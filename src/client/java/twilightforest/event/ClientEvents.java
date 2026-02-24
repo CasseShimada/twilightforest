@@ -1,8 +1,21 @@
 package twilightforest.client.event;
 
 import com.ibm.icu.text.RuleBasedNumberFormat;
+import com.mojang.blaze3d.buffers.GpuBuffer;
+import com.mojang.blaze3d.buffers.GpuBufferSlice;
+import com.mojang.blaze3d.buffers.Std140Builder;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.blaze3d.systems.CommandEncoder;
+import com.mojang.blaze3d.systems.RenderPass;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.textures.GpuTextureView;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -18,13 +31,19 @@ import net.minecraft.client.gui.components.SplashRenderer;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.rendertype.OutputTarget;
 import net.minecraft.client.renderer.state.BlockOutlineRenderState;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,18 +54,24 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.WrittenBookItem;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
+import org.lwjgl.system.MemoryStack;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.GiantBlock;
 import twilightforest.block.MiniatureStructureBlock;
 import twilightforest.block.entity.GrowingBeanstalkBlockEntity;
 import twilightforest.client.BugModelAnimationHelper;
 import twilightforest.client.OptifineWarningScreen;
+import twilightforest.client.renderer.TFRenderPipelines;
 import twilightforest.config.TFConfig;
 import twilightforest.events.HostileMountEvents;
 import twilightforest.init.TFDataAttachments;
@@ -57,30 +82,44 @@ import twilightforest.item.GiantPickItem;
 import twilightforest.item.IceBowItem;
 import twilightforest.item.SeekerBowItem;
 import twilightforest.item.TripleBowItem;
+import twilightforest.mixin.client.accessor.BiomeManagerAccessor;
 import twilightforest.tags.TFItemTags;
+import twilightforest.util.HolderMatcher;
 
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
 
 public class ClientEvents {
 	private static final VoxelShape GIANT_BLOCK = Shapes.box(0.0D, 0.0D, 0.0D, 4.0D, 4.0D, 4.0D);
 	private static final MutableComponent WIP_TEXT = Component.translatable("misc.twilightforest.wip").withStyle(ChatFormatting.RED);
 	private static final MutableComponent EMPERORS_CLOTH_TOOLTIP = Component.translatable("item.twilightforest.emperors_cloth.desc").withStyle(ChatFormatting.GRAY);
 	public static final RenderStateDataKey<Boolean> HEAD_KEY = RenderStateDataKey.create(() -> TwilightForestMod.prefix("wearing_trophy").toString());
+	private static final int AURORA_UNIFORM_SIZE = 32;
 
 	private static boolean firstTitleScreenShown = false;
 
 	public static int time = 0;
 	private static float shakeIntensity = 0.0F;
 
+	private static int aurora = 0;
+	private static int lastAurora = 0;
+	private static int auroraDebugCooldown = 0;
+	private static boolean auroraDebugLogged = false;
+	private static GpuBuffer auroraUniformBuffer;
+
+	private static final HolderMatcher HOLDER_MATCHER = new HolderMatcher();
+
 	public static void register() {
 		ScreenEvents.AFTER_INIT.register(ClientEvents::onScreenInit);
 		ItemTooltipCallback.EVENT.register(ClientEvents::addCustomTooltips);
 		ItemTooltipCallback.EVENT.register(ClientEvents::translateBookAuthor);
 		ClientTickEvents.END_CLIENT_TICK.register(ClientEvents::clientTick);
+		WorldRenderEvents.BEFORE_TRANSLUCENT.register(ClientEvents::renderAurora);
 		WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register(ClientEvents::renderGiantBlockOutlines);
 
 		HudElementRegistry.replaceElement(VanillaHudElements.MOUNT_HEALTH, original -> (context, tickCounter) -> {
@@ -118,6 +157,42 @@ public class ClientEvents {
 
 			if (mc.player != null) {
 				TFDataAttachments.get(mc.player, TFDataAttachments.TF_PORTAL_COOLDOWN).tick(mc.player);
+			}
+
+			lastAurora = aurora;
+			if (mc.level != null && mc.getCameraEntity() != null && !TFConfig.getValidAuroraBiomes(mc.level.registryAccess()).isEmpty()) {
+				RegistryAccess access = mc.level.registryAccess();
+				Holder<Biome> biome = mc.level.getBiome(mc.getCameraEntity().blockPosition());
+				if (TFConfig.getValidAuroraBiomes(access).stream().anyMatch(c -> HOLDER_MATCHER.match(c, biome)))
+					aurora++;
+				else
+					aurora--;
+				aurora = Mth.clamp(aurora, 0, 60);
+			} else {
+				aurora = 0;
+			}
+
+			if (mc.level != null && mc.getCameraEntity() != null) {
+				RegistryAccess access = mc.level.registryAccess();
+				List<Holder<Biome>> auroraBiomes = TFConfig.getValidAuroraBiomes(access);
+				if (!auroraDebugLogged) {
+					if (auroraBiomes.isEmpty()) {
+						TwilightForestMod.LOGGER.warn("[TF Debug] Aurora biomes list is empty; aurora effect will stay disabled.");
+					} else {
+						TwilightForestMod.LOGGER.info("[TF Debug] Aurora biomes loaded: {} entries.", auroraBiomes.size());
+					}
+					auroraDebugLogged = true;
+				}
+				if (auroraDebugCooldown-- <= 0) {
+					Holder<Biome> biome = mc.level.getBiome(mc.getCameraEntity().blockPosition());
+					Identifier biomeId = biome.unwrapKey().map(ResourceKey::identifier).orElse(Identifier.parse("unknown"));
+					boolean matches = auroraBiomes.stream().anyMatch(c -> HOLDER_MATCHER.match(c, biome));
+					TwilightForestMod.LOGGER.info(
+						"[TF Debug] Aurora tick: biome={}, matches={}, aurora={}, lastAurora={}",
+						biomeId, matches, aurora, lastAurora
+					);
+					auroraDebugCooldown = 200;
+				}
 			}
 
 			BugModelAnimationHelper.animate();
@@ -180,6 +255,112 @@ public class ClientEvents {
 				}
 			}
 		}
+	}
+
+	private static void renderAurora(WorldRenderContext context) {
+		Minecraft mc = Minecraft.getInstance();
+		if (mc.level == null) return;
+
+		float partialTick = mc.getDeltaTracker().getGameTimeDeltaPartialTick(false);
+		float alpha = (Mth.lerp(partialTick, lastAurora, aurora)) / 60F * 0.5F;
+		if (alpha <= 0.001F) return;
+
+		final float scale = 2048F * (mc.gameRenderer.getRenderDistance() / 32F);
+		Vec3 pos = getCameraPosition();
+		float y = (float) (256F - pos.y());
+
+		BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+		addAuroraVertex(buffer, -scale, y, scale, 0.0F, 1.0F, alpha);
+		addAuroraVertex(buffer, -scale, y, -scale, 0.0F, 0.0F, alpha);
+		addAuroraVertex(buffer, scale, y, -scale, 1.0F, 0.0F, alpha);
+		addAuroraVertex(buffer, scale, y, scale, 1.0F, 1.0F, alpha);
+
+		MeshData mesh = buffer.build();
+		if (mesh == null) {
+			return;
+		}
+
+		int seed = 0;
+		if (mc.level != null) {
+			seed = Mth.abs((int) ((BiomeManagerAccessor) mc.level.getBiomeManager()).twilightforest$getBiomeZoomSeed());
+		}
+		renderAuroraMesh(mesh, pos, seed);
+	}
+
+	private static void renderAuroraMesh(MeshData mesh, Vec3 cameraPos, int seed) {
+		RenderPipeline pipeline = TFRenderPipelines.AURORA;
+		CommandEncoder encoder = RenderSystem.getDevice().createCommandEncoder();
+		Matrix4f modelView = new Matrix4f(RenderSystem.getModelViewMatrix()).setTranslation(0.0F, 0.0F, 0.0F);
+		GpuBufferSlice transformSlice = RenderSystem.getDynamicUniforms().writeTransform(
+			modelView,
+			new Vector4f(1.0F, 1.0F, 1.0F, 1.0F),
+			new Vector3f(),
+			new Matrix4f()
+		);
+
+		GpuBuffer auroraBuffer = getAuroraUniformBuffer();
+		try (MemoryStack stack = MemoryStack.stackPush()) {
+			Std140Builder builder = Std140Builder.onStack(stack, AURORA_UNIFORM_SIZE);
+			builder.putInt(seed).putVec3((float) cameraPos.x, (float) cameraPos.y, (float) cameraPos.z);
+			encoder.writeToBuffer(auroraBuffer.slice(), builder.get());
+		}
+
+		GpuBuffer vertexBuffer = pipeline.getVertexFormat().uploadImmediateVertexBuffer(mesh.vertexBuffer());
+		GpuBuffer indexBuffer;
+		VertexFormat.IndexType indexType;
+		if (mesh.indexBuffer() == null) {
+			RenderSystem.AutoStorageIndexBuffer indexBufferSource = RenderSystem.getSequentialBuffer(mesh.drawState().mode());
+			indexBuffer = indexBufferSource.getBuffer(mesh.drawState().indexCount());
+			indexType = indexBufferSource.type();
+		} else {
+			indexBuffer = pipeline.getVertexFormat().uploadImmediateIndexBuffer(mesh.indexBuffer());
+			indexType = mesh.drawState().indexType();
+		}
+
+		GpuTextureView color = RenderSystem.outputColorTextureOverride;
+		OutputTarget outputTarget = OutputTarget.MAIN_TARGET;
+		var target = outputTarget.getRenderTarget();
+		if (color == null) {
+			color = target.getColorTextureView();
+		}
+		GpuTextureView depth = null;
+		if (target.useDepth) {
+			depth = RenderSystem.outputDepthTextureOverride != null ? RenderSystem.outputDepthTextureOverride : target.getDepthTextureView();
+		}
+
+		try (RenderPass pass = encoder.createRenderPass(() -> "twilightforest_aurora", color, OptionalInt.empty(), depth, OptionalDouble.empty())) {
+			pass.setPipeline(pipeline);
+			RenderSystem.bindDefaultUniforms(pass);
+			pass.setUniform("DynamicTransforms", transformSlice);
+			pass.setUniform("AuroraContext", auroraBuffer.slice());
+
+			pass.setVertexBuffer(0, vertexBuffer);
+
+			pass.setIndexBuffer(indexBuffer, indexType);
+			pass.drawIndexed(0, 0, mesh.drawState().indexCount(), 1);
+		} finally {
+			mesh.close();
+		}
+	}
+
+	private static GpuBuffer getAuroraUniformBuffer() {
+		if (auroraUniformBuffer == null || auroraUniformBuffer.isClosed()) {
+			auroraUniformBuffer = RenderSystem.getDevice().createBuffer(
+				() -> "twilightforest_aurora_uniforms",
+				GpuBuffer.USAGE_UNIFORM | GpuBuffer.USAGE_COPY_DST,
+				AURORA_UNIFORM_SIZE
+			);
+		}
+		return auroraUniformBuffer;
+	}
+
+	private static void addAuroraVertex(VertexConsumer consumer, float x, float y, float z, float u, float v, float alpha) {
+		consumer.addVertex(x, y, z)
+			.setUv(u, v)
+			.setColor(1.0F, 1.0F, 1.0F, alpha)
+			.setLight(LightTexture.FULL_BRIGHT)
+			.setOverlay(OverlayTexture.NO_OVERLAY)
+			.setNormal(0.0F, 1.0F, 0.0F);
 	}
 
 	private static boolean renderGiantBlockOutlines(WorldRenderContext context, BlockOutlineRenderState outlineState) {

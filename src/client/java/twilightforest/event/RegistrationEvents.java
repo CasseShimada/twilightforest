@@ -64,6 +64,7 @@ import twilightforest.client.properties.NaturalDimension;
 import twilightforest.client.properties.OreMeterFlash;
 import twilightforest.client.properties.PotionFlaskDamage;
 import twilightforest.client.properties.PotionFlaskDosage;
+import twilightforest.client.renderer.TFRenderPipelines;
 import twilightforest.client.renderer.TFSimpleArmorRenderer;
 import twilightforest.client.renderer.block.*;
 import twilightforest.client.renderer.entity.*;
@@ -83,6 +84,7 @@ public class RegistrationEvents {
 
 	public static void register() {
 		detectOptifine();
+		TFRenderPipelines.init();
 		registerWoodTypes();
 		registerRenderLayers();
 		registerModelLoaders();
