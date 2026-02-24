@@ -55,7 +55,10 @@ public record UpdateTFMultipartPacket(int entityId, @Nullable Entity entity, @Nu
 		ctx.enqueueWork(() -> {
 			int eId = message.entity != null && message.entityId <= 0 ? message.entity.getId() : message.entityId; // Account for Singleplayer
 			Entity ent = ctx.player().level().getEntity(eId);
+			if (ent == null) return;
 			if (!(ent instanceof TFMultipartEntity multipart)) return;
+
+			TFPart.assignPartIDs(ent);
 
 			TFPart<?>[] parts = multipart.getParts();
 			if (parts == null) return;

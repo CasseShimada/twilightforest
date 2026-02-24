@@ -160,13 +160,22 @@ public class Hydra extends BaseTFBoss implements TFMultipartEntity {
 
 	@Override
 	public void aiStep() {
+		super.aiStep();
+	}
+
+	@Override
+	public void tick() {
+		super.tick();
+		this.tickMultipart();
+	}
+
+	private void tickMultipart() {
 		if (this.renderFakeHeads) this.renderFakeHeads = false;
 		this.clearFire();
 		this.body.tick();
 		this.leftLeg.tick();
 		this.rightLeg.tick();
 
-		// update all heads
 		for (int i = 0; i < MAX_HEADS; i++) {
 			this.hc[i].tick();
 		}
@@ -178,33 +187,32 @@ public class Hydra extends BaseTFBoss implements TFMultipartEntity {
 		}
 
 		this.ticksSinceDamaged++;
-
-		// update fight variables for difficulty setting
 		this.setDifficultyVariables();
 
-		super.aiStep();
+		if (!this.level().isClientSide()) {
+			// set body part positions (server authoritative)
+			float angle;
+			double dx, dy, dz;
 
-		// set body part positions
-		float angle;
-		double dx, dy, dz;
+			// body goes behind the actual position of the hydra
+			angle = (((this.yBodyRot + 180.0F) * Mth.PI) / 180.0F);
 
-		// body goes behind the actual position of the hydra
-		angle = (((this.yBodyRot + 180.0F) * Mth.PI) / 180.0F);
+			dx = this.getX() - Mth.sin(angle) * 3.0D;
+			dy = this.getY() + 0.1D;
+			dz = this.getZ() + Mth.cos(angle) * 3.0D;
+			this.body.setPos(dx, dy, dz);
 
-		dx = this.getX() - Mth.sin(angle) * 3.0D;
-		dy = this.getY() + 0.1D;
-		dz = this.getZ() + Mth.cos(angle) * 3.0D;
-		this.body.setPos(dx, dy, dz);
+			dx = this.getX() - Mth.sin(angle) * 10.5D;
+			dy = this.getY() + 0.1D;
+			dz = this.getZ() + Mth.cos(angle) * 10.5D;
+			this.tail.setPos(dx, dy, dz);
 
-		dx = this.getX() - Mth.sin(angle) * 10.5D;
-		dy = this.getY() + 0.1D;
-		dz = this.getZ() + Mth.cos(angle) * 10.5D;
-		this.tail.setPos(dx, dy, dz);
-
-		if (this.hurtTime == 0) {
-			this.collideWithEntities(this.level().getEntities(this, this.body.getBoundingBox()), this.body);
-			this.collideWithEntities(this.level().getEntities(this, this.tail.getBoundingBox()), this.tail);
+			if (this.hurtTime == 0) {
+				this.collideWithEntities(this.level().getEntities(this, this.body.getBoundingBox()), this.body);
+				this.collideWithEntities(this.level().getEntities(this, this.tail.getBoundingBox()), this.tail);
+			}
 		}
+
 	}
 
 	@Override

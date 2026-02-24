@@ -22,10 +22,22 @@
     "continents": 0.0,
     "depth": 0.0,
     "erosion": 0.0,
-    "final_density": "twilightforest:forested_terrain",
+    "final_density": {
+      "type": "minecraft:add",
+      "argument1": "twilightforest:forested_terrain",
+      "argument2": {
+        "type": "minecraft:beardifier"
+      }
+    },
     "fluid_level_floodedness": 0.0,
     "fluid_level_spread": 0.0,
-    "initial_density_without_jaggedness": "twilightforest:forested_terrain",
+    "initial_density_without_jaggedness": {
+      "type": "minecraft:add",
+      "argument1": "twilightforest:forested_terrain",
+      "argument2": {
+        "type": "minecraft:beardifier"
+      }
+    },
     "lava": 0.0,
     "preliminary_surface_level": 0.0,
     "ridges": 0.0,

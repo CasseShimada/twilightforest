@@ -167,6 +167,9 @@ public abstract class TFPart<T extends Entity> extends Entity {
 	public void readData(UpdateTFMultipartPacket.PartDataHolder data) {
 		Vec3 vec = new Vec3(data.x(), data.y(), data.z());
 		this.setPositionAndRotationDirect(vec.x(), vec.y(), vec.z(), data.yRot(), data.xRot(), 3);
+		// Apply immediately in case this part is not ticked by the world every frame.
+		this.setPos(vec.x(), vec.y(), vec.z());
+		this.setRot(data.yRot(), data.xRot());
 		final float w = data.width();
 		final float h = data.height();
 		this.setSize(data.fixed() ? EntityDimensions.fixed(w, h) : EntityDimensions.scalable(w, h));
