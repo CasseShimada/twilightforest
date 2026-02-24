@@ -1,0 +1,72 @@
+package twilightforest.client.renderer.special;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.client.model.object.chest.ChestModel;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.special.NoDataSpecialModelRenderer;
+import net.minecraft.client.renderer.special.SpecialModelRenderer;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.MaterialSet;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemDisplayContext;
+import org.joml.Vector3fc;
+
+import java.util.function.Consumer;
+
+public record TFChestSpecialRenderer(MaterialSet materials, ChestModel model, Material material, float openness) implements NoDataSpecialModelRenderer {
+
+	@Override
+	public void submit(ItemDisplayContext displayContext, PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, boolean hasFoil, int outlineColor) {
+		nodeCollector.submitModel(
+			this.model,
+			this.openness,
+			poseStack,
+			this.material.renderType(RenderTypes::entitySolid),
+			packedLight,
+			packedOverlay,
+			-1,
+			this.materials.get(this.material),
+			outlineColor,
+			null
+		);
+	}
+
+	@Override
+	public void getExtents(Consumer<Vector3fc> output) {
+		PoseStack poseStack = new PoseStack();
+		this.model.setupAnim(this.openness);
+		this.model.root().getExtentsForGui(poseStack, output);
+	}
+
+	public record Unbaked(Identifier texture, float openness) implements SpecialModelRenderer.Unbaked {
+		public static final MapCodec<TFChestSpecialRenderer.Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(
+			instance -> instance.group(
+					Identifier.CODEC.fieldOf("texture").forGetter(TFChestSpecialRenderer.Unbaked::texture),
+					Codec.FLOAT.optionalFieldOf("openness", 0.0F).forGetter(TFChestSpecialRenderer.Unbaked::openness)
+				)
+				.apply(instance, TFChestSpecialRenderer.Unbaked::new)
+		);
+
+		public Unbaked(Identifier location) {
+			this(location, 0.0F);
+		}
+
+		@Override
+		public MapCodec<TFChestSpecialRenderer.Unbaked> type() {
+			return MAP_CODEC;
+		}
+
+		@Override
+		public SpecialModelRenderer<?> bake(SpecialModelRenderer.BakingContext context) {
+			ChestModel chestmodel = new ChestModel(context.entityModelSet().bakeLayer(ModelLayers.CHEST));
+			Material material = Sheets.CHEST_MAPPER.apply(this.texture);
+			return new TFChestSpecialRenderer(context.materials(), chestmodel, material, this.openness());
+		}
+	}
+}
