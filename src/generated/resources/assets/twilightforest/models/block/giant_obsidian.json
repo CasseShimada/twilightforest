@@ -1,6 +1,5 @@
 {
   "parent": "minecraft:block/block",
-  "loader": "twilightforest:giant_block",
   "textures": {
     "down": "minecraft:block/obsidian",
     "east": "minecraft:block/obsidian",
@@ -9,5 +8,6 @@
     "south": "minecraft:block/obsidian",
     "up": "minecraft:block/obsidian",
     "west": "minecraft:block/obsidian"
-  }
+  },
+  "fabric:type": "twilightforest:giant_block"
 }

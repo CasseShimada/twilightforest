@@ -13,9 +13,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.fml.ModList;
 import twilightforest.init.TFDamageTypes;
 import twilightforest.init.TFItems;
+import twilightforest.platform.Mods;
 
 public class FieryBlock extends Block {
 	public FieryBlock(Properties properties) {
@@ -29,7 +29,7 @@ public class FieryBlock extends Block {
 
 	@Override
 	public boolean skipRendering(BlockState state, BlockState otherState, Direction direction) {
-		return ModList.get().isLoaded("ctm") && otherState.getBlock() instanceof FieryBlock;
+		return Mods.isLoaded("ctm") && otherState.getBlock() instanceof FieryBlock;
 	}
 
 	@Override
@@ -48,8 +48,4 @@ public class FieryBlock extends Block {
 		super.stepOn(level, pos, state, entity);
 	}
 
-	@Override
-	public boolean isFireSource(BlockState state, LevelReader level, BlockPos pos, Direction direction) {
-		return true;
-	}
 }

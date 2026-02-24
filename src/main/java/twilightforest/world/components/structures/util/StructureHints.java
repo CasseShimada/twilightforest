@@ -67,7 +67,7 @@ public interface StructureHints {
 			true
 		));
 
-		book.set(TFDataComponents.TRANSLATABLE_BOOK, Unit.INSTANCE); //for the author
+		book.set(TFDataComponents.TRANSLATABLE_BOOK.get(), Unit.INSTANCE); //for the author
 		book.set(DataComponents.ITEM_NAME, Component.translatable(TwilightForestMod.ID + ".book." + key));
 	}
 
@@ -105,7 +105,8 @@ public interface StructureHints {
 
 		// make our hint monster
 		Mob hinty = this.createHintMonster(world);
-		hinty.moveTo(pos.offset(dx, dy, dz), 0f, 0f);
+		BlockPos spawnPos = pos.offset(dx, dy, dz);
+		hinty.setPos(spawnPos.getX() + 0.5D, spawnPos.getY(), spawnPos.getZ() + 0.5D);
 
 		// check if the bounding box is clear
 		if (hinty.checkSpawnObstruction(world) && hinty.getSensing().hasLineOfSight(player)) {

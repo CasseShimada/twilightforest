@@ -3,7 +3,7 @@ package twilightforest.item.recipe;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.TypedDataComponent;
@@ -19,19 +19,19 @@ import net.minecraft.world.item.crafting.display.SmithingRecipeDisplay;
 import net.minecraft.world.level.Level;
 import twilightforest.init.TFRecipes;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
 public class NoTemplateSmithingRecipe implements SmithingRecipe {
 
-	private final Optional<Ingredient> base;
+	private final Ingredient base;
 	private final Optional<Ingredient> addition;
 	private final List<TypedDataComponent<?>> additionalData;
 	@Nullable
 	private PlacementInfo placementInfo;
 
-	public NoTemplateSmithingRecipe(Optional<Ingredient> base, Optional<Ingredient> addition, List<TypedDataComponent<?>> additionalData) {
+	public NoTemplateSmithingRecipe(Ingredient base, Optional<Ingredient> addition, List<TypedDataComponent<?>> additionalData) {
 		this.base = base;
 		this.addition = addition;
 		this.additionalData = additionalData;
@@ -57,7 +57,7 @@ public class NoTemplateSmithingRecipe implements SmithingRecipe {
 	}
 
 	@Override
-	public Optional<Ingredient> baseIngredient() {
+	public Ingredient baseIngredient() {
 		return this.base;
 	}
 
@@ -96,7 +96,7 @@ public class NoTemplateSmithingRecipe implements SmithingRecipe {
 	@Override
 	public PlacementInfo placementInfo() {
 		if (this.placementInfo == null) {
-			this.placementInfo = PlacementInfo.createFromOptionals(List.of(this.base, this.addition));
+			this.placementInfo = PlacementInfo.createFromOptionals(List.of(Optional.empty(), Optional.of(this.base), this.addition));
 		}
 
 		return this.placementInfo;
@@ -104,14 +104,14 @@ public class NoTemplateSmithingRecipe implements SmithingRecipe {
 
 	@Override
 	public List<RecipeDisplay> display() {
-		SlotDisplay slotdisplay = Ingredient.optionalIngredientToDisplay(this.base);
+		SlotDisplay slotdisplay = this.base.display();
 		SlotDisplay slotdisplay1 = Ingredient.optionalIngredientToDisplay(this.addition);
 		return List.of(
 			new SmithingRecipeDisplay(
 				SlotDisplay.Empty.INSTANCE,
 				slotdisplay,
 				slotdisplay1,
-				new SlotDisplay.SmithingTrimDemoSlotDisplay(slotdisplay, slotdisplay1, SlotDisplay.Empty.INSTANCE),
+				slotdisplay,
 				new SlotDisplay.ItemSlotDisplay(Items.SMITHING_TABLE)
 			)
 		);
@@ -128,13 +128,13 @@ public class NoTemplateSmithingRecipe implements SmithingRecipe {
 
 	public static class Serializer implements RecipeSerializer<NoTemplateSmithingRecipe> {
 		private static final MapCodec<NoTemplateSmithingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-			Ingredient.CODEC.optionalFieldOf("base").forGetter(NoTemplateSmithingRecipe::baseIngredient),
+			Ingredient.CODEC.fieldOf("base").forGetter(NoTemplateSmithingRecipe::baseIngredient),
 			Ingredient.CODEC.optionalFieldOf("addition").forGetter(NoTemplateSmithingRecipe::additionIngredient),
 			DATA_COMPONENT_CODEC.optionalFieldOf("additional_data", List.of()).forGetter(NoTemplateSmithingRecipe::additionalData)
 		).apply(instance, NoTemplateSmithingRecipe::new));
 
 		private static final StreamCodec<RegistryFriendlyByteBuf, NoTemplateSmithingRecipe> STREAM_CODEC = StreamCodec.composite(
-			Ingredient.OPTIONAL_CONTENTS_STREAM_CODEC, NoTemplateSmithingRecipe::baseIngredient,
+			Ingredient.CONTENTS_STREAM_CODEC, NoTemplateSmithingRecipe::baseIngredient,
 			Ingredient.OPTIONAL_CONTENTS_STREAM_CODEC, NoTemplateSmithingRecipe::additionIngredient,
 			TypedDataComponent.STREAM_CODEC.apply(ByteBufCodecs.list()), NoTemplateSmithingRecipe::additionalData,
 			NoTemplateSmithingRecipe::new

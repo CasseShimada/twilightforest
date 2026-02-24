@@ -50,8 +50,6 @@ public class TFTreeGrowers {
 		Optional.of(TFConfiguredFeatures.SORTING_TREE),
 		Optional.empty());
 
-	public static final TreeGrower HOLLOW_OAK = new StructureTreeGrower("hollow_oak");
-
 	public static final TreeGrower RAINBOW_OAK = new TreeGrower("rainbow_oak", 0.1F,
 		Optional.empty(),
 		Optional.empty(),

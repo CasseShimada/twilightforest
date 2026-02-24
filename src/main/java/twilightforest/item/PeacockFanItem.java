@@ -8,6 +8,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -21,9 +22,8 @@ import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.level.BlockEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import twilightforest.network.PacketDistributor;
 import twilightforest.block.LightableBlock;
 import twilightforest.init.TFDataAttachments;
 import twilightforest.init.TFSounds;
@@ -45,13 +45,14 @@ public class PeacockFanItem extends Item {
 	public InteractionResult use(Level level, Player player, @Nonnull InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
 
-		boolean flag = !player.onGround() && !player.isSwimming() && !player.getData(TFDataAttachments.FEATHER_FAN);
+		boolean flag = !player.onGround() && !player.isSwimming() && !TFDataAttachments.get(player, TFDataAttachments.FEATHER_FAN);
 
 		if (!level.isClientSide()) {
 			int fanned = this.doFan(level, player);
-			stack.hurtAndBreak(fanned + 1, player, LivingEntity.getSlotForHand(hand));
+			EquipmentSlot slot = hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+			stack.hurtAndBreak(fanned + 1, player, slot);
 			if (flag) {
-				player.setData(TFDataAttachments.FEATHER_FAN, true);
+				TFDataAttachments.set(player, TFDataAttachments.FEATHER_FAN, true);
 				PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new UpdateFeatherFanFallPacket(player.getId(), true));
 			} else {
 				AABB fanBox = this.getEffectAABB(player);
@@ -158,7 +159,7 @@ public class PeacockFanItem extends Item {
 		BlockState state = level.getBlockState(pos);
 		if (state.getBlock() instanceof FlowerBlock) {
 			if (level.getRandom().nextInt(3) == 0) {
-				if (!NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(level, pos, state, player)).isCanceled()) {
+				if (!(level instanceof ServerLevel serverLevel) || PlayerBlockBreakEvents.BEFORE.invoker().beforeBlockBreak(serverLevel, player, pos, state, serverLevel.getBlockEntity(pos))) {
 					level.destroyBlock(pos, true);
 					cost++;
 				}

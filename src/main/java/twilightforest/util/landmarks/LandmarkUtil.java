@@ -20,8 +20,8 @@ import twilightforest.TwilightForestMod;
 import twilightforest.tags.TFStructureTags;
 import twilightforest.entity.EnforcedHomePoint;
 import twilightforest.init.TFAdvancements;
-import twilightforest.world.components.structures.start.TFStructureStart;
-import twilightforest.world.components.structures.util.CustomStructureData;
+import twilightforest.world.components.structures.util.ConquerableStructure;
+import twilightforest.world.components.structures.util.StructureConqueredData;
 
 import java.util.Map;
 import java.util.Optional;
@@ -66,8 +66,15 @@ public final class LandmarkUtil {
 	}
 
 	public static boolean isConquered(Level level, int blockX, int blockZ) {
-		Optional<StructureStart> start = locateNearestMatchingLandmark(level, s -> s instanceof CustomStructureData, blockX >> 4, blockZ >> 4, false);
-		return start.filter(structureStart -> structureStart instanceof TFStructureStart tfStructureStart && tfStructureStart.isConquered()).isPresent();
+		if (!(level instanceof ServerLevel serverLevel)) {
+			return false;
+		}
+		Optional<StructureStart> start = locateNearestMatchingLandmark(level, s -> s instanceof ConquerableStructure, blockX >> 4, blockZ >> 4, false);
+		if (start.isEmpty()) {
+			return false;
+		}
+		ResourceKey<Structure> key = getStructureKey(level, start.get().getStructure());
+		return key != null && StructureConqueredData.get(serverLevel).isConquered(key, start.get().getChunkPos());
 	}
 
 	public static void markStructureConquered(Level level, EnforcedHomePoint mobHome, ResourceKey<Structure> structureKey, boolean conquered) {
@@ -77,9 +84,8 @@ public final class LandmarkUtil {
 	public static void markStructureConquered(Level level, @Nullable GlobalPos pos, ResourceKey<Structure> structureKey, boolean conquered) {
 		if (pos != null && level.dimension() == pos.dimension()) {
 			Optional<StructureStart> nearStart = locateNearestLandmarkStart(level, structureKey, pos.pos());
-			if (nearStart.isEmpty() || !(nearStart.get() instanceof TFStructureStart twilightStart)) return;
-
-			twilightStart.setConquered(conquered, level);
+			if (nearStart.isEmpty() || !(level instanceof ServerLevel serverLevel)) return;
+			StructureConqueredData.get(serverLevel).setConquered(structureKey, nearStart.get().getChunkPos(), conquered);
 
 			for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, new AABB(pos.pos()).inflate(32.0F))) {
 				TFAdvancements.STRUCTURE_CLEARED.get().trigger(player, structureKey);
@@ -125,9 +131,14 @@ public final class LandmarkUtil {
 	}
 
 	public static boolean isProgressionEnforced(ServerLevel level) {
-		return level.getGameRules().getBoolean(TwilightForestMod.ENFORCED_PROGRESSION_RULE.get());
+		return level.getGameRules().get(TwilightForestMod.ENFORCED_PROGRESSION_RULE.get());
 	}
 
 	private LandmarkUtil() {
+	}
+
+	@Nullable
+	private static ResourceKey<Structure> getStructureKey(LevelAccessor level, Structure structure) {
+		return level.registryAccess().lookup(Registries.STRUCTURE).flatMap(registry -> registry.getResourceKey(structure)).orElse(null);
 	}
 }

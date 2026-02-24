@@ -11,7 +11,6 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -28,7 +27,6 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
 import twilightforest.init.TFItems;
 import twilightforest.init.TFStats;
 
@@ -65,14 +63,14 @@ public class Experiment115Block extends Block {
 			if (stack.is(TFItems.EXPERIMENT_115.get())) {
 				if (bitesTaken == 0) return InteractionResult.FAIL;
 				level.setBlockAndUpdate(pos, state.setValue(BITES_TAKEN, bitesTaken - 1));
-				level.playSound(null, pos, state.getSoundType(level, pos, player).getPlaceSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
+				level.playSound(null, pos, state.getSoundType().getPlaceSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
 				stack.consume(1, player);
 				if (player instanceof ServerPlayer)
 					CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayer) player, pos, stack);
 				return InteractionResult.SUCCESS;
 			} else if (!state.getValue(REGENERATE) && bitesTaken == 0 && stack.is(Items.REDSTONE)) {
 				level.setBlockAndUpdate(pos, state.setValue(REGENERATE, true));
-				level.playSound(null, pos, state.getSoundType(level, pos, player).getPlaceSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
+				level.playSound(null, pos, state.getSoundType().getPlaceSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
 				stack.consume(1, player);
 				if (player instanceof ServerPlayer) {
 					player.awardStat(Stats.ITEM_USED.get(Items.REDSTONE));
@@ -87,8 +85,12 @@ public class Experiment115Block extends Block {
 					level.removeBlock(pos, false);
 				}
 				player.playSound(SoundEvents.ITEM_PICKUP, 0.5F, 1.0F);
-				if (!player.isCreative())
-					ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(TFItems.EXPERIMENT_115.get()));
+				if (!player.isCreative()) {
+					ItemStack give = new ItemStack(TFItems.EXPERIMENT_115.get());
+					if (!player.addItem(give)) {
+						player.drop(give, false);
+					}
+				}
 				return InteractionResult.SUCCESS;
 			}
 		}
@@ -144,7 +146,7 @@ public class Experiment115Block extends Block {
 
 	@Override
 	@SuppressWarnings("deprecation") // Fine to override
-	public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+	public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos, Direction direction) {
 		return (8 - state.getValue(BITES_TAKEN)) + (state.getValue(REGENERATE) ? 7 : 0);
 	}
 

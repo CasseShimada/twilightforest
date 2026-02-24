@@ -13,12 +13,12 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.event.EventHooks;
 import twilightforest.tags.TFBlockTags;
 import twilightforest.init.TFDamageTypes;
 import twilightforest.init.TFEntities;
@@ -48,7 +48,7 @@ public class HydraMortar extends ThrowableProjectile {
 		double py = head.getY() + 1 + vector.y() * dist;
 		double pz = head.getZ() + vector.z() * dist;
 
-		this.moveTo(px, py, pz, 0, 0);
+		this.setPos(px, py, pz);
 		// these are being set to extreme numbers when we get here, why?
 		head.setDeltaMovement(Vec3.ZERO);
 		this.shootFromRotation(head, head.getXRot(), head.getYRot(), -20.0F, 0.5F, 1F);
@@ -131,7 +131,7 @@ public class HydraMortar extends ThrowableProjectile {
 
 	private void detonate(ServerLevel level) {
 		float explosionPower = this.megaBlast ? 4.0F : 0.1F;
-		boolean flag = EventHooks.canEntityGrief(level, this);
+		boolean flag = level.getGameRules().get(GameRules.MOB_GRIEFING);
 		this.level().explode(this, this.getX(), this.getY(), this.getZ(), explosionPower, flag, Level.ExplosionInteraction.MOB);
 
 		for (Entity nearby : this.level().getEntities(this, this.getBoundingBox().inflate(1.0D, 1.0D, 1.0D))) {

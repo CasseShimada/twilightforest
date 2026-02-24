@@ -1,6 +1,5 @@
 package twilightforest.command;
 
-import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -11,17 +10,20 @@ import net.minecraft.commands.Commands;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.storage.LevelResource;
-import net.neoforged.fml.loading.FMLEnvironment;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
 import twilightforest.init.TFBiomes;
 import twilightforest.init.TFDataMaps;
 import twilightforest.util.ColorUtil;
 import twilightforest.util.datamaps.MagicMapBiomeColor;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,42 +34,41 @@ import java.util.Map;
 /**
  * Thank you @SuperCoder79 (from Twitter) for sharing the original code! Code sourced from a LGPL project
  */
-@tamaized.beanification.Component
 public class MapBiomesCommand {
 
 	private final DecimalFormat numberFormat = new DecimalFormat("#.00");
 
-	private final HashMap<ResourceLocation, BiomeMapColor> BIOME2COLOR = new HashMap<>();
+	private final HashMap<Identifier, BiomeMapColor> BIOME2COLOR = new HashMap<>();
 
 	private void init() {
-		BIOME2COLOR.put(TFBiomes.STREAM.location(), new BiomeMapColor(0, 0, 255));
-		BIOME2COLOR.put(TFBiomes.LAKE.location(), new BiomeMapColor(0, 0, 255));
-		BIOME2COLOR.put(TFBiomes.CLEARING.location(), new BiomeMapColor(132, 245, 130));
-		BIOME2COLOR.put(TFBiomes.OAK_SAVANNAH.location(), new BiomeMapColor(239, 245, 130));
-		BIOME2COLOR.put(TFBiomes.FOREST.location(), new BiomeMapColor(0, 255, 0));
-		BIOME2COLOR.put(TFBiomes.DENSE_FOREST.location(), new BiomeMapColor(0, 170, 0));
-		BIOME2COLOR.put(TFBiomes.FIREFLY_FOREST.location(), new BiomeMapColor(88, 252, 102));
-		BIOME2COLOR.put(TFBiomes.ENCHANTED_FOREST.location(), new BiomeMapColor(0, 255, 255));
-		BIOME2COLOR.put(TFBiomes.SPOOKY_FOREST.location(), new BiomeMapColor(119, 0, 255));
-		BIOME2COLOR.put(TFBiomes.MUSHROOM_FOREST.location(), new BiomeMapColor(204, 0, 139));
-		BIOME2COLOR.put(TFBiomes.DENSE_MUSHROOM_FOREST.location(), new BiomeMapColor(184, 48, 184));
+		BIOME2COLOR.put(TFBiomes.STREAM.identifier(), new BiomeMapColor(0, 0, 255));
+		BIOME2COLOR.put(TFBiomes.LAKE.identifier(), new BiomeMapColor(0, 0, 255));
+		BIOME2COLOR.put(TFBiomes.CLEARING.identifier(), new BiomeMapColor(132, 245, 130));
+		BIOME2COLOR.put(TFBiomes.OAK_SAVANNAH.identifier(), new BiomeMapColor(239, 245, 130));
+		BIOME2COLOR.put(TFBiomes.FOREST.identifier(), new BiomeMapColor(0, 255, 0));
+		BIOME2COLOR.put(TFBiomes.DENSE_FOREST.identifier(), new BiomeMapColor(0, 170, 0));
+		BIOME2COLOR.put(TFBiomes.FIREFLY_FOREST.identifier(), new BiomeMapColor(88, 252, 102));
+		BIOME2COLOR.put(TFBiomes.ENCHANTED_FOREST.identifier(), new BiomeMapColor(0, 255, 255));
+		BIOME2COLOR.put(TFBiomes.SPOOKY_FOREST.identifier(), new BiomeMapColor(119, 0, 255));
+		BIOME2COLOR.put(TFBiomes.MUSHROOM_FOREST.identifier(), new BiomeMapColor(204, 0, 139));
+		BIOME2COLOR.put(TFBiomes.DENSE_MUSHROOM_FOREST.identifier(), new BiomeMapColor(184, 48, 184));
 
-		BIOME2COLOR.put(TFBiomes.SWAMP.location(), new BiomeMapColor(0, 204, 187));
-		BIOME2COLOR.put(TFBiomes.FIRE_SWAMP.location(), new BiomeMapColor(140, 0, 0));
+		BIOME2COLOR.put(TFBiomes.SWAMP.identifier(), new BiomeMapColor(0, 204, 187));
+		BIOME2COLOR.put(TFBiomes.FIRE_SWAMP.identifier(), new BiomeMapColor(140, 0, 0));
 
-		BIOME2COLOR.put(TFBiomes.DARK_FOREST.location(), new BiomeMapColor(25, 61, 13));
-		BIOME2COLOR.put(TFBiomes.DARK_FOREST_CENTER.location(), new BiomeMapColor(157, 79, 0));
+		BIOME2COLOR.put(TFBiomes.DARK_FOREST.identifier(), new BiomeMapColor(25, 61, 13));
+		BIOME2COLOR.put(TFBiomes.DARK_FOREST_CENTER.identifier(), new BiomeMapColor(157, 79, 0));
 
-		BIOME2COLOR.put(TFBiomes.SNOWY_FOREST.location(), new BiomeMapColor(255, 255, 255));
-		BIOME2COLOR.put(TFBiomes.GLACIER.location(), new BiomeMapColor(130, 191, 245));
+		BIOME2COLOR.put(TFBiomes.SNOWY_FOREST.identifier(), new BiomeMapColor(255, 255, 255));
+		BIOME2COLOR.put(TFBiomes.GLACIER.identifier(), new BiomeMapColor(130, 191, 245));
 
-		BIOME2COLOR.put(TFBiomes.HIGHLANDS.location(), new BiomeMapColor(100, 65, 0));
-		BIOME2COLOR.put(TFBiomes.THORNLANDS.location(), new BiomeMapColor(128, 100, 90));
-		BIOME2COLOR.put(TFBiomes.FINAL_PLATEAU.location(), new BiomeMapColor(128, 128, 128));
+		BIOME2COLOR.put(TFBiomes.HIGHLANDS.identifier(), new BiomeMapColor(100, 65, 0));
+		BIOME2COLOR.put(TFBiomes.THORNLANDS.identifier(), new BiomeMapColor(128, 100, 90));
+		BIOME2COLOR.put(TFBiomes.FINAL_PLATEAU.identifier(), new BiomeMapColor(128, 128, 128));
 	}
 
 	public LiteralArgumentBuilder<CommandSourceStack> register() {
-		return Commands.literal("biomepng").requires(cs -> cs.hasPermission(2)).executes(context -> createMap(context.getSource(), 4096, 4096, true))
+		return Commands.literal("biomepng").requires(cs -> Commands.LEVEL_GAMEMASTERS.check(cs.permissions())).executes(context -> createMap(context.getSource(), 4096, 4096, true))
 			.then(Commands.argument("width", IntegerArgumentType.integer(0))
 				.executes(context -> createMap(context.getSource(), IntegerArgumentType.getInteger(context, "width"), IntegerArgumentType.getInteger(context, "width"), true))
 				.then(Commands.argument("height", IntegerArgumentType.integer(0))
@@ -78,7 +79,7 @@ public class MapBiomesCommand {
 	}
 
 	private int createMap(CommandSourceStack source, int width, int height, boolean showBiomePercents) {
-		if (FMLEnvironment.dist.isDedicatedServer())
+		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER)
 			return -1;
 
 		if (BIOME2COLOR.isEmpty()) {
@@ -87,7 +88,7 @@ public class MapBiomesCommand {
 
 		//setup image
 		Map<Holder<Biome>, Integer> biomeCount = new HashMap<>();
-		NativeImage img = new NativeImage(width, height, false);
+		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
 		int progressUpdate = img.getHeight() / 8;
 
@@ -95,7 +96,7 @@ public class MapBiomesCommand {
 			for (int z = 0; z < img.getWidth(); z++) {
 				ServerLevel level = source.getLevel();
 				Holder<Biome> b = level.getNoiseBiome(x - (img.getWidth() / 2), 0, z - (img.getHeight() / 2));
-				ResourceLocation key = level.registryAccess().lookupOrThrow(Registries.BIOME).getKey(b.value());
+				Identifier key = level.registryAccess().lookupOrThrow(Registries.BIOME).getKey(b.value());
 				BiomeMapColor color = BIOME2COLOR.get(key);
 
 				if (color == null) {
@@ -114,7 +115,7 @@ public class MapBiomesCommand {
 				}
 
 				//set the color
-				img.setPixel(x, z, color.getARGB());
+				img.setRGB(x, z, color.getARGB());
 			}
 
 			//send a progress update to let people know the server isn't dying
@@ -140,7 +141,7 @@ public class MapBiomesCommand {
 		try {
 			if (!Files.exists(path)) {
 				Files.createDirectories(path.getParent());
-				img.writeToFile(path);
+				ImageIO.write(img, "png", path.toFile());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -154,7 +155,7 @@ public class MapBiomesCommand {
 	}
 
 	public static int getBiomeColor(Holder<Biome> biome) {
-		MagicMapBiomeColor c = biome.getData(TFDataMaps.MAGIC_MAP_BIOME_COLOR);
+		MagicMapBiomeColor c = TFDataMaps.getMagicMapColor(biome);
 		return c != null ? getMapColor(c) : 0xFF000000;
 	}
 

@@ -8,6 +8,7 @@ import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import twilightforest.init.TFStructurePieceTypes;
+import twilightforest.mixin.accessor.StructurePiecesBuilderAccessor;
 
 
 public class MushroomTowerMainBridgeComponent extends MushroomTowerBridgeComponent {
@@ -35,7 +36,7 @@ public class MushroomTowerMainBridgeComponent extends MushroomTowerBridgeCompone
 
 		list.addPiece(wing);
 		if (list instanceof StructurePiecesBuilder start) {
-			wing.addChildren(start.pieces.get(0), list, rand);
+			wing.addChildren(((StructurePiecesBuilderAccessor) start).twilightforest$getPieces().get(0), list, rand);
 		}
 		addOpening(x, y, z, rotation);
 

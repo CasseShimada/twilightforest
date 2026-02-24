@@ -2,7 +2,7 @@ package twilightforest.world.registration.biomes;
 
 import it.unimi.dsi.fastutil.doubles.Double2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.doubles.Double2ObjectSortedMap;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
@@ -51,8 +51,6 @@ public final class BiomeMaker extends BiomeHelper {
 	private static TerrainColumn biomeColumnWithUnderground(double noiseDepth, double noiseScale, double weight, HolderGetter<Biome> biomeRegistry, ResourceKey<Biome> key, Holder<Biome> undergroundBiome) {
 		Holder.Reference<Biome> biomeHolder = biomeRegistry.getOrThrow(key);
 
-		biomeHolder.bindKey(key);
-
 		return makeColumn(DensityFunctions.constant(noiseDepth), DensityFunctions.constant(noiseScale), DensityFunctions.constant(weight), biomeHolder, treeMap -> {
 			// This will put the transition boundary around Y-8
 			treeMap.put(Math.min(noiseDepth - 1, -1), biomeHolder);
@@ -62,8 +60,6 @@ public final class BiomeMaker extends BiomeHelper {
 
 	private static TerrainColumn biomeColumnToBedrock(double noiseDepth, double noiseScale, double weight, HolderGetter<Biome> biomeRegistry, ResourceKey<Biome> key) {
 		Holder.Reference<Biome> biomeHolder = biomeRegistry.getOrThrow(key);
-
-		biomeHolder.bindKey(key);
 
 		return makeColumn(DensityFunctions.constant(noiseDepth), DensityFunctions.constant(noiseScale), DensityFunctions.constant(weight), biomeHolder, treeMap -> treeMap.put(0, biomeHolder));
 	}

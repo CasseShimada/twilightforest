@@ -6,7 +6,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.random.WeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.MobSpawnSettings;
@@ -26,6 +26,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static twilightforest.world.components.structures.util.ControlledSpawns.ControlledSpawningConfig.weightedSpawn;
 
 public class AuroraPalaceStructure extends ControlledSpawningStructure {
 	public static final MapCodec<AuroraPalaceStructure> CODEC = RecordCodecBuilder.mapCodec(instance ->
@@ -48,18 +50,18 @@ public class AuroraPalaceStructure extends ControlledSpawningStructure {
 
 	public static AuroraPalaceStructure buildAuroraPalaceConfig(BootstrapContext<Structure> context) {
 		return new AuroraPalaceStructure(
-			ControlledSpawningConfig.firstIndexMonsters(
-				new MobSpawnSettings.SpawnerData(TFEntities.SNOW_GUARDIAN.get(), 10, 1, 2),
-				new MobSpawnSettings.SpawnerData(TFEntities.STABLE_ICE_CORE.get(), 10, 1, 2),
-				new MobSpawnSettings.SpawnerData(TFEntities.UNSTABLE_ICE_CORE.get(), 5, 1, 2)
-			),
+			ControlledSpawningConfig.justMonsters(List.of(List.of(
+				weightedSpawn(TFEntities.SNOW_GUARDIAN.get(), 10, 1, 2),
+				weightedSpawn(TFEntities.STABLE_ICE_CORE.get(), 10, 1, 2),
+				weightedSpawn(TFEntities.UNSTABLE_ICE_CORE.get(), 5, 1, 2)
+			))),
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_yeti"))),
 			new HintConfig(HintConfig.book("icetower", 3), TFEntities.KOBOLD.get()),
 			new DecorationConfig(2, false, true, false),
-			true, Optional.of(TFMapDecorations.AURORA_PALACE),
+			true, Optional.of(Holder.direct(TFMapDecorations.AURORA_PALACE.get())),
 			new StructureSettings(
 				context.lookup(Registries.BIOME).getOrThrow(TFBiomeTags.VALID_AURORA_PALACE_BIOMES),
-				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedRandomList.create()))), // Landmarks have Controlled Mob spawning
+				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedList.of()))), // Landmarks have Controlled Mob spawning
 				GenerationStep.Decoration.SURFACE_STRUCTURES,
 				TerrainAdjustment.NONE
 			)

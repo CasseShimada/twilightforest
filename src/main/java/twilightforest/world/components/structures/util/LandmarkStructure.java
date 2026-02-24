@@ -14,6 +14,7 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import org.jetbrains.annotations.Nullable;
+import twilightforest.mixin.accessor.StructurePiecesBuilderAccessor;
 import twilightforest.world.components.biomesources.TFBiomeProvider;
 import twilightforest.world.components.structures.TFStructureComponentTemplate;
 
@@ -46,9 +47,10 @@ public abstract class LandmarkStructure extends Structure implements DecorationC
 		return new GenerationStub(new BlockPos(x, y, z), structurePiecesBuilder -> {
 			this.generateFromStartingPiece(startingPiece, context, structurePiecesBuilder);
 
-			structurePiecesBuilder.pieces.sort(Comparator.comparing(piece -> piece instanceof SortablePiece sortable ? sortable.getSortKey() : 0));
+			((StructurePiecesBuilderAccessor) structurePiecesBuilder).twilightforest$getPieces()
+				.sort(Comparator.comparing(piece -> piece instanceof SortablePiece sortable ? sortable.getSortKey() : 0));
 
-			structurePiecesBuilder.pieces.stream()
+			((StructurePiecesBuilderAccessor) structurePiecesBuilder).twilightforest$getPieces().stream()
 				.filter(TFStructureComponentTemplate.class::isInstance)
 				.map(TFStructureComponentTemplate.class::cast)
 				.forEach(t -> t.LAZY_TEMPLATE_LOADER.run());

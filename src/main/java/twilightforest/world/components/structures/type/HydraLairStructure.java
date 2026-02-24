@@ -8,7 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.random.WeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.DensityFunction;
@@ -66,10 +66,10 @@ public class HydraLairStructure extends ProgressionStructure implements CustomDe
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_labyrinth"))),
 			new HintConfig(HintConfig.book("hydralair", 4), TFEntities.KOBOLD.get()),
 			new DecorationConfig(2, false, false, false),
-			true, Optional.of(TFMapDecorations.HYDRA_LAIR),
+			true, Optional.of(Holder.direct(TFMapDecorations.HYDRA_LAIR.get())),
 			new StructureSettings(
 				context.lookup(Registries.BIOME).getOrThrow(TFBiomeTags.VALID_HYDRA_LAIR_BIOMES),
-				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedRandomList.create()))), // Landmarks have Controlled Mob spawning
+				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedList.of()))), // Landmarks have Controlled Mob spawning
 				GenerationStep.Decoration.SURFACE_STRUCTURES,
 				TerrainAdjustment.NONE
 			),

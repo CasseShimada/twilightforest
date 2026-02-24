@@ -9,7 +9,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
@@ -18,7 +20,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.PacketDistributor;
+import twilightforest.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFDamageTypes;
 import twilightforest.init.TFEntities;
@@ -351,13 +353,13 @@ public class HydraHeadContainer {
 		// only actually do these things on the server
 		if (this.hydra.level() instanceof ServerLevel level) {
 			// make sure this is set up
-			if (!this.isDead() && this.headEntity.dimensions.width() == 0) {
-				this.headEntity.activate();
-				this.performOnAllNecks(HydraPart::activate);
-			} else if (!this.isActive() && this.headEntity.dimensions.width() > 0) {
-				this.headEntity.deactivate();
-				this.performOnAllNecks(HydraPart::deactivate);
-			}
+				if (!this.isDead() && this.headEntity.getBbWidth() == 0.0F) {
+					this.headEntity.activate();
+					this.performOnAllNecks(HydraPart::activate);
+				} else if (!this.isActive() && this.headEntity.getBbWidth() > 0.0F) {
+					this.headEntity.deactivate();
+					this.performOnAllNecks(HydraPart::deactivate);
+				}
 			this.advanceRespawnCounter();
 			this.advanceHeadState();
 			this.setHeadPosition();
@@ -679,7 +681,8 @@ public class HydraHeadContainer {
 						if (!player.getCooldowns().isOnCooldown(player.getUseItem())) {
 							//cause severe damage and play a shatter sound
 							this.headEntity.level().playSound(null, player.blockPosition(), player.getUseItem().is(Items.SHIELD) ? TFSounds.WOOD_SHIELD_SHATTERS.get() : TFSounds.METAL_SHIELD_SHATTERS.get(), SoundSource.PLAYERS, 1.0F, player.getVoicePitch());
-							player.getUseItem().hurtAndBreak(112, player, LivingEntity.getSlotForHand(player.getUsedItemHand()));
+							EquipmentSlot slot = player.getUsedItemHand() == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+							player.getUseItem().hurtAndBreak(112, player, slot);
 						}
 						//add cooldown and knockback
 						player.getCooldowns().addCooldown(player.getUseItem(), 200);

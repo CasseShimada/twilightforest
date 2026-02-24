@@ -1,7 +1,7 @@
 package twilightforest.world.components.structures.icetower;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -22,6 +22,7 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilde
 import twilightforest.TwilightForestMod;
 import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.loot.TFLootTables;
+import twilightforest.mixin.accessor.StructurePiecesBuilderAccessor;
 import twilightforest.util.RotationUtil;
 import twilightforest.util.WorldUtil;
 import twilightforest.world.components.structures.TFStructureComponentOld;
@@ -52,8 +53,8 @@ public class IceTowerWingComponent extends TowerWingComponent {
 
 	public IceTowerWingComponent(StructurePieceType piece, CompoundTag nbt) {
 		super(piece, nbt);
-		this.hasBase = nbt.getBoolean("hasBase");
-		this.treasureFloor = nbt.getInt("treasureFloor");
+		this.hasBase = nbt.getBooleanOr("hasBase", false);
+		this.treasureFloor = nbt.getIntOr("treasureFloor", -1);
 	}
 
 	protected IceTowerWingComponent(StructurePieceType piece, int i, int x, int y, int z, int pSize, int pHeight, Direction direction) {
@@ -90,7 +91,7 @@ public class IceTowerWingComponent extends TowerWingComponent {
 		} else if (list instanceof StructurePiecesBuilder structurePiecesBuilder){
 			UtilityPiece utilityPiece = new UtilityPiece(getGenDepth() + 1,
 				new BoundingBox(
-					boundingBox.minX(), structurePiecesBuilder.pieces.stream().mapToInt(piece -> piece.getBoundingBox().minY()).min().getAsInt(), boundingBox.minZ(),
+					boundingBox.minX(), ((StructurePiecesBuilderAccessor) structurePiecesBuilder).twilightforest$getPieces().stream().mapToInt(piece -> piece.getBoundingBox().minY()).min().getAsInt(), boundingBox.minZ(),
 					boundingBox.maxX(), boundingBox.minY(), boundingBox.maxZ()
 				));
 			list.addPiece(utilityPiece);
@@ -131,7 +132,7 @@ public class IceTowerWingComponent extends TowerWingComponent {
 		if (!(list instanceof StructurePiecesBuilder start))
 			return false;
 
-		if (start.pieces.stream().anyMatch(piece -> {
+		if (((StructurePiecesBuilderAccessor) start).twilightforest$getPieces().stream().anyMatch(piece -> {
 			BoundingBox pieceBox = piece.getBoundingBox();
 			BoundingBox box = this.getBoundingBox();
 			Rectangle rectanglePiece = new Rectangle(pieceBox.minX(), pieceBox.minZ(), pieceBox.maxX() - pieceBox.minX(), pieceBox.maxZ() - pieceBox.minZ());
@@ -163,16 +164,17 @@ public class IceTowerWingComponent extends TowerWingComponent {
 		int[] dx = offsetTowerCoords(x, y, z, wingSize, direction);
 
 		// stop if out of range
-		if (!(list instanceof StructurePiecesBuilder start) || !start.pieces.isEmpty() && isOutOfRange(start.pieces.get(0), dx[0], dx[2], RANGE))
+		if (!(list instanceof StructurePiecesBuilder start) || !((StructurePiecesBuilderAccessor) start).twilightforest$getPieces().isEmpty() && isOutOfRange(((StructurePiecesBuilderAccessor) start).twilightforest$getPieces().get(0), dx[0], dx[2], RANGE))
 			return false;
 
+		List<StructurePiece> pieces = ((StructurePiecesBuilderAccessor) start).twilightforest$getPieces();
 		IceTowerWingComponent wing = new IceTowerWingComponent(TFStructurePieceTypes.TFITWin.get(), index, dx[0], dx[1], dx[2], wingSize, wingHeight, direction);
 		// check to see if it intersects something already there
 		BoundingBox sbb = wing.getBoundingBox();
 		StructurePiece intersect = start.findCollisionPiece(new BoundingBox(
 			sbb.minX(), sbb.minY() - Math.round(this.size * 1.414F), sbb.minZ(),  // Magic constant is a copy-paste from IceTowerBeardComponent
 			sbb.maxX(), sbb.maxY() + Math.round(this.size * 1.414F), sbb.maxZ()));  // Calculated magic constant from IceTowerRoofComponent
-		if (intersect != null && intersect != this || start.pieces.stream().anyMatch(piece -> {
+		if (intersect != null && intersect != this || pieces.stream().anyMatch(piece -> {
 			BoundingBox pieceBox = piece.getBoundingBox();
 			BoundingBox box = this.getBoundingBox();
 			Rectangle rectanglePiece = new Rectangle(pieceBox.minX(), pieceBox.minZ(), pieceBox.maxX() - pieceBox.minX(), pieceBox.maxZ() - pieceBox.minZ());
@@ -182,7 +184,7 @@ public class IceTowerWingComponent extends TowerWingComponent {
 			return false;
 
 		list.addPiece(wing);
-		wing.addChildren(start.pieces.get(0), list, rand);
+		wing.addChildren(pieces.get(0), list, rand);
 		addOpening(x, y, z, rotation);
 		return true;
 	}
@@ -201,7 +203,7 @@ public class IceTowerWingComponent extends TowerWingComponent {
 		if (intersect == null || intersect == this) {
 			list.addPiece(wing);
 			if (list instanceof StructurePiecesBuilder start) {
-				wing.addChildren(start.pieces.get(0), list, rand);
+				wing.addChildren(((StructurePiecesBuilderAccessor) start).twilightforest$getPieces().get(0), list, rand);
 			}
 			addOpening(x, y, z, rotation);
 			return true;

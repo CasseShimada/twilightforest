@@ -29,10 +29,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.entity.IHostileMount;
 import twilightforest.entity.ai.goal.ThrowRiderGoal;
@@ -208,13 +208,8 @@ public class AlphaYeti extends BaseTFBoss implements RangedAttackMob, IHostileMo
 		return new Vec3(0.0F, dimensions.height(), 0.4F);
 	}
 
-	@Override
-	public boolean canRiderInteract() {
-		return true;
-	}
-
 	public void destroyBlocksInAABB(ServerLevel level, AABB box) {
-		if (EventHooks.canEntityGrief(level, this)) {
+		if (level.getGameRules().get(GameRules.MOB_GRIEFING)) {
 			for (BlockPos pos : WorldUtil.getAllInBB(box)) {
 				if (EntityUtil.canDestroyBlock(this.level(), pos, this)) {
 					this.level().destroyBlock(pos, false);
@@ -224,7 +219,7 @@ public class AlphaYeti extends BaseTFBoss implements RangedAttackMob, IHostileMo
 	}
 
 	public void makeRandomBlockFall(ServerLevel level, int range, int hangTime) {
-		if (EventHooks.canEntityGrief(level, this)) {
+		if (level.getGameRules().get(GameRules.MOB_GRIEFING)) {
 			// find a block nearby
 			int bx = Mth.floor(this.getX()) + this.getRandom().nextInt(range) - this.getRandom().nextInt(range);
 			int bz = Mth.floor(this.getZ()) + this.getRandom().nextInt(range) - this.getRandom().nextInt(range);
@@ -296,7 +291,7 @@ public class AlphaYeti extends BaseTFBoss implements RangedAttackMob, IHostileMo
 	}
 
 	@Override
-	public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
+	public boolean causeFallDamage(double distance, float multiplier, DamageSource source) {
 		if (this.level() instanceof ServerLevel level && this.isRampaging()) {
 			this.playSound(TFSounds.ALPHA_YETI_ICE.get(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
 			this.hitNearbyEntities(level);

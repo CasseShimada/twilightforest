@@ -1,7 +1,6 @@
 package twilightforest.entity.monster;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -18,19 +17,21 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
-import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.entity.monster.skeleton.Skeleton;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import twilightforest.TwilightForestMod;
 import twilightforest.entity.projectile.NatureBolt;
 import twilightforest.init.TFEntities;
 import twilightforest.init.TFSounds;
 
-public class SkeletonDruid extends AbstractSkeleton {
+public class SkeletonDruid extends Skeleton {
 	private RangedAttackGoal rangedAttackGoal;
 
 	public SkeletonDruid(EntityType<? extends SkeletonDruid> type, Level world) {
@@ -68,8 +69,8 @@ public class SkeletonDruid extends AbstractSkeleton {
 	}
 
 	@Override
-	protected SoundEvent getStepSound() {
-		return TFSounds.SKELETON_DRUID_STEP.get();
+	protected void playStepSound(BlockPos pos, net.minecraft.world.level.block.state.BlockState blockState) {
+		this.playSound(TFSounds.SKELETON_DRUID_STEP.get(), 0.15F, 1.0F);
 	}
 
 
@@ -128,15 +129,15 @@ public class SkeletonDruid extends AbstractSkeleton {
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putBoolean("IsBaby", this.isBaby());
+	public void addAdditionalSaveData(ValueOutput output) {
+		super.addAdditionalSaveData(output);
+		output.putBoolean("IsBaby", this.isBaby());
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		this.setBaby(compound.getBoolean("IsBaby"));
+	public void readAdditionalSaveData(ValueInput input) {
+		super.readAdditionalSaveData(input);
+		this.setBaby(input.getBooleanOr("IsBaby", this.isBaby()));
 	}
 
 	// Below: VANILLACOPY Zombie Baby Code

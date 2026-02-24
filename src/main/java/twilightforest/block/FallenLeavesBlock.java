@@ -1,7 +1,6 @@
 package twilightforest.block;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -9,6 +8,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -27,8 +27,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.network.PacketDistributor;
-import twilightforest.client.particle.data.LeafParticleData;
+import twilightforest.network.PacketDistributor;
+import twilightforest.particle.data.LeafParticleData;
 import twilightforest.network.SpawnFallenLeafFromPacket;
 
 public class FallenLeavesBlock extends TFPlantBlock {
@@ -44,8 +44,9 @@ public class FallenLeavesBlock extends TFPlantBlock {
 	}
 
 	@Override
-	protected MapCodec<? extends BushBlock> codec() {
-		return CODEC;
+	@SuppressWarnings("unchecked")
+	public MapCodec<BushBlock> codec() {
+		return (MapCodec<BushBlock>)(MapCodec<?>) CODEC;
 	}
 
 	@Override
@@ -124,7 +125,7 @@ public class FallenLeavesBlock extends TFPlantBlock {
 					return;
 			}
 
-			int color = Minecraft.getInstance().getBlockColors().getColor(Blocks.OAK_LEAVES.defaultBlockState(), level, pos, 0);
+			int color = level.getBiome(pos).value().getFoliageColor();
 			int r = Mth.clamp(((color >> 16) & 0xFF) + random.nextInt(0x22) - 0x11, 0x00, 0xFF);
 			int g = Mth.clamp(((color >> 8) & 0xFF) + random.nextInt(0x22) - 0x11, 0x00, 0xFF);
 			int b = Mth.clamp((color & 0xFF) + random.nextInt(0x22) - 0x11, 0x00, 0xFF);
@@ -133,14 +134,14 @@ public class FallenLeavesBlock extends TFPlantBlock {
 	}
 
 	@Override
-	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-		super.entityInside(state, level, pos, entity);
+	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean movedByPiston) {
+		super.entityInside(state, level, pos, entity, effectApplier, movedByPiston);
 		if (state.getValue(LAYERS) > 2) {
 			entity.makeStuckInBlock(state, new Vec3(1.0D - (0.05D * (state.getValue(LAYERS) - 2)), 1.0D, 1.0D - (0.05D * (state.getValue(LAYERS) - 2))));
 		}
 		if (entity instanceof LivingEntity && (entity.getDeltaMovement().x() != 0 || entity.getDeltaMovement().z() != 0) && level.getRandom().nextBoolean()) {
 			if (level.isClientSide()) {
-				int color = Minecraft.getInstance().getBlockColors().getColor(Blocks.OAK_LEAVES.defaultBlockState(), level, pos, 0);
+				int color = level.getBiome(pos).value().getFoliageColor();
 				int r = Mth.clamp(((color >> 16) & 0xFF) + level.getRandom().nextInt(0x22) - 0x11, 0x00, 0xFF);
 				int g = Mth.clamp(((color >> 8) & 0xFF) + level.getRandom().nextInt(0x22) - 0x11, 0x00, 0xFF);
 				int b = Mth.clamp((color & 0xFF) + level.getRandom().nextInt(0x22) - 0x11, 0x00, 0xFF);

@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
@@ -86,11 +85,6 @@ public class RopeBlock extends Block implements SimpleWaterloggedBlock {
 	}
 
 	@Override
-	public boolean isScaffolding(BlockState state, LevelReader level, BlockPos pos, LivingEntity entity) {
-		return true;
-	}
-
-	@Override
 	public boolean canBeReplaced(BlockState state, BlockPlaceContext context) {
 		return context.getItemInHand().is(this.asItem());
 	}
@@ -109,13 +103,13 @@ public class RopeBlock extends Block implements SimpleWaterloggedBlock {
 
 	@Override
 	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState otherState, boolean isMoving) {
-		if (!level.isClientSide) level.scheduleTick(pos, this, 1);
+		if (!level.isClientSide()) level.scheduleTick(pos, this, 1);
 	}
 
 	@Override
 	protected BlockState updateShape(BlockState state, LevelReader reader, ScheduledTickAccess access, BlockPos pos, Direction direction, BlockPos facingPos, BlockState facingState, RandomSource random) {
 		if (state.getValue(WATERLOGGED)) access.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(reader));
-		if (!reader.isClientSide()) access.scheduleTick(pos, this, 1);
+		if (reader instanceof Level level && !level.isClientSide()) access.scheduleTick(pos, this, 1);
 		return state;
 	}
 

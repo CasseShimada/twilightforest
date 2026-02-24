@@ -91,7 +91,11 @@ public class MonolithFeature extends Feature<NoneFeatureConfiguration> {
 
 			if (dPos.getY() > 0) {
 				Raven raven = TFEntities.RAVEN.get().create(world.getLevel(), EntitySpawnReason.CHUNK_GENERATION);
-				raven.moveTo(dPos, rand.nextFloat() * 360.0F, 0.0F);
+				float yaw = rand.nextFloat() * 360.0F;
+				raven.setPos(dPos.getX() + 0.5D, dPos.getY(), dPos.getZ() + 0.5D);
+				raven.setYRot(yaw);
+				raven.setXRot(0.0F);
+				raven.setYHeadRot(yaw);
 
 				world.addFreshEntity(raven);
 			}

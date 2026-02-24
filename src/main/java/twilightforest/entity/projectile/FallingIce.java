@@ -5,19 +5,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
@@ -32,6 +30,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -41,7 +43,6 @@ import twilightforest.entity.boss.AlphaYeti;
 import twilightforest.init.TFDamageTypes;
 import twilightforest.init.TFEntities;
 
-import java.util.Objects;
 
 //modified version of FallingBlockEntity, edits noted
 public class FallingIce extends Entity {
@@ -115,11 +116,11 @@ public class FallingIce extends Entity {
 			if (!this.level().isClientSide()) {
 				BlockPos blockpos = this.blockPosition();
 				boolean flag = this.blockState.getBlock() instanceof ConcretePowderBlock;
-				boolean flag1 = flag && this.blockState.canBeHydrated(this.level(), blockpos, this.level().getFluidState(blockpos), blockpos);
+				boolean flag1 = flag && touchesLiquid(this.level(), blockpos);
 				double d0 = this.getDeltaMovement().lengthSqr();
 				if (flag && d0 > 1.0D) {
 					BlockHitResult blockhitresult = this.level().clip(new ClipContext(new Vec3(this.xo, this.yo, this.zo), this.position(), ClipContext.Block.COLLIDER, ClipContext.Fluid.SOURCE_ONLY, this));
-					if (blockhitresult.getType() != HitResult.Type.MISS && this.blockState.canBeHydrated(this.level(), blockpos, this.level().getFluidState(blockhitresult.getBlockPos()), blockhitresult.getBlockPos())) {
+					if (blockhitresult.getType() != HitResult.Type.MISS && touchesLiquid(this.level(), blockhitresult.getBlockPos())) {
 						blockpos = blockhitresult.getBlockPos();
 						flag1 = true;
 					}
@@ -141,21 +142,20 @@ public class FallingIce extends Entity {
 								this.blockState = this.blockState.setValue(BlockStateProperties.WATERLOGGED, true);
 							}
 
-							if (this.level().setBlock(blockpos, this.blockState, Block.UPDATE_ALL)) {
-								((ServerLevel) this.level()).getChunkSource().chunkMap.broadcast(this, new ClientboundBlockUpdatePacket(blockpos, this.level().getBlockState(blockpos)));
-								this.discard();
+								if (this.level().setBlock(blockpos, this.blockState, Block.UPDATE_ALL)) {
+									this.level().sendBlockUpdated(blockpos, this.blockState, this.blockState, Block.UPDATE_ALL);
+									this.discard();
 
 								if (this.blockData != null && this.blockState.hasBlockEntity()) {
 									BlockEntity blockentity = this.level().getBlockEntity(blockpos);
 									if (blockentity != null) {
 										CompoundTag compoundtag = blockentity.saveWithoutMetadata(this.level().registryAccess());
 
-										for (String s : this.blockData.getAllKeys()) {
-											compoundtag.put(s, Objects.requireNonNull(this.blockData.get(s)).copy());
-										}
+										compoundtag.merge(this.blockData);
 
 										try {
-											blockentity.loadWithComponents(compoundtag, this.level().registryAccess());
+											ValueInput blockEntityInput = TagValueInput.create(ProblemReporter.DISCARDING, this.level().registryAccess(), compoundtag);
+											blockentity.loadWithComponents(blockEntityInput);
 										} catch (Exception exception) {
 											TwilightForestMod.LOGGER.error("Failed to load block entity from falling block", exception);
 										}
@@ -188,11 +188,20 @@ public class FallingIce extends Entity {
 		}
 	}
 
+	private static boolean touchesLiquid(Level level, BlockPos pos) {
+		for (Direction direction : Direction.values()) {
+			BlockPos offset = pos.relative(direction);
+			if (level.getFluidState(offset).is(FluidTags.WATER)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	//TF: always hurt entities, remove anvil and dripstone crap, make sure our target isn't the alpha yeti, and scale damage based on difficulty
 	@Override
-	public boolean causeFallDamage(float dist, float multiplier, DamageSource source) {
-
-		int realDist = Mth.ceil(dist - 5.0F);
+	public boolean causeFallDamage(double dist, float multiplier, DamageSource source) {
+		int realDist = Mth.ceil(dist - 5.0D);
 		if (realDist >= 0) {
 			float dmg = (float) Math.min(Mth.floor((float) realDist * this.damagePerDifficulty[this.level().getDifficulty().getId()]), this.fallDamageMax);
 			this.level().getEntities(this, this.getBoundingBox().inflate(1.0F, 0.0F, 1.0F), EntitySelector.NO_SPECTATORS).forEach((entity) -> {
@@ -225,27 +234,20 @@ public class FallingIce extends Entity {
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundTag tag) {
-		tag.put("BlockState", NbtUtils.writeBlockState(this.blockState));
-		tag.putInt("Time", this.time);
-		if (this.blockData != null) {
-			tag.put("BlockEntityData", this.blockData);
-		}
-
+	protected void addAdditionalSaveData(ValueOutput output) {
+		output.store("BlockState", BlockState.CODEC, this.blockState);
+		output.putInt("Time", this.time);
+		output.storeNullable("BlockEntityData", CompoundTag.CODEC, this.blockData);
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundTag tag) {
-		this.blockState = NbtUtils.readBlockState(this.level().holderLookup(Registries.BLOCK), tag.getCompound("BlockState"));
-		this.time = tag.getInt("Time");
-		if (tag.contains("BlockEntityData", 10)) {
-			this.blockData = tag.getCompound("BlockEntityData");
-		}
-
+	protected void readAdditionalSaveData(ValueInput input) {
+		this.blockState = input.read("BlockState", BlockState.CODEC).orElse(Blocks.PACKED_ICE.defaultBlockState());
+		this.time = input.getIntOr("Time", 0);
+		this.blockData = input.read("BlockEntityData", CompoundTag.CODEC).orElse(null);
 		if (this.blockState.isAir()) {
 			this.blockState = Blocks.PACKED_ICE.defaultBlockState();
 		}
-
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package twilightforest.world.components.structures.lichtowerrevamp;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.FrontAndTop;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
@@ -16,9 +16,8 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
-import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
+import twilightforest.world.components.structures.PieceBeardifierModifier;
 import twilightforest.TwilightForestMod;
-import tamaized.beanification.Autowired;
 import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.tags.TFPaintingVariantTags;
 import twilightforest.util.jigsaw.JigsawPlaceContext;
@@ -30,8 +29,7 @@ import twilightforest.world.components.structures.TwilightTemplateStructurePiece
 import java.util.ArrayList;
 
 public final class LichTowerSegment extends TwilightJigsawPiece implements PieceBeardifierModifier, SpawnIndexProvider {
-	@Autowired
-	private static LichTowerUtil lichTowerUtil;
+	private static final LichTowerUtil lichTowerUtil = new LichTowerUtil();
 
 	private final boolean putMobBridge;
 	private final boolean putWings;
@@ -43,12 +41,12 @@ public final class LichTowerSegment extends TwilightJigsawPiece implements Piece
 		LichTowerUtil.addDefaultProcessors(this.placeSettings);
 		stairDecay(this.genDepth, this.placeSettings);
 
-		this.putMobBridge = compoundTag.getBoolean("put_bridge");
-		this.putWings = compoundTag.getBoolean("put_wings");
-		this.putGallery = compoundTag.getBoolean("put_gallery");
+		this.putMobBridge = compoundTag.getBooleanOr("put_bridge", false);
+		this.putWings = compoundTag.getBooleanOr("put_wings", false);
+		this.putGallery = compoundTag.getBooleanOr("put_gallery", false);
 	}
 
-	public LichTowerSegment(StructureTemplateManager structureManager, int genDepth, JigsawPlaceContext jigsawContext, boolean putMobBridge, boolean putWings, boolean putGallery, ResourceLocation template) {
+	public LichTowerSegment(StructureTemplateManager structureManager, int genDepth, JigsawPlaceContext jigsawContext, boolean putMobBridge, boolean putWings, boolean putGallery, Identifier template) {
 		super(TFStructurePieceTypes.LICH_TOWER_SEGMENT.get(), genDepth, structureManager, template, jigsawContext);
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings);
@@ -79,7 +77,7 @@ public final class LichTowerSegment extends TwilightJigsawPiece implements Piece
 	}
 
 	public static void buildTowerBySegments(StructurePieceAccessor pieceAccessor, RandomSource random, final BlockPos sourceJigsawPos, final FrontAndTop sourceOrientation, final TwilightJigsawPiece parentBase, StructureTemplateManager structureManager, final int segments) {
-		ResourceLocation segmentId = TwilightForestMod.prefix("lich_tower/tower_slice");
+		Identifier segmentId = TwilightForestMod.prefix("lich_tower/tower_slice");
 		ArrayList<TwilightTemplateStructurePiece> pieces = new ArrayList<>();
 
 		TwilightTemplateStructurePiece priorPiece = parentBase;
@@ -157,7 +155,7 @@ public final class LichTowerSegment extends TwilightJigsawPiece implements Piece
 					// Either keep match jigsaw rotation or spin it 180. This will "flip" a few bridges
 					FrontAndTop forPlacement = random.nextBoolean() ? orientation : FrontAndTop.fromFrontAndTop(orientation.front(), orientation.top().getOpposite());
 
-					ResourceLocation mobBridgeLocation = lichTowerUtil.rollRandomMobBridge(random);
+					Identifier mobBridgeLocation = lichTowerUtil.rollRandomMobBridge(random);
 					JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(this.templatePosition(), connection.pos(), forPlacement, this.structureManager, mobBridgeLocation, "twilightforest:mob_bridge", random);
 
 					if (placeableJunction != null) {

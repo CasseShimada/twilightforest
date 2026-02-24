@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -21,14 +20,15 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.network.PacketDistributor;
+import twilightforest.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.config.TFConfig;
 import twilightforest.entity.EnforcedHomePoint;
@@ -59,7 +59,7 @@ public abstract class BaseTFBoss extends Monster implements IBossLootBuffer, Enf
 	public abstract Block getBossSpawner();
 
 	protected boolean shouldSpawnLoot(ServerLevel level) {
-		return level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT);
+		return level.getGameRules().get(GameRules.MOB_DROPS);
 	}
 
 	protected boolean shouldCreateSpawner() {
@@ -86,17 +86,17 @@ public abstract class BaseTFBoss extends Monster implements IBossLootBuffer, Enf
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		this.saveHomePointToNbt(compound);
-		this.addDeathItemsSaveData(compound, this.registryAccess());
-		super.addAdditionalSaveData(compound);
+	public void addAdditionalSaveData(ValueOutput output) {
+		this.saveHomePointToNbt(output);
+		this.addDeathItemsSaveData(output);
+		super.addAdditionalSaveData(output);
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		this.readDeathItemsSaveData(compound, this.registryAccess());
-		this.loadHomePointFromNbt(compound);
+	public void readAdditionalSaveData(ValueInput input) {
+		super.readAdditionalSaveData(input);
+		this.readDeathItemsSaveData(input);
+		this.loadHomePointFromNbt(input);
 	}
 
 	@Override
@@ -156,12 +156,7 @@ public abstract class BaseTFBoss extends Monster implements IBossLootBuffer, Enf
 	}
 
 	@Override
-	protected boolean shouldDespawnInPeaceful() {
-		return true;
-	}
-
-	@Override
-	protected boolean shouldDropLoot() {
+	protected boolean shouldDropLoot(ServerLevel level) {
 		return !TFConfig.bossDropChests;
 	}
 
@@ -176,7 +171,7 @@ public abstract class BaseTFBoss extends Monster implements IBossLootBuffer, Enf
 	}
 
 	@Override
-	public boolean isPushedByFluid(FluidType type) {
+	public boolean isPushedByFluid() {
 		return false;
 	}
 

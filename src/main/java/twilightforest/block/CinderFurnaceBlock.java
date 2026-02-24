@@ -46,11 +46,6 @@ public class CinderFurnaceBlock extends BaseEntityBlock {
 	}
 
 	@Override
-	public int getLightEmission(BlockState state, BlockGetter getter, BlockPos pos) {
-		return state.getValue(LIT) ? 15 : 0;
-	}
-
-	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(LIT, FACING);
 	}
@@ -78,22 +73,19 @@ public class CinderFurnaceBlock extends BaseEntityBlock {
 	}
 
 	@Override
-	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-		if (state.getValue(LIT)) {
-			Blocks.FURNACE.animateTick(state, level, pos, random);
+	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+		BlockEntity tileentity = level.getBlockEntity(pos);
+		if (tileentity instanceof CinderFurnaceBlockEntity) {
+			Containers.dropContents(level, pos, (CinderFurnaceBlockEntity) tileentity);
+			level.updateNeighbourForOutputSignal(pos, this);
 		}
+		return super.playerWillDestroy(level, pos, state, player);
 	}
 
 	@Override
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-		if (state.getBlock() != newState.getBlock()) {
-			BlockEntity tileentity = level.getBlockEntity(pos);
-			if (tileentity instanceof CinderFurnaceBlockEntity) {
-				Containers.dropContents(level, pos, (CinderFurnaceBlockEntity) tileentity);
-				level.updateNeighbourForOutputSignal(pos, this);
-			}
-
-			super.onRemove(state, level, pos, newState, isMoving);
+	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+		if (state.getValue(LIT)) {
+			Blocks.FURNACE.animateTick(state, level, pos, random);
 		}
 	}
 }

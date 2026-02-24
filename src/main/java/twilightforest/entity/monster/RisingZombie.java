@@ -17,8 +17,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.event.EventHooks;
-import net.neoforged.neoforge.fluids.FluidType;
 
 public class RisingZombie extends Monster {
 
@@ -61,7 +59,7 @@ public class RisingZombie extends Monster {
 			if (!this.level().isClientSide()) {
 				this.getEntityData().set(RISING_TICKS, this.getRisingTicks() + 1);
 				if (this.getRisingTicks() % 10 == 0 && this.getRisingTicks() < 130) {
-					this.level().playSound(null, this.blockPosition(), state.getSoundType(this.level(), pos, null).getBreakSound(), SoundSource.BLOCKS, 1.0F, this.getRandom().nextFloat() * 0.15F + 0.7F);
+					this.level().playSound(null, this.blockPosition(), state.getSoundType().getBreakSound(), SoundSource.BLOCKS, 1.0F, this.getRandom().nextFloat() * 0.15F + 0.7F);
 				}
 			} else {
 				if (!this.level().isEmptyBlock(this.blockPosition().below())) {
@@ -87,7 +85,6 @@ public class RisingZombie extends Monster {
 
 		if (!this.level().isClientSide() && this.getRisingTicks() >= 130) {
 			this.convertTo(EntityType.ZOMBIE, ConversionParams.single(this, true, true), mob -> {
-				EventHooks.onLivingConvert(this, mob);
 				mob.setHealth(this.getHealth());
 				mob.setYRot(this.yRotO = this.getYRot());
 			});
@@ -145,12 +142,7 @@ public class RisingZombie extends Monster {
 	}
 
 	@Override
-	protected boolean isAffectedByFluids() {
-		return false;
-	}
-
-	@Override
-	public boolean isPushedByFluid(FluidType type) {
+	public boolean isAffectedByFluids() {
 		return false;
 	}
 

@@ -1,11 +1,11 @@
 package twilightforest.entity.monster;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -22,8 +22,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
 import twilightforest.entity.ai.goal.RiderSpearAttackGoal;
@@ -94,15 +95,15 @@ public class LowerGoblinKnight extends Monster {
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putBoolean("hasArmor", this.hasArmor());
+	public void addAdditionalSaveData(ValueOutput output) {
+		super.addAdditionalSaveData(output);
+		output.putBoolean("hasArmor", this.hasArmor());
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		this.setHasArmor(compound.getBoolean("hasArmor"));
+	public void readAdditionalSaveData(ValueInput input) {
+		super.readAdditionalSaveData(input);
+		this.setHasArmor(input.getBooleanOr("hasArmor", this.hasArmor()));
 	}
 
 	@Nullable
@@ -111,8 +112,11 @@ public class LowerGoblinKnight extends Monster {
 		data = super.finalizeSpawn(accessor, difficulty, reason, data);
 
 		UpperGoblinKnight upper = new UpperGoblinKnight(TFEntities.UPPER_GOBLIN_KNIGHT.get(), this.level());
-		upper.moveTo(this.getX(), this.getY() + 1, this.getZ(), this.getYRot(), 0.0F);
-		EventHooks.finalizeMobSpawn(upper, accessor, difficulty, EntitySpawnReason.NATURAL, data);
+		upper.setPos(this.getX(), this.getY() + 1, this.getZ());
+		upper.setYRot(this.getYRot());
+		upper.setXRot(0.0F);
+		upper.setYHeadRot(this.getYRot());
+		upper.finalizeSpawn(accessor, difficulty, EntitySpawnReason.NATURAL, data);
 		upper.startRiding(this);
 
 		return data;
@@ -206,9 +210,9 @@ public class LowerGoblinKnight extends Monster {
 	public void handleEntityEvent(byte id) {
 		if (id == EntityEvent.STOP_ATTACKING) {
 			ItemStack broken = new ItemStack(Items.IRON_CHESTPLATE);
-			this.breakItem(broken);
-			this.breakItem(broken);
-			this.breakItem(broken);
+			this.playBreakSound(broken);
+			this.playBreakSound(broken);
+			this.playBreakSound(broken);
 		} else {
 			super.handleEntityEvent(id);
 		}
@@ -217,5 +221,9 @@ public class LowerGoblinKnight extends Monster {
 	private void breakArmor() {
 		this.level().broadcastEntityEvent(this, (byte) 5);
 		this.setHasArmor(false);
+	}
+
+	private void playBreakSound(ItemStack stack) {
+		this.playSound(SoundEvents.ITEM_BREAK.value(), 0.8F, 0.8F + this.level().getRandom().nextFloat() * 0.4F);
 	}
 }

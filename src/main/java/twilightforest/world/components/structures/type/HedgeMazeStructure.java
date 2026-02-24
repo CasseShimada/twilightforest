@@ -6,7 +6,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.random.WeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.DensityFunction;
@@ -46,10 +46,10 @@ public class HedgeMazeStructure extends LandmarkStructure implements CustomDensi
 	public static HedgeMazeStructure buildStructureConfig(BootstrapContext<Structure> context) {
 		return new HedgeMazeStructure(
 			new DecorationClearance.DecorationConfig(2, false, true, true),
-			true, Optional.of(TFMapDecorations.HEDGE_MAZE),
+			true, Optional.of(Holder.direct(TFMapDecorations.HEDGE_MAZE.get())),
 			new Structure.StructureSettings(
 				context.lookup(Registries.BIOME).getOrThrow(TFBiomeTags.VALID_HEDGE_MAZE_BIOMES),
-				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedRandomList.create()))), // Landmarks have Controlled Mob spawning
+				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedList.of()))), // Landmarks have Controlled Mob spawning
 				GenerationStep.Decoration.SURFACE_STRUCTURES,
 				TerrainAdjustment.BEARD_BOX
 			)

@@ -18,6 +18,9 @@ build
 .gradle
 secrets.properties
 
+# datagen (generated resources cache)
+/src/generated/resources/.cache/
+
 # other
 eclipse
 run

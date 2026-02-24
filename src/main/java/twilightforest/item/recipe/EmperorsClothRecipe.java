@@ -1,13 +1,14 @@
 package twilightforest.item.recipe;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.Unit;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.Level;
 import twilightforest.init.TFDataComponents;
 import twilightforest.init.TFItems;
@@ -30,7 +31,7 @@ public class EmperorsClothRecipe extends CustomRecipe {
 				if (stack.is(TFItems.EMPERORS_CLOTH.get()) && !foundInk) {
 					foundInk = true;
 				} else if (!foundItem) {
-					if (stack.getItem() instanceof ArmorItem && stack.getCraftingRemainder().isEmpty() && stack.get(TFDataComponents.EMPERORS_CLOTH) == null) {
+					if (isHumanoidArmor(stack) && stack.getItem().getCraftingRemainder().isEmpty() && stack.get(TFDataComponents.EMPERORS_CLOTH.get()) == null) {
 						foundItem = true;
 					} else {
 						return false;
@@ -50,18 +51,23 @@ public class EmperorsClothRecipe extends CustomRecipe {
 
 		for (int i = 0; i < input.size(); i++) {
 			ItemStack stack = input.getItem(i);
-			if (!stack.isEmpty() && stack.getItem() instanceof ArmorItem && item.isEmpty()) {
+			if (!stack.isEmpty() && isHumanoidArmor(stack) && item.isEmpty()) {
 				item = stack;
 			}
 		}
 
 		ItemStack copy = item.copy();
-		copy.set(TFDataComponents.EMPERORS_CLOTH, Unit.INSTANCE);
+		copy.set(TFDataComponents.EMPERORS_CLOTH.get(), Unit.INSTANCE);
 		return copy;
 	}
 
 	@Override
 	public RecipeSerializer<? extends CustomRecipe> getSerializer() {
 		return TFRecipes.EMPERORS_CLOTH_RECIPE.get();
+	}
+
+	private static boolean isHumanoidArmor(ItemStack stack) {
+		Equippable equippable = stack.get(DataComponents.EQUIPPABLE);
+		return equippable != null && equippable.slot().isArmor();
 	}
 }

@@ -6,7 +6,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.ChunkPos;
@@ -22,7 +22,6 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
-import net.neoforged.neoforge.event.EventHooks;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
@@ -36,8 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GraveyardFeature extends Feature<NoneFeatureConfiguration> {
-	private static final ResourceLocation GRAVEYARD = TwilightForestMod.prefix("feature/graveyard/graveyard");
-	private static final ResourceLocation TRAP = TwilightForestMod.prefix("feature/graveyard/grave_trap");
+	private static final Identifier GRAVEYARD = TwilightForestMod.prefix("feature/graveyard/graveyard");
+	private static final Identifier TRAP = TwilightForestMod.prefix("feature/graveyard/grave_trap");
 
 	public GraveyardFeature(Codec<NoneFeatureConfiguration> config) {
 		super(config);
@@ -177,7 +176,7 @@ public class GraveyardFeature extends Feature<NoneFeatureConfiguration> {
 						}
 						Wraith wraith = new Wraith(TFEntities.WRAITH.get(), world.getLevel());
 						wraith.setPos(placement.getX(), placement.getY(), placement.getZ());
-						EventHooks.finalizeMobSpawn(wraith, world, world.getCurrentDifficultyAt(placement), EntitySpawnReason.STRUCTURE, null);
+						wraith.finalizeSpawn(world, world.getCurrentDifficultyAt(placement), EntitySpawnReason.STRUCTURE, null);
 						world.addFreshEntity(wraith);
 					}
 				}
@@ -185,16 +184,19 @@ public class GraveyardFeature extends Feature<NoneFeatureConfiguration> {
 		}
 
 		data.forEach(info -> {
-			if (info.nbt() != null && StructureMode.valueOf(info.nbt().getString("mode")) == StructureMode.DATA) {
-				String s = info.nbt().getString("metadata");
-				BlockPos p = info.pos();
-				if ("spawner".equals(s)) {
-					world.removeBlock(p, false);
-					if (rand.nextInt(4) == 0) {
-						if (world.setBlock(p, Blocks.SPAWNER.defaultBlockState(), Block.UPDATE_ALL)) {
-							SpawnerBlockEntity ms = (SpawnerBlockEntity) world.getBlockEntity(p);
-							if (ms != null)
-								ms.setEntityId(TFEntities.RISING_ZOMBIE.get(), rand);
+			if (info.nbt() != null) {
+				String mode = info.nbt().getStringOr("mode", "");
+				if (!mode.isEmpty() && StructureMode.valueOf(mode) == StructureMode.DATA) {
+					String s = info.nbt().getStringOr("metadata", "");
+					BlockPos p = info.pos();
+					if ("spawner".equals(s)) {
+						world.removeBlock(p, false);
+						if (rand.nextInt(4) == 0) {
+							if (world.setBlock(p, Blocks.SPAWNER.defaultBlockState(), Block.UPDATE_ALL)) {
+								SpawnerBlockEntity ms = (SpawnerBlockEntity) world.getBlockEntity(p);
+								if (ms != null)
+									ms.setEntityId(TFEntities.RISING_ZOMBIE.get(), rand);
+							}
 						}
 					}
 				}
@@ -213,9 +215,9 @@ public class GraveyardFeature extends Feature<NoneFeatureConfiguration> {
 		Lower(TwilightForestMod.prefix("feature/graveyard/grave_lower"));
 
 		private static final GraveType[] VALUES = values();
-		private final ResourceLocation RL;
+		private final Identifier RL;
 
-		GraveType(ResourceLocation rl) {
+		GraveType(Identifier rl) {
 			this.RL = rl;
 		}
 	}
@@ -232,9 +234,8 @@ public class GraveyardFeature extends Feature<NoneFeatureConfiguration> {
 			return TFStructureProcessors.WEB.get();
 		}
 
-		@Nullable
 		@Override
-		public StructureTemplate.StructureBlockInfo process(LevelReader worldIn, BlockPos pos, BlockPos piecepos, StructureTemplate.StructureBlockInfo p_process_3_, StructureTemplate.StructureBlockInfo blockInfo, StructurePlaceSettings settings, @Nullable StructureTemplate template) {
+		public StructureTemplate.StructureBlockInfo processBlock(LevelReader worldIn, BlockPos pos, BlockPos piecepos, StructureTemplate.StructureBlockInfo originalInfo, StructureTemplate.StructureBlockInfo blockInfo, StructurePlaceSettings settings) {
 			return blockInfo.state().getBlock() == Blocks.GRASS_BLOCK ? blockInfo : settings.getRandom(pos).nextInt(5) == 0 ? new StructureTemplate.StructureBlockInfo(pos, Blocks.COBWEB.defaultBlockState(), null) : blockInfo;
 		}
 	}

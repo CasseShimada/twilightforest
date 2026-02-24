@@ -8,6 +8,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import twilightforest.entity.boss.SnowQueen;
 import twilightforest.entity.boss.SnowQueen.Phase;
+import twilightforest.entity.TFMultipartEntity;
 
 import java.util.*;
 
@@ -144,8 +145,9 @@ public class HoverBeamGoal extends HoverBaseGoal<SnowQueen> {
 		List<Entity> possibleList = this.attacker.level().getEntities(this.attacker, this.attacker.getBoundingBox().move(lookVec.x() * offset, lookVec.y() * offset, lookVec.z() * offset).inflate(range, range, range));
 		double hitDist = 0;
 
-		if (this.attacker.isMultipartEntity())
-			possibleList.removeAll(Arrays.asList(Objects.requireNonNull(this.attacker.getParts())));
+		if (this.attacker instanceof TFMultipartEntity multipart && multipart.getParts() != null) {
+			possibleList.removeAll(Arrays.asList(multipart.getParts()));
+		}
 
 		for (Entity possibleEntity : possibleList) {
 			if (possibleEntity.isPickable() && possibleEntity != this.attacker) {

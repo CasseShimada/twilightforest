@@ -1,10 +1,14 @@
 package twilightforest.init;
 
-import net.minecraft.Util;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Util;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
 import twilightforest.tags.TFItemTags;
+import twilightforest.util.registry.DeferredHolder;
 
 import java.util.EnumMap;
 
@@ -48,7 +52,7 @@ public class TFArmorMaterials {
 		map.put(ArmorType.CHESTPLATE, 8);
 		map.put(ArmorType.HELMET, 3);
 		map.put(ArmorType.BODY, 11);
-	}), 8, TFSounds.KNIGHTMETAL_EQUIP, 1.0F, 0.0F, TFItemTags.REPAIRS_KNIGHTMETAL_ARMOR, TFEquipmentAssets.KNIGHTMETAL);
+	}), 8, sound(TFSounds.KNIGHTMETAL_EQUIP), 1.0F, 0.0F, TFItemTags.REPAIRS_KNIGHTMETAL_ARMOR, TFEquipmentAssets.KNIGHTMETAL);
 
 	public static final ArmorMaterial PHANTOM = new ArmorMaterial(30, Util.make(new EnumMap<>(ArmorType.class), map -> {
 		map.put(ArmorType.BOOTS, 3);
@@ -73,4 +77,8 @@ public class TFArmorMaterials {
 		map.put(ArmorType.HELMET, 2);
 		map.put(ArmorType.BODY, 7);
 	}), 8, SoundEvents.ARMOR_EQUIP_GENERIC, 2.0F, 0.0F, TFItemTags.REPAIRS_ARCTIC_ARMOR, TFEquipmentAssets.ARCTIC);
+
+	private static Holder<SoundEvent> sound(DeferredHolder<SoundEvent, SoundEvent> sound) {
+		return BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound.get());
+	}
 }

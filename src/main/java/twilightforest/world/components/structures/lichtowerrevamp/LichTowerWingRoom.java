@@ -5,7 +5,7 @@ import it.unimi.dsi.fastutil.ints.IntArraySet;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -13,7 +13,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.InclusiveRange;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -46,13 +46,12 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.neoforged.fml.loading.FMLLoader;
-import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
+import net.fabricmc.loader.api.FabricLoader;
+import twilightforest.world.components.structures.PieceBeardifierModifier;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
-import tamaized.beanification.Autowired;
 import twilightforest.block.ChiseledCanopyShelfBlock;
 import twilightforest.block.LightableBlock;
 import twilightforest.block.SkullCandleBlock;
@@ -63,6 +62,8 @@ import twilightforest.block.entity.spawner.SinisterSpawnerBlockEntity;
 import twilightforest.entity.monster.DeathTome;
 import twilightforest.init.*;
 import twilightforest.loot.TFLootTables;
+import twilightforest.mixin.accessor.BrewingStandBlockEntityAccessor;
+import twilightforest.mixin.accessor.BaseSpawnerAccessor;
 import twilightforest.util.BoundingBoxUtils;
 import twilightforest.util.DirectionUtil;
 import twilightforest.util.RotationUtil;
@@ -80,8 +81,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public final class LichTowerWingRoom extends TwilightJigsawPiece implements PieceBeardifierModifier, SpawnIndexProvider {
-	@Autowired
-	private static LichTowerUtil lichTowerUtil;
+	private static final LichTowerUtil lichTowerUtil = new LichTowerUtil();
 
 	private final int roomSize;
 	private final boolean generateGround;
@@ -96,15 +96,15 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(lichTowerUtil.getRoomSpawnerProcessor()));
 		this.placeSettings().setLiquidSettings(LiquidSettings.IGNORE_WATERLOGGING);
 
-		this.roomSize = compoundTag.getInt("room_size");
-		this.generateGround = compoundTag.getBoolean("gen_ground");
-		this.ladderIndex = compoundTag.getInt("ladder_index");
+		this.roomSize = compoundTag.getIntOr("room_size", 0);
+		this.generateGround = compoundTag.getBooleanOr("gen_ground", false);
+		this.ladderIndex = compoundTag.getIntOr("ladder_index", -1);
 		this.jigsawLadderTarget = this.shouldLadderUpwards() ? this.getSpareJigsaws().get(this.ladderIndex).target() : "";
-		this.roofFallback = compoundTag.getInt("roof_index");
-		this.allowedCeilingPlacements = compoundTag.getIntArray("allowed_ceiling_placements");
+		this.roofFallback = compoundTag.getIntOr("roof_index", -1);
+		this.allowedCeilingPlacements = compoundTag.getIntArray("allowed_ceiling_placements").orElse(new int[0]);
 	}
 
-	public LichTowerWingRoom(StructureTemplateManager structureManager, int genDepth, JigsawPlaceContext jigsawContext, ResourceLocation roomId, int roomSize, boolean generateGround, boolean canGenerateLadder, RandomSource random) {
+	public LichTowerWingRoom(StructureTemplateManager structureManager, int genDepth, JigsawPlaceContext jigsawContext, Identifier roomId, int roomSize, boolean generateGround, boolean canGenerateLadder, RandomSource random) {
 		super(TFStructurePieceTypes.LICH_WING_ROOM.get(), genDepth, structureManager, roomId, jigsawContext);
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(lichTowerUtil.getRoomSpawnerProcessor()));
@@ -132,7 +132,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		blockInfos.removeIf(info -> {
 			CompoundTag nbt = info.nbt();
 			if (nbt == null || nbt.isEmpty()) return false;
-			String metadata = nbt.getString("metadata");
+			String metadata = nbt.getStringOr("metadata", "");
 			return !(metadata.startsWith("rope") || metadata.startsWith("chain"));
 		});
 
@@ -173,10 +173,10 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 	}
 
 	private static boolean filterMetadata(RandomSource random, CompoundTag nbt) {
-		if (nbt.isEmpty() || !nbt.contains("metadata", Tag.TAG_STRING))
+		if (nbt.isEmpty() || !nbt.contains("metadata"))
 			return true;
 
-		String metadata = nbt.getString("metadata").split("%", 1)[0];
+		String metadata = nbt.getStringOr("metadata", "").split("%", 1)[0];
 		String chance = metadata.startsWith("rope") ? metadata.substring("rope".length()) : metadata.substring("chain".length());
 
 		return chance.isBlank() || StringUtils.isNumeric(chance) && random.nextFloat() > Integer.parseInt(chance) * 0.01f;
@@ -238,16 +238,16 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 				FrontAndTop orientationToMatch = getVerticalOrientation(connection, Direction.DOWN, this);
 
 				if (this.generateGround) {
-					ResourceLocation trim = lichTowerUtil.getTrim(random, this.roomSize);
+					Identifier trim = lichTowerUtil.getTrim(random, this.roomSize);
 					this.tryBeard(pieceAccessor, random, connection, trim, orientationToMatch, true, true);
 				} else {
-					for (ResourceLocation beardLocation : lichTowerUtil.shuffledBeards(random, this.roomSize)) {
+					for (Identifier beardLocation : lichTowerUtil.shuffledBeards(random, this.roomSize)) {
 						if (this.tryBeard(pieceAccessor, random, connection, beardLocation, orientationToMatch, false, false)) {
 							return;
 						}
 					}
 
-					ResourceLocation fallbackBeard = lichTowerUtil.getFallbackBeard(random, this.roomSize);
+					Identifier fallbackBeard = lichTowerUtil.getFallbackBeard(random, this.roomSize);
 					this.tryBeard(pieceAccessor, random, connection, fallbackBeard, orientationToMatch, true, false);
 				}
 			}
@@ -258,7 +258,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 
 		if (this.ladderIndex == jigsawIndex && this.jigsawLadderTarget.equals(connection.target())) {
 			int ladderOffset = Integer.parseInt(this.jigsawLadderTarget.substring(this.jigsawLadderTarget.length() - 1));
-			ResourceLocation roomId = lichTowerUtil.getRoomUpwards(random, this.roomSize, ladderOffset);
+			Identifier roomId = lichTowerUtil.getRoomUpwards(random, this.roomSize, ladderOffset);
 			if (roomId != null && (this.templateName.equals(roomId.toString()) || (parent instanceof TwilightTemplateStructurePiece twilightTemplate && twilightTemplate.getTemplateName().equals(roomId.toString())))) {
 				// 1 chance at reroll if template is same as current or parent's
 				roomId = lichTowerUtil.getRoomUpwards(random, this.roomSize, ladderOffset);
@@ -292,7 +292,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			}
 
 			if (this.roofFallback >= 0) {
-				// if (!FMLLoader.isProduction()) TwilightForestMod.LOGGER.error("Failed to generate room above {}", this.templatePosition.offset(topPos));
+				// if (FabricLoader.getInstance().isDevelopmentEnvironment()) TwilightForestMod.LOGGER.error("Failed to generate room above {}", this.templatePosition.offset(topPos));
 				// If the room above cannot generate, then place the roof instead
 				this.putRoof(pieceAccessor, random, this.getSpareJigsaws().get(this.roofFallback));
 			}
@@ -310,13 +310,13 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		BoundingBox roofExtension = BoundingBoxUtils.extrusionFrom(this.boundingBox.minX(), this.boundingBox.maxY() + 1, this.boundingBox.minZ(), this.boundingBox.maxX(), this.boundingBox.maxY() + 1, this.boundingBox.maxZ(), orientationToMatch.top().getOpposite(), 1);
 		boolean doSideAttachment = connection.orientation().front().getAxis().isHorizontal() && pieceAccessor.findCollisionPiece(roofExtension) != null;
 
-		for (ResourceLocation roofLocation : lichTowerUtil.shuffledRoofs(random, this.roomSize, doSideAttachment)) {
+		for (Identifier roofLocation : lichTowerUtil.shuffledRoofs(random, this.roomSize, doSideAttachment)) {
 			if (tryRoof(pieceAccessor, random, connection, roofLocation, orientationToMatch, false, this, this.genDepth + 1, this.structureManager)) {
 				return true;
 			}
 		}
 
-		ResourceLocation fallbackRoof = lichTowerUtil.getFallbackRoof(random, this.roomSize, doSideAttachment);
+		Identifier fallbackRoof = lichTowerUtil.getFallbackRoof(random, this.roomSize, doSideAttachment);
 		tryRoof(pieceAccessor, random, connection, fallbackRoof, orientationToMatch, true, this, this.genDepth + 1, this.structureManager);
 		return false;
 	}
@@ -329,7 +329,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		return FrontAndTop.fromFrontAndTop(vertical, sourceDirection.getOpposite());
 	}
 
-	public static boolean tryRoof(StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, @Nullable ResourceLocation roofLocation, FrontAndTop orientationToMatch, boolean allowClipping, TwilightJigsawPiece parent, int newDepth, StructureTemplateManager structureManager) {
+	public static boolean tryRoof(StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, @Nullable Identifier roofLocation, FrontAndTop orientationToMatch, boolean allowClipping, TwilightJigsawPiece parent, int newDepth, StructureTemplateManager structureManager) {
 		JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(parent.templatePosition(), connection.pos(), orientationToMatch, structureManager, roofLocation, "twilightforest:lich_tower/roof", random);
 
 		if (placeableJunction != null) {
@@ -345,7 +345,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		return false;
 	}
 
-	private boolean tryBeard(StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, @Nullable ResourceLocation beardLocation, FrontAndTop orientationToMatch, boolean allowClipping, boolean generateGround) {
+	private boolean tryBeard(StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, @Nullable Identifier beardLocation, FrontAndTop orientationToMatch, boolean allowClipping, boolean generateGround) {
 		JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(this.templatePosition(), connection.pos(), orientationToMatch, this.structureManager, beardLocation, "twilightforest:lich_tower/beard", random);
 
 		if (placeableJunction != null) {
@@ -434,7 +434,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 				pos = this.danglingBlock(pos, level, random, TFBlocks.ROPE.value().defaultBlockState(), modifiedLabel[0].substring("rope".length()));
 				if (pos == null) return;
 			} if (modifiedLabel[0].startsWith("chain")) {
-				pos = this.danglingBlock(pos, level, random, Blocks.CHAIN.defaultBlockState(), modifiedLabel[0].substring("chain".length()));
+				pos = this.danglingBlock(pos, level, random, Blocks.IRON_CHAIN.defaultBlockState(), modifiedLabel[0].substring("chain".length()));
 				if (pos == null) return;
 			} else if (modifiedLabel[0].equals("pedestal")) {
 
@@ -559,7 +559,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 				BlockState blockState = this.blockFromLabel(parameters[0]).rotate(stateRotation);
 				if (!blockState.isAir()) {
 					level.setBlock(pos, blockState, Block.UPDATE_CLIENTS);
-				} else if (!FMLLoader.isProduction()) {
+				} else if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
 					TwilightForestMod.LOGGER.warn("Variation label {} ({}) obtained {} in {}", parameters[0], parameters, blockState, this.templateName);
 				}
 			}
@@ -579,18 +579,18 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 					case "library" -> TFLootTables.TOWER_LIBRARY;
 					case "potion" -> TFLootTables.TOWER_POTION;
 					case "enchanting" -> TFLootTables.TOWER_ENCHANTING;
-					default -> ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.bySeparator(label, '.'));
+					default -> ResourceKey.create(Registries.LOOT_TABLE, Identifier.bySeparator(label, '.'));
 				};
 				if (!jarEntity.fillFromLootTable(lootTableId, random.nextLong(), level.getLevel())) {
-					ResourceLocation itemId = ResourceLocation.bySeparator(label, '.');
-					jarEntity.getItemHandler().setItem(new ItemStack(level.registryAccess().lookup(Registries.ITEM).<Function<ResourceLocation, Item>>map(reg -> reg::getValue).orElse($ -> Items.AIR).apply(itemId)));
+					Identifier itemId = Identifier.bySeparator(label, '.');
+					jarEntity.getItemHandler().setItem(new ItemStack(level.registryAccess().lookup(Registries.ITEM).<Function<Identifier, Item>>map(reg -> reg::getValue).orElse($ -> Items.AIR).apply(itemId)));
 				}
 				int itemRotation = this.placeSettings.getRotation().ordinal() * 4 + (parameters.length == 3 ? this.getHeadRotation(parameters[2], random) : 0);
 				jarEntity.setItemRotation(Math.floorMod(itemRotation, 16));
 			}
 		}
 
-		if (level.getBlockState(pos.above()).is(TFBlocks.CANOPY_BOOKSHELF)) {
+		if (level.getBlockState(pos.above()).is(TFBlocks.CANOPY_BOOKSHELF.get())) {
 			level.setBlock(pos.above(), TFBlocks.CANOPY_SLAB.value().defaultBlockState().setValue(SlabBlock.TYPE, SlabType.TOP), Block.UPDATE_CLIENTS);
 		}
 	}
@@ -602,20 +602,20 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			.setValue(BrewingStandBlock.HAS_BOTTLE[2], true);
 
 		level.setBlock(pos, brewingStandBlock, Block.UPDATE_CLIENTS);
-		if (level.getBlockEntity(pos) instanceof BrewingStandBlockEntity brewingStandBE) {ItemStack potionStack = new ItemStack(random.nextInt(4) == 0 ? Items.SPLASH_POTION : Items.POTION);
-			potionStack.set(DataComponents.POTION_CONTENTS, new PotionContents(switch (random.nextInt(7)) {
-				case 6 -> Potions.STRONG_HEALING;
-				case 4, 5 -> Potions.REGENERATION;
-				case 1, 2, 3 -> Potions.HEALING;
+			if (level.getBlockEntity(pos) instanceof BrewingStandBlockEntity brewingStandBE) {ItemStack potionStack = new ItemStack(random.nextInt(4) == 0 ? Items.SPLASH_POTION : Items.POTION);
+				potionStack.set(DataComponents.POTION_CONTENTS, new PotionContents(switch (random.nextInt(7)) {
+					case 6 -> Potions.STRONG_HEALING;
+					case 4, 5 -> Potions.REGENERATION;
+					case 1, 2, 3 -> Potions.HEALING;
 				default -> Potions.WATER;
 			}));
 			for (int index = 0; index < 3; index++) {
 				brewingStandBE.setItem(index, potionStack.copy());
 			}
-			brewingStandBE.setItem(4, new ItemStack(Items.BLAZE_POWDER, random.nextIntBetweenInclusive(1, 5)));
-			brewingStandBE.fuel = random.nextIntBetweenInclusive(10, 20);
+				brewingStandBE.setItem(4, new ItemStack(Items.BLAZE_POWDER, random.nextIntBetweenInclusive(1, 5)));
+				((BrewingStandBlockEntityAccessor) brewingStandBE).twilightforest$setFuel(random.nextIntBetweenInclusive(10, 20));
+			}
 		}
-	}
 
 	private void putSpawner(BlockPos pos, WorldGenLevel level, RandomSource random, String[] parameters) {
 		level.setBlock(pos, Blocks.SPAWNER.defaultBlockState(), Block.UPDATE_CLIENTS);
@@ -624,7 +624,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			this.configureBaseSpawner(pos, random, parameters, spawner.getSpawner());
 
 			if (parameters.length == 3 && StringUtils.isNumeric(parameters[2])) {
-				spawner.getSpawner().spawnRange = Mth.clamp(Integer.parseInt(parameters[2]), 1, 16);
+				((BaseSpawnerAccessor) spawner.getSpawner()).twilightforest$setSpawnRange(Mth.clamp(Integer.parseInt(parameters[2]), 1, 16));
 			}
 		}
 	}
@@ -641,13 +641,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		this.configureBaseSpawner(pos, random, parameters, spawner.getSpawner());
 
 		if (parameters.length >= 3 && StringUtils.isNumeric(parameters[2])) {
-			spawner.getSpawner().spawnRange = Mth.clamp(Integer.parseInt(parameters[2]), 1, 16);
-		}
-
-		if (parameters.length >= 4 && StringUtils.isNumeric(parameters[3])) {
-			spawner.getSpawner().entityScanRange = Mth.clamp(Integer.parseInt(parameters[3]), 1, 32);
-		} else {
-			spawner.getSpawner().entityScanRange = spawner.getSpawner().spawnRange;
+			((BaseSpawnerAccessor) spawner.getSpawner()).twilightforest$setSpawnRange(Mth.clamp(Integer.parseInt(parameters[2]), 1, 16));
 		}
 	}
 
@@ -657,7 +651,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		CompoundTag entityToSpawn = new CompoundTag();
 		entityToSpawn.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(monster).toString());
 		SpawnData spawnData = new SpawnData(entityToSpawn, Optional.of(new SpawnData.CustomSpawnRules(new InclusiveRange<>(0, 7), new InclusiveRange<>(0, 15))), Optional.empty());
-		spawner.setNextSpawnData(null, pos, spawnData);
+		((BaseSpawnerAccessor) spawner).twilightforest$setNextSpawnData(null, pos, spawnData);
 	}
 
 	private EntityType<?> pickRandomMob(RandomSource random, String[] parameters) {
@@ -721,12 +715,12 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		if (knot == null || trapEntity == null)
 			return;
 
-		knot.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+		knot.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 
 		trapEntity.setPersistenceRequired();
 		trapEntity.setLeashedTo(knot, false);
-		trapEntity.moveTo(zombiePos.getX() + 0.5, zombiePos.getY() - 1, zombiePos.getZ() + 0.5);
-		trapEntity.setData(TFDataAttachments.LEASH_PATHFINDER_OVERRIDE, Unit.INSTANCE);
+		trapEntity.setPos(zombiePos.getX() + 0.5, zombiePos.getY() - 1, zombiePos.getZ() + 0.5);
+		TFDataAttachments.set(trapEntity, TFDataAttachments.LEASH_PATHFINDER_OVERRIDE, Unit.INSTANCE);
 		level.addFreshEntity(trapEntity);
 	}
 
@@ -752,9 +746,9 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 
 	private BlockState blockFromLabel(String label) {
 		if (label.contains(".")) {
-			return BuiltInRegistries.BLOCK.getValue(ResourceLocation.bySeparator(label, '.')).defaultBlockState();
+			return BuiltInRegistries.BLOCK.getValue(Identifier.bySeparator(label, '.')).defaultBlockState();
 		} else {
-			return BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(label)).defaultBlockState();
+			return BuiltInRegistries.BLOCK.getValue(Identifier.parse(label)).defaultBlockState();
 		}
 	}
 
@@ -769,12 +763,12 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 				case "library" -> TFLootTables.TOWER_LIBRARY;
 				case "potion" -> TFLootTables.TOWER_POTION;
 				case "enchanting" -> TFLootTables.TOWER_ENCHANTING;
-				default -> ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.bySeparator(parameters[1], '.'));
+				default -> ResourceKey.create(Registries.LOOT_TABLE, Identifier.bySeparator(parameters[1], '.'));
 			};
 			lootBlock.setLootTable(lootTableId, random.nextLong());
 		}
 
-		if (level.getBlockState(pos.above()).is(TFBlocks.CANOPY_BOOKSHELF)) {
+		if (level.getBlockState(pos.above()).is(TFBlocks.CANOPY_BOOKSHELF.get())) {
 			level.setBlock(pos.above(), TFBlocks.CANOPY_SLAB.value().defaultBlockState().setValue(SlabBlock.TYPE, SlabType.TOP), Block.UPDATE_CLIENTS);
 		}
 	}
@@ -797,8 +791,10 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			for (int index : filledSlots) {
 				// Spawner shelves never contain enchanted books; Otherwise Chiseled Shelves have a 1/10 chance of generating an enchanted book instead of only a book
 				ItemStack book = isHostile || random.nextInt(16) != 0 ? new ItemStack(Items.BOOK) : EnchantmentHelper.enchantItem(random, new ItemStack(Items.BOOK), random.nextIntBetweenInclusive(1, 40), registryAccess, Optional.empty());
-				shelfBlockEntity.items.set(index, book);
+				// Avoid updateState() NPE during worldgen when the block entity level isn't wired yet.
+				shelfBlockEntity.getItems().set(index, book);
 			}
+			shelfBlockEntity.setChanged();
 
 			if (isHostile) {
 				shelfBlockEntity.getSpawner().setEntityId(TFEntities.DEATH_TOME.value(), null, random, pos);
@@ -871,7 +867,11 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			DeathTome tomeMimic = TFEntities.DEATH_TOME.get().create(level.getLevel(), EntitySpawnReason.STRUCTURE);
 			if (tomeMimic != null) {
 				tomeMimic.setPersistenceRequired();
-				tomeMimic.moveTo(pos, lectern.getValue(HorizontalDirectionalBlock.FACING).toYRot(), 0);
+				float yaw = lectern.getValue(HorizontalDirectionalBlock.FACING).toYRot();
+				tomeMimic.setPos(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
+				tomeMimic.setYRot(yaw);
+				tomeMimic.setXRot(0.0F);
+				tomeMimic.setYHeadRot(yaw);
 				tomeMimic.setOnLectern(true);
 				tomeMimic.finalizeSpawn(level, level.getCurrentDifficultyAt(tomeMimic.blockPosition()), EntitySpawnReason.STRUCTURE, null);
 				level.addFreshEntityWithPassengers(tomeMimic);

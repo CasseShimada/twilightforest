@@ -1,11 +1,25 @@
 {
   "ambient_light": 0.01,
-  "bed_works": true,
+  "attributes": {
+    "minecraft:gameplay/bed_rule": {
+      "can_set_spawn": "always",
+      "can_sleep": "when_dark",
+      "error_message": {
+        "translate": "block.minecraft.bed.no_sleep"
+      }
+    },
+    "minecraft:gameplay/can_start_raid": false,
+    "minecraft:gameplay/nether_portal_spawns_piglin": true,
+    "minecraft:gameplay/piglins_zombify": true,
+    "minecraft:gameplay/respawn_anchor_works": false,
+    "minecraft:visual/cloud_color": "#ccffffff",
+    "minecraft:visual/cloud_height": 192.33,
+    "minecraft:visual/fog_color": "#c0d8ff",
+    "minecraft:visual/sky_color": "#78a7ff"
+  },
   "coordinate_scale": 0.125,
-  "effects": "twilightforest:renderer",
-  "fixed_time": 13000,
   "has_ceiling": false,
-  "has_raids": false,
+  "has_fixed_time": true,
   "has_skylight": true,
   "height": 288,
   "infiniburn": "#minecraft:infiniburn_overworld",
@@ -17,8 +31,5 @@
     "max_inclusive": 7,
     "min_inclusive": 0
   },
-  "natural": true,
-  "piglin_safe": false,
-  "respawn_anchor_works": false,
-  "ultrawarm": false
+  "timelines": "#minecraft:in_overworld"
 }

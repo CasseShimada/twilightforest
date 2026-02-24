@@ -1,16 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/template_spawn_egg",
-    "tints": [
-      {
-        "type": "minecraft:constant",
-        "value": -6640395
-      },
-      {
-        "type": "minecraft:constant",
-        "value": -6615131
-      }
-    ]
+    "model": "twilightforest:item/unstable_ice_core_spawn_egg"
   }
 }

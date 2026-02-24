@@ -35,12 +35,12 @@ public class TrollRootBlock extends Block {
 	public static boolean canPlaceRootBelow(LevelReader reader, BlockPos pos) {
 		BlockState state = reader.getBlockState(pos);
 
-		return state.is(BlockTags.BASE_STONE_OVERWORLD) || state.is(TFBlocks.TROLLVIDR) || state.is(TFBlocks.TROLLBER) || state.is(TFBlocks.UNRIPE_TROLLBER);
+		return state.is(BlockTags.BASE_STONE_OVERWORLD) || state.is(TFBlocks.TROLLVIDR.get()) || state.is(TFBlocks.TROLLBER.get()) || state.is(TFBlocks.UNRIPE_TROLLBER.get());
 	}
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
-		if (state.is(TFBlocks.TROLLBER)) {
+		if (state.is(TFBlocks.TROLLBER.get())) {
 			level.setBlock(pos, TFBlocks.TROLLVIDR.get().defaultBlockState(), Block.UPDATE_CLIENTS);
 			level.playSound(null, pos, TFSounds.PICKED_TORCHBERRIES.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
 			ItemEntity torchberries = new ItemEntity(level, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, new ItemStack(TFItems.TORCHBERRIES.get()));

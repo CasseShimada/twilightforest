@@ -5,7 +5,7 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -25,9 +25,9 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureCheckResult;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFDimensionData;
+import twilightforest.network.PacketDistributor;
 import twilightforest.util.landmarks.LegacyLandmarkPlacements;
 import twilightforest.world.components.structures.placements.LandmarkGridPlacement;
 
@@ -42,15 +42,15 @@ public final class WorldUtil {
 	}
 
 	public static long getOverworldSeed() {
-		return Objects.requireNonNull(ServerLifecycleHooks.getCurrentServer()).getWorldData().worldGenOptions().seed();
+		return Objects.requireNonNull(PacketDistributor.getServer()).getWorldData().worldGenOptions().seed();
 	}
 
 	public static RegistryAccess getRegistryAccess() {
-		return Objects.requireNonNull(ServerLifecycleHooks.getCurrentServer()).registryAccess();
+		return Objects.requireNonNull(PacketDistributor.getServer()).registryAccess();
 	}
 
 	public static Difficulty getDifficulty() {
-		return Objects.requireNonNull(ServerLifecycleHooks.getCurrentServer()).getWorldData().getDifficulty();
+		return Objects.requireNonNull(PacketDistributor.getServer()).getWorldData().getDifficulty();
 	}
 
 	/**
@@ -94,7 +94,7 @@ public final class WorldUtil {
 
 	public static int getGeneratorSeaLevel(LevelAccessor level) {
 		return level.getChunkSource() instanceof ServerChunkCache chunkSource
-			? chunkSource.chunkMap.generator().getSeaLevel()
+			? chunkSource.getGenerator().getSeaLevel()
 			: TFDimensionData.SEALEVEL; // Should only ever hit if this method is called on client FIXME Fix causes
 	}
 

@@ -2,7 +2,6 @@ package twilightforest.entity.monster;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Monster;
@@ -30,7 +29,7 @@ public abstract class BaseIceMob extends Monster {
 				float pz = (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.3F;
 
 				this.level().addParticle(TFParticleType.SNOW_GUARDIAN.get(), this.xOld + px, this.yOld + py, this.zOld + pz, 0, 0, 0);
-				if (this.level().getBiome(this.blockPosition()).is(BiomeTags.SNOW_GOLEM_MELTS)) {
+				if (this.level().getBiome(this.blockPosition()).value().warmEnoughToRain(this.blockPosition(), this.level().getSeaLevel())) {
 					if (this.random.nextInt(4) == 0) this.level().addParticle(ParticleTypes.CLOUD, this.xOld + px, this.yOld + py, this.zOld + pz, 0, 0.1F, 0);
 					if (this.random.nextBoolean()) this.level().addParticle(ParticleTypes.FALLING_WATER, this.xOld + px, this.yOld + py, this.zOld + pz, 0, 0, 0);
 				}
@@ -41,7 +40,7 @@ public abstract class BaseIceMob extends Monster {
 	@Override
 	protected void customServerAiStep(ServerLevel level) {
 		super.customServerAiStep(level);
-		if (this.tickCount % 20 == 0 && level.getBiome(this.blockPosition()).is(BiomeTags.SNOW_GOLEM_MELTS)) {
+		if (this.tickCount % 20 == 0 && level.getBiome(this.blockPosition()).value().warmEnoughToRain(this.blockPosition(), level.getSeaLevel())) {
 			//BURN!!!
 			this.hurtServer(level, this.damageSources().onFire(), 1.0F);
 		}

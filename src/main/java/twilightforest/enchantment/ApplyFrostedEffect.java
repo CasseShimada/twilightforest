@@ -2,6 +2,7 @@ package twilightforest.enchantment;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ItemTags;
@@ -39,7 +40,7 @@ public record ApplyFrostedEffect(LevelBasedValue duration, LevelBasedValue ampli
 				!victim.getItemBySlot(EquipmentSlot.LEGS).is(ItemTags.FREEZE_IMMUNE_WEARABLES) &&
 				!victim.getItemBySlot(EquipmentSlot.FEET).is(ItemTags.FREEZE_IMMUNE_WEARABLES)) {
 				if (!(victim instanceof Player player) || !player.isCreative()) {
-					victim.addEffect(new MobEffectInstance(TFMobEffects.FROSTY, duration, amplifier));
+					victim.addEffect(new MobEffectInstance(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(TFMobEffects.FROSTY.get()), duration, amplifier));
 				}
 			}
 		}

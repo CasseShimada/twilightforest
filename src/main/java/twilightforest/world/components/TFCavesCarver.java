@@ -12,6 +12,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.CarvingMask;
@@ -26,6 +27,7 @@ import net.minecraft.world.level.levelgen.synth.ImprovedNoise;
 import net.minecraft.world.level.material.Fluids;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.jetbrains.annotations.Nullable;
+import twilightforest.mixin.accessor.CaveCarverConfigurationAccessor;
 import twilightforest.util.landmarks.LegacyLandmarkPlacements;
 
 import java.util.function.Function;
@@ -70,7 +72,7 @@ public class TFCavesCarver extends WorldCarver<CaveCarverConfiguration> {
 			double z = accessPos.getBlockZ(random.nextInt(16));
 			double horiz = config.horizontalRadiusMultiplier.sample(random);
 			double vert = config.verticalRadiusMultiplier.sample(random);
-			double floor = config.floorLevel.sample(random);
+			double floor = ((CaveCarverConfigurationAccessor) config).twilightforest$getFloorLevel().sample(random);
 			CarveSkipChecker checker = (context, dX, dY, dZ, yPos) -> shouldSkip(dX, dY, dZ, floor);
 			int tunnelCount = 1;
 			if (this.isHighlands || random.nextInt(4) == 0) {
@@ -104,7 +106,7 @@ public class TFCavesCarver extends WorldCarver<CaveCarverConfiguration> {
 		//We dont want caves to go so far down you can see bedrock, so lets stop them right before
 		if (pos.getY() < access.getMinY() + 6) return false;
 
-		if (!this.canReplaceBlock(config, stateBeforeReplacement) && !isDebugEnabled(config)) {
+		if (!this.canReplaceBlock(config, stateBeforeReplacement) && !config.debugSettings.isDebugMode()) {
 			return false;
 		} else {
 			BlockPos chunkOrigin = access.getPos().getWorldPosition();
@@ -122,7 +124,7 @@ public class TFCavesCarver extends WorldCarver<CaveCarverConfiguration> {
 				if (!access.getFluidState(pos.above(2)).isEmpty()) // Sand doesn't quite generate until after the carvers, so we must look for liquid above possible sand instead
 					blockStateToPlace = randomFromPos.nextBoolean() ? Blocks.ROOTED_DIRT.defaultBlockState() : Blocks.COARSE_DIRT.defaultBlockState(); // normal dirt will get replaced with sand, special ones are required
 
-				boolean blockPlaced = access.setBlockState(pos, blockStateToPlace, false) != null;
+				boolean blockPlaced = access.setBlockState(pos, blockStateToPlace, Block.UPDATE_NONE) != null;
 
 				if (aquifer.shouldScheduleFluidUpdate() && !blockStateToPlace.getFluidState().isEmpty()) {
 					access.markPosForPostprocessing(pos);
@@ -132,7 +134,7 @@ public class TFCavesCarver extends WorldCarver<CaveCarverConfiguration> {
 					BlockPos posDown = pos.relative(Direction.DOWN);
 					if (access.getBlockState(posDown).is(Blocks.DIRT)) {
 						ctx.topMaterial(biomePos, access, posDown, !blockStateToPlace.getFluidState().isEmpty()).ifPresent(state -> {
-							access.setBlockState(posDown, state, false);
+							access.setBlockState(posDown, state, Block.UPDATE_NONE);
 							if (!state.getFluidState().isEmpty()) {
 								access.markPosForPostprocessing(posDown);
 							}
@@ -166,7 +168,7 @@ public class TFCavesCarver extends WorldCarver<CaveCarverConfiguration> {
 
 			if (this.isHighlands) {
 				if (rand.nextInt(4) == 0 && this.canReplaceBlock(config, access.getBlockState(directionalRelative))) {
-					access.setBlockState(directionalRelative, this.wallBlocks.getState(rand, directionalRelative), false);
+					access.setBlockState(directionalRelative, this.wallBlocks.getState(rand, directionalRelative), Block.UPDATE_NONE);
 				}
 			} else if (facing != Direction.DOWN && (facing == Direction.UP || access.getBlockState(directionalRelative.above()).isAir() || this.checkNoiseThreshold(directionalRelative, 0.25f, 0.5f))) { //here's the code for making dirt roofs. Enjoy :)
 				// Dirt is never placed below, always on roof, and typically to the sides
@@ -174,7 +176,7 @@ public class TFCavesCarver extends WorldCarver<CaveCarverConfiguration> {
 				BlockState neighboringBlock = access.getBlockState(directionalRelative);
 
 				if (neighboringBlock.is(BlockTags.BASE_STONE_OVERWORLD) || neighboringBlock.getFluidState().is(FluidTags.WATER)) {
-					access.setBlockState(directionalRelative, this.wallBlocks.getState(rand, directionalRelative), false);
+					access.setBlockState(directionalRelative, this.wallBlocks.getState(rand, directionalRelative), Block.UPDATE_NONE);
 				}
 			}
 		}
@@ -278,7 +280,6 @@ public class TFCavesCarver extends WorldCarver<CaveCarverConfiguration> {
 	}
 
 	@Nullable
-	@Override
 	public BlockState getCarveState(CarvingContext context, CaveCarverConfiguration config, BlockPos pos, Aquifer aquifer) {
 		return Blocks.CAVE_AIR.defaultBlockState();
 	}

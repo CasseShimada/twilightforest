@@ -9,7 +9,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import twilightforest.util.Codecs;
@@ -53,8 +53,8 @@ public final class TerrainColumn {
 	public void getBiomesDebug(Consumer<String> accumulator) {
 		this.biomes.double2ObjectEntrySet()
 			.stream()
-			.map(e -> e.getDoubleKey() + ": " + e.getValue().unwrapKey().map(ResourceKey::location).map(ResourceLocation::toString).orElse("NOT REFERENCED"))
-			.forEach(accumulator);
+			.map(e -> e.getDoubleKey() + ": " + e.getValue().unwrapKey().map(ResourceKey::identifier).map(Identifier::toString).orElse("NOT REFERENCED"))
+			.forEach(accumulator::accept);
 	}
 
 	public boolean is(Holder<Biome> biome) {

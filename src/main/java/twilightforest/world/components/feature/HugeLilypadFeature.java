@@ -42,7 +42,7 @@ public class HugeLilypadFeature extends Feature<NoneFeatureConfiguration> {
 				random.nextInt(8) - random.nextInt(8)
 			);
 
-			if (shouldPlacePadAt(world, dPos) && world.isAreaLoaded(dPos, 1)) {
+			if (shouldPlacePadAt(world, dPos) && world.hasChunksAt(dPos.offset(-1, -1, -1), dPos.offset(1, 1, 1))) {
 				final Direction horizontal = Direction.from2DDataValue(random.nextInt(4));
 				final BlockState lilypad = TFBlocks.HUGE_LILY_PAD.get().defaultBlockState().setValue(FACING, horizontal);
 

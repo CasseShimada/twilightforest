@@ -2,11 +2,10 @@ package twilightforest.entity.passive;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
@@ -16,13 +15,18 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.fox.Fox;
+import net.minecraft.world.entity.animal.feline.Cat;
+import net.minecraft.world.entity.animal.feline.Ocelot;
+import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.util.Lazy;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TFRegistries;
 import twilightforest.tags.TFItemTags;
@@ -33,9 +37,9 @@ import twilightforest.init.custom.DwarfRabbitVariants;
 
 import java.util.Optional;
 
-public class DwarfRabbit extends Animal implements VariantHolder<Holder<DwarfRabbitVariant>> {
+public class DwarfRabbit extends Animal {
 
-	private static final EntityDataAccessor<Holder<DwarfRabbitVariant>> VARIANT = SynchedEntityData.defineId(DwarfRabbit.class, TFDataSerializers.DWARF_RABBIT_VARIANT.get());
+	private static final EntityDataAccessor<Holder<DwarfRabbitVariant>> VARIANT = SynchedEntityData.defineId(DwarfRabbit.class, TFDataSerializers.DWARF_RABBIT_VARIANT);
 
 	public DwarfRabbit(EntityType<? extends DwarfRabbit> type, Level world) {
 		super(type, world);
@@ -91,15 +95,15 @@ public class DwarfRabbit extends Animal implements VariantHolder<Holder<DwarfRab
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putString("variant", this.getVariant().unwrapKey().orElse(DwarfRabbitVariants.BROWN).location().toString());
+	public void addAdditionalSaveData(ValueOutput output) {
+		super.addAdditionalSaveData(output);
+		output.putString("variant", this.getVariant().unwrapKey().orElse(DwarfRabbitVariants.BROWN).identifier().toString());
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		Optional.ofNullable(ResourceLocation.tryParse(compound.getString("variant")))
+	public void readAdditionalSaveData(ValueInput input) {
+		super.readAdditionalSaveData(input);
+		Optional.ofNullable(Identifier.tryParse(input.getStringOr("variant", "")))
 			.map(location -> ResourceKey.create(TFRegistries.Keys.DWARF_RABBIT_VARIANT, location))
 			.flatMap(key -> this.registryAccess().lookupOrThrow(TFRegistries.Keys.DWARF_RABBIT_VARIANT).get(key))
 			.ifPresent(this::setVariant);
@@ -112,12 +116,10 @@ public class DwarfRabbit extends Animal implements VariantHolder<Holder<DwarfRab
 		return data;
 	}
 
-	@Override
 	public Holder<DwarfRabbitVariant> getVariant() {
 		return this.getEntityData().get(VARIANT);
 	}
 
-	@Override
 	public void setVariant(Holder<DwarfRabbitVariant> variant) {
 		this.getEntityData().set(VARIANT, variant);
 	}

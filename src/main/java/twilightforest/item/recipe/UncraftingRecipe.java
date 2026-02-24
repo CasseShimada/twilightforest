@@ -39,7 +39,7 @@ public class UncraftingRecipe extends ShapedRecipe {
 
 	//Checks if the itemStack is a part of the ingredient when UncraftingMenu's getRecipesFor() method iterates through all recipes.
 	public boolean isItemStackAnIngredient(ItemStack stack) {
-		return this.input.getValues().stream().anyMatch(i -> (stack.is(i.value()) && stack.getCount() >= this.count));
+		return this.input.items().anyMatch(holder -> stack.is(holder.value()) && stack.getCount() >= this.count);
 	}
 
 	@Override

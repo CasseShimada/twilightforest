@@ -15,8 +15,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 import twilightforest.util.entities.EntityUtil;
+import twilightforest.util.blocks.EntityDestroyable;
 
-public class StrongholdShieldBlock extends DirectionalBlock {
+public class StrongholdShieldBlock extends DirectionalBlock implements EntityDestroyable {
 
 	public static final MapCodec<StrongholdShieldBlock> CODEC = simpleCodec(StrongholdShieldBlock::new);
 
@@ -49,7 +50,7 @@ public class StrongholdShieldBlock extends DirectionalBlock {
 		Direction sideFace = state.getValue(DirectionalBlock.FACING);
 
 		if (hitFace == sideFace) {
-			return player.getDestroySpeed(Blocks.STONE.defaultBlockState(), pos) / 1.5F / 100F;
+			return player.getDestroySpeed(Blocks.STONE.defaultBlockState()) / 1.5F / 100F;
 		} else {
 			return super.getDestroyProgress(state, player, getter, pos);
 		}

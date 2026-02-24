@@ -2,15 +2,19 @@ package twilightforest.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Item.TooltipContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import twilightforest.enchantment.RechargeScepterEffect;
 import twilightforest.init.TFDataAttachments;
@@ -18,7 +22,7 @@ import twilightforest.init.TFEnchantments;
 import twilightforest.init.TFSounds;
 import twilightforest.util.TFItemStackUtils;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 public class FortificationWandItem extends Item {
 
@@ -35,7 +39,7 @@ public class FortificationWandItem extends Item {
 		}
 
 		if (!level.isClientSide()) {
-			player.getData(TFDataAttachments.FORTIFICATION_SHIELDS).setShields(player, 5, true);
+			TFDataAttachments.get(player, TFDataAttachments.FORTIFICATION_SHIELDS).setShields(player, 5, true);
 			if (!player.hasInfiniteMaterials()) {
 				TFItemStackUtils.hurtWithoutBreaking(stack, 1, player);
 			}
@@ -48,18 +52,19 @@ public class FortificationWandItem extends Item {
 	}
 
 	@Override
-	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-		if (entity.tickCount % 20 == 0 && level instanceof ServerLevel serverLevel && stack.has(DataComponents.ENCHANTMENTS) && !isSelected) {
-			int renewal = stack.get(DataComponents.ENCHANTMENTS).getLevel(level.holderOrThrow(TFEnchantments.RENEWAL));
+	public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, EquipmentSlot slot) {
+		boolean isSelected = slot == EquipmentSlot.MAINHAND;
+		if (entity.tickCount % 20 == 0 && stack.has(DataComponents.ENCHANTMENTS) && !isSelected) {
+			int renewal = stack.get(DataComponents.ENCHANTMENTS).getLevel(level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(TFEnchantments.RENEWAL));
 			if (renewal > 0) {
-				RechargeScepterEffect.applyRecharge(serverLevel, stack, entity);
+				RechargeScepterEffect.applyRecharge(level, stack, entity);
 			}
 		}
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flags) {
-		super.appendHoverText(stack, context, tooltip, flags);
-		tooltip.add(Component.translatable("item.twilightforest.scepter.desc", stack.getMaxDamage() - stack.getDamageValue()).withStyle(ChatFormatting.GRAY));
+	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flags) {
+		super.appendHoverText(stack, context, display, tooltip, flags);
+		tooltip.accept(Component.translatable("item.twilightforest.scepter.desc", stack.getMaxDamage() - stack.getDamageValue()).withStyle(ChatFormatting.GRAY));
 	}
 }

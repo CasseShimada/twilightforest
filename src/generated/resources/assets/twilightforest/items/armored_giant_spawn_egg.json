@@ -1,16 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/template_spawn_egg",
-    "tints": [
-      {
-        "type": "minecraft:constant",
-        "value": -14445679
-      },
-      {
-        "type": "minecraft:constant",
-        "value": -6645094
-      }
-    ]
+    "model": "twilightforest:item/armored_giant_spawn_egg"
   }
 }

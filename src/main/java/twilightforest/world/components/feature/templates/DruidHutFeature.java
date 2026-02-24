@@ -1,10 +1,10 @@
 package twilightforest.world.components.feature.templates;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.*;
@@ -55,15 +55,20 @@ public class DruidHutFeature extends TemplateFeature<SwizzleConfig> {
 
 			template.placeInWorld(world, placementPos, placementPos, placementSettings, random, Block.UPDATE_CLIENTS);
 
-			for (StructureTemplate.StructureBlockInfo info : template.filterBlocks(placementPos, placementSettings, Blocks.STRUCTURE_BLOCK))
-				if (info.nbt() != null && StructureMode.valueOf(info.nbt().getString("mode")) == StructureMode.DATA)
-					this.processMarkers(info, world, rotation, mirror, random);
+			for (StructureTemplate.StructureBlockInfo info : template.filterBlocks(placementPos, placementSettings, Blocks.STRUCTURE_BLOCK)) {
+				if (info.nbt() != null) {
+					String mode = info.nbt().getStringOr("mode", "");
+					if (!mode.isEmpty() && StructureMode.valueOf(mode) == StructureMode.DATA) {
+						this.processMarkers(info, world, rotation, mirror, random);
+					}
+				}
+			}
 		}
 	}
 
 	@Override
 	protected void processMarkers(StructureTemplate.StructureBlockInfo info, WorldGenLevel world, Rotation rotation, Mirror mirror, RandomSource random) {
-		String s = info.nbt().getString("metadata");
+		String s = info.nbt().getStringOr("metadata", "");
 		BlockPos blockPos = info.pos();
         /*
          `spawner` will place a Druid spawner.
@@ -144,9 +149,9 @@ public class DruidHutFeature extends TemplateFeature<SwizzleConfig> {
 		SIDEWAYS(TwilightForestMod.prefix("feature/druid_hut/druid_sideways")),
 		DOUBLE_DECK(TwilightForestMod.prefix("feature/druid_hut/druid_doubledeck"));
 
-		private final ResourceLocation resourceLocation;
+		private final Identifier resourceLocation;
 
-		HutType(ResourceLocation rl) {
+		HutType(Identifier rl) {
 			this.resourceLocation = rl;
 		}
 	}
@@ -156,10 +161,10 @@ public class DruidHutFeature extends TemplateFeature<SwizzleConfig> {
 		SHELVES(TwilightForestMod.prefix("feature/druid_hut/basement_shelves"), TwilightForestMod.prefix("feature/druid_hut/basement_shelves_trap")),
 		GALLERY(TwilightForestMod.prefix("feature/druid_hut/basement_gallery"), TwilightForestMod.prefix("feature/druid_hut/basement_gallery_trap"));
 
-		private final ResourceLocation resourceLocation;
-		private final ResourceLocation resourceLocationTrap;
+		private final Identifier resourceLocation;
+		private final Identifier resourceLocationTrap;
 
-		BasementType(ResourceLocation rl, ResourceLocation rlTrap) {
+		BasementType(Identifier rl, Identifier rlTrap) {
 			this.resourceLocation = rl;
 			this.resourceLocationTrap = rlTrap;
 			increment();
@@ -171,7 +176,7 @@ public class DruidHutFeature extends TemplateFeature<SwizzleConfig> {
 			++size;
 		}
 
-		private ResourceLocation getBasement(boolean trapped) {
+		private Identifier getBasement(boolean trapped) {
 			return trapped ? resourceLocationTrap : resourceLocation;
 		}
 	}

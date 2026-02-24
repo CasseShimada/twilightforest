@@ -11,7 +11,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.entity.monster.spider.Spider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -36,13 +36,13 @@ public class HedgeSpider extends Spider {
 		super.registerGoals();
 
 		// Remove default spider melee task
-		this.goalSelector.availableGoals.removeIf(t -> t.getGoal() instanceof MeleeAttackGoal);
+		this.goalSelector.removeAllGoals(goal -> goal instanceof MeleeAttackGoal);
 
 		// Replace with one that doesn't become docile in light
 		this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1, true));
 
 		// Remove default spider target player task
-		this.targetSelector.availableGoals.removeIf(t -> t.getPriority() == 2 && t.getGoal() instanceof NearestAttackableTargetGoal);
+		this.targetSelector.removeAllGoals(goal -> goal instanceof NearestAttackableTargetGoal);
 		// Replace with one that doesn't care about light
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
 	}

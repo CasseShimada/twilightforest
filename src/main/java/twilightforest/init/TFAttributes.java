@@ -3,8 +3,8 @@ package twilightforest.init;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import twilightforest.util.registry.DeferredHolder;
+import twilightforest.util.registry.DeferredRegister;
 import twilightforest.TwilightForestMod;
 
 public class TFAttributes {

@@ -1,15 +1,12 @@
 package twilightforest.world.components.structures.fallentrunk;
 
-import it.unimi.dsi.fastutil.objects.ObjectIterators;
-import it.unimi.dsi.fastutil.objects.ObjectListIterator;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.Beardifier;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.pools.JigsawJunction;
 import twilightforest.world.components.chunkgenerators.TanhHillFunction;
 
 import java.util.ArrayList;
@@ -22,6 +19,7 @@ public class TrunkUnderDensityFunction extends Beardifier {
 	private final boolean isXOriented;
 	private final RandomSource random;  // used to create dirt mounds
 	private final BoundingBox boundingBox;
+	private final Rigid fallenTrunkPiece;
 	private final List<TanhHillFunction> tanhHillFunctions;
 	protected final BoundingBox moundBase;
 	protected static final float MOUND_RADIUS = 3F;
@@ -30,10 +28,11 @@ public class TrunkUnderDensityFunction extends Beardifier {
 	protected static final float BIG_TREE_MOUND_HEIGHT = 3F;
 	protected static final float NON_BIG_TREE_MOUND_HEIGHT = 1.5F;
 
-	public TrunkUnderDensityFunction(ObjectListIterator<Rigid> pieceIterator, FallenTrunkPiece piece, boolean isBigTree, int minMounds, int maxMounds) {
-		super(pieceIterator, (ObjectListIterator<JigsawJunction>) ObjectIterators.<JigsawJunction>emptyIterator());
+	public TrunkUnderDensityFunction(List<Rigid> pieces, FallenTrunkPiece piece, boolean isBigTree, int minMounds, int maxMounds) {
+		super(pieces, List.of(), piece.getBoundingBox());
 		this.isBigTree = isBigTree;
-		boundingBox = getFallenTrunkPiece().box();
+		this.fallenTrunkPiece = pieces.get(0);
+		boundingBox = this.fallenTrunkPiece.box();
 		random = RandomSource.create(boundingBox.minX() * 14413411L + boundingBox.minZ() * 43387781L);
 		isXOriented = boundingBox.maxX() - boundingBox.minX() > boundingBox.maxZ() - boundingBox.minZ();
 		int length = isXOriented ? boundingBox.getXSpan() : boundingBox.getZSpan();
@@ -137,9 +136,7 @@ public class TrunkUnderDensityFunction extends Beardifier {
 
 
 	protected Beardifier.Rigid getFallenTrunkPiece() {
-		Beardifier.Rigid piece = pieceIterator.next();
-		this.pieceIterator.back(Integer.MAX_VALUE);
-		return piece;
+		return this.fallenTrunkPiece;
 	}
 
 	private static int getRadius(BoundingBox box) {

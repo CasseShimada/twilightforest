@@ -92,12 +92,12 @@ public class KeepsakeCasketBlock extends SkullChestBlock {
 	@Override
 	protected void modifyDrop(BlockState state, ItemStack stack) {
 		if (state.getValue(BREAKAGE) > 0)
-			stack.set(TFDataComponents.CASKET_DAMAGE, state.getValue(BREAKAGE));
+			stack.set(TFDataComponents.CASKET_DAMAGE.get(), state.getValue(BREAKAGE));
 	}
 
 	@Override
 	public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-		level.setBlock(pos, state.setValue(BREAKAGE, stack.getOrDefault(TFDataComponents.CASKET_DAMAGE, 0)), Block.UPDATE_CLIENTS);
+		level.setBlock(pos, state.setValue(BREAKAGE, stack.getOrDefault(TFDataComponents.CASKET_DAMAGE.get(), 0)), Block.UPDATE_CLIENTS);
 
 		super.setPlacedBy(level, pos, state, placer, stack);
 	}
@@ -109,12 +109,12 @@ public class KeepsakeCasketBlock extends SkullChestBlock {
 	}
 
 	@Override
-	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player) {
+	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
 		if (state.getValue(BREAKAGE) > 0) {
 			ItemStack itemstack = new ItemStack(this);
 			itemstack.applyComponents(DataComponentPatch.builder().set(TFDataComponents.CASKET_DAMAGE.get(), state.getValue(BREAKAGE)).build());
 			return itemstack;
 		}
-		return super.getCloneItemStack(level, pos, state, includeData, player);
+		return super.getCloneItemStack(level, pos, state, includeData);
 	}
 }

@@ -14,12 +14,11 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
-import twilightforest.world.components.structures.start.TFStructureStart;
 
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public abstract class ConquerableStructure extends LandmarkStructure implements CustomStructureData {
+public abstract class ConquerableStructure extends LandmarkStructure {
 	public ConquerableStructure(DecorationConfig decorationConfig, boolean centerInChunk, Optional<Holder<MapDecorationType>> structureIcon, StructureSettings structureSettings) {
 		super(decorationConfig, centerInChunk, structureIcon, structureSettings);
 	}
@@ -30,7 +29,6 @@ public abstract class ConquerableStructure extends LandmarkStructure implements 
 	}
 
 	// [VANILLA COPY] Structure.generate
-	//  StructureStart construction swapped for TFStructureStart construction
 	public StructureStart generateCustom(RegistryAccess registryAccess, ChunkGenerator chunkGen, BiomeSource biomeSource, RandomState randomState, StructureTemplateManager templateManager, long pseed, ChunkPos chunkPos, int references, LevelHeightAccessor heightAccessor, Predicate<Holder<Biome>> isValidBiome) {
 		GenerationContext structure$generationcontext = new GenerationContext(registryAccess, chunkGen, biomeSource, randomState, templateManager, pseed, chunkPos, heightAccessor, isValidBiome);
 		Optional<GenerationStub> optional = this.findValidGenerationPoint(structure$generationcontext);
@@ -43,6 +41,6 @@ public abstract class ConquerableStructure extends LandmarkStructure implements 
 	}
 
 	protected StructureStart createStart(ChunkPos chunkPos, int reference, GenerationStub generationStub) {
-		return new TFStructureStart(this, chunkPos, reference, generationStub.getPiecesBuilder().build());
+		return new StructureStart(this, chunkPos, reference, generationStub.getPiecesBuilder().build());
 	}
 }

@@ -1,11 +1,11 @@
 package twilightforest.util;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import twilightforest.util.registry.DeferredRegister;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.*;
 
@@ -15,6 +15,7 @@ public class TFRemapper {
 		DeferredRegister<Block> blockReg = TFBlocks.BLOCKS;
 		DeferredRegister<EntityType<?>> entityReg = TFEntities.ENTITY_TYPES;
 		DeferredRegister<Item> itemReg = TFItems.ITEMS;
+		DeferredRegister<Item> spawnEggReg = TFEntities.SPAWN_EGGS;
 		DeferredRegister<StructurePieceType> pieceTypeReg = TFStructurePieceTypes.STRUCTURE_PIECE_TYPES;
 
 		remapEntryFromRegistries("yeti_trophy", "alpha_yeti_trophy", blockReg, itemReg);
@@ -163,15 +164,15 @@ public class TFRemapper {
 		remapEntry(itemReg, "alpha_fur", "alpha_yeti_fur");
 		remapEntry(itemReg, "questing_ram_banner_pattern", "quest_ram_banner_pattern");
 
-		remapEntry(itemReg, "bunny_spawn_egg", "dwarf_rabbit_spawn_egg");
-		remapEntry(itemReg, "goblin_knight_lower_spawn_egg", "lower_goblin_knight_spawn_egg");
-		remapEntry(itemReg, "mini_ghast_spawn_egg", "carminite_ghastling_spawn_egg");
-		remapEntry(itemReg, "tower_ghast_spawn_egg", "carminite_ghastguard_spawn_egg");
-		remapEntry(itemReg, "tower_golem_spawn_egg", "carminite_golem_spawn_egg");
-		remapEntry(itemReg, "tower_broodling_spawn_egg", "carminite_broodling_spawn_egg");
-		remapEntry(itemReg, "tower_termite_spawn_egg", "towerwood_borer_spawn_egg");
-		remapEntry(itemReg, "wild_boar_spawn_egg", "boar_spawn_egg");
-		remapEntry(itemReg, "yeti_alpha_spawn_egg", "alpha_yeti_spawn_egg");
+		remapEntry(spawnEggReg, "bunny_spawn_egg", "dwarf_rabbit_spawn_egg");
+		remapEntry(spawnEggReg, "goblin_knight_lower_spawn_egg", "lower_goblin_knight_spawn_egg");
+		remapEntry(spawnEggReg, "mini_ghast_spawn_egg", "carminite_ghastling_spawn_egg");
+		remapEntry(spawnEggReg, "tower_ghast_spawn_egg", "carminite_ghastguard_spawn_egg");
+		remapEntry(spawnEggReg, "tower_golem_spawn_egg", "carminite_golem_spawn_egg");
+		remapEntry(spawnEggReg, "tower_broodling_spawn_egg", "carminite_broodling_spawn_egg");
+		remapEntry(spawnEggReg, "tower_termite_spawn_egg", "towerwood_borer_spawn_egg");
+		remapEntry(spawnEggReg, "wild_boar_spawn_egg", "boar_spawn_egg");
+		remapEntry(spawnEggReg, "yeti_alpha_spawn_egg", "alpha_yeti_spawn_egg");
 
 		remapEntry(entityReg, "wild_boar", "boar");
 		remapEntry(entityReg, "bunny", "dwarf_rabbit");
@@ -188,7 +189,7 @@ public class TFRemapper {
 		remapEntry(pieceTypeReg, "TFNCDu", "TFNCTe"); // Terrace Duct
 		remapEntry(pieceTypeReg, "TFNCSt", "TFNCTe"); // Terrace Statue
 
-		TFStructureProcessors.STRUCTURE_PROCESSORS.addAlias(TwilightForestMod.prefix("meta_block_processor"), ResourceLocation.withDefaultNamespace("jigsaw_replacement"));
+		TFStructureProcessors.STRUCTURE_PROCESSORS.addAlias(TwilightForestMod.prefix("meta_block_processor"), Identifier.withDefaultNamespace("jigsaw_replacement"));
 	}
 
 	private static void remapEntry(DeferredRegister<?> registry, String oldId, String newId) {

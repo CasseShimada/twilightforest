@@ -43,17 +43,17 @@ public class TowerWingComponent extends TFStructureComponentOld {
 	public TowerWingComponent(StructurePieceType piece, CompoundTag nbt) {
 		super(piece, nbt);
 
-		this.size = nbt.getInt("towerSize");
-		this.height = nbt.getInt("towerHeight");
+		this.size = nbt.getIntOr("towerSize", 0);
+		this.height = nbt.getIntOr("towerHeight", 0);
 
-		this.readOpeningsFromArray(nbt.getIntArray("doorInts"));
+		this.readOpeningsFromArray(nbt.getIntArray("doorInts").orElse(new int[0]));
 
-		this.highestOpening = nbt.getInt("highestOpening");
+		this.highestOpening = nbt.getIntOr("highestOpening", 0);
 		// too lazy to do this as a loop
-		this.openingTowards[0] = nbt.getBoolean("openingTowards0");
-		this.openingTowards[1] = nbt.getBoolean("openingTowards1");
-		this.openingTowards[2] = nbt.getBoolean("openingTowards2");
-		this.openingTowards[3] = nbt.getBoolean("openingTowards3");
+		this.openingTowards[0] = nbt.getBooleanOr("openingTowards0", false);
+		this.openingTowards[1] = nbt.getBooleanOr("openingTowards1", false);
+		this.openingTowards[2] = nbt.getBooleanOr("openingTowards2", false);
+		this.openingTowards[3] = nbt.getBooleanOr("openingTowards3", false);
 	}
 
 	public int size;

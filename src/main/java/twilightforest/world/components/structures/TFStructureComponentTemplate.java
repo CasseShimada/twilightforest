@@ -13,6 +13,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnorePr
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import twilightforest.mixin.accessor.StructurePieceFieldsAccessor;
 
 /**
  * Copied a few things from {@link net.minecraft.world.level.levelgen.structure.TemplateStructurePiece}
@@ -28,22 +29,23 @@ public abstract class TFStructureComponentTemplate extends TFStructureComponent 
 
 	public TFStructureComponentTemplate(StructurePieceSerializationContext ctx, StructurePieceType piece, CompoundTag nbt) {
 		super(piece, nbt);
-		this.templatePosition = new BlockPos(nbt.getInt("TPX"), nbt.getInt("TPY"), nbt.getInt("TPZ"));
-		this.placeSettings.setRotation(this.rotation);
+		this.templatePosition = new BlockPos(nbt.getIntOr("TPX", 0), nbt.getIntOr("TPY", 0), nbt.getIntOr("TPZ", 0));
+		this.placeSettings.setRotation(((StructurePieceFieldsAccessor) this).twilightforest$getRotation());
 		LAZY_TEMPLATE_LOADER = () -> setup(ctx.structureTemplateManager());
 	}
 
 	public TFStructureComponentTemplate(StructurePieceType type, int i, int x, int y, int z, BoundingBox boundingBox) {
 		super(type, i, boundingBox);
-		this.mirror = Mirror.NONE;
+		((StructurePieceFieldsAccessor) this).twilightforest$setMirror(Mirror.NONE);
 		this.templatePosition = new BlockPos(x, y, z);
 	}
 
 	@Deprecated
 	public TFStructureComponentTemplate(StructureTemplateManager manager, StructurePieceType type, int i, int x, int y, int z, Rotation rotation) {
 		super(type, i, new BoundingBox(x, y, z, x, y, z));
-		this.rotation = rotation;
-		this.mirror = Mirror.NONE;
+		StructurePieceFieldsAccessor accessor = (StructurePieceFieldsAccessor) this;
+		accessor.twilightforest$setRotation(rotation);
+		accessor.twilightforest$setMirror(Mirror.NONE);
 		this.placeSettings.setRotation(rotation);
 		this.templatePosition = new BlockPos(x, y, z);
 		LAZY_TEMPLATE_LOADER = () -> setup(manager);

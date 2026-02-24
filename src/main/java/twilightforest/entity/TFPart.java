@@ -1,23 +1,40 @@
 package twilightforest.entity;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerEntity;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.entity.PartEntity;
 import twilightforest.TwilightForestMod;
 import twilightforest.network.UpdateTFMultipartPacket;
 
 import java.util.Objects;
 
-public abstract class TFPart<T extends Entity> extends PartEntity<T> {
+/**
+ * Fabric/vanilla replacement for the previous multipart entity API.
+ *
+ * <p>These entities are not spawned via vanilla networking. They exist as logical hitboxes attached
+ * to a parent and are synchronized using {@link UpdateTFMultipartPacket}.</p>
+ */
+public abstract class TFPart<T extends Entity> extends Entity {
 
-	public static final ResourceLocation RENDERER = TwilightForestMod.prefix("noop");
+	public static final Identifier RENDERER = TwilightForestMod.prefix("noop");
+
+	private final T parent;
 
 	protected EntityDimensions realSize = EntityDimensions.fixed(1F, 1F);
 
@@ -33,11 +50,21 @@ public abstract class TFPart<T extends Entity> extends PartEntity<T> {
 	public int deathTime;
 	public int hurtTime;
 
-	public TFPart(T parent) {
-		super(parent);
+	protected TFPart(T parent) {
+		// Marker is inert and safe for parts that should never be spawned via vanilla networking.
+		this(EntityType.MARKER, parent.level(), parent);
 	}
 
-	public ResourceLocation renderer() {
+	protected TFPart(EntityType<?> type, Level level, T parent) {
+		super(type, level);
+		this.parent = Objects.requireNonNull(parent, "parent");
+	}
+
+	public T getParent() {
+		return this.parent;
+	}
+
+	public Identifier renderer() {
 		return RENDERER;
 	}
 
@@ -54,6 +81,7 @@ public abstract class TFPart<T extends Entity> extends PartEntity<T> {
 	public void tick() {
 		updateLastPos();
 		super.tick();
+
 		if (this.newPosRotationIncrements > 0) {
 			double d0 = this.getX() + (this.interpTargetX - this.getX()) / (double) this.newPosRotationIncrements;
 			double d2 = this.getY() + (this.interpTargetY - this.getY()) / (double) this.newPosRotationIncrements;
@@ -76,11 +104,15 @@ public abstract class TFPart<T extends Entity> extends PartEntity<T> {
 		while (getXRot() - this.xRotO >= 180F) this.xRotO += 360F;
 	}
 
-	public final void updateLastPos() {
-		this.moveTo(this.getX(), this.getY(), this.getZ());
+	private void updateLastPos() {
+		this.xOld = this.getX();
+		this.yOld = this.getY();
+		this.zOld = this.getZ();
+		this.xo = this.getX();
+		this.yo = this.getY();
+		this.zo = this.getZ();
 		this.yRotO = this.getYRot();
 		this.xRotO = this.getXRot();
-		this.tickCount++;
 	}
 
 	protected void setSize(EntityDimensions size) {
@@ -90,12 +122,12 @@ public abstract class TFPart<T extends Entity> extends PartEntity<T> {
 
 	@Override
 	public boolean isCurrentlyGlowing() {
-		return this.getParent().isCurrentlyGlowing();
+		return this.parent.isCurrentlyGlowing();
 	}
 
 	@Override
 	public boolean isInvisible() {
-		return this.getParent().isInvisible();
+		return this.parent.isInvisible();
 	}
 
 	@Override
@@ -110,11 +142,12 @@ public abstract class TFPart<T extends Entity> extends PartEntity<T> {
 
 	@Override
 	public InteractionResult interact(Player player, InteractionHand hand) {
-		return this.getParent().interact(player, hand);
+		return this.parent.interact(player, hand);
 	}
 
 	@Override
 	public void setId(int id) {
+		// Keep ids distinct from the parent entity id space.
 		super.setId(id + 1);
 	}
 
@@ -125,11 +158,10 @@ public abstract class TFPart<T extends Entity> extends PartEntity<T> {
 			this.getZ(),
 			this.getYRot(),
 			this.getXRot(),
-			this.dimensions.width(),
-			this.dimensions.height(),
-			this.dimensions.fixed(),
+			this.getDimensions(this.getPose()).width(),
+			this.getDimensions(this.getPose()).height(),
+			this.getDimensions(this.getPose()).fixed(),
 			getEntityData().packDirty());
-
 	}
 
 	public void readData(UpdateTFMultipartPacket.PartDataHolder data) {
@@ -138,16 +170,48 @@ public abstract class TFPart<T extends Entity> extends PartEntity<T> {
 		final float w = data.width();
 		final float h = data.height();
 		this.setSize(data.fixed() ? EntityDimensions.fixed(w, h) : EntityDimensions.scalable(w, h));
-		if (data.data() != null)
+		if (data.data() != null) {
 			getEntityData().assignValues(data.data());
+		}
 		this.refreshDimensions();
 	}
 
 	public static void assignPartIDs(Entity parent) {
-		PartEntity<?>[] parts = parent.getParts();
-		for (int i = 0, partsLength = Objects.requireNonNull(parts).length; i < partsLength; i++) {
-			PartEntity<?> part = parts[i];
-			part.setId(parent.getId() + i);
+		if (!(parent instanceof TFMultipartEntity multipart)) return;
+		TFPart<?>[] parts = multipart.getParts();
+		if (parts == null) return;
+		for (int i = 0; i < parts.length; i++) {
+			parts[i].setId(parent.getId() + i);
 		}
+	}
+
+	@Override
+	public boolean shouldBeSaved() {
+		return false;
+	}
+
+	@Override
+	public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity entity) {
+		throw new UnsupportedOperationException("TFPart should never be spawned via vanilla networking");
+	}
+
+	// Parts should never be persisted; keep legacy CompoundTag overloads for existing subclasses.
+	protected void readAdditionalSaveData(CompoundTag compound) {
+	}
+
+	protected void addAdditionalSaveData(CompoundTag compound) {
+	}
+
+	@Override
+	protected final void readAdditionalSaveData(ValueInput input) {
+	}
+
+	@Override
+	protected final void addAdditionalSaveData(ValueOutput output) {
+	}
+
+	@Override
+	public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+		return false;
 	}
 }

@@ -1,14 +1,12 @@
 package twilightforest.world.components.structures.darktower;
 
 import net.minecraft.world.level.block.Blocks;
-import tamaized.beanification.Autowired;
 import twilightforest.init.TFBlocks;
 import twilightforest.world.components.structures.TFStructureDecorator;
 import twilightforest.world.components.structures.selectors.TowerwoodRandomBlockSelectorFactory;
 
 public class StructureDecoratorDarkTower extends TFStructureDecorator {
-	@Autowired
-	private static TowerwoodRandomBlockSelectorFactory towerwood;
+	private static final TowerwoodRandomBlockSelectorFactory towerwood = new TowerwoodRandomBlockSelectorFactory();
 
 	public StructureDecoratorDarkTower() {
 		this.blockState = TFBlocks.TOWERWOOD.get().defaultBlockState();

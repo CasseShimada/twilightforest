@@ -9,6 +9,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -28,14 +29,18 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.ItemAbilities;
-import net.neoforged.neoforge.fluids.FluidUtil;
-import net.neoforged.neoforge.fluids.capability.templates.VoidFluidHandler;
+import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import twilightforest.block.entity.BrazierBlockEntity;
 import twilightforest.enums.BrazierLight;
 import twilightforest.init.TFBlockEntities;
+import twilightforest.util.ToolActionUtil;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class BrazierBlock extends BaseEntityBlock {
 
@@ -95,7 +100,7 @@ public class BrazierBlock extends BaseEntityBlock {
 
 	@Override
 	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
-		if (!level.isClientSide() && (player.isCreative() || !player.hasCorrectToolForDrops(state, level, pos))) {
+		if (!level.isClientSide() && (player.isCreative() || !player.hasCorrectToolForDrops(state))) {
 			DoubleBlockHalf half = state.getValue(HALF);
 			if (half == DoubleBlockHalf.UPPER) {
 				BlockPos below = pos.below();
@@ -138,11 +143,12 @@ public class BrazierBlock extends BaseEntityBlock {
 	@Override
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
 		if (state.is(this) && state.getValue(HALF) == DoubleBlockHalf.UPPER) {
-			if (state.getValue(LIGHT) != BrazierLight.FULL && stack.canPerformAction(ItemAbilities.FIRESTARTER_LIGHT)) {
+			if (state.getValue(LIGHT) != BrazierLight.FULL && ToolActionUtil.isFireStarter(stack)) {
 				level.setBlock(pos, state.cycle(LIGHT), Block.UPDATE_ALL_IMMEDIATE);
 				level.getBlockState(pos.below()).cycle(LIGHT);
 				if (stack.is(Items.FLINT_AND_STEEL)) {
-					stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+					EquipmentSlot slot = hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+					stack.hurtAndBreak(1, player, slot);
 				} else {
 					stack.consume(1, player);
 				}
@@ -152,15 +158,30 @@ public class BrazierBlock extends BaseEntityBlock {
 			}
 
 			if (state.getValue(LIGHT).isLit()) {
-				if (FluidUtil.getFluidContained(stack).isPresent() && FluidUtil.getFluidContained(stack).get().is(Fluids.WATER)) {
-					if (FluidUtil.tryEmptyContainer(stack, new VoidFluidHandler(), 1000, player, true).isSuccess()) {
-						level.setBlock(pos, state.setValue(LIGHT, BrazierLight.OFF), 11);
-						level.getBlockState(pos.below()).setValue(LIGHT, BrazierLight.OFF);
-						level.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS);
-						player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
-						return InteractionResult.SUCCESS;
-					} else {
-						return InteractionResult.FAIL;
+				ContainerItemContext itemContext = ContainerItemContext.ofPlayerHand(player, hand);
+				Storage<FluidVariant> storage = itemContext.find(FluidStorage.ITEM);
+				if (storage != null) {
+					FluidVariant water = FluidVariant.of(Fluids.WATER);
+
+					try (Transaction tx = Transaction.openOuter()) {
+						long extracted = storage.extract(water, FluidConstants.BUCKET, tx);
+						if (extracted == FluidConstants.BUCKET) {
+							tx.commit();
+
+							level.setBlock(pos, state.setValue(LIGHT, BrazierLight.OFF), 11);
+							level.getBlockState(pos.below()).setValue(LIGHT, BrazierLight.OFF);
+							level.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS);
+							player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
+							return InteractionResult.SUCCESS;
+						}
+					}
+
+					// If the held item contains some water but can't provide a full bucket, treat the interaction as a failure.
+					try (Transaction tx = Transaction.openOuter()) {
+						long extracted = storage.extract(water, 1, tx);
+						if (extracted > 0) {
+							return InteractionResult.FAIL;
+						}
 					}
 				}
 			}

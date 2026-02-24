@@ -5,16 +5,18 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item.TooltipContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ResolvableProfile;
-import net.minecraft.world.level.block.entity.SkullBlockEntity;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.component.TypedEntityData;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.apache.commons.lang3.text.WordUtils;
 import twilightforest.block.AbstractSkullCandleBlock;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 public class SkullCandleItem extends StandingAndWallBlockItem {
 
@@ -23,17 +25,19 @@ public class SkullCandleItem extends StandingAndWallBlockItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-		CustomData data = stack.get(DataComponents.BLOCK_ENTITY_DATA);
-		if (data != null && !data.isEmpty()) {
-			CompoundTag tag = data.copyTag();
+	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+		TypedEntityData<BlockEntityType<?>> data = stack.get(DataComponents.BLOCK_ENTITY_DATA);
+		if (data != null) {
+			CompoundTag tag = data.copyTagWithoutId();
 			if (tag.contains("CandleColor") && tag.contains("CandleAmount")) {
-				tooltip.add(
-					Component.translatable(tag.getInt("CandleAmount") > 1 ?
+				int candleAmount = tag.getIntOr("CandleAmount", 0);
+				int candleColor = tag.getIntOr("CandleColor", 0);
+				tooltip.accept(
+					Component.translatable(candleAmount > 1 ?
 								"item.twilightforest.skull_candle.desc.multiple" :
 								"item.twilightforest.skull_candle.desc",
-							String.valueOf(tag.getInt("CandleAmount")),
-							WordUtils.capitalize(AbstractSkullCandleBlock.CandleColors.colorFromInt(tag.getInt("CandleColor")).getSerializedName()
+							String.valueOf(candleAmount),
+							WordUtils.capitalize(AbstractSkullCandleBlock.CandleColors.colorFromInt(candleColor).getSerializedName()
 								.replace("\"", "").replace("_", " ")))
 						.withStyle(ChatFormatting.GRAY));
 			}
@@ -46,13 +50,5 @@ public class SkullCandleItem extends StandingAndWallBlockItem {
 		return resolvableprofile != null && resolvableprofile.name().isPresent()
 			? Component.translatable(this.getDescriptionId() + ".named", resolvableprofile.name().get())
 			: super.getName(stack);
-	}
-
-	@Override
-	public void verifyComponentsAfterLoad(ItemStack stack) {
-		ResolvableProfile resolvableprofile = stack.get(DataComponents.PROFILE);
-		if (resolvableprofile != null && !resolvableprofile.isResolved()) {
-			resolvableprofile.resolve().thenAcceptAsync(profile -> stack.set(DataComponents.PROFILE, profile), SkullBlockEntity.CHECKED_MAIN_THREAD_EXECUTOR);
-		}
 	}
 }

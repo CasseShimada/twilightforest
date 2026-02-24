@@ -8,7 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -18,6 +18,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.Spawner;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFBlockEntities;
@@ -34,28 +36,26 @@ public class SinisterSpawnerBlockEntity extends BlockEntity implements Spawner {
 	@Nullable private ResourceKey<LootTable> lootTable = null;
 
 	public SinisterSpawnerBlockEntity(BlockPos pos, BlockState blockState) {
-		super(TFBlockEntities.SINISTER_SPAWNER.value(), pos, blockState);
+		super(TFBlockEntities.SINISTER_SPAWNER.get(), pos, blockState);
 	}
 
 	@Override
-	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-		super.loadAdditional(tag, registries);
-		this.spawner.load(this.level, this.worldPosition, tag);
+	protected void loadAdditional(ValueInput input) {
+		super.loadAdditional(input);
+		this.spawner.load(this.level, this.worldPosition, input);
 
-		if (tag.contains("LootTable")) {
-			this.lootTable = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(tag.getString("LootTable")));
-		} else {
-			this.lootTable = null;
-		}
+		this.lootTable = input.read("LootTable", Identifier.CODEC)
+			.map(id -> ResourceKey.create(Registries.LOOT_TABLE, id))
+			.orElse(null);
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-		super.saveAdditional(tag, registries);
-		this.spawner.save(tag);
+	protected void saveAdditional(ValueOutput output) {
+		super.saveAdditional(output);
+		this.spawner.save(output);
 
 		if (this.lootTable != null) {
-			tag.putString("LootTable", this.lootTable.location().toString());
+			output.store("LootTable", Identifier.CODEC, this.lootTable.identifier());
 		}
 	}
 

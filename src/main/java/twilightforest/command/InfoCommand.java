@@ -11,28 +11,29 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.util.random.Weighted;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
-import net.neoforged.fml.loading.FMLLoader;
+import net.fabricmc.loader.api.FabricLoader;
 import twilightforest.events.EntityEvents;
 import twilightforest.util.landmarks.LandmarkUtil;
-import twilightforest.world.components.structures.start.TFStructureStart;
 import twilightforest.world.components.structures.util.LandmarkStructure;
+import twilightforest.world.components.structures.util.StructureConqueredData;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.StringJoiner;
 
-@tamaized.beanification.Component
 public class InfoCommand {
 
 	public LiteralArgumentBuilder<CommandSourceStack> register() {
-		return Commands.literal("info").requires(cs -> cs.hasPermission(2)).executes(this::run);
+		return Commands.literal("info").requires(cs -> Commands.LEVEL_GAMEMASTERS.check(cs.permissions())).executes(this::run);
 	}
 
 	private int run(CommandContext<CommandSourceStack> ctx) {
@@ -47,9 +48,9 @@ public class InfoCommand {
 		if (possibleStructureRegistry.isEmpty() || possibleNearLandmark.isEmpty() || !(possibleNearLandmark.get().getStructure() instanceof LandmarkStructure landmarkStructure)) return 0;
 		StructureStart structureStart = possibleNearLandmark.get();
 
-		ResourceLocation key = possibleStructureRegistry.get().getKey(landmarkStructure);
+		Identifier key = possibleStructureRegistry.get().getKey(landmarkStructure);
 
-		if (FMLLoader.isProduction())
+		if (!FabricLoader.getInstance().isDevelopmentEnvironment())
 			source.sendSuccess(() -> Component.translatable("This command is still WIP, some things may still be broken.").withStyle(ChatFormatting.RED, ChatFormatting.BOLD), false);
 
 		// nearest feature
@@ -70,16 +71,23 @@ public class InfoCommand {
 		if (boundingBox.isInside(pos)) {
 			source.sendSuccess(() -> Component.translatable("commands.tffeature.structure.inside").withStyle(ChatFormatting.BOLD, ChatFormatting.GREEN), false);
 
-			if (structureStart instanceof TFStructureStart tfStructureStart) {
-				source.sendSuccess(() -> Component.translatable("commands.tffeature.structure.conquer.status", tfStructureStart.isConquered()).withStyle(ChatFormatting.BOLD, tfStructureStart.isConquered() ? ChatFormatting.GREEN : ChatFormatting.RED), false);
+			boolean conquered = false;
+			var structureKey = possibleStructureRegistry.get().getResourceKey(structureStart.getStructure()).orElse(null);
+			if (structureKey != null) {
+				conquered = StructureConqueredData.get(level).isConquered(structureKey, structureStart.getChunkPos());
 			}
+			boolean finalConquered = conquered;
+			source.sendSuccess(() -> Component.translatable("commands.tffeature.structure.conquer.status", finalConquered).withStyle(ChatFormatting.BOLD, finalConquered ? ChatFormatting.GREEN : ChatFormatting.RED), false);
 
 			// what is the spawn list
-			List<MobSpawnSettings.SpawnerData> spawnList = EntityEvents.gatherPotentialSpawns(level.structureManager(), MobCategory.MONSTER, pos);
+			WeightedList<MobSpawnSettings.SpawnerData> spawnList = EntityEvents.gatherPotentialSpawns(level, MobCategory.MONSTER, pos);
 			source.sendSuccess(() -> Component.translatable("commands.tffeature.structure.spawn_list").withStyle(ChatFormatting.UNDERLINE), false);
-			if (spawnList != null)
-				for (MobSpawnSettings.SpawnerData entry : spawnList)
-					source.sendSuccess(() -> Component.translatable("commands.tffeature.structure.spawn_info", entry.type.getDescription().getString(), entry.getWeight().asInt()), false);
+			if (spawnList != null) {
+				for (Weighted<MobSpawnSettings.SpawnerData> entry : spawnList.unwrap()) {
+					MobSpawnSettings.SpawnerData data = entry.value();
+					source.sendSuccess(() -> Component.translatable("commands.tffeature.structure.spawn_info", data.type().getDescription().getString(), data.minCount() + "-" + data.maxCount()), false);
+				}
+			}
 		} else {
 			source.sendSuccess(() -> Component.translatable("commands.tffeature.structure.outside").withStyle(ChatFormatting.BOLD, ChatFormatting.RED), false);
 		}

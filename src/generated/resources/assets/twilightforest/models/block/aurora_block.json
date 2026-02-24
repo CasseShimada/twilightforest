@@ -1,6 +1,5 @@
 {
   "parent": "minecraft:block/block",
-  "loader": "twilightforest:noise_varying",
   "variants": [
     "twilightforest:block/aurora_block_0",
     "twilightforest:block/aurora_block_1",
@@ -18,5 +17,9 @@
     "twilightforest:block/aurora_block_13",
     "twilightforest:block/aurora_block_14",
     "twilightforest:block/aurora_block_15"
-  ]
+  ],
+  "textures": {
+    "particle": "twilightforest:block/aurora_block"
+  },
+  "fabric:type": "twilightforest:noise_varying"
 }

@@ -5,7 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.FrontAndTop;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -23,10 +23,10 @@ import net.minecraft.world.level.levelgen.structure.*;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
-import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
+import twilightforest.world.components.structures.PieceBeardifierModifier;
 import org.joml.SimplexNoise;
-import tamaized.beanification.Autowired;
 import twilightforest.init.TFStructurePieceTypes;
+import twilightforest.mixin.accessor.StructurePiecesBuilderAccessor;
 import twilightforest.util.BoundingBoxUtils;
 import twilightforest.util.jigsaw.JigsawPlaceContext;
 import twilightforest.util.jigsaw.JigsawRecord;
@@ -40,8 +40,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class LichYardBox extends StructurePiece implements PieceBeardifierModifier, SortablePiece, SpawnIndexProvider {
-	@Autowired
-	private static LichTowerUtil lichTowerUtil;
+	private static final LichTowerUtil lichTowerUtil = new LichTowerUtil();
 
 	private final float edgeFeatheringRange;
 	private final Direction direction;
@@ -62,11 +61,11 @@ public class LichYardBox extends StructurePiece implements PieceBeardifierModifi
 	public LichYardBox(StructurePieceSerializationContext ctx, CompoundTag tag) {
 		super(TFStructurePieceTypes.LICH_YARD_PATH.value(), tag);
 
-		this.edgeFeatheringRange = tag.getFloat("feather");
-		this.direction = tag.contains("direction") ? Direction.values()[tag.getInt("direction")] : Direction.UP;
-		this.doDirtMotley = tag.getBoolean("dirt_mix");
-		this.scale = tag.getFloat("dirt_scale");
-		this.offset = tag.getFloat("offset");
+		this.edgeFeatheringRange = tag.getFloatOr("feather", 0.0f);
+		this.direction = tag.contains("direction") ? Direction.values()[tag.getIntOr("direction", Direction.UP.ordinal())] : Direction.UP;
+		this.doDirtMotley = tag.getBooleanOr("dirt_mix", false);
+		this.scale = tag.getFloatOr("dirt_scale", 0.0f);
+		this.offset = tag.getFloatOr("offset", 0.0f);
 	}
 
 	@Override
@@ -193,7 +192,9 @@ public class LichYardBox extends StructurePiece implements PieceBeardifierModifi
 		generateYard(foyerPiece, pieces, nearVestibule, nearFence, random, direction, context);
 
 		Stream<BlockPos> foyerRootPos = Stream.of(foyerPiece.getBoundingBox().getCenter().above(10), BoundingBoxUtils.bottomCenterOf(foyerPiece.getBoundingBox()).below(10));
-		Stream<BlockPos> fencePostPos = pieces.pieces.stream().filter(p -> p instanceof LichPerimeterFence).flatMap(f -> ((LichPerimeterFence) f).fencePostPositions());
+		Stream<BlockPos> fencePostPos = ((StructurePiecesBuilderAccessor) pieces).twilightforest$getPieces().stream()
+			.filter(p -> p instanceof LichPerimeterFence)
+			.flatMap(f -> ((LichPerimeterFence) f).fencePostPositions());
 		Optional<BoundingBox> fullYard = BoundingBox.encapsulatingPositions(Streams.concat(foyerRootPos, fencePostPos).collect(Collectors.toUnmodifiableSet()));
 		if (fullYard.isEmpty()) return;
 
@@ -273,7 +274,7 @@ public class LichYardBox extends StructurePiece implements PieceBeardifierModifi
 			FrontAndTop orientation = FrontAndTop.fromFrontAndTop(side, Direction.UP);
 			// int baseY = context.chunkGenerator().getBaseHeight(randomPos.getX(), randomPos.getZ(), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
 
-			ResourceLocation templateId = lichTowerUtil.rollGrave(random);
+			Identifier templateId = lichTowerUtil.rollGrave(random);
 			JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(randomPos.atY(baseY - 1), BlockPos.ZERO, orientation, context.structureTemplateManager(), templateId, "twilightforest:lich_tower/grave", random);
 
 			if (placeableJunction == null) continue;

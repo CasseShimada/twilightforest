@@ -1,9 +1,7 @@
 package twilightforest.components.entity;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.DeathScreen;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.player.LocalPlayer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import twilightforest.block.TFPortalBlock;
@@ -37,15 +35,21 @@ public class TFPortalAttachment {
 			}
 		} else if (this.getPortalTimer() > 0) this.portalTimer -= 2;
 
-		if (player.level().isClientSide() && player instanceof LocalPlayer local) {
-			Minecraft minecraft = Minecraft.getInstance();
-			if (this.isInsidePortal()) {
-				if (minecraft.screen != null && !minecraft.screen.isPauseScreen() && !(minecraft.screen instanceof DeathScreen)) {
-					if (minecraft.screen instanceof AbstractContainerScreen) local.closeContainer();
-					minecraft.setScreen(null);
-				}
-				this.isInsidePortal = false;
-			}
+		if (player.level().isClientSide() && this.isInsidePortal() && handleClientPortalScreenClose(player)) {
+			this.isInsidePortal = false;
+		}
+	}
+
+	private boolean handleClientPortalScreenClose(Player player) {
+		if (FabricLoader.getInstance().getEnvironmentType() != EnvType.CLIENT) {
+			return false;
+		}
+
+		try {
+			Class<?> helper = Class.forName("twilightforest.client.ClientPortalHelper");
+			return (Boolean) helper.getMethod("handlePortalScreenClose", Player.class, boolean.class).invoke(null, player, true);
+		} catch (Throwable ignored) {
+			return false;
 		}
 	}
 }

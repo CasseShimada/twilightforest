@@ -23,6 +23,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import twilightforest.entity.SpikeBlock;
+import twilightforest.entity.TFMultipartEntity;
 import twilightforest.entity.TFPart;
 import twilightforest.entity.ai.goal.AvoidAnyEntityGoal;
 import twilightforest.entity.ai.goal.ThrowSpikeBlockGoal;
@@ -32,7 +33,7 @@ import twilightforest.util.entities.EntityUtil;
 
 import java.util.List;
 
-public class BlockChainGoblin extends Monster {
+public class BlockChainGoblin extends Monster implements TFMultipartEntity {
 	//this is here but its never been used
 	//private static final UUID MODIFIER_UUID = UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E");
 	//private static final AttributeModifier MODIFIER = new AttributeModifier(MODIFIER_UUID, "speedPenalty", -0.25D, AttributeModifier.Operation.ADDITION);
@@ -290,11 +291,6 @@ public class BlockChainGoblin extends Monster {
 	}
 
 	@Override
-	public boolean isMultipartEntity() {
-		return true;
-	}
-
-	@Override
 	public void recreateFromPacket(ClientboundAddEntityPacket packet) {
 		super.recreateFromPacket(packet);
 		TFPart.assignPartIDs(this);
@@ -304,7 +300,7 @@ public class BlockChainGoblin extends Monster {
 	 * We need to do this for the bounding boxes on the parts to become active
 	 */
 	@Override
-	public MultipartGenericsAreDumb[] getParts() {
+	public TFPart<?>[] getParts() {
 		return partsArray;
 	}
 }

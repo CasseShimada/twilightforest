@@ -8,12 +8,14 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -38,8 +40,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.event.EventHooks;
-import net.neoforged.neoforge.network.PacketDistributor;
+import twilightforest.network.PacketDistributor;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.config.TFConfig;
@@ -82,9 +83,7 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 			List<Entity> list = level.getEntitiesOfClass(Entity.class, new AABB(pos).inflate(range));
 
 			for (Entity victim : list) {
-				if (!EventHooks.onEntityStruckByLightning(victim, bolt)) {
-					victim.thunderHit((ServerLevel) level, bolt);
-				}
+				victim.thunderHit((ServerLevel) level, bolt);
 			}
 		}
 	}
@@ -215,7 +214,7 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 	}
 
 	@Override
-	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean movedByPiston) {
 		if (state == this.defaultBlockState()) {
 			if (entity instanceof ServerPlayer player && !player.isCreative() && !player.isSpectator() && TFConfig.getPortalLockingAdvancement(player) != null) {
 				AdvancementHolder requirement = PlayerHelper.getAdvancement(player, Objects.requireNonNull(TFConfig.getPortalLockingAdvancement(player)));
@@ -236,7 +235,7 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 
 			if (entity.canUsePortal(false)) {
 				entity.setAsInsidePortal(this, entity.blockPosition());
-				entity.getData(TFDataAttachments.TF_PORTAL_COOLDOWN).setInPortal(true);
+				TFDataAttachments.get(entity, TFDataAttachments.TF_PORTAL_COOLDOWN).setInPortal(true);
 			}
 		}
 	}
@@ -264,7 +263,7 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 	}
 
 	@Override
-	public boolean canPlaceLiquid(@Nullable Player player, BlockGetter getter, BlockPos pos, BlockState state, Fluid fluid) {
+	public boolean canPlaceLiquid(@Nullable LivingEntity entity, BlockGetter getter, BlockPos pos, BlockState state, Fluid fluid) {
 		return false;
 	}
 
@@ -280,8 +279,8 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 
 	@Override
 	public TeleportTransition getPortalDestination(ServerLevel level, Entity entity, BlockPos pos) {
-		if (cachedOriginDimension == null) cachedOriginDimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(TFConfig.originDimension));
-		ResourceKey<Level> newDimension = !level.dimension().location().equals(TFDimension.DIMENSION) ? TFDimension.DIMENSION_KEY : cachedOriginDimension;
+		if (cachedOriginDimension == null) cachedOriginDimension = ResourceKey.create(Registries.DIMENSION, Identifier.parse(TFConfig.originDimension));
+		ResourceKey<Level> newDimension = !level.dimension().identifier().equals(TFDimension.DIMENSION) ? TFDimension.DIMENSION_KEY : cachedOriginDimension;
 		ServerLevel serverlevel = level.getServer().getLevel(newDimension);
 		if (serverlevel == null) {
 			return null;

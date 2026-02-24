@@ -1,16 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/template_spawn_egg",
-    "tints": [
-      {
-        "type": "minecraft:constant",
-        "value": -8958430
-      },
-      {
-        "type": "minecraft:constant",
-        "value": -2372162
-      }
-    ]
+    "model": "twilightforest:item/death_tome_spawn_egg"
   }
 }

@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
@@ -116,13 +117,13 @@ public class BuilderBlock extends BaseEntityBlock {
 	}
 
 	@Override
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moving) {
-		if (!newState.is(state.getBlock())) {
+	public void destroy(LevelAccessor level, BlockPos pos, BlockState state) {
+		if (level instanceof Level levelRef) {
 			for (Direction e : Direction.values()) {
-				activateBuiltBlocks(level, pos.relative(e));
+				activateBuiltBlocks(levelRef, pos.relative(e));
 			}
 		}
-		super.onRemove(state, level, pos, newState, moving);
+		super.destroy(level, pos, state);
 	}
 
 	private void letsBuild(Level level, BlockPos pos) {

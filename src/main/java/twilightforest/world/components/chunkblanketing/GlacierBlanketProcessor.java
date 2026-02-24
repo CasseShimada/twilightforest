@@ -9,6 +9,7 @@ import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
@@ -28,11 +29,11 @@ public record GlacierBlanketProcessor(HolderSet<Biome> biomesForApplication, Blo
 		int maxY = firstAvailableY + this.height;
 
 		BlockPos maxPosY = aboveFloor.atY(maxY);
-		chunkAccess.setBlockState(maxPosY, this.glacierTop.getState(random, maxPosY), false);
+		chunkAccess.setBlockState(maxPosY, this.glacierTop.getState(random, maxPosY), Block.UPDATE_NONE);
 
 		for (int y = maxY - 1; y >= firstAvailableY; y--) {
 			BlockPos posSurfaceChunk = aboveFloor.atY(y);
-			chunkAccess.setBlockState(posSurfaceChunk, this.glacierBody.getState(random, posSurfaceChunk), false);
+			chunkAccess.setBlockState(posSurfaceChunk, this.glacierBody.getState(random, posSurfaceChunk), Block.UPDATE_NONE);
 		}
 	}
 

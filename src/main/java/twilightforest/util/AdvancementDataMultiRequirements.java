@@ -3,12 +3,10 @@ package twilightforest.util;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.Criterion;
-import tamaized.beanification.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 public class AdvancementDataMultiRequirements {
 
 	public MultiRequirementsBuilder wrap(Advancement.Builder parent) {

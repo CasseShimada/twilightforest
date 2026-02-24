@@ -1,18 +1,20 @@
 package twilightforest.data.helpers;
 
 import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.criterion.ImpossibleTrigger;
+import net.minecraft.resources.Identifier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import tamaized.beanification.junit.MockitoFixer;
 import twilightforest.util.AdvancementDataMultiRequirements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoFixer.class)
 public class AdvancementDataMultiRequirementsTests {
@@ -26,10 +28,10 @@ public class AdvancementDataMultiRequirementsTests {
 
 	@Test
 	public void wrap() {
-		Advancement.Builder builder = mock(Advancement.Builder.class);
-		Criterion<?> criterion = mock(Criterion.class);
+		Advancement.Builder builder = Advancement.Builder.advancement();
+		Criterion<?> criterion = new Criterion<>(CriteriaTriggers.IMPOSSIBLE, new ImpossibleTrigger.TriggerInstance());
 
-		instance.wrap(builder)
+		AdvancementHolder holder = instance.wrap(builder)
 			.addCriterion("A", criterion)
 			.and()
 			.addCriterion("B", criterion)
@@ -38,12 +40,10 @@ public class AdvancementDataMultiRequirementsTests {
 			.addCriterion("D", criterion)
 			.addCriterion("E", criterion)
 			.addCriterion("F", criterion)
-			.requirements();
+			.requirements()
+			.build(Identifier.fromNamespaceAndPath("twilightforest", "test_multi"));
 
-		ArgumentCaptor<AdvancementRequirements> captor = ArgumentCaptor.captor();
-		verify(builder, times(1)).requirements(captor.capture());
-
-		AdvancementRequirements result = captor.getValue();
+		AdvancementRequirements result = holder.value().requirements();
 
 		assertNotNull(result);
 		assertNotNull(result.requirements());

@@ -3,7 +3,6 @@ package twilightforest.entity.monster;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -24,6 +23,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.entity.EnforcedHomePoint;
 import twilightforest.entity.ai.goal.GhastguardAttackGoal;
@@ -182,15 +183,15 @@ public class CarminiteGhastguard extends Ghast implements EnforcedHomePoint {
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		this.saveHomePointToNbt(compound);
-		super.addAdditionalSaveData(compound);
+	protected void addAdditionalSaveData(ValueOutput output) {
+		this.saveHomePointToNbt(output);
+		super.addAdditionalSaveData(output);
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		this.loadHomePointFromNbt(compound);
+	protected void readAdditionalSaveData(ValueInput input) {
+		super.readAdditionalSaveData(input);
+		this.loadHomePointFromNbt(input);
 	}
 
 	@Override
@@ -208,4 +209,3 @@ public class CarminiteGhastguard extends Ghast implements EnforcedHomePoint {
 		return 64;
 	}
 }
-

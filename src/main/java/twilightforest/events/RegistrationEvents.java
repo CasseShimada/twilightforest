@@ -1,26 +1,37 @@
 package twilightforest.events;
 
-import net.minecraft.world.entity.*;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
-import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
-import twilightforest.TwilightForestMod;
 import twilightforest.init.TFEntities;
+import twilightforest.mixin.accessor.SpawnPlacementsInvoker;
 
-@EventBusSubscriber(modid = TwilightForestMod.ID, bus = EventBusSubscriber.Bus.MOD)
 public class RegistrationEvents {
 
-	@SubscribeEvent
-	@SuppressWarnings("unchecked") //entities added this way will always extend LivingEntity
-	public static void registerAttributes(EntityAttributeCreationEvent event) {
-		TFEntities.ATTRIBUTES.forEach((type, builder) -> event.put((EntityType<? extends LivingEntity>) type.value(), builder.get().build()));
+	public static void register() {
+		registerAttributes();
+		registerPlacements();
 	}
 
-	@SubscribeEvent
-	@SuppressWarnings("unchecked") //PAIN
-	public static void registerPlacements(RegisterSpawnPlacementsEvent event) {
-		TFEntities.SPAWN_PREDICATES.forEach((type, predicate) -> event.register((EntityType<Entity>) type.value(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (SpawnPlacements.SpawnPredicate<Entity>) predicate, RegisterSpawnPlacementsEvent.Operation.REPLACE));
+	@SuppressWarnings("unchecked") // entities added this way will always extend LivingEntity
+	private static void registerAttributes() {
+		TFEntities.ATTRIBUTES.forEach((type, builder) ->
+			FabricDefaultAttributeRegistry.register((EntityType<? extends LivingEntity>) type.get(), builder.get().build())
+		);
+	}
+
+	@SuppressWarnings({"unchecked", "rawtypes"}) // predicates are keyed by their entity types
+	private static void registerPlacements() {
+		TFEntities.SPAWN_PREDICATES.forEach((type, predicate) ->
+			SpawnPlacementsInvoker.twilightforest$register(
+				(EntityType) type.get(),
+				SpawnPlacementTypes.ON_GROUND,
+				Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+				(SpawnPlacements.SpawnPredicate) predicate
+			)
+		);
 	}
 }

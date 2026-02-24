@@ -29,14 +29,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.entity.PartEntity;
-import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.entity.IBreathAttacker;
+import twilightforest.entity.TFMultipartEntity;
 import twilightforest.entity.TFPart;
 import twilightforest.entity.ai.goal.HoverBeamGoal;
 import twilightforest.entity.ai.goal.HoverSummonGoal;
@@ -48,7 +48,7 @@ import twilightforest.util.WorldUtil;
 
 import java.util.List;
 
-public class SnowQueen extends BaseTFBoss implements IBreathAttacker {
+public class SnowQueen extends BaseTFBoss implements IBreathAttacker, TFMultipartEntity {
 
 	private static final int MAX_SUMMONS = 6;
 	private static final EntityDataAccessor<Boolean> BEAM_FLAG = SynchedEntityData.defineId(SnowQueen.class, EntityDataSerializers.BOOLEAN);
@@ -303,7 +303,7 @@ public class SnowQueen extends BaseTFBoss implements IBreathAttacker {
 	}
 
 	public void destroyBlocksInAABB(ServerLevel level, AABB box) {
-		if (EventHooks.canEntityGrief(level, this)) {
+		if (level.getGameRules().get(GameRules.MOB_GRIEFING)) {
 			for (BlockPos pos : WorldUtil.getAllInBB(box)) {
 				BlockState state = this.level().getBlockState(pos);
 				if (state.is(BlockTags.ICE)) {
@@ -354,7 +354,9 @@ public class SnowQueen extends BaseTFBoss implements IBreathAttacker {
 
 	public void summonMinionAt(LivingEntity targetedEntity) {
 		IceCrystal minion = TFEntities.ICE_CRYSTAL.get().create(this.level(), EntitySpawnReason.MOB_SUMMONED);
-		minion.absMoveTo(this.getX(), this.getY(), this.getZ(), 0.0F, 0.0F);
+		minion.setPos(this.getX(), this.getY(), this.getZ());
+		minion.setYRot(0.0F);
+		minion.setXRot(0.0F);
 
 		this.level().addFreshEntity(minion);
 
@@ -399,11 +401,6 @@ public class SnowQueen extends BaseTFBoss implements IBreathAttacker {
 	}
 
 	@Override
-	public boolean isMultipartEntity() {
-		return true;
-	}
-
-	@Override
 	public void recreateFromPacket(ClientboundAddEntityPacket packet) {
 		super.recreateFromPacket(packet);
 		TFPart.assignPartIDs(this);
@@ -414,7 +411,7 @@ public class SnowQueen extends BaseTFBoss implements IBreathAttacker {
 	 */
 	@Nullable
 	@Override
-	public PartEntity<?>[] getParts() {
+	public TFPart<?>[] getParts() {
 		return this.iceArray;
 	}
 

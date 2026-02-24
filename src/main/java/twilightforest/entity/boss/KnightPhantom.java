@@ -8,7 +8,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -20,6 +19,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -30,6 +30,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -38,6 +39,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -46,7 +49,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.network.PacketDistributor;
+import twilightforest.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
 import twilightforest.entity.ai.control.NoClipMoveControl;
@@ -82,6 +85,7 @@ public class KnightPhantom extends BaseTFBoss {
 	private BlockPos chargePos = BlockPos.ZERO;
 	private final EntityDimensions invisibleSize = EntityDimensions.fixed(1.25F, 2.5F);
 	private final EntityDimensions visibleSize = EntityDimensions.fixed(1.75F, 4.0F);
+	private boolean untouchable;
 
 	public KnightPhantom(EntityType<? extends KnightPhantom> type, Level level) {
 		super(type, level);
@@ -210,7 +214,7 @@ public class KnightPhantom extends BaseTFBoss {
 				ObjectArrayList<ItemStack> items = table.getRandomItems(params);
 				if (!this.getItemStacks().isEmpty()) items.addAll(this.getItemStacks());
 				List<Integer> list = this.getAvailableSlots(this.random);
-				table.shuffleAndSplitItems(items, list.size(), this.random);
+				IBossLootBuffer.shuffleAndSplitItems(items, list.size(), this.random);
 
 				giveKnightLoot(knights.getFirst(), items, serverLevel, list, this.position());
 			}
@@ -228,8 +232,11 @@ public class KnightPhantom extends BaseTFBoss {
 					.withParameter(LootContextParams.DAMAGE_SOURCE, cause);
 
 				if (this.lastHurtByPlayer != null) {
-					builder = builder.withParameter(LootContextParams.LAST_DAMAGE_PLAYER, this.lastHurtByPlayer)
-						.withLuck(this.lastHurtByPlayer.getLuck());
+					Player lastPlayer = EntityReference.getPlayer(this.lastHurtByPlayer, serverLevel);
+					if (lastPlayer != null) {
+						builder = builder.withParameter(LootContextParams.LAST_DAMAGE_PLAYER, lastPlayer)
+							.withLuck(lastPlayer.getLuck());
+					}
 				}
 
 				if (cause.getEntity() != null) {
@@ -242,7 +249,7 @@ public class KnightPhantom extends BaseTFBoss {
 
 				items.addAll(serverLevel.getServer().reloadableRegistries().getLootTable(TFLootTables.KNIGHT_PHANTOM_DEFEATED).getRandomItems(builder.create(LootContextParamSets.ENTITY)));
 				List<Integer> list = this.getAvailableSlots(this.random);
-				table.shuffleAndSplitItems(items, list.size(), this.random);
+				IBossLootBuffer.shuffleAndSplitItems(items, list.size(), this.random);
 
 				giveKnightLoot(this, items, serverLevel, list, this.position());
 			}
@@ -299,11 +306,31 @@ public class KnightPhantom extends BaseTFBoss {
 	@Override
 	public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
 		if (this.isDamageSourceBlocked(source)) {
-			this.playSound(SoundEvents.SHIELD_BLOCK, 1.0F, 0.8F + this.level().getRandom().nextFloat() * 0.4F);
+			this.playSound(SoundEvents.SHIELD_BLOCK.value(), 1.0F, 0.8F + this.level().getRandom().nextFloat() * 0.4F);
 			return false;
 		}
 
 		return super.hurtServer(level, source, amount);
+	}
+
+	private boolean isDamageSourceBlocked(DamageSource source) {
+		if (source.is(DamageTypeTags.BYPASSES_SHIELD)) {
+			return false;
+		}
+		if (source.getDirectEntity() instanceof AbstractArrow arrow && arrow.getPierceLevel() > 0) {
+			return false;
+		}
+		if (!this.isBlocking()) {
+			return false;
+		}
+		Vec3 vec3 = source.getSourcePosition();
+		if (vec3 == null) {
+			return false;
+		}
+		Vec3 view = this.getViewVector(1.0F);
+		Vec3 diff = vec3.vectorTo(this.position()).normalize();
+		diff = new Vec3(diff.x, 0.0D, diff.z);
+		return diff.dot(view) < 0.0D;
 	}
 
 	@Override
@@ -313,7 +340,6 @@ public class KnightPhantom extends BaseTFBoss {
 
 	@Override
 	public void knockback(double damage, double xRatio, double zRatio) {
-		this.hasImpulse = true;
 		float f = Mth.sqrt((float) (xRatio * xRatio + zRatio * zRatio));
 		float distance = 0.2F;
 		this.setDeltaMovement(new Vec3(this.getDeltaMovement().x() / 2.0D, this.getDeltaMovement().y() / 2.0D, this.getDeltaMovement().z() / 2.0D));
@@ -334,7 +360,7 @@ public class KnightPhantom extends BaseTFBoss {
 	//[VanillaCopy] of FlyingMob.travel
 	@Override
 	public void travel(Vec3 vec3) {
-		if (this.isControlledByLocalInstance()) {
+		if (this.isEffectiveAi()) {
 			if (this.isInWater()) {
 				this.moveRelative(0.02F, vec3);
 				this.move(MoverType.SELF, this.getDeltaMovement());
@@ -347,13 +373,13 @@ public class KnightPhantom extends BaseTFBoss {
 				BlockPos ground = getBlockPosBelowThatAffectsMyMovement();
 				float f = 0.91F;
 				if (this.onGround()) {
-					f = this.level().getBlockState(ground).getFriction(this.level(), ground, this) * 0.91F;
+					f = this.level().getBlockState(ground).getBlock().getFriction() * 0.91F;
 				}
 
 				float f1 = 0.16277137F / (f * f * f);
 				f = 0.91F;
 				if (this.onGround()) {
-					f = this.level().getBlockState(ground).getFriction(this.level(), ground, this) * 0.91F;
+					f = this.level().getBlockState(ground).getBlock().getFriction() * 0.91F;
 				}
 
 				this.moveRelative(this.onGround() ? 0.1F * f1 : 0.02F, vec3);
@@ -442,6 +468,9 @@ public class KnightPhantom extends BaseTFBoss {
 
 	@Override
 	public EntityDimensions getDefaultDimensions(Pose pose) {
+		if (this.untouchable) {
+			return UNTOUCHABLE;
+		}
 		return this.isChargingAtPlayer() ? this.visibleSize : this.invisibleSize;
 	}
 
@@ -518,23 +547,23 @@ public class KnightPhantom extends BaseTFBoss {
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putInt("TotalKnownKnights", this.totalKnownKnights);
-		compound.putInt("MyNumber", this.getNumber());
-		compound.putInt("Formation", this.getFormationAsNumber());
-		compound.putInt("TicksProgress", this.getTicksProgress());
-		compound.putBoolean("IsItOver", this.getEntityData().get(IT_IS_OVER));
+	public void addAdditionalSaveData(ValueOutput output) {
+		super.addAdditionalSaveData(output);
+		output.putInt("TotalKnownKnights", this.totalKnownKnights);
+		output.putInt("MyNumber", this.getNumber());
+		output.putInt("Formation", this.getFormationAsNumber());
+		output.putInt("TicksProgress", this.getTicksProgress());
+		output.putBoolean("IsItOver", this.getEntityData().get(IT_IS_OVER));
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		this.totalKnownKnights = compound.getInt("TotalKnownKnights");
-		this.setNumber(compound.getInt("MyNumber"));
-		this.switchToFormationByNumber(compound.getInt("Formation"));
-		this.setTicksProgress(compound.getInt("TicksProgress"));
-		this.getEntityData().set(IT_IS_OVER, compound.getBoolean("IsItOver"));
+	public void readAdditionalSaveData(ValueInput input) {
+		super.readAdditionalSaveData(input);
+		this.totalKnownKnights = input.getIntOr("TotalKnownKnights", this.totalKnownKnights);
+		this.setNumber(input.getIntOr("MyNumber", this.getNumber()));
+		this.switchToFormationByNumber(input.getIntOr("Formation", this.getFormationAsNumber()));
+		this.setTicksProgress(input.getIntOr("TicksProgress", this.getTicksProgress()));
+		this.getEntityData().set(IT_IS_OVER, input.getBooleanOr("IsItOver", this.getEntityData().get(IT_IS_OVER)));
 	}
 
 	@Override
@@ -583,21 +612,23 @@ public class KnightPhantom extends BaseTFBoss {
 	@Override
 	protected void tickDeath() {
 		super.tickDeath();
-		if (this.deathTime >= DYING_TICKS && this.dimensions != UNTOUCHABLE) { // Remove the mob's hitbox if it enters a certain part of it's dying animation
-			EntityDimensions oldDimensions = this.dimensions;
-			this.dimensions = UNTOUCHABLE;
+		if (this.deathTime >= DYING_TICKS && !this.untouchable) { // Remove the mob's hitbox if it enters a certain part of it's dying animation
+			EntityDimensions oldDimensions = this.getDimensions(this.getPose());
+			this.untouchable = true;
+			this.refreshDimensions();
+			EntityDimensions newDimensions = this.getDimensions(this.getPose());
 			this.reapplyPosition();
-			boolean flag = (double) UNTOUCHABLE.width() <= 4.0 && (double) UNTOUCHABLE.height() <= 4.0;
-			if (!this.level().isClientSide && !this.firstTick && !this.noPhysics && flag && (UNTOUCHABLE.width() > oldDimensions.width() || UNTOUCHABLE.height() > oldDimensions.height())) {
+			boolean flag = (double) newDimensions.width() <= 4.0 && (double) newDimensions.height() <= 4.0;
+			if (!this.level().isClientSide() && !this.firstTick && !this.noPhysics && flag && (newDimensions.width() > oldDimensions.width() || newDimensions.height() > oldDimensions.height())) {
 				Vec3 vec3 = this.position().add(0.0, (double) oldDimensions.height() / 2.0, 0.0);
-				double d0 = (double) Math.max(0.0F, UNTOUCHABLE.width() - oldDimensions.width()) + 1.0E-6;
-				double d1 = (double) Math.max(0.0F, UNTOUCHABLE.height() - oldDimensions.height()) + 1.0E-6;
+				double d0 = (double) Math.max(0.0F, newDimensions.width() - oldDimensions.width()) + 1.0E-6;
+				double d1 = (double) Math.max(0.0F, newDimensions.height() - oldDimensions.height()) + 1.0E-6;
 				VoxelShape voxelshape = Shapes.create(AABB.ofSize(vec3, d0, d1, d0));
 				this.level()
 					.findFreePosition(
-						this, voxelshape, vec3, UNTOUCHABLE.width(), UNTOUCHABLE.height(), UNTOUCHABLE.width()
+						this, voxelshape, vec3, newDimensions.width(), newDimensions.height(), newDimensions.width()
 					)
-					.ifPresent(vec31 -> this.setPos(vec31.add(0.0, (double) (-UNTOUCHABLE.height()) / 2.0, 0.0)));
+					.ifPresent(vec31 -> this.setPos(vec31.add(0.0, (double) (-newDimensions.height()) / 2.0, 0.0)));
 			}
 		}
 	}

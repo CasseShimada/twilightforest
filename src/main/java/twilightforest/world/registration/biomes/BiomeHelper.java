@@ -1,11 +1,18 @@
 package twilightforest.world.registration.biomes;
 
 import net.minecraft.core.HolderGetter;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.placement.AquaticPlacements;
 import net.minecraft.data.worldgen.placement.MiscOverworldPlacements;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
+import net.minecraft.world.attribute.AmbientParticle;
+import net.minecraft.world.attribute.AmbientMoodSettings;
+import net.minecraft.world.attribute.AmbientSounds;
+import net.minecraft.world.attribute.BackgroundMusic;
+import net.minecraft.world.attribute.EnvironmentAttributeMap;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
@@ -13,6 +20,10 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import twilightforest.init.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public abstract class BiomeHelper {
 
@@ -416,18 +427,18 @@ public abstract class BiomeHelper {
 		biome.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, TFPlacedFeatures.PLACED_SMALL_GRANITE);
 	}
 
-	public static BiomeSpecialEffects.Builder whiteAshParticles(BiomeSpecialEffects.Builder builder) {
-		builder.ambientParticle(new AmbientParticleSettings(ParticleTypes.WHITE_ASH, 0.05f));
+	public static TFBiomeEffectsBuilder whiteAshParticles(TFBiomeEffectsBuilder builder) {
+		builder.ambientParticle(ParticleTypes.WHITE_ASH, 0.05f);
 		return builder;
 	}
 
-	public static BiomeSpecialEffects.Builder fireflyForestParticles(BiomeSpecialEffects.Builder builder) {
-		builder.ambientParticle(new AmbientParticleSettings(TFParticleType.WANDERING_FIREFLY.get(), 0.001f));
+	public static TFBiomeEffectsBuilder fireflyForestParticles(TFBiomeEffectsBuilder builder) {
+		builder.ambientParticle(TFParticleType.WANDERING_FIREFLY.get(), 0.001f);
 		return builder;
 	}
 
-	public static BiomeSpecialEffects.Builder fireflyParticles(BiomeSpecialEffects.Builder builder) {
-		builder.ambientParticle(new AmbientParticleSettings(TFParticleType.WANDERING_FIREFLY.get(), 0.00025f));
+	public static TFBiomeEffectsBuilder fireflyParticles(TFBiomeEffectsBuilder builder) {
+		builder.ambientParticle(TFParticleType.WANDERING_FIREFLY.get(), 0.00025f);
 		return builder;
 	}
 
@@ -462,7 +473,7 @@ public abstract class BiomeHelper {
 		MobSpawnSettings.Builder spawnInfo = new MobSpawnSettings.Builder();
 
 		spawnInfo.creatureGenerationProbability(0.15f);
-		spawnInfo.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(TFEntities.PENGUIN.get(), 10, 2, 4));
+		spawnInfo.addSpawn(MobCategory.CREATURE, 10, new MobSpawnSettings.SpawnerData(TFEntities.PENGUIN.get(), 2, 4));
 
 		return spawnInfo;
 	}
@@ -471,14 +482,14 @@ public abstract class BiomeHelper {
 		MobSpawnSettings.Builder spawnInfo = new MobSpawnSettings.Builder();
 
 		spawnInfo.creatureGenerationProbability(0.05f);
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ENDERMAN, 2, 1, 2)).addMobCharge(EntityType.ENDERMAN, 0.75D, 0.15D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 5, 1, 2)).addMobCharge(EntityType.ZOMBIE, 0.7D, 0.15D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 5, 1, 2)).addMobCharge(EntityType.SKELETON, 0.8D, 0.15D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(TFEntities.MIST_WOLF.get(), 5, 1, 1)).addMobCharge(TFEntities.MIST_WOLF.get(), 0.75D, 0.2D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(TFEntities.SKELETON_DRUID.get(), 5, 1, 1)).addMobCharge(TFEntities.SKELETON_DRUID.get(), 0.8D, 0.2D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(TFEntities.KING_SPIDER.get(), 1, 1, 1)).addMobCharge(TFEntities.KING_SPIDER.get(), 0.85D, 0.25D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(TFEntities.KOBOLD.get(), 10, 1, 3)).addMobCharge(TFEntities.KOBOLD.get(), 0.7D, 0.15D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.WITCH, 2, 1, 1)).addMobCharge(EntityType.WITCH, 0.75D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 2, new MobSpawnSettings.SpawnerData(EntityType.ENDERMAN, 1, 2)).addMobCharge(EntityType.ENDERMAN, 0.75D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 1, 2)).addMobCharge(EntityType.ZOMBIE, 0.7D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 1, 2)).addMobCharge(EntityType.SKELETON, 0.8D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(TFEntities.MIST_WOLF.get(), 1, 1)).addMobCharge(TFEntities.MIST_WOLF.get(), 0.75D, 0.2D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(TFEntities.SKELETON_DRUID.get(), 1, 1)).addMobCharge(TFEntities.SKELETON_DRUID.get(), 0.8D, 0.2D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 1, new MobSpawnSettings.SpawnerData(TFEntities.KING_SPIDER.get(), 1, 1)).addMobCharge(TFEntities.KING_SPIDER.get(), 0.85D, 0.25D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 10, new MobSpawnSettings.SpawnerData(TFEntities.KOBOLD.get(), 1, 3)).addMobCharge(TFEntities.KOBOLD.get(), 0.7D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 2, new MobSpawnSettings.SpawnerData(EntityType.WITCH, 1, 1)).addMobCharge(EntityType.WITCH, 0.75D, 0.15D);
 
 		return spawnInfo;
 	}
@@ -487,8 +498,8 @@ public abstract class BiomeHelper {
 		MobSpawnSettings.Builder spawnInfo = new MobSpawnSettings.Builder();
 
 		spawnInfo.creatureGenerationProbability(0.05f);
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(TFEntities.WINTER_WOLF.get(), 5, 1, 1)).addMobCharge(TFEntities.WINTER_WOLF.get(), 0.6D, 0.15D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(TFEntities.YETI.get(), 5, 1, 1)).addMobCharge(TFEntities.YETI.get(), 0.6D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(TFEntities.WINTER_WOLF.get(), 1, 1)).addMobCharge(TFEntities.WINTER_WOLF.get(), 0.6D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(TFEntities.YETI.get(), 1, 1)).addMobCharge(TFEntities.YETI.get(), 0.6D, 0.15D);
 
 		return spawnInfo;
 	}
@@ -497,7 +508,7 @@ public abstract class BiomeHelper {
 		MobSpawnSettings.Builder spawnInfo = new MobSpawnSettings.Builder();
 
 		spawnInfo.creatureGenerationProbability(0.3f);
-		spawnInfo.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(TFEntities.RAVEN.get(), 10, 4, 4));
+		spawnInfo.addSpawn(MobCategory.CREATURE, 10, new MobSpawnSettings.SpawnerData(TFEntities.RAVEN.get(), 4, 4));
 
 		return spawnInfo;
 	}
@@ -505,8 +516,8 @@ public abstract class BiomeHelper {
 	public static MobSpawnSettings.Builder swampSpawning() {
 		MobSpawnSettings.Builder spawnInfo = new MobSpawnSettings.Builder();
 
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 10, 1, 2)).addMobCharge(EntityType.ZOMBIE, 0.7D, 0.15D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(TFEntities.MOSQUITO_SWARM.get(), 10, 1, 1)).addMobCharge(TFEntities.MOSQUITO_SWARM.get(), 0.7D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 10, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 1, 2)).addMobCharge(EntityType.ZOMBIE, 0.7D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 10, new MobSpawnSettings.SpawnerData(TFEntities.MOSQUITO_SWARM.get(), 1, 1)).addMobCharge(TFEntities.MOSQUITO_SWARM.get(), 0.7D, 0.15D);
 
 		return spawnInfo;
 	}
@@ -514,17 +525,17 @@ public abstract class BiomeHelper {
 	public static MobSpawnSettings.Builder spookSpawning() {
 		MobSpawnSettings.Builder spawnInfo = new MobSpawnSettings.Builder();
 
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SPIDER, 50, 1, 2)).addMobCharge(EntityType.SPIDER, 0.75D, 0.25D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 20, 1, 2)).addMobCharge(EntityType.SKELETON, 0.85D, 0.25D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(TFEntities.SKELETON_DRUID.get(), 5, 1, 1)).addMobCharge(TFEntities.SKELETON_DRUID.get(), 0.95D, 0.25D);
-		spawnInfo.addSpawn(MobCategory.AMBIENT, new MobSpawnSettings.SpawnerData(EntityType.BAT, 20, 2, 4));
+		spawnInfo.addSpawn(MobCategory.MONSTER, 50, new MobSpawnSettings.SpawnerData(EntityType.SPIDER, 1, 2)).addMobCharge(EntityType.SPIDER, 0.75D, 0.25D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 20, new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 1, 2)).addMobCharge(EntityType.SKELETON, 0.85D, 0.25D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(TFEntities.SKELETON_DRUID.get(), 1, 1)).addMobCharge(TFEntities.SKELETON_DRUID.get(), 0.95D, 0.25D);
+		spawnInfo.addSpawn(MobCategory.AMBIENT, 20, new MobSpawnSettings.SpawnerData(EntityType.BAT, 2, 4));
 
 		return spawnInfo;
 	}
 
 	// Defaults
-	public static BiomeSpecialEffects.Builder defaultAmbientBuilder() {
-		return new BiomeSpecialEffects.Builder()
+	public static TFBiomeEffectsBuilder defaultAmbientBuilder() {
+		return new TFBiomeEffectsBuilder()
 			.fogColor(0xC0FFD8)
 			.waterColor(0x3F76E4)
 			.waterFogColor(0x050533)
@@ -554,15 +565,15 @@ public abstract class BiomeHelper {
 
 		spawnInfo.creatureGenerationProbability(0.15f);
 
-		spawnInfo.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(TFEntities.BIGHORN_SHEEP.get(), 12, 4, 4));
-		spawnInfo.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(TFEntities.BOAR.get(), 10, 4, 4));
-		spawnInfo.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.CHICKEN, 10, 4, 4));
-		spawnInfo.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(TFEntities.DEER.get(), 15, 4, 5));
-		spawnInfo.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.WOLF, 5, 4, 4));
-		spawnInfo.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(TFEntities.TINY_BIRD.get(), 15, 4, 8));
-		spawnInfo.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(TFEntities.SQUIRREL.get(), 10, 2, 4));
-		spawnInfo.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(TFEntities.DWARF_RABBIT.get(), 10, 4, 5));
-		spawnInfo.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(TFEntities.RAVEN.get(), 10, 1, 2));
+		spawnInfo.addSpawn(MobCategory.CREATURE, 12, new MobSpawnSettings.SpawnerData(TFEntities.BIGHORN_SHEEP.get(), 4, 4));
+		spawnInfo.addSpawn(MobCategory.CREATURE, 10, new MobSpawnSettings.SpawnerData(TFEntities.BOAR.get(), 4, 4));
+		spawnInfo.addSpawn(MobCategory.CREATURE, 10, new MobSpawnSettings.SpawnerData(EntityType.CHICKEN, 4, 4));
+		spawnInfo.addSpawn(MobCategory.CREATURE, 15, new MobSpawnSettings.SpawnerData(TFEntities.DEER.get(), 4, 5));
+		spawnInfo.addSpawn(MobCategory.CREATURE, 5, new MobSpawnSettings.SpawnerData(EntityType.WOLF, 4, 4));
+		spawnInfo.addSpawn(MobCategory.CREATURE, 15, new MobSpawnSettings.SpawnerData(TFEntities.TINY_BIRD.get(), 4, 8));
+		spawnInfo.addSpawn(MobCategory.CREATURE, 10, new MobSpawnSettings.SpawnerData(TFEntities.SQUIRREL.get(), 2, 4));
+		spawnInfo.addSpawn(MobCategory.CREATURE, 10, new MobSpawnSettings.SpawnerData(TFEntities.DWARF_RABBIT.get(), 4, 5));
+		spawnInfo.addSpawn(MobCategory.CREATURE, 10, new MobSpawnSettings.SpawnerData(TFEntities.RAVEN.get(), 1, 2));
 
 		return spawnInfo;
 	}
@@ -570,26 +581,101 @@ public abstract class BiomeHelper {
 	public static MobSpawnSettings.Builder undergroundMobSpawning() {
 		MobSpawnSettings.Builder spawnInfo = new MobSpawnSettings.Builder();
 
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SPIDER, 10, 2, 3)).addMobCharge(EntityType.SPIDER, 0.2D, 0.15D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 10, 1, 2)).addMobCharge(EntityType.ZOMBIE, 0.2D, 0.15D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 10, 1, 1)).addMobCharge(EntityType.SKELETON, 0.3D, 0.15D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.CREEPER, 1, 1, 1)).addMobCharge(EntityType.CREEPER, 0.35D, 0.15D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SLIME, 10, 2, 4)).addMobCharge(EntityType.SLIME, 0.2D, 0.15D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ENDERMAN, 1, 1, 2)).addMobCharge(EntityType.ENDERMAN, 0.4D, 0.15D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(TFEntities.KOBOLD.get(), 10, 1, 3)).addMobCharge(TFEntities.KOBOLD.get(), 0.2D, 0.15D);
-		spawnInfo.addSpawn(MobCategory.AMBIENT, new MobSpawnSettings.SpawnerData(EntityType.BAT, 10, 1, 1));
+		spawnInfo.addSpawn(MobCategory.MONSTER, 10, new MobSpawnSettings.SpawnerData(EntityType.SPIDER, 2, 3)).addMobCharge(EntityType.SPIDER, 0.2D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 10, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 1, 2)).addMobCharge(EntityType.ZOMBIE, 0.2D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 10, new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 1, 1)).addMobCharge(EntityType.SKELETON, 0.3D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 1, new MobSpawnSettings.SpawnerData(EntityType.CREEPER, 1, 1)).addMobCharge(EntityType.CREEPER, 0.35D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 10, new MobSpawnSettings.SpawnerData(EntityType.SLIME, 2, 4)).addMobCharge(EntityType.SLIME, 0.2D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 1, new MobSpawnSettings.SpawnerData(EntityType.ENDERMAN, 1, 2)).addMobCharge(EntityType.ENDERMAN, 0.4D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 10, new MobSpawnSettings.SpawnerData(TFEntities.KOBOLD.get(), 1, 3)).addMobCharge(TFEntities.KOBOLD.get(), 0.2D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.AMBIENT, 10, new MobSpawnSettings.SpawnerData(EntityType.BAT, 1, 1));
 
 		return spawnInfo;
 	}
 
-	public static Biome.BiomeBuilder biomeWithDefaults(BiomeSpecialEffects.Builder biomeAmbience, MobSpawnSettings.Builder mobSpawnInfo, BiomeGenerationSettings.Builder biomeGenerationSettings) {
-		return new Biome.BiomeBuilder()
+	public static Biome.BiomeBuilder biomeWithDefaults(TFBiomeEffectsBuilder biomeAmbience, MobSpawnSettings.Builder mobSpawnInfo, BiomeGenerationSettings.Builder biomeGenerationSettings) {
+		Biome.BiomeBuilder builder = new Biome.BiomeBuilder()
 			.hasPrecipitation(true)
 			.temperature(0.5F)
 			.downfall(0.5F)
-			.specialEffects(biomeAmbience.build())
 			.mobSpawnSettings(mobSpawnInfo.build())
 			.generationSettings(biomeGenerationSettings.build())
 			.temperatureAdjustment(Biome.TemperatureModifier.NONE);
+
+		biomeAmbience.applyTo(builder);
+		return builder;
+	}
+
+	public static final class TFBiomeEffectsBuilder {
+		private final BiomeSpecialEffects.Builder specialEffects = new BiomeSpecialEffects.Builder();
+		private final EnvironmentAttributeMap.Builder attributes = EnvironmentAttributeMap.builder();
+		private final List<AmbientParticle> ambientParticles = new ArrayList<>();
+
+		public TFBiomeEffectsBuilder waterColor(int color) {
+			this.specialEffects.waterColor(color);
+			return this;
+		}
+
+		public TFBiomeEffectsBuilder foliageColorOverride(int color) {
+			this.specialEffects.foliageColorOverride(color);
+			return this;
+		}
+
+		public TFBiomeEffectsBuilder dryFoliageColorOverride(int color) {
+			this.specialEffects.dryFoliageColorOverride(color);
+			return this;
+		}
+
+		public TFBiomeEffectsBuilder grassColorOverride(int color) {
+			this.specialEffects.grassColorOverride(color);
+			return this;
+		}
+
+		public TFBiomeEffectsBuilder grassColorModifier(BiomeSpecialEffects.GrassColorModifier modifier) {
+			this.specialEffects.grassColorModifier(modifier);
+			return this;
+		}
+
+		public TFBiomeEffectsBuilder fogColor(int color) {
+			this.attributes.set(EnvironmentAttributes.FOG_COLOR, color);
+			return this;
+		}
+
+		public TFBiomeEffectsBuilder waterFogColor(int color) {
+			this.attributes.set(EnvironmentAttributes.WATER_FOG_COLOR, color);
+			return this;
+		}
+
+		public TFBiomeEffectsBuilder skyColor(int color) {
+			this.attributes.set(EnvironmentAttributes.SKY_COLOR, color);
+			return this;
+		}
+
+		public TFBiomeEffectsBuilder ambientMoodSound(AmbientMoodSettings mood) {
+			this.attributes.set(EnvironmentAttributes.AMBIENT_SOUNDS, new AmbientSounds(Optional.empty(), Optional.of(mood), List.of()));
+			return this;
+		}
+
+		public TFBiomeEffectsBuilder backgroundMusic(net.minecraft.sounds.Music music) {
+			this.attributes.set(EnvironmentAttributes.BACKGROUND_MUSIC, new BackgroundMusic(music));
+			return this;
+		}
+
+		public TFBiomeEffectsBuilder ambientParticle(ParticleOptions particle, float probability) {
+			this.ambientParticles.add(new AmbientParticle(particle, probability));
+			return this;
+		}
+
+		private void applyTo(Biome.BiomeBuilder builder) {
+			if (!this.ambientParticles.isEmpty()) {
+				this.attributes.set(EnvironmentAttributes.AMBIENT_PARTICLES, List.copyOf(this.ambientParticles));
+			}
+
+			builder.specialEffects(this.specialEffects.build());
+			EnvironmentAttributeMap map = this.attributes.build();
+			if (map != EnvironmentAttributeMap.EMPTY) {
+				builder.putAttributes(map);
+			}
+		}
 	}
 }

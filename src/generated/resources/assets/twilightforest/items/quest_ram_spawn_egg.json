@@ -1,16 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/template_spawn_egg",
-    "tints": [
-      {
-        "type": "minecraft:constant",
-        "value": -65810
-      },
-      {
-        "type": "minecraft:constant",
-        "value": -13391139
-      }
-    ]
+    "model": "twilightforest:item/quest_ram_spawn_egg"
   }
 }

@@ -16,6 +16,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
@@ -36,16 +37,16 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.neoforged.neoforge.entity.PartEntity;
-import net.neoforged.neoforge.event.EventHooks;
-import net.neoforged.neoforge.network.PacketDistributor;
+import twilightforest.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
+import twilightforest.entity.TFMultipartEntity;
 import twilightforest.entity.TFPart;
 import twilightforest.entity.ai.control.NagaMoveControl;
 import twilightforest.entity.ai.goal.AttemptToGoHomeGoal;
@@ -61,7 +62,7 @@ import twilightforest.util.entities.EntityUtil;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Naga extends BaseTFBoss {
+public class Naga extends BaseTFBoss implements TFMultipartEntity {
 	private static final int DEATH_ANIMATION_DURATION = 24;
 	private static final int DEATH_PARTICLES_DURATION = 100;
 
@@ -261,7 +262,7 @@ public class Naga extends BaseTFBoss {
 			this.setTarget(null);
 		}
 
-		if (EventHooks.canEntityGrief(level, this)) {
+		if (level.getGameRules().get(GameRules.MOB_GRIEFING)) {
 			AABB bb = this.getBoundingBox();
 
 			int minx = Mth.floor(bb.minX - 0.75D);
@@ -368,21 +369,25 @@ public class Naga extends BaseTFBoss {
 				Vec3 motion = this.getDeltaMovement();
 				toAttack.push(motion.x() * 1.5D, 0.5D, motion.z() * 1.5D);
 				this.push(motion.x() * -1.25D, 0.5D, motion.z() * -1.25D);
-				if (toAttack instanceof ServerPlayer player) {
-					player.getUseItem().hurtAndBreak(5, player, LivingEntity.getSlotForHand(player.getUsedItemHand()));
-					PacketDistributor.sendToPlayer(player, new MovePlayerPacket(motion.x() * 3.0D, motion.y() + 0.75D, motion.z() * 3.0D));
-				}
-				this.hurtServer(level, this.damageSources().generic(), 2.0F);
-				this.level().playSound(null, toAttack.blockPosition(), SoundEvents.SHIELD_BLOCK, SoundSource.PLAYERS, 1.0F, 0.8F + this.level().getRandom().nextFloat() * 0.4F);
-				this.getMovementPattern().doDaze();
-				return false;
-			} else if (this.getMovementPattern().getState() == NagaMovementPattern.MovementState.STUNLESS_CHARGE) {
-				if (toAttack instanceof ServerPlayer player) {
-					player.getUseItem().hurtAndBreak(10, player, LivingEntity.getSlotForHand(player.getUsedItemHand()));
-					player.getCooldowns().addCooldown(player.getUseItem(), 200);
-					player.stopUsingItem();
-					this.level().broadcastEntityEvent(player, (byte) 30);
-				}
+					if (toAttack instanceof ServerPlayer player) {
+						InteractionHand usedHand = player.getUsedItemHand();
+						EquipmentSlot usedSlot = usedHand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+						player.getUseItem().hurtAndBreak(5, player, usedSlot);
+						PacketDistributor.sendToPlayer(player, new MovePlayerPacket(motion.x() * 3.0D, motion.y() + 0.75D, motion.z() * 3.0D));
+					}
+					this.hurtServer(level, this.damageSources().generic(), 2.0F);
+					this.level().playSound(null, toAttack.blockPosition(), SoundEvents.SHIELD_BLOCK.value(), SoundSource.PLAYERS, 1.0F, 0.8F + this.level().getRandom().nextFloat() * 0.4F);
+					this.getMovementPattern().doDaze();
+					return false;
+				} else if (this.getMovementPattern().getState() == NagaMovementPattern.MovementState.STUNLESS_CHARGE) {
+					if (toAttack instanceof ServerPlayer player) {
+						InteractionHand usedHand = player.getUsedItemHand();
+						EquipmentSlot usedSlot = usedHand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+						player.getUseItem().hurtAndBreak(10, player, usedSlot);
+						player.getCooldowns().addCooldown(player.getUseItem(), 200);
+						player.stopUsingItem();
+						this.level().broadcastEntityEvent(player, (byte) 30);
+					}
 				living.hurtServer(level, this.damageSources().mobAttack(this), 4.0F);
 				this.playSound(SoundEvents.FOX_BITE, 2.0F, 0.5F);
 				this.getMovementPattern().doCircle();
@@ -448,7 +453,11 @@ public class Naga extends BaseTFBoss {
 		for (int i = 0; i < this.currentSegmentCount; i++) {
 			NagaSegment segment = this.bodySegments[i];
 			segment.activate();
-			segment.moveTo(getX() + 0.1 * i, getY() + 0.5D, getZ() + 0.1 * i, this.getRandom().nextFloat() * 360.0F, 0.0F);
+			float yaw = this.getRandom().nextFloat() * 360.0F;
+			segment.setPos(getX() + 0.1 * i, getY() + 0.5D, getZ() + 0.1 * i);
+			segment.setYRot(yaw);
+			segment.setXRot(0.0F);
+			segment.setYHeadRot(yaw);
 			for (int j = 0; j < 20; j++) {
 				double d0 = this.getRandom().nextGaussian() * 0.02D;
 				double d1 = this.getRandom().nextGaussian() * 0.02D;
@@ -506,19 +515,13 @@ public class Naga extends BaseTFBoss {
 	}
 
 	@Override
-	public boolean isMultipartEntity() {
-		return true;
-	}
-
-	@Override
 	public void recreateFromPacket(ClientboundAddEntityPacket packet) {
 		super.recreateFromPacket(packet);
 		TFPart.assignPartIDs(this);
 	}
 
-	@Nullable
 	@Override
-	public PartEntity<?>[] getParts() {
+	public TFPart<?>[] getParts() {
 		return this.bodySegments;
 	}
 

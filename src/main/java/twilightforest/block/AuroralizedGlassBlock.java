@@ -1,20 +1,17 @@
 package twilightforest.block;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.BeaconBeamBlock;
 import net.minecraft.world.level.block.TransparentBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import twilightforest.util.ColorUtil;
-import twilightforest.util.SimplexNoiseHelper;
 
-public class AuroralizedGlassBlock extends TransparentBlock {
+public class AuroralizedGlassBlock extends TransparentBlock implements BeaconBeamBlock {
 
 	public AuroralizedGlassBlock(Properties properties) {
 		super(properties);
 	}
 
 	@Override
-	public Integer getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos) {
-		return ColorUtil.hsvToRGB(SimplexNoiseHelper.rippleFractalNoise(2, 128.0f, pos.above(128), 0.37f, 0.67f, 1.5f), 1.0f, 1.0f);
+	public DyeColor getColor() {
+		return DyeColor.CYAN;
 	}
 }

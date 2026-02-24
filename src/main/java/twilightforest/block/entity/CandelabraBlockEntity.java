@@ -2,15 +2,12 @@ package twilightforest.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -19,6 +16,8 @@ import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.CandelabraBlock;
 import twilightforest.block.LightableBlock;
@@ -67,15 +66,15 @@ public class CandelabraBlockEntity extends BlockEntity {
 	}
 
 	@Override
-	public void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-		super.saveAdditional(tag, provider);
-		this.data.save(tag);
+	protected void saveAdditional(ValueOutput output) {
+		super.saveAdditional(output);
+		output.store("Candles", CandelabraData.CODEC, this.data);
 	}
 
 	@Override
-	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-		super.loadAdditional(tag, provider);
-		this.data = CandelabraData.load(tag);
+	protected void loadAdditional(ValueInput input) {
+		super.loadAdditional(input);
+		this.data = input.read("Candles", CandelabraData.CODEC).orElse(CandelabraData.EMPTY);
 	}
 
 	public void updateState(int index) {
@@ -100,19 +99,19 @@ public class CandelabraBlockEntity extends BlockEntity {
 	@Override
 	protected void collectImplicitComponents(DataComponentMap.Builder components) {
 		super.collectImplicitComponents(components);
-		components.set(TFDataComponents.CANDELABRA_DATA, this.data);
+		components.set(TFDataComponents.CANDELABRA_DATA.get(), this.data);
 	}
 
 	@Override
-	protected void applyImplicitComponents(BlockEntity.DataComponentInput componentInput) {
+	protected void applyImplicitComponents(DataComponentGetter componentInput) {
 		super.applyImplicitComponents(componentInput);
-		this.data = componentInput.getOrDefault(TFDataComponents.CANDELABRA_DATA, CandelabraData.EMPTY);
+		this.data = componentInput.getOrDefault(TFDataComponents.CANDELABRA_DATA.get(), CandelabraData.EMPTY);
 	}
 
 	@Override
-	public void removeComponentsFromTag(CompoundTag tag) {
-		super.removeComponentsFromTag(tag);
-		tag.remove("Candles");
+	public void removeComponentsFromTag(ValueOutput output) {
+		super.removeComponentsFromTag(output);
+		output.discard("Candles");
 	}
 
 	@Override

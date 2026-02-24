@@ -11,14 +11,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
-import tamaized.beanification.Autowired;
-import twilightforest.enums.extensions.TFDamageEffectsEnumExtension;
 import twilightforest.util.entities.EntityExcludedDamageSource;
 
 public class TFDamageTypes {
-
-	@Autowired
-	private static TFDamageEffectsEnumExtension tfDamageEffectsEnumExtension;
 
 	public static final ResourceKey<DamageType> GHAST_TEAR = create("ghast_tear"); //Ur-Ghast
 	public static final ResourceKey<DamageType> HYDRA_BITE = create("hydra_bite"); //Hydra
@@ -69,7 +64,8 @@ public class TFDamageTypes {
 	}
 
 	public static DamageSource getIndirectEntityDamageSource(Level level, ResourceKey<DamageType> type, @Nullable Entity attacker, @Nullable Entity indirectAttacker, EntityType<?>... toIgnore) {
-		return toIgnore.length > 0 ? new EntityExcludedDamageSource(level.registryAccess().holderOrThrow(type), attacker, indirectAttacker, toIgnore) : new DamageSource(level.registryAccess().holderOrThrow(type), attacker, indirectAttacker);
+		var holder = level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(type);
+		return toIgnore.length > 0 ? new EntityExcludedDamageSource(holder, attacker, indirectAttacker, toIgnore) : new DamageSource(holder, attacker, indirectAttacker);
 	}
 
 	public static void bootstrap(BootstrapContext<DamageType> context) {
@@ -95,7 +91,7 @@ public class TFDamageTypes {
 		context.register(YEETED, new DamageType("twilightforest.yeeted", 0.1F));
 		context.register(ANT, new DamageType("twilightforest.ant", 0.1F));
 		context.register(HAUNT, new DamageType("twilightforest.haunt", 0.1F));
-		context.register(CLAMPED, new DamageType("twilightforest.clamped", 0.1F, tfDamageEffectsEnumExtension.PINCH));
+		context.register(CLAMPED, new DamageType("twilightforest.clamped", 0.1F, DamageEffects.POKING));
 		context.register(SCORCHED, new DamageType("twilightforest.scorched", 0.1F, DamageEffects.BURNING));
 		context.register(FROZEN, new DamageType("twilightforest.frozen", 0.1F, DamageEffects.FREEZING));
 		context.register(SPIKED, new DamageType("twilightforest.spiked", 0.1F));

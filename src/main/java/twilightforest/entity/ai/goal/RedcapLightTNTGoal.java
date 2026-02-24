@@ -1,15 +1,15 @@
 package twilightforest.entity.ai.goal;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.TntBlock;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.event.EventHooks;
 import twilightforest.entity.monster.Redcap;
 
 import java.util.EnumSet;
@@ -28,7 +28,7 @@ public class RedcapLightTNTGoal extends RedcapBaseGoal {
 
 	@Override
 	public boolean canUse() {
-		if (!EventHooks.canEntityGrief(getServerLevel(this.redcap), this.redcap)) {
+		if (!(this.redcap.level() instanceof ServerLevel level) || !level.getGameRules().get(GameRules.MOB_GRIEFING)) {
 			return false;
 		}
 
@@ -71,7 +71,7 @@ public class RedcapLightTNTGoal extends RedcapBaseGoal {
 		if (this.redcap.distanceToSqr(Vec3.atLowerCornerOf(this.tntPos)) < 2.4D * 2.4D) {
 			redcap.playAmbientSound();
 
-			Blocks.TNT.onCaughtFire(Blocks.TNT.defaultBlockState(), this.redcap.level(), this.tntPos, Direction.UP, this.redcap);
+			TntBlock.prime(this.redcap.level(), this.tntPos);
 			this.redcap.swing(InteractionHand.MAIN_HAND);
 			this.redcap.level().setBlock(this.tntPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
 			this.redcap.gameEvent(GameEvent.PRIME_FUSE);

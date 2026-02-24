@@ -1,7 +1,7 @@
 {
-  "neoforge:conditions": [
+  "fabric:load_conditions": [
     {
-      "type": "twilightforest:uncrafting_table_enabled"
+      "condition": "twilightforest:uncrafting_table_enabled"
     }
   ],
   "parent": "minecraft:recipes/root",

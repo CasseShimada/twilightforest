@@ -5,22 +5,23 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -75,12 +76,7 @@ public class ThornsBlock extends ConnectableRotatedPillarBlock implements Simple
 	}
 
 	@Override
-	public PathType getBlockPathType(BlockState state, BlockGetter getter, BlockPos pos, @Nullable Mob entity) {
-		return PathType.DAMAGE_OTHER;
-	}
-
-	@Override
-	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean movedByPiston) {
 		if (level instanceof ServerLevel serverLevel && (!(entity instanceof ItemEntity item) || !item.getItem().is(TFItemTags.IMMUNE_TO_THORNS))) {
 			entity.hurtServer(serverLevel, serverLevel.damageSources().source(TFDamageTypes.THORNS), THORN_DAMAGE);
 		}
@@ -90,23 +86,22 @@ public class ThornsBlock extends ConnectableRotatedPillarBlock implements Simple
 	public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
 
 		if (state.getBlock() instanceof ThornsBlock && state.getValue(AXIS) == Direction.Axis.Y) {
-			entityInside(state, level, pos, entity);
+			entityInside(state, level, pos, entity, InsideBlockEffectApplier.NOOP, false);
 		}
 
 		super.stepOn(level, pos, state, entity);
 	}
 
 	@Override
-	public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+	public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack stack) {
 		if (!player.getAbilities().instabuild) {
 			if (!level.isClientSide()) {
-				// grow more
 				this.doThornBurst(level, pos, state);
+				level.setBlock(pos, state, Block.UPDATE_ALL);
 			}
-			return false;
-		} else {
-			return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
+			return;
 		}
+		super.playerDestroy(level, player, pos, state, blockEntity, stack);
 	}
 
 	/**

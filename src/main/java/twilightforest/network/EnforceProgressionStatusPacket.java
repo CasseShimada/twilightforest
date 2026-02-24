@@ -4,7 +4,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
 import twilightforest.TwilightForestMod;
 
 public record EnforceProgressionStatusPacket(boolean enforce) implements CustomPacketPayload {
@@ -27,7 +26,7 @@ public record EnforceProgressionStatusPacket(boolean enforce) implements CustomP
 		return TYPE;
 	}
 
-	public static void handle(EnforceProgressionStatusPacket message, IPayloadContext ctx) {
+	public static void handle(EnforceProgressionStatusPacket message, PayloadContext ctx) {
 		ctx.enqueueWork(() -> {
 			enforcedProgression = message.enforce();
 		});

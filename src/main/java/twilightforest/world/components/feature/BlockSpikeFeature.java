@@ -7,8 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.random.WeightedEntry;
-import net.minecraft.util.random.WeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -119,9 +118,14 @@ public class BlockSpikeFeature extends Feature<NoneFeatureConfiguration> {
 						if (ore.right().isPresent()) {
 							level.setBlock(placement, ore.right().get().defaultBlockState(), Block.UPDATE_ALL);
 						} else {
-							// FIXME Deduplicate this construction of the weightedlist, tt is constructed many times per generation
-							WeightedRandomList<WeightedEntry.Wrapper<Block>> entries = WeightedRandomList.create(ore.left().get().stream().map(pair -> WeightedEntry.wrap(pair.getFirst(), pair.getSecond())).toList());
-							level.setBlock(placement, entries.getRandom(random).orElse(WeightedEntry.wrap(Blocks.STONE, 1)).data().defaultBlockState(), Block.UPDATE_ALL);
+							// FIXME Deduplicate this construction of the weighted list, it is constructed many times per generation
+							WeightedList.Builder<Block> builder = WeightedList.builder();
+							for (Pair<Block, Integer> pair : ore.left().get()) {
+								builder.add(pair.getFirst(), pair.getSecond());
+							}
+							WeightedList<Block> entries = builder.build();
+							Block chosen = entries.getRandom(random).orElse(Blocks.STONE);
+							level.setBlock(placement, chosen.defaultBlockState(), Block.UPDATE_ALL);
 						}
 					}
 				}

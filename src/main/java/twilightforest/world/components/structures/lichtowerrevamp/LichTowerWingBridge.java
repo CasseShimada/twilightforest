@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.FrontAndTop;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
@@ -17,9 +17,8 @@ import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
-import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
+import twilightforest.world.components.structures.PieceBeardifierModifier;
 import org.jetbrains.annotations.Nullable;
-import tamaized.beanification.Autowired;
 import twilightforest.tags.TFBlockTags;
 import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.util.BoundingBoxUtils;
@@ -31,8 +30,7 @@ import twilightforest.world.components.structures.util.SortablePiece;
 import java.util.List;
 
 public final class LichTowerWingBridge extends TwilightJigsawPiece implements PieceBeardifierModifier, SortablePiece {
-	@Autowired
-	private static LichTowerUtil lichTowerUtil;
+	private static final LichTowerUtil lichTowerUtil = new LichTowerUtil();
 
 	private final boolean fromCentral;
 
@@ -40,10 +38,10 @@ public final class LichTowerWingBridge extends TwilightJigsawPiece implements Pi
 		super(TFStructurePieceTypes.LICH_WING_BRIDGE.get(), compoundTag, ctx, readSettings(compoundTag));
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings);
-		this.fromCentral = compoundTag.getBoolean("from_central");
+		this.fromCentral = compoundTag.getBooleanOr("from_central", false);
 	}
 
-	public LichTowerWingBridge(StructureTemplateManager structureManager, int genDepth, JigsawPlaceContext jigsawContext, ResourceLocation templateLocation, boolean fromCentral) {
+	public LichTowerWingBridge(StructureTemplateManager structureManager, int genDepth, JigsawPlaceContext jigsawContext, Identifier templateLocation, boolean fromCentral) {
 		super(TFStructurePieceTypes.LICH_WING_BRIDGE.get(), genDepth, structureManager, templateLocation, jigsawContext);
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings);
@@ -101,21 +99,21 @@ public final class LichTowerWingBridge extends TwilightJigsawPiece implements Pi
 		return 1;
 	}
 
-	public static void tryRoomAndBridge(TwilightJigsawPiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, StructureTemplateManager structureManager, boolean fromCentralTower, int roomMaxSize, boolean generateGround, int newDepth, @Nullable ResourceLocation override) {
+	public static void tryRoomAndBridge(TwilightJigsawPiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, StructureTemplateManager structureManager, boolean fromCentralTower, int roomMaxSize, boolean generateGround, int newDepth, @Nullable Identifier override) {
 		if (!generateGround) {
 			if (fromCentralTower) {
-				for (ResourceLocation bridgeId : lichTowerUtil.shuffledCenterBridges(random)) {
+				for (Identifier bridgeId : lichTowerUtil.shuffledCenterBridges(random)) {
 					if (tryBridge(parent, pieceAccessor, random, connection.pos(), connection.orientation(), structureManager, true, roomMaxSize, false, newDepth, bridgeId, true, override, false)) {
 						return;
 					}
 				}
 			} else {
-				for (ResourceLocation bridgeId : lichTowerUtil.shuffledRoomBridges(random)) {
+				for (Identifier bridgeId : lichTowerUtil.shuffledRoomBridges(random)) {
 					if (tryBridge(parent, pieceAccessor, random, connection.pos(), connection.orientation(), structureManager, false, roomMaxSize, false, newDepth, bridgeId, false, override, false)) {
 						return;
 					}
 				}
-				for (ResourceLocation bridgeId : lichTowerUtil.shuffledEndBridges(random)) {
+				for (Identifier bridgeId : lichTowerUtil.shuffledEndBridges(random)) {
 					if (tryBridge(parent, pieceAccessor, random, connection.pos(), connection.orientation(), structureManager, false, 0, false, newDepth, bridgeId, false, override, true)) {
 						return;
 					}
@@ -131,7 +129,7 @@ public final class LichTowerWingBridge extends TwilightJigsawPiece implements Pi
 		}
 	}
 
-	private static boolean tryBridge(TwilightJigsawPiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, BlockPos sourceJigsawPos, FrontAndTop sourceOrientation, StructureTemplateManager structureManager, boolean fromCentralTower, int roomMaxSize, boolean generateGround, int newDepth, ResourceLocation bridgeId, boolean allowClipping, @Nullable ResourceLocation override, boolean tiny) {
+	private static boolean tryBridge(TwilightJigsawPiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, BlockPos sourceJigsawPos, FrontAndTop sourceOrientation, StructureTemplateManager structureManager, boolean fromCentralTower, int roomMaxSize, boolean generateGround, int newDepth, Identifier bridgeId, boolean allowClipping, @Nullable Identifier override, boolean tiny) {
 		JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(parent.templatePosition(), sourceJigsawPos, sourceOrientation, structureManager, bridgeId, fromCentralTower ? "twilightforest:lich_tower/bridge_center" : "twilightforest:lich_tower/bridge", random);
 
 		if (placeableJunction != null) {
@@ -151,7 +149,7 @@ public final class LichTowerWingBridge extends TwilightJigsawPiece implements Pi
 		BlockPos parentTemplatePos = parent.templatePosition();
 		BoundingBox clearance = BoundingBox.fromCorners(parentTemplatePos.offset(sourceJigsawPos.relative(sourceOrientation.front(), 1)), parentTemplatePos.offset(sourceJigsawPos.relative(sourceOrientation.front(), 3)));
 		boolean onlyCobbleStopper = noWindow || pieceAccessor.findCollisionPiece(clearance) != null;
-		ResourceLocation bridgeCoverLocation = onlyCobbleStopper ? lichTowerUtil.getDefaultBridgeStopper(random) : lichTowerUtil.rollRandomCover(random);
+		Identifier bridgeCoverLocation = onlyCobbleStopper ? lichTowerUtil.getDefaultBridgeStopper(random) : lichTowerUtil.rollRandomCover(random);
 		JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(parentTemplatePos, sourceJigsawPos, sourceOrientation, structureManager, bridgeCoverLocation, "twilightforest:lich_tower/bridge", random);
 
 		if (placeableJunction != null) {
@@ -161,7 +159,7 @@ public final class LichTowerWingBridge extends TwilightJigsawPiece implements Pi
 		}
 	}
 
-	public boolean tryGenerateRoom(final RandomSource random, final StructurePieceAccessor structureStart, final int roomMaxSize, boolean generateGround, @Nullable ResourceLocation override, boolean tiny) {
+	public boolean tryGenerateRoom(final RandomSource random, final StructurePieceAccessor structureStart, final int roomMaxSize, boolean generateGround, @Nullable Identifier override, boolean tiny) {
 		List<JigsawRecord> spareJigsaws = this.getSpareJigsaws();
 		if (this.getSpareJigsaws().isEmpty())
 			return false;
@@ -184,7 +182,7 @@ public final class LichTowerWingBridge extends TwilightJigsawPiece implements Pi
 		return false;
 	}
 
-	public static boolean tryPlaceRoom(RandomSource random, StructurePieceAccessor pieceAccessor, @Nullable ResourceLocation roomId, JigsawRecord connection, int roomSize, boolean canPutGround, boolean allowClipping, TwilightJigsawPiece parent, int newDepth, StructureTemplateManager structureManager, String jigsawLabel) {
+	public static boolean tryPlaceRoom(RandomSource random, StructurePieceAccessor pieceAccessor, @Nullable Identifier roomId, JigsawRecord connection, int roomSize, boolean canPutGround, boolean allowClipping, TwilightJigsawPiece parent, int newDepth, StructureTemplateManager structureManager, String jigsawLabel) {
 		JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(parent.templatePosition(), connection.pos(), connection.orientation(), structureManager, roomId, jigsawLabel, random);
 
 		if (placeableJunction == null) {

@@ -1,16 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/template_spawn_egg",
-    "tints": [
-      {
-        "type": "minecraft:constant",
-        "value": -2889796
-      },
-      {
-        "type": "minecraft:constant",
-        "value": -14729217
-      }
-    ]
+    "model": "twilightforest:item/block_and_chain_goblin_spawn_egg"
   }
 }

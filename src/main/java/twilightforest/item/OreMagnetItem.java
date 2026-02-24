@@ -2,32 +2,30 @@ package twilightforest.item;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.TagsUpdatedEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
-import twilightforest.TwilightForestMod;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import twilightforest.network.PacketDistributor;
 import twilightforest.tags.TFBlockTags;
 import twilightforest.init.TFParticleType;
 import twilightforest.init.TFSounds;
@@ -37,29 +35,14 @@ import twilightforest.util.iterators.VoxelBresenhamIterator;
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-@EventBusSubscriber(modid = TwilightForestMod.ID)
 public class OreMagnetItem extends Item {
 
 	private static final float WIGGLE = 10F;
 
 	public OreMagnetItem(Properties properties) {
 		super(properties);
-	}
-
-	@Override
-	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-		AtomicBoolean badEnchant = new AtomicBoolean();
-		book.getTagEnchantments().entrySet().forEach(enchantment -> {
-			if (!Objects.equals(Enchantments.UNBREAKING, enchantment)) {
-				badEnchant.set(true);
-			}
-		});
-
-		return !badEnchant.get() && super.isBookEnchantable(stack, book);
 	}
 
 	@Nonnull
@@ -102,7 +85,8 @@ public class OreMagnetItem extends Item {
 			}
 
 			if (moved > 0) {
-				stack.hurtAndBreak(moved, living, LivingEntity.getSlotForHand(living.getUsedItemHand()));
+				EquipmentSlot slot = living.getUsedItemHand() == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+				stack.hurtAndBreak(moved, living, slot);
 				level.playSound(null, living.getX(), living.getY(), living.getZ(), TFSounds.MAGNET_GRAB.get(), living.getSoundSource(), 1.0F, 1.0F);
 				return true;
 			}
@@ -251,21 +235,22 @@ public class OreMagnetItem extends Item {
 	public static final HashMap<Block, Block> MAGNET_ORE_TO_BLOCK_REPLACEMENTS = new HashMap<>();
 	public static final HashMap<Block, Block> TREE_ORE_TO_BLOCK_REPLACEMENTS = new HashMap<>();
 
-	@SubscribeEvent
-	public static void onTagsUpdatedEvent(TagsUpdatedEvent event) {
+	public static void rebuildOreMappings(RegistryAccess registryAccess) {
 		MAGNET_ORE_TO_BLOCK_REPLACEMENTS.clear();
 		TREE_ORE_TO_BLOCK_REPLACEMENTS.clear();
 
+		Registry<Block> registry = registryAccess.lookupOrThrow(Registries.BLOCK);
+
 		//collect all tags
-		for (HolderSet.Named<Block> tag : BuiltInRegistries.BLOCK.getTags().filter(location -> location.key().location().getNamespace().equals("c")).toList()) {
+		for (HolderSet.Named<Block> tag : registry.getTags().filter(location -> location.key().location().getNamespace().equals("c")).toList()) {
 			//check if the tag is a valid ore tag
 			if (tag.key().location().getPath().contains("ores_in_ground/")) {
 				//grab the part after the slash for use later
 				String oreground = tag.key().location().getPath().substring(15);
 				//check if a tag for ore grounds matches up with our ores in ground tag
-				if (BuiltInRegistries.BLOCK.getTags().filter(location -> location.key().location().getNamespace().equals("c")).anyMatch(blockTagKey -> blockTagKey.key().location().getPath().equals("ore_bearing_ground/" + oreground))) {
+				if (registry.getTags().filter(location -> location.key().location().getNamespace().equals("c")).anyMatch(blockTagKey -> blockTagKey.key().location().getPath().equals("ore_bearing_ground/" + oreground))) {
 					//add each ground type to each ore
-					BuiltInRegistries.BLOCK.get(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "ore_bearing_ground/" + oreground))).get().forEach(ground ->
+					for (Holder<Block> ground : registry.getTagOrEmpty(TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("c", "ore_bearing_ground/" + oreground)))) {
 						tag.forEach(ore -> {
 							//exclude ignored ores
 							if (!ore.value().defaultBlockState().is(TFBlockTags.ORE_MAGNET_IGNORE)) {
@@ -274,7 +259,8 @@ public class OreMagnetItem extends Item {
 							if (!ore.value().defaultBlockState().is(TFBlockTags.MINING_CORE_EXCLUDED)) {
 								TREE_ORE_TO_BLOCK_REPLACEMENTS.put(ore.value(), ground.value());
 							}
-						}));
+						});
+					}
 				}
 			}
 		}

@@ -6,13 +6,13 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -31,7 +31,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.util.ConcatenatedListView;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.block.entity.spawner.SinisterSpawnerBlockEntity;
 import twilightforest.block.entity.spawner.SinisterSpawnerLogic;
@@ -40,6 +39,7 @@ import twilightforest.init.TFBlocks;
 import twilightforest.init.TFItems;
 import twilightforest.init.TFParticleType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static twilightforest.init.TFBlocks.KNIGHT_PHANTOM_BOSS_SPAWNER;
@@ -69,18 +69,15 @@ public class SinisterSpawnerBlock extends BaseEntityBlock {
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-		return createTickerHelper(blockEntityType, TFBlockEntities.SINISTER_SPAWNER.value(), level.isClientSide ? SinisterSpawnerBlockEntity::clientTick : SinisterSpawnerBlockEntity::serverTick);
+		return createTickerHelper(blockEntityType, TFBlockEntities.SINISTER_SPAWNER.value(), level.isClientSide() ? SinisterSpawnerBlockEntity::clientTick : SinisterSpawnerBlockEntity::serverTick);
 	}
 
 	@Override
-	public int getExpDrop(BlockState state, LevelAccessor level, BlockPos pos, @Nullable BlockEntity blockEntity, @Nullable Entity breaker, ItemStack tool) {
-		return 15 + level.getRandom().nextInt(15) + level.getRandom().nextInt(15);
-	}
-
-	@Override
-	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-		super.appendHoverText(stack, context, tooltip, flag);
-		Spawner.appendHoverText(stack, tooltip, "SpawnData");
+	public void spawnAfterBreak(BlockState state, ServerLevel level, BlockPos pos, ItemStack tool, boolean dropExperience) {
+		super.spawnAfterBreak(state, level, pos, tool, dropExperience);
+		if (dropExperience) {
+			popExperience(level, pos, 15 + level.getRandom().nextInt(15) + level.getRandom().nextInt(15));
+		}
 	}
 
 	@Override
@@ -118,25 +115,25 @@ public class SinisterSpawnerBlock extends BaseEntityBlock {
 	}
 
 	private List<ParticleOptions> particlesFromItem(ItemStack stack) {
-		if (stack.is(TFItems.NAGA_TROPHY) || stack.is(TFBlocks.NAGA_BOSS_SPAWNER.asItem())) {
+		if (stack.is(TFItems.NAGA_TROPHY.get()) || stack.is(TFBlocks.NAGA_BOSS_SPAWNER.asItem())) {
 			return List.of(ParticleTypes.SMOKE, ParticleTypes.CRIT);
-		} else if (stack.is(TFItems.LICH_TROPHY) || stack.is(TFBlocks.LICH_BOSS_SPAWNER.asItem())) {
+		} else if (stack.is(TFItems.LICH_TROPHY.get()) || stack.is(TFBlocks.LICH_BOSS_SPAWNER.asItem())) {
 			return List.of(ParticleTypes.SMOKE, TFParticleType.OMINOUS_FLAME.get());
-		} else if (stack.is(TFItems.MINOSHROOM_TROPHY) || stack.is(TFBlocks.MINOSHROOM_BOSS_SPAWNER.asItem())) {
+		} else if (stack.is(TFItems.MINOSHROOM_TROPHY.get()) || stack.is(TFBlocks.MINOSHROOM_BOSS_SPAWNER.asItem())) {
 			return List.of(ParticleTypes.SMOKE, ParticleTypes.CRIMSON_SPORE);
-		} else if (stack.is(TFItems.HYDRA_TROPHY) || stack.is(TFBlocks.HYDRA_BOSS_SPAWNER.asItem())) {
+		} else if (stack.is(TFItems.HYDRA_TROPHY.get()) || stack.is(TFBlocks.HYDRA_BOSS_SPAWNER.asItem())) {
 			return List.of(ParticleTypes.SMOKE, ParticleTypes.FLAME);
-		} else if (stack.is(TFItems.KNIGHT_PHANTOM_TROPHY) || stack.is(KNIGHT_PHANTOM_BOSS_SPAWNER.asItem())) {
+		} else if (stack.is(TFItems.KNIGHT_PHANTOM_TROPHY.get()) || stack.is(KNIGHT_PHANTOM_BOSS_SPAWNER.asItem())) {
 			return List.of(ParticleTypes.SMOKE, TFParticleType.OMINOUS_FLAME.get());
-		} else if (stack.is(TFItems.UR_GHAST_TROPHY) || stack.is(TFBlocks.UR_GHAST_BOSS_SPAWNER.asItem())) {
+		} else if (stack.is(TFItems.UR_GHAST_TROPHY.get()) || stack.is(TFBlocks.UR_GHAST_BOSS_SPAWNER.asItem())) {
 			return List.of(ParticleTypes.SMOKE, DustParticleOptions.REDSTONE);
-		} else if (stack.is(TFItems.ALPHA_YETI_TROPHY) || stack.is(TFBlocks.ALPHA_YETI_BOSS_SPAWNER.asItem())) {
+		} else if (stack.is(TFItems.ALPHA_YETI_TROPHY.get()) || stack.is(TFBlocks.ALPHA_YETI_BOSS_SPAWNER.asItem())) {
 			return List.of(TFParticleType.SNOW.get(), ParticleTypes.FALLING_WATER);
-		} else if (stack.is(TFItems.SNOW_QUEEN_TROPHY) || stack.is(TFBlocks.SNOW_QUEEN_BOSS_SPAWNER.asItem())) {
+		} else if (stack.is(TFItems.SNOW_QUEEN_TROPHY.get()) || stack.is(TFBlocks.SNOW_QUEEN_BOSS_SPAWNER.asItem())) {
 			return List.of(TFParticleType.SNOW.get(), TFParticleType.SNOW_WARNING.get());
 		} else if (stack.is(TFBlocks.FINAL_BOSS_BOSS_SPAWNER.asItem())) {
 			return List.of(TFParticleType.ANNIHILATE.get());
-		} else if (stack.is(TFItems.QUEST_RAM_TROPHY)) {
+		} else if (stack.is(TFItems.QUEST_RAM_TROPHY.get())) {
 			return List.of(TFParticleType.TRANSFORMATION_PARTICLE.get());
 		}
 
@@ -151,7 +148,13 @@ public class SinisterSpawnerBlock extends BaseEntityBlock {
 			LootTable lootTable = entity.getLootTable();
 			if (lootTable != null) {
 				LootParams params = paramBuilder.withParameter(LootContextParams.BLOCK_STATE, state).create(LootContextParamSets.BLOCK);
-				return ConcatenatedListView.of(drops, lootTable.getRandomItems(params));
+				List<ItemStack> extra = lootTable.getRandomItems(params);
+				if (extra.isEmpty()) return drops;
+
+				List<ItemStack> combined = new ArrayList<>(drops.size() + extra.size());
+				combined.addAll(drops);
+				combined.addAll(extra);
+				return combined;
 			}
 		}
 

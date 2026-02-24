@@ -105,7 +105,9 @@ public class RectangleLatticeIterator<T> implements Iterator<T>, Iterable<T> {
 
 		public static final TriangularLatticeConfig DEFAULT = new TriangularLatticeConfig(3.5f);
 
-		public static final Codec<TriangularLatticeConfig> CODEC = Codec.withAlternative(VERBOSE_CODEC, Codec.withAlternative(OFFSET_CODEC, Codec.withAlternative(SPACING_CODEC, Codec.unit(DEFAULT))));
+		private static final Codec<TriangularLatticeConfig> DEFAULT_CODEC = Codec.EMPTY.xmap(unit -> DEFAULT, value -> com.mojang.datafixers.util.Unit.INSTANCE).codec();
+
+		public static final Codec<TriangularLatticeConfig> CODEC = Codec.withAlternative(VERBOSE_CODEC, Codec.withAlternative(OFFSET_CODEC, Codec.withAlternative(SPACING_CODEC, DEFAULT_CODEC)));
 
 		public TriangularLatticeConfig(float spacing) {
 			this(spacing, Mth.cos(Mth.PI / 6f) * spacing, Mth.sin(Mth.PI / 6f) * spacing);
@@ -116,14 +118,14 @@ public class RectangleLatticeIterator<T> implements Iterator<T>, Iterable<T> {
 		}
 
 		public static TriangularLatticeConfig fromNBT(CompoundTag tag) {
-			float spacing = tag.getFloat("spacing");
+			float spacing = tag.getFloatOr("spacing", 3.5f);
 			if (spacing <= 0.0000001) spacing = 3.5f;
 
-			float xOffset = tag.contains("x_offset", 5) ? tag.getFloat("x_offset") : Mth.cos(Mth.PI / 6f) * spacing;
-			float zOffset = tag.contains("z_offset", 5) ? tag.getFloat("z_offset") : Mth.sin(Mth.PI / 6f) * spacing;
+			float xOffset = tag.getFloatOr("x_offset", Mth.cos(Mth.PI / 6f) * spacing);
+			float zOffset = tag.getFloatOr("z_offset", Mth.sin(Mth.PI / 6f) * spacing);
 
-			if (tag.contains("x_spacing", 5) || tag.contains("z_spacing", 5)) {
-				return new TriangularLatticeConfig(spacing, xOffset, zOffset, tag.getFloat("x_spacing"), tag.getFloat("z_spacing"));
+			if (tag.contains("x_spacing") || tag.contains("z_spacing")) {
+				return new TriangularLatticeConfig(spacing, xOffset, zOffset, tag.getFloatOr("x_spacing", xOffset * 2f), tag.getFloatOr("z_spacing", spacing));
 			} else {
 				return new TriangularLatticeConfig(spacing, xOffset, zOffset);
 			}

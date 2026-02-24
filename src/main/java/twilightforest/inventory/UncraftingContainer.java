@@ -85,14 +85,6 @@ public class UncraftingContainer implements Container {
 	}
 
 	@Override
-	public void startOpen(Player player) {
-	}
-
-	@Override
-	public void stopOpen(Player player) {
-	}
-
-	@Override
 	public boolean canPlaceItem(int index, ItemStack stack) {
 		return false;
 	}

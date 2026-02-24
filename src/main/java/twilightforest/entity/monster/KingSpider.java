@@ -7,7 +7,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.entity.monster.spider.Spider;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -63,7 +63,10 @@ public class KingSpider extends Spider {
 		// will always have a druid riding the spider or whatever is riding the spider
 		SkeletonDruid druid = TFEntities.SKELETON_DRUID.get().create(this.level(), EntitySpawnReason.JOCKEY);
 		if (druid != null) {
-			druid.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
+			druid.setPos(this.getX(), this.getY(), this.getZ());
+			druid.setYRot(this.getYRot());
+			druid.setXRot(0.0F);
+			druid.setYHeadRot(this.getYRot());
 			druid.finalizeSpawn(accessor, difficulty, EntitySpawnReason.JOCKEY, null);
 			Entity lastRider = this;
 			while (!lastRider.getPassengers().isEmpty())

@@ -16,8 +16,9 @@ import net.minecraft.world.entity.ai.goal.ZombieAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
@@ -65,8 +66,8 @@ public class LichMinion extends Zombie {
 			if (source.getEntity() instanceof Lich) {
 				// return to previous target but speed up
 				this.setLastHurtByMob(prevTarget);
-				this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 200, 2));
-				this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 200, 1));
+				this.addEffect(new MobEffectInstance(MobEffects.SPEED, 200, 2));
+				this.addEffect(new MobEffectInstance(MobEffects.STRENGTH, 200, 1));
 			}
 			return true;
 		} else return false;
@@ -131,7 +132,7 @@ public class LichMinion extends Zombie {
 
 		if (this.master != null && difficulty.getDifficulty() == Difficulty.HARD) {
 			int babiesSummoned = this.master.getBabyMinionsSummoned();
-			if (babiesSummoned < this.master.getAttributeValue(TFAttributes.MINION_COUNT) / 4) { // One quarter can be babies on hard, by default: 9 / 4 = 2
+			if (babiesSummoned < this.master.getAttributeValue(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(TFAttributes.MINION_COUNT.get())) / 4) { // One quarter can be babies on hard, by default: 9 / 4 = 2
 				baby = this.getRandom().nextInt(100) <= 20; // 20%
 			}
 			if (baby) this.master.setBabyMinionsSummoned(babiesSummoned + 1);

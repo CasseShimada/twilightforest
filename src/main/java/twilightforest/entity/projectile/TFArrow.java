@@ -3,11 +3,12 @@ package twilightforest.entity.projectile;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import twilightforest.mixin.accessor.AbstractArrowAccessor;
 
 public abstract class TFArrow extends AbstractArrow implements ITFProjectile {
 
@@ -46,7 +47,7 @@ public abstract class TFArrow extends AbstractArrow implements ITFProjectile {
 	@Override
 	public void doPostHurtEffects(LivingEntity target) {
 		if (this.parentArrow != null) {
-			this.parentArrow.doPostHurtEffects(target);
+			((AbstractArrowAccessor) this.parentArrow).twilightforest$doPostHurtEffects(target);
 		}
 		super.doPostHurtEffects(target);
 	}

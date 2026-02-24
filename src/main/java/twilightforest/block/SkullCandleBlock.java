@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -90,7 +90,7 @@ public class SkullCandleBlock extends AbstractSkullCandleBlock {
 		return this.defaultBlockState()
 			.setValue(ROTATION, Mth.floor((double) (ctx.getRotation() * 16.0F / 360.0F) + 0.5D) & 15)
 			.setValue(LIGHTING, Lighting.NONE)
-			.setValue(CANDLES, ctx.getItemInHand().getOrDefault(TFDataComponents.SKULL_CANDLES, SkullCandles.DEFAULT).count());
+			.setValue(CANDLES, ctx.getItemInHand().getOrDefault(TFDataComponents.SKULL_CANDLES.get(), SkullCandles.DEFAULT).count());
 	}
 
 	@Override

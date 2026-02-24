@@ -1,16 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/template_spawn_egg",
-    "tints": [
-      {
-        "type": "minecraft:constant",
-        "value": -4418777
-      },
-      {
-        "type": "minecraft:constant",
-        "value": -14412279
-      }
-    ]
+    "model": "twilightforest:item/pinch_beetle_spawn_egg"
   }
 }

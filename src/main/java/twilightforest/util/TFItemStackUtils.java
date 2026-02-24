@@ -1,28 +1,27 @@
 package twilightforest.util;
 
-import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.RegistryOps;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ItemLike;
-import org.codehaus.plexus.util.StringUtils;
 import twilightforest.block.KeepsakeCasketBlock;
 import twilightforest.events.CharmEvents;
 import twilightforest.init.TFDataComponents;
+import twilightforest.TwilightForestMod;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,22 +30,29 @@ import java.util.function.Consumer;
 public class TFItemStackUtils {
 
 	public static boolean consumeInventoryItem(final Player player, final ItemLike item, CompoundTag persistentTag, boolean saveItemToTag) {
-		return consumeInventoryItem(player.getInventory().armor, item, persistentTag, saveItemToTag, player.registryAccess())
-			|| consumeInventoryItem(player.getInventory().items, item, persistentTag, saveItemToTag, player.registryAccess())
-			|| consumeInventoryItem(player.getInventory().offhand, item, persistentTag, saveItemToTag, player.registryAccess());
+		Inventory inventory = player.getInventory();
+		if (consumeInventoryItem(inventory.getNonEquipmentItems(), item, persistentTag, saveItemToTag, player.registryAccess())) {
+			return true;
+		}
+
+		return consumeEquipmentSlot(player, EquipmentSlot.HEAD, item, persistentTag, saveItemToTag)
+			|| consumeEquipmentSlot(player, EquipmentSlot.CHEST, item, persistentTag, saveItemToTag)
+			|| consumeEquipmentSlot(player, EquipmentSlot.LEGS, item, persistentTag, saveItemToTag)
+			|| consumeEquipmentSlot(player, EquipmentSlot.FEET, item, persistentTag, saveItemToTag)
+			|| consumeEquipmentSlot(player, EquipmentSlot.OFFHAND, item, persistentTag, saveItemToTag);
 	}
 
-	public static boolean consumeInventoryItem(final NonNullList<ItemStack> stacks, final ItemLike item, CompoundTag persistentTag, boolean saveItemToTag, HolderLookup.Provider provider) {
+	public static boolean consumeInventoryItem(final NonNullList<ItemStack> stacks, final ItemLike item, CompoundTag persistentTag, boolean saveItemToTag, RegistryAccess registryAccess) {
 		for (ItemStack stack : stacks) {
 			if (stack.is(item.asItem())) {
-				if (saveItemToTag) persistentTag.put(CharmEvents.CONSUMED_CHARM_TAG, stack.save(provider));
+				if (saveItemToTag) persistentTag.put(CharmEvents.CONSUMED_CHARM_TAG, saveItem(registryAccess, stack));
 				BlockItemStateProperties blockItemStateProperties = stack.get(DataComponents.BLOCK_STATE);
 				if (blockItemStateProperties != null && blockItemStateProperties.properties().containsKey(KeepsakeCasketBlock.BREAKAGE.getName())) {
 					String propertyValueString = blockItemStateProperties.properties().get(KeepsakeCasketBlock.BREAKAGE.getName());
 
-					persistentTag.putInt(CharmEvents.CASKET_DAMAGE_TAG, StringUtils.isNumeric(propertyValueString) ? Integer.parseInt(propertyValueString) : 0);
-				} else if (stack.has(TFDataComponents.CASKET_DAMAGE)) {
-					persistentTag.putInt(CharmEvents.CASKET_DAMAGE_TAG, stack.getOrDefault(TFDataComponents.CASKET_DAMAGE, 0));
+					persistentTag.putInt(CharmEvents.CASKET_DAMAGE_TAG, isNumeric(propertyValueString) ? Integer.parseInt(propertyValueString) : 0);
+				} else if (stack.has(TFDataComponents.CASKET_DAMAGE.get())) {
+					persistentTag.putInt(CharmEvents.CASKET_DAMAGE_TAG, stack.getOrDefault(TFDataComponents.CASKET_DAMAGE.get(), 0));
 				}
 				stack.shrink(1);
 				return true;
@@ -56,14 +62,37 @@ public class TFItemStackUtils {
 		return false;
 	}
 
+	private static boolean consumeEquipmentSlot(Player player, EquipmentSlot slot, ItemLike item, CompoundTag persistentTag, boolean saveItemToTag) {
+		ItemStack stack = player.getItemBySlot(slot);
+		if (!stack.is(item.asItem())) {
+			return false;
+		}
+		if (saveItemToTag) {
+			persistentTag.put(CharmEvents.CONSUMED_CHARM_TAG, saveItem(player.registryAccess(), stack));
+		}
+		BlockItemStateProperties blockItemStateProperties = stack.get(DataComponents.BLOCK_STATE);
+		if (blockItemStateProperties != null && blockItemStateProperties.properties().containsKey(KeepsakeCasketBlock.BREAKAGE.getName())) {
+			String propertyValueString = blockItemStateProperties.properties().get(KeepsakeCasketBlock.BREAKAGE.getName());
+			persistentTag.putInt(CharmEvents.CASKET_DAMAGE_TAG, isNumeric(propertyValueString) ? Integer.parseInt(propertyValueString) : 0);
+		} else if (stack.has(TFDataComponents.CASKET_DAMAGE.get())) {
+			persistentTag.putInt(CharmEvents.CASKET_DAMAGE_TAG, stack.getOrDefault(TFDataComponents.CASKET_DAMAGE.get(), 0));
+		}
+		stack.shrink(1);
+		player.setItemSlot(slot, stack);
+		return true;
+	}
+
 	public static NonNullList<ItemStack> sortArmorForCasket(Player player) {
-		NonNullList<ItemStack> armor = player.getInventory().armor;
-		Collections.reverse(armor);
+		NonNullList<ItemStack> armor = NonNullList.create();
+		armor.add(player.getItemBySlot(EquipmentSlot.HEAD));
+		armor.add(player.getItemBySlot(EquipmentSlot.CHEST));
+		armor.add(player.getItemBySlot(EquipmentSlot.LEGS));
+		armor.add(player.getItemBySlot(EquipmentSlot.FEET));
 		return armor;
 	}
 
 	public static NonNullList<ItemStack> sortInvForCasket(Player player) {
-		NonNullList<ItemStack> inv = player.getInventory().items;
+		NonNullList<ItemStack> inv = player.getInventory().getNonEquipmentItems();
 		NonNullList<ItemStack> sorted = NonNullList.create();
 		//hotbar at the bottom
 		sorted.addAll(inv.subList(9, 36));
@@ -87,7 +116,7 @@ public class TFItemStackUtils {
 
 	public static boolean hasInfoTag(ItemStack stack, String key) {
 		CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
-		return customData != null && customData.contains(key);
+		return customData != null && customData.copyTag().contains(key);
 	}
 
 	public static void addInfoTag(ItemStack stack, String key) {
@@ -113,25 +142,13 @@ public class TFItemStackUtils {
 		List<ItemStack> blockedItems = new ArrayList<>();
 
 		for (int i = 0; i < tag.size(); ++i) {
-			CompoundTag compoundtag = tag.getCompound(i);
-			int j = compoundtag.getByte("Slot") & 255;
-			ItemStack itemstack = ItemStack.parseOptional(registryAccess, compoundtag);
+			CompoundTag compoundtag = tag.getCompoundOrEmpty(i);
+			int j = compoundtag.getInt("Slot").orElse(compoundtag.getByteOr("Slot", (byte) 0) & 255);
+			ItemStack itemstack = loadItem(registryAccess, compoundtag);
 			if (!itemstack.isEmpty()) {
-				if (j < inventory.items.size()) {
-					if (inventory.items.get(j).isEmpty()) {
-						inventory.items.set(j, itemstack);
-					} else {
-						blockedItems.add(itemstack);
-					}
-				} else if (j >= 100 && j < inventory.armor.size() + 100) {
-					if (inventory.armor.get(j - 100).isEmpty()) {
-						inventory.armor.set(j - 100, itemstack);
-					} else {
-						blockedItems.add(itemstack);
-					}
-				} else if (j >= 150 && j < inventory.offhand.size() + 150) {
-					if (inventory.offhand.get(j - 150).isEmpty()) {
-						inventory.offhand.set(j - 150, itemstack);
+				if (j < inventory.getContainerSize()) {
+					if (inventory.getItem(j).isEmpty()) {
+						inventory.setItem(j, itemstack);
 					} else {
 						blockedItems.add(itemstack);
 					}
@@ -142,28 +159,70 @@ public class TFItemStackUtils {
 		if (!blockedItems.isEmpty()) blockedItems.forEach(inventory::add);
 	}
 
+	public static ListTag saveInventory(RegistryAccess registryAccess, Inventory inventory) {
+		ListTag tagList = new ListTag();
+		for (int i = 0; i < inventory.getContainerSize(); i++) {
+			ItemStack stack = inventory.getItem(i);
+			if (!stack.isEmpty()) {
+				CompoundTag itemTag = saveItem(registryAccess, stack);
+				itemTag.putInt("Slot", i);
+				tagList.add(itemTag);
+			}
+		}
+		return tagList;
+	}
+
+	public static CompoundTag saveItem(RegistryAccess registryAccess, ItemStack stack) {
+		RegistryOps<Tag> ops = RegistryOps.create(NbtOps.INSTANCE, registryAccess);
+		return ItemStack.CODEC.encodeStart(ops, stack)
+			.resultOrPartial(TwilightForestMod.LOGGER::error)
+			.filter(CompoundTag.class::isInstance)
+			.map(CompoundTag.class::cast)
+			.orElseGet(CompoundTag::new);
+	}
+
+	public static ItemStack loadItem(RegistryAccess registryAccess, CompoundTag tag) {
+		RegistryOps<Tag> ops = RegistryOps.create(NbtOps.INSTANCE, registryAccess);
+		CompoundTag itemTag = tag.contains("Item") ? tag.getCompoundOrEmpty("Item") : tag.copy();
+		itemTag.remove("Slot");
+		return ItemStack.CODEC.parse(ops, itemTag)
+			.resultOrPartial(TwilightForestMod.LOGGER::error)
+			.orElse(ItemStack.EMPTY);
+	}
+
+	public static int equipmentSlotIndex(EquipmentSlot slot) {
+		for (var entry : Inventory.EQUIPMENT_SLOT_MAPPING.int2ObjectEntrySet()) {
+			if (entry.getValue() == slot) {
+				return entry.getIntKey();
+			}
+		}
+		return Inventory.NOT_FOUND_INDEX;
+	}
+
 	public static boolean isAtZeroDurability(ItemStack stack) {
 		return stack.isDamageableItem() && stack.getDamageValue() >= stack.getMaxDamage();
 	}
 
-	public static void hurtWithoutBreaking(ItemStack stack, int amount, Player player) {
+	public static void hurtWithoutBreaking(ItemStack stack, int amount, @Nullable Player player) {
 		if (stack.isDamageableItem()) {
-			amount = stack.getItem().damageItem(stack, amount, player, item -> {});
-			if (player instanceof ServerPlayer sp && !player.hasInfiniteMaterials()) {
-				if (amount > 0) {
-					amount = EnchantmentHelper.processDurabilityChange(sp.serverLevel(), stack, amount);
-					if (amount <= 0) {
-						return;
-					}
-				}
-
-				if (amount != 0) {
-					CriteriaTriggers.ITEM_DURABILITY_CHANGED.trigger(sp, stack, stack.getDamageValue() + amount);
-				}
-
-				int i = stack.getDamageValue() + amount;
-				stack.setDamageValue(i);
+			if (player != null) {
+				stack.hurtWithoutBreaking(amount, player);
+			} else {
+				int newDamage = Math.min(stack.getDamageValue() + amount, stack.getMaxDamage() - 1);
+				stack.setDamageValue(newDamage);
 			}
 		}
+	}
+
+	private static boolean isNumeric(@Nullable String value) {
+		if (value == null || value.isEmpty()) {
+			return false;
+		}
+		for (int i = 0; i < value.length(); i++) {
+			if (!Character.isDigit(value.charAt(i))) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

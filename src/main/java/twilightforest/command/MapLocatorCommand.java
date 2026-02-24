@@ -7,7 +7,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -30,7 +30,6 @@ import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import java.util.Collection;
 import java.util.Collections;
 
-@tamaized.beanification.Component
 public class MapLocatorCommand {
 
 	// [vanillacopy] LocateCommand.java
@@ -43,7 +42,7 @@ public class MapLocatorCommand {
 
 	public LiteralArgumentBuilder<CommandSourceStack> register() {
 		// TODO A magic map variation might be cool
-		return Commands.literal("map_locator").requires(cs -> cs.hasPermission(2)).then(
+		return Commands.literal("map_locator").requires(cs -> Commands.LEVEL_GAMEMASTERS.check(cs.permissions())).then(
 			Commands.argument("structure", ResourceOrTagKeyArgument.resourceOrTagKey(Registries.STRUCTURE)).executes(context -> run(context, Collections.singleton(context.getSource().getPlayerOrException()), false)).then(
 				Commands.argument("player", EntityArgument.players()).executes(context -> run(context, EntityArgument.getPlayers(context, "player"), false)).then(
 					Commands.argument("skip_known_structures", BoolArgumentType.bool()).executes(context -> run(context, EntityArgument.getPlayers(context, "player"), BoolArgumentType.getBool(context, "skip_known_structures")))
@@ -57,7 +56,8 @@ public class MapLocatorCommand {
 		var source = context.getSource();
 
 		Registry<Structure> registry = source.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE);
-		HolderSet<Structure> holderset = LocateCommand.getHolders(structure, registry).orElseThrow(() -> ERROR_STRUCTURE_INVALID.create(structure.asPrintable()));
+		HolderSet<Structure> holderset = structure.unwrap()
+			.map(key -> HolderSet.direct(registry.getOrThrow(key)), registry::getOrThrow);
 		BlockPos blockpos = BlockPos.containing(source.getPosition());
 		ServerLevel serverlevel = source.getLevel();
 		Stopwatch stopwatch = Stopwatch.createStarted(Util.TICKER);

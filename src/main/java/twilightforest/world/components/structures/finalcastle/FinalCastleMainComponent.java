@@ -17,6 +17,7 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFStructurePieceTypes;
+import twilightforest.mixin.accessor.StructurePiecesBuilderAccessor;
 import twilightforest.util.BoundingBoxUtils;
 import twilightforest.util.landmarks.LegacyLandmarkPlacements;
 import twilightforest.util.RotationUtil;
@@ -125,7 +126,7 @@ public class FinalCastleMainComponent extends TFStructureComponentOld {
 			while (!complete && iterations < 15) {
 				iterations++;
 				// duplicate list
-				List<StructurePiece> before = new LinkedList<>(start.pieces);
+				List<StructurePiece> before = new LinkedList<>(((StructurePiecesBuilderAccessor) start).twilightforest$getPieces());
 
 				// build
 				BlockPos tc = this.offsetTowerCCoords(x, y, z, howFar, direction);
@@ -149,8 +150,8 @@ public class FinalCastleMainComponent extends TFStructureComponentOld {
 					complete = true;
 				} else {
 					//TwilightForestMod.LOGGER.info("Tower maze color {} INCOMPLETE, retrying!", type);
-					start.pieces.clear();
-					start.pieces.addAll(before);
+					((StructurePiecesBuilderAccessor) start).twilightforest$getPieces().clear();
+					((StructurePiecesBuilderAccessor) start).twilightforest$getPieces().addAll(before);
 				}
 			}
 		}
@@ -158,10 +159,10 @@ public class FinalCastleMainComponent extends TFStructureComponentOld {
 
 	private boolean isMazeComplete(StructurePieceAccessor list, BlockState type) {
 		if (list instanceof StructurePiecesBuilder start) {
-			if (start.pieces.size() > 60) {
+			if (((StructurePiecesBuilderAccessor) start).twilightforest$getPieces().size() > 60) {
 				//TwilightForestMod.LOGGER.warn("Maze of color {} is getting a bit excessive.", BuiltInRegistries.BLOCK.getKey(type.getBlock()).toString());
 			}
-			for (StructurePiece structurecomponent : start.pieces) {
+			for (StructurePiece structurecomponent : ((StructurePiecesBuilderAccessor) start).twilightforest$getPieces()) {
 				BoundingBox boundingBox = structurecomponent.getBoundingBox();
 				int x = (boundingBox.maxX() - boundingBox.minX() / 2) + boundingBox.minX();
 				int y = (boundingBox.maxY() - boundingBox.minY() / 2) + boundingBox.minY();

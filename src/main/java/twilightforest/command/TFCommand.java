@@ -10,52 +10,22 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import tamaized.beanification.Autowired;
-
-@tamaized.beanification.Component
 public class TFCommand {
 
-	@Autowired
-	private CenterCommand centerCommand;
-
-	@Autowired
-	private ConquerCommand conquerCommand;
-
-	@Autowired
-	private GenerateBookCommand generateBookCommand;
-
-	@Autowired
-	private InfoCommand infoCommand;
-
-	@Autowired
-	private MapBiomesCommand mapBiomesCommand;
-
-	@Autowired
-	private MapLocatorCommand mapLocatorCommand;
-
-	@Autowired
-	private ShieldCommand shieldCommand;
-
-	@Autowired
-	private SinisterSpawnerCommand spawnerCommand;
-
-	@Autowired
-	private DisplayPiecesCommand displayPiecesCommand;
-
-	@Autowired
-	private CountLootCommand countLootCommand;
-
-	@Autowired
-	private CountTemplateCommand countTemplateCommand;
-
-	@Autowired
-	private StructureDistanceCommand structureDistanceCommand;
-
-	@Autowired
-	private ClearDisplayCommand clearDisplayCommand;
-
-	@Autowired
-	private GetSeedAndTeleportCommand getSeedAndTeleportCommand;
+	private final CenterCommand centerCommand = new CenterCommand();
+	private final ConquerCommand conquerCommand = new ConquerCommand();
+	private final GenerateBookCommand generateBookCommand = new GenerateBookCommand();
+	private final InfoCommand infoCommand = new InfoCommand();
+	private final MapBiomesCommand mapBiomesCommand = new MapBiomesCommand();
+	private final MapLocatorCommand mapLocatorCommand = new MapLocatorCommand();
+	private final ShieldCommand shieldCommand = new ShieldCommand();
+	private final SinisterSpawnerCommand spawnerCommand = new SinisterSpawnerCommand();
+	private final DisplayPiecesCommand displayPiecesCommand = new DisplayPiecesCommand();
+	private final CountLootCommand countLootCommand = new CountLootCommand();
+	private final CountTemplateCommand countTemplateCommand = new CountTemplateCommand();
+	private final StructureDistanceCommand structureDistanceCommand = new StructureDistanceCommand();
+	private final ClearDisplayCommand clearDisplayCommand = new ClearDisplayCommand();
+	private final GetSeedAndTeleportCommand getSeedAndTeleportCommand = new GetSeedAndTeleportCommand();
 
 	public void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext, Commands.CommandSelection selection) {
 		LiteralArgumentBuilder<CommandSourceStack> structureBranch = Commands.literal("structure_util")

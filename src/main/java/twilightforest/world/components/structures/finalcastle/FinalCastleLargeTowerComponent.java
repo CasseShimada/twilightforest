@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.FrontAndTop;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
@@ -16,7 +16,7 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import twilightforest.network.PacketDistributor;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFStructurePieceTypes;
@@ -28,7 +28,7 @@ import twilightforest.world.components.structures.lichtower.TowerWingComponent;
 
 public class FinalCastleLargeTowerComponent extends TowerWingComponent {
 
-	public static final ResourceLocation LARGE_TOWER_TEMP_POOL = TwilightForestMod.prefix("final_castle/temp/large_tower");
+	public static final Identifier LARGE_TOWER_TEMP_POOL = TwilightForestMod.prefix("final_castle/temp/large_tower");
 
 	public FinalCastleLargeTowerComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
 		super(TFStructurePieceTypes.TFFCLaTo.get(), nbt);
@@ -53,7 +53,7 @@ public class FinalCastleLargeTowerComponent extends TowerWingComponent {
 		list.addPiece(roof);
 		roof.addChildren(this, list, rand);
 
-		TwilightJigsawPiece templatePiece = TwilightJigsawPiece.initializeTemplateFromPool(LARGE_TOWER_TEMP_POOL, this.getWorldPos(0, 1, 2), this.rotation.rotation().rotate(FrontAndTop.WEST_UP), "twilightforest:final_castle/large_tower", rand, this.genDepth + 1, ServerLifecycleHooks.getCurrentServer().getStructureManager());
+		TwilightJigsawPiece templatePiece = TwilightJigsawPiece.initializeTemplateFromPool(LARGE_TOWER_TEMP_POOL, this.getWorldPos(0, 1, 2), ((twilightforest.mixin.accessor.StructurePieceFieldsAccessor) this).twilightforest$getRotation().rotation().rotate(FrontAndTop.WEST_UP), "twilightforest:final_castle/large_tower", rand, this.genDepth + 1, PacketDistributor.getServer().getStructureManager());
 		if (templatePiece != null) {
 			list.addPiece(templatePiece);
 			templatePiece.addChildren(parent, list, rand);

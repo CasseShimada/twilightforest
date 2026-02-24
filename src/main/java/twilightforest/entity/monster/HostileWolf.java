@@ -3,12 +3,11 @@ package twilightforest.entity.monster;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -21,13 +20,19 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.*;
-import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.turtle.Turtle;
+import net.minecraft.world.entity.animal.wolf.Wolf;
+import net.minecraft.world.entity.animal.wolf.WolfVariant;
+import net.minecraft.world.entity.animal.wolf.WolfVariants;
+import net.minecraft.world.entity.monster.skeleton.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFSounds;
 import twilightforest.init.TFStructures;
@@ -35,7 +40,7 @@ import twilightforest.util.landmarks.LegacyLandmarkPlacements;
 
 import java.util.Optional;
 
-public class HostileWolf extends Monster implements VariantHolder<Holder<WolfVariant>> {
+public class HostileWolf extends Monster {
 
 	private static final EntityDataAccessor<Holder<WolfVariant>> VARIANT = SynchedEntityData.defineId(HostileWolf.class, EntityDataSerializers.WOLF_VARIANT);
 
@@ -68,31 +73,29 @@ public class HostileWolf extends Monster implements VariantHolder<Holder<WolfVar
 		builder.define(VARIANT, this.registryAccess().lookupOrThrow(Registries.WOLF_VARIANT).getOrThrow(WolfVariants.PALE));
 	}
 
-	public ResourceLocation getTexture() {
+	public Identifier getTexture() {
 		WolfVariant wolfvariant = this.getVariant().value();
-		return this.isAggressive() ? wolfvariant.angryTexture() : wolfvariant.wildTexture();
+		return (this.isAggressive() ? wolfvariant.assetInfo().angry() : wolfvariant.assetInfo().wild()).id();
 	}
 
-	@Override
 	public Holder<WolfVariant> getVariant() {
 		return this.getEntityData().get(VARIANT);
 	}
 
-	@Override
 	public void setVariant(Holder<WolfVariant> variant) {
 		this.getEntityData().set(VARIANT, variant);
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag tag) {
-		super.addAdditionalSaveData(tag);
-		tag.putString("variant", this.getVariant().unwrapKey().orElse(WolfVariants.PALE).location().toString());
+	public void addAdditionalSaveData(ValueOutput output) {
+		super.addAdditionalSaveData(output);
+		output.putString("variant", this.getVariant().unwrapKey().orElse(WolfVariants.PALE).identifier().toString());
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag tag) {
-		super.readAdditionalSaveData(tag);
-		Optional.ofNullable(ResourceLocation.tryParse(tag.getString("variant")))
+	public void readAdditionalSaveData(ValueInput input) {
+		super.readAdditionalSaveData(input);
+		Optional.ofNullable(Identifier.tryParse(input.getStringOr("variant", "")))
 			.map(location -> ResourceKey.create(Registries.WOLF_VARIANT, location))
 			.flatMap(key -> this.registryAccess().lookupOrThrow(Registries.WOLF_VARIANT).get(key))
 			.ifPresent(this::setVariant);
@@ -143,11 +146,6 @@ public class HostileWolf extends Monster implements VariantHolder<Holder<WolfVar
 	@Override
 	protected float getSoundVolume() {
 		return 0.4F;
-	}
-
-	@Override
-	protected boolean shouldDespawnInPeaceful() {
-		return true;
 	}
 
 	public float getTailAngle() {

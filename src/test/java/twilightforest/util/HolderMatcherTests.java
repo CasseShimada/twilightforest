@@ -6,7 +6,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import twilightforest.init.TFItems;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -60,7 +59,7 @@ public class HolderMatcherTests {
 
 	@Test
 	public void matchesDeferred() {
-		Holder<Item> holder = TFItems.EXPERIMENT_115;
+		Holder<Item> holder = BuiltInRegistries.ITEM.getOrThrow(BuiltInRegistries.ITEM.getResourceKey(Items.IRON_INGOT).orElseThrow());
 
 		boolean result = instance.match(holder, holder);
 
@@ -69,8 +68,8 @@ public class HolderMatcherTests {
 
 	@Test
 	public void matchesDeferredFailed() {
-		Holder<Item> holder = TFItems.EXPERIMENT_115;
-		Holder<Item> other = TFItems.STEELEAF_INGOT;
+		Holder<Item> holder = BuiltInRegistries.ITEM.getOrThrow(BuiltInRegistries.ITEM.getResourceKey(Items.IRON_INGOT).orElseThrow());
+		Holder<Item> other = BuiltInRegistries.ITEM.getOrThrow(BuiltInRegistries.ITEM.getResourceKey(Items.GOLD_INGOT).orElseThrow());
 
 		boolean result = instance.match(holder, other);
 
@@ -79,9 +78,9 @@ public class HolderMatcherTests {
 
 	@Test
 	public void matchesMixed() {
-		Holder<Item> ref = BuiltInRegistries.ITEM.getOrThrow(BuiltInRegistries.ITEM.getResourceKey(TFItems.EXPERIMENT_115.value()).orElseThrow());
-		Holder<Item> direct = Holder.direct(TFItems.EXPERIMENT_115.value());
-		Holder<Item> deferred = TFItems.EXPERIMENT_115;
+		Holder<Item> ref = BuiltInRegistries.ITEM.getOrThrow(BuiltInRegistries.ITEM.getResourceKey(Items.IRON_INGOT).orElseThrow());
+		Holder<Item> direct = Holder.direct(Items.IRON_INGOT);
+		Holder<Item> deferred = BuiltInRegistries.ITEM.getOrThrow(BuiltInRegistries.ITEM.getResourceKey(Items.IRON_INGOT).orElseThrow());
 
 		assertTrue(instance.match(ref, direct));
 		assertTrue(instance.match(ref, deferred));

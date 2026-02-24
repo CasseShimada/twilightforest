@@ -28,11 +28,12 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
+import twilightforest.world.components.structures.PieceBeardifierModifier;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
-import tamaized.beanification.Autowired;
 import twilightforest.loot.TFLootTables;
+import twilightforest.mixin.accessor.StructurePieceFieldsAccessor;
+import twilightforest.mixin.accessor.SignBlockEntityAccessor;
 import twilightforest.util.BoundingBoxUtils;
 import twilightforest.world.components.structures.selectors.StrongholdStonesRandomBlockSelectorFactory;
 
@@ -45,8 +46,7 @@ import java.util.function.Predicate;
 public abstract class TFStructureComponentOld extends TFStructureComponent implements PieceBeardifierModifier {
 
 	protected static final BlockState AIR = Blocks.AIR.defaultBlockState();
-	@Autowired
-	private static StrongholdStonesRandomBlockSelectorFactory strongholdStones;
+	private static final StrongholdStonesRandomBlockSelectorFactory strongholdStones = new StrongholdStonesRandomBlockSelectorFactory();
 
 	public TFStructureComponentOld(StructurePieceType piece, CompoundTag nbt) {
 		super(piece, nbt);
@@ -64,17 +64,18 @@ public abstract class TFStructureComponentOld extends TFStructureComponent imple
 	//Let's not use vanilla's weird rotation+mirror thing...
 	@Override
 	public void setOrientation(@Nullable Direction facing) {
-		this.orientation = facing;
-		this.mirror = Mirror.NONE;
+		StructurePieceFieldsAccessor accessor = (StructurePieceFieldsAccessor) this;
+		accessor.twilightforest$setOrientation(facing);
+		accessor.twilightforest$setMirror(Mirror.NONE);
 
 		if (facing == null) {
-			this.rotation = Rotation.NONE;
+			accessor.twilightforest$setRotation(Rotation.NONE);
 		} else {
 			switch (facing) {
-				case SOUTH -> this.rotation = Rotation.CLOCKWISE_180;
-				case WEST -> this.rotation = Rotation.COUNTERCLOCKWISE_90;
-				case EAST -> this.rotation = Rotation.CLOCKWISE_90;
-				default -> this.rotation = Rotation.NONE;
+				case SOUTH -> accessor.twilightforest$setRotation(Rotation.CLOCKWISE_180);
+				case WEST -> accessor.twilightforest$setRotation(Rotation.COUNTERCLOCKWISE_90);
+				case EAST -> accessor.twilightforest$setRotation(Rotation.CLOCKWISE_90);
+				default -> accessor.twilightforest$setRotation(Rotation.NONE);
 			}
 		}
 	}
@@ -266,7 +267,10 @@ public abstract class TFStructureComponentOld extends TFStructureComponent imple
 			world.setBlock(pos, Blocks.OAK_SIGN.defaultBlockState().setValue(StandingSignBlock.ROTATION, this.getOrientation().get2DDataValue() * 4), Block.UPDATE_CLIENTS);
 
 			if (world.getBlockEntity(pos) instanceof SignBlockEntity sign) {
-				sign.frontText = sign.frontText.setMessage(1, Component.literal(string0)).setMessage(2, Component.literal(string1));
+				SignBlockEntityAccessor accessor = (SignBlockEntityAccessor) sign;
+				accessor.twilightforest$setFrontText(accessor.twilightforest$getFrontText()
+					.setMessage(1, Component.literal(string0))
+					.setMessage(2, Component.literal(string1)));
 			}
 		}
 	}

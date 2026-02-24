@@ -7,7 +7,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.random.WeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
@@ -23,7 +23,6 @@ import twilightforest.tags.TFBiomeTags;
 import twilightforest.init.TFEntities;
 import twilightforest.init.TFMapDecorations;
 import twilightforest.init.TFStructureTypes;
-import twilightforest.world.components.structures.start.TFStructureStart;
 import twilightforest.world.components.structures.stronghold.StrongholdEntranceComponent;
 import twilightforest.world.components.structures.util.ControlledSpawningStructure;
 
@@ -31,6 +30,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static twilightforest.world.components.structures.util.ControlledSpawns.ControlledSpawningConfig.weightedSpawn;
 
 public class KnightStrongholdStructure extends ControlledSpawningStructure {
 	public static final MapCodec<KnightStrongholdStructure> CODEC = RecordCodecBuilder.mapCodec(instance ->
@@ -53,23 +54,23 @@ public class KnightStrongholdStructure extends ControlledSpawningStructure {
 
 	public static KnightStrongholdStructure buildKnightStrongholdConfig(BootstrapContext<Structure> context) {
 		return new KnightStrongholdStructure(
-			ControlledSpawningConfig.firstIndexMonsters(
-				new MobSpawnSettings.SpawnerData(TFEntities.BLOCKCHAIN_GOBLIN.get(), 10, 1, 2),
-				new MobSpawnSettings.SpawnerData(TFEntities.LOWER_GOBLIN_KNIGHT.get(), 5, 1, 2),
-				new MobSpawnSettings.SpawnerData(TFEntities.HELMET_CRAB.get(), 10, 2, 4),
-				new MobSpawnSettings.SpawnerData(TFEntities.SLIME_BEETLE.get(), 10, 2, 3),
-				new MobSpawnSettings.SpawnerData(TFEntities.REDCAP_SAPPER.get(), 2, 1, 2),
-				new MobSpawnSettings.SpawnerData(TFEntities.KOBOLD.get(), 10, 2, 4),
-				new MobSpawnSettings.SpawnerData(EntityType.CREEPER, 5, 1, 2),
-				new MobSpawnSettings.SpawnerData(EntityType.SLIME, 5, 4, 4)
-			),
+			ControlledSpawningConfig.justMonsters(List.of(List.of(
+				weightedSpawn(TFEntities.BLOCKCHAIN_GOBLIN.get(), 10, 1, 2),
+				weightedSpawn(TFEntities.LOWER_GOBLIN_KNIGHT.get(), 5, 1, 2),
+				weightedSpawn(TFEntities.HELMET_CRAB.get(), 10, 2, 4),
+				weightedSpawn(TFEntities.SLIME_BEETLE.get(), 10, 2, 3),
+				weightedSpawn(TFEntities.REDCAP_SAPPER.get(), 2, 1, 2),
+				weightedSpawn(TFEntities.KOBOLD.get(), 10, 2, 4),
+				weightedSpawn(EntityType.CREEPER, 5, 1, 2),
+				weightedSpawn(EntityType.SLIME, 5, 4, 4)
+			))),
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_trophy_pedestal"))),
 			new HintConfig(HintConfig.book("tfstronghold", 4), TFEntities.KOBOLD.get()),
 			new DecorationConfig(3, true, false, false),
-			true, Optional.of(TFMapDecorations.KNIGHT_STRONGHOLD),
+			true, Optional.of(Holder.direct(TFMapDecorations.KNIGHT_STRONGHOLD.get())),
 			new StructureSettings(
 				context.lookup(Registries.BIOME).getOrThrow(TFBiomeTags.VALID_KNIGHT_STRONGHOLD_BIOMES),
-				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedRandomList.create()))), // Landmarks have Controlled Mob spawning
+				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedList.of()))), // Landmarks have Controlled Mob spawning
 				GenerationStep.Decoration.UNDERGROUND_STRUCTURES,
 				TerrainAdjustment.BURY
 			)
@@ -78,44 +79,6 @@ public class KnightStrongholdStructure extends ControlledSpawningStructure {
 
 	@Override
 	protected StructureStart createStart(ChunkPos chunkPos, int reference, GenerationStub generationStub) {
-		KnightStructureStart start = new KnightStructureStart(this, chunkPos, reference, generationStub.getPiecesBuilder().build());
-		start.setStartY(generationStub.position().getY() - 1);
-		return start;
-	}
-
-	public static class KnightStructureStart extends TFStructureStart {
-		private int startY = 0;
-
-		public KnightStructureStart(Structure structure, ChunkPos chunkPos, int references, PiecesContainer pieces) {
-			super(structure, chunkPos, references, pieces);
-		}
-
-		public void setStartY(int startY) {
-			this.startY = startY;
-		}
-
-		@Override
-		public BoundingBox getBoundingBox() {
-			BoundingBox boundingbox = this.cachedBoundingBox;
-			if (boundingbox == null) {
-				BoundingBox bBox = super.getBoundingBox();
-				boundingbox = new BoundingBox(bBox.minX(), bBox.minY(), bBox.minZ(), bBox.maxX(), Math.min(bBox.maxY(), this.startY), bBox.maxZ());
-				this.cachedBoundingBox = boundingbox; // Cache that shit since it may get called like every tick
-			}
-			return boundingbox;
-		}
-
-		@Override
-		public CompoundTag createTag(StructurePieceSerializationContext level, ChunkPos chunkPos) {
-			CompoundTag tag = super.createTag(level, chunkPos);
-			tag.putInt("knight_y", this.startY);
-			return tag;
-		}
-
-		@Override
-		public void loadFromTag(CompoundTag nbt) {
-			super.loadFromTag(nbt);
-			this.startY = nbt.getInt("knight_y");
-		}
+		return new StructureStart(this, chunkPos, reference, generationStub.getPiecesBuilder().build());
 	}
 }

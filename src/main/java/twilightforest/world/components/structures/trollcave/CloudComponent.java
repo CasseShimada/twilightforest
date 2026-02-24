@@ -140,7 +140,7 @@ public class CloudComponent extends StructurePiece {
 
 	private static void setIfAir(ChunkAccess chunkAccess, BlockPos topPos, BlockState blockState) {
 		if (chunkAccess.getBlockState(topPos).isAir()) {
-			chunkAccess.setBlockState(topPos, blockState, false);
+			chunkAccess.setBlockState(topPos, blockState, 0);
 		}
 	}
 }

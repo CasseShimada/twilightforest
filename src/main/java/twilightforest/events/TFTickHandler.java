@@ -5,20 +5,20 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SpellParticleOption;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.LevelBasedPermissionSet;
+import net.minecraft.server.permissions.PermissionLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
+import twilightforest.network.PacketDistributor;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.TFPortalBlock;
 import twilightforest.config.TFConfig;
@@ -38,22 +38,20 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-@EventBusSubscriber(modid = TwilightForestMod.ID)
 public class TFTickHandler {
 
-	@SubscribeEvent
-	public static void playerTick(PlayerTickEvent.Post event) {
-		Player eventPlayer = event.getEntity();
-
-		if (!(eventPlayer instanceof ServerPlayer player)) return;
-		if (!(player.level() instanceof ServerLevel world)) return;
+	public static void onPlayerTick(ServerPlayer player, ServerLevel world) {
+		if (player == null || world == null) {
+			return;
+		}
 
 		// check for portal creation, at least if it's not disabled
 		if (!TFConfig.disablePortalCreation && player.tickCount % (!TFConfig.checkPortalPlacement ? 100 : 20) == 0) {
 			// skip non admin players when the option is on
-			if (world.getServer().getProfilePermissions(player.getGameProfile()) >= TFConfig.portalCreationPermission) {
+			PermissionLevel requiredLevel = PermissionLevel.byId(TFConfig.portalCreationPermission);
+			if (player.permissions() instanceof LevelBasedPermissionSet permissionSet && permissionSet.level().isEqualOrHigherThan(requiredLevel)) {
 				// reduce range to 4.0 if config is set to admins/owners only
-				checkForPortalCreation(player, world, TFConfig.portalCreationPermission >= Commands.LEVEL_ADMINS ? 4.0F : 32.0F);
+				checkForPortalCreation(player, world, requiredLevel.isEqualOrHigherThan(PermissionLevel.ADMINS) ? 4.0F : 32.0F);
 			}
 		}
 
@@ -108,7 +106,7 @@ public class TFTickHandler {
 	}
 
 	private static void checkForPortalCreation(ServerPlayer player, ServerLevel level, float rangeToCheck) {
-		if (level.dimension().location().equals(ResourceLocation.parse(TFConfig.originDimension))
+		if (level.dimension().identifier().equals(Identifier.parse(TFConfig.originDimension))
 			|| TFDimension.isTwilightPortalDestination(level)
 			|| TFConfig.allowPortalsInOtherDimensions) {
 
@@ -149,7 +147,7 @@ public class TFTickHandler {
 				double vy = level.getRandom().nextGaussian() * 0.02D;
 				double vz = level.getRandom().nextGaussian() * 0.02D;
 
-				level.addParticle(ParticleTypes.EFFECT, qualified.getX(), qualified.getY() + 0.2, qualified.getZ(), vx, vy, vz);
+				level.addParticle(SpellParticleOption.create(ParticleTypes.EFFECT, 0.0F, 0.0F, 0.0F, 1.0F), qualified.getX(), qualified.getY() + 0.2, qualified.getZ(), vx, vy, vz);
 			}
 
 			if (TFBlocks.TWILIGHT_PORTAL.get().tryToCreatePortal(level, qualified.blockPosition(), qualified, player))

@@ -11,12 +11,12 @@ import it.unimi.dsi.fastutil.doubles.Double2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.doubles.Double2ObjectSortedMap;
 import it.unimi.dsi.fastutil.floats.Float2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.floats.Float2ObjectSortedMap;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Climate;
@@ -60,10 +60,10 @@ public final class Codecs {
 	public static final MapCodec<MapColor> COLOR_CODEC = RecordCodecBuilder.<MapColor>mapCodec(instance -> instance.group(
 		Codec.INT.fieldOf("id").forGetter(o -> o.id),
 		Codec.INT.fieldOf("color").forGetter(o -> o.col)
-	).apply(instance, MapColor::new)).validate(Codecs::validateMapColor);
+	).apply(instance, (id, color) -> MapColor.byId(id))).validate(Codecs::validateMapColor);
 	public static final Codec<GameProfile> SIMPLE_GAME_PROFILE = RecordCodecBuilder.create(instance -> instance.group(
-		UUIDUtil.AUTHLIB_CODEC.fieldOf("id").forGetter(GameProfile::getId),
-		ExtraCodecs.PLAYER_NAME.fieldOf("name").forGetter(GameProfile::getName)
+		UUIDUtil.AUTHLIB_CODEC.fieldOf("id").forGetter(GameProfile::id),
+		ExtraCodecs.PLAYER_NAME.fieldOf("name").forGetter(GameProfile::name)
 	).apply(instance, GameProfile::new));
 
 	public static final Codec<Climate.ParameterList<Holder<Biome>>> CLIMATE_SYSTEM = ExtraCodecs.nonEmptyList(RecordCodecBuilder.<Pair<Climate.ParameterPoint, Holder<Biome>>>create((instance) -> instance.group(Climate.ParameterPoint.CODEC.fieldOf("parameters").forGetter(Pair::getFirst), Biome.CODEC.fieldOf("biome").forGetter(Pair::getSecond)).apply(instance, Pair::of)).listOf()).xmap(Climate.ParameterList::new, Climate.ParameterList::values);
@@ -142,7 +142,7 @@ public final class Codecs {
 	}
 
 	public static <T> Codec<T> fromRegistry(Registry<T> registry) {
-		return ResourceLocation.CODEC.xmap(registry::getValue, registry::getKey);
+		return Identifier.CODEC.xmap(registry::getValue, registry::getKey);
 	}
 
 	public static <E> DataResult<Pair<E, E>> arrayToPair(List<E> list) {

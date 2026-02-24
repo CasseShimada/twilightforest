@@ -3,7 +3,7 @@ package twilightforest.world.components.feature.templates;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.*;
@@ -18,8 +18,8 @@ import twilightforest.world.components.feature.config.SwizzleConfig;
 import twilightforest.world.components.processors.SmartGrassProcessor;
 
 public class SimpleWellFeature extends TemplateFeature<SwizzleConfig> {
-	private static final ResourceLocation WELL_TOP = TwilightForestMod.prefix("feature/well/simple_well_top");
-	private static final ResourceLocation WELL_BOTTOM = TwilightForestMod.prefix("feature/well/simple_well_bottom");
+	private static final Identifier WELL_TOP = TwilightForestMod.prefix("feature/well/simple_well_top");
+	private static final Identifier WELL_BOTTOM = TwilightForestMod.prefix("feature/well/simple_well_bottom");
 
 	public SimpleWellFeature(Codec<SwizzleConfig> config) {
 		super(config);
@@ -52,14 +52,19 @@ public class SimpleWellFeature extends TemplateFeature<SwizzleConfig> {
 
 		template.placeInWorld(world, placementPos, placementPos, placementSettings, random, Block.UPDATE_CLIENTS);
 
-		for (StructureTemplate.StructureBlockInfo info : template.filterBlocks(placementPos, placementSettings, Blocks.STRUCTURE_BLOCK))
-			if (info.nbt() != null && StructureMode.valueOf(info.nbt().getString("mode")) == StructureMode.DATA)
-				this.processMarkers(info, world, rotation, mirror, random);
+		for (StructureTemplate.StructureBlockInfo info : template.filterBlocks(placementPos, placementSettings, Blocks.STRUCTURE_BLOCK)) {
+			if (info.nbt() != null) {
+				String mode = info.nbt().getStringOr("mode", "");
+				if (!mode.isEmpty() && StructureMode.valueOf(mode) == StructureMode.DATA) {
+					this.processMarkers(info, world, rotation, mirror, random);
+				}
+			}
+		}
 	}
 
 	@Override
 	protected void processMarkers(StructureTemplate.StructureBlockInfo info, WorldGenLevel world, Rotation rotation, Mirror mirror, RandomSource random) {
-		String s = info.nbt().getString("metadata");
+		String s = info.nbt().getStringOr("metadata", "");
 		BlockPos blockPos = info.pos();
 
 		// removeBlock calls are required due to WorldGenRegion jank with cached TEs, this ensures the correct TE is used

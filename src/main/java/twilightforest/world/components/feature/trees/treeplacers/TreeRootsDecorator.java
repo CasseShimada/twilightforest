@@ -10,6 +10,7 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProv
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import twilightforest.init.TFFeatureModifiers;
+import twilightforest.mixin.accessor.TreeDecoratorContextAccessor;
 import twilightforest.util.features.FeatureLogic;
 import twilightforest.util.features.FeaturePlacers;
 import twilightforest.util.RootPlacer;
@@ -95,12 +96,12 @@ public class TreeRootsDecorator extends TreeDecorator {
 		if (this.hasSurfaceRoots) {
 			for (int i = 0; i < numBranches; i++) {
 				BlockPos dest = FeatureLogic.translate(startPos.below(i + 2), this.length, 0.3 * i + (double) offset, 0.8);
-				FeaturePlacers.traceExposedRoot(context.level(), new RootPlacer(context.decorationSetter, this.rootPenetrability), context.random(), this.surfaceBlock, this.rootBlock, new VoxelBresenhamIterator(startPos.below(), dest));
+				FeaturePlacers.traceExposedRoot(context.level(), new RootPlacer(((TreeDecoratorContextAccessor) (Object) context).twilightforest$getDecorationSetter(), this.rootPenetrability), context.random(), this.surfaceBlock, this.rootBlock, new VoxelBresenhamIterator(startPos.below(), dest));
 			}
 		} else {
 			for (int i = 0; i < numBranches; i++) {
 				BlockPos dest = FeatureLogic.translate(startPos.below(i + 2), this.length, 0.3 * i + (double) offset, 0.8);
-				FeaturePlacers.traceRoot(context.level(), new RootPlacer(context.decorationSetter, this.rootPenetrability), context.random(), this.rootBlock, new VoxelBresenhamIterator(startPos.below(), dest));
+				FeaturePlacers.traceRoot(context.level(), new RootPlacer(((TreeDecoratorContextAccessor) (Object) context).twilightforest$getDecorationSetter(), this.rootPenetrability), context.random(), this.rootBlock, new VoxelBresenhamIterator(startPos.below(), dest));
 			}
 		}
 	}

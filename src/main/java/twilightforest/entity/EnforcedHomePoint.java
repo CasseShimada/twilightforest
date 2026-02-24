@@ -2,16 +2,15 @@ package twilightforest.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtOps;
+import com.mojang.serialization.Codec;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-import twilightforest.TwilightForestMod;
 import twilightforest.entity.ai.goal.AttemptToGoHomeGoal;
 import twilightforest.init.TFDimension;
 
@@ -21,25 +20,19 @@ public interface EnforcedHomePoint {
 		selector.addGoal(5, new AttemptToGoHomeGoal<>(entity, 1.25D));
 	}
 
-	default void saveHomePointToNbt(CompoundTag tag) {
+	default void saveHomePointToNbt(ValueOutput output) {
 		if (this.getRestrictionPoint() != null) {
-			GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, this.getRestrictionPoint()).resultOrPartial(TwilightForestMod.LOGGER::error).ifPresent(tag1 -> tag.put("HomePos", tag1));
+			output.store("HomePos", GlobalPos.CODEC, this.getRestrictionPoint());
 		}
 	}
 
-	default void loadHomePointFromNbt(CompoundTag tag) {
-		//properly load old home points, just assume theyre set in TF
-		if (tag.contains("Home", 9)) {
-			ListTag nbttaglist = tag.getList("Home", 6);
-			double hx = nbttaglist.getDouble(0);
-			double hy = nbttaglist.getDouble(1);
-			double hz = nbttaglist.getDouble(2);
-			this.setRestrictionPoint(GlobalPos.of(TFDimension.DIMENSION_KEY, BlockPos.containing(hx, hy, hz)));
-		} else {
-			if (tag.contains("HomePos")) {
-				this.setRestrictionPoint(GlobalPos.CODEC.parse(NbtOps.INSTANCE, tag.get("HomePos")).resultOrPartial(TwilightForestMod.LOGGER::error).orElse(null));
-			}
-		}
+	default void loadHomePointFromNbt(ValueInput input) {
+		input.read("HomePos", GlobalPos.CODEC).ifPresentOrElse(this::setRestrictionPoint, () -> {
+			// properly load old home points, just assume theyre set in TF
+			input.read("Home", Codec.DOUBLE.listOf())
+				.filter(list -> list.size() >= 3)
+				.ifPresent(list -> this.setRestrictionPoint(GlobalPos.of(TFDimension.DIMENSION_KEY, BlockPos.containing(list.get(0), list.get(1), list.get(2)))));
+		});
 	}
 
 	default boolean isMobWithinHomeArea(Entity entity) {

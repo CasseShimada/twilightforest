@@ -14,7 +14,7 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.*;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
-import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
+import twilightforest.world.components.structures.PieceBeardifierModifier;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.util.BoundingBoxUtils;
@@ -30,7 +30,7 @@ public class LichYardLights extends StructurePiece implements PieceBeardifierMod
 
 	public LichYardLights(StructurePieceSerializationContext ctx, CompoundTag tag) {
 		super(TFStructurePieceTypes.LICH_YARD_LIGHTS.value(), tag);
-		this.placeAxis = tag.contains("axis") ? Direction.Axis.values()[tag.getInt("axis")] : Direction.Axis.Y;
+		this.placeAxis = tag.contains("axis") ? Direction.Axis.values()[tag.getIntOr("axis", Direction.Axis.Y.ordinal())] : Direction.Axis.Y;
 	}
 
 	@Override

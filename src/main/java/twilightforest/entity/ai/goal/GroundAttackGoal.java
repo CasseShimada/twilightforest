@@ -75,7 +75,7 @@ public class GroundAttackGoal extends Goal {
 	public void tick() {
 		// look where we're going
 		this.attacker.getLookControl().setLookAt(this.attackTarget, 30.0F, 30.0F);
-		this.attacker.getMoveControl().operation = MoveControl.Operation.WAIT;
+		this.attacker.getMoveControl().setWait();
 
 		if (this.attackTick-- <= 0) {
 			this.attacker.setGroundAttackCharge(false);

@@ -1,13 +1,12 @@
 package twilightforest.entity.boss;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
@@ -17,15 +16,18 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.PacketDistributor;
+import twilightforest.network.PacketDistributor;
 import twilightforest.config.TFConfig;
 import twilightforest.init.TFSounds;
 import twilightforest.loot.TFLootTables;
 import twilightforest.network.ParticlePacket;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface IBossLootBuffer {
@@ -42,12 +44,12 @@ public interface IBossLootBuffer {
 		}
 	}
 
-	default void addDeathItemsSaveData(CompoundTag tag, RegistryAccess registryAccess) {
-		ContainerHelper.saveAllItems(tag, this.getItemStacks(), registryAccess);
+	default void addDeathItemsSaveData(ValueOutput output) {
+		ContainerHelper.saveAllItems(output, this.getItemStacks());
 	}
 
-	default void readDeathItemsSaveData(CompoundTag tag, RegistryAccess registryAccess) {
-		ContainerHelper.loadAllItems(tag, this.getItemStacks(), registryAccess);
+	default void readDeathItemsSaveData(ValueInput input) {
+		ContainerHelper.loadAllItems(input, this.getItemStacks());
 	}
 
 	static <T extends LivingEntity & IBossLootBuffer> void saveDropsIntoBoss(T boss, LootParams params, ServerLevel serverLevel) {
@@ -117,7 +119,7 @@ public interface IBossLootBuffer {
 		ObjectArrayList<ItemStack> items = table.getRandomItems(context);
 		RandomSource randomsource = boss.getRandom();
 		List<Integer> list = this.getAvailableSlots(randomsource);
-		table.shuffleAndSplitItems(items, list.size(), randomsource);
+		shuffleAndSplitItems(items, list.size(), randomsource);
 
 		for (ItemStack itemstack : items) {
 			if (!list.isEmpty()) {
@@ -131,6 +133,41 @@ public interface IBossLootBuffer {
 		for (int i = 0; i < CONTAINER_SIZE; ++i) arrayList.add(i);
 		Util.shuffle(arrayList, random);
 		return arrayList;
+	}
+
+	static void shuffleAndSplitItems(ObjectArrayList<ItemStack> stacks, int slots, RandomSource random) {
+		List<ItemStack> splitStacks = new ArrayList<>();
+
+		for (var iterator = stacks.iterator(); iterator.hasNext(); ) {
+			ItemStack stack = iterator.next();
+			if (stack.isEmpty()) {
+				iterator.remove();
+			} else if (stack.getCount() > 1) {
+				splitStacks.add(stack);
+				iterator.remove();
+			}
+		}
+
+		while (slots - stacks.size() - splitStacks.size() > 0 && !splitStacks.isEmpty()) {
+			ItemStack stack = splitStacks.remove(Mth.nextInt(random, 0, splitStacks.size() - 1));
+			int splitCount = Mth.nextInt(random, 1, stack.getCount() / 2);
+			ItemStack split = stack.split(splitCount);
+
+			if (stack.getCount() > 1 && random.nextBoolean()) {
+				splitStacks.add(stack);
+			} else {
+				stacks.add(stack);
+			}
+
+			if (split.getCount() > 1 && random.nextBoolean()) {
+				splitStacks.add(split);
+			} else {
+				stacks.add(split);
+			}
+		}
+
+		stacks.addAll(splitStacks);
+		Util.shuffle(stacks, random);
 	}
 
 	NonNullList<ItemStack> getItemStacks();

@@ -6,7 +6,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.TFDataAttachments;
 
@@ -31,21 +30,18 @@ public record UpdateShieldPacket(int entityID, int temporaryShields, int permane
 	}
 
 	@SuppressWarnings("Convert2Lambda")
-	public static void handle(UpdateShieldPacket message, IPayloadContext ctx) {
-		//ensure this is only done on clients as this uses client only code
-		//the level is not yet set in the payload context when a player logs in, so we need to fall back to the clientlevel instead
-		if (ctx.flow().isClientbound()) {
-			ctx.enqueueWork(new Runnable() {
-				@Override
-				public void run() {
-					Entity entity = ctx.player().level().getEntity(message.entityID);
-					if (entity instanceof LivingEntity living) {
-						var attachment = living.getData(TFDataAttachments.FORTIFICATION_SHIELDS);
-						attachment.setShields(living, message.temporaryShields, true);
-						attachment.setShields(living, message.permanentShields, false);
-					}
+	public static void handle(UpdateShieldPacket message, PayloadContext ctx) {
+		// Client-only logic; this handler is only registered for S2C.
+		ctx.enqueueWork(new Runnable() {
+			@Override
+			public void run() {
+				Entity entity = ctx.player().level().getEntity(message.entityID());
+				if (entity instanceof LivingEntity living) {
+					var attachment = TFDataAttachments.get(living, TFDataAttachments.FORTIFICATION_SHIELDS);
+					attachment.setShields(living, message.temporaryShields(), true);
+					attachment.setShields(living, message.permanentShields(), false);
 				}
-			});
-		}
+			}
+		});
 	}
 }

@@ -5,11 +5,11 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.levelgen.Beardifier;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.DensityFunctions;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
+import twilightforest.mixin.accessor.BeardifierInvoker;
 
 import java.util.List;
 
@@ -77,9 +77,9 @@ public class BoxDensityFunction implements DensityFunction.SimpleFunction {
 		};
 
 		double densityValue = switch (this.terrainAdjustment) {
-			case BURY -> Beardifier.getBuryContribution(xDist, yDist * 0.5, zDist);
-			case BEARD_THIN, BEARD_BOX -> Beardifier.getBeardContribution(xDist, yDist, zDist, distAboveBottom) * 0.8;
-			case ENCAPSULATE -> Beardifier.getBuryContribution(xDist * 0.5, yDist * 0.5, zDist * 0.5) * 0.8;
+			case BURY -> BeardifierInvoker.twilightforest$getBuryContribution(xDist, yDist * 0.5, zDist);
+			case BEARD_THIN, BEARD_BOX -> BeardifierInvoker.twilightforest$getBeardContribution(xDist, yDist, zDist, distAboveBottom) * 0.8;
+			case ENCAPSULATE -> BeardifierInvoker.twilightforest$getBuryContribution(xDist * 0.5, yDist * 0.5, zDist * 0.5) * 0.8;
 			default -> 0;
 		};
 

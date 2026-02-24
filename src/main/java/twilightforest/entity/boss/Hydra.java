@@ -1,11 +1,8 @@
 package twilightforest.entity.boss;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -26,13 +23,15 @@ import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.neoforge.entity.PartEntity;
-import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.Nullable;
+import twilightforest.entity.TFMultipartEntity;
 import twilightforest.entity.TFPart;
 import twilightforest.init.*;
 import twilightforest.util.entities.EntityUtil;
@@ -43,7 +42,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class Hydra extends BaseTFBoss {
+public class Hydra extends BaseTFBoss implements TFMultipartEntity {
 
 	private static final int TICKS_BEFORE_HEALING = 1000;
 	private static final int HEAD_RESPAWN_TICKS = 140;
@@ -56,7 +55,7 @@ public class Hydra extends BaseTFBoss {
 	private static final int SECONDARY_FLAME_CHANCE = 10;
 	private static final int SECONDARY_MORTAR_CHANCE = 16;
 
-	private static final EntityDataAccessor<List<String>> HEAD_NAMES = SynchedEntityData.defineId(Hydra.class, TFDataSerializers.STRING_LIST.get());
+	private static final EntityDataAccessor<List<String>> HEAD_NAMES = SynchedEntityData.defineId(Hydra.class, TFDataSerializers.STRING_LIST);
 	public final HydraHeadContainer[] hc = new HydraHeadContainer[MAX_HEADS];
 
 	private final HydraPart[] partArray;
@@ -112,7 +111,7 @@ public class Hydra extends BaseTFBoss {
 	}
 
 	@Override
-	protected float tickHeadTurn(float yRot, float yTurnDelta) {
+	protected void tickHeadTurn(float yRot) {
 		float f = Mth.wrapDegrees(yRot - this.yBodyRot);
 		this.yBodyRot += f * 0.3F;
 		float f1 = Mth.wrapDegrees(this.getYRot() - this.yBodyRot);
@@ -133,10 +132,10 @@ public class Hydra extends BaseTFBoss {
 		}
 
 		if (flag) {
-			yTurnDelta *= -1.0F;
+			yRot *= -1.0F;
 		}
 
-		return yTurnDelta;
+		this.setYHeadRot(this.yBodyRot + yRot);
 	}
 
 	@Override
@@ -209,34 +208,34 @@ public class Hydra extends BaseTFBoss {
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
+	public void addAdditionalSaveData(ValueOutput output) {
 		byte headData = 0;
 		for (int i = 0; i < MAX_HEADS; i++) {
 			if (this.hc[i].isActive()) {
 				headData |= (byte) (1 << i);
 			}
 		}
-		compound.putByte("NumHeads", headData);
-		ListTag headNames = new ListTag();
+		output.putByte("NumHeads", headData);
+		ValueOutput.TypedOutputList<String> headNames = output.list("HeadNames", Codec.STRING);
 		for (int i = 0; i < MAX_HEADS; i++) {
-			headNames.add(StringTag.valueOf(this.getEntityData().get(HEAD_NAMES).get(i)));
+			headNames.add(this.getEntityData().get(HEAD_NAMES).get(i));
 		}
-		compound.put("HeadNames", headNames);
-		super.addAdditionalSaveData(compound);
+		super.addAdditionalSaveData(output);
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		this.activateHeadsOnLoad(compound.getByte("NumHeads"));
-		if (compound.contains("HeadNames", Tag.TAG_LIST)) {
-			List<String> names = new ArrayList<>();
-			ListTag list = compound.getList("HeadNames", Tag.TAG_STRING);
-			for (int i = 0; i < list.size(); i++) {
-				String name = list.getString(i);
-				names.add(name);
-				this.hc[i].headEntity.setCustomName(Component.literal(name));
+	public void readAdditionalSaveData(ValueInput input) {
+		super.readAdditionalSaveData(input);
+		this.activateHeadsOnLoad(input.getByteOr("NumHeads", (byte) 0));
+		List<String> names = new ArrayList<>();
+		for (String name : input.listOrEmpty("HeadNames", Codec.STRING)) {
+			names.add(name);
+			int index = names.size() - 1;
+			if (index < this.hc.length) {
+				this.hc[index].headEntity.setCustomName(Component.literal(name));
 			}
+		}
+		if (!names.isEmpty()) {
 			this.getEntityData().set(HEAD_NAMES, names);
 		}
 	}
@@ -554,7 +553,7 @@ public class Hydra extends BaseTFBoss {
 	}
 
 	private void destroyBlocksInAABB(ServerLevel level, AABB box) {
-		if (this.deathTime <= 0 && EventHooks.canEntityGrief(level, this)) {
+		if (this.deathTime <= 0 && level.getGameRules().get(GameRules.MOB_GRIEFING)) {
 			for (BlockPos pos : WorldUtil.getAllInBB(box)) {
 				if (EntityUtil.canDestroyBlock(this.level(), pos, this)) {
 					this.level().destroyBlock(pos, false);
@@ -577,7 +576,7 @@ public class Hydra extends BaseTFBoss {
 		if (source.getEntity() == this || source.getDirectEntity() == this)
 			return false;
 		if (this.getParts() != null)
-			for (PartEntity<?> partEntity : this.getParts())
+			for (TFPart<?> partEntity : this.getParts())
 				if (partEntity == source.getEntity() || partEntity == source.getDirectEntity())
 					return false;
 
@@ -636,17 +635,12 @@ public class Hydra extends BaseTFBoss {
 		return !source.is(TFDamageTypes.HYDRA_MORTAR) && super.isInvulnerableTo(level, source);
 	}
 
-	@Override
-	public boolean isMultipartEntity() {
-		return true;
-	}
-
 	/**
 	 * We need to do this for the bounding boxes on the parts to become active
 	 */
 	@Nullable
 	@Override
-	public PartEntity<?>[] getParts() {
+	public TFPart<?>[] getParts() {
 		return this.partArray;
 	}
 

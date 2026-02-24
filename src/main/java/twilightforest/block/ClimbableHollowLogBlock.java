@@ -4,8 +4,8 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -31,14 +31,17 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.ItemAbilities;
+import twilightforest.util.ToolActionUtil;
 import twilightforest.enums.HollowLogVariants;
+
+import java.util.Objects;
+import java.util.function.Supplier;
 
 public class ClimbableHollowLogBlock extends HorizontalDirectionalBlock implements WaterloggedBlock {
 
 	public static final EnumProperty<HollowLogVariants.Climbable> VARIANT = EnumProperty.create("variant", HollowLogVariants.Climbable.class);
 	public static final MapCodec<ClimbableHollowLogBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-			BuiltInRegistries.BLOCK.holderByNameCodec().fieldOf("vertical_log").forGetter(o -> o.vertical),
+			Identifier.CODEC.fieldOf("vertical_log").forGetter(o -> o.verticalId),
 			propertiesCodec())
 		.apply(instance, ClimbableHollowLogBlock::new)
 	);
@@ -59,11 +62,17 @@ public class ClimbableHollowLogBlock extends HorizontalDirectionalBlock implemen
 	private static final VoxelShape COLLISION_SHAPE_EAST = Shapes.or(COLLISION_SHAPE, LADDER_EAST);
 	private static final VoxelShape COLLISION_SHAPE_WEST = Shapes.or(COLLISION_SHAPE, LADDER_WEST);
 
-	private final Holder<Block> vertical;
+	private final Identifier verticalId;
+	private final Supplier<? extends Block> vertical;
 
-	public ClimbableHollowLogBlock(Holder<Block> vertical, Properties properties) {
+	public ClimbableHollowLogBlock(Identifier verticalId, Properties properties) {
+		this(verticalId, () -> BuiltInRegistries.BLOCK.getValue(verticalId), properties);
+	}
+
+	public ClimbableHollowLogBlock(Identifier verticalId, Supplier<? extends Block> vertical, Properties properties) {
 		super(properties);
-		this.vertical = vertical;
+		this.verticalId = Objects.requireNonNull(verticalId, "verticalId");
+		this.vertical = Objects.requireNonNull(vertical, "vertical");
 
 		this.registerDefaultState(this.getStateDefinition().any().setValue(VARIANT, HollowLogVariants.Climbable.VINE).setValue(FACING, Direction.NORTH));
 	}
@@ -107,7 +116,7 @@ public class ClimbableHollowLogBlock extends HorizontalDirectionalBlock implemen
 	@Override
 	public BlockState setWaterlog(BlockState prior, boolean doWater) {
 		return switch (prior.getValue(VARIANT)) {
-			case VINE -> doWater ? this.vertical.value().defaultBlockState().setValue(VerticalHollowLogBlock.WATERLOGGED, true) : prior;
+			case VINE -> doWater ? this.vertical.get().defaultBlockState().setValue(VerticalHollowLogBlock.WATERLOGGED, true) : prior;
 			case LADDER -> prior.setValue(VARIANT, HollowLogVariants.Climbable.LADDER_WATERLOGGED);
 			case LADDER_WATERLOGGED -> prior.setValue(VARIANT, HollowLogVariants.Climbable.LADDER);
 		};
@@ -131,9 +140,9 @@ public class ClimbableHollowLogBlock extends HorizontalDirectionalBlock implemen
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 		if (!isInside(hit, pos)) return super.useItemOn(stack, state, level, pos, player, hand, hit);
 
-		if (stack.canPerformAction(ItemAbilities.SHEARS_HARVEST)) {
+		if (ToolActionUtil.isShears(stack)) {
 			HollowLogVariants.Climbable variant = state.getValue(VARIANT);
-			level.setBlock(pos, this.vertical.value().defaultBlockState().setValue(VerticalHollowLogBlock.WATERLOGGED, variant == HollowLogVariants.Climbable.LADDER_WATERLOGGED), Block.UPDATE_ALL);
+			level.setBlock(pos, this.vertical.get().defaultBlockState().setValue(VerticalHollowLogBlock.WATERLOGGED, variant == HollowLogVariants.Climbable.LADDER_WATERLOGGED), Block.UPDATE_ALL);
 			level.playSound(null, pos, SoundEvents.SHEEP_SHEAR, SoundSource.BLOCKS, 1.0F, 1.0F);
 			if (!player.isCreative()) {
 				stack.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);

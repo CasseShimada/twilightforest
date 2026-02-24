@@ -16,7 +16,7 @@ import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
-import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
+import twilightforest.world.components.structures.PieceBeardifierModifier;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFStructurePieceTypes;
@@ -40,8 +40,8 @@ public final class LichTowerFoyer extends TwilightJigsawPiece implements PieceBe
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings);
 
-		this.putChest = compoundTag.getBoolean("put_chest");
-		this.chestSide = compoundTag.getBoolean("chest_side");
+		this.putChest = compoundTag.getBooleanOr("put_chest", false);
+		this.chestSide = compoundTag.getBooleanOr("chest_side", false);
 	}
 
 	public LichTowerFoyer(StructureTemplateManager structureManager, JigsawPlaceContext placeContext, boolean putChest, boolean chestSide) {

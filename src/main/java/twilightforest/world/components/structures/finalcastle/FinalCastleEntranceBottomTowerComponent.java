@@ -11,6 +11,7 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFStructurePieceTypes;
+import twilightforest.mixin.accessor.StructurePiecesBuilderAccessor;
 import twilightforest.world.components.structures.TFStructureComponentOld;
 
 
@@ -52,7 +53,7 @@ public class FinalCastleEntranceBottomTowerComponent extends FinalCastleMazeTowe
 
 		list.addPiece(stairs);
 		if (list instanceof StructurePiecesBuilder start) {
-			stairs.addChildren(start.pieces.get(0), list, rand);
+			stairs.addChildren(((StructurePiecesBuilderAccessor) start).twilightforest$getPieces().get(0), list, rand);
 		}
 		return true;
 	}

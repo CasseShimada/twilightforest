@@ -31,6 +31,8 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilde
 import twilightforest.TwilightForestMod;
 import twilightforest.tags.TFBlockTags;
 import twilightforest.init.*;
+import twilightforest.mixin.accessor.StructurePiecesBuilderAccessor;
+import twilightforest.mixin.accessor.BaseSpawnerAccessor;
 import twilightforest.loot.TFLootTables;
 import twilightforest.util.RotationUtil;
 import twilightforest.world.components.structures.TFMaze;
@@ -157,7 +159,7 @@ public class DarkTowerMainComponent extends DarkTowerWingComponent {
 			ArrayList<DarkTowerWingComponent> possibleKeyTowers = new ArrayList<DarkTowerWingComponent>();
 
 			if (list instanceof StructurePiecesBuilder start) {
-				for (StructurePiece piece : start.pieces) {
+				for (StructurePiece piece : ((StructurePiecesBuilderAccessor) start).twilightforest$getPieces()) {
 					if (piece instanceof DarkTowerWingComponent wing && wing.size == 9 && wing.getGenDepth() == this.getGenDepth()) {
 						possibleKeyTowers.add(wing);
 					}
@@ -865,7 +867,7 @@ public class DarkTowerMainComponent extends DarkTowerWingComponent {
 		int dx = getXWithOffsetRotated(x, z, rotation);
 		int dy = getWorldY(y);
 		int dz = getZWithOffsetRotated(x, z, rotation);
-		Direction facing = this.rotation.getRotated(rotation).rotate(direction).getOpposite();
+		Direction facing = ((twilightforest.mixin.accessor.StructurePieceFieldsAccessor) this).twilightforest$getRotation().getRotated(rotation).rotate(direction).getOpposite();
 		final BlockPos pos = new BlockPos(dx, dy, dz).relative(facing);
 		if (sbb.isInside(pos)) {
 			ItemFrame frame = new ItemFrame(world.getLevel(), pos, facing);
@@ -1224,11 +1226,11 @@ public class DarkTowerMainComponent extends DarkTowerWingComponent {
 	 */
 	private void makeMiniGhastSpawner(WorldGenLevel world, int y, int sx, int sz, BoundingBox sbb) {
 		setSpawner(world, sx, y + 2, sz, sbb, TFEntities.CARMINITE_GHASTLING.get(), spawner -> {
-			var base = spawner.getSpawner();
+			BaseSpawnerAccessor base = (BaseSpawnerAccessor) spawner.getSpawner();
 
-			base.spawnRange = 16;
-			base.maxNearbyEntities = 2;
-			base.spawnCount = 1;
+			base.twilightforest$setSpawnRange(16);
+			base.twilightforest$setMaxNearbyEntities(2);
+			base.twilightforest$setSpawnCount(1);
 		});
 	}
 

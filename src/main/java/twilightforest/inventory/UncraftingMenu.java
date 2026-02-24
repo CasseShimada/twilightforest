@@ -2,8 +2,11 @@ package twilightforest.inventory;
 
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -12,18 +15,16 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.Level;
-import net.neoforged.fml.loading.FMLLoader;
-import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.network.PacketDistributor;
+import twilightforest.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
@@ -110,7 +111,7 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 
 		this.slotsChanged(this.craftSlots);
 
-		if (!FMLLoader.isProduction()) {
+		if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
 			// Debug slot listing
 			NonNullList<Slot> slots = this.slots;
 
@@ -244,7 +245,7 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 					result.get(DataComponents.ENCHANTMENTS).entrySet().forEach(enchantment -> enchants.set(enchantment.getKey(), enchantment.getIntValue()));
 				}
 				//remove any incompatible enchants
-				enchants.removeIf(holder -> !result.supportsEnchantment(holder));
+				enchants.removeIf(holder -> !holder.value().canEnchant(result));
 
 				//remove enchantments and replace with filtered list
 				result.remove(DataComponents.ENCHANTMENTS);
@@ -271,7 +272,7 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 	}
 
 	public static boolean isIngredientProblematic(ItemStack ingredient) {
-		return (!ingredient.isEmpty() && !ingredient.getItem().getCraftingRemainder(ingredient).isEmpty()) || ingredient.is(Items.BARRIER);
+		return (!ingredient.isEmpty() && !ingredient.getItem().getCraftingRemainder().isEmpty()) || ingredient.is(Items.BARRIER);
 	}
 
 	private static ItemStack normalizeIngredient(ItemStack ingredient) {
@@ -288,8 +289,8 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 		if (!inputStack.isEmpty() && world instanceof ServerLevel level) {
 			for (RecipeHolder<?> holder : level.recipeAccess().getRecipes()) {
 				if (holder.value() instanceof CraftingRecipe recipe) {
-					if (isRecipeSupported(inputStack, recipe) && TFConfig.reverseRecipeBlacklist == TFConfig.disableUncraftingRecipes.contains(holder.id().toString())) {
-						if (TFConfig.flipUncraftingModIdList == TFConfig.blacklistedUncraftingModIds.contains(holder.id().location().getNamespace())) {
+					if (isRecipeSupported(inputStack, recipe, level.registryAccess()) && TFConfig.reverseRecipeBlacklist == TFConfig.disableUncraftingRecipes.contains(holder.id().toString())) {
+						if (TFConfig.flipUncraftingModIdList == TFConfig.blacklistedUncraftingModIds.contains(holder.id().identifier().getNamespace())) {
 							recipes.add(recipe);
 						}
 					}
@@ -301,15 +302,15 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 		return recipes.toArray(new CraftingRecipe[0]);
 	}
 
-	protected static boolean isRecipeSupported(ItemStack inputStack, CraftingRecipe recipe) {
+	protected static boolean isRecipeSupported(ItemStack inputStack, CraftingRecipe recipe, RegistryAccess registryAccess) {
 		if (recipe instanceof ShapedRecipe shapedRecipe) {
 			return isComplete(shapedRecipe.placementInfo().ingredients()) &&
-				shapedRecipe.pattern.width() <= 3 && shapedRecipe.pattern.height() <= 3 &&
-				matches(inputStack, shapedRecipe.result);
+				shapedRecipe.getWidth() <= 3 && shapedRecipe.getHeight() <= 3 &&
+				matches(inputStack, getRecipeResult(shapedRecipe, registryAccess));
 		} else if (TFConfig.allowShapelessUncrafting && recipe instanceof ShapelessRecipe shapelessRecipe) {
 			return isComplete(shapelessRecipe.placementInfo().ingredients()) &&
 				shapelessRecipe.placementInfo().ingredients().size() <= 9 &&
-				matches(inputStack, shapelessRecipe.result);
+				matches(inputStack, getRecipeResult(shapelessRecipe, registryAccess));
 		}
 
 		return TFConfig.allowShapelessUncrafting ? recipe instanceof CraftingRecipe : recipe instanceof ShapedRecipe;
@@ -323,8 +324,13 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 		return input.is(output.getItem()) && input.getCount() >= output.getCount();
 	}
 
+	private static ItemStack getRecipeResult(CraftingRecipe recipe, RegistryAccess registryAccess) {
+		return recipe.assemble(CraftingInput.EMPTY, registryAccess);
+	}
+
 	private static List<RecipeHolder<CraftingRecipe>> getRecipesFor(CraftingInput input, ServerLevel level) {
-		return level.recipeAccess().recipeMap().getRecipesFor(RecipeType.CRAFTING, input, level).toList();
+		RecipeManager recipeManager = level.recipeAccess();
+		return RecipeMap.create(recipeManager.getRecipes()).getRecipesFor(RecipeType.CRAFTING, input, level).toList();
 	}
 
 	private void chooseRecipe(CraftingInput input) {
@@ -338,7 +344,7 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 
 			RecipeHolder<CraftingRecipe> recipe = recipes.get(Math.floorMod(this.recipeInCycle, recipes.size()));
 
-			if (recipe != null && (!serverLevel.getGameRules().getBoolean(GameRules.RULE_LIMITED_CRAFTING) || ((ServerPlayer) this.player).getRecipeBook().contains(recipe.id()))) {
+			if (recipe != null && (!serverLevel.getGameRules().get(GameRules.LIMITED_CRAFTING) || ((ServerPlayer) this.player).getRecipeBook().contains(recipe.id()))) {
 				this.tinkerResult.setRecipeUsed(recipe);
 				this.tinkerResult.setItem(0, recipe.value().assemble(input, this.level.registryAccess()));
 			} else {
@@ -366,18 +372,20 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 		if (inputStack.is(ItemTags.SWORDS) && resultStack.is(ItemTags.SWORDS)) {
 			return true;
 		}
-		if (inputStack.is(Tags.Items.TOOLS_BOW) && resultStack.is(Tags.Items.TOOLS_BOW)) {
+		if (inputStack.is(ConventionalItemTags.BOW_TOOLS) && resultStack.is(ConventionalItemTags.BOW_TOOLS)) {
 			return true;
 		}
-		if (inputStack.is(Tags.Items.TOOLS_CROSSBOW) && resultStack.is(Tags.Items.TOOLS_CROSSBOW)) {
+		if (inputStack.is(ConventionalItemTags.CROSSBOW_TOOLS) && resultStack.is(ConventionalItemTags.CROSSBOW_TOOLS)) {
 			return true;
 		}
-		if (inputStack.is(Tags.Items.TOOLS_FISHING_ROD) && resultStack.is(Tags.Items.TOOLS_FISHING_ROD)) {
+		if (inputStack.is(ConventionalItemTags.FISHING_ROD_TOOLS) && resultStack.is(ConventionalItemTags.FISHING_ROD_TOOLS)) {
 			return true;
 		}
 
-		if (inputStack.getItem() instanceof ArmorItem input && resultStack.getItem() instanceof ArmorItem result) {
-			return input.getEquipmentSlot(inputStack) == result.getEquipmentSlot(resultStack);
+		Equippable inputEquip = inputStack.get(DataComponents.EQUIPPABLE);
+		Equippable resultEquip = resultStack.get(DataComponents.EQUIPPABLE);
+		if (inputEquip != null && resultEquip != null) {
+			return inputEquip.slot() == resultEquip.slot();
 		}
 
 		return false;
@@ -435,7 +443,7 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 		cost += enchantCost;
 
 		// broken pieces cost
-		int damagedCost = (1 + this.countDamagedParts(input)) * output.getTagEnchantments().size();
+		int damagedCost = (1 + this.countDamagedParts(input)) * output.getEnchantments().size();
 		cost += damagedCost;
 
 		// minimum cost of 1 if we're even calling this part
@@ -447,7 +455,7 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 	private static int countTotalEnchantmentCost(ItemStack stack) {
 		int count = 0;
 
-		for (Object2IntMap.Entry<Holder<Enchantment>> entry : stack.getTagEnchantments().entrySet()) {
+		for (Object2IntMap.Entry<Holder<Enchantment>> entry : stack.getEnchantments().entrySet()) {
 			Enchantment ench = entry.getKey().value();
 			int level = entry.getIntValue();
 
@@ -569,7 +577,7 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 				}
 				slot.onQuickCraft(itemstack1, itemstack);
 			} else if (slotNum == 1) {
-				this.positionData.execute((p_39378_, p_39379_) -> itemstack1.getItem().onCraftedBy(itemstack1, p_39378_, player));
+				itemstack1.getItem().onCraftedBy(itemstack1, player);
 				if (!this.moveItemStackTo(itemstack1, 20, 56, true)) {
 					return ItemStack.EMPTY;
 				}
@@ -618,7 +626,10 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 		ItemStack[] stacks = new ItemStack[ingredients.size()];
 
 		for (int i = 0; i < ingredients.size(); i++) {
-			ItemStack[] matchingStacks = ingredients.get(i).getValues().stream().filter(s -> !s.is(TFItemTags.BANNED_UNCRAFTING_INGREDIENTS)).map(p -> new ItemStack(p.value())).toArray(ItemStack[]::new);
+			ItemStack[] matchingStacks = ingredients.get(i).items()
+				.filter(holder -> !holder.is(TFItemTags.BANNED_UNCRAFTING_INGREDIENTS))
+				.map(holder -> new ItemStack(holder.value()))
+				.toArray(ItemStack[]::new);
 			stacks[i] = matchingStacks.length > 0 ? matchingStacks[Math.floorMod(this.ingredientsInCycle, matchingStacks.length)] : ItemStack.EMPTY;
 		}
 

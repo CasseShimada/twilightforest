@@ -1,7 +1,6 @@
 package twilightforest.block;
 
-import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
+import net.minecraft.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -24,6 +23,7 @@ import twilightforest.config.TFConfig;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFDataComponents;
 import twilightforest.init.TFSounds;
+import twilightforest.util.ClientSoundHelper;
 
 public class CicadaJarBlock extends JarBlock {
 	public CicadaJarBlock(Properties properties) {
@@ -34,7 +34,7 @@ public class CicadaJarBlock extends JarBlock {
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
 		if (player.isShiftKeyDown() && level.getBlockEntity(pos) instanceof JarBlockEntity jarBE) {
 			if (level instanceof ServerLevel sl) {
-				ItemEntity cicada = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(TFBlocks.CICADA));
+				ItemEntity cicada = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(TFBlocks.CICADA.get()));
 				level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 				cicada.spawnAtLocation(sl, cicada.getItem());
 				cicada.spawnAtLocation(sl, Util.make(new ItemStack(TFBlocks.MASON_JAR.get()), jar -> jar.set(TFDataComponents.JAR_LID.get(), new JarLid(jarBE.lid))));
@@ -55,7 +55,7 @@ public class CicadaJarBlock extends JarBlock {
 	public void destroy(LevelAccessor accessor, BlockPos pos, BlockState state) {
 		super.destroy(accessor, pos, state);
 		if (accessor.isClientSide())
-			Minecraft.getInstance().getSoundManager().stop(TFSounds.CICADA.get().location(), SoundSource.BLOCKS);
+			ClientSoundHelper.stopSound(TFSounds.CICADA.get().location(), SoundSource.BLOCKS);
 	}
 
 	@Override

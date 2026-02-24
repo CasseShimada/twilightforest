@@ -3,7 +3,8 @@ package twilightforest.entity.projectile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.Mth;
@@ -176,14 +177,14 @@ public class IceBomb extends TFThrowable {
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundTag pCompound) {
-		pCompound.putInt("zone_timer", this.zoneTimer);
-		pCompound.putBoolean("has_hit", this.hasHit);
+	protected void addAdditionalSaveData(ValueOutput output) {
+		output.putInt("zone_timer", this.zoneTimer);
+		output.putBoolean("has_hit", this.hasHit);
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundTag pCompound) {
-		this.zoneTimer = pCompound.getInt("zone_timer");
-		this.hasHit = pCompound.getBoolean("has_hit");
+	protected void readAdditionalSaveData(ValueInput input) {
+		this.zoneTimer = input.getIntOr("zone_timer", 0);
+		this.hasHit = input.getBooleanOr("has_hit", false);
 	}
 }

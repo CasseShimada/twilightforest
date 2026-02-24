@@ -1,6 +1,6 @@
 package twilightforest.world.components.structures.fallentrunk;
 
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -10,7 +10,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
@@ -65,13 +65,13 @@ public class FallenTrunkPiece extends StructurePiece {
 
 	public FallenTrunkPiece(StructurePieceSerializationContext context, CompoundTag tag) {
 		super(TFStructurePieceTypes.TFFallenTrunk.value(), tag);
-		this.length = tag.getInt("length");
-		this.radius = tag.getInt("radius");
+		this.length = tag.getIntOr("length", 0);
+		this.radius = tag.getIntOr("radius", 0);
 
 		RegistryOps<Tag> ops = RegistryOps.create(NbtOps.INSTANCE, context.registryAccess());
-		log = BlockStateProvider.CODEC.parse(ops, tag.getCompound("log")).result().orElse(DEFAULT_LOG);
-		chestLootTable = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(tag.getString("chest_loot_table")));
-		this.holeSeed = tag.getInt("hole_seed");
+		log = BlockStateProvider.CODEC.parse(ops, tag.getCompoundOrEmpty("log")).result().orElse(DEFAULT_LOG);
+		chestLootTable = ResourceKey.create(Registries.LOOT_TABLE, Identifier.parse(tag.getStringOr("chest_loot_table", "")));
+		this.holeSeed = tag.getLongOr("hole_seed", 0L);
 		this.hole = new Hole(this, RandomSource.create(holeSeed));
 	}
 
@@ -80,7 +80,7 @@ public class FallenTrunkPiece extends StructurePiece {
 		tag.putInt("length", this.length);
 		tag.putInt("radius", this.radius);
 		tag.put("log", BlockStateProvider.CODEC.encodeStart(NbtOps.INSTANCE, this.log).resultOrPartial(TwilightForestMod.LOGGER::error).orElseGet(CompoundTag::new));
-		tag.putString("chest_loot_table", this.chestLootTable.location().toString());
+		tag.putString("chest_loot_table", this.chestLootTable.identifier().toString());
 		tag.putLong("hole_seed", this.holeSeed);
 	}
 
@@ -180,7 +180,7 @@ public class FallenTrunkPiece extends StructurePiece {
 			spawner.setEntityId(Util.getRandom(SPAWNER_MONSTERS, spawnerRandom), spawnerRandom);
 
 		Direction orientation = this.getOrientation().getClockWise();
-		if (this.mirror == Mirror.LEFT_RIGHT)
+		if (((twilightforest.mixin.accessor.StructurePieceFieldsAccessor) this).twilightforest$getMirror() == Mirror.LEFT_RIGHT)
 			orientation = orientation.getOpposite();
 
 
@@ -219,11 +219,11 @@ public class FallenTrunkPiece extends StructurePiece {
 		if (hasHole && z > ERODED_LENGTH && z < length - 1 - ERODED_LENGTH - 1 && getAllAbsoluteHoleBlockPos().contains(getWorldPos(x, y, z)))
 			return;
 		BlockState blockState = this.getBlock(level, x, y, z, boundingbox);
-		if (blockState.is(BlockTags.REPLACEABLE_BY_TREES) || blockState.is(BlockTags.FLOWERS) || blockState.isEmpty() || randomChild.nextBoolean()) {
+		if (blockState.is(BlockTags.REPLACEABLE_BY_TREES) || blockState.is(BlockTags.FLOWERS) || blockState.isAir() || randomChild.nextBoolean()) {
 			placeBlock(level, blockstate, x, y, z, boundingbox);
 			if (randomChild.nextFloat() <= MOSS_CHANCE && boundingbox.isInside(getWorldPos(x, y + 1, z)) && this.getBlock(level, x, y + 1, z, boundingbox).is(BlockTags.REPLACEABLE)) {
 				placeBlock(level, TFBlocks.MOSS_PATCH.get().defaultBlockState(), x, y + 1, z, boundingbox);
-				level.blockUpdated(getWorldPos(x, y + 1, z), TFBlocks.MOSS_PATCH.get());  // to connect moss patches
+				level.updateNeighborsAt(getWorldPos(x, y + 1, z), TFBlocks.MOSS_PATCH.get());  // to connect moss patches
 				level.getChunk(getWorldPos(x, y + 1, z)).markPosForPostprocessing(getWorldPos(x, y + 1, z));
 			}
 		}
@@ -232,7 +232,7 @@ public class FallenTrunkPiece extends StructurePiece {
 	@NotNull
 	@Override
 	public Direction getOrientation() {
-		return Objects.requireNonNull(orientation);  // orientation is always not null, just to remove warnings
+		return Objects.requireNonNull(super.getOrientation());  // orientation is always not null, just to remove warnings
 	}
 
 	protected int getSideLength() {

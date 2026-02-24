@@ -67,18 +67,18 @@ public class TFTeleporter {
 		BlockPos blockpos;
 		ColumnPos columnPos = new ColumnPos(entity.blockPosition().getX(), entity.blockPosition().getZ()); // Must be the position from the src dim
 
-		PortalPosition portalPosition = cache.getPortalPosition(destDim.dimension().location(), columnPos);
+		PortalPosition portalPosition = cache.getPortalPosition(destDim.dimension().identifier(), columnPos);
 		if (portalPosition != null) {
 			blockpos = portalPosition.pos;
 			portalPosition.lastUpdateTime = destDim.getGameTime();
 			flag = false;
 			// Validate that the Portal still exists
 			TwilightForestMod.LOGGER.debug("Using cache, validating. {}", blockpos);
-			if (blockpos == null || !destDim.getBlockState(blockpos).is(TFBlocks.TWILIGHT_PORTAL)) {
+			if (blockpos == null || !destDim.getBlockState(blockpos).is(TFBlocks.TWILIGHT_PORTAL.get())) {
 				// Portal was broken, we need to recreate it.
 				TwilightForestMod.LOGGER.debug("Portal Invalid, recreating.");
 				blockpos = null;
-				cache.removeInvalidPos(destDim.dimension().location(), columnPos);
+				cache.removeInvalidPos(destDim.dimension().identifier(), columnPos);
 			}
 		} else {
 			//BlockPos blockpos3 = new BlockPos(entity);
@@ -97,11 +97,11 @@ public class TFTeleporter {
 				portalBlocks.forEach((blockPos, b) -> {
 					if (b) {
 						TwilightForestMod.LOGGER.debug("Caching {}", blockPos);
-						cache.addBlockToCache(destDim.dimension().location(), new ColumnPos(blockPos.getX(), blockPos.getZ()), new PortalPosition(finalBlockpos, destDim.getGameTime()));
+						cache.addBlockToCache(destDim.dimension().identifier(), new ColumnPos(blockPos.getX(), blockPos.getZ()), new PortalPosition(finalBlockpos, destDim.getGameTime()));
 					}
 				});
 				// the last param is just an object for tracking, don't worry about it using columnPos instead of blockpos
-				destDim.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(blockpos), 3, new BlockPos(columnPos.x(), blockpos.getY(), columnPos.z()));
+				destDim.getChunkSource().addTicketWithRadius(TicketType.PORTAL, new ChunkPos(blockpos), 3);
 			}
 
 			// replace with our own placement logic
@@ -186,7 +186,7 @@ public class TFTeleporter {
 	}
 
 	private static boolean isPortal(BlockState state) {
-		return state.is(TFBlocks.TWILIGHT_PORTAL);
+		return state.is(TFBlocks.TWILIGHT_PORTAL.get());
 	}
 
 	// from the start point, builds a set of all directly adjacent non-portal blocks
@@ -453,7 +453,7 @@ public class TFTeleporter {
 	}
 
 	protected static double getYFactor(ServerLevel world) {
-		return world.dimension().location().equals(Level.OVERWORLD.location()) ? 2.0 : 0.5;
+		return world.dimension().identifier().equals(Level.OVERWORLD.identifier()) ? 2.0 : 0.5;
 	}
 
 	private static void cacheNewPortalCoords(TeleporterCache cache, @Nullable ServerLevel srcDim, BlockPos pos, BlockPos srcPos) {
@@ -464,10 +464,10 @@ public class TFTeleporter {
 		if (exitPos == null)
 			return;
 		TwilightForestMod.LOGGER.debug("Caching Dest Portal Blocks to {}", exitPos);
-		cache.addBlockToCache(srcDim.dimension().location(), new ColumnPos(pos.getX(), pos.getZ()), new TFTeleporter.PortalPosition(exitPos, srcDim.getGameTime()));
-		cache.addBlockToCache(srcDim.dimension().location(), new ColumnPos(pos.south().getX(), pos.south().getZ()), new TFTeleporter.PortalPosition(exitPos, srcDim.getGameTime()));
-		cache.addBlockToCache(srcDim.dimension().location(), new ColumnPos(pos.east().getX(), pos.east().getZ()), new TFTeleporter.PortalPosition(exitPos, srcDim.getGameTime()));
-		cache.addBlockToCache(srcDim.dimension().location(), new ColumnPos(pos.south().east().getX(), pos.south().east().getZ()), new TFTeleporter.PortalPosition(exitPos, srcDim.getGameTime()));
+		cache.addBlockToCache(srcDim.dimension().identifier(), new ColumnPos(pos.getX(), pos.getZ()), new TFTeleporter.PortalPosition(exitPos, srcDim.getGameTime()));
+		cache.addBlockToCache(srcDim.dimension().identifier(), new ColumnPos(pos.south().getX(), pos.south().getZ()), new TFTeleporter.PortalPosition(exitPos, srcDim.getGameTime()));
+		cache.addBlockToCache(srcDim.dimension().identifier(), new ColumnPos(pos.east().getX(), pos.east().getZ()), new TFTeleporter.PortalPosition(exitPos, srcDim.getGameTime()));
+		cache.addBlockToCache(srcDim.dimension().identifier(), new ColumnPos(pos.south().east().getX(), pos.south().east().getZ()), new TFTeleporter.PortalPosition(exitPos, srcDim.getGameTime()));
 	}
 
 	protected static boolean isIdealForPortal(ServerLevel world, BlockPos pos) {

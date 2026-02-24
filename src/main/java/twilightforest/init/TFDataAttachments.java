@@ -1,37 +1,78 @@
 package twilightforest.init;
 
 import com.mojang.authlib.GameProfile;
-import com.mojang.serialization.Codec;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Unit;
-import net.neoforged.neoforge.attachment.AttachmentType;
-import net.neoforged.neoforge.attachment.IAttachmentHolder;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
+import net.fabricmc.fabric.api.attachment.v1.AttachmentTarget;
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import twilightforest.TwilightForestMod;
 import twilightforest.components.entity.*;
 import twilightforest.components.item.OreScannerComponent;
 import twilightforest.util.Codecs;
+import net.minecraft.world.entity.Entity;
 
 public class TFDataAttachments {
-	public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, TwilightForestMod.ID);
+	public static void init() {
+		// Ensure attachments are registered during mod initialization.
+	}
 
-	public static final DeferredHolder<AttachmentType<?>, AttachmentType<Boolean>> FEATHER_FAN = ATTACHMENT_TYPES.register("feather_fan_falling", () -> AttachmentType.builder(() -> false).serialize(Codec.BOOL).build());
-	public static final DeferredHolder<AttachmentType<?>, AttachmentType<PotionFlaskTrackingAttachment>> FLASK_DOSES = ATTACHMENT_TYPES.register("flask_doses", () -> AttachmentType.builder(PotionFlaskTrackingAttachment::new).serialize(PotionFlaskTrackingAttachment.CODEC).build());
-	public static final DeferredHolder<AttachmentType<?>, AttachmentType<FortificationShieldAttachment>> FORTIFICATION_SHIELDS = ATTACHMENT_TYPES.register("fortification_shields", () -> AttachmentType.builder(FortificationShieldAttachment::new).serialize(FortificationShieldAttachment.CODEC).build());
-	public static final DeferredHolder<AttachmentType<?>, AttachmentType<GiantPickaxeMiningAttachment>> GIANT_PICKAXE_MINING = ATTACHMENT_TYPES.register("giant_pickaxe_mining", () -> AttachmentType.builder(GiantPickaxeMiningAttachment::new).build());
-	public static final DeferredHolder<AttachmentType<?>, AttachmentType<OreScannerComponent>> ORE_SCANNER = ATTACHMENT_TYPES.register("ore_scanner", () -> AttachmentType.builder(OreScannerComponent::getEmpty).serialize(OreScannerComponent.CODEC).build());
-	public static final DeferredHolder<AttachmentType<?>, AttachmentType<YetiThrowAttachment>> YETI_THROWING = ATTACHMENT_TYPES.register("yeti_throwing", () -> AttachmentType.builder(YetiThrowAttachment::new).build());
-	public static final DeferredHolder<AttachmentType<?>, AttachmentType<MultiplayerInclusivityAttachment>> MULTIPLAYER_FIGHT = ATTACHMENT_TYPES.register("multiplayer_fight", () -> AttachmentType.builder(MultiplayerInclusivityAttachment::new).build());
-	public static final DeferredHolder<AttachmentType<?>, AttachmentType<TFPortalAttachment>> TF_PORTAL_COOLDOWN = ATTACHMENT_TYPES.register("tf_portal_cooldown", () -> AttachmentType.builder(TFPortalAttachment::new).build());
-	public static final DeferredHolder<AttachmentType<?>, AttachmentType<SmashBlocksEnchantmentAttachment>> SMASH_BLOCKS = ATTACHMENT_TYPES.register("smash_blocks", () -> AttachmentType.builder(() -> new SmashBlocksEnchantmentAttachment()).serialize(SmashBlocksEnchantmentAttachment.CODEC).build());
-	public static final DeferredHolder<AttachmentType<?>, AttachmentType<GameProfile>> ZOMBIFIED_PLAYER = ATTACHMENT_TYPES.register("zombified_player", () -> AttachmentType.builder(() -> UUIDUtil.createOfflineProfile("GizmoTheMoonPig")).serialize(Codecs.SIMPLE_GAME_PROFILE).build());
-	public static final DeferredHolder<AttachmentType<?>, AttachmentType<Unit>> LEASH_PATHFINDER_OVERRIDE = ATTACHMENT_TYPES.register("leashed_pathfinder_override", () -> AttachmentType.builder(() -> Unit.INSTANCE).serialize(Codec.unit(Unit.INSTANCE)).build());
-	public static final DeferredHolder<AttachmentType<?>, AttachmentType<Unit>> BANISHED_TO_TWILIGHT_FOREST = ATTACHMENT_TYPES.register("twilightforest_banished", () -> AttachmentType.builder(() -> Unit.INSTANCE).serialize(Codec.unit(Unit.INSTANCE)).copyOnDeath().build());
+	public static final AttachmentType<Boolean> FEATHER_FAN = AttachmentRegistry.create(TwilightForestMod.prefix("feather_fan_falling"), builder ->
+		builder.initializer(() -> false).persistent(com.mojang.serialization.Codec.BOOL));
 
-	private static <T> T directCopy(T attachment, IAttachmentHolder holder, HolderLookup.Provider provider) {
-		return attachment;
+	public static final AttachmentType<PotionFlaskTrackingAttachment> FLASK_DOSES = AttachmentRegistry.create(TwilightForestMod.prefix("flask_doses"), builder ->
+		builder.initializer(PotionFlaskTrackingAttachment::new).persistent(PotionFlaskTrackingAttachment.CODEC));
+
+	public static final AttachmentType<FortificationShieldAttachment> FORTIFICATION_SHIELDS = AttachmentRegistry.create(TwilightForestMod.prefix("fortification_shields"), builder ->
+		builder.initializer(FortificationShieldAttachment::new).persistent(FortificationShieldAttachment.CODEC));
+
+	public static final AttachmentType<GiantPickaxeMiningAttachment> GIANT_PICKAXE_MINING = AttachmentRegistry.createDefaulted(TwilightForestMod.prefix("giant_pickaxe_mining"), GiantPickaxeMiningAttachment::new);
+
+	public static final AttachmentType<OreScannerComponent> ORE_SCANNER = AttachmentRegistry.create(TwilightForestMod.prefix("ore_scanner"), builder ->
+		builder.initializer(OreScannerComponent::getEmpty).persistent(OreScannerComponent.CODEC));
+
+	public static final AttachmentType<YetiThrowAttachment> YETI_THROWING = AttachmentRegistry.createDefaulted(TwilightForestMod.prefix("yeti_throwing"), YetiThrowAttachment::new);
+
+	public static final AttachmentType<MultiplayerInclusivityAttachment> MULTIPLAYER_FIGHT = AttachmentRegistry.createDefaulted(TwilightForestMod.prefix("multiplayer_fight"), MultiplayerInclusivityAttachment::new);
+
+	public static final AttachmentType<TFPortalAttachment> TF_PORTAL_COOLDOWN = AttachmentRegistry.createDefaulted(TwilightForestMod.prefix("tf_portal_cooldown"), TFPortalAttachment::new);
+
+	public static final AttachmentType<SmashBlocksEnchantmentAttachment> SMASH_BLOCKS = AttachmentRegistry.create(TwilightForestMod.prefix("smash_blocks"), builder ->
+		builder.initializer(SmashBlocksEnchantmentAttachment::new).persistent(SmashBlocksEnchantmentAttachment.CODEC));
+
+	public static final AttachmentType<GameProfile> ZOMBIFIED_PLAYER = AttachmentRegistry.create(TwilightForestMod.prefix("zombified_player"), builder ->
+		builder.initializer(() -> UUIDUtil.createOfflineProfile("GizmoTheMoonPig")).persistent(Codecs.SIMPLE_GAME_PROFILE));
+
+	public static final AttachmentType<Unit> LEASH_PATHFINDER_OVERRIDE = AttachmentRegistry.create(TwilightForestMod.prefix("leashed_pathfinder_override"), builder ->
+		builder.initializer(() -> Unit.INSTANCE).persistent(Unit.CODEC));
+
+	public static final AttachmentType<Unit> BANISHED_TO_TWILIGHT_FOREST = AttachmentRegistry.create(TwilightForestMod.prefix("twilightforest_banished"), builder ->
+		builder.initializer(() -> Unit.INSTANCE).persistent(Unit.CODEC).copyOnDeath());
+
+	public static final AttachmentType<Boolean> ENDER_BOW_ARROW = AttachmentRegistry.create(TwilightForestMod.prefix("ender_bow_arrow"), builder ->
+		builder.initializer(() -> false).persistent(com.mojang.serialization.Codec.BOOL));
+
+	public static final AttachmentType<CompoundTag> CHARM_DATA = AttachmentRegistry.create(TwilightForestMod.prefix("charm_data"), builder ->
+		builder.initializer(CompoundTag::new).persistent(CompoundTag.CODEC));
+
+	public static <A> A get(AttachmentTarget target, AttachmentType<A> type) {
+		return target.getAttachedOrCreate(type);
+	}
+
+	public static <A> A get(Entity entity, AttachmentType<A> type) {
+		return get((AttachmentTarget) entity, type);
+	}
+
+	public static boolean has(Entity entity, AttachmentType<?> type) {
+		return ((AttachmentTarget) entity).hasAttached(type);
+	}
+
+	public static <A> void set(Entity entity, AttachmentType<A> type, A value) {
+		((AttachmentTarget) entity).setAttached(type, value);
+	}
+
+	public static <A> A remove(Entity entity, AttachmentType<A> type) {
+		return ((AttachmentTarget) entity).removeAttached(type);
 	}
 }

@@ -8,27 +8,35 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.neoforged.neoforge.common.TranslatableEnum;
-import net.neoforged.neoforge.network.PacketDistributor;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
-import twilightforest.network.SyncUncraftingTableConfigPacket;
 import twilightforest.util.PlayerHelper;
 
 import java.net.Proxy;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.UUID;
 
-public class TFConfig {
+public final class TFConfig {
+
+	private TFConfig() {}
 
 	public static final String CONFIG_ID = "config." + TwilightForestMod.ID + ".";
+
+	// Backing values for the removed config system.
+	// If/when a Fabric config system is added later, it should write into these fields.
+	public static String portalAdvancementLock = "";
+	public static List<String> auroraBiomes = new ArrayList<>(List.of("twilightforest:glacier"));
+	public static List<String> giantSkinUUIDs = new ArrayList<>();
+
 	@Nullable
-	private static ResourceLocation portalLockingAdvancement;
+	private static Identifier portalLockingAdvancement;
 	private static final List<Holder<Biome>> VALID_AURORA_BIOMES = new ArrayList<>();
 	public static final List<GameProfile> GAME_PROFILES = new ArrayList<>();
 
@@ -59,7 +67,7 @@ public class TFConfig {
 	public static boolean portalForNewPlayerSpawn = true;
 
 	// -- Portal --
-	public static String originDimension = Level.OVERWORLD.location().toString();
+	public static String originDimension = Level.OVERWORLD.identifier().toString();
 	public static boolean allowPortalsInOtherDimensions = false;
 	public static int portalCreationPermission = 0;
 	public static boolean disablePortalCreation = false;
@@ -99,31 +107,28 @@ public class TFConfig {
 	}
 
 	@Nullable
-	public static ResourceLocation getPortalLockingAdvancement(Player player) {
-		//only run assigning logic if the config has an advancement set and the RL is null
-		if (portalLockingAdvancement == null && !ConfigSetup.COMMON_CONFIG.PORTAL.portalAdvancementLock.get().isEmpty()) {
-
-			ResourceLocation lock = ResourceLocation.tryParse(ConfigSetup.COMMON_CONFIG.PORTAL.portalAdvancementLock.get());
+	public static Identifier getPortalLockingAdvancement(Player player) {
+		// Only run assigning logic if the config has an advancement set and the cached Identifier is null.
+		if (portalLockingAdvancement == null && !portalAdvancementLock.isEmpty()) {
+			Identifier lock = Identifier.tryParse(portalAdvancementLock);
 			if (lock == null || PlayerHelper.getAdvancement(player, lock) == null) {
-				//if the RL is not a valid advancement fail us
 				TwilightForestMod.LOGGER.fatal("The portal locking advancement is not a valid advancement! Setting to null!");
-				ConfigSetup.COMMON_CONFIG.PORTAL.portalAdvancementLock.set("");
+				portalAdvancementLock = "";
 			} else {
-				portalLockingAdvancement = ResourceLocation.tryParse(ConfigSetup.COMMON_CONFIG.PORTAL.portalAdvancementLock.get());
+				portalLockingAdvancement = lock;
 				TwilightForestMod.LOGGER.debug("Portal locking advancement reloaded. Current advancement to check for is: {}", portalLockingAdvancement);
 			}
 		}
-		//always return the RL, even if its null. We can use this to run logic less often
+		// Always return the cached identifier (can be null).
 		return portalLockingAdvancement;
 	}
 
-	//Forge's biome registry doesn't contain biomes done via datapacks, so we have to use registryaccess
 	public static List<Holder<Biome>> getValidAuroraBiomes(RegistryAccess access) {
-		if (VALID_AURORA_BIOMES.isEmpty() && !ConfigSetup.CLIENT_CONFIG.auroraBiomes.get().isEmpty()) {
-			ConfigSetup.CLIENT_CONFIG.auroraBiomes.get().forEach(s -> {
-				Optional<Holder<Biome>> holder = Optional.ofNullable(ResourceLocation.tryParse(s)).flatMap(key -> access.lookupOrThrow(Registries.BIOME).get(key));
+		if (VALID_AURORA_BIOMES.isEmpty() && !auroraBiomes.isEmpty()) {
+			auroraBiomes.forEach(s -> {
+				Optional<Holder<Biome>> holder = Optional.ofNullable(Identifier.tryParse(s)).flatMap(key -> access.lookupOrThrow(Registries.BIOME).get(key));
 				if (holder.isEmpty()) {
-					TwilightForestMod.LOGGER.warn("Biome {} in Twilight Forest's validAuroraBiomes config option is not a valid biome. Skipping!", s);
+					TwilightForestMod.LOGGER.warn("Biome {} in Twilight Forest's aurora biomes list is not a valid biome. Skipping!", s);
 				} else {
 					VALID_AURORA_BIOMES.add(holder.get());
 				}
@@ -132,110 +137,29 @@ public class TFConfig {
 		return VALID_AURORA_BIOMES;
 	}
 
-	protected static void rebakeCommonOptions(TFCommonConfig config) {
-		casketUUIDLocking = config.casketUUIDLocking.get();
-		disableSkullCandles = config.disableSkullCandles.get();
-		defaultItemEnchants = config.defaultItemEnchants.get();
-		bossDropChests = config.bossDropChests.get();
-		commonCloudBlockPrecipitationDistance = config.cloudBlockPrecipitationDistance.get();
-		multiplayerFightAdjuster = config.multiplayerFightAdjuster.get();
-
-		//Dimension
-		newPlayersSpawnInTF = config.DIMENSION.newPlayersSpawnInTF.get();
-		portalForNewPlayerSpawn = config.DIMENSION.portalForNewPlayerSpawn.get();
-
-		//Portal
-		originDimension = config.PORTAL.originDimension.get();
-		allowPortalsInOtherDimensions = config.PORTAL.allowPortalsInOtherDimensions.get();
-		portalCreationPermission = config.PORTAL.portalCreationPermission.get();
-		disablePortalCreation = config.PORTAL.disablePortalCreation.get();
-		checkPortalPlacement = config.PORTAL.checkPortalPlacement.get();
-		destructivePortalLightning = config.PORTAL.destructivePortalLightning.get();
-		shouldReturnPortalBeUsable = config.PORTAL.shouldReturnPortalBeUsable.get();
-		maxPortalSize = config.PORTAL.maxPortalSize.get();
-
-		//Uncrafting Table
-		uncraftingXpCostMultiplier = config.UNCRAFTING_STUFFS.uncraftingXpCostMultiplier.get();
-		repairingXpCostMultiplier = config.UNCRAFTING_STUFFS.repairingXpCostMultiplier.get();
-		allowShapelessUncrafting = config.UNCRAFTING_STUFFS.allowShapelessUncrafting.get();
-		disableIngredientSwitching = config.UNCRAFTING_STUFFS.disableIngredientSwitching.get();
-		disableUncraftingOnly = config.UNCRAFTING_STUFFS.disableUncraftingOnly.get();
-		disableEntireTable = config.UNCRAFTING_STUFFS.disableEntireTable.get();
-		disableUncraftingRecipes = config.UNCRAFTING_STUFFS.disableUncraftingRecipes.get();
-		reverseRecipeBlacklist = config.UNCRAFTING_STUFFS.reverseRecipeBlacklist.get();
-		blacklistedUncraftingModIds = config.UNCRAFTING_STUFFS.blacklistedUncraftingModIds.get();
-		flipUncraftingModIdList = config.UNCRAFTING_STUFFS.flipUncraftingModIdList.get();
-
-		// Tree Cores
-		disableTimeCore = config.MAGIC_TREES.timeRange.get() <= 0;
-		timeCoreRange = config.MAGIC_TREES.timeRange.get();
-		disableTransformationCore = config.MAGIC_TREES.transformationRange.get() <= 0;
-		transformationCoreRange = config.MAGIC_TREES.transformationRange.get();
-		disableMiningCore = config.MAGIC_TREES.miningRange.get() <= 0;
-		miningCoreRange = config.MAGIC_TREES.miningRange.get();
-		disableSortingCore = config.MAGIC_TREES.sortingRange.get() <= 0;
-		sortingCoreRange = config.MAGIC_TREES.sortingRange.get();
-
-		//Parrying
-		parryNonTwilightAttacks = config.SHIELD_INTERACTIONS.parryNonTwilightAttacks.get();
-		shieldParryTicks = config.SHIELD_INTERACTIONS.shieldParryTicks.get();
-
-		//resends uncrafting settings to all players when the config is reloaded. This ensures all players have matching configs so things don't desync.
-		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-		if (server != null && server.isDedicatedServer()) {
-			PacketDistributor.sendToAllPlayers(new SyncUncraftingTableConfigPacket(
-				uncraftingXpCostMultiplier, repairingXpCostMultiplier,
-				allowShapelessUncrafting, disableIngredientSwitching,
-				disableUncraftingOnly, disableEntireTable,
-				disableUncraftingRecipes, reverseRecipeBlacklist,
-				blacklistedUncraftingModIds, flipUncraftingModIdList));
-		}
-		//sets cached portal locking advancement to null just in case it changed
-		portalLockingAdvancement = null;
-	}
-
-	protected static void rebakeClientOptions(TFClientConfig config) {
-		reloadGiantSkins(config);
-		VALID_AURORA_BIOMES.clear();
-		silentCicadas = config.silentCicadas.get();
-		silentCicadasOnHead = config.silentCicadasOnHead.get();
-		firstPersonEffects = config.firstPersonEffects.get();
-		rotateTrophyHeadsGui = config.rotateTrophyHeadsGui.get();
-		disableOptifineNagScreen = config.disableOptifineNagScreen.get();
-		disableLockedBiomeToasts = config.disableLockedBiomeToasts.get();
-		showFortificationShieldIndicator = config.showFortificationShieldIndicator.get();
-		showFortificationShieldIndicatorInCreative = config.showFortificationShieldIndicatorInCreative.get();
-		showQuestRamCrosshairIndicator = config.showQuestRamCrosshairIndicator.get();
-		clientCloudBlockPrecipitationDistance = config.cloudBlockPrecipitationDistance.get();
-		prettifyOreMeterGui = config.prettifyOreMeterGui.get();
-		spawnCharmAnimationAsTotem = config.spawnCharmAnimationAsTotem.get();
-	}
-
-	private static void reloadGiantSkins(TFClientConfig config) {
-		if (!config.giantSkinUUIDs.get().isEmpty()) {
-			new Thread() {
-				@Override
-				public void run() {
-					GAME_PROFILES.clear();
-					YggdrasilAuthenticationService service = new YggdrasilAuthenticationService(Proxy.NO_PROXY);
-					MinecraftSessionService session = service.createMinecraftSessionService();
-					for (String stringUUID : config.giantSkinUUIDs.get()) {
-						try {
-							ProfileResult result = session.fetchProfile(UUID.fromString(stringUUID), false);
-							if (result != null) {
-								GAME_PROFILES.add(result.profile());
-							}
-						} catch (IllegalArgumentException e) {
-							TwilightForestMod.LOGGER.error("\"{}\" is not a valid UUID!", stringUUID);
+	public static void reloadGiantSkins() {
+		if (!giantSkinUUIDs.isEmpty()) {
+			Thread loader = new Thread(() -> {
+				GAME_PROFILES.clear();
+				YggdrasilAuthenticationService service = new YggdrasilAuthenticationService(Proxy.NO_PROXY);
+				MinecraftSessionService session = service.createMinecraftSessionService();
+				for (String stringUUID : giantSkinUUIDs) {
+					try {
+						ProfileResult result = session.fetchProfile(UUID.fromString(stringUUID), false);
+						if (result != null) {
+							GAME_PROFILES.add(result.profile());
 						}
+					} catch (IllegalArgumentException e) {
+						TwilightForestMod.LOGGER.error("\"{}\" is not a valid UUID!", stringUUID);
 					}
-					super.run();
 				}
-			}.start();
+			}, "TF Giant Skin Loader");
+			loader.setDaemon(true);
+			loader.start();
 		}
 	}
 
-	public enum MultiplayerFightAdjuster implements TranslatableEnum {
+	public enum MultiplayerFightAdjuster {
 		NONE(false, false),
 		MORE_LOOT(true, false),
 		MORE_HEALTH(false, true),
@@ -257,9 +181,8 @@ public class TFConfig {
 			return this.moreHealth;
 		}
 
-		@Override
 		public Component getTranslatedName() {
-			return Component.translatable("config.twilightforest.multiplayer_fight_adjuster." + this.name().toLowerCase(Locale.ROOT));
+			return Component.translatable(CONFIG_ID + "multiplayer_fight_adjuster." + this.name().toLowerCase(Locale.ROOT));
 		}
 	}
 }

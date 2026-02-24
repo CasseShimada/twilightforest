@@ -1,6 +1,5 @@
 package twilightforest.block;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -9,7 +8,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -27,7 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.network.PacketDistributor;
+import twilightforest.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.block.entity.bookshelf.ChiseledCanopyShelfBlockEntity;
 import twilightforest.init.TFBlockEntities;
@@ -51,20 +49,6 @@ public class ChiseledCanopyShelfBlock extends ChiseledBookShelfBlock {
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder.add(SPAWNER));
-	}
-
-	@Override
-	public void onCaughtFire(BlockState state, Level level, BlockPos pos, @Nullable Direction face, @Nullable LivingEntity igniter) {
-		if (level.getBlockState(pos).getValue(SPAWNER) && level instanceof ServerLevel serverLevel && level.getBlockEntity(pos) instanceof ChiseledCanopyShelfBlockEntity shelf) {
-			for (int i = 0; i < ChiseledCanopyShelfBlock.SLOT_OCCUPIED_PROPERTIES.size(); i++) {
-				BooleanProperty property = ChiseledCanopyShelfBlock.SLOT_OCCUPIED_PROPERTIES.get(i);
-				if (state.hasProperty(property) && state.getValue(property)) {
-					shelf.getSpawner().attemptSpawnTome(i, serverLevel, pos, true, igniter, 5);
-				}
-			}
-			level.destroyBlock(pos, false);
-		}
-		super.onCaughtFire(state, level, pos, face, igniter);
 	}
 
 	@Override

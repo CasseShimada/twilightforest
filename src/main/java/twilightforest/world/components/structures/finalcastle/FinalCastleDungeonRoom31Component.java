@@ -22,6 +22,7 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilde
 import twilightforest.init.TFBiomes;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFStructurePieceTypes;
+import twilightforest.mixin.accessor.StructurePiecesBuilderAccessor;
 import twilightforest.util.BoundingBoxUtils;
 import twilightforest.util.RotationUtil;
 import twilightforest.world.components.structures.TFStructureComponentOld;
@@ -95,7 +96,7 @@ public class FinalCastleDungeonRoom31Component extends TowerWingComponent {
 	}
 
 	protected boolean addDungeonRoom(StructurePiece parent, StructurePieceAccessor list, RandomSource rand, Rotation rotation, int level) {
-		rotation = rotation.getRotated(this.rotation);
+		rotation = rotation.getRotated(((twilightforest.mixin.accessor.StructurePieceFieldsAccessor) this).twilightforest$getRotation());
 
 		BlockPos rc = this.getNewRoomCoords(rand, rotation);
 
@@ -104,7 +105,7 @@ public class FinalCastleDungeonRoom31Component extends TowerWingComponent {
 		BoundingBox largerBB = BoundingBoxUtils.clone(dRoom.getBoundingBox());
 
 		if (list instanceof StructurePiecesBuilder start) {
-			StructurePiece intersect = TFStructureComponentOld.findIntersectingExcluding(start.pieces, largerBB, this);
+			StructurePiece intersect = TFStructureComponentOld.findIntersectingExcluding(((StructurePiecesBuilderAccessor) start).twilightforest$getPieces(), largerBB, this);
 			if (intersect == null) {
 				list.addPiece(dRoom);
 				dRoom.addChildren(parent, list, rand);
@@ -118,11 +119,11 @@ public class FinalCastleDungeonRoom31Component extends TowerWingComponent {
 
 		//TODO: check if we are sufficiently near the castle center
 
-		rotation = rotation.getRotated(this.rotation);
+		rotation = rotation.getRotated(((twilightforest.mixin.accessor.StructurePieceFieldsAccessor) this).twilightforest$getRotation());
 		BlockPos rc = this.getNewRoomCoords(rand, rotation);
 		FinalCastleDungeonExitComponent dRoom = new FinalCastleDungeonExitComponent(this.genDepth + 1, rc.getX(), rc.getY(), rc.getZ(), rotation.rotate(Direction.SOUTH), this.level);
 		if (list instanceof StructurePiecesBuilder start) {
-			StructurePiece intersect = TFStructureComponentOld.findIntersectingExcluding(start.pieces, dRoom.getBoundingBox(), this);
+			StructurePiece intersect = TFStructureComponentOld.findIntersectingExcluding(((StructurePiecesBuilderAccessor) start).twilightforest$getPieces(), dRoom.getBoundingBox(), this);
 			if (intersect == null) {
 				list.addPiece(dRoom);
 				dRoom.addChildren(this, list, rand);
@@ -160,7 +161,7 @@ public class FinalCastleDungeonRoom31Component extends TowerWingComponent {
 		RandomSource decoRNG = RandomSource.create(world.getSeed() + (this.boundingBox.minX() * 321534781L) ^ (this.boundingBox.minZ() * 756839L));
 
 		//TODO add a deadrock tag, or a tag for castle replaceables
-		Predicate<BlockState> replacing = state -> state.isAir() || state.is(TFBlocks.DEADROCK) || state.is(TFBlocks.CRACKED_DEADROCK) || state.is(TFBlocks.WEATHERED_DEADROCK);
+		Predicate<BlockState> replacing = state -> state.isAir() || state.is(TFBlocks.DEADROCK.get()) || state.is(TFBlocks.CRACKED_DEADROCK.get()) || state.is(TFBlocks.WEATHERED_DEADROCK.get());
 
 
 		this.fillWithAir(world, sbb, 0, 0, 0, this.size - 1, this.height - 1, this.size - 1, replacing);
@@ -191,7 +192,7 @@ public class FinalCastleDungeonRoom31Component extends TowerWingComponent {
 	}
 
 	protected BlockState getRuneColor(BlockState forceFieldColor) {
-		return forceFieldColor.is(TFBlocks.GREEN_FORCE_FIELD) ? TFBlocks.YELLOW_CASTLE_RUNE_BRICK.get().defaultBlockState() : TFBlocks.BLUE_CASTLE_RUNE_BRICK.get().defaultBlockState();
+		return forceFieldColor.is(TFBlocks.GREEN_FORCE_FIELD.get()) ? TFBlocks.YELLOW_CASTLE_RUNE_BRICK.get().defaultBlockState() : TFBlocks.BLUE_CASTLE_RUNE_BRICK.get().defaultBlockState();
 	}
 
 	protected BlockState getForceFieldColor(RandomSource decoRNG) {

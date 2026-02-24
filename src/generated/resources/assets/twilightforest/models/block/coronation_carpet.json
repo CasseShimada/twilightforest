@@ -21,10 +21,10 @@
       16
     ]
   },
-  "loader": "twilightforest:connected_texture_block",
   "textures": {
     "overlay_connected": "twilightforest:block/coronation_carpet_ctm",
     "overlay_texture": "twilightforest:block/coronation_carpet",
     "particle": "twilightforest:block/coronation_carpet"
-  }
+  },
+  "fabric:type": "twilightforest:connected_texture_block"
 }

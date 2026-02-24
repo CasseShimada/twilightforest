@@ -11,11 +11,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import twilightforest.util.landmarks.LegacyLandmarkPlacements;
 
-@tamaized.beanification.Component
 public class CenterCommand {
 
 	public LiteralArgumentBuilder<CommandSourceStack> register() {
-		return Commands.literal("center").requires(cs -> cs.hasPermission(2)).executes(this::run);
+		return Commands.literal("center").requires(cs -> Commands.LEVEL_GAMEMASTERS.check(cs.permissions())).executes(this::run);
 	}
 
 	private int run(CommandContext<CommandSourceStack> ctx) {
@@ -24,7 +23,7 @@ public class CenterCommand {
 		int dx = Mth.floor(source.getPosition().x());
 		int dz = Mth.floor(source.getPosition().z());
 		BlockPos cc = LegacyLandmarkPlacements.getNearestCenterXZ(dx >> 4, dz >> 4);
-		var closestFeature = LegacyLandmarkPlacements.pickLandmarkAtBlock(cc.getX(), cc.getZ(), source.getLevel()).location();
+		var closestFeature = LegacyLandmarkPlacements.pickLandmarkAtBlock(cc.getX(), cc.getZ(), source.getLevel()).identifier();
 		boolean fc = LegacyLandmarkPlacements.blockIsInLandmarkCenter(dx, dz);
 
 		String structurename = Component.translatable(closestFeature.toLanguageKey("structure")).withStyle(ChatFormatting.DARK_GREEN).getString();

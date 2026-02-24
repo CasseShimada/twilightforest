@@ -1,8 +1,10 @@
 package twilightforest.item;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -21,15 +23,16 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item.TooltipContext;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
+import twilightforest.network.PacketDistributor;
 import twilightforest.tags.TFEntityTypeTags;
 import twilightforest.enchantment.RechargeScepterEffect;
 import twilightforest.init.TFDamageTypes;
@@ -45,6 +48,7 @@ import twilightforest.util.entities.EntityUtil;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class LifedrainScepterItem extends Item {
 
@@ -65,11 +69,12 @@ public class LifedrainScepterItem extends Item {
 	}
 
 	@Override
-	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-		if (entity.tickCount % 20 == 0 && level instanceof ServerLevel serverLevel && stack.has(DataComponents.ENCHANTMENTS) && !isSelected) {
-			int renewal = stack.get(DataComponents.ENCHANTMENTS).getLevel(level.holderOrThrow(TFEnchantments.RENEWAL));
+	public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, EquipmentSlot slot) {
+		boolean isSelected = slot == EquipmentSlot.MAINHAND;
+		if (entity.tickCount % 20 == 0 && stack.has(DataComponents.ENCHANTMENTS) && !isSelected) {
+			int renewal = stack.get(DataComponents.ENCHANTMENTS).getLevel(level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(TFEnchantments.RENEWAL));
 			if (renewal > 0) {
-				RechargeScepterEffect.applyRecharge(serverLevel, stack, entity);
+				RechargeScepterEffect.applyRecharge(level, stack, entity);
 			}
 		}
 	}
@@ -86,7 +91,7 @@ public class LifedrainScepterItem extends Item {
 		ParticlePacket particlePacket = new ParticlePacket();
 		double gaussFactor = 5.0D;
 
-		for (int i = 0; i < 50 + ((int) target.dimensions.width() * (big ? 75 : 25)); ++i) {
+		for (int i = 0; i < 50 + ((int) target.getBbWidth() * (big ? 75 : 25)); ++i) {
 			double gaussX = level.getRandom().nextGaussian() * 0.01D;
 			double gaussY = level.getRandom().nextGaussian() * 0.01D;
 			double gaussZ = level.getRandom().nextGaussian() * 0.01D;
@@ -161,7 +166,7 @@ public class LifedrainScepterItem extends Item {
 				DamageSource damageSource = TFDamageTypes.getEntityDamageSource(level, TFDamageTypes.LIFEDRAIN, living);
 				if (level instanceof ServerLevel serverLevel && target.hurtServer(serverLevel, damageSource, 1)) {
 					// make it explode
-					if (target.getHealth() <= 1 && !target.getType().is(Tags.EntityTypes.BOSSES)) {
+					if (target.getHealth() <= 1 && !target.getType().is(TFEntityTypeTags.BOSSES)) {
 						if (!target.getType().is(TFEntityTypeTags.LIFEDRAIN_DROPS_NO_FLESH) && living instanceof Player player) {
 							LootParams ctx = new LootParams.Builder(serverLevel)
 								.withParameter(LootContextParams.THIS_ENTITY, target)
@@ -190,7 +195,7 @@ public class LifedrainScepterItem extends Item {
 							}
 						}
 					} else {
-						target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 2));
+						target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 20, 2));
 						if (count % 10 == 0) {
 							// heal the player
 							living.heal(1.0F);
@@ -200,7 +205,7 @@ public class LifedrainScepterItem extends Item {
 						}
 					}
 
-					if (living instanceof Player player && !player.getAbilities().instabuild && (!player.getItemBySlot(EquipmentSlot.HEAD).is(TFItems.MYSTIC_CROWN) || level.getRandom().nextFloat() > 0.05f)) {
+					if (living instanceof Player player && !player.getAbilities().instabuild && (!player.getItemBySlot(EquipmentSlot.HEAD).is(TFItems.MYSTIC_CROWN.get()) || level.getRandom().nextFloat() > 0.05f)) {
 						TFItemStackUtils.hurtWithoutBreaking(stack, 1, player);
 					}
 				}
@@ -215,7 +220,7 @@ public class LifedrainScepterItem extends Item {
 
 	public static void makeRedMagicTrail(Level level, LivingEntity source, Vec3 target) {
 		// make particle trail
-		Vec3 handPos = getPlayerHandPos(source, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false));
+		Vec3 handPos = getPlayerHandPos(source, getClientPartialTick());
 		double distance = handPos.distanceTo(target);
 
 		for (double i = 0; i <= distance * 3; i++) {
@@ -234,29 +239,49 @@ public class LifedrainScepterItem extends Item {
 	 * ( cant link it cuz its client only or some shit, idk, you do it, wise guy )
 	 */
 	private static Vec3 getPlayerHandPos(LivingEntity living, float partialTicks) {
+		Vec3 clientPos = getClientHandPos(living, partialTicks);
+		if (clientPos != null) {
+			return clientPos;
+		}
+
 		float armSwing = Mth.sin(Mth.sqrt(living.getAttackAnim(partialTicks)) * (float) Math.PI);
 		int hand = living.getMainArm() == HumanoidArm.RIGHT ? 1 : -1;
 		if (!(living.getMainHandItem().getItem() instanceof LifedrainScepterItem)) hand = -hand;
 
-		Minecraft minecraft = Minecraft.getInstance();
-		if (minecraft.options.getCameraType().isFirstPerson() && living == minecraft.player) {
-			Vec3 vec3 = minecraft.getEntityRenderDispatcher()
-				.camera
-				.getNearPlane()
-				.getPointOnPlane((float) hand * 0.525F, -0.1F)
-				.scale(960.0D / (double) minecraft.options.fov().get())
-				.yRot(armSwing * 0.5F)
-				.xRot(-armSwing * 0.7F);
-			return living.getEyePosition(partialTicks).add(vec3);
-		} else {
-			float yRot = Mth.lerp(partialTicks, living.yBodyRotO, living.yBodyRot) * (float) (Math.PI / 180.0);
-			double sin = Mth.sin(yRot);
-			double cos = Mth.cos(yRot);
-			float scale = living.getScale();
-			double offset = (double) hand * 0.35 * (double) scale;
-			double factor = 0.8 * (double) scale;
-			float crouch = living.isCrouching() ? -0.1875F : 0.0F;
-			return living.getEyePosition(partialTicks).add(-cos * offset - sin * factor, (double) crouch - 0.45 * (double) scale, -sin * offset + cos * factor);
+		float yRot = Mth.lerp(partialTicks, living.yBodyRotO, living.yBodyRot) * (float) (Math.PI / 180.0);
+		double sin = Mth.sin(yRot);
+		double cos = Mth.cos(yRot);
+		float scale = living.getScale();
+		double offset = (double) hand * 0.35 * (double) scale;
+		double factor = 0.8 * (double) scale;
+		float crouch = living.isCrouching() ? -0.1875F : 0.0F;
+		return living.getEyePosition(partialTicks).add(-cos * offset - sin * factor, (double) crouch - 0.45 * (double) scale, -sin * offset + cos * factor);
+	}
+
+	private static float getClientPartialTick() {
+		if (FabricLoader.getInstance().getEnvironmentType() != EnvType.CLIENT) {
+			return 0.0F;
+		}
+
+		try {
+			Class<?> helper = Class.forName("twilightforest.client.ClientHandHelper");
+			return ((Float) helper.getMethod("getPartialTick").invoke(null)).floatValue();
+		} catch (Throwable ignored) {
+			return 0.0F;
+		}
+	}
+
+	@Nullable
+	private static Vec3 getClientHandPos(LivingEntity living, float partialTicks) {
+		if (FabricLoader.getInstance().getEnvironmentType() != EnvType.CLIENT) {
+			return null;
+		}
+
+		try {
+			Class<?> helper = Class.forName("twilightforest.client.ClientHandHelper");
+			return (Vec3) helper.getMethod("getPlayerHandPos", LivingEntity.class, float.class).invoke(null, living, partialTicks);
+		} catch (Throwable ignored) {
+			return null;
 		}
 	}
 
@@ -271,18 +296,8 @@ public class LifedrainScepterItem extends Item {
 	}
 
 	@Override
-	public boolean canContinueUsing(ItemStack oldStack, ItemStack newStack) {
-		return oldStack.getItem() == newStack.getItem();
-	}
-
-	@Override
-	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-		return slotChanged || newStack.getItem() != oldStack.getItem();
-	}
-
-	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flags) {
-		super.appendHoverText(stack, context, tooltip, flags);
-		tooltip.add(Component.translatable("item.twilightforest.scepter.desc", stack.getMaxDamage() - stack.getDamageValue()).withStyle(ChatFormatting.GRAY));
+	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flags) {
+		super.appendHoverText(stack, context, display, tooltip, flags);
+		tooltip.accept(Component.translatable("item.twilightforest.scepter.desc", stack.getMaxDamage() - stack.getDamageValue()).withStyle(ChatFormatting.GRAY));
 	}
 }

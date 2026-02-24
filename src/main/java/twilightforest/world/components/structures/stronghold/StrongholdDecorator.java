@@ -3,14 +3,12 @@ package twilightforest.world.components.structures.stronghold;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.properties.SlabType;
-import tamaized.beanification.Autowired;
 import twilightforest.init.TFBlocks;
 import twilightforest.world.components.structures.TFStructureDecorator;
 import twilightforest.world.components.structures.selectors.KnightStonesRandomBlockSelectorFactory;
 
 public class StrongholdDecorator extends TFStructureDecorator {
-	@Autowired
-	private static KnightStonesRandomBlockSelectorFactory knightStones;
+	private static final KnightStonesRandomBlockSelectorFactory knightStones = new KnightStonesRandomBlockSelectorFactory();
 
 	public StrongholdDecorator() {
 		this.blockState = TFBlocks.UNDERBRICK.get().defaultBlockState();

@@ -4,7 +4,7 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.ConstantFloat;
 import net.minecraft.util.valueproviders.UniformFloat;
 import net.minecraft.world.level.block.Block;
@@ -19,8 +19,8 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStatePr
 import net.minecraft.world.level.levelgen.heightproviders.BiasedToBottomHeight;
 import net.minecraft.world.level.levelgen.heightproviders.UniformHeight;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import twilightforest.util.registry.DeferredHolder;
+import twilightforest.util.registry.DeferredRegister;
 import twilightforest.TwilightForestMod;
 import twilightforest.tags.TFBlockTags;
 import twilightforest.world.components.TFCavesCarver;
@@ -54,7 +54,7 @@ public class TFCaveCarvers {
 		CaveCarverConfiguration.CODEC,
 		true,
 		new WeightedStateProvider(
-			new SimpleWeightedRandomList.Builder<BlockState>()
+			WeightedList.<BlockState>builder()
 				.add(TFBlocks.TROLLSTEINN.value().defaultBlockState(), 1)
 				.add(Blocks.STONE.defaultBlockState(), 3)
 		)

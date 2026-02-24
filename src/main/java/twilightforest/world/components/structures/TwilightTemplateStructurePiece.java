@@ -2,7 +2,7 @@ package twilightforest.world.components.structures;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -22,6 +22,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnorePr
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import twilightforest.mixin.accessor.StructurePieceFieldsAccessor;
 import twilightforest.util.ArrayUtil;
 import twilightforest.util.BoundingBoxUtils;
 
@@ -36,8 +37,9 @@ public abstract class TwilightTemplateStructurePiece extends TemplateStructurePi
 
 	public TwilightTemplateStructurePiece(StructurePieceType structurePieceType, CompoundTag compoundTag, StructurePieceSerializationContext ctx, StructurePlaceSettings placeSettings) {
 		super(structurePieceType, compoundTag, ctx.structureTemplateManager(), rl -> placeSettings);
-		this.rotation = this.getRotation();
-		this.mirror = this.getMirror();
+		StructurePieceFieldsAccessor accessor = (StructurePieceFieldsAccessor) this;
+		accessor.twilightforest$setRotation(this.getRotation());
+		accessor.twilightforest$setMirror(this.getMirror());
 
 		this.structureManager = ctx.structureTemplateManager();
 
@@ -49,10 +51,11 @@ public abstract class TwilightTemplateStructurePiece extends TemplateStructurePi
 		this.placeFlag = Block.UPDATE_CLIENTS;
 	}
 
-	public TwilightTemplateStructurePiece(StructurePieceType type, int genDepth, StructureTemplateManager structureManager, ResourceLocation templateLocation, StructurePlaceSettings placeSettings, BlockPos startPosition) {
+	public TwilightTemplateStructurePiece(StructurePieceType type, int genDepth, StructureTemplateManager structureManager, Identifier templateLocation, StructurePlaceSettings placeSettings, BlockPos startPosition) {
 		super(type, genDepth, structureManager, templateLocation, templateLocation.toString(), placeSettings, startPosition);
-		this.rotation = this.getRotation();
-		this.mirror = this.getMirror();
+		StructurePieceFieldsAccessor accessor = (StructurePieceFieldsAccessor) this;
+		accessor.twilightforest$setRotation(this.getRotation());
+		accessor.twilightforest$setMirror(this.getMirror());
 
 		this.structureManager = structureManager;
 
@@ -94,9 +97,9 @@ public abstract class TwilightTemplateStructurePiece extends TemplateStructurePi
 
 	public static StructurePlaceSettings readSettings(CompoundTag compoundTag) {
 		return new StructurePlaceSettings()
-			.setRotation(ArrayUtil.wrapped(Rotation.values(), compoundTag.getInt("rotation")))
-			.setMirror(ArrayUtil.wrapped(Mirror.values(), compoundTag.getInt("mirror")))
-			.setRotationPivot(new BlockPos(compoundTag.getInt("pivot_x"), compoundTag.getInt("pivot_y"), compoundTag.getInt("pivot_z")))
+			.setRotation(ArrayUtil.wrapped(Rotation.values(), compoundTag.getIntOr("rotation", 0)))
+			.setMirror(ArrayUtil.wrapped(Mirror.values(), compoundTag.getIntOr("mirror", 0)))
+			.setRotationPivot(new BlockPos(compoundTag.getIntOr("pivot_x", 0), compoundTag.getIntOr("pivot_y", 0), compoundTag.getIntOr("pivot_z", 0)))
 			.addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK);
 	}
 
@@ -125,10 +128,10 @@ public abstract class TwilightTemplateStructurePiece extends TemplateStructurePi
 			for (StructureTemplate.StructureBlockInfo structuretemplate$structureblockinfo : this.template
 				.filterBlocks(this.templatePosition, this.placeSettings, Blocks.STRUCTURE_BLOCK)) {
 				if (structuretemplate$structureblockinfo.nbt() != null) {
-					StructureMode structuremode = StructureMode.valueOf(structuretemplate$structureblockinfo.nbt().getString("mode"));
+					StructureMode structuremode = StructureMode.valueOf(structuretemplate$structureblockinfo.nbt().getStringOr("mode", ""));
 					if (structuremode == StructureMode.DATA) {
 						this.handleDataMarker(
-							structuretemplate$structureblockinfo.nbt().getString("metadata"),
+							structuretemplate$structureblockinfo.nbt().getStringOr("metadata", ""),
 							structuretemplate$structureblockinfo.pos(),
 							level,
 							random,

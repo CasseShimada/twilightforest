@@ -18,9 +18,8 @@ import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.EventHooks;
-import net.neoforged.neoforge.event.level.BlockEvent;
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.minecraft.world.level.gamerules.GameRules;
 import twilightforest.init.TFDataMaps;
 import twilightforest.init.TFSounds;
 import twilightforest.init.TFStats;
@@ -58,16 +57,6 @@ public class CrumbleHornItem extends Item {
 		return 72000;
 	}
 
-	@Override
-	public boolean canContinueUsing(ItemStack oldStack, ItemStack newStack) {
-		return oldStack.getItem() == newStack.getItem();
-	}
-
-	@Override
-	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-		return slotChanged || newStack.getItem() != oldStack.getItem();
-	}
-
 	private void doCrumble(ServerLevel serverLevel, LivingEntity living, ItemStack stack) {
 		final double centerDistance = 3.0D;
 		final int radius = 2;
@@ -96,28 +85,29 @@ public class CrumbleHornItem extends Item {
 	private boolean crumbleBlock(ServerLevel serverLevel, LivingEntity living, BlockPos pos) {
 		BlockState state = serverLevel.getBlockState(pos);
 		Block block = state.getBlock();
-		var crumbleMap = block.builtInRegistryHolder().getData(TFDataMaps.CRUMBLE_HORN);
+		var crumbleMap = TFDataMaps.getCrumble(block);
 
 		if (state.isAir() || crumbleMap == null) return false;
 
-		if (living instanceof Player) {
-			if (NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(serverLevel, pos, state, (Player) living)).isCanceled())
+		if (living instanceof Player player) {
+			if (!PlayerBlockBreakEvents.BEFORE.invoker().beforeBlockBreak(serverLevel, player, pos, state, serverLevel.getBlockEntity(pos))) {
 				return false;
+			}
 		}
 
 		if (crumbleMap.result() == Blocks.AIR) {
-			if (serverLevel.getRandom().nextFloat() < crumbleMap.chanceToCrumble()) {
-				if (living instanceof Player player) {
-					if (block.canHarvestBlock(state, serverLevel, pos, player)) {
-						serverLevel.removeBlock(pos, false);
-						block.playerDestroy(serverLevel, (Player) living, pos, state, serverLevel.getBlockEntity(pos), ItemStack.EMPTY);
-						serverLevel.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
+				if (serverLevel.getRandom().nextFloat() < crumbleMap.chanceToCrumble()) {
+					if (living instanceof Player player) {
+						if (player.hasCorrectToolForDrops(state)) {
+							serverLevel.removeBlock(pos, false);
+							block.playerDestroy(serverLevel, (Player) living, pos, state, serverLevel.getBlockEntity(pos), ItemStack.EMPTY);
+							serverLevel.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
 						if (player instanceof ServerPlayer) {
 							player.awardStat(Stats.ITEM_USED.get(this));
 						}
 						return true;
 					}
-				} else if (EventHooks.canEntityGrief(serverLevel, living)) {
+				} else if (serverLevel.getGameRules().get(GameRules.MOB_GRIEFING)) {
 					serverLevel.destroyBlock(pos, true);
 					return true;
 				}

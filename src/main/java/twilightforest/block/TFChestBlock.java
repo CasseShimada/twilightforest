@@ -1,6 +1,7 @@
 package twilightforest.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -9,7 +10,7 @@ import twilightforest.init.TFBlockEntities;
 
 public class TFChestBlock extends ChestBlock {
 	public TFChestBlock(Properties properties) {
-		super(TFBlockEntities.TF_CHEST::get, properties);
+		super(TFBlockEntities.TF_CHEST::get, SoundEvents.CHEST_OPEN, SoundEvents.CHEST_CLOSE, properties);
 	}
 
 	@Override

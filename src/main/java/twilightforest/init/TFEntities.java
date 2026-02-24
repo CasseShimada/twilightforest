@@ -1,19 +1,18 @@
 package twilightforest.init;
 
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Zombie;
-import net.minecraft.world.entity.vehicle.Boat;
-import net.minecraft.world.entity.vehicle.ChestBoat;
+import net.minecraft.world.entity.monster.zombie.Zombie;
+import net.minecraft.world.entity.vehicle.boat.Boat;
+import net.minecraft.world.entity.vehicle.boat.ChestBoat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import twilightforest.util.registry.DeferredHolder;
+import twilightforest.util.registry.DeferredRegister;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
 import twilightforest.entity.*;
@@ -30,8 +29,8 @@ public class TFEntities {
 
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, TwilightForestMod.ID);
 	public static final DeferredRegister<Item> SPAWN_EGGS = DeferredRegister.create(Registries.ITEM, TwilightForestMod.ID);
-	public static final Map<Holder<EntityType<?>>, Supplier<AttributeSupplier.Builder>> ATTRIBUTES = new HashMap<>();
-	public static final Map<Holder<EntityType<?>>, SpawnPlacements.SpawnPredicate<?>> SPAWN_PREDICATES = new HashMap<>();
+	public static final Map<DeferredHolder<EntityType<?>, ? extends EntityType<?>>, Supplier<AttributeSupplier.Builder>> ATTRIBUTES = new HashMap<>();
+	public static final Map<DeferredHolder<EntityType<?>, ? extends EntityType<?>>, SpawnPlacements.SpawnPredicate<?>> SPAWN_PREDICATES = new HashMap<>();
 
 	public static final DeferredHolder<EntityType<?>, EntityType<Adherent>> ADHERENT = registerWithAttributes("adherent", EntityType.Builder.of(Adherent::new, MobCategory.MONSTER).sized(0.8F, 2.2F).clientTrackingRange(8), Adherent::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<AlphaYeti>> ALPHA_YETI = registerWithEgg("alpha_yeti", EntityType.Builder.of(AlphaYeti::new, MobCategory.MONSTER).sized(3.8F, 5.0F).clientTrackingRange(16), AlphaYeti::registerAttributes, Monster::checkAnyLightMonsterSpawnRules);
@@ -44,9 +43,9 @@ public class TFEntities {
 	public static final DeferredHolder<EntityType<?>, EntityType<CarminiteGhastguard>> CARMINITE_GHASTGUARD = registerWithEgg("carminite_ghastguard", EntityType.Builder.of(CarminiteGhastguard::new, MobCategory.MONSTER).sized(4.0F, 6.0F).clientTrackingRange(20).fireImmune(), CarminiteGhastguard::registerAttributes, CarminiteGhastguard::checkGhastguardSpawnRules);
 	public static final DeferredHolder<EntityType<?>, EntityType<CarminiteGhastling>> CARMINITE_GHASTLING = registerWithEgg("carminite_ghastling", EntityType.Builder.of(CarminiteGhastling::new, MobCategory.MONSTER).sized(1.1F, 1.5F).eyeHeight(0.5F).clientTrackingRange(10).fireImmune(), CarminiteGhastling::registerAttributes, CarminiteGhastling::checkGhastlingSpawnRules);
 	public static final DeferredHolder<EntityType<?>, EntityType<CarminiteGolem>> CARMINITE_GOLEM = registerWithEgg("carminite_golem", EntityType.Builder.of(CarminiteGolem::new, MobCategory.MONSTER).sized(1.4F, 2.9F).clientTrackingRange(8), CarminiteGolem::registerAttributes, Monster::checkMonsterSpawnRules);
-	public static final DeferredHolder<EntityType<?>, EntityType<ChainBlock>> CHAIN_BLOCK = registerMisc("chain_block", EntityType.Builder.<ChainBlock>of(ChainBlock::new, MobCategory.MISC).sized(0.6F, 0.6F).noSummon().clientTrackingRange(8).setUpdateInterval(1).fireImmune());
+	public static final DeferredHolder<EntityType<?>, EntityType<ChainBlock>> CHAIN_BLOCK = registerMisc("chain_block", EntityType.Builder.<ChainBlock>of(ChainBlock::new, MobCategory.MISC).sized(0.6F, 0.6F).noSummon().clientTrackingRange(8).updateInterval(1).fireImmune());
 	public static final DeferredHolder<EntityType<?>, EntityType<CharmEffect>> CHARM_EFFECT = registerMisc("charm_effect", EntityType.Builder.<CharmEffect>of(CharmEffect::new, MobCategory.MISC).sized(0.0F, 0.0F).clientTrackingRange(4).updateInterval(Integer.MAX_VALUE).noSave().noSummon().fireImmune());
-	public static final DeferredHolder<EntityType<?>, EntityType<CubeOfAnnihilation>> CUBE_OF_ANNIHILATION = registerMisc("cube_of_annihilation", EntityType.Builder.<CubeOfAnnihilation>of(CubeOfAnnihilation::new, MobCategory.MISC).sized(1.0F, 1.0F).noSummon().clientTrackingRange(4).setUpdateInterval(20).fireImmune());
+	public static final DeferredHolder<EntityType<?>, EntityType<CubeOfAnnihilation>> CUBE_OF_ANNIHILATION = registerMisc("cube_of_annihilation", EntityType.Builder.<CubeOfAnnihilation>of(CubeOfAnnihilation::new, MobCategory.MISC).sized(1.0F, 1.0F).noSummon().clientTrackingRange(4).updateInterval(20).fireImmune());
 	public static final DeferredHolder<EntityType<?>, EntityType<DeathTome>> DEATH_TOME = registerWithEgg("death_tome", EntityType.Builder.of(DeathTome::new, MobCategory.MONSTER).sized(0.75F, 1.5F).clientTrackingRange(8), DeathTome::registerAttributes, Monster::checkMonsterSpawnRules);
 	public static final DeferredHolder<EntityType<?>, EntityType<Deer>> DEER = registerWithEgg("deer", EntityType.Builder.of(Deer::new, MobCategory.CREATURE).sized(0.7F, 1.8F).clientTrackingRange(8), Deer::registerAttributes, Animal::checkAnimalSpawnRules);
 	public static final DeferredHolder<EntityType<?>, EntityType<DwarfRabbit>> DWARF_RABBIT = registerWithEgg("dwarf_rabbit", EntityType.Builder.of(DwarfRabbit::new, MobCategory.CREATURE).sized(0.4F, 0.4F).clientTrackingRange(8), DwarfRabbit::registerAttributes, Animal::checkAnimalSpawnRules);
@@ -112,7 +111,7 @@ public class TFEntities {
 	public static final DeferredHolder<EntityType<?>, EntityType<UpperGoblinKnight>> UPPER_GOBLIN_KNIGHT = registerWithPlacement("upper_goblin_knight", EntityType.Builder.of(UpperGoblinKnight::new, MobCategory.MONSTER).sized(1.1F, 1.3F).clientTrackingRange(8), UpperGoblinKnight::registerAttributes, Monster::checkMonsterSpawnRules);
 	public static final DeferredHolder<EntityType<?>, EntityType<UrGhast>> UR_GHAST = registerWithEgg("ur_ghast", EntityType.Builder.of(UrGhast::new, MobCategory.MONSTER).sized(14.0F, 18.0F).clientTrackingRange(24).fireImmune(), UrGhast::registerAttributes, Monster::checkAnyLightMonsterSpawnRules);
 	public static final DeferredHolder<EntityType<?>, EntityType<WinterWolf>> WINTER_WOLF = registerWithEgg("winter_wolf", EntityType.Builder.of(WinterWolf::new, MobCategory.MONSTER).sized(1.4F, 1.9F).eyeHeight(1.45F).clientTrackingRange(8), WinterWolf::registerAttributes, WinterWolf::checkWinterSpawnRules);
-	public static final DeferredHolder<EntityType<?>, EntityType<Wraith>> WRAITH = registerWithEgg("wraith", EntityType.Builder.of(Wraith::new, MobCategory.MONSTER).sized(0.6F, 2.1F).clientTrackingRange(8).fireImmune(), Wraith::registerAttributes, Wraith::checkMonsterSpawnRules);
+	public static final DeferredHolder<EntityType<?>, EntityType<Wraith>> WRAITH = registerWithEgg("wraith", EntityType.Builder.of(Wraith::new, MobCategory.MONSTER).sized(0.6F, 2.1F).clientTrackingRange(8).fireImmune(), Wraith::registerAttributes, Wraith::checkWraithSpawnRules);
 	public static final DeferredHolder<EntityType<?>, EntityType<Yeti>> YETI = registerWithEgg("yeti", EntityType.Builder.of(Yeti::new, MobCategory.MONSTER).sized(1.4F, 2.4F).clientTrackingRange(8), Yeti::registerAttributes, Yeti::checkYetiSpawnRules);
 
 	public static final DeferredHolder<EntityType<?>, EntityType<Boat>> TWILIGHT_OAK_BOAT = registerMisc("twilight_oak_boat", EntityType.Builder.<Boat>of((type, level) -> new Boat(type, level, TFItems.TWILIGHT_OAK_BOAT), MobCategory.MISC).sized(1.375F, 0.5625F).eyeHeight(0.5625F).clientTrackingRange(10));
@@ -153,7 +152,7 @@ public class TFEntities {
 
 	public static <E extends Mob> DeferredHolder<EntityType<?>, EntityType<E>> registerWithEgg(String name, EntityType.Builder<E> builder, Supplier<AttributeSupplier.Builder> attributes, @Nullable SpawnPlacements.SpawnPredicate<E> predicate) {
 		DeferredHolder<EntityType<?>, EntityType<E>> ret = ENTITY_TYPES.register(name, () -> builder.build(createIDFor(name)));
-		SPAWN_EGGS.register(name + "_spawn_egg", () -> new SpawnEggItem(ret.get(), new Item.Properties().setId(ResourceKey.create(Registries.ITEM, TwilightForestMod.prefix(name + "_spawn_egg")))));
+		SPAWN_EGGS.register(name + "_spawn_egg", () -> new SpawnEggItem(new Item.Properties().spawnEgg(ret.get()).setId(ResourceKey.create(Registries.ITEM, TwilightForestMod.prefix(name + "_spawn_egg")))));
 		ATTRIBUTES.put(ret, attributes);
 		if (predicate != null) {
 			SPAWN_PREDICATES.put(ret, predicate);

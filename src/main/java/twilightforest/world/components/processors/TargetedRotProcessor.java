@@ -11,15 +11,15 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.BlockRotProce
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFStructureProcessors;
+import twilightforest.mixin.accessor.BlockRotProcessorAccessor;
 
 import java.util.ArrayList;
 
 public final class TargetedRotProcessor extends BlockRotProcessor {
 	public static final MapCodec<TargetedRotProcessor> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 		BlockState.CODEC.listOf().xmap(ImmutableSet::copyOf, ArrayList::new).fieldOf("blocks_to_rot").forGetter(p -> p.blocksToRot),
-		Codec.FLOAT.fieldOf("integrity").orElse(1.0f).forGetter(p -> p.integrity)
+		Codec.FLOAT.fieldOf("integrity").orElse(1.0f).forGetter(p -> ((BlockRotProcessorAccessor) (Object) p).twilightforest$getIntegrity())
 	).apply(instance, TargetedRotProcessor::new));
 
 	private final ImmutableSet<BlockState> blocksToRot;
@@ -29,9 +29,8 @@ public final class TargetedRotProcessor extends BlockRotProcessor {
 		this.blocksToRot = blocksToRot;
 	}
 
-	@Nullable
 	@Override
-	public StructureTemplate.StructureBlockInfo process(LevelReader level, BlockPos origin, BlockPos centerBottom, StructureTemplate.StructureBlockInfo originalBlockInfo, StructureTemplate.StructureBlockInfo modifiedBlockInfo, StructurePlaceSettings settings, @Nullable StructureTemplate template) {
+	public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos origin, BlockPos centerBottom, StructureTemplate.StructureBlockInfo originalBlockInfo, StructureTemplate.StructureBlockInfo modifiedBlockInfo, StructurePlaceSettings settings) {
 		if (!this.blocksToRot.contains(modifiedBlockInfo.state())) return modifiedBlockInfo;
 		return super.processBlock(level, origin, centerBottom, originalBlockInfo, modifiedBlockInfo, settings);
 	}

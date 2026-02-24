@@ -39,11 +39,6 @@ public class MoonwormQueenItem extends Item {
 	}
 
 	@Override
-	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-		return false;
-	}
-
-	@Override
 	public InteractionResult use(Level level, Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
 		if (TFItemStackUtils.isAtZeroDurability(stack)) {
@@ -72,7 +67,7 @@ public class MoonwormQueenItem extends Item {
 
 			if (!TFItemStackUtils.isAtZeroDurability(stack) && player.mayUseItemAt(pos, context.getClickedFace(), stack) && level.isUnobstructed(TFBlocks.MOONWORM.get().defaultBlockState(), pos, CollisionContext.empty())) {
 				if (this.tryPlace(blockItemUseContext).consumesAction()) {
-					SoundType soundtype = level.getBlockState(pos).getBlock().getSoundType(level.getBlockState(pos), level, pos, player);
+					SoundType soundtype = level.getBlockState(pos).getSoundType();
 					level.playSound(player, pos, soundtype.getPlaceSound(), SoundSource.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
 					// TF - damage stack instead of shrinking
 					player.stopUsingItem();
@@ -127,21 +122,20 @@ public class MoonwormQueenItem extends Item {
 				Level level = context.getLevel();
 				Player player = context.getPlayer();
 				ItemStack stack = context.getItemInHand();
-				BlockState blockstate1 = level.getBlockState(blockpos);
-				if (blockstate1.is(blockstate.getBlock())) {
-					blockstate1 = this.updateBlockStateFromTag(blockpos, level, stack, blockstate1);
-					BlockItem.updateCustomBlockEntityTag(level, player, blockpos, stack);
-					BlockItem.updateBlockEntityComponents(level, blockpos, stack);
-					blockstate1.getBlock().setPlacedBy(level, blockpos, blockstate1, player, stack);
-					if (player instanceof ServerPlayer) {
-						CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayer) player, blockpos, stack);
+					BlockState blockstate1 = level.getBlockState(blockpos);
+					if (blockstate1.is(blockstate.getBlock())) {
+						blockstate1 = this.updateBlockStateFromTag(blockpos, level, stack, blockstate1);
+						BlockItem.updateCustomBlockEntityTag(level, player, blockpos, stack);
+						blockstate1.getBlock().setPlacedBy(level, blockpos, blockstate1, player, stack);
+						if (player instanceof ServerPlayer) {
+							CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayer) player, blockpos, stack);
+						}
 					}
-				}
 
-				SoundType soundtype = blockstate1.getSoundType(level, blockpos, player);
-				level.playSound(player, blockpos, soundtype.getPlaceSound(), SoundSource.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
-				level.gameEvent(GameEvent.BLOCK_PLACE, blockpos, GameEvent.Context.of(player, blockstate1));
-				//TF: instead of shrinking the stack here damage it
+					SoundType soundtype = blockstate1.getSoundType();
+					level.playSound(player, blockpos, soundtype.getPlaceSound(), SoundSource.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+					level.gameEvent(GameEvent.BLOCK_PLACE, blockpos, GameEvent.Context.of(player, blockstate1));
+					//TF: instead of shrinking the stack here damage it
 				TFItemStackUtils.hurtWithoutBreaking(stack, 1, player);
 				return InteractionResult.SUCCESS;
 			}

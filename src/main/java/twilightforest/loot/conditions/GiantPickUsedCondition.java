@@ -24,13 +24,13 @@ public record GiantPickUsedCondition(LootContext.EntityTarget target) implements
 
 	@Override
 	public Set<ContextKey<?>> getReferencedContextParams() {
-		return ImmutableSet.of(this.target.getParam());
+		return ImmutableSet.of(this.target.contextParam());
 	}
 
 	@Override
 	public boolean test(LootContext context) {
-		if (context.getOptionalParameter(this.target.getParam()) instanceof Player player) {
-			var attachment = player.getData(TFDataAttachments.GIANT_PICKAXE_MINING);
+		if (context.getOptionalParameter(this.target.contextParam()) instanceof Player player) {
+			var attachment = TFDataAttachments.get(player, TFDataAttachments.GIANT_PICKAXE_MINING);
 			return player.level().getGameTime() == attachment.getMining() && attachment.canMakeGiantBlock();
 		}
 		return false;

@@ -17,7 +17,7 @@ import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
-import tamaized.beanification.Autowired;
+import twilightforest.mixin.accessor.StructurePiecesBuilderAccessor;
 import twilightforest.world.components.structures.selectors.KnightStonesRandomBlockSelectorFactory;
 import twilightforest.world.components.structures.selectors.StrongholdStonesRandomBlockSelectorFactory;
 import twilightforest.world.components.structures.TFStructureComponentOld;
@@ -28,16 +28,14 @@ import java.util.List;
 
 
 public abstract class KnightStrongholdComponent extends TFStructureComponentOld {
-	@Autowired
-	private static StrongholdStonesRandomBlockSelectorFactory strongholdStones;
-	@Autowired
-	private static KnightStonesRandomBlockSelectorFactory knightStones;
+	private static final StrongholdStonesRandomBlockSelectorFactory strongholdStones = new StrongholdStonesRandomBlockSelectorFactory();
+	private static final KnightStonesRandomBlockSelectorFactory knightStones = new KnightStonesRandomBlockSelectorFactory();
 
 	public final List<BlockPos> doors = new ArrayList<>();
 
 	public KnightStrongholdComponent(StructurePieceType piece, CompoundTag nbt) {
 		super(piece, nbt);
-		this.readOpeningsFromArray(nbt.getIntArray("doorInts"));
+		this.readOpeningsFromArray(nbt.getIntArray("doorInts").orElse(new int[0]));
 	}
 
 	public KnightStrongholdComponent(StructurePieceType type, int i, Direction facing, int x, int y, int z) {
@@ -142,7 +140,7 @@ public abstract class KnightStrongholdComponent extends TFStructureComponentOld 
 	protected StructurePiece findBreakInComponent(StructurePieceAccessor list, int x, int y, int z) {
 		BlockPos pos = new BlockPos(x, y, z);
 		if (list instanceof StructurePiecesBuilder start) {
-			for (StructurePiece component : start.pieces) {
+			for (StructurePiece component : ((StructurePiecesBuilderAccessor) start).twilightforest$getPieces()) {
 				if (component.getBoundingBox() != null && component.getBoundingBox().isInside(pos)) {
 					return component;
 				}

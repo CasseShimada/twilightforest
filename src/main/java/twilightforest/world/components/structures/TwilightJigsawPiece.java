@@ -5,7 +5,7 @@ import net.minecraft.core.FrontAndTop;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
@@ -20,7 +20,7 @@ import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
-import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
+import twilightforest.world.components.structures.PieceBeardifierModifier;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.util.jigsaw.JigsawPlaceContext;
@@ -46,8 +46,8 @@ public class TwilightJigsawPiece extends TwilightTemplateStructurePiece implemen
 	}
 
 	@Nullable
-	public static TwilightJigsawPiece initializeTemplateFromPool(ResourceLocation templatePool, BlockPos.MutableBlockPos parentJunctionPos, FrontAndTop parentOrientation, String selectName, RandomSource rand, int genDepth, StructureTemplateManager structureManager) {
-		ResourceLocation templateId = StructureTemplateDefinitions.INSTANCE.rollTemplatePool(rand, templatePool);
+	public static TwilightJigsawPiece initializeTemplateFromPool(Identifier templatePool, BlockPos.MutableBlockPos parentJunctionPos, FrontAndTop parentOrientation, String selectName, RandomSource rand, int genDepth, StructureTemplateManager structureManager) {
+		Identifier templateId = StructureTemplateDefinitions.INSTANCE.rollTemplatePool(rand, templatePool);
 		JigsawPlaceContext placeContext = JigsawPlaceContext.pickPlaceableJunction(parentJunctionPos, BlockPos.ZERO, parentOrientation, structureManager, templateId, selectName, rand);
 
 		if (templateId == null || placeContext == null)
@@ -56,7 +56,7 @@ public class TwilightJigsawPiece extends TwilightTemplateStructurePiece implemen
 		return TwilightJigsawPiece.defaultForTemplate(genDepth, structureManager, templateId, placeContext);
 	}
 
-	public static TwilightJigsawPiece defaultForTemplate(int genDepth, StructureTemplateManager structureManager, ResourceLocation templateLocation, JigsawPlaceContext jigsawContext) {
+	public static TwilightJigsawPiece defaultForTemplate(int genDepth, StructureTemplateManager structureManager, Identifier templateLocation, JigsawPlaceContext jigsawContext) {
 		TwilightJigsawPiece twilightJigsawPiece = new TwilightJigsawPiece(TFStructurePieceTypes.TFJigsawTemplate.value(), genDepth, structureManager, templateLocation, jigsawContext);
 		twilightJigsawPiece.placeSettings().addProcessor(JigsawReplacementProcessor.INSTANCE);
 		twilightJigsawPiece.placeSettings().addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK);
@@ -71,7 +71,7 @@ public class TwilightJigsawPiece extends TwilightTemplateStructurePiece implemen
 		this.terrainAdjustment = TerrainAdjustment.NONE;
 	}
 
-	public TwilightJigsawPiece(StructurePieceType type, int genDepth, StructureTemplateManager structureManager, ResourceLocation templateLocation, JigsawPlaceContext jigsawContext) {
+	public TwilightJigsawPiece(StructurePieceType type, int genDepth, StructureTemplateManager structureManager, Identifier templateLocation, JigsawPlaceContext jigsawContext) {
 		super(type, genDepth, structureManager, templateLocation, jigsawContext.placementSettings(), jigsawContext.templatePos());
 
 		this.sourceJigsaw = jigsawContext.seedJigsaw();
@@ -80,11 +80,11 @@ public class TwilightJigsawPiece extends TwilightTemplateStructurePiece implemen
 	}
 
 	protected static JigsawRecord readSourceFromNBT(CompoundTag structureTag) {
-		return JigsawRecord.fromTag(structureTag.getCompound("source"));
+		return JigsawRecord.fromTag(structureTag.getCompoundOrEmpty("source"));
 	}
 
 	protected static List<JigsawRecord> readConnectionsFromNBT(CompoundTag structureTag) {
-		ListTag connections = structureTag.getList("connections", Tag.TAG_COMPOUND);
+		ListTag connections = structureTag.getListOrEmpty("connections");
 
 		List<JigsawRecord> connectionsList = new ArrayList<>();
 

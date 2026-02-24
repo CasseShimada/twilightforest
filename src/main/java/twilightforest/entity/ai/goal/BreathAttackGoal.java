@@ -12,6 +12,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.entity.IBreathAttacker;
+import twilightforest.entity.TFMultipartEntity;
 
 import java.util.*;
 
@@ -114,8 +115,9 @@ public class BreathAttackGoal<T extends Mob & IBreathAttacker> extends Goal {
 		List<Entity> possibleList = this.entityHost.level().getEntities(this.entityHost, this.entityHost.getBoundingBox().move(lookVec.x() * offset, lookVec.y() * offset, lookVec.z() * offset).inflate(var9, var9, var9));
 		double hitDist = 0;
 
-		if (this.entityHost.isMultipartEntity())
-			possibleList.removeAll(Arrays.asList(Objects.requireNonNull(this.entityHost.getParts())));
+		if (this.entityHost instanceof TFMultipartEntity multipart && multipart.getParts() != null) {
+			possibleList.removeAll(Arrays.asList(multipart.getParts()));
+		}
 
 		for (Entity possibleEntity : possibleList) {
 			if (possibleEntity.isPickable() && possibleEntity != this.entityHost && EntitySelector.NO_CREATIVE_OR_SPECTATOR.and(EntitySelector.LIVING_ENTITY_STILL_ALIVE).test(possibleEntity)) {

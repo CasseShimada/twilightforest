@@ -1,15 +1,10 @@
 package twilightforest.init;
 
-import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.EquipmentAssets;
 import twilightforest.TwilightForestMod;
-import twilightforest.item.ArcticArmorItem;
-
-import java.util.Optional;
-import java.util.function.BiConsumer;
 
 public class TFEquipmentAssets {
 
@@ -24,25 +19,5 @@ public class TFEquipmentAssets {
 
 	static ResourceKey<EquipmentAsset> createId(String name) {
 		return ResourceKey.create(EquipmentAssets.ROOT_ID, TwilightForestMod.prefix(name));
-	}
-
-	public static void bootstrap(BiConsumer<ResourceKey<EquipmentAsset>, EquipmentClientInfo> consumer) {
-		consumer.accept(IRONWOOD, EquipmentClientInfo.builder().addHumanoidLayers(TwilightForestMod.prefix("ironwood"), false).build());
-		consumer.accept(STEELEAF, EquipmentClientInfo.builder().addHumanoidLayers(TwilightForestMod.prefix("steeleaf"), false).build());
-		consumer.accept(NAGA, EquipmentClientInfo.builder().addHumanoidLayers(TwilightForestMod.prefix("naga_scale"), false).build());
-		consumer.accept(FIERY, EquipmentClientInfo.builder().addHumanoidLayers(TwilightForestMod.prefix("fiery"), false).build());
-		consumer.accept(KNIGHTMETAL, EquipmentClientInfo.builder().addHumanoidLayers(TwilightForestMod.prefix("knightmetal"), false).build());
-		consumer.accept(PHANTOM, EquipmentClientInfo.builder().addMainHumanoidLayer(TwilightForestMod.prefix("phantom"), false).build());
-		consumer.accept(ARCTIC, EquipmentClientInfo.builder()
-			.addLayers(EquipmentClientInfo.LayerType.HUMANOID, arcticDyeable(TwilightForestMod.prefix("arctic"), true))
-			.addLayers(EquipmentClientInfo.LayerType.HUMANOID, arcticDyeable(TwilightForestMod.prefix("arctic_overlay"), false))
-			.addLayers(EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS, arcticDyeable(TwilightForestMod.prefix("arctic"), true))
-			.addLayers(EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS, arcticDyeable(TwilightForestMod.prefix("arctic_overlay"), false))
-			.build());
-		consumer.accept(YETI, EquipmentClientInfo.builder().addHumanoidLayers(TwilightForestMod.prefix("yeti"), false).build());
-	}
-
-	public static EquipmentClientInfo.Layer arcticDyeable(ResourceLocation textureId, boolean dyeable) {
-		return new EquipmentClientInfo.Layer(textureId, dyeable ? Optional.of(new EquipmentClientInfo.Dyeable(Optional.of(ArcticArmorItem.DEFAULT_COLOR))) : Optional.empty(), false);
 	}
 }

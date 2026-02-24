@@ -13,11 +13,12 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.HangingEntity;
-import net.minecraft.world.entity.decoration.Painting;
-import net.minecraft.world.entity.decoration.PaintingVariant;
+import net.minecraft.world.entity.decoration.painting.Painting;
+import net.minecraft.world.entity.decoration.painting.PaintingVariant;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -31,11 +32,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ProtoChunk;
 import net.minecraft.world.level.chunk.status.ChunkStatus;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.fml.util.ObfuscationReflectionHelper;
-import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
 import twilightforest.entity.EnforcedHomePoint;
@@ -48,6 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.DoubleUnaryOperator;
+import twilightforest.util.blocks.EntityDestroyable;
 
 public class EntityUtil {
 
@@ -61,11 +63,10 @@ public class EntityUtil {
 
 	public static boolean canDestroyBlock(Level world, BlockPos pos, BlockState state, Entity entity) {
 		float hardness = state.getDestroySpeed(world, pos);
+		boolean canDestroy = !(state.getBlock() instanceof EntityDestroyable destroyable) || destroyable.canEntityDestroy(state, world, pos, entity);
 		return hardness >= 0f && hardness < 50f && !state.isAir()
 			&& !(world.getBlockEntity(pos) instanceof Container)
-			&& state.getBlock().canEntityDestroy(state, world, pos, entity)
-			&& (/* rude type limit */!(entity instanceof LivingEntity)
-			|| EventHooks.onEntityDestroyBlock((LivingEntity) entity, pos, state));
+			&& canDestroy;
 	}
 
 	/**
@@ -88,23 +89,35 @@ public class EntityUtil {
 	}
 
 	private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
-	private static final Method LivingEntity_getDeathSound = ObfuscationReflectionHelper.findMethod(LivingEntity.class, "getDeathSound");
+	private static final Method LivingEntity_getDeathSound = findMethod(LivingEntity.class, "getDeathSound");
 	private static final MethodHandle handle_LivingEntity_getDeathSound;
-	private static final Method HangingEntity_setDirection = ObfuscationReflectionHelper.findMethod(HangingEntity.class, "setDirection", Direction.class);
-	private static final MethodHandle handle_HangingEntity_setDirection;
 
 	static {
 		MethodHandle tmp_handle_LivingEntity_getDeathSound = null;
-		MethodHandle tmp_handle_HangingEntity_setDirection = null;
 
 		try {
-			tmp_handle_LivingEntity_getDeathSound = LOOKUP.unreflect(LivingEntity_getDeathSound);
-			tmp_handle_HangingEntity_setDirection = LOOKUP.unreflect(HangingEntity_setDirection);
+			if (LivingEntity_getDeathSound != null) {
+				tmp_handle_LivingEntity_getDeathSound = LOOKUP.unreflect(LivingEntity_getDeathSound);
+			}
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
 		handle_LivingEntity_getDeathSound = tmp_handle_LivingEntity_getDeathSound;
-		handle_HangingEntity_setDirection = tmp_handle_HangingEntity_setDirection;
+	}
+
+	@Nullable
+	private static Method findMethod(Class<?> owner, String name, Class<?>... params) {
+		try {
+			Method method = owner.getDeclaredMethod(name, params);
+			method.setAccessible(true);
+			return method;
+		} catch (NoSuchMethodException e) {
+			TwilightForestMod.LOGGER.warn("Missing method {} on {}", name, owner.getName());
+			return null;
+		} catch (Exception e) {
+			TwilightForestMod.LOGGER.warn("Failed accessing method {} on {}", name, owner.getName(), e);
+			return null;
+		}
 	}
 
 	@Nullable
@@ -177,17 +190,7 @@ public class EntityUtil {
 	public static boolean tryHangPainting(WorldGenLevel world, BlockPos pos, Direction direction, @Nullable Holder<PaintingVariant> chosenPainting) {
 		if (chosenPainting == null) return false;
 
-		Painting painting = createEntityIgnoreException(EntityType.PAINTING, world, EntitySpawnReason.STRUCTURE);
-
-		painting.setPos(pos.getX(), pos.getY(), pos.getZ());
-		try {
-			handle_HangingEntity_setDirection.invoke(painting, direction);
-		} catch (Throwable throwable) {
-			throwable.printStackTrace();
-
-			return false;
-		}
-		painting.setVariant(chosenPainting);
+		Painting painting = new Painting(world.getLevel(), pos, direction, chosenPainting);
 
 		if (checkValidPaintingPosition(world, painting)) {
 			world.addFreshEntity(painting);
@@ -288,11 +291,11 @@ public class EntityUtil {
 		if (!(oldEntity.level() instanceof ServerLevel level)) return false;
 		var newEntity = newType.create(level, EntitySpawnReason.CONVERSION);
 		if (newEntity == null) return false;
-		if (!(newEntity instanceof LivingEntity living) || EventHooks.canLivingConvert(oldEntity, (EntityType<? extends LivingEntity>) living.getType(), timer -> {})) {
+		if (!(newEntity instanceof LivingEntity)) return false;
+		{
 			var passengerSave = oldEntity.getPassengers();
 			if (oldEntity instanceof Mob mob && newEntity instanceof Mob newMob) {
 				newEntity = mob.convertTo((EntityType<? extends Mob>) newMob.getType(), ConversionParams.single(mob, true, true), mob1 -> {
-					EventHooks.onLivingConvert(oldEntity, mob1);
 				});
 			} else {
 				newEntity.copyPosition(oldEntity);
@@ -303,12 +306,12 @@ public class EntityUtil {
 							ItemStack itemstack = oldEntity.getItemBySlot(equipmentslot).copyAndClear();
 							if (!itemstack.isEmpty()) {
 								mob.setItemSlot(equipmentslot, itemstack.copyAndClear());
-								mob.setDropChance(equipmentslot, oldMob.getEquipmentDropChance(equipmentslot));
+								mob.setDropChance(equipmentslot, oldMob.getDropChances().byEquipment(equipmentslot));
 							}
 						}
 					}
 
-					EventHooks.finalizeMobSpawn(mob, level, level.getCurrentDifficultyAt(oldEntity.blockPosition()), EntitySpawnReason.CONVERSION, null);
+					mob.finalizeSpawn(level, level.getCurrentDifficultyAt(oldEntity.blockPosition()), EntitySpawnReason.CONVERSION, null);
 				}
 
 				oldEntity.level().addFreshEntity(newEntity);
@@ -316,7 +319,13 @@ public class EntityUtil {
 			}
 			try { // try copying what can be copied
 				UUID uuid = newEntity.getUUID();
-				newEntity.load(oldEntity.saveWithoutId(newEntity.saveWithoutId(new CompoundTag())));
+				TagValueOutput baseOut = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
+				newEntity.saveWithoutId(baseOut);
+				CompoundTag mergedTag = baseOut.buildResult();
+				TagValueOutput oldOut = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
+				oldEntity.saveWithoutId(oldOut);
+				mergedTag.merge(oldOut.buildResult());
+				newEntity.load(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), mergedTag));
 				newEntity.setUUID(uuid);
 				if (newEntity instanceof LivingEntity living) {
 					living.setHealth(living.getMaxHealth());
@@ -325,8 +334,11 @@ public class EntityUtil {
 				TwilightForestMod.LOGGER.warn("Couldn't transform entity NBT data", e);
 			}
 
-			if (oldEntity instanceof Saddleable saddleable && saddleable.isSaddled() && !(newEntity instanceof Saddleable)) {
-				newEntity.spawnAtLocation(level, Items.SADDLE);
+			if (oldEntity instanceof LivingEntity oldLiving) {
+				ItemStack saddle = oldLiving.getItemBySlot(EquipmentSlot.SADDLE);
+				if (!saddle.isEmpty()) {
+					newEntity.spawnAtLocation(level, saddle.copy());
+				}
 			}
 
 			if (newEntity instanceof Mob mob) {
@@ -341,15 +353,13 @@ public class EntityUtil {
 
 			if (!passengerSave.isEmpty()) {
 				for (var entity : passengerSave) {
-					entity.startRiding(newEntity, true);
+					entity.startRiding(newEntity, true, true);
 				}
 			}
 
-			if (newEntity instanceof LivingEntity living) EventHooks.onLivingConvert(oldEntity, living);
 			level.playSound(null, newEntity.blockPosition(), TFSounds.POWDER_USE.get(), newEntity.getSoundSource());
 			return true;
 		}
-		return false;
 	}
 
 	@Nullable

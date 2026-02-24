@@ -4,11 +4,17 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Item.TooltipContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import twilightforest.TwilightForestMod;
@@ -16,18 +22,18 @@ import twilightforest.block.GiantBlock;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFDataAttachments;
 
-import java.util.List;
+import java.util.function.Consumer;
 
-public class GiantPickItem extends PickaxeItem {
+public class GiantPickItem extends Item {
 
 	public GiantPickItem(ToolMaterial material, Properties properties) {
-		super(material, 8, -3.5F, properties);
+		super(properties);
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flags) {
-		super.appendHoverText(stack, context, tooltip, flags);
-		tooltip.add(Component.translatable(getDescriptionId() + ".desc").withStyle(ChatFormatting.GRAY));
+	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flags) {
+		super.appendHoverText(stack, context, display, tooltip, flags);
+		tooltip.accept(Component.translatable(getDescriptionId() + ".desc").withStyle(ChatFormatting.GRAY));
 	}
 
 	public static ItemAttributeModifiers createGiantAttributes(ToolMaterial material, float damage, float speed) {
@@ -43,22 +49,21 @@ public class GiantPickItem extends PickaxeItem {
 	public float getDestroySpeed(ItemStack stack, BlockState state) {
 		float destroySpeed = super.getDestroySpeed(stack, state);
 		// extra 64X strength vs giant obsidian
-		destroySpeed *= (state.is(TFBlocks.GIANT_OBSIDIAN)) ? 64 : 1;
+		destroySpeed *= (state.is(TFBlocks.GIANT_OBSIDIAN.get())) ? 64 : 1;
 		// 64x strength vs giant blocks
 		return state.getBlock() instanceof GiantBlock ? destroySpeed * 64 : destroySpeed;
 	}
 
 	@Override
-	public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
-		ItemStack stack = player.getMainHandItem();
-		if (stack.is(this)) {
-			var attachment = player.getData(TFDataAttachments.GIANT_PICKAXE_MINING);
+	public boolean canDestroyBlock(ItemStack stack, BlockState state, Level level, BlockPos pos, LivingEntity entity) {
+		if (entity instanceof Player player && stack.is(this)) {
+			var attachment = TFDataAttachments.get(player, TFDataAttachments.GIANT_PICKAXE_MINING);
 			if (attachment.getMining() != level.getGameTime()) {
 				attachment.setMining(level.getGameTime());
 				attachment.setBreaking(false);
 				attachment.setGiantBlockConversion(0);
 			}
 		}
-		return super.canAttackBlock(state, level, pos, player);
+		return super.canDestroyBlock(stack, state, level, pos, entity);
 	}
 }

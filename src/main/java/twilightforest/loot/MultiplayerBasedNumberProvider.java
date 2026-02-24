@@ -34,8 +34,8 @@ public record MultiplayerBasedNumberProvider(NumberProvider rollsPerPlayer, Numb
 	@Override
 	public float getFloat(LootContext context) {
 		if (TFConfig.multiplayerFightAdjuster.adjustsLootRolls()) {
-			if (context.hasParameter(LootContextParams.THIS_ENTITY) && context.getParameter(LootContextParams.THIS_ENTITY).hasData(TFDataAttachments.MULTIPLAYER_FIGHT)) {
-				int qualifiedPlayers = context.getParameter(LootContextParams.THIS_ENTITY).getData(TFDataAttachments.MULTIPLAYER_FIGHT).getQualifiedPlayers().size();
+			if (context.hasParameter(LootContextParams.THIS_ENTITY) && TFDataAttachments.has(context.getParameter(LootContextParams.THIS_ENTITY), TFDataAttachments.MULTIPLAYER_FIGHT)) {
+				int qualifiedPlayers = TFDataAttachments.get(context.getParameter(LootContextParams.THIS_ENTITY), TFDataAttachments.MULTIPLAYER_FIGHT).getQualifiedPlayers().size();
 				float total = this.defaultRolls.getFloat(context);
 				for (int i = 0; i < qualifiedPlayers - 1; i++) {
 					total += Math.max(0, this.rollsPerPlayer.getFloat(context));

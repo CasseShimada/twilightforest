@@ -8,7 +8,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
 import twilightforest.TwilightForestMod;
 
 import java.util.ArrayList;
@@ -65,7 +64,7 @@ public class ParticlePacket implements CustomPacketPayload {
 	private record QueuedParticle(ParticleOptions particleOptions, double x, double y, double z, double x2, double y2, double z2) {
 	}
 
-	public static void handle(ParticlePacket message, IPayloadContext ctx) {
+	public static void handle(ParticlePacket message, PayloadContext ctx) {
 		ctx.enqueueWork(() -> {
 			for (QueuedParticle queuedParticle : message.queuedParticles) {
 				ctx.player().level().addParticle(queuedParticle.particleOptions, queuedParticle.x, queuedParticle.y, queuedParticle.z, queuedParticle.x2, queuedParticle.y2, queuedParticle.z2);

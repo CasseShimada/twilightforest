@@ -13,17 +13,17 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.structure.*;
+import twilightforest.mixin.accessor.TemplateStructurePieceInvoker;
 
 import java.util.Comparator;
 import java.util.List;
 
-@tamaized.beanification.Component
 public class CountTemplateCommand {
 	public LiteralArgumentBuilder<CommandSourceStack> register() {
-		return Commands.literal("count_template").requires(cs -> cs.hasPermission(Commands.LEVEL_GAMEMASTERS))
+		return Commands.literal("count_template").requires(cs -> Commands.LEVEL_GAMEMASTERS.check(cs.permissions()))
 			.then(Commands.argument("filter_structure", ResourceKeyArgument.key(Registries.STRUCTURE)).executes(this::countTemplates));
 	}
 
@@ -38,17 +38,17 @@ public class CountTemplateCommand {
 
 		StructureStart structureAt = level.structureManager().getStructureAt(commandPos, structure.value());
 
-		Object2IntMap<ResourceLocation> templateCounts = new Object2IntOpenHashMap<>();
+		Object2IntMap<Identifier> templateCounts = new Object2IntOpenHashMap<>();
 
 		List<StructurePiece> structurePieces = structureAt.getPieces();
 		for (StructurePiece piece : structurePieces) {
 			if (piece instanceof TemplateStructurePiece templatePiece) {
-				ResourceLocation resourceLocation = templatePiece.makeTemplateLocation();
+				Identifier resourceLocation = ((TemplateStructurePieceInvoker) templatePiece).twilightforest$makeTemplateLocation();
 				templateCounts.put(resourceLocation, templateCounts.getOrDefault(resourceLocation, 0) + 1);
 			}
 		}
 
-		for (Object2IntMap.Entry<ResourceLocation> countedTemplate : templateCounts.object2IntEntrySet().stream().sorted(Comparator.comparing(Object2IntMap.Entry::getKey)).sorted(Comparator.comparing(Object2IntMap.Entry::getIntValue)).toList()) {
+		for (Object2IntMap.Entry<Identifier> countedTemplate : templateCounts.object2IntEntrySet().stream().sorted(Comparator.comparing(Object2IntMap.Entry::getKey)).sorted(Comparator.comparing(Object2IntMap.Entry::getIntValue)).toList()) {
 			MutableComponent text = Component.literal(countedTemplate.getKey() + "    " + countedTemplate.getIntValue());
 			context.getSource().sendSystemMessage(text);
 		}

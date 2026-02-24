@@ -24,6 +24,7 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilde
 import twilightforest.TwilightForestMod;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFStructurePieceTypes;
+import twilightforest.mixin.accessor.StructurePiecesBuilderAccessor;
 import twilightforest.util.BoundingBoxUtils;
 import twilightforest.util.RotationUtil;
 import twilightforest.world.components.structures.TFStructureComponentOld;
@@ -38,7 +39,7 @@ public class FinalCastleMazeTower13Component extends TowerWingComponent {
 
 	public FinalCastleMazeTower13Component(StructurePieceType piece, CompoundTag nbt) {
 		super(piece, nbt);
-		color = NbtUtils.readBlockState(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY).lookupOrThrow(Registries.BLOCK), nbt.getCompound("color"));
+		color = NbtUtils.readBlockState(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY).lookupOrThrow(Registries.BLOCK), nbt.getCompoundOrEmpty("color"));
 	}
 
 	public FinalCastleMazeTower13Component(StructurePieceSerializationContext ctx, CompoundTag nbt) {
@@ -249,7 +250,7 @@ public class FinalCastleMazeTower13Component extends TowerWingComponent {
 
 		// find start
 		if (list instanceof StructurePiecesBuilder start2) {
-			StructurePiece start = start2.pieces.get(0);
+			StructurePiece start = ((StructurePiecesBuilderAccessor) start2).twilightforest$getPieces().get(0);
 
 			int centerX = ((start.getBoundingBox().minX() + 128) >> 8) << 8;
 			int centerZ = ((start.getBoundingBox().minZ() + 128) >> 8) << 8;

@@ -3,7 +3,6 @@ package twilightforest.entity.boss;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -24,15 +23,16 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiRecord;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.LargeFireball;
+import net.minecraft.world.entity.projectile.hurtingprojectile.LargeFireball;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.event.EventHooks;
-import twilightforest.client.renderer.TFWeatherRenderer;
 import twilightforest.entity.ai.control.NoClipMoveControl;
 import twilightforest.entity.ai.goal.UrGhastAttackGoal;
 import twilightforest.entity.ai.goal.UrGhastFlightGoal;
@@ -40,6 +40,7 @@ import twilightforest.entity.ai.goal.UrGhastLookGoal;
 import twilightforest.entity.monster.CarminiteGhastguard;
 import twilightforest.entity.monster.CarminiteGhastling;
 import twilightforest.init.*;
+import twilightforest.util.TFClientFlags;
 import twilightforest.util.entities.EntityUtil;
 
 import java.util.ArrayList;
@@ -200,8 +201,9 @@ public class UrGhast extends BaseTFBoss {
 		if (this.level() instanceof ServerLevel serverLevel) {
 			LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(serverLevel, EntitySpawnReason.EVENT);
 			if (lightningbolt != null) {
-				BlockPos blockpos = serverLevel.findLightningTargetAround(BlockPos.containing(this.position().add(new Vec3(18.0D, 0.0D, 0.0D).yRot((float) Math.toRadians(this.getRandom().nextInt(360))))));
-				lightningbolt.moveTo(Vec3.atBottomCenterOf(blockpos));
+				BlockPos target = BlockPos.containing(this.position().add(new Vec3(18.0D, 0.0D, 0.0D).yRot((float) Math.toRadians(this.getRandom().nextInt(360)))));
+				BlockPos blockpos = serverLevel.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, target);
+				lightningbolt.setPos(Vec3.atBottomCenterOf(blockpos));
 				lightningbolt.setVisualOnly(true);
 				serverLevel.addFreshEntity(lightningbolt);
 			}
@@ -211,7 +213,7 @@ public class UrGhast extends BaseTFBoss {
 
 	@Override
 	public void tick() {
-		if (this.level().isClientSide() && !this.isDeadOrDying() && this.isInTantrum()) TFWeatherRenderer.urGhastAlive = true;
+		if (this.level().isClientSide() && !this.isDeadOrDying() && this.isInTantrum()) TFClientFlags.urGhastAlive = true;
 		super.tick();
 	}
 
@@ -250,14 +252,19 @@ public class UrGhast extends BaseTFBoss {
 
 		for (int i = 0; i < tries; i++) {
 			CarminiteGhastling minion = TFEntities.CARMINITE_GHASTLING.get().create(level, EntitySpawnReason.MOB_SUMMONED);
+			if (minion == null) continue;
 
 			double sx = x + ((this.getRandom().nextDouble() - this.getRandom().nextDouble()) * rangeXZ);
 			double sy = y + (this.getRandom().nextDouble() * rangeY);
 			double sz = z + ((this.getRandom().nextDouble() - this.getRandom().nextDouble()) * rangeXZ);
 
-			minion.moveTo(sx, sy, sz, level.getRandom().nextFloat() * 360.0F, 0.0F);
+			float yaw = level.getRandom().nextFloat() * 360.0F;
+			minion.setPos(sx, sy, sz);
+			minion.setYRot(yaw);
+			minion.setXRot(0.0F);
+			minion.setYHeadRot(yaw);
 			minion.makeBossMinion();
-			EventHooks.finalizeMobSpawn(minion, level, level.getCurrentDifficultyAt(minion.blockPosition()), EntitySpawnReason.MOB_SUMMONED, null);
+			minion.finalizeSpawn(level, level.getCurrentDifficultyAt(minion.blockPosition()), EntitySpawnReason.MOB_SUMMONED, null);
 			if (minion.checkSpawnRules(level, EntitySpawnReason.MOB_SUMMONED)) {
 				level.addFreshEntity(minion);
 				minion.spawnAnim();
@@ -293,7 +300,7 @@ public class UrGhast extends BaseTFBoss {
 
 		if (this.tickCount % 60 == 0 && !this.getTrapLocations().isEmpty()) {
 			//validate traps positions are still actually usable traps. If not, remove them
-			this.getTrapLocations().removeIf(pos -> !this.level().getBlockState(pos).is(TFBlocks.GHAST_TRAP) || !this.level().canSeeSky(pos.above()));
+			this.getTrapLocations().removeIf(pos -> !this.level().getBlockState(pos).is(TFBlocks.GHAST_TRAP.get()) || !this.level().canSeeSky(pos.above()));
 		}
 
 		if (this.firstTick || this.tickCount % 100 == 0) {
@@ -348,7 +355,7 @@ public class UrGhast extends BaseTFBoss {
 	private List<BlockPos> scanForTraps(ServerLevel level) {
 		PoiManager poimanager = level.getPoiManager();
 		Stream<PoiRecord> stream = poimanager.getInRange(type ->
-				type.is(TFPOITypes.GHAST_TRAP.getKey()),
+				type.is(TFPOITypes.GHAST_TRAP.getId()),
 			this.getLogicalScanPoint(),
 			this.getHomeRadius(),
 			PoiManager.Occupancy.ANY);
@@ -423,15 +430,15 @@ public class UrGhast extends BaseTFBoss {
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putBoolean("inTantrum", this.isInTantrum());
+	public void addAdditionalSaveData(ValueOutput output) {
+		super.addAdditionalSaveData(output);
+		output.putBoolean("inTantrum", this.isInTantrum());
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		this.setInTantrum(compound.getBoolean("inTantrum"));
+	public void readAdditionalSaveData(ValueInput input) {
+		super.readAdditionalSaveData(input);
+		this.setInTantrum(input.getBooleanOr("inTantrum", this.isInTantrum()));
 	}
 
 	@Override
@@ -441,7 +448,7 @@ public class UrGhast extends BaseTFBoss {
 		if (this.level() instanceof ServerLevel serverLevel) {
 			LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(serverLevel, EntitySpawnReason.EVENT);
 			if (lightningbolt != null) {
-				lightningbolt.moveTo(this.position().add(0.0D, this.getBbHeight() * 0.5F, 0.0D));
+				lightningbolt.setPos(this.position().add(0.0D, this.getBbHeight() * 0.5F, 0.0D));
 				lightningbolt.setVisualOnly(true);
 				serverLevel.addFreshEntity(lightningbolt);
 			}
@@ -468,7 +475,7 @@ public class UrGhast extends BaseTFBoss {
 	//[VanillaCopy] of FlyingMob.travel
 	@Override
 	public void travel(Vec3 vec3) {
-		if (this.isControlledByLocalInstance()) {
+		if (this.isEffectiveAi()) {
 			if (this.isInWater()) {
 				this.moveRelative(0.02F, vec3);
 				this.move(MoverType.SELF, this.getDeltaMovement());
@@ -481,13 +488,13 @@ public class UrGhast extends BaseTFBoss {
 				BlockPos ground = getBlockPosBelowThatAffectsMyMovement();
 				float f = 0.91F;
 				if (this.onGround()) {
-					f = this.level().getBlockState(ground).getFriction(this.level(), ground, this) * 0.91F;
+					f = this.level().getBlockState(ground).getBlock().getFriction() * 0.91F;
 				}
 
 				float f1 = 0.16277137F / (f * f * f);
 				f = 0.91F;
 				if (this.onGround()) {
-					f = this.level().getBlockState(ground).getFriction(this.level(), ground, this) * 0.91F;
+					f = this.level().getBlockState(ground).getBlock().getFriction() * 0.91F;
 				}
 
 				this.moveRelative(this.onGround() ? 0.1F * f1 : 0.02F, vec3);

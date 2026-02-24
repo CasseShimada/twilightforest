@@ -7,7 +7,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.neoforged.neoforge.event.EventHooks;
+import net.minecraft.world.level.gamerules.GameRules;
 import twilightforest.entity.boss.Naga;
 import twilightforest.init.TFSounds;
 import twilightforest.util.entities.EntityUtil;
@@ -71,7 +71,11 @@ public class NagaMovementPattern extends Goal {
 						//the stunless charge has a higher chance to happen the lower the naga's health gets
 						//difficulty is also factored in. The higher the difficulty the greater the chance
 						float healthRatio = 1.0F - (this.naga.getHealth() / (this.naga.getMaxHealth())) - 0.25F;
-						float chance = Mth.clamp(healthRatio + (this.naga.level().getCurrentDifficultyAt(this.naga.blockPosition()).getDifficulty().getId() * 0.05F), 0.0F, 0.5F);
+						float difficultyId = this.naga.level().getDifficulty().getId();
+						if (this.naga.level() instanceof ServerLevel serverLevel) {
+							difficultyId = serverLevel.getCurrentDifficultyAt(this.naga.blockPosition()).getDifficulty().getId();
+						}
+						float chance = Mth.clamp(healthRatio + (difficultyId * 0.05F), 0.0F, 0.5F);
 						float randChance = this.naga.getRandom().nextFloat() * 0.75F;
 						boolean stunless = randChance < chance;
 						this.naga.setStunlessCharging(stunless);
@@ -176,7 +180,7 @@ public class NagaMovementPattern extends Goal {
 	}
 
 	private void crumbleBelowTarget(int range) {
-		if (!EventHooks.canEntityGrief((ServerLevel) this.naga.level(), this.naga) || this.naga.getTarget() == null) return;
+		if (!(this.naga.level() instanceof ServerLevel serverLevel) || !serverLevel.getGameRules().get(GameRules.MOB_GRIEFING) || this.naga.getTarget() == null) return;
 
 		int floor = (int) this.naga.getBoundingBox().minY;
 		int targetY = (int) this.naga.getTarget().getBoundingBox().minY;

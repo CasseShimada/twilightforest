@@ -13,7 +13,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.common.Tags;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -103,7 +103,7 @@ public class OreScannerComponent {
 		ImmutableMap.Builder<String, Integer> builder = ImmutableMap.builder();
 
 		for (Object2IntMap.Entry<Block> entry : this.blockCounter.object2IntEntrySet()) {
-			if (entry.getIntValue() > 0 && entry.getKey().builtInRegistryHolder().is(Tags.Blocks.ORES)) {
+			if (entry.getIntValue() > 0 && entry.getKey().builtInRegistryHolder().is(ConventionalBlockTags.ORES)) {
 				builder.put(entry.getKey().getDescriptionId(), entry.getIntValue());
 			}
 		}

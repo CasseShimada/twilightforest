@@ -1,16 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/template_spawn_egg",
-    "tints": [
-      {
-        "type": "minecraft:constant",
-        "value": -5975274
-      },
-      {
-        "type": "minecraft:constant",
-        "value": -14993397
-      }
-    ]
+    "model": "twilightforest:item/naga_spawn_egg"
   }
 }

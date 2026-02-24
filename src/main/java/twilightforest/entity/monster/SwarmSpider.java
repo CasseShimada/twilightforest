@@ -17,12 +17,11 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.entity.monster.spider.Spider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFEntities;
 import twilightforest.init.TFSounds;
@@ -47,13 +46,13 @@ public class SwarmSpider extends Spider {
 		super.registerGoals();
 
 		// Remove default spider melee task
-		this.goalSelector.availableGoals.removeIf(t -> t.getGoal() instanceof MeleeAttackGoal);
+		this.goalSelector.removeAllGoals(goal -> goal instanceof MeleeAttackGoal);
 
 		// Replace with one that doesn't become docile in light
 		this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1, true));
 
 		// Remove default spider target player task
-		this.targetSelector.availableGoals.removeIf(t -> t.getPriority() == 2 && t.getGoal() instanceof NearestAttackableTargetGoal);
+		this.targetSelector.removeAllGoals(goal -> goal instanceof NearestAttackableTargetGoal);
 		// Replace with one that doesn't care about light
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
 	}
@@ -116,9 +115,12 @@ public class SwarmSpider extends Spider {
 		if (this.getFirstPassenger() != null || accessor.getRandom().nextInt(200) == 0) {
 			SkeletonDruid druid = TFEntities.SKELETON_DRUID.get().create(this.level(), EntitySpawnReason.JOCKEY);
 			if (druid != null) {
-				druid.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
+				druid.setPos(this.getX(), this.getY(), this.getZ());
+				druid.setYRot(this.getYRot());
+				druid.setXRot(0.0F);
+				druid.setYHeadRot(this.getYRot());
 				druid.setBaby(true);
-				EventHooks.finalizeMobSpawn(druid, accessor, difficulty, EntitySpawnReason.JOCKEY, null);
+				druid.finalizeSpawn(accessor, difficulty, EntitySpawnReason.JOCKEY, null);
 
 				if (this.hasPassenger(e -> true)) this.ejectPassengers();
 				druid.startRiding(this);

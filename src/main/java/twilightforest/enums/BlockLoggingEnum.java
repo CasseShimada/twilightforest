@@ -3,7 +3,7 @@ package twilightforest.enums;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
@@ -72,7 +72,7 @@ public enum BlockLoggingEnum implements StringRepresentable {
 
 	public interface IMultiLoggable extends BucketPickup, LiquidBlockContainer {
 		@Override
-		default ItemStack pickupBlock(@Nullable Player player, LevelAccessor world, BlockPos pos, BlockState state) {
+		default ItemStack pickupBlock(@Nullable LivingEntity entity, LevelAccessor world, BlockPos pos, BlockState state) {
 			Fluid stateFluid = state.getValue(MULTILOGGED).fluid;
 
 			if (stateFluid != Fluids.EMPTY) {
@@ -83,7 +83,7 @@ public enum BlockLoggingEnum implements StringRepresentable {
 		}
 
 		@Override
-		default boolean canPlaceLiquid(@Nullable Player player, BlockGetter world, BlockPos pos, BlockState state, Fluid fluid) {
+		default boolean canPlaceLiquid(@Nullable LivingEntity entity, BlockGetter world, BlockPos pos, BlockState state, Fluid fluid) {
 			return state.hasProperty(MULTILOGGED) && Ref.FLUIDS.containsKey(fluid) && !fluid.equals(state.getValue(MULTILOGGED).fluid) && state.getValue(MULTILOGGED) == AIR;
 		}
 
@@ -106,7 +106,6 @@ public enum BlockLoggingEnum implements StringRepresentable {
 			return Optional.empty();
 		}
 
-		@Override
 		default Optional<SoundEvent> getPickupSound(BlockState state) {
 			return state.getValue(MULTILOGGED).fluid.getPickupSound();
 		}

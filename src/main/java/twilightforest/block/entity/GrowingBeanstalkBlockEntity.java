@@ -2,10 +2,8 @@ package twilightforest.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
@@ -14,6 +12,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import twilightforest.init.TFBlockEntities;
 import twilightforest.init.TFBlocks;
 
@@ -163,18 +163,18 @@ public class GrowingBeanstalkBlockEntity extends BlockEntity {
 	 */
 	private boolean tryToPlaceStalk(Level level, BlockPos pos, boolean checkBlocked) {
 		BlockState state = level.getBlockState(pos);
-		if (state.isAir() || (state.canBeReplaced() && !state.is(TFBlocks.BEANSTALK_GROWER)) || (state.isAir() || state.is(BlockTags.LEAVES)) || state.is(TFBlocks.FLUFFY_CLOUD)) {
+		if (state.isAir() || (state.canBeReplaced() && !state.is(TFBlocks.BEANSTALK_GROWER.get())) || (state.isAir() || state.is(BlockTags.LEAVES)) || state.is(TFBlocks.FLUFFY_CLOUD.get())) {
 			level.setBlockAndUpdate(pos, TFBlocks.HUGE_STALK.get().defaultBlockState());
 			if (pos.getY() > 150) {
 				for (int i = 0; i < 7; i++) {
-					if (level.getBlockState(pos.relative(Direction.UP, i)).is(TFBlocks.WISPY_CLOUD) || level.getBlockState(pos.relative(Direction.UP, i)).is(TFBlocks.FLUFFY_CLOUD)) {
+					if (level.getBlockState(pos.relative(Direction.UP, i)).is(TFBlocks.WISPY_CLOUD.get()) || level.getBlockState(pos.relative(Direction.UP, i)).is(TFBlocks.FLUFFY_CLOUD.get())) {
 						level.setBlockAndUpdate(pos.relative(Direction.UP, i), Blocks.AIR.defaultBlockState());
 					}
 				}
 			}
 			return true;
 		} else {
-			if (!state.is(TFBlocks.HUGE_STALK) && checkBlocked) {
+			if (!state.is(TFBlocks.HUGE_STALK.get()) && checkBlocked) {
 				this.blocksSkipped++;
 			}
 			return this.blocksSkipped < 15;
@@ -189,33 +189,31 @@ public class GrowingBeanstalkBlockEntity extends BlockEntity {
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
-		super.saveAdditional(compoundTag, provider);
-		compoundTag.putInt("ticker", this.ticker);
-		compoundTag.putInt("layer", this.layer);
-		compoundTag.putBoolean("isAreaClearEnough", this.isAreaClearEnough);
-
-		compoundTag.putInt("nextLeafY", this.nextLeafY);
-		compoundTag.putInt("yOffset", this.yOffset);
-		compoundTag.putFloat("cScale", this.cScale);
-		compoundTag.putFloat("rScale", this.rScale);
-		compoundTag.putInt("maxY", this.maxY);
-		compoundTag.putInt("blocksSkipped", this.blocksSkipped);
+	protected void saveAdditional(ValueOutput output) {
+		super.saveAdditional(output);
+		output.putInt("ticker", this.ticker);
+		output.putInt("layer", this.layer);
+		output.putBoolean("isAreaClearEnough", this.isAreaClearEnough);
+		output.putInt("nextLeafY", this.nextLeafY);
+		output.putInt("yOffset", this.yOffset);
+		output.putFloat("cScale", this.cScale);
+		output.putFloat("rScale", this.rScale);
+		output.putInt("maxY", this.maxY);
+		output.putInt("blocksSkipped", this.blocksSkipped);
 	}
 
 	@Override
-	protected void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
-		super.loadAdditional(compoundTag, provider);
-		this.ticker = compoundTag.getInt("ticker");
-		this.layer = compoundTag.getInt("layer");
-		this.isAreaClearEnough = compoundTag.getBoolean("isAreaClearEnough");
-
-		this.nextLeafY = compoundTag.getInt("nextLeafY");
-		this.yOffset = compoundTag.getInt("yOffset");
-		this.cScale = compoundTag.getFloat("cScale");
-		this.rScale = compoundTag.getFloat("rScale");
-		this.maxY = compoundTag.getInt("maxY");
-		this.blocksSkipped = compoundTag.getInt("blocksSkipped");
+	protected void loadAdditional(ValueInput input) {
+		super.loadAdditional(input);
+		this.ticker = input.getIntOr("ticker", 0);
+		this.layer = input.getIntOr("layer", 0);
+		this.isAreaClearEnough = input.getBooleanOr("isAreaClearEnough", true);
+		this.nextLeafY = input.getIntOr("nextLeafY", 0);
+		this.yOffset = input.getIntOr("yOffset", 0);
+		this.cScale = input.getFloatOr("cScale", 0.0F);
+		this.rScale = input.getFloatOr("rScale", 0.0F);
+		this.maxY = input.getIntOr("maxY", 0);
+		this.blocksSkipped = input.getIntOr("blocksSkipped", 0);
 	}
 
 	public boolean isBeanstalkRumbling() {

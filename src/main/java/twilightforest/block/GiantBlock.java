@@ -5,6 +5,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -44,10 +45,10 @@ public class GiantBlock extends Block {
 	}
 
 	@Override
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-		super.onRemove(state, level, pos, newState, isMoving);
-		if (!this.isSelfDestructing && !isVolumeFilled(level, pos)) {
-			this.setGiantBlockToAir(level, pos);
+	public void destroy(LevelAccessor level, BlockPos pos, BlockState state) {
+		super.destroy(level, pos, state);
+		if (level instanceof Level levelRef && !this.isSelfDestructing && !isVolumeFilled(levelRef, pos)) {
+			this.setGiantBlockToAir(levelRef, pos);
 		}
 	}
 

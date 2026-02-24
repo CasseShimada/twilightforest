@@ -33,10 +33,10 @@ public record RechargeScepterEffect() implements EnchantmentEntityEffect {
 				if (item.is(recipe.getScepter())) {
 					var ingredientCopy = new ArrayList<>(recipe.placementInfo().ingredients());
 					scepterItemsCheck:
-					for (int i = 0; i < player.getInventory().items.size(); i++) {
-						var stack = player.getInventory().items.get(i);
+					for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+						var stack = player.getInventory().getItem(i);
 						if (stack.isEmpty()) continue;
-						if (stack.is(TFItems.EXANIMATE_ESSENCE)) {
+						if (stack.is(TFItems.EXANIMATE_ESSENCE.get())) {
 							stack.shrink(1);
 							item.setDamageValue(0);
 							return;
@@ -52,11 +52,12 @@ public record RechargeScepterEffect() implements EnchantmentEntityEffect {
 
 					if (slotsToConsume.size() == recipe.placementInfo().ingredients().size()) {
 						for (int slot : slotsToConsume) {
-							ItemStack stack = player.getInventory().items.get(slot);
+							ItemStack stack = player.getInventory().getItem(slot);
 							stack.shrink(1);
-							if (!stack.getCraftingRemainder().isEmpty()) {
-								if (!player.getInventory().add(stack.getCraftingRemainder())) {
-									player.drop(stack.getCraftingRemainder(), false);
+							ItemStack remainder = stack.getItem().getCraftingRemainder();
+							if (!remainder.isEmpty()) {
+								if (!player.getInventory().add(remainder)) {
+									player.drop(remainder, false);
 								}
 							}
 						}

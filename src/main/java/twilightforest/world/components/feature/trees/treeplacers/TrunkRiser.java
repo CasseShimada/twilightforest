@@ -12,6 +12,7 @@ import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 import twilightforest.init.TFFeatureModifiers;
+import twilightforest.mixin.accessor.TrunkPlacerAccessor;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -26,7 +27,7 @@ public class TrunkRiser extends TrunkPlacer {
 	private final TrunkPlacer placer;
 
 	public TrunkRiser(int baseHeight, TrunkPlacer placer) {
-		super(placer.baseHeight, placer.heightRandA, placer.heightRandB);
+		super(((TrunkPlacerAccessor) placer).twilightforest$getBaseHeight(), ((TrunkPlacerAccessor) placer).twilightforest$getHeightRandA(), ((TrunkPlacerAccessor) placer).twilightforest$getHeightRandB());
 
 		this.offset = baseHeight;
 		this.placer = placer;

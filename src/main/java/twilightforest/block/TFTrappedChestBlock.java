@@ -2,7 +2,8 @@ package twilightforest.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
@@ -16,7 +17,7 @@ import twilightforest.init.TFBlockEntities;
 
 public class TFTrappedChestBlock extends ChestBlock {
 	public TFTrappedChestBlock(Properties properties) {
-		super(TFBlockEntities.TF_TRAPPED_CHEST::get, properties);
+		super(TFBlockEntities.TF_TRAPPED_CHEST::get, SoundEvents.CHEST_OPEN, SoundEvents.CHEST_CLOSE, properties);
 	}
 
 	@Override
@@ -25,7 +26,7 @@ public class TFTrappedChestBlock extends ChestBlock {
 	}
 
 	@Override
-	protected Stat<ResourceLocation> getOpenChestStat() {
+	protected Stat<Identifier> getOpenChestStat() {
 		return Stats.CUSTOM.get(Stats.TRIGGER_TRAPPED_CHEST);
 	}
 

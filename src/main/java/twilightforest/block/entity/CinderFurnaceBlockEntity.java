@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.block.CinderFurnaceBlock;
 import twilightforest.init.TFBlockEntities;
@@ -129,7 +128,7 @@ public class CinderFurnaceBlockEntity extends FurnaceBlockEntity {
 //		if (level.hasChunkAt(pos)) {
 //			BlockState nearbyBlock = level.getBlockState(pos);
 //
-//			if (!nearbyBlock.is(TFBlocks.CINDER_LOG) && nearbyBlock.is(BlockTags.LOGS)) {
+//			if (!nearbyBlock.is(TFBlocks.CINDER_LOG.get()) && nearbyBlock.is(BlockTags.LOGS)) {
 //				level.setBlock(pos, this.getCinderLog(dx, dy, dz), 2);
 //				level.levelEvent(LevelEvent.PARTICLES_MOBBLOCK_SPAWN, pos, 0);
 //				level.levelEvent(LevelEvent.PARTICLES_MOBBLOCK_SPAWN, pos, 0);

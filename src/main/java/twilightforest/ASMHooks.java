@@ -1,14 +1,8 @@
 package twilightforest;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectListIterator;
-import net.minecraft.client.Camera;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.culling.Frustum;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -35,22 +29,19 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import org.jetbrains.annotations.Nullable;
-import tamaized.beanification.Autowired;
 import twilightforest.init.TFDataAttachments;
 import twilightforest.util.ArmorUtil;
 import twilightforest.util.multiparts.MultipartEntityUtil;
 import twilightforest.block.CloudBlock;
 import twilightforest.block.WroughtIronFenceBlock;
-import twilightforest.client.FoliageColorHandler;
 import twilightforest.config.TFConfig;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFDataComponents;
 import twilightforest.init.custom.ChunkBlanketProcessors;
 import twilightforest.util.WorldUtil;
 import twilightforest.world.components.structures.CustomDensitySource;
-import twilightforest.world.components.structures.util.CustomStructureData;
 
 import java.util.Iterator;
 import java.util.List;
@@ -59,14 +50,8 @@ import java.util.List;
 @SuppressWarnings({"JavadocReference", "unused", "RedundantSuppression", "deprecation"})
 public class ASMHooks {
 
-	@Autowired
-	private static ArmorUtil armorUtil;
-
-	@Autowired
-	private static MultipartEntityUtil multipartEntityUtil;
-
-	@Autowired
-	private static FoliageColorHandler foliageColorHandler;
+	private static final ArmorUtil armorUtil = new ArmorUtil();
+	private static final MultipartEntityUtil multipartEntityUtil = new MultipartEntityUtil();
 
 	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// armor
@@ -89,7 +74,7 @@ public class ASMHooks {
 	 * {@link net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer#renderArmorPiece(PoseStack, MultiBufferSource, ItemStack, EquipmentSlot, int, HumanoidModel)}
 	 */
 	public static boolean cancelArmorRendering(boolean o, ItemStack stack) {
-		if (o && stack.get(TFDataComponents.EMPERORS_CLOTH) != null) {
+		if (o && stack.get(TFDataComponents.EMPERORS_CLOTH.get()) != null) {
 			return false;
 		}
 		return o;
@@ -188,23 +173,7 @@ public class ASMHooks {
 	 * Targets: {@link net.minecraft.world.level.levelgen.structure.StructureStart#StructureStart(Structure, ChunkPos, int, PiecesContainer)}
 	 */
 	public static StructureStart loadStaticStart(StructureStart start, PiecesContainer piecesContainer, CompoundTag nbt) {
-		if (start.getStructure() instanceof CustomStructureData s)
-			return s.forDeserialization(start.getStructure(), start.getChunkPos(), start.getReferences(), piecesContainer, nbt);
 		return start;
-	}
-
-	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// foliage
-	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * {@link twilightforest.asm.transformers.foliage.FoliageColorResolverTransformer}<p/>
-	 *
-	 * Injection Point:<br/>
-	 * {@link net.minecraft.client.renderer.BiomeColors#FOLIAGE_COLOR_RESOLVER}
-	 */
-	public static int resolveFoliageColor(int o, Biome biome, double x, double z) {
-		return foliageColorHandler.get(o, biome, x, z);
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -220,7 +189,7 @@ public class ASMHooks {
 	public static boolean leashFenceKnotSurvives(boolean o, LeashFenceKnotEntity entity) {
 		if (o) return true; // Short-circuit to avoid an unnecessary #getBlockState call
 		BlockState fenceState = entity.level().getBlockState(entity.getPos());
-		return fenceState.is(TFBlocks.WROUGHT_IRON_FENCE) && fenceState.getValue(WroughtIronFenceBlock.POST) != WroughtIronFenceBlock.PostState.NONE;
+		return fenceState.is(TFBlocks.WROUGHT_IRON_FENCE.get()) && fenceState.getValue(WroughtIronFenceBlock.POST) != WroughtIronFenceBlock.PostState.NONE;
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -236,33 +205,6 @@ public class ASMHooks {
 	@Nullable
 	public static Pair<BlockPos, Holder<Structure>> resolveNearestNonRandomSpreadMapStructure(@Nullable Pair<BlockPos, Holder<Structure>> o, ServerLevel level, HolderSet<Structure> targetStructures, BlockPos pos, int searchRadius, boolean skipKnownStructures) {
 		return WorldUtil.findNearestMapLandmark(level, targetStructures, pos, searchRadius, skipKnownStructures).orElse(o);
-	}
-
-	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// multipart
-	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * {@link twilightforest.asm.transformers.multipart.ResolveEntitiesForRendereringTransformer}<p/>
-	 *
-	 * Injection Point:<br/>
-	 * {@link net.minecraft.client.renderer.LevelRenderer#collectVisibleEntities(Camera, Frustum, List)}<br/>
-	 * [Targets: {@link net.minecraft.client.multiplayer.ClientLevel#entitiesForRendering}]
-	 */
-	public static Iterator<Entity> resolveEntitiesForRendering(Iterator<Entity> iter) {
-		return multipartEntityUtil.injectTFPartEntities(iter);
-	}
-
-	/**
-	 * {@link twilightforest.asm.transformers.multipart.ResolveEntityRendererTransformer}<p/>
-	 *
-	 * Injection Point:<br/>
-	 * {@link net.minecraft.client.renderer.entity.EntityRenderDispatcher#getRenderer(Entity)}<br/>
-	 * Targets: {@link net.minecraft.client.renderer.entity.EntityRenderDispatcher#renderers}
-	 */
-	@Nullable
-	public static EntityRenderer<?, ?> resolveEntityRenderer(@Nullable EntityRenderer<?, ?> renderer, Entity entity) {
-		return multipartEntityUtil.tryLookupTFPartRenderer(renderer, entity);
 	}
 
 	/**
@@ -287,13 +229,13 @@ public class ASMHooks {
 	 * Targets: {@link BlockState#canSustainPlant(BlockGetter, BlockPos, Direction, BlockState)}
 	 */
 	public static TriState modifySoilDecisionForMushroomBlockSurvivability(TriState o, LevelReader level, BlockPos pos) {
-		if (!o.isDefault())
+		if (o != TriState.DEFAULT)
 			return o; // Short-circuit - We should not override non-default soil behaviour otherwise this would allow Mushrooms to survive on ALL blocks
 		for (int x = -1; x <= 1; x++) {
 			for (int z = -1; z <= 1; z++) {
 				if (x == 0 && z == 0)
 					continue;
-				if (level.getBlockState(pos.offset(x, -1, z)).is(TFBlocks.TWILIGHT_PORTAL))
+				if (level.getBlockState(pos.offset(x, -1, z)).is(TFBlocks.TWILIGHT_PORTAL.get()))
 					return TriState.TRUE;
 			}
 		}
@@ -312,6 +254,6 @@ public class ASMHooks {
 	 * Targets: IRETURN
 	 */
 	public static boolean overrideStayCloseToHolder(boolean prior, PathfinderMob mob) {
-		return prior && !mob.hasData(TFDataAttachments.LEASH_PATHFINDER_OVERRIDE);
+		return prior && !TFDataAttachments.has(mob, TFDataAttachments.LEASH_PATHFINDER_OVERRIDE);
 	}
 }

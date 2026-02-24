@@ -8,7 +8,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.TFDataAttachments;
 
@@ -33,12 +32,12 @@ public record UpdateThrownPacket(int entityID, boolean thrown, int thrower, int 
 		return TYPE;
 	}
 
-	public static void handle(UpdateThrownPacket message, IPayloadContext ctx) {
+	public static void handle(UpdateThrownPacket message, PayloadContext ctx) {
 		ctx.enqueueWork(() -> {
 			Level level = ctx.player().level();
 			Entity entity = level.getEntity(message.entityID());
 			if (entity instanceof Player player) {
-				var attachment = player.getData(TFDataAttachments.YETI_THROWING);
+				var attachment = TFDataAttachments.get(player, TFDataAttachments.YETI_THROWING);
 				LivingEntity thrower = message.thrower() != 0 ? (LivingEntity) level.getEntity(message.thrower()) : null;
 				attachment.setThrown(player, message.thrown(), thrower);
 				attachment.setThrowCooldown(player, message.throwCooldown());

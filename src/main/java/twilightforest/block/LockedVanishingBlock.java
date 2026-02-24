@@ -7,9 +7,8 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -33,8 +32,8 @@ public class LockedVanishingBlock extends VanishingBlock {
 	}
 
 	@Override
-	public float getExplosionResistance(BlockState state, BlockGetter getter, BlockPos pos, Explosion explosion) {
-		return state.getValue(LOCKED) ? 6000000.0F : super.getExplosionResistance(state, getter, pos, explosion);
+	public float getExplosionResistance() {
+		return 6000000.0F;
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.DensityFunction;
@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 
 public class BiomeDensitySource {
 	public static final Codec<BiomeDensitySource> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
-		TerrainColumn.CODEC.listOf().fieldOf("biome_landscape").xmap(l -> l.stream().collect(Collectors.toMap(TerrainColumn::getResourceKey, Function.identity())), m -> m.values().stream().sorted(Comparator.comparing(TerrainColumn::getResourceKey)).toList()).forGetter(o -> o.biomeList),
+		TerrainColumn.CODEC.listOf().fieldOf("biome_landscape").xmap(l -> l.stream().collect(Collectors.toMap(TerrainColumn::getResourceKey, Function.identity())), m -> m.values().stream().sorted(Comparator.comparing(column -> column.getResourceKey().identifier().toString())).toList()).forGetter(o -> o.biomeList),
 		BiomeLayerStack.HOLDER_CODEC.fieldOf("biome_layer_config").forGetter(BiomeDensitySource::getBiomeConfig)
 	).apply(instance, instance.stable(BiomeDensitySource::new)));
 
@@ -84,8 +84,8 @@ public class BiomeDensitySource {
 		info.add("BiomeDensitySource at " + cameraPos + ":");
 		info.add("Twilight Biome Column:");
 		biomeColumn.getBiomesDebug(info::add);
-		info.add("Primary Biome: " + biomeKey.location());
-		info.add("Biome at elevation: " + biomeAtY.unwrapKey().map(ResourceKey::location).map(ResourceLocation::toString).orElse("NOT REFERENCED"));
+		info.add("Primary Biome: " + biomeKey.identifier());
+		info.add("Biome at elevation: " + biomeAtY.unwrapKey().map(ResourceKey::identifier).map(Identifier::toString).orElse("NOT REFERENCED"));
 	}
 
 	public static final class DensityData {

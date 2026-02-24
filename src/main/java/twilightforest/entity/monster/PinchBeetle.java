@@ -13,7 +13,7 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.vehicle.boat.Boat;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -75,7 +75,7 @@ public class PinchBeetle extends Monster implements IHostileMount {
 	@Override
 	public void aiStep() {
 		super.aiStep();
-		this.dimensions = this.getDimensions(this.getPose());
+		this.refreshDimensions();
 
 		if (!this.getPassengers().isEmpty()) {
 			Entity passenger = this.getPassengers().getFirst();
@@ -124,31 +124,26 @@ public class PinchBeetle extends Monster implements IHostileMount {
 				// Pluck them from the boat, minecart, donkey, or whatever
 				entity.stopRiding();
 
-				entity.startRiding(this, true);
+				entity.startRiding(this, true, true);
 			}
 		}
 		return EntityUtil.properlyApplyCustomDamageSource(level, this, entity, TFDamageTypes.getEntityDamageSource(this.level(), TFDamageTypes.CLAMPED, this), null);
 	}
 
 	@Override
-	public boolean startRiding(Entity entity, boolean force) {
+	public boolean startRiding(Entity entity, boolean force, boolean sendGameEvent) {
 		if (entity instanceof Boat boat) {
 			boat.discard();
 			this.playSound(SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR);
 			return false;
 		}
 
-		return super.startRiding(entity, force);
+		return super.startRiding(entity, force, sendGameEvent);
 	}
 
 	@Override
 	protected Vec3 getPassengerAttachmentPoint(Entity entity, EntityDimensions dimensions, float yRot) {
 		return new Vec3(0.0F, this.getEyeHeight(), 0.75F);
-	}
-
-	@Override
-	public boolean canRiderInteract() {
-		return true;
 	}
 
 	@Override

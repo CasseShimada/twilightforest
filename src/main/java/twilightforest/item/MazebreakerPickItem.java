@@ -1,16 +1,16 @@
 package twilightforest.item;
 
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.block.state.BlockState;
 import twilightforest.tags.TFBlockTags;
 
 import javax.annotation.Nonnull;
 
-public class MazebreakerPickItem extends PickaxeItem {
+public class MazebreakerPickItem extends Item {
 	public MazebreakerPickItem(ToolMaterial material, Properties properties) {
-		super(material, 1.0F, -2.8F, properties);
+		super(properties.pickaxe(material, 1.0F, -2.8F));
 	}
 
 	@Override

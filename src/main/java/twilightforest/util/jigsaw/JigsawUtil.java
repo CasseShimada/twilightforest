@@ -1,20 +1,20 @@
 package twilightforest.util.jigsaw;
 
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.FrontAndTop;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.JigsawBlock;
-import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,7 +52,7 @@ public class JigsawUtil {
 		}
 	}
 
-	public static List<StructureTemplate.StructureBlockInfo> readConnectableJigsaws(StructureTemplateManager manager, ResourceLocation templateLocation, StructurePlaceSettings settings, @Nullable RandomSource random) {
+	public static List<StructureTemplate.StructureBlockInfo> readConnectableJigsaws(StructureTemplateManager manager, Identifier templateLocation, StructurePlaceSettings settings, @Nullable RandomSource random) {
 		return readConnectableJigsaws(manager.getOrCreate(templateLocation), settings, random);
 	}
 
@@ -66,7 +66,7 @@ public class JigsawUtil {
 		if (random != null) {
 			Util.shuffle(returnables, random);
 			// "Stable" sorting - preserves order of "equal" priorities, as arranged by prior shuffling.
-			SinglePoolElement.sortBySelectionPriority(returnables);
+			returnables.sort(Comparator.comparingInt(StructureTemplate.JigsawBlockInfo::selectionPriority));
 		}
 
 		return returnables.stream().map(StructureTemplate.JigsawBlockInfo::info).collect(Collectors.toCollection(ArrayList::new));

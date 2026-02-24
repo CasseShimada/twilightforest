@@ -1,6 +1,5 @@
 package twilightforest.block;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -9,22 +8,15 @@ import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.BoneMealItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.redstone.ExperimentalRedstoneUtils;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.util.FakePlayer;
-import net.neoforged.neoforge.common.util.FakePlayerFactory;
-import net.neoforged.neoforge.common.util.TriState;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFItems;
@@ -51,13 +43,6 @@ public class UberousSoilBlock extends Block implements BonemealableBlock {
 	public BlockState getStateForPlacement(BlockPlaceContext ctx) {
 		BlockState state = ctx.getLevel().getBlockState(ctx.getClickedPos().above());
 		return state.isSolid() && !(state.getBlock() instanceof BonemealableBlock && !state.is(this)) ? Blocks.DIRT.defaultBlockState() : super.getStateForPlacement(ctx);
-	}
-
-	@Override
-	public TriState canSustainPlant(BlockState state, BlockGetter level, BlockPos soilPosition, Direction facing, BlockState plant) {
-		if (facing.getAxis() != Direction.Axis.Y) return TriState.FALSE;
-		if (plant.is(BlockTags.CROPS)) return TriState.TRUE;
-		return super.canSustainPlant(state, level, soilPosition, facing, plant);
 	}
 
 	@Override
@@ -103,11 +88,9 @@ public class UberousSoilBlock extends Block implements BonemealableBlock {
 
 			if (level instanceof ServerLevel serverLevel) {
 				MinecraftServer server = serverLevel.getServer();
-				FakePlayer fakePlayer = FakePlayerFactory.getMinecraft(serverLevel);
 				server.schedule(new TickTask(server.getTickCount(), () -> {
 					//We need to use a tick task so that plants that grow into tall variants don't just break upon growth
-					for (int i = 0; i < 15; i++)
-						BoneMealItem.applyBonemeal(new ItemStack(Items.BONE_MEAL), serverLevel, pos.above(), fakePlayer);
+					applyBonemealLike(serverLevel, pos.above(), 15);
 				}));
 			}
 
@@ -120,9 +103,8 @@ public class UberousSoilBlock extends Block implements BonemealableBlock {
 
 			if (level instanceof ServerLevel serverLevel) {
 				MinecraftServer server = serverLevel.getServer();
-				FakePlayer fakePlayer = FakePlayerFactory.getMinecraft(serverLevel);
 				server.schedule(new TickTask(server.getTickCount(), () -> {
-					for (int i = 0; i < 15; i++) BoneMealItem.applyBonemeal(new ItemStack(Items.BONE_MEAL), serverLevel, pos.below(), fakePlayer);
+					applyBonemealLike(serverLevel, pos.below(), 15);
 				}));
 
 				level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos.below(), 15); // Bonemeal particles
@@ -140,7 +122,8 @@ public class UberousSoilBlock extends Block implements BonemealableBlock {
 	@Override
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource rand) {
 		if (level.isClientSide() && rand.nextInt(5) == 0) {
-			if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.isHolding(TFItems.MAGIC_BEANS.get())) {
+			var nearest = level.getNearestPlayer(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 8.0D, false);
+			if (nearest != null && nearest.isHolding(TFItems.MAGIC_BEANS.get())) {
 				for (int i = 0; i < 2; i++) {
 					level.addParticle(ParticleTypes.HAPPY_VILLAGER, pos.getX() + rand.nextDouble(), pos.getY() + 1.25D, pos.getZ() + rand.nextDouble(), 0.0D, 0.0D, 0.0D);
 				}
@@ -158,19 +141,19 @@ public class UberousSoilBlock extends Block implements BonemealableBlock {
 				if (
 					!getter.getBlockState(pos.relative(dir).above()).isSolid() &&
 						(blockAt.is(BlockTags.DIRT) || blockAt.is(Blocks.FARMLAND)) &&
-						!blockAt.is(TFBlocks.UBEROUS_SOIL)) {
+						!blockAt.is(TFBlocks.UBEROUS_SOIL.get())) {
 					return true;
 
 				} else if (
 					!getter.getBlockState(pos.relative(dir).above().above()).isSolid() &&
 						(getter.getBlockState(pos.relative(dir).above()).is(BlockTags.DIRT) || getter.getBlockState(pos.relative(dir).above()).is(Blocks.FARMLAND)) &&
-						!getter.getBlockState(pos.relative(dir).above()).is(TFBlocks.UBEROUS_SOIL)) {
+						!getter.getBlockState(pos.relative(dir).above()).is(TFBlocks.UBEROUS_SOIL.get())) {
 					return true;
 
 				} else if (
 					!getter.getBlockState(pos.relative(dir)).isSolid() &&
 						(getter.getBlockState(pos.relative(dir).below()).is(BlockTags.DIRT) || getter.getBlockState(pos.relative(dir).below()).is(Blocks.FARMLAND)) &&
-						!getter.getBlockState(pos.relative(dir).below()).is(TFBlocks.UBEROUS_SOIL)) {
+						!getter.getBlockState(pos.relative(dir).below()).is(TFBlocks.UBEROUS_SOIL.get())) {
 					return true;
 				}
 			}
@@ -196,21 +179,21 @@ public class UberousSoilBlock extends Block implements BonemealableBlock {
 				if (
 					!level.getBlockState(pos.relative(dir).above()).isSolid() &&
 						(blockAt.is(BlockTags.DIRT) || blockAt.is(Blocks.FARMLAND)) &&
-						!blockAt.is(TFBlocks.UBEROUS_SOIL)) {
+						!blockAt.is(TFBlocks.UBEROUS_SOIL.get())) {
 
 					this.spreadTo(level, pos.relative(dir));
 					break;
 				} else if (
 					!level.getBlockState(pos.relative(dir).above().above()).isSolid() &&
 						(level.getBlockState(pos.relative(dir).above()).is(BlockTags.DIRT) || level.getBlockState(pos.relative(dir).above()).is(Blocks.FARMLAND)) &&
-						!level.getBlockState(pos.relative(dir).above()).is(TFBlocks.UBEROUS_SOIL)) {
+						!level.getBlockState(pos.relative(dir).above()).is(TFBlocks.UBEROUS_SOIL.get())) {
 
 					this.spreadTo(level, pos.relative(dir).above());
 					break;
 				} else if (
 					!level.getBlockState(pos.relative(dir)).isSolid() &&
 						(level.getBlockState(pos.relative(dir).below()).is(BlockTags.DIRT) || level.getBlockState(pos.relative(dir).below()).is(Blocks.FARMLAND)) &&
-						!level.getBlockState(pos.relative(dir).below()).is(TFBlocks.UBEROUS_SOIL)) {
+						!level.getBlockState(pos.relative(dir).below()).is(TFBlocks.UBEROUS_SOIL.get())) {
 
 					this.spreadTo(level, pos.relative(dir).below());
 					break;
@@ -222,5 +205,17 @@ public class UberousSoilBlock extends Block implements BonemealableBlock {
 	public void spreadTo(ServerLevel level, BlockPos pos) {
 		level.setBlockAndUpdate(pos, this.defaultBlockState());
 		if (!level.getBlockState(pos.above()).isAir()) this.neighborChanged(this.defaultBlockState(), level, pos, this, Orientation.of(Direction.UP, Direction.UP, Orientation.SideBias.LEFT), false); //TODO how tf do orientations work????
+	}
+
+	private static void applyBonemealLike(ServerLevel level, BlockPos targetPos, int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			BlockState targetState = level.getBlockState(targetPos);
+			if (!(targetState.getBlock() instanceof BonemealableBlock bonemealable)) continue;
+
+			if (bonemealable.isValidBonemealTarget(level, targetPos, targetState)
+				&& bonemealable.isBonemealSuccess(level, level.random, targetPos, targetState)) {
+				bonemealable.performBonemeal(level, level.random, targetPos, targetState);
+			}
+		}
 	}
 }

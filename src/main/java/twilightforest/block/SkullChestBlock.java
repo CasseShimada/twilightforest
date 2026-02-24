@@ -15,6 +15,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -34,8 +35,9 @@ import org.jetbrains.annotations.Nullable;
 import twilightforest.block.entity.SkullChestBlockEntity;
 import twilightforest.enums.BlockLoggingEnum;
 import twilightforest.init.TFBlockEntities;
+import twilightforest.util.blocks.EntityDestroyable;
 
-public class SkullChestBlock extends BaseEntityBlock implements BlockLoggingEnum.IMultiLoggable {
+public class SkullChestBlock extends BaseEntityBlock implements BlockLoggingEnum.IMultiLoggable, EntityDestroyable {
 
 	public static final EnumProperty<Direction> FACING = TFHorizontalBlock.FACING;
 	public static final MapCodec<SkullChestBlock> CODEC = simpleCodec(SkullChestBlock::new);
@@ -88,20 +90,19 @@ public class SkullChestBlock extends BaseEntityBlock implements BlockLoggingEnum
 	}
 
 	@Override
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-		if (!state.is(newState.getBlock())) {
-			BlockEntity tileentity = level.getBlockEntity(pos);
+	public void destroy(LevelAccessor level, BlockPos pos, BlockState state) {
+		if (level instanceof Level levelRef) {
+			BlockEntity tileentity = levelRef.getBlockEntity(pos);
 			if (tileentity instanceof Container) {
-				Containers.dropContents(level, pos, (Container) tileentity);
-				level.updateNeighbourForOutputSignal(pos, this);
+				Containers.dropContents(levelRef, pos, (Container) tileentity);
+				levelRef.updateNeighbourForOutputSignal(pos, this);
 			}
-
-			super.onRemove(state, level, pos, newState, isMoving);
 		}
+		super.destroy(level, pos, state);
 	}
 
 	@Override
-	public float getExplosionResistance(BlockState state, BlockGetter getter, BlockPos pos, Explosion explosion) {
+	public float getExplosionResistance() {
 		return Float.MAX_VALUE;
 	}
 
@@ -124,7 +125,7 @@ public class SkullChestBlock extends BaseEntityBlock implements BlockLoggingEnum
 
 	@Override
 	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
-		if (level instanceof ServerLevel sl && !player.isCreative() && sl.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
+		if (level instanceof ServerLevel sl && !player.isCreative() && sl.getGameRules().get(GameRules.BLOCK_DROPS)) {
 			BlockEntity tile = level.getBlockEntity(pos);
 			if (tile instanceof SkullChestBlockEntity) {
 				if (state.getValue(BlockLoggingEnum.MULTILOGGED).getFluid() == Fluids.EMPTY) {
@@ -190,8 +191,13 @@ public class SkullChestBlock extends BaseEntityBlock implements BlockLoggingEnum
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+	public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos, Direction direction) {
 		return AbstractContainerMenu.getRedstoneSignalFromBlockEntity(level.getBlockEntity(pos));
+	}
+
+	@Override
+	public boolean canEntityDestroy(BlockState state, BlockGetter getter, BlockPos pos, Entity entity) {
+		return false;
 	}
 
 	@Override
@@ -207,11 +213,6 @@ public class SkullChestBlock extends BaseEntityBlock implements BlockLoggingEnum
 	@Override
 	public FluidState getFluidState(BlockState state) {
 		return state.getValue(BlockLoggingEnum.MULTILOGGED).getFluid().defaultFluidState();
-	}
-
-	@Override
-	public boolean canEntityDestroy(BlockState state, BlockGetter getter, BlockPos pos, Entity entity) {
-		return false;
 	}
 
 	@Override

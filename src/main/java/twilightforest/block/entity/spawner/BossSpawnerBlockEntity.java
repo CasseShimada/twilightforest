@@ -13,7 +13,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.event.EventHooks;
 import twilightforest.entity.EnforcedHomePoint;
 
 import java.util.Objects;
@@ -59,8 +58,12 @@ public abstract class BossSpawnerBlockEntity<T extends Mob & EnforcedHomePoint> 
 		T myCreature = this.makeMyCreature();
 
 		BlockPos spawnPos = accessor.getBlockState(this.getBlockPos().below()).getCollisionShape(accessor, this.getBlockPos().below()).isEmpty() ? this.getBlockPos().below() : this.getBlockPos();
-		myCreature.moveTo(spawnPos, accessor.getLevel().getRandom().nextFloat() * 360F, 0.0F);
-		EventHooks.finalizeMobSpawn(myCreature, accessor, accessor.getCurrentDifficultyAt(spawnPos), EntitySpawnReason.SPAWNER, null);
+		float yaw = accessor.getLevel().getRandom().nextFloat() * 360F;
+		myCreature.setPos(spawnPos.getX() + 0.5D, spawnPos.getY(), spawnPos.getZ() + 0.5D);
+		myCreature.setYRot(yaw);
+		myCreature.setXRot(0.0F);
+		myCreature.setYHeadRot(yaw);
+		myCreature.finalizeSpawn(accessor, accessor.getCurrentDifficultyAt(spawnPos), EntitySpawnReason.SPAWNER, null);
 
 		// set creature's home to this
 		this.initializeCreature(myCreature);

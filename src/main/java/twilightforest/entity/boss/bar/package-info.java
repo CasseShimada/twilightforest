@@ -3,7 +3,7 @@
 @ParametersAreNonnullByDefault
 package twilightforest.entity.boss.bar;
 
-import net.minecraft.FieldsAreNonnullByDefault;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import twilightforest.util.annotation.FieldsAreNonnullByDefault;
+import twilightforest.util.annotation.MethodsReturnNonnullByDefault;
 
 import javax.annotation.ParametersAreNonnullByDefault;

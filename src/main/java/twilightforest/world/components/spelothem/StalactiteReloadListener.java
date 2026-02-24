@@ -3,7 +3,7 @@ package twilightforest.world.components.spelothem;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
@@ -26,11 +26,11 @@ public class StalactiteReloadListener extends CodecResourceReloadListener<Speleo
 	public static final Map<String, List<Stalactite>> STALAGMITES_PER_HILL = new HashMap<>();
 
 	public StalactiteReloadListener() {
-		super(SpeleothemVarietyConfig.CODEC, STALACTITE_DIRECTORY);
+		super(TwilightForestMod.prefix("stalactites"), SpeleothemVarietyConfig.CODEC, STALACTITE_DIRECTORY);
 	}
 
 	@Override
-	protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager manager, ProfilerFiller profiler) {
+	protected void apply(Map<Identifier, JsonElement> map, ResourceManager manager, ProfilerFiller profiler) {
 		HILL_CONFIGS.clear();
 		ORE_STALACTITES_PER_HILL.clear();
 		STALAGMITES_PER_HILL.clear();
@@ -40,7 +40,7 @@ public class StalactiteReloadListener extends CodecResourceReloadListener<Speleo
 	}
 
 	@Override
-	protected void forLocation(ResourceManager manager, ResourceLocation location, SpeleothemVarietyConfig config) {
+	protected void forLocation(ResourceManager manager, Identifier location, SpeleothemVarietyConfig config) {
 		if (!HILL_CONFIGS.containsKey(config.type()) || config.replace()) {
 			HILL_CONFIGS.put(config.type(), config);
 			if (config.replace()) {
@@ -53,13 +53,13 @@ public class StalactiteReloadListener extends CodecResourceReloadListener<Speleo
 		this.populateList(manager, config, config.stalagmites(), STALAGMITES_PER_HILL);
 	}
 
-	private void populateList(ResourceManager manager, SpeleothemVarietyConfig config, List<ResourceLocation> rawEntries, Map<String, List<Stalactite>> stalactiteDict) {
+	private void populateList(ResourceManager manager, SpeleothemVarietyConfig config, List<Identifier> rawEntries, Map<String, List<Stalactite>> stalactiteDict) {
 		List<Stalactite> stalactitesForType = stalactiteDict.computeIfAbsent(config.type(), k -> new ArrayList<>());
 
 		if (config.replace()) stalactitesForType.clear();
 
-		for (ResourceLocation rl : rawEntries) {
-			rl = ResourceLocation.fromNamespaceAndPath(rl.getNamespace(), String.format("%s/%s.json", STALACTITE_DIRECTORY, rl.getPath()));
+		for (Identifier rl : rawEntries) {
+			rl = Identifier.fromNamespaceAndPath(rl.getNamespace(), String.format("%s/%s.json", STALACTITE_DIRECTORY, rl.getPath()));
 			Optional<Resource> stalRes = manager.getResource(rl);
 			if (stalRes.isPresent()) {
 				try {

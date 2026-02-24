@@ -1,6 +1,6 @@
 package twilightforest.world.components.structures.lichtowerrevamp;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -18,11 +18,11 @@ public class StructureTemplateDefinitionsTest {
 
 	@Test
 	public void afterDeserialize() {
-		ResourceLocation alcovePool = TwilightForestMod.prefix("pools/alcovePool");
-		ResourceLocation balconyPool = TwilightForestMod.prefix("pools/balcony");
-		ResourceLocation chamber = TwilightForestMod.prefix("pools/chamber");
+		Identifier alcovePool = TwilightForestMod.prefix("pools/alcovePool");
+		Identifier balconyPool = TwilightForestMod.prefix("pools/balcony");
+		Identifier chamber = TwilightForestMod.prefix("pools/chamber");
 
-		ResourceLocation architectureTemplate = TwilightForestMod.prefix("template/architecture");
+		Identifier architectureTemplate = TwilightForestMod.prefix("template/architecture");
 		StructureTemplateDefinition templateDefinition = new StructureTemplateDefinition(Map.of(
 			alcovePool, 1,
 			balconyPool, 10,

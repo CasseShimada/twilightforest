@@ -5,23 +5,22 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.PacketDistributor;
+import twilightforest.network.PacketDistributor;
 import org.apache.commons.lang3.tuple.Pair;
 import twilightforest.config.TFConfig;
 import twilightforest.init.TFParticleType;
 import twilightforest.network.ParticlePacket;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class CloudBlock extends Block {
 	@Nullable
@@ -46,9 +45,9 @@ public class CloudBlock extends Block {
 		BlockPos blockpos1 = entity.blockPosition();
 		double jumpMultiplier = jumping ? 2.0D : 1.0D;
 
-		double x = entity.getX() + (level.getRandom().nextDouble() - 0.5D) * (double) entity.dimensions.width() * jumpMultiplier;
+		double x = entity.getX() + (level.getRandom().nextDouble() - 0.5D) * (double) entity.getBbWidth() * jumpMultiplier;
 		double y = entity.getY() + 0.1D;
-		double z = entity.getZ() + (level.getRandom().nextDouble() - 0.5D) * (double) entity.dimensions.width() * jumpMultiplier;
+		double z = entity.getZ() + (level.getRandom().nextDouble() - 0.5D) * (double) entity.getBbWidth() * jumpMultiplier;
 
 		if (blockpos1.getX() != pos.getX()) x = Mth.clamp(x, pos.getX(), (double) pos.getX() + 1.0D);
 		if (blockpos1.getZ() != pos.getZ()) z = Mth.clamp(z, pos.getZ(), (double) pos.getZ() + 1.0D);
@@ -57,8 +56,32 @@ public class CloudBlock extends Block {
 	}
 
 	@Override
-	public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
+	public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, double fallDistance) {
 		entity.causeFallDamage(fallDistance, 0.1F, level.damageSources().fall());
+		if (level instanceof ServerLevel serverLevel) {
+			ParticlePacket particlePacket = new ParticlePacket();
+			int maxI = Mth.clamp((int) fallDistance * 2, 8, 40);
+
+			double bbWidth = entity.getBbWidth();
+
+			double y = entity.getY() + 0.1D;
+			double ySpeed = 0.0005D * maxI;
+
+			for (int i = 0; i < maxI; i++) {
+				double xSpd = (entity.getRandom().nextDouble() - 0.5D) * bbWidth * 2.5D;
+				double zSpd = (entity.getRandom().nextDouble() - 0.5D) * bbWidth * 2.5D;
+
+				double x = entity.getX() + xSpd;
+				double z = entity.getZ() + zSpd;
+
+				double xSpeed = xSpd * 0.0035D * maxI;
+				double zSpeed = zSpd * 0.0035D * maxI;
+
+				particlePacket.queueParticle(TFParticleType.CLOUD_PUFF.get(), x, y, z, xSpeed, ySpeed, zSpeed);
+			}
+
+			PacketDistributor.sendToPlayersTrackingChunk(serverLevel, new ChunkPos(pos), particlePacket);
+		}
 	}
 
 	@Override
@@ -95,7 +118,7 @@ public class CloudBlock extends Block {
 	 */
 	@Override
 	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-		if (!level.isAreaLoaded(pos, 1) || TFConfig.commonCloudBlockPrecipitationDistance == 0) return;
+		if (!level.hasChunksAt(pos.offset(-1, -1, -1), pos.offset(1, 1, 1)) || TFConfig.commonCloudBlockPrecipitationDistance == 0) return;
 
 		Pair<Biome.Precipitation, Float> pair = this.getCurrentPrecipitation(pos, level, level.getRainLevel(1.0F));
 		if (pair.getRight() > 0.0F) {
@@ -108,7 +131,7 @@ public class CloudBlock extends Block {
 				}
 				if (highestRainyBlock > level.getMinY()) {
 					if (precipitation == Biome.Precipitation.SNOW) {
-						int snowHeight = level.getGameRules().getInt(GameRules.RULE_SNOW_ACCUMULATION_HEIGHT);
+						int snowHeight = level.getGameRules().get(GameRules.MAX_SNOW_ACCUMULATION_HEIGHT);
 						BlockPos snowOnPos = pos.atY(highestRainyBlock + 1); // We check the position above our last block
 						if (snowHeight > 0 && CloudBlock.shouldSnow(level, snowOnPos)) {
 							BlockState snowOnState = level.getBlockState(snowOnPos);
@@ -131,33 +154,6 @@ public class CloudBlock extends Block {
 		}
 	}
 
-	@Override
-	public boolean addLandingEffects(BlockState state1, ServerLevel level, BlockPos pos, BlockState state2, LivingEntity living, int numberOfParticles) { // ServerSide
-		ParticlePacket particlePacket = new ParticlePacket();
-		int maxI = Mth.clamp((int) living.fallDistance * 2, 8, 40);
-
-		double bbWidth = living.getBbWidth();
-
-		double y = living.getY() + 0.1D;
-		double ySpeed = 0.0005D * maxI;
-
-		for (int i = 0; i < maxI; i++) {
-			double xSpd = (living.getRandom().nextDouble() - 0.5D) * bbWidth * 2.5D;
-			double zSpd = (living.getRandom().nextDouble() - 0.5D) * bbWidth * 2.5D;
-
-			double x = living.getX() + xSpd;
-			double z = living.getZ() + zSpd;
-
-			double xSpeed = xSpd * 0.0035D * maxI;
-			double zSpeed = zSpd * 0.0035D * maxI;
-
-			particlePacket.queueParticle(TFParticleType.CLOUD_PUFF.get(), x, y, z, xSpeed, ySpeed, zSpeed);
-		}
-
-		PacketDistributor.sendToPlayersTrackingChunk(level, new ChunkPos(pos), particlePacket);
-
-		return true;
-	}
 
 	@Override
 	public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
@@ -172,11 +168,4 @@ public class CloudBlock extends Block {
 		return entity.tickCount % 2 == 0 && !entity.isSpectator();
 	}
 
-	@Override
-	public boolean addRunningEffects(BlockState state, Level level, BlockPos pos, Entity entity) { // Client & Server Side
-		if (level.isClientSide() && state.getRenderShape() != RenderShape.INVISIBLE) {
-			addEntityMovementParticles(level, pos, entity, false);
-		}
-		return true;
-	}
 }

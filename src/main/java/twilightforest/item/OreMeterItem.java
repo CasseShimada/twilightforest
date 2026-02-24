@@ -2,6 +2,7 @@ package twilightforest.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -9,10 +10,13 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Item.TooltipContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -26,7 +30,7 @@ import twilightforest.tags.TFBlockTags;
 import twilightforest.init.TFDataComponents;
 import twilightforest.init.TFSounds;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 public class OreMeterItem extends Item {
 	public static final int MAX_CHUNK_SEARCH_RANGE = 2;
@@ -37,28 +41,28 @@ public class OreMeterItem extends Item {
 	}
 
 	@Override
-	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean held) {
-		if (level.isClientSide() || !stack.has(TFDataComponents.ORE_SCANNING))
+	public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, EquipmentSlot slot) {
+		if (!stack.has(TFDataComponents.ORE_SCANNING.get()))
 			return;
 
-		OreScannerComponent newScan = stack.get(TFDataComponents.ORE_SCANNING).tickScan(level);
+		OreScannerComponent newScan = stack.get(TFDataComponents.ORE_SCANNING.get()).tickScan(level);
 
 		if (newScan.isEmpty()) {
-			stack.remove(TFDataComponents.ORE_SCANNING);
+			stack.remove(TFDataComponents.ORE_SCANNING.get());
 			return;
 		}
 
 		if (!newScan.isFinished()) {
-			stack.set(TFDataComponents.ORE_LOADING, newScan.getTickProgress());
-			stack.set(TFDataComponents.ORE_SCANNING, newScan);
+			stack.set(TFDataComponents.ORE_LOADING.get(), newScan.getTickProgress());
+			stack.set(TFDataComponents.ORE_SCANNING.get(), newScan);
 			return;
 		}
 
 		// Scanning completed, save results to item
-		stack.set(TFDataComponents.ORE_DATA, OreScannerData.create(newScan.getResults(stack.get(TFDataComponents.ORE_FILTER)), newScan.centerChunkPos(), newScan.getVolume(level), getRange(stack)));
+		stack.set(TFDataComponents.ORE_DATA.get(), OreScannerData.create(newScan.getResults(stack.get(TFDataComponents.ORE_FILTER.get())), newScan.centerChunkPos(), newScan.getVolume(level), getRange(stack)));
 
-		stack.remove(TFDataComponents.ORE_LOADING);
-		stack.remove(TFDataComponents.ORE_SCANNING);
+		stack.remove(TFDataComponents.ORE_LOADING.get());
+		stack.remove(TFDataComponents.ORE_SCANNING.get());
 	}
 
 	@Override
@@ -92,7 +96,7 @@ public class OreMeterItem extends Item {
 			int scanTime = LOAD_TIME + range * 25;
 
 			OreScannerComponent data = OreScannerComponent.scanFromCenter(player.blockPosition(), range, scanTime);
-			stack.set(TFDataComponents.ORE_SCANNING, data);
+			stack.set(TFDataComponents.ORE_SCANNING.get(), data);
 		}
 
 		level.playSound(player, player.blockPosition(), TFSounds.ORE_METER_CRACKLE.get(), SoundSource.PLAYERS, 0.5F, level.getRandom().nextFloat() * 0.1F + 0.9F);
@@ -105,10 +109,10 @@ public class OreMeterItem extends Item {
 		//if we're crouching and not targeting a block, change the ore meter range instead
 		HitResult result = getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY);
 		if (result.getType() == HitResult.Type.MISS) {
-			if (!level.isClientSide) {
+			if (!level.isClientSide()) {
 				int newRange = Mth.positiveModulo(getRange(stack) + 1, MAX_CHUNK_SEARCH_RANGE + 1);
 
-				stack.set(TFDataComponents.ORE_RANGE, newRange);
+				stack.set(TFDataComponents.ORE_RANGE.get(), newRange);
 				player.displayClientMessage(Component.translatable("misc.twilightforest.ore_meter_new_range", newRange), true);
 				level.playSound(null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.PLAYERS, 0.25F, 0.75F + (newRange * 0.1F));
 			}
@@ -125,7 +129,7 @@ public class OreMeterItem extends Item {
 		if (context.isSecondaryUseActive()) {
 			BlockState state = context.getLevel().getBlockState(context.getClickedPos());
 			if (state.is(TFBlockTags.ORE_METER_TARGETABLE)) {
-				stack.set(TFDataComponents.ORE_FILTER, state.getBlock());
+				stack.set(TFDataComponents.ORE_FILTER.get(), state.getBlock());
 				context.getPlayer().displayClientMessage(Component.translatable("misc.twilightforest.ore_meter_set_block", Component.translatable(state.getBlock().getDescriptionId())), true);
 				context.getLevel().playSound(context.getPlayer(), context.getPlayer().blockPosition(), TFSounds.ORE_METER_TARGET_BLOCK.get(), SoundSource.PLAYERS, 0.5F, context.getLevel().getRandom().nextFloat() * 0.1F + 0.9F);
 				return InteractionResult.SUCCESS;
@@ -134,32 +138,26 @@ public class OreMeterItem extends Item {
 		return super.useOn(context);
 	}
 
-	//don't make the player hand spazz out when the NBT changes
 	@Override
-	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-		return slotChanged || newStack.getItem() != oldStack.getItem();
-	}
-
-	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-		Block block = stack.get(TFDataComponents.ORE_FILTER);
+	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+		Block block = stack.get(TFDataComponents.ORE_FILTER.get());
 
 		if (block != null)
-			tooltip.add(Component.translatable("misc.twilightforest.ore_meter_targeted_block", block.getDescriptionId()).withStyle(ChatFormatting.GRAY));
+			tooltip.accept(Component.translatable("misc.twilightforest.ore_meter_targeted_block", block.getDescriptionId()).withStyle(ChatFormatting.GRAY));
 
-		super.appendHoverText(stack, context, tooltip, flag);
+		super.appendHoverText(stack, context, display, tooltip, flag);
 	}
 
 	public static boolean isLoading(ItemStack stack) {
-		return stack.has(TFDataComponents.ORE_LOADING);
+		return stack.has(TFDataComponents.ORE_LOADING.get());
 	}
 
 	public static int getLoadProgress(ItemStack stack) {
-		return stack.getOrDefault(TFDataComponents.ORE_LOADING, 0);
+		return stack.getOrDefault(TFDataComponents.ORE_LOADING.get(), 0);
 	}
 
 	public static @NotNull Integer getRange(ItemStack stack) {
-		return stack.getOrDefault(TFDataComponents.ORE_RANGE, 1);
+		return stack.getOrDefault(TFDataComponents.ORE_RANGE.get(), 1);
 	}
 
 }

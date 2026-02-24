@@ -50,7 +50,7 @@ public class AntibuilderBlockEntity extends BlockEntity {
 			} else {
 
 				// new plan, take a snapshot of the world when we are first activated, and then rapidly revert changes
-				if (te.blockData == null && level.isAreaLoaded(pos, AntibuilderBlockEntity.RADIUS)) {
+				if (te.blockData == null && level.hasChunksAt(pos.offset(-RADIUS, -RADIUS, -RADIUS), pos.offset(RADIUS, RADIUS, RADIUS))) {
 					te.captureBlockData(level, pos);
 					te.slowScan = true;
 				}

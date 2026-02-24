@@ -1,11 +1,10 @@
 package twilightforest.entity.passive;
 
 import net.minecraft.core.Holder;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.DifficultyInstance;
@@ -13,18 +12,18 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnGroupData;
-import net.minecraft.world.entity.VariantHolder;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.Cat;
-import net.minecraft.world.entity.animal.Ocelot;
+import net.minecraft.world.entity.animal.feline.Cat;
+import net.minecraft.world.entity.animal.feline.Ocelot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.neoforged.neoforge.common.util.Lazy;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TFRegistries;
 import twilightforest.tags.TFItemTags;
@@ -34,9 +33,9 @@ import twilightforest.init.custom.TinyBirdVariants;
 
 import java.util.Optional;
 
-public class TinyBird extends FlyingBird implements VariantHolder<Holder<TinyBirdVariant>> {
+public class TinyBird extends FlyingBird {
 
-	private static final EntityDataAccessor<Holder<TinyBirdVariant>> VARIANT = SynchedEntityData.defineId(TinyBird.class, TFDataSerializers.TINY_BIRD_VARIANT.get());
+	private static final EntityDataAccessor<Holder<TinyBirdVariant>> VARIANT = SynchedEntityData.defineId(TinyBird.class, TFDataSerializers.TINY_BIRD_VARIANT);
 
 	public TinyBird(EntityType<? extends TinyBird> type, Level level) {
 		super(type, level);
@@ -63,15 +62,15 @@ public class TinyBird extends FlyingBird implements VariantHolder<Holder<TinyBir
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putString("variant", this.getVariant().unwrapKey().orElse(TinyBirdVariants.RED).location().toString());
+	public void addAdditionalSaveData(ValueOutput output) {
+		super.addAdditionalSaveData(output);
+		output.putString("variant", this.getVariant().unwrapKey().orElse(TinyBirdVariants.RED).identifier().toString());
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		Optional.ofNullable(ResourceLocation.tryParse(compound.getString("variant")))
+	public void readAdditionalSaveData(ValueInput input) {
+		super.readAdditionalSaveData(input);
+		Optional.ofNullable(Identifier.tryParse(input.getStringOr("variant", "")))
 			.map(location -> ResourceKey.create(TFRegistries.Keys.TINY_BIRD_VARIANT, location))
 			.flatMap(key -> this.registryAccess().lookupOrThrow(TFRegistries.Keys.TINY_BIRD_VARIANT).get(key))
 			.ifPresent(this::setVariant);
@@ -84,12 +83,10 @@ public class TinyBird extends FlyingBird implements VariantHolder<Holder<TinyBir
 		return data;
 	}
 
-	@Override
 	public Holder<TinyBirdVariant> getVariant() {
 		return this.getEntityData().get(VARIANT);
 	}
 
-	@Override
 	public void setVariant(Holder<TinyBirdVariant> variant) {
 		this.getEntityData().set(VARIANT, variant);
 	}

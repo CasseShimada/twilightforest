@@ -11,7 +11,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Display;
@@ -21,20 +21,16 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
-import tamaized.beanification.Autowired;
-import tamaized.beanification.Component;
 import twilightforest.util.DisplayUtil;
 import twilightforest.world.components.structures.util.ProgressionPiece;
 
 import java.util.List;
 
-@Component
 public class DisplayPiecesCommand {
-	@Autowired
-	private DisplayUtil displayUtil;
+	private final DisplayUtil displayUtil = new DisplayUtil();
 
 	public LiteralArgumentBuilder<CommandSourceStack> register() {
-		return Commands.literal("display_pieces").requires(cs -> cs.hasPermission(Commands.LEVEL_GAMEMASTERS))
+		return Commands.literal("display_pieces").requires(cs -> Commands.LEVEL_GAMEMASTERS.check(cs.permissions()))
 			.then(Commands.argument("filter_structure", ResourceKeyArgument.key(Registries.STRUCTURE)).executes(this::debugDisplayPieces));
 	}
 
@@ -56,7 +52,7 @@ public class DisplayPiecesCommand {
 		int maxPieces = structurePieces.size();
 		for (StructurePiece piece : structurePieces) {
 			BlockState displayState = piece instanceof ProgressionPiece shieldablePiece && shieldablePiece.isComponentProtected() ? Blocks.LIME_STAINED_GLASS.defaultBlockState() : Blocks.LIGHT_BLUE_STAINED_GLASS.defaultBlockState();
-			ResourceLocation key = BuiltInRegistries.STRUCTURE_PIECE.getKey(piece.getType());
+			Identifier key = BuiltInRegistries.STRUCTURE_PIECE.getKey(piece.getType());
 			float padding = Mth.lerp((float) successes / maxPieces, 0.003f, 0.025f);
 			BoundingBox boundingBox = piece.getBoundingBox();
 			if (this.displayUtil.spawnBlockDisplay(level, boundingBox, displayState, padding)) {

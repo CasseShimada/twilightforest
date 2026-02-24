@@ -29,11 +29,6 @@ public class LampOfCindersItem extends Item {
 	}
 
 	@Override
-	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-		return false;
-	}
-
-	@Override
 	public InteractionResult use(Level level, Player player, InteractionHand hand) {
 		if (TFItemStackUtils.isAtZeroDurability(player.getItemInHand(hand))) {
 			return InteractionResult.FAIL;
@@ -72,7 +67,7 @@ public class LampOfCindersItem extends Item {
 
 	private boolean burnBlock(Level level, BlockPos pos) {
 		BlockState state = level.getBlockState(pos);
-		if (state.is(TFBlocks.BROWN_THORNS) || state.is(TFBlocks.GREEN_THORNS)) {
+		if (state.is(TFBlocks.BROWN_THORNS.get()) || state.is(TFBlocks.GREEN_THORNS.get())) {
 			level.setBlockAndUpdate(pos, TFBlocks.BURNT_THORNS.get().withPropertiesOf(state));
 			return true;
 		} else return false;

@@ -1,25 +1,27 @@
 package twilightforest.block.entity.bookshelf;
 
-import com.mojang.datafixers.util.Either;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.Spawner;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChiseledBookShelfBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.block.ChiseledCanopyShelfBlock;
 import twilightforest.init.TFBlockEntities;
 import twilightforest.init.TFBlocks;
+import twilightforest.util.SaveDebug;
 
 public class ChiseledCanopyShelfBlockEntity extends ChiseledBookShelfBlockEntity implements Spawner {
 
@@ -38,10 +40,6 @@ public class ChiseledCanopyShelfBlockEntity extends ChiseledBookShelfBlockEntity
 			}
 		}
 
-		@Override
-		public Either<BlockEntity, Entity> getOwner() {
-			return Either.left(ChiseledCanopyShelfBlockEntity.this);
-		}
 	};
 
 	public ChiseledCanopyShelfBlockEntity(BlockPos pos, BlockState state) {
@@ -65,15 +63,15 @@ public class ChiseledCanopyShelfBlockEntity extends ChiseledBookShelfBlockEntity
 	}
 
 	@Override
-	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-		super.loadAdditional(tag, provider);
-		this.spawner.load(this.level, this.worldPosition, tag);
+	protected void loadAdditional(ValueInput input) {
+		super.loadAdditional(input);
+		this.spawner.load(this.level, this.worldPosition, input);
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-		super.saveAdditional(tag, provider);
-		this.spawner.save(tag);
+	protected void saveAdditional(ValueOutput output) {
+		super.saveAdditional(output);
+		this.spawner.save(output);
 	}
 
 	@Override
@@ -100,6 +98,28 @@ public class ChiseledCanopyShelfBlockEntity extends ChiseledBookShelfBlockEntity
 			this.level.setBlockAndUpdate(this.worldPosition, this.getBlockState().setValue(ChiseledCanopyShelfBlock.SPAWNER, true));
 		}
 		this.setChanged();
+	}
+
+	@Override
+	public void setRemoved() {
+		Level level = this.level;
+		if (level instanceof ServerLevel serverLevel) {
+			if (SaveDebug.isShutdownInProgress() || !level.hasChunkAt(this.worldPosition)) {
+				super.setRemoved();
+				return;
+			}
+			BlockState newState = level.getBlockState(this.worldPosition);
+			BlockState oldState = this.getBlockState();
+			if (newState.getBlock() instanceof BaseFireBlock && oldState.getValue(ChiseledCanopyShelfBlock.SPAWNER)) {
+				for (int i = 0; i < ChiseledCanopyShelfBlock.SLOT_OCCUPIED_PROPERTIES.size(); i++) {
+					BooleanProperty property = ChiseledCanopyShelfBlock.SLOT_OCCUPIED_PROPERTIES.get(i);
+					if (oldState.hasProperty(property) && oldState.getValue(property)) {
+						this.spawner.attemptSpawnTome(i, serverLevel, this.worldPosition, true, null, 5);
+					}
+				}
+			}
+		}
+		super.setRemoved();
 	}
 
 	public BookshelfSpawner getSpawner() {

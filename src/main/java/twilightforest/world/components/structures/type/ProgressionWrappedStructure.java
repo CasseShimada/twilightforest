@@ -11,6 +11,7 @@ import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFStructureTypes;
+import twilightforest.mixin.accessor.StructureInvoker;
 import twilightforest.world.components.structures.util.ProgressionStructure;
 
 import java.util.Optional;
@@ -32,7 +33,7 @@ public class ProgressionWrappedStructure extends ProgressionStructure {
 
 	@Override
 	public Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
-		return this.wrappedStructure.findGenerationPoint(context);
+		return ((StructureInvoker) this.wrappedStructure).twilightforest$invokeFindGenerationPoint(context);
 	}
 
 	//not used since we override findGenerationPoint

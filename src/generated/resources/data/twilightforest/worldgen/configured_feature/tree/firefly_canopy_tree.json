@@ -61,6 +61,7 @@
         "type": "twilightforest:dangle_from_tree_decorator",
         "attempts_minimum": 1,
         "baggage_provider": {
+          "type": "minecraft:weighted_state_provider",
           "entries": [
             {
               "data": {
@@ -87,6 +88,7 @@
         "random_add_attempts": 1,
         "random_add_length": 15,
         "rope_provider": {
+          "type": "minecraft:weighted_state_provider",
           "entries": [
             {
               "data": {
@@ -102,7 +104,7 @@
             },
             {
               "data": {
-                "Name": "minecraft:chain",
+                "Name": "minecraft:iron_chain",
                 "Properties": {
                   "axis": "y",
                   "waterlogged": "false"

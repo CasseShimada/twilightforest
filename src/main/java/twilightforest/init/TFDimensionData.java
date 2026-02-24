@@ -1,15 +1,21 @@
 package twilightforest.init;
 
 import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TimelineTags;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.attribute.BedRule;
+import net.minecraft.world.attribute.EnvironmentAttributeMap;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.*;
+import net.minecraft.world.timeline.Timeline;
 import twilightforest.TFRegistries;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.custom.BiomeLayerStack;
@@ -18,7 +24,6 @@ import twilightforest.world.components.layer.BiomeDensitySource;
 import twilightforest.world.registration.surface_rules.TFSurfaceRules;
 
 import java.util.List;
-import java.util.OptionalLong;
 
 public class TFDimensionData {
 
@@ -34,28 +39,36 @@ public class TFDimensionData {
 
 	public static final ResourceKey<LevelStem> TWILIGHT_LEVEL_STEM = ResourceKey.create(Registries.LEVEL_STEM, TFDimension.DIMENSION);
 
-	private static DimensionType twilightDimType() {
+	private static DimensionType twilightDimType(BootstrapContext<DimensionType> context) {
+		HolderSet<Timeline> timelines = context.lookup(Registries.TIMELINE).getOrThrow(TimelineTags.IN_OVERWORLD);
+		EnvironmentAttributeMap attributes = EnvironmentAttributeMap.builder()
+			.set(EnvironmentAttributes.BED_RULE, BedRule.CAN_SLEEP_WHEN_DARK)
+			.set(EnvironmentAttributes.CAN_START_RAID, false)
+			.set(EnvironmentAttributes.RESPAWN_ANCHOR_WORKS, false)
+			.set(EnvironmentAttributes.NETHER_PORTAL_SPAWNS_PIGLINS, true)
+			.set(EnvironmentAttributes.PIGLINS_ZOMBIFY, true)
+			.build();
+
 		return new DimensionType(
-			OptionalLong.of(13000L), //fixed time
+			true, //fixed time
 			true, //skylight
 			false, //ceiling
-			false, //ultrawarm
-			true, //natural
 			1 / 8.0, //coordinate scale
-			true, //bed works
-			false, //respawn anchor works
 			-32, // Minimum Y Level
 			32 + 256, // Height + Min Y = Max Y
 			32 + 256, // Logical Height
 			BlockTags.INFINIBURN_OVERWORLD, //infiburn
-			TFDimension.DIMENSION_RENDERER, // DimensionRenderInfo
 			0.01f,
-			new DimensionType.MonsterSettings(false, false, UniformInt.of(0, 7), 7)
+			new DimensionType.MonsterSettings(UniformInt.of(0, 7), 7),
+			DimensionType.Skybox.OVERWORLD,
+			DimensionType.CardinalLightType.DEFAULT,
+			attributes,
+			timelines
 		);
 	}
 
 	public static void bootstrapType(BootstrapContext<DimensionType> context) {
-		context.register(TWILIGHT_DIM_TYPE, twilightDimType());
+		context.register(TWILIGHT_DIM_TYPE, twilightDimType(context));
 	}
 
 	public static NoiseGeneratorSettings makeNoiseSettings(BootstrapContext<NoiseGeneratorSettings> context, boolean skylight) {

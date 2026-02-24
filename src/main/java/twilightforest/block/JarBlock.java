@@ -39,7 +39,7 @@ import twilightforest.block.entity.JarBlockEntity;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFSounds;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
@@ -94,14 +94,14 @@ public class JarBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
 	}
 
 	public Item getDefaultLid() {
-		return TFBlocks.TWILIGHT_OAK_LOG.asItem();
+		return TFBlocks.TWILIGHT_OAK_LOG.get().asItem();
 	}
 
 	@Override
-	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player) {
+	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
 		return level.getBlockEntity(pos) instanceof JarBlockEntity jarBlockEntity
 			? jarBlockEntity.getJarAsItem()
-			: super.getCloneItemStack(level, pos, state, includeData, player);
+			: super.getCloneItemStack(level, pos, state, includeData);
 	}
 
 	@Override

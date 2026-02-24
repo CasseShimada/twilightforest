@@ -9,7 +9,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.ChunkPos;
@@ -52,17 +52,17 @@ public class HollowTreeLargeBranch extends HollowTreeMedBranch {
 	public HollowTreeLargeBranch(StructurePieceSerializationContext context, CompoundTag tag) {
 		super(TFStructurePieceTypes.TFHTLB.value(), context, tag);
 
-		this.hasLeafDungeon = tag.getBoolean("has_leaf_dungeon");
+		this.hasLeafDungeon = tag.getBooleanOr("has_leaf_dungeon", false);
 
 		RegistryOps<Tag> ops = RegistryOps.create(NbtOps.INSTANCE, context.registryAccess());
 
-		this.dungeonWood = BlockStateProvider.CODEC.parse(ops, tag.getCompound("dungeon_wood")).result().orElse(HollowTreePiece.DEFAULT_WOOD);
-		this.dungeonAir = BlockStateProvider.CODEC.parse(ops, tag.getCompound("dungeon_air")).result().orElse(HollowTreePiece.DEFAULT_DUNGEON_AIR);
-		this.dungeonLootBlock = BlockStateProvider.CODEC.parse(ops, tag.getCompound("dungeon_loot_block")).result().orElse(HollowTreePiece.DEFAULT_DUNGEON_LOOT_BLOCK);
+		this.dungeonWood = BlockStateProvider.CODEC.parse(ops, tag.getCompoundOrEmpty("dungeon_wood")).result().orElse(HollowTreePiece.DEFAULT_WOOD);
+		this.dungeonAir = BlockStateProvider.CODEC.parse(ops, tag.getCompoundOrEmpty("dungeon_air")).result().orElse(HollowTreePiece.DEFAULT_DUNGEON_AIR);
+		this.dungeonLootBlock = BlockStateProvider.CODEC.parse(ops, tag.getCompoundOrEmpty("dungeon_loot_block")).result().orElse(HollowTreePiece.DEFAULT_DUNGEON_LOOT_BLOCK);
 
-		this.dungeonLootTable = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(tag.getString("dungeon_loot_table")));
+		this.dungeonLootTable = ResourceKey.create(Registries.LOOT_TABLE, Identifier.parse(tag.getStringOr("dungeon_loot_table", "")));
 
-		ResourceKey<EntityType<?>> dungeonMonster = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse(tag.getString("dungeon_monster")));
+		ResourceKey<EntityType<?>> dungeonMonster = ResourceKey.create(Registries.ENTITY_TYPE, Identifier.parse(tag.getStringOr("dungeon_monster", "")));
 		this.dungeonMonster = context.registryAccess().lookup(Registries.ENTITY_TYPE)
 			.<Holder<EntityType<?>>>flatMap(reg -> reg.get(dungeonMonster))
 			.orElse(HollowTreePiece.DEFAULT_DUNGEON_MONSTER);
@@ -78,7 +78,7 @@ public class HollowTreeLargeBranch extends HollowTreeMedBranch {
 		tag.put("dungeon_air", BlockStateProvider.CODEC.encodeStart(NbtOps.INSTANCE, this.dungeonAir).resultOrPartial(TwilightForestMod.LOGGER::error).orElseGet(CompoundTag::new));
 		tag.put("dungeon_loot_block", BlockStateProvider.CODEC.encodeStart(NbtOps.INSTANCE, this.dungeonLootBlock).resultOrPartial(TwilightForestMod.LOGGER::error).orElseGet(CompoundTag::new));
 
-		tag.putString("dungeon_loot_table", this.dungeonLootTable.location().toString());
+		tag.putString("dungeon_loot_table", this.dungeonLootTable.identifier().toString());
 
 		tag.putString("dungeon_monster", BuiltInRegistries.ENTITY_TYPE.getKey(this.dungeonMonster.value()).toString());
 	}

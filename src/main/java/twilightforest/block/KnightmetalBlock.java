@@ -1,18 +1,13 @@
 package twilightforest.block;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
@@ -33,7 +28,6 @@ import java.util.List;
 
 public class KnightmetalBlock extends Block implements SimpleWaterloggedBlock {
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-	private static final MutableComponent TOOLTIP = Component.translatable("block.twilightforest.knightmetal_block.desc").withStyle(ChatFormatting.GRAY);
 	private static final VoxelShape SHAPE = Block.box(1.0D, 1.0D, 1.0D, 15.0D, 15.0D, 15.0D);
 	private static final float BLOCK_DAMAGE = 4;
 
@@ -73,19 +67,10 @@ public class KnightmetalBlock extends Block implements SimpleWaterloggedBlock {
 	}
 
 	@Override
-	public PathType getBlockPathType(BlockState state, BlockGetter getter, BlockPos pos, @Nullable Mob entity) {
-		return PathType.DAMAGE_OTHER;
-	}
-
-	@Override
-	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean movedByPiston) {
 		if (level instanceof ServerLevel serverLevel) {
 			entity.hurtServer(serverLevel, serverLevel.damageSources().source(TFDamageTypes.KNIGHTMETAL), BLOCK_DAMAGE);
 		}
 	}
 
-	@Override
-	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-		tooltip.add(TOOLTIP);
-	}
 }

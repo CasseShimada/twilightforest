@@ -16,6 +16,7 @@ import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
+import twilightforest.mixin.accessor.StructurePiecesBuilderAccessor;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.util.RotationUtil;
@@ -39,8 +40,8 @@ public class MushroomTowerWingComponent extends TowerWingComponent {
 
 	public MushroomTowerWingComponent(StructurePieceType piece, CompoundTag nbt) {
 		super(piece, nbt);
-		this.hasBase = nbt.getBoolean("hasBase");
-		this.isAscender = nbt.getBoolean("isAscender");
+		this.hasBase = nbt.getBooleanOr("hasBase", false);
+		this.isAscender = nbt.getBooleanOr("isAscender", false);
 	}
 
 	protected MushroomTowerWingComponent(StructurePieceType piece, int i, int x, int y, int z, int pSize, int pHeight, Direction direction) {
@@ -162,7 +163,7 @@ public class MushroomTowerWingComponent extends TowerWingComponent {
 	protected int[] adjustCoordinates(int x, int y, int z, int wingSize, Direction direction, StructurePieceAccessor list) {
 		// go through list.  if there are any same size towers within wingSize, return their xyz instead
 		if (list instanceof StructurePiecesBuilder start) {
-			for (StructurePiece obj : start.pieces) {
+			for (StructurePiece obj : ((StructurePiecesBuilderAccessor) start).twilightforest$getPieces()) {
 				if (obj instanceof TowerWingComponent otherWing && !(obj instanceof MushroomTowerBridgeComponent)) {
 
 					if (wingSize == otherWing.size && otherWing.getBoundingBox().intersects(x - 3, z - 3, x + 3, z + 3)) {
@@ -193,7 +194,7 @@ public class MushroomTowerWingComponent extends TowerWingComponent {
 		);
 
 		if (list instanceof StructurePiecesBuilder start) {
-			for (StructurePiece obj : start.pieces) {
+			for (StructurePiece obj : ((StructurePiecesBuilderAccessor) start).twilightforest$getPieces()) {
 				if (this != obj && obj instanceof TowerWingComponent otherWing && !(obj instanceof MushroomTowerBridgeComponent)) {
 
 					if (size == otherWing.size && otherWing.getBoundingBox().intersects(boxAbove)) {

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelSimulatedReader;
@@ -45,7 +46,7 @@ public class MegaOakTreeFeature extends CanopyTreeFeature {
 		}
 
 		// check if we're on dirt or grass
-		if (world.getBlockState(pos.below()).canSustainPlant(world, pos.below(), Direction.UP, TFBlocks.CANOPY_SAPLING.get().defaultBlockState()).isFalse()) {
+		if (!world.getBlockState(pos.below()).is(BlockTags.DIRT)) {
 			return false;
 		}
 

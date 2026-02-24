@@ -1,7 +1,6 @@
 package twilightforest.block;
 
-import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
+import net.minecraft.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -16,6 +15,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -44,6 +44,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.tags.TFEntityTypeTags;
+import twilightforest.util.ClientSoundHelper;
 import twilightforest.init.*;
 
 public abstract class CritterBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
@@ -142,7 +143,7 @@ public abstract class CritterBlock extends BaseEntityBlock implements SimpleWate
 					stack.consume(1, player);
 					player.getInventory().add(newStack);
 					if (level.isClientSide())
-						Minecraft.getInstance().getSoundManager().stop(TFSounds.CICADA.get().location(), SoundSource.NEUTRAL);
+						ClientSoundHelper.stopSound(TFSounds.CICADA.get().location(), SoundSource.NEUTRAL);
 					level.setBlockAndUpdate(pos, state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState());
 					return InteractionResult.SUCCESS;
 				}
@@ -152,11 +153,11 @@ public abstract class CritterBlock extends BaseEntityBlock implements SimpleWate
 	}
 
 	@Override
-	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean movedByPiston) {
 		if ((entity instanceof Projectile && !entity.getType().is(TFEntityTypeTags.DONT_KILL_BUGS)) || entity instanceof FallingBlockEntity) {
 			level.setBlockAndUpdate(pos, state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState());
 			if (level.isClientSide())
-				Minecraft.getInstance().getSoundManager().stop(TFSounds.CICADA.get().location(), SoundSource.NEUTRAL);
+				ClientSoundHelper.stopSound(TFSounds.CICADA.get().location(), SoundSource.NEUTRAL);
 
 			level.playSound(null, pos, TFSounds.BUG_SQUISH.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
 

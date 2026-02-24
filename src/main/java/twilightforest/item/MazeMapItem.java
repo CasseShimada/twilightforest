@@ -12,10 +12,14 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item.TooltipContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -24,14 +28,16 @@ import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.saveddata.maps.MapId;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
-import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFDataMaps;
 import twilightforest.init.TFItems;
+import twilightforest.init.TFStructures;
+import twilightforest.tags.TFBlockTags;
 import twilightforest.item.mapdata.TFMazeMapData;
 import twilightforest.util.datamaps.OreMapOreColor;
+import twilightforest.util.landmarks.LegacyLandmarkPlacements;
 
-import java.util.List;
+import java.util.function.Consumer;
 import java.util.Optional;
 
 // [VanillaCopy] super everything, but with appropriate redirections to our own datastructures. finer details noted
@@ -60,11 +66,10 @@ public class MazeMapItem extends MapItem {
 	}
 
 	@Nullable
-	@Override
 	protected TFMazeMapData getCustomMapData(ItemStack stack, Level level) {
 		TFMazeMapData mapdata = getData(stack, level);
 		if (mapdata == null && !level.isClientSide()) {
-			BlockPos pos = level.getSharedSpawnPos();
+			BlockPos pos = level.getRespawnData().pos();
 			mapdata = MazeMapItem.createMapData(stack, level, pos.getX(), pos.getZ(), 0, false, false, level.dimension(), pos.getY(), mapOres);
 		}
 
@@ -72,7 +77,8 @@ public class MazeMapItem extends MapItem {
 	}
 
 	private static TFMazeMapData createMapData(ItemStack stack, Level level, int x, int z, int scale, boolean trackingPosition, boolean unlimitedTracking, ResourceKey<Level> dimension, int y, boolean ore) {
-		MapId i = level.getFreeMapId();
+		ServerLevel serverLevel = (ServerLevel) level;
+		MapId i = serverLevel.getFreeMapId();
 
 		int mapSize = 128 * (1 << scale);
 		int roundX = Mth.floor((x + 64.0D) / (double) mapSize);
@@ -80,8 +86,16 @@ public class MazeMapItem extends MapItem {
 		int scaledX = roundX * mapSize + mapSize / 2 - 64;
 		int scaledZ = roundZ * mapSize + mapSize / 2 - 64;
 
-		TFMazeMapData mapdata = new TFMazeMapData(scaledX, scaledZ, (byte) scale, trackingPosition, unlimitedTracking, false, dimension);
-		mapdata.calculateMapCenter(level, x, y, z); // call our own map center calculation
+		int centerX = scaledX;
+		int centerZ = scaledZ;
+		if (LegacyLandmarkPlacements.pickLandmarkForChunk(x >> 4, z >> 4, serverLevel) == TFStructures.LABYRINTH) {
+			BlockPos mc = LegacyLandmarkPlacements.getNearestCenterXZ(x >> 4, z >> 4);
+			centerX = mc.getX();
+			centerZ = mc.getZ();
+		}
+
+		TFMazeMapData mapdata = new TFMazeMapData(centerX, centerZ, (byte) scale, trackingPosition, unlimitedTracking, false, dimension);
+		mapdata.yCenter = y;
 		mapdata.ore = ore;
 		TFMazeMapData.registerMazeMapData(level, mapdata, getMapName(i.id())); // call our own register method
 		stack.set(DataComponents.MAP_ID, i);
@@ -168,10 +182,10 @@ public class MazeMapItem extends MapItem {
 
 									if (this.mapOres) {
 										// recolor ores
-										OreMapOreColor color = state.getBlock().builtInRegistryHolder().getData(TFDataMaps.ORE_MAP_ORE_COLOR);
+										OreMapOreColor color = TFDataMaps.getOreMapColor(state.getBlock());
 										if (color != null) {
 											multiset.add(color.color(), 1000);
-										} else if (!state.isAir() && state.is(Tags.Blocks.ORES)) {
+										} else if (!state.isAir() && state.is(TFBlockTags.COMMON_ORES)) {
 											multiset.add(MapColor.COLOR_PINK, 1000);
 										}
 									}
@@ -199,51 +213,52 @@ public class MazeMapItem extends MapItem {
 
 	// [VanillaCopy] super but shows a dot if player is too far in the vertical direction as well
 	@Override
-	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean isSelected) {
-		if (!level.isClientSide()) {
-			TFMazeMapData mapdata = this.getCustomMapData(stack, level);
+	public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, EquipmentSlot slot) {
+		TFMazeMapData mapdata = this.getCustomMapData(stack, level);
 
-			if (mapdata != null) {
-				if (entity instanceof Player entityplayer) {
-					mapdata.tickCarriedBy(entityplayer, stack);
+		if (mapdata != null) {
+			if (entity instanceof Player entityplayer) {
+				mapdata.tickCarriedBy(entityplayer, stack);
 
-					// TF - if player is far away vertically, show a dot
-					int yProximity = Mth.floor(entityplayer.getY() - mapdata.yCenter);
-					if (yProximity < -YSEARCH || yProximity > YSEARCH) {
-						MapDecoration decoration = mapdata.decorations.get(entityplayer.getName().getString());
-						if (decoration != null) {
-							mapdata.decorations.put(entityplayer.getName().getString(), new MapDecoration(MapDecorationTypes.PLAYER_OFF_MAP, decoration.x(), decoration.y(), decoration.rot(), Optional.empty()));
-						}
+				// TF - if player is far away vertically, show a dot
+				int yProximity = Mth.floor(entityplayer.getY() - mapdata.yCenter);
+				if (yProximity < -YSEARCH || yProximity > YSEARCH) {
+					MapDecoration decoration = mapdata.decorations.get(entityplayer.getName().getString());
+					if (decoration != null) {
+						mapdata.decorations.put(entityplayer.getName().getString(), new MapDecoration(MapDecorationTypes.PLAYER_OFF_MAP, decoration.x(), decoration.y(), decoration.rot(), Optional.empty()));
 					}
 				}
+			}
 
-				if (!mapdata.locked && (isSelected || entity instanceof Player player && player.getOffhandItem() == stack)) {
-					this.update(level, entity, mapdata);
-				}
+			boolean isSelected = slot == EquipmentSlot.MAINHAND;
+			if (!mapdata.locked && (isSelected || (entity instanceof Player player && slot == EquipmentSlot.OFFHAND && player.getOffhandItem() == stack))) {
+				this.update(level, entity, mapdata);
 			}
 		}
 	}
 
 	@Override
-	public void onCraftedBy(ItemStack stack, Level level, Player player) {
+	public void onCraftedBy(ItemStack stack, Player player) {
 		// disable zooming
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
 		MapId mapId = stack.get(DataComponents.MAP_ID);
 		if (mapId != null) {
 			TFMazeMapData data = TFMazeMapData.getClientMagicMapData(getMapName(mapId.id()));
 			if (flag.isAdvanced()) {
 				if (data != null) {
-					tooltip.add(Component.translatable("item.twilightforest.maze_map.y_level", data.yCenter).withStyle(ChatFormatting.GRAY));
-					tooltip.add(Component.translatable("filled_map.id", mapId.id()).withStyle(ChatFormatting.GRAY));
-					tooltip.add(Component.translatable("filled_map.scale", 1 << data.scale).withStyle(ChatFormatting.GRAY));
-					tooltip.add(Component.translatable("filled_map.level", data.scale, 4).withStyle(ChatFormatting.GRAY));
+					tooltip.accept(Component.translatable("item.twilightforest.maze_map.y_level", data.yCenter).withStyle(ChatFormatting.GRAY));
+					tooltip.accept(Component.translatable("filled_map.id", mapId.id()).withStyle(ChatFormatting.GRAY));
+					tooltip.accept(Component.translatable("filled_map.scale", 1 << data.scale).withStyle(ChatFormatting.GRAY));
+					tooltip.accept(Component.translatable("filled_map.level", data.scale, 4).withStyle(ChatFormatting.GRAY));
 				} else {
-					tooltip.add(Component.translatable("filled_map.unknown").withStyle(ChatFormatting.GRAY));
+					tooltip.accept(Component.translatable("filled_map.unknown").withStyle(ChatFormatting.GRAY));
 				}
-			} else tooltip.add(MapItem.getTooltipForId(mapId));
+			} else {
+				mapId.addToTooltip(context, tooltip, flag, stack);
+			}
 		}
 	}
 }

@@ -3,7 +3,6 @@ package twilightforest.entity.monster;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -34,6 +33,8 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.LecternBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.HitResult;
@@ -189,7 +190,7 @@ public class DeathTome extends Monster implements RangedAttackMob {
 	@Override
 	public void tick() {
 		if (this.isOnLectern()) this.ambientSoundTime = -1; // Don't play ambient sounds if we're trying to be stealthy
-		if (this.level().isClientSide) {
+		if (this.level().isClientSide()) {
 			float f1 = this.flipT;
 
 			if (this.random.nextInt(this.isOnLectern() ? 120 : 30) == 0) {
@@ -265,15 +266,15 @@ public class DeathTome extends Monster implements RangedAttackMob {
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag tag) {
-		super.readAdditionalSaveData(tag);
-		this.entityData.set(DATA_LECTERN, tag.getBoolean("on_lectern"));
+	public void readAdditionalSaveData(ValueInput input) {
+		super.readAdditionalSaveData(input);
+		this.entityData.set(DATA_LECTERN, input.getBooleanOr("on_lectern", false));
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag tag) {
-		super.addAdditionalSaveData(tag);
-		tag.putBoolean("on_lectern", this.entityData.get(DATA_LECTERN));
+	public void addAdditionalSaveData(ValueOutput output) {
+		super.addAdditionalSaveData(output);
+		output.putBoolean("on_lectern", this.entityData.get(DATA_LECTERN));
 	}
 
 	@Override

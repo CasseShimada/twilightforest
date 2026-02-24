@@ -16,6 +16,7 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
 import twilightforest.util.RootPlacer;
+import twilightforest.mixin.accessor.TreeFeatureInvoker;
 import twilightforest.world.components.feature.config.TFTreeFeatureConfig;
 
 import java.util.Set;
@@ -63,7 +64,7 @@ public abstract class TFTreeFeature<T extends TFTreeFeatureConfig> extends Featu
 			}
 
 			return BoundingBox.encapsulatingPositions(Iterables.concat(set, set1, set2, set3)).map((boundingBox) -> {
-				DiscreteVoxelShape discretevoxelshape = TreeFeature.updateLeaves(worldgenlevel, boundingBox, set1, set3, set);
+				DiscreteVoxelShape discretevoxelshape = TreeFeatureInvoker.twilightforest$updateLeaves(worldgenlevel, boundingBox, set1, set3, set);
 				StructureTemplate.updateShapeAtEdge(worldgenlevel, 3, discretevoxelshape, boundingBox.minX(), boundingBox.minY(), boundingBox.minZ());
 				return true;
 			}).orElse(false);

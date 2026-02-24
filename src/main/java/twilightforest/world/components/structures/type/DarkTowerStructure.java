@@ -6,7 +6,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.random.WeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
@@ -27,6 +27,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static twilightforest.world.components.structures.util.ControlledSpawns.ControlledSpawningConfig.weightedSpawn;
 
 public class DarkTowerStructure extends ControlledSpawningStructure {
 	public static final MapCodec<DarkTowerStructure> CODEC = RecordCodecBuilder.mapCodec(instance ->
@@ -50,28 +52,28 @@ public class DarkTowerStructure extends ControlledSpawningStructure {
 	public static DarkTowerStructure buildDarkTowerConfig(BootstrapContext<Structure> context) {
 		return new DarkTowerStructure(
 			ControlledSpawningConfig.create(List.of(List.of(
-				new MobSpawnSettings.SpawnerData(TFEntities.CARMINITE_GOLEM.get(), 10, 1, 2),
-				new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 10, 1, 2),
-				new MobSpawnSettings.SpawnerData(EntityType.CREEPER, 5, 1, 1),
-				new MobSpawnSettings.SpawnerData(EntityType.ENDERMAN, 2, 1, 2),
-				new MobSpawnSettings.SpawnerData(EntityType.WITCH, 1, 1, 1),
-				new MobSpawnSettings.SpawnerData(TFEntities.CARMINITE_GHASTLING.get(), 10, 1, 2),
-				new MobSpawnSettings.SpawnerData(TFEntities.CARMINITE_BROODLING.get(), 10, 4, 4),
-				new MobSpawnSettings.SpawnerData(TFEntities.PINCH_BEETLE.get(), 10, 1, 1)
+				weightedSpawn(TFEntities.CARMINITE_GOLEM.get(), 10, 1, 2),
+				weightedSpawn(EntityType.SKELETON, 10, 1, 2),
+				weightedSpawn(EntityType.CREEPER, 5, 1, 1),
+				weightedSpawn(EntityType.ENDERMAN, 2, 1, 2),
+				weightedSpawn(EntityType.WITCH, 1, 1, 1),
+				weightedSpawn(TFEntities.CARMINITE_GHASTLING.get(), 10, 1, 2),
+				weightedSpawn(TFEntities.CARMINITE_BROODLING.get(), 10, 4, 4),
+				weightedSpawn(TFEntities.PINCH_BEETLE.get(), 10, 1, 1)
 			), List.of(
 				// roof ghasts
-				new MobSpawnSettings.SpawnerData(TFEntities.CARMINITE_GHASTGUARD.get(), 10, 1, 2)
+				weightedSpawn(TFEntities.CARMINITE_GHASTGUARD.get(), 10, 1, 2)
 			)), List.of(), List.of(
 				// aquarium squids (only in aquariums between y = 35 and y = 64. :/
-				new MobSpawnSettings.SpawnerData(EntityType.SQUID, 10, 4, 4)
+				weightedSpawn(EntityType.SQUID, 10, 4, 4)
 			)),
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_knights"))),
 			new HintConfig(HintConfig.book("darktower", 3), TFEntities.KOBOLD.get()),
 			new DecorationConfig(1, false, true, true),
-			true, Optional.of(TFMapDecorations.DARK_TOWER),
+			true, Optional.of(Holder.direct(TFMapDecorations.DARK_TOWER.get())),
 			new StructureSettings(
 				context.lookup(Registries.BIOME).getOrThrow(TFBiomeTags.VALID_DARK_TOWER_BIOMES),
-				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedRandomList.create()))), // Landmarks have Controlled Mob spawning
+				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedList.of()))), // Landmarks have Controlled Mob spawning
 				GenerationStep.Decoration.SURFACE_STRUCTURES,
 				TerrainAdjustment.BEARD_THIN
 			)

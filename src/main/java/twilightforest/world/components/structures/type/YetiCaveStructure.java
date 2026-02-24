@@ -7,7 +7,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.random.WeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.MobSpawnSettings;
@@ -34,6 +34,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static twilightforest.world.components.structures.util.ControlledSpawns.ControlledSpawningConfig.weightedSpawn;
 
 public class YetiCaveStructure extends ControlledSpawningStructure implements CustomDensitySource {
 	public static final MapCodec<YetiCaveStructure> CODEC = RecordCodecBuilder.mapCodec(instance ->
@@ -62,14 +64,16 @@ public class YetiCaveStructure extends ControlledSpawningStructure implements Cu
 
 	public static YetiCaveStructure buildYetiCaveConfig(BootstrapContext<Structure> context) {
 		return new YetiCaveStructure(
-			ControlledSpawningConfig.firstIndexMonsters(new MobSpawnSettings.SpawnerData(TFEntities.YETI.get(), 5, 1, 2)),
+			ControlledSpawningConfig.justMonsters(List.of(List.of(
+				weightedSpawn(TFEntities.YETI.get(), 5, 1, 2)
+			))),
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_lich"))),
 			new HintConfig(HintConfig.book("yeticave", 3), TFEntities.KOBOLD.get()),
 			new DecorationConfig(2, true, false, false),
-			false, Optional.of(TFMapDecorations.YETI_LAIR),
+			false, Optional.of(Holder.direct(TFMapDecorations.YETI_LAIR.get())),
 			new StructureSettings(
 				context.lookup(Registries.BIOME).getOrThrow(TFBiomeTags.VALID_YETI_CAVE_BIOMES),
-				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedRandomList.create()))), // Landmarks have Controlled Mob spawning
+				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedList.of()))), // Landmarks have Controlled Mob spawning
 				GenerationStep.Decoration.SURFACE_STRUCTURES,
 				TerrainAdjustment.NONE
 			),

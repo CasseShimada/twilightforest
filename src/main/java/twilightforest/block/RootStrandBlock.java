@@ -24,8 +24,9 @@ public class RootStrandBlock extends TFPlantBlock implements BonemealableBlock {
 	}
 
 	@Override
-	protected MapCodec<? extends BushBlock> codec() {
-		return CODEC;
+	@SuppressWarnings("unchecked")
+	public MapCodec<BushBlock> codec() {
+		return (MapCodec<BushBlock>)(MapCodec<?>) CODEC;
 	}
 
 	@Override

@@ -2,10 +2,9 @@ package twilightforest.advancements.predicate;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.advancements.critereon.SingleComponentItemPredicate;
+import net.minecraft.advancements.criterion.SingleComponentItemPredicate;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
 
 public record ItemColorPredicate(int color) implements SingleComponentItemPredicate<DyedItemColor> {
@@ -20,9 +19,8 @@ public record ItemColorPredicate(int color) implements SingleComponentItemPredic
 	}
 
 	@Override
-	public boolean matches(ItemStack stack, DyedItemColor value) {
-		if (stack.has(DataComponents.DYED_COLOR) && this.color() == -1) return true;
-		return value.rgb() == this.color();
+	public boolean matches(DyedItemColor value) {
+		return this.color() == -1 || value.rgb() == this.color();
 	}
 
 	public static ItemColorPredicate anyColor() {

@@ -7,6 +7,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import twilightforest.init.TFBlockEntities;
 
 public class SkullCandleBlockEntity extends SkullBlockEntity {
@@ -46,15 +48,15 @@ public class SkullCandleBlockEntity extends SkullBlockEntity {
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-		super.saveAdditional(tag, provider);
-		tag.putInt("CandleColor", this.candleColor);
+	protected void saveAdditional(ValueOutput output) {
+		super.saveAdditional(output);
+		output.putInt("CandleColor", this.candleColor);
 	}
 
 	@Override
-	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-		super.loadAdditional(tag, provider);
-		this.candleColor = tag.getInt("CandleColor");
+	protected void loadAdditional(ValueInput input) {
+		super.loadAdditional(input);
+		this.candleColor = input.getIntOr("CandleColor", 0);
 	}
 
 	@Override

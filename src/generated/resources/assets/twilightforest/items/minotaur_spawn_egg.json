@@ -1,16 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/template_spawn_egg",
-    "tints": [
-      {
-        "type": "minecraft:constant",
-        "value": -12636124
-      },
-      {
-        "type": "minecraft:constant",
-        "value": -5603994
-      }
-    ]
+    "model": "twilightforest:item/minotaur_spawn_egg"
   }
 }

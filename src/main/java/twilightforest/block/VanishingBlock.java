@@ -10,7 +10,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,6 +23,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFSounds;
+import twilightforest.util.blocks.EntityDestroyable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -41,7 +41,7 @@ import java.util.Set;
  * @see ReappearingBlock, It is only separated from this class because vanilla does
  * not like having blockstate properties be conditionally registered.
  */
-public class VanishingBlock extends Block {
+public class VanishingBlock extends Block implements EntityDestroyable {
 	public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 	public static final BooleanProperty VANISHED = BooleanProperty.create("vanished");
 	private static final VoxelShape VANISHED_SHAPE = box(6, 6, 6, 10, 10, 10);
@@ -113,13 +113,13 @@ public class VanishingBlock extends Block {
 	}
 
 	@Override
-	public float getExplosionResistance(BlockState state, BlockGetter getter, BlockPos pos, Explosion explosion) {
-		return !state.getValue(ACTIVE) ? 6000F : super.getExplosionResistance(state, getter, pos, explosion);
+	public float getExplosionResistance() {
+		return 6000F;
 	}
 
 	@Override
 	public boolean canEntityDestroy(BlockState state, BlockGetter getter, BlockPos pos, Entity entity) {
-		return !state.getValue(ACTIVE) ? !areBlocksLocked(getter, pos) : super.canEntityDestroy(state, getter, pos, entity);
+		return !state.getValue(ACTIVE) ? !areBlocksLocked(getter, pos) : true;
 	}
 
 	@Override

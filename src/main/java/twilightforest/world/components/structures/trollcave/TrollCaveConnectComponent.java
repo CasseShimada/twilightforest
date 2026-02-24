@@ -21,6 +21,7 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilde
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFStructurePieceTypes;
+import twilightforest.mixin.accessor.StructurePiecesBuilderAccessor;
 import twilightforest.util.BoundingBoxUtils;
 import twilightforest.util.HugeMushroomUtil;
 import twilightforest.util.RotationUtil;
@@ -31,10 +32,10 @@ public class TrollCaveConnectComponent extends TrollCaveMainComponent {
 
 	public TrollCaveConnectComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
 		super(TFStructurePieceTypes.TFTCCon.get(), ctx, nbt);
-		this.openingTowards[0] = nbt.getBoolean("openingTowards0");
-		this.openingTowards[1] = nbt.getBoolean("openingTowards1");
-		this.openingTowards[2] = nbt.getBoolean("openingTowards2");
-		this.openingTowards[3] = nbt.getBoolean("openingTowards3");
+		this.openingTowards[0] = nbt.getBooleanOr("openingTowards0", false);
+		this.openingTowards[1] = nbt.getBooleanOr("openingTowards1", false);
+		this.openingTowards[2] = nbt.getBooleanOr("openingTowards2", false);
+		this.openingTowards[3] = nbt.getBooleanOr("openingTowards3", false);
 	}
 
 	public TrollCaveConnectComponent(int index, int x, int y, int z, int caveSize, int caveHeight, Direction direction, Holder.Reference<StructureSpeleothemConfig> speleothemConfig) {
@@ -253,7 +254,7 @@ public class TrollCaveConnectComponent extends TrollCaveMainComponent {
 		BoundingBox largeBox = new BoundingBox(boundingBox.minX() - 30, boundingBox.minY() - 30, boundingBox.minZ() - 30, boundingBox.maxX() - 30, boundingBox.maxY() - 30, boundingBox.maxZ() - 30);
 
 		if (list instanceof StructurePiecesBuilder start) {
-			for (StructurePiece component : start.pieces) {
+			for (StructurePiece component : ((StructurePiecesBuilderAccessor) start).twilightforest$getPieces()) {
 				if (component instanceof TrollCaveGardenComponent && component.getBoundingBox().intersects(largeBox)) {
 					return component;
 				}

@@ -11,7 +11,10 @@ import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import twilightforest.init.TFStructurePieceTypes;
+import twilightforest.mixin.accessor.StructurePiecesBuilderAccessor;
 import twilightforest.util.BoundingBoxUtils;
+
+import java.util.List;
 
 
 public class IceTowerMainComponent extends IceTowerWingComponent {
@@ -19,7 +22,7 @@ public class IceTowerMainComponent extends IceTowerWingComponent {
 
 	public IceTowerMainComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
 		super(TFStructurePieceTypes.TFITMai.get(), nbt);
-		this.hasBossWing = nbt.getBoolean("hasBossWing");
+		this.hasBossWing = nbt.getBooleanOr("hasBossWing", false);
 	}
 
 	public IceTowerMainComponent(RandomSource rand, int index, int x, int y, int z) {
@@ -45,18 +48,19 @@ public class IceTowerMainComponent extends IceTowerWingComponent {
 	public void addChildren(StructurePiece parent, StructurePieceAccessor list, RandomSource rand) {
 		if (!(list instanceof StructurePiecesBuilder start))  // should never happen
 			return;
+		List<StructurePiece> pieces = ((StructurePiecesBuilderAccessor) start).twilightforest$getPieces();
 
 		while (!((IceTowerMainComponent) parent).hasBossWing) {
 			rand.setSeed(rand.nextLong());
 			openings.clear();
 			addOpening(0, 1, size / 2, Rotation.CLOCKWISE_180);
-			start.pieces.clear();
-			start.pieces.add(parent);
+			pieces.clear();
+			pieces.add(parent);
 
 			// add entrance tower
 			BoundingBox towerBB = BoundingBoxUtils.clone(this.boundingBox);
 
-			for (StructurePiece structurecomponent : start.pieces)
+			for (StructurePiece structurecomponent : pieces)
 				towerBB.encapsulate(structurecomponent.getBoundingBox());
 
 			// TODO: make this more general
@@ -82,7 +86,7 @@ public class IceTowerMainComponent extends IceTowerWingComponent {
 				entranceDoor = entranceDoor.south(towerBB.maxZ() - this.getBoundingBox().maxZ());
 			}
 
-			makeEntranceTower(list, rand, this.getGenDepth() + 1, entranceDoor.getX(), entranceDoor.getY(), entranceDoor.getZ(), SIZE, 11, this.rotation);
+			makeEntranceTower(list, rand, this.getGenDepth() + 1, entranceDoor.getX(), entranceDoor.getY(), entranceDoor.getZ(), SIZE, 11, ((twilightforest.mixin.accessor.StructurePieceFieldsAccessor) this).twilightforest$getRotation());
 			super.addChildren(parent, start, rand);
 		}
 	}
@@ -95,7 +99,7 @@ public class IceTowerMainComponent extends IceTowerWingComponent {
 
 		list.addPiece(bridge);
 		if (list instanceof StructurePiecesBuilder start) {
-			bridge.addChildren(start.pieces.get(0), list, rand);
+			bridge.addChildren(((StructurePiecesBuilderAccessor) start).twilightforest$getPieces().get(0), list, rand);
 		}
 	}
 
@@ -107,7 +111,7 @@ public class IceTowerMainComponent extends IceTowerWingComponent {
 
 		list.addPiece(entrance);
 		if (list instanceof StructurePiecesBuilder start) {
-			entrance.addChildren(start.pieces.get(0), list, rand);
+			entrance.addChildren(((StructurePiecesBuilderAccessor) start).twilightforest$getPieces().get(0), list, rand);
 		}
 		addOpening(x, y, z, rotation);
 		return true;

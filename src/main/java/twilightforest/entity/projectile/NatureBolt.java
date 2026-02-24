@@ -18,11 +18,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.neoforge.event.EventHooks;
 import twilightforest.tags.TFBlockTags;
 import twilightforest.init.TFDamageTypes;
 import twilightforest.init.TFEntities;
@@ -66,7 +66,7 @@ public class NatureBolt extends TFThrowable implements ITFProjectile, ItemSuppli
 		BlockPos blockPosHit = result.getBlockPos();
 		BlockState stateHit = this.level().getBlockState(blockPosHit);
 
-		if (this.level() instanceof ServerLevel level && EventHooks.canEntityGrief(level, this)) {
+		if (this.level() instanceof ServerLevel level && level.getGameRules().get(GameRules.MOB_GRIEFING)) {
 			if (stateHit.getBlock() instanceof BonemealableBlock bonemealable && bonemealable.isValidBonemealTarget(this.level(), blockPosHit, stateHit)) {
 				bonemealable.performBonemeal((ServerLevel) this.level(), this.random, blockPosHit, stateHit);
 			} else if (stateHit.isSolid() && this.canReplaceBlock(this.level(), blockPosHit)) {

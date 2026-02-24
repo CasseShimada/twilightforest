@@ -1,16 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/template_spawn_egg",
-    "tints": [
-      {
-        "type": "minecraft:constant",
-        "value": -13353964
-      },
-      {
-        "type": "minecraft:constant",
-        "value": -4526590
-      }
-    ]
+    "model": "twilightforest:item/carminite_broodling_spawn_egg"
   }
 }

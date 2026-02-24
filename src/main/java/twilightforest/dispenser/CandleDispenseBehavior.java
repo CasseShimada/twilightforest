@@ -19,6 +19,7 @@ import twilightforest.block.*;
 import twilightforest.block.entity.CandelabraBlockEntity;
 import twilightforest.block.entity.SkullCandleBlockEntity;
 import twilightforest.init.TFBlocks;
+import twilightforest.mixin.accessor.SkullBlockEntityAccessor;
 
 public class CandleDispenseBehavior extends OptionalDispenseItemBehavior {
 
@@ -119,7 +120,9 @@ public class CandleDispenseBehavior extends OptionalDispenseItemBehavior {
 				.setValue(AbstractSkullCandleBlock.LIGHTING, LightableBlock.Lighting.NONE)
 				.setValue(SkullCandleBlock.ROTATION, level.getBlockState(pos).getValue(SkullBlock.ROTATION)),
 			AbstractSkullCandleBlock.candleToCandleColor(candle).getValue()));
-		if (level.getBlockEntity(pos) instanceof SkullCandleBlockEntity sc) sc.setOwner(profile);
+		if (level.getBlockEntity(pos) instanceof SkullCandleBlockEntity sc && profile != null) {
+			((SkullBlockEntityAccessor) sc).twilightforest$setOwnerProfile(profile);
+		}
 	}
 
 	private static void makeWallSkull(Level level, BlockPos pos, Block newBlock, Item candle) {
@@ -133,6 +136,8 @@ public class CandleDispenseBehavior extends OptionalDispenseItemBehavior {
 				.setValue(AbstractSkullCandleBlock.LIGHTING, LightableBlock.Lighting.NONE)
 				.setValue(WallSkullCandleBlock.FACING, level.getBlockState(pos).getValue(WallSkullBlock.FACING)),
 			AbstractSkullCandleBlock.candleToCandleColor(candle).getValue()));
-		if (level.getBlockEntity(pos) instanceof SkullCandleBlockEntity sc) sc.setOwner(profile);
+		if (level.getBlockEntity(pos) instanceof SkullCandleBlockEntity sc && profile != null) {
+			((SkullBlockEntityAccessor) sc).twilightforest$setOwnerProfile(profile);
+		}
 	}
 }

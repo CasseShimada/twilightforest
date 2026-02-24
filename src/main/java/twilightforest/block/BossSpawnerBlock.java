@@ -15,8 +15,9 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import twilightforest.block.entity.spawner.BossSpawnerBlockEntity;
 import twilightforest.enums.BossVariant;
+import twilightforest.util.blocks.EntityDestroyable;
 
-public class BossSpawnerBlock extends BaseEntityBlock {
+public class BossSpawnerBlock extends BaseEntityBlock implements EntityDestroyable {
 
 	public static final MapCodec<BossSpawnerBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			BossVariant.CODEC.fieldOf("variant").forGetter(o -> o.boss),

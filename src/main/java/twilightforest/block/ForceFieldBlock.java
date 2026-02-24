@@ -19,8 +19,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import twilightforest.util.blocks.EntityDestroyable;
 
-public class ForceFieldBlock extends Block implements SimpleWaterloggedBlock {
+public class ForceFieldBlock extends Block implements SimpleWaterloggedBlock, EntityDestroyable {
 	public static final BooleanProperty DOWN = PipeBlock.DOWN;
 	public static final BooleanProperty UP = PipeBlock.UP;
 	public static final BooleanProperty NORTH = PipeBlock.NORTH;

@@ -5,14 +5,13 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
+import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.resources.FileToIdConverter;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
-import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import twilightforest.TwilightForestMod;
 
 import java.util.ArrayList;
@@ -22,27 +21,34 @@ import java.util.Optional;
 
 //TODO this class may be redundant now that SimpleJsonResourceReloadListener uses codecs. Look into it
 @Deprecated
-public abstract class CodecResourceReloadListener<T> extends SimpleJsonResourceReloadListener<JsonElement> {
+public abstract class CodecResourceReloadListener<T> extends SimpleJsonResourceReloadListener<JsonElement> implements IdentifiableResourceReloadListener {
 	protected final Gson gson;
 	private final Codec<T> codec;
+	private final Identifier fabricId;
 
-	public CodecResourceReloadListener(Codec<T> codec, String directory) {
-		this(new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create(), codec, directory);
+	public CodecResourceReloadListener(Identifier fabricId, Codec<T> codec, String directory) {
+		this(fabricId, new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create(), codec, directory);
 	}
 
-	public CodecResourceReloadListener(Gson gson, Codec<T> codec, String directory) {
+	public CodecResourceReloadListener(Identifier fabricId, Gson gson, Codec<T> codec, String directory) {
 		super(ExtraCodecs.JSON, FileToIdConverter.json(directory));
 
 		this.gson = gson;
 		this.codec = codec;
+		this.fabricId = fabricId;
 	}
 
 	@Override
-	protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager manager, ProfilerFiller profiler) {
-		List<Map.Entry<ResourceLocation, JsonElement>> nonTwilight = new ArrayList<>();
+	public Identifier getFabricId() {
+		return this.fabricId;
+	}
 
-		for (Map.Entry<ResourceLocation, JsonElement> entry : map.entrySet()) {
-			ResourceLocation location = entry.getKey();
+	@Override
+	protected void apply(Map<Identifier, JsonElement> map, ResourceManager manager, ProfilerFiller profiler) {
+		List<Map.Entry<Identifier, JsonElement>> nonTwilight = new ArrayList<>();
+
+		for (Map.Entry<Identifier, JsonElement> entry : map.entrySet()) {
+			Identifier location = entry.getKey();
 
 			// FIXME separate Stalactite entry from structure-specific stalactite jsons
 			//  The StalactiteReloadListener requires this. When that is fixed, then this class can be deleted.
@@ -57,14 +63,14 @@ public abstract class CodecResourceReloadListener<T> extends SimpleJsonResourceR
 			}
 		}
 
-		for (Map.Entry<ResourceLocation, JsonElement> entry : nonTwilight) {
-			ResourceLocation location = entry.getKey();
+		for (Map.Entry<Identifier, JsonElement> entry : nonTwilight) {
+			Identifier location = entry.getKey();
 			JsonElement jsonElement = entry.getValue();
 			this.deserialize(manager, location, jsonElement);
 		}
 	}
 
-	protected void deserialize(ResourceManager manager, ResourceLocation location, JsonElement jsonElement) {
+	protected void deserialize(ResourceManager manager, Identifier location, JsonElement jsonElement) {
 		try {
 			Optional<T> checkFile = this.codec.parse(JsonOps.INSTANCE, jsonElement).result();
 			if (checkFile.isPresent()) {
@@ -77,5 +83,5 @@ public abstract class CodecResourceReloadListener<T> extends SimpleJsonResourceR
 		}
 	}
 
-	protected abstract void forLocation(ResourceManager manager, ResourceLocation location, T element);
+	protected abstract void forLocation(ResourceManager manager, Identifier location, T element);
 }

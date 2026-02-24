@@ -3,7 +3,6 @@ package twilightforest.entity.monster;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -20,11 +19,15 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.entity.EnforcedHomePoint;
 import twilightforest.entity.ai.control.NoClipMoveControl;
@@ -36,7 +39,7 @@ import twilightforest.util.entities.EntityUtil;
 import java.util.EnumSet;
 import java.util.Optional;
 
-public class Wraith extends FlyingMob implements Enemy, EnforcedHomePoint {
+public class Wraith extends Monster implements Enemy, EnforcedHomePoint {
 
 	private static final EntityDataAccessor<Optional<GlobalPos>> HOME_POINT = SynchedEntityData.defineId(Wraith.class, EntityDataSerializers.OPTIONAL_GLOBAL_POS);
 
@@ -44,6 +47,14 @@ public class Wraith extends FlyingMob implements Enemy, EnforcedHomePoint {
 		super(type, level);
 		this.moveControl = new NoClipMoveControl(this);
 		this.noPhysics = true;
+	}
+
+	@Override
+	protected PathNavigation createNavigation(Level level) {
+		FlyingPathNavigation navigation = new FlyingPathNavigation(this, level);
+		navigation.setCanOpenDoors(false);
+		navigation.setCanFloat(true);
+		return navigation;
 	}
 
 	@Override
@@ -71,11 +82,6 @@ public class Wraith extends FlyingMob implements Enemy, EnforcedHomePoint {
 
 	@Override
 	public boolean isSteppingCarefully() {
-		return true;
-	}
-
-	@Override
-	protected boolean shouldDespawnInPeaceful() {
 		return true;
 	}
 
@@ -120,7 +126,7 @@ public class Wraith extends FlyingMob implements Enemy, EnforcedHomePoint {
 		return TFSounds.WRAITH_DEATH.get();
 	}
 
-	public static boolean checkMonsterSpawnRules(EntityType<? extends Wraith> entity, ServerLevelAccessor world, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
+	public static boolean checkWraithSpawnRules(EntityType<? extends Wraith> entity, ServerLevelAccessor world, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
 		return world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random) && checkMobSpawnRules(entity, world, reason, pos, random);
 	}
 
@@ -131,15 +137,15 @@ public class Wraith extends FlyingMob implements Enemy, EnforcedHomePoint {
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag tag) {
-		super.addAdditionalSaveData(tag);
-		this.saveHomePointToNbt(tag);
+	public void addAdditionalSaveData(ValueOutput output) {
+		super.addAdditionalSaveData(output);
+		this.saveHomePointToNbt(output);
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag tag) {
-		super.readAdditionalSaveData(tag);
-		this.loadHomePointFromNbt(tag);
+	public void readAdditionalSaveData(ValueInput input) {
+		super.readAdditionalSaveData(input);
+		this.loadHomePointFromNbt(input);
 	}
 
 	@Override

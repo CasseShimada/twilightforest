@@ -1,16 +1,12 @@
 package twilightforest.network;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.network.protocol.game.ClientboundBossEventPacket;
 import net.minecraft.world.BossEvent;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
 import twilightforest.TwilightForestMod;
-import twilightforest.entity.boss.bar.ClientTFBossBar;
 import twilightforest.entity.boss.bar.ServerTFBossBar;
 
 import java.util.UUID;
@@ -28,6 +24,18 @@ public abstract class TFBossBarPacket implements CustomPacketPayload {
 
 	public void write(RegistryFriendlyByteBuf buf) {
 		buf.writeUUID(this.id);
+	}
+
+	public UUID id() {
+		return this.id;
+	}
+
+	private static byte encodeProperties(boolean darkenScreen, boolean playMusic, boolean createWorldFog) {
+		byte result = 0;
+		if (darkenScreen) result |= 1;
+		if (playMusic) result |= 2;
+		if (createWorldFog) result |= 4;
+		return result;
 	}
 
 	public static class AddTFBossBarPacket extends TFBossBarPacket {
@@ -72,7 +80,7 @@ public abstract class TFBossBarPacket implements CustomPacketPayload {
 			buf.writeFloat(this.progress);
 			buf.writeInt(this.color);
 			buf.writeEnum(this.overlay);
-			buf.writeByte(ClientboundBossEventPacket.encodeProperties(this.darkenScreen, this.playMusic, this.createWorldFog));
+			buf.writeByte(encodeProperties(this.darkenScreen, this.playMusic, this.createWorldFog));
 		}
 
 		@Override
@@ -80,17 +88,32 @@ public abstract class TFBossBarPacket implements CustomPacketPayload {
 			return TYPE;
 		}
 
-		@SuppressWarnings("Convert2Lambda")
-		public static void handle(AddTFBossBarPacket packet, IPayloadContext ctx) {
-			if (ctx.flow().isClientbound()) {
-				ctx.enqueueWork(new Runnable() {
-					@Override
-					public void run() {
-						Minecraft minecraft = Minecraft.getInstance();
-						minecraft.gui.getBossOverlay().events.put(packet.id, new ClientTFBossBar(packet.id, packet.name, packet.progress, packet.color, packet.overlay, packet.darkenScreen, packet.playMusic, packet.createWorldFog));
-					}
-				});
-			}
+		public Component name() {
+			return this.name;
+		}
+
+		public float progress() {
+			return this.progress;
+		}
+
+		public int color() {
+			return this.color;
+		}
+
+		public BossEvent.BossBarOverlay overlay() {
+			return this.overlay;
+		}
+
+		public boolean darkenScreen() {
+			return this.darkenScreen;
+		}
+
+		public boolean playMusic() {
+			return this.playMusic;
+		}
+
+		public boolean createWorldFog() {
+			return this.createWorldFog;
 		}
 	}
 
@@ -129,21 +152,16 @@ public abstract class TFBossBarPacket implements CustomPacketPayload {
 			return TYPE;
 		}
 
-		@SuppressWarnings("Convert2Lambda")
-		public static void handle(UpdateTFBossBarStylePacket packet, IPayloadContext ctx) {
-			if (ctx.flow().isClientbound()) {
-				ctx.enqueueWork(new Runnable() {
-					@Override
-					public void run() {
-						Minecraft minecraft = Minecraft.getInstance();
-						if (minecraft.gui.getBossOverlay().events.get(packet.id) instanceof ClientTFBossBar bossEvent) {
-							bossEvent.setBarColor(packet.color);
-							bossEvent.setOverlay(packet.overlay);
-							if (!packet.allowLerp) bossEvent.setSetTime(bossEvent.getSetTime() - 200L); // Boss bars lerp over 100 milliseconds, we sometimes don't want that
-						}
-					}
-				});
-			}
+		public int color() {
+			return this.color;
+		}
+
+		public BossEvent.BossBarOverlay overlay() {
+			return this.overlay;
+		}
+
+		public boolean allowLerp() {
+			return this.allowLerp;
 		}
 	}
 }

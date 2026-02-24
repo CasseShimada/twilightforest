@@ -1,9 +1,9 @@
 package twilightforest.tags;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.core.registries.Registries;
 import twilightforest.TwilightForestMod;
 
 public class TFItemTags {
@@ -99,7 +99,7 @@ public class TFItemTags {
 	public static final TagKey<Item> RANDOMIUM_BLACKLIST = create("randomium", "blacklist");
 
 	private static TagKey<Item> create(String tagName) {
-		return ItemTags.create(TwilightForestMod.prefix(tagName));
+		return TagKey.create(Registries.ITEM, TwilightForestMod.prefix(tagName));
 	}
 
 	public static TagKey<Item> makeCommonTag(String tagName) {
@@ -107,6 +107,6 @@ public class TFItemTags {
 	}
 
 	private static TagKey<Item> create(String modid, String tagName) {
-		return ItemTags.create(ResourceLocation.fromNamespaceAndPath(modid, tagName));
+		return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(modid, tagName));
 	}
 }

@@ -20,9 +20,9 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.ItemAbilities;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFParticleType;
+import twilightforest.util.ToolActionUtil;
 
 import java.util.Locale;
 
@@ -37,7 +37,7 @@ public interface LightableBlock {
 			this.extinguish(player, state, level, pos);
 			return InteractionResult.SUCCESS;
 		} else if (this.canBeLit(state)) {
-			if (stack.canPerformAction(ItemAbilities.FIRESTARTER_LIGHT)) {
+			if (ToolActionUtil.isFireStarter(stack)) {
 				return InteractionResult.PASS;
 			}
 		}

@@ -131,10 +131,6 @@ steps:
                   value = "$($env:JAVAPROPS_MOD_VERSION).$($env:REVISION)"
               },
               [Ordered]@{
-                  name = "NeoForge Version"
-                  value = "$($env:JAVAPROPS_NEO_VERSION)"
-              },
-              [Ordered]@{
                   name = "Commit"
                   value = "[$(($env:BUILD_SOURCEVERSION).Substring(0, 7))]($($env:BUILD_REPOSITORY_URI)/commit/$($env:BUILD_SOURCEVERSION))"
               }

@@ -13,6 +13,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
@@ -121,7 +122,7 @@ public record CanopyBlanketProcessor(HolderSet<Biome> biomesForApplication, Bloc
 					int treeTop = treeBottom + (int) (thickness);
 
 					for (int y = treeBottom; y < treeTop; y++) {
-						chunk.setBlockState(pos.atY(y), canopyBlock.getState(random, pos), false);
+						chunk.setBlockState(pos.atY(y), canopyBlock.getState(random, pos), Block.UPDATE_NONE);
 					}
 				}
 			}

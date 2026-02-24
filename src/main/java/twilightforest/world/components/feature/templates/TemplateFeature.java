@@ -2,7 +2,7 @@ package twilightforest.world.components.feature.templates;
 
 import com.google.common.math.StatsAccumulator;
 import com.mojang.serialization.Codec;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
@@ -70,9 +70,14 @@ public abstract class TemplateFeature<T extends FeatureConfiguration> extends Fe
 
 		template.placeInWorld(world, placementPos, placementPos, placementSettings, random, Block.UPDATE_CLIENTS);
 
-		for (StructureTemplate.StructureBlockInfo info : template.filterBlocks(placementPos, placementSettings, Blocks.STRUCTURE_BLOCK))
-			if (info.nbt() != null && StructureMode.valueOf(info.nbt().getString("mode")) == StructureMode.DATA)
-				this.processMarkers(info, world, rotation, mirror, random);
+		for (StructureTemplate.StructureBlockInfo info : template.filterBlocks(placementPos, placementSettings, Blocks.STRUCTURE_BLOCK)) {
+			if (info.nbt() != null) {
+				String mode = info.nbt().getStringOr("mode", "");
+				if (!mode.isEmpty() && StructureMode.valueOf(mode) == StructureMode.DATA) {
+					this.processMarkers(info, world, rotation, mirror, random);
+				}
+			}
+		}
 
 		this.postPlacement(world, random, templateManager, rotation, mirror, placementSettings, placementPos, config);
 
@@ -141,6 +146,6 @@ public abstract class TemplateFeature<T extends FeatureConfiguration> extends Fe
 	}
 
 	private static boolean isDataBlock(StructureTemplate.StructureBlockInfo info) {
-		return StructureMode.DATA.name().equals(info.nbt().getString("mode"));
+		return StructureMode.DATA.name().equals(info.nbt().getStringOr("mode", ""));
 	}
 }

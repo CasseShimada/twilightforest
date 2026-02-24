@@ -14,6 +14,7 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
+import twilightforest.mixin.accessor.StructurePiecesBuilderAccessor;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.util.BoundingBoxUtils;
@@ -42,7 +43,7 @@ public class StrongholdEntranceComponent extends KnightStrongholdComponent {
 		super.addChildren(parent, old, random);
 
 		if (old instanceof StructurePiecesBuilder start) {
-			List<StructurePiece> list = start.pieces;
+			List<StructurePiece> list = ((StructurePiecesBuilderAccessor) start).twilightforest$getPieces();
 
 			// make a random component in each direction
 			this.lowerPieces.prepareStructurePieces();

@@ -13,6 +13,7 @@ import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -22,6 +23,7 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import twilightforest.init.TFBiomes;
 import twilightforest.init.TFConfiguredFeatures;
 import twilightforest.init.TFStructurePieceTypes;
+import twilightforest.mixin.accessor.StructurePieceFieldsAccessor;
 import twilightforest.util.BoundingBoxUtils;
 import twilightforest.world.components.spelothem.StructureSpeleothemConfig;
 
@@ -83,16 +85,17 @@ public class TrollCaveGardenComponent extends TrollCaveMainComponent {
 		}
 
 		// mushglooms first
+		Rotation rotation = ((StructurePieceFieldsAccessor) this).twilightforest$getRotation();
 		for (int i = 0; i < 8; i++) {
 			BlockPos.MutableBlockPos dest = getCoordsInCave(decoRNG);
-			setBlockStateRotated(world, Blocks.MYCELIUM.defaultBlockState(), dest.getX(), dest.setY(0).getY(), dest.getZ(), this.rotation, sbb);
+			setBlockStateRotated(world, Blocks.MYCELIUM.defaultBlockState(), dest.getX(), dest.setY(0).getY(), dest.getZ(), rotation, sbb);
 			generate(world, generator, TFConfiguredFeatures.TROLL_BIG_MUSHGLOOMS, decoRNG, dest.getX(), dest.setY(1).getY(), dest.getZ(), sbb);
 		}
 
 		// mushrooms!
 		for (int i = 0; i < 16; i++) {
 			BlockPos.MutableBlockPos dest = getCoordsInCave(decoRNG);
-			setBlockStateRotated(world, Blocks.MYCELIUM.defaultBlockState(), dest.getX(), dest.setY(0).getY(), dest.getZ(), this.rotation, sbb);
+			setBlockStateRotated(world, Blocks.MYCELIUM.defaultBlockState(), dest.getX(), dest.setY(0).getY(), dest.getZ(), rotation, sbb);
 			generate(world, generator, rand.nextBoolean() ? TFConfiguredFeatures.TROLL_HUGE_BROWN_MUSHROOMS : TFConfiguredFeatures.TROLL_HUGE_RED_MUSHROOMS, decoRNG, dest.getX(), dest.setY(1).getY(), dest.getZ(), sbb);
 		}
 

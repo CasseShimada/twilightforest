@@ -3,31 +3,32 @@ package twilightforest.events;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityEquipment;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ResolvableProfile;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.neoforged.bus.api.EventPriority;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.common.util.FakePlayer;
-import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
-import net.neoforged.neoforge.registries.DeferredItem;
+import net.fabricmc.fabric.api.entity.FakePlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import twilightforest.network.PacketDistributor;
+import twilightforest.util.registry.DeferredItem;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.KeepsakeCasketBlock;
 import twilightforest.block.entity.SkullChestBlockEntity;
@@ -35,44 +36,37 @@ import twilightforest.config.TFConfig;
 import twilightforest.tags.TFItemTags;
 import twilightforest.enums.BlockLoggingEnum;
 import twilightforest.init.TFBlocks;
+import twilightforest.init.TFDataAttachments;
 import twilightforest.init.TFItems;
 import twilightforest.init.TFSounds;
 import twilightforest.init.TFStats;
 import twilightforest.network.SpawnCharmPacket;
+import twilightforest.mixin.accessor.BaseContainerBlockEntityAccessor;
 import twilightforest.util.TFItemStackUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@EventBusSubscriber(modid = TwilightForestMod.ID)
 public class CharmEvents {
 
 	public static final String CHARM_INV_TAG = "TFCharmInventory";
 	public static final String CASKET_DAMAGE_TAG = "CasketDamage";
 	public static final String CONSUMED_CHARM_TAG = "CharmStack";
 
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	// Check for charm of life first to stop a player from dying
-	public static void applyCharmOfLife(LivingDeathEvent event) {
-		LivingEntity living = event.getEntity();
-
-		//ensure our player is real and in survival before attempting anything
-		if (event.isCanceled() || living.level().isClientSide() || !(living instanceof Player player) || living instanceof FakePlayer ||
-				player.isCreative() || player.isSpectator()) return;
-
-		if (charmOfLife(player)) event.setCanceled(true); // Executes if the player had charms
+	public static boolean tryPreventDeath(ServerPlayer player, DamageSource source) {
+		if (player.level().isClientSide() || player instanceof FakePlayer || player.isCreative() || player.isSpectator()) {
+			return false;
+		}
+		return charmOfLife(player);
 	}
 
-	@SubscribeEvent(priority = EventPriority.HIGH)
 	// Then check if the player should keep any items through death
-	public static void applyKeepingAndCasket(LivingDeathEvent event) {
-		LivingEntity living = event.getEntity();
-
-		//ensure our player is real and in survival before attempting anything
-		if (event.isCanceled() || !(living.level() instanceof ServerLevel level) || !(living instanceof Player player) || living instanceof FakePlayer ||
-				player.isCreative() || player.isSpectator()) return;
-
-		if (!level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
+	public static void handleDeath(ServerPlayer player) {
+		if (!(player.level() instanceof ServerLevel level) || player instanceof FakePlayer || player.isCreative() || player.isSpectator()) {
+			return;
+		}
+		if (!level.getGameRules().get(GameRules.KEEP_INVENTORY)) {
 			// Did the player recover? No? Let's give them their stuff based on the keeping charms
 			charmOfKeeping(player);
 
@@ -81,11 +75,9 @@ public class CharmEvents {
 		}
 	}
 
-	@SubscribeEvent
-	public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-		if (!(event.getEntity() instanceof ServerPlayer serverPlayer)) return;
-		if (!event.isEndConquered()) {
-			returnStoredItems(serverPlayer);
+	public static void onPlayerRespawn(ServerPlayer player, boolean alive) {
+		if (!alive) {
+			returnStoredItems(player);
 		}
 	}
 
@@ -103,12 +95,12 @@ public class CharmEvents {
 				player.setHealth(player.getMaxHealth());
 
 				player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 600, 3));
-				player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 600, 0));
+				player.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 600, 0));
 				player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 600, 0));
 			}
 
 			if (player instanceof ServerPlayer serverPlayer) {
-				PacketDistributor.sendToPlayer(serverPlayer, new SpawnCharmPacket(new ItemStack(charm1 ? TFItems.CHARM_OF_LIFE_1.get() : TFItems.CHARM_OF_LIFE_2.get()), TFSounds.CHARM_LIFE.getKey()));
+				PacketDistributor.sendToPlayer(serverPlayer, new SpawnCharmPacket(new ItemStack(charm1 ? TFItems.CHARM_OF_LIFE_1.get() : TFItems.CHARM_OF_LIFE_2.get()), ResourceKey.create(Registries.SOUND_EVENT, TFSounds.CHARM_LIFE.getId())));
 				serverPlayer.awardStat(TFStats.LIFE_CHARMS_ACTIVATED.get());
 			}
 
@@ -120,71 +112,71 @@ public class CharmEvents {
 
 	private static void charmOfKeeping(Player player) {
 		//create a fake inventory to organize our kept inventory in
-		Inventory keepInventory = new Inventory(player);
-		ListTag tagList = new ListTag();
+		Inventory keepInventory = new Inventory(player, new EntityEquipment());
+		Inventory playerInventory = player.getInventory();
+		List<Integer> allSlots = slotRange(0, playerInventory.getNonEquipmentItems().size());
+		List<Integer> hotbarSlots = slotRange(0, Inventory.getSelectionSize());
 
-		if (!applyCharm(TFItems.CHARM_OF_KEEPING_3, keepInventory, player, player.getInventory().items)) {
-			if (!applyCharm(TFItems.CHARM_OF_KEEPING_2, keepInventory, player, player.getInventory().items.subList(0, 9))) {
-				int i = player.getInventory().selected;
-				if (Inventory.isHotbarSlot(i)) {
-					applyCharm(TFItems.CHARM_OF_KEEPING_1, keepInventory, player, NonNullList.of(player.getInventory().items.get(i)));
+		if (!applyCharm(TFItems.CHARM_OF_KEEPING_3, keepInventory, player, allSlots)) {
+			if (!applyCharm(TFItems.CHARM_OF_KEEPING_2, keepInventory, player, hotbarSlots)) {
+				int selected = playerInventory.getSelectedSlot();
+				if (Inventory.isHotbarSlot(selected)) {
+					applyCharm(TFItems.CHARM_OF_KEEPING_1, keepInventory, player, List.of(selected));
 				}
 			}
 		}
 
 		//keep all items in the kept_on_death tag. This allows modpacks to support other items to keep on death
-		for (int i = 0; i < player.getInventory().items.size(); i++) {
-			ItemStack stack = player.getInventory().items.get(i);
+		for (int i = 0; i < playerInventory.getContainerSize(); i++) {
+			ItemStack stack = playerInventory.getItem(i);
 			if (stack.is(TFItemTags.KEPT_ON_DEATH)) {
-				keepInventory.items.set(i, stack.copy());
-				player.getInventory().items.set(i, ItemStack.EMPTY);
+				keepInventory.setItem(i, stack.copy());
+				playerInventory.setItem(i, ItemStack.EMPTY);
 			}
-		}
-
-		for (int i = 0; i < player.getInventory().armor.size(); i++) {
-			ItemStack armor = player.getInventory().armor.get(i);
-			if (armor.is(TFItemTags.KEPT_ON_DEATH)) {
-				keepInventory.armor.set(i, armor.copy());
-				player.getInventory().armor.set(i, ItemStack.EMPTY);
-			}
-		}
-
-		if (player.getInventory().offhand.getFirst().is(TFItemTags.KEPT_ON_DEATH)) {
-			keepInventory.offhand.set(0, player.getInventory().offhand.getFirst().copy());
-			player.getInventory().offhand.set(0, ItemStack.EMPTY);
 		}
 
 		//take our fake inventory and save it to the persistent player data.
 		//by saving it there we can guarantee we will always get all of our items back, even if the player logs out and back in.
 		if (!keepInventory.isEmpty()) {
-			keepInventory.save(tagList);
-			getPlayerData(player).put(CHARM_INV_TAG, tagList);
+			getPlayerData(player).put(CHARM_INV_TAG, TFItemStackUtils.saveInventory(player.registryAccess(), keepInventory));
 		}
 	}
 
-	private static boolean applyCharm(DeferredItem<Item> charm, Inventory keptInventory, Player player, List<ItemStack> inventorySlots) {
-		List<ItemStack> mergedCheck = new ArrayList<>(inventorySlots);
-		//merge armor and offhand into check slots since theyll always be kept by a charm
-		mergedCheck.addAll(player.getInventory().armor);
-		mergedCheck.addAll(player.getInventory().offhand);
+	private static boolean applyCharm(DeferredItem<Item> charm, Inventory keptInventory, Player player, List<Integer> inventorySlots) {
+		Inventory playerInventory = player.getInventory();
+		List<Integer> checkSlots = new ArrayList<>(inventorySlots);
+		checkSlots.addAll(equipmentSlotIndices());
+
+		boolean hasItems = false;
+		for (int slot : checkSlots) {
+			ItemStack stack = playerInventory.getItem(slot);
+			if (!stack.isEmpty() && !stack.is(charm.get())) {
+				hasItems = true;
+				break;
+			}
+		}
+
 		//first, check all affected slots to make sure they arent empty.
 		//filter out the charm so it doesnt count towards keeping items if its the only thing we are holding
-		if (mergedCheck.stream().filter(stack -> !stack.is(charm)).allMatch(ItemStack::isEmpty)) return false;
+		if (!hasItems) {
+			return false;
+		}
 
 		//do we even have a charm? No? Then stop operation
-		if (!TFItemStackUtils.consumeInventoryItem(player, charm, getPlayerData(player), true) && !hasCharmCurio(charm.value(), player)) return false;
+		if (!TFItemStackUtils.consumeInventoryItem(player, charm.get(), getPlayerData(player), true) && !hasCharmCurio(charm.get(), player)) {
+			return false;
+		}
 
-		boolean keptACasket = keepWholeListAndCheckCasket(keptInventory.items, inventorySlots, charm == TFItems.CHARM_OF_KEEPING_3);
-		keptACasket = keepWholeListAndCheckCasket(keptInventory.armor, player.getInventory().armor, keptACasket);
-		keepWholeListAndCheckCasket(keptInventory.offhand, player.getInventory().offhand, keptACasket);
+		boolean keptACasket = keepSlotsAndCheckCasket(keptInventory, playerInventory, inventorySlots, charm == TFItems.CHARM_OF_KEEPING_3);
+		keepSlotsAndCheckCasket(keptInventory, playerInventory, equipmentSlotIndices(), keptACasket);
 
 		return true;
 	}
 
 	private static void keepsakeCasket(Player player) {
 		//make sure we are still actually holding onto items before trying to place a casket
-		if (player.getInventory().hasAnyMatching(stack -> !stack.isEmpty() && !stack.is(TFItems.KEEPSAKE_CASKET))) {
-			boolean casketConsumed = TFItemStackUtils.consumeInventoryItem(player, TFBlocks.KEEPSAKE_CASKET, getPlayerData(player), false);
+		if (player.getInventory().contains(stack -> !stack.isEmpty() && !stack.is(TFItems.KEEPSAKE_CASKET.get()))) {
+			boolean casketConsumed = TFItemStackUtils.consumeInventoryItem(player, TFItems.KEEPSAKE_CASKET.get(), getPlayerData(player), false);
 
 			if (!casketConsumed)
 				return;
@@ -211,7 +203,7 @@ public class CharmEvents {
 			BlockPos immutablePos = pos.immutable();
 			FluidState fluidState = level.getFluidState(immutablePos);
 
-			int damage = getPlayerData(player).contains(CASKET_DAMAGE_TAG) ? getPlayerData(player).getInt(CASKET_DAMAGE_TAG) : 0;
+			int damage = getPlayerData(player).getIntOr(CASKET_DAMAGE_TAG, 0);
 			BlockState setState = TFBlocks.KEEPSAKE_CASKET.get().defaultBlockState()
 				.setValue(BlockLoggingEnum.MULTILOGGED, BlockLoggingEnum.getFromFluid(fluidState.getType()))
 				.setValue(KeepsakeCasketBlock.BREAKAGE, damage)
@@ -240,14 +232,14 @@ public class CharmEvents {
 
 			if (TFConfig.casketUUIDLocking) {
 				//make it so only the player who died can open the chest if our config allows us
-				casket.owner = new ResolvableProfile(player.getGameProfile());
+				casket.owner = ResolvableProfile.createResolved(player.getGameProfile());
 			} else {
 				casket.owner = null;
 			}
 
 			//some names are way too long for the casket so we'll cut them down
 			String modifiedName = player.getName().getString().substring(0, Math.min(12, player.getName().getString().length()));
-			casket.name = (Component.literal(modifiedName + "'s " + (level.getRandom().nextInt(1000) == 0 ? "Costco Casket" : casket.getDisplayName().getString())));
+			((BaseContainerBlockEntityAccessor) casket).twilightforest$setName(Component.literal(modifiedName + "'s " + (level.getRandom().nextInt(1000) == 0 ? "Costco Casket" : casket.getDisplayName().getString())));
 
 			int casketCapacity = casket.getContainerSize();
 			List<ItemStack> list = new ArrayList<>(casketCapacity);
@@ -255,24 +247,30 @@ public class CharmEvents {
 
 			// lets add our inventory exactly how it was on us
 			list.addAll(TFItemStackUtils.sortArmorForCasket(player));
-			player.getInventory().armor.clear();
+			player.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
+			player.setItemSlot(EquipmentSlot.CHEST, ItemStack.EMPTY);
+			player.setItemSlot(EquipmentSlot.LEGS, ItemStack.EMPTY);
+			player.setItemSlot(EquipmentSlot.FEET, ItemStack.EMPTY);
 			list.addAll(filler);
-			list.addAll(player.getInventory().offhand);
-			player.getInventory().offhand.clear();
+			list.add(player.getItemBySlot(EquipmentSlot.OFFHAND));
+			player.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
 			list.addAll(TFItemStackUtils.sortInvForCasket(player));
-			player.getInventory().items.clear();
+			NonNullList<ItemStack> nonEquipmentItems = player.getInventory().getNonEquipmentItems();
+			for (int i = 0; i < nonEquipmentItems.size(); i++) {
+				nonEquipmentItems.set(i, ItemStack.EMPTY);
+			}
 
 			casket.setItems(NonNullList.of(ItemStack.EMPTY, list.toArray(new ItemStack[casketCapacity])));
 			getPlayerData(player).remove(CASKET_DAMAGE_TAG);
 		} else {
 			//inventory is empty minus the casket: put the casket into the kept inventory
 			for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
-				if (player.getInventory().getItem(i).is(TFItems.KEEPSAKE_CASKET)) {
-					Inventory tmp = new Inventory(player);
-					tmp.load(getPlayerData(player).getList(CHARM_INV_TAG, 10));
+				if (player.getInventory().getItem(i).is(TFItems.KEEPSAKE_CASKET.get())) {
+					Inventory tmp = new Inventory(player, new EntityEquipment());
+					TFItemStackUtils.loadNoClear(player.registryAccess(), getPlayerData(player).getListOrEmpty(CHARM_INV_TAG), tmp);
 					tmp.add(player.getInventory().getItem(i).copy());
 					player.getInventory().setItem(i, ItemStack.EMPTY);
-					getPlayerData(player).put(CHARM_INV_TAG, tmp.save(new ListTag()));
+					getPlayerData(player).put(CHARM_INV_TAG, TFItemStackUtils.saveInventory(player.registryAccess(), tmp));
 				}
 			}
 		}
@@ -288,49 +286,68 @@ public class CharmEvents {
 		//check if our tag is in the persistent player data. If so, copy that inventory over to our own. Cloud storage at its finest!
 		CompoundTag playerData = getPlayerData(player);
 		if (!player.level().isClientSide() && playerData.contains(CHARM_INV_TAG)) {
-			ListTag tagList = playerData.getList(CHARM_INV_TAG, 10);
+			ListTag tagList = playerData.getListOrEmpty(CHARM_INV_TAG);
 			TFItemStackUtils.loadNoClear(player.registryAccess(), tagList, player.getInventory());
-			getPlayerData(player).getList(CHARM_INV_TAG, 10).clear();
-			getPlayerData(player).remove(CHARM_INV_TAG);
+			playerData.remove(CHARM_INV_TAG);
 		}
 
 		// spawn effect thingers
-		if (getPlayerData(player).contains(CONSUMED_CHARM_TAG)) {
-			ItemStack stack = ItemStack.parseOptional(player.registryAccess(), (CompoundTag) getPlayerData(player).get(CONSUMED_CHARM_TAG));
+		if (playerData.contains(CONSUMED_CHARM_TAG)) {
+			ItemStack stack = TFItemStackUtils.loadItem(player.registryAccess(), playerData.getCompoundOrEmpty(CONSUMED_CHARM_TAG));
 
 			if (player instanceof ServerPlayer serverPlayer) {
-				PacketDistributor.sendToPlayer(serverPlayer, new SpawnCharmPacket(stack, TFSounds.CHARM_KEEP.getKey()));
+				PacketDistributor.sendToPlayer(serverPlayer, new SpawnCharmPacket(stack, ResourceKey.create(Registries.SOUND_EVENT, TFSounds.CHARM_KEEP.getId())));
 				serverPlayer.awardStat(TFStats.KEEPING_CHARMS_ACTIVATED.get());
 			}
-			getPlayerData(player).remove(CONSUMED_CHARM_TAG);
+			playerData.remove(CONSUMED_CHARM_TAG);
 		}
 	}
 
 	public static CompoundTag getPlayerData(Player player) {
-		if (!player.getPersistentData().contains(Player.PERSISTED_NBT_TAG)) {
-			player.getPersistentData().put(Player.PERSISTED_NBT_TAG, new CompoundTag());
-		}
-		return player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG);
+		return TFDataAttachments.get(player, TFDataAttachments.CHARM_DATA);
 	}
 
 	//transfers a list of items to another
-	private static boolean keepWholeListAndCheckCasket(NonNullList<ItemStack> transferTo, List<ItemStack> transferFrom, boolean skipCasketCheck) {
+	private static boolean keepSlotsAndCheckCasket(Inventory transferTo, Inventory transferFrom, List<Integer> slots, boolean skipCasketCheck) {
 		boolean keptCasket = false;
-		for (int i = 0; i < transferFrom.size(); i++) {
-			var item = transferFrom.get(i).copy();
-			if (skipCasketCheck || (!item.is(TFItems.KEEPSAKE_CASKET) || keptCasket)) {
-				transferTo.set(i, item);
-				transferFrom.set(i, ItemStack.EMPTY);
+		for (int slot : slots) {
+			var item = transferFrom.getItem(slot);
+			if (item.isEmpty()) {
+				continue;
+			}
+			var copy = item.copy();
+			if (skipCasketCheck || (!copy.is(TFItems.KEEPSAKE_CASKET.get()) || keptCasket)) {
+				transferTo.setItem(slot, copy);
+				transferFrom.setItem(slot, ItemStack.EMPTY);
 			} else {
 				keptCasket = true;
-				if (item.getCount() > 1) {
-					item.shrink(1);
-					transferTo.set(i, item);
-					transferFrom.set(i, item.copyWithCount(1));
+				if (copy.getCount() > 1) {
+					copy.shrink(1);
+					transferTo.setItem(slot, copy);
+					transferFrom.setItem(slot, copy.copyWithCount(1));
 				}
 			}
 		}
 		return keptCasket || skipCasketCheck;
+	}
+
+	private static List<Integer> equipmentSlotIndices() {
+		List<Integer> indices = new ArrayList<>();
+		indices.add(TFItemStackUtils.equipmentSlotIndex(EquipmentSlot.HEAD));
+		indices.add(TFItemStackUtils.equipmentSlotIndex(EquipmentSlot.CHEST));
+		indices.add(TFItemStackUtils.equipmentSlotIndex(EquipmentSlot.LEGS));
+		indices.add(TFItemStackUtils.equipmentSlotIndex(EquipmentSlot.FEET));
+		indices.add(TFItemStackUtils.equipmentSlotIndex(EquipmentSlot.OFFHAND));
+		indices.removeIf(index -> index == Inventory.NOT_FOUND_INDEX);
+		return indices;
+	}
+
+	private static List<Integer> slotRange(int startInclusive, int endExclusive) {
+		List<Integer> slots = new ArrayList<>();
+		for (int i = startInclusive; i < endExclusive; i++) {
+			slots.add(i);
+		}
+		return slots;
 	}
 
 	private static boolean hasCharmCurio(Item item, Player player) {

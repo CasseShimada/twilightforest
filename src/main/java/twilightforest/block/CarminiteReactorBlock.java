@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -67,16 +68,16 @@ public class CarminiteReactorBlock extends BaseEntityBlock {
 	}
 
 	@Override
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moving) {
-		if (!newState.is(state.getBlock())) {
+	public void destroy(LevelAccessor level, BlockPos pos, BlockState state) {
+		if (level instanceof Level levelRef) {
 			for (BlockPos offset : BlockPos.betweenClosed(pos.offset(-1, -1, -1), pos.offset(1, 1, 1))) {
-				BlockState checkState = level.getBlockState(offset);
-				if (checkState.is(TFBlocks.FAKE_GOLD) || checkState.is(TFBlocks.FAKE_DIAMOND)) {
-					level.destroyBlock(offset, false);
+				BlockState checkState = levelRef.getBlockState(offset);
+				if (checkState.is(TFBlocks.FAKE_GOLD.get()) || checkState.is(TFBlocks.FAKE_DIAMOND.get())) {
+					levelRef.destroyBlock(offset, false);
 				}
 			}
 		}
-		super.onRemove(state, level, pos, newState, moving);
+		super.destroy(level, pos, state);
 	}
 
 	@Override

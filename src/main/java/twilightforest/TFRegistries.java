@@ -1,9 +1,10 @@
 package twilightforest;
 
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
+import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.registries.RegistryBuilder;
+import net.minecraft.resources.Identifier;
 import twilightforest.entity.MagicPaintingVariant;
 import twilightforest.entity.passive.DwarfRabbitVariant;
 import twilightforest.entity.passive.TinyBirdVariant;
@@ -21,9 +22,13 @@ import java.util.Locale;
 
 public class TFRegistries {
 
-	public static final Registry<BiomeLayerType> BIOME_LAYER_TYPE = new RegistryBuilder<>(Keys.BIOME_LAYER_TYPE).create();
-	public static final Registry<Enforcement> ENFORCEMENT = new RegistryBuilder<>(Keys.ENFORCEMENT).sync(true).create();
-	public static final Registry<ChunkBlanketType> CHUNK_BLANKET_TYPES = new RegistryBuilder<>(Keys.CHUNK_BLANKET_TYPE).create();
+	public static final Registry<BiomeLayerType> BIOME_LAYER_TYPE = FabricRegistryBuilder.createSimple(Keys.BIOME_LAYER_TYPE).buildAndRegister();
+	public static final Registry<Enforcement> ENFORCEMENT = FabricRegistryBuilder.createSimple(Keys.ENFORCEMENT).attribute(RegistryAttribute.SYNCED).buildAndRegister();
+	public static final Registry<ChunkBlanketType> CHUNK_BLANKET_TYPES = FabricRegistryBuilder.createSimple(Keys.CHUNK_BLANKET_TYPE).buildAndRegister();
+
+	public static void bootstrap() {
+		// No-op: ensures static initialization runs before custom registries are queried.
+	}
 
 	public static final class Keys {
 		public static final String REGISTRY_NAMESPACE = "twilight";
@@ -44,8 +49,8 @@ public class TFRegistries {
 		public static final ResourceKey<Registry<WoodPalette>> WOOD_PALETTES = ResourceKey.createRegistryKey(namedRegistry("wood_palettes"));
 		public static final ResourceKey<Registry<ChunkBlanketProcessor>> CHUNK_BLANKET_PROCESSORS = ResourceKey.createRegistryKey(namedRegistry("chunk_blanket_processors"));
 
-		public static ResourceLocation namedRegistry(String name) {
-			return ResourceLocation.fromNamespaceAndPath(REGISTRY_NAMESPACE, name.toLowerCase(Locale.ROOT));
+		public static Identifier namedRegistry(String name) {
+			return Identifier.fromNamespaceAndPath(REGISTRY_NAMESPACE, name.toLowerCase(Locale.ROOT));
 		}
 	}
 }

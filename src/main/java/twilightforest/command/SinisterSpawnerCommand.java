@@ -15,21 +15,21 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.world.level.storage.loot.LootTable;
 import twilightforest.block.entity.spawner.SinisterSpawnerBlockEntity;
 
-@tamaized.beanification.Component
 public class SinisterSpawnerCommand {
 	// Copied from LootCommand.SUGGEST_LOOT_TABLE
 	public static final SuggestionProvider<CommandSourceStack> SUGGEST_LOOT_TABLE = (context, builder) -> {
-		ReloadableServerRegistries.Holder holder = context.getSource().getServer().reloadableRegistries();
-		return SharedSuggestionProvider.suggestResource(holder.getKeys(Registries.LOOT_TABLE), builder);
+		var registry = context.getSource().getServer().registryAccess().lookupOrThrow(Registries.LOOT_TABLE);
+		return SharedSuggestionProvider.suggestResource(registry.keySet(), builder);
 	};
 
 	public LiteralArgumentBuilder<CommandSourceStack> register(CommandBuildContext buildContext) {
 		return Commands.literal("sinister_spawner")
-			.requires(cs -> cs.hasPermission(2))
+			.requires(cs -> Commands.LEVEL_GAMEMASTERS.check(cs.permissions()))
 			.then(Commands.literal("add_particle").then(Commands.argument("particle", ParticleArgument.particle(buildContext)).then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(this::addParticle))))
 			.then(Commands.literal("remove_particle").then(Commands.argument("particle", ParticleArgument.particle(buildContext)).then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(this::removeParticle))))
 			.then(Commands.literal("set_loot").then(Commands.argument("loot", ResourceOrIdArgument.lootTable(buildContext)).suggests(SUGGEST_LOOT_TABLE).then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(this::setLootTable))))
@@ -66,7 +66,7 @@ public class SinisterSpawnerCommand {
 		Holder<LootTable> loot = ResourceOrIdArgument.getLootTable(context, "loot");
 
 		if (context.getSource().getLevel().getBlockEntity(pos) instanceof SinisterSpawnerBlockEntity entity)
-			if (entity.setLootTable(loot.getKey()))
+			if (entity.setLootTable(loot.unwrapKey().orElse(null)))
 				return 1;
 
 		return 0;

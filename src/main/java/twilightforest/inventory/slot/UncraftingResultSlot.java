@@ -9,10 +9,9 @@ import net.minecraft.world.inventory.ResultSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.neoforged.neoforge.common.CommonHooks;
-import twilightforest.TwilightForestMod;
 import twilightforest.inventory.UncraftingContainer;
 import twilightforest.inventory.UncraftingMenu;
 
@@ -38,10 +37,7 @@ public class UncraftingResultSlot extends ResultSlot {
 
 	@Override
 	public void onTake(Player player, ItemStack stack) {
-		if (!(player.level() instanceof ServerLevel level)) {
-			TwilightForestMod.LOGGER.error("FUCK");//FIXME 1.21.3
-			return;
-		}
+		if (!(player.level() instanceof ServerLevel level)) return;
 
 		// let's see, if the assembly matrix can produce this item, then it's a normal recipe, if not, it's combined.  Will that work?
 		boolean combined = true;
@@ -49,7 +45,8 @@ public class UncraftingResultSlot extends ResultSlot {
 		//clear the temp map, just in case
 		this.tempRemainderMap.clear();
 
-		for (RecipeHolder<CraftingRecipe> recipe : level.recipeAccess().recipeMap().getRecipesFor(RecipeType.CRAFTING, this.assemblyMatrix.asCraftInput(), level).toList()) {
+		for (RecipeHolder<CraftingRecipe> recipe : RecipeMap.create(level.recipeAccess().getRecipes())
+			.getRecipesFor(RecipeType.CRAFTING, this.assemblyMatrix.asCraftInput(), level).toList()) {
 			if (ItemStack.isSameItemSameComponents(recipe.value().assemble(this.assemblyMatrix.asCraftInput(), player.level().registryAccess()), stack)) {
 				combined = false;
 				break;
@@ -83,9 +80,10 @@ public class UncraftingResultSlot extends ResultSlot {
 		CraftingInput input = positioned.input();
 		int i = positioned.left();
 		int j = positioned.top();
-		CommonHooks.setCraftingPlayer(player);
-		NonNullList<ItemStack> remainingItems = level.recipeAccess().getRecipeFor(RecipeType.CRAFTING, input, player.level()).map(holder -> holder.value().getRemainingItems(this.assemblyMatrix.asCraftInput())).orElse(null);
-		CommonHooks.setCraftingPlayer(null);
+		NonNullList<ItemStack> remainingItems = level.recipeAccess()
+			.getRecipeFor(RecipeType.CRAFTING, input, player.level())
+			.map(holder -> holder.value().getRemainingItems(this.assemblyMatrix.asCraftInput()))
+			.orElse(null);
 
 		for (int k = 0; k < input.height(); k++) {
 			for (int l = 0; l < input.width(); l++) {

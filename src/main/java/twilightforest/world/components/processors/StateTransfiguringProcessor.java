@@ -10,7 +10,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.*;
 import twilightforest.init.TFStructureProcessors;
 import twilightforest.util.features.FeaturePlacers;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class StateTransfiguringProcessor extends StructureProcessor {
 
 	@Nullable
 	@Override
-	public StructureTemplate.StructureBlockInfo process(LevelReader level, BlockPos origin, BlockPos centerBottom, StructureTemplate.StructureBlockInfo originalBlockInfo, StructureTemplate.StructureBlockInfo modifiedBlockInfo, StructurePlaceSettings settings, @Nullable StructureTemplate template) {
+	public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos origin, BlockPos centerBottom, StructureTemplate.StructureBlockInfo originalBlockInfo, StructureTemplate.StructureBlockInfo modifiedBlockInfo, StructurePlaceSettings settings) {
 		BlockState state = level.getBlockState(modifiedBlockInfo.pos());
 
 		RandomSource random = RandomSource.create(Mth.getSeed(modifiedBlockInfo.pos()));

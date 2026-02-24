@@ -1,14 +1,16 @@
 package twilightforest.init;
 
-import net.minecraft.Util;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Util;
 import net.minecraft.world.item.JukeboxSong;
 import twilightforest.TwilightForestMod;
+import twilightforest.util.registry.DeferredHolder;
 
 public class TFJukeboxSongs {
 
@@ -27,18 +29,22 @@ public class TFJukeboxSongs {
 	}
 
 	public static void bootstrap(BootstrapContext<JukeboxSong> context) {
-		register(context, RADIANCE, TFSounds.MUSIC_DISC_RADIANCE, 123, 15);
-		register(context, STEPS, TFSounds.MUSIC_DISC_STEPS, 195, 15);
-		register(context, SUPERSTITIOUS, TFSounds.MUSIC_DISC_SUPERSTITIOUS, 192, 15);
-		register(context, HOME, TFSounds.MUSIC_DISC_HOME, 215, 15);
-		register(context, WAYFARER, TFSounds.MUSIC_DISC_WAYFARER, 173, 15);
-		register(context, FINDINGS, TFSounds.MUSIC_DISC_FINDINGS, 196, 15);
-		register(context, MAKER, TFSounds.MUSIC_DISC_MAKER, 207, 15);
-		register(context, THREAD, TFSounds.MUSIC_DISC_THREAD, 201, 15);
-		register(context, MOTION, TFSounds.MUSIC_DISC_MOTION, 169, 15);
+		register(context, RADIANCE, sound(TFSounds.MUSIC_DISC_RADIANCE), 123, 15);
+		register(context, STEPS, sound(TFSounds.MUSIC_DISC_STEPS), 195, 15);
+		register(context, SUPERSTITIOUS, sound(TFSounds.MUSIC_DISC_SUPERSTITIOUS), 192, 15);
+		register(context, HOME, sound(TFSounds.MUSIC_DISC_HOME), 215, 15);
+		register(context, WAYFARER, sound(TFSounds.MUSIC_DISC_WAYFARER), 173, 15);
+		register(context, FINDINGS, sound(TFSounds.MUSIC_DISC_FINDINGS), 196, 15);
+		register(context, MAKER, sound(TFSounds.MUSIC_DISC_MAKER), 207, 15);
+		register(context, THREAD, sound(TFSounds.MUSIC_DISC_THREAD), 201, 15);
+		register(context, MOTION, sound(TFSounds.MUSIC_DISC_MOTION), 169, 15);
+	}
+
+	private static Holder<SoundEvent> sound(DeferredHolder<SoundEvent, SoundEvent> sound) {
+		return BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound.get());
 	}
 
 	private static void register(BootstrapContext<JukeboxSong> context, ResourceKey<JukeboxSong> key, Holder<SoundEvent> sound, float length, int output) {
-		context.register(key, new JukeboxSong(sound, Component.translatable(Util.makeDescriptionId("jukebox_song", key.location())), length, output));
+		context.register(key, new JukeboxSong(sound, Component.translatable(Util.makeDescriptionId("jukebox_song", key.identifier())), length, output));
 	}
 }

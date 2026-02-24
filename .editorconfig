@@ -6,6 +6,10 @@ trim_trailing_whitespace = true
 indent_style = tab
 charset = utf-8
 max_line_length = off
+end_of_line = lf
+
+[*.bat]
+end_of_line = crlf
 
 [{*.js,*.vsh,*.fsh}]
 indent_style = space

@@ -1,6 +1,6 @@
 package twilightforest.util.features;
 
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -104,7 +104,7 @@ public final class FeatureLogic {
 	}
 
 	public static boolean isBlockNotOk(BlockState state) {
-		return state.liquid() || state.is(Blocks.BEDROCK) || state.getBlock() instanceof GiantBlock || state.is(TFBlockTags.CLOUDS) || state.is(TFBlocks.HARDENED_DARK_LEAVES);
+		return state.liquid() || state.is(Blocks.BEDROCK) || state.getBlock() instanceof GiantBlock || state.is(TFBlockTags.CLOUDS) || state.is(TFBlocks.HARDENED_DARK_LEAVES.get());
 	}
 
 	// North is treated for default rotation and null means you're not on the wall

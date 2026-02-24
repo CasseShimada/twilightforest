@@ -6,7 +6,7 @@ import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
@@ -25,19 +25,19 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import twilightforest.TwilightForestMod;
 
 public abstract class TwilightDoubleTemplateStructurePiece extends TwilightTemplateStructurePiece {
-	protected final ResourceLocation templateOverlayLocation;
+	protected final Identifier templateOverlayLocation;
 	protected final StructureTemplate templateOverlay;
 	protected final StructurePlaceSettings placeSettingsOverlay;
 
 	public TwilightDoubleTemplateStructurePiece(StructurePieceType structurePieceType, CompoundTag compoundTag, StructurePieceSerializationContext ctx, StructurePlaceSettings rl2SettingsFunction, StructurePlaceSettings placeSettingsOverlay) {
 		super(structurePieceType, compoundTag, ctx, rl2SettingsFunction);
 
-		this.templateOverlayLocation = ResourceLocation.parse(compoundTag.getString("TemplateOverlay"));
+		this.templateOverlayLocation = Identifier.parse(compoundTag.getStringOr("TemplateOverlay", ""));
 		this.templateOverlay = this.structureManager.getOrCreate(this.templateOverlayLocation);
 		this.placeSettingsOverlay = placeSettingsOverlay;
 	}
 
-	public TwilightDoubleTemplateStructurePiece(StructurePieceType type, int genDepth, StructureTemplateManager structureManager, ResourceLocation templateLocation, StructurePlaceSettings placeSettings, ResourceLocation templateOverlayLocation, StructurePlaceSettings placeSettingsOverlay, BlockPos startPosition) {
+	public TwilightDoubleTemplateStructurePiece(StructurePieceType type, int genDepth, StructureTemplateManager structureManager, Identifier templateLocation, StructurePlaceSettings placeSettings, Identifier templateOverlayLocation, StructurePlaceSettings placeSettingsOverlay, BlockPos startPosition) {
 		super(type, genDepth, structureManager, templateLocation, placeSettings, startPosition);
 
 		this.templateOverlayLocation = templateOverlayLocation;
@@ -62,16 +62,16 @@ public abstract class TwilightDoubleTemplateStructurePiece extends TwilightTempl
 		if (this.templateOverlay.placeInWorld(worldGenLevel, this.templatePosition, blockPos, this.placeSettingsOverlay, random, 2)) {
 			for (StructureTemplate.StructureBlockInfo structureBlockInfo : this.templateOverlay.filterBlocks(this.templatePosition, this.placeSettingsOverlay, Blocks.STRUCTURE_BLOCK)) {
 				if (structureBlockInfo.nbt() != null) {
-					StructureMode structureMode = StructureMode.valueOf(structureBlockInfo.nbt().getString("mode"));
+					StructureMode structureMode = StructureMode.valueOf(structureBlockInfo.nbt().getStringOr("mode", ""));
 
 					if (structureMode == StructureMode.DATA)
-						this.handleDataMarker(structureBlockInfo.nbt().getString("metadata"), structureBlockInfo.pos(), worldGenLevel, random, boundingBox);
+						this.handleDataMarker(structureBlockInfo.nbt().getStringOr("metadata", ""), structureBlockInfo.pos(), worldGenLevel, random, boundingBox);
 				}
 			}
 
 			for (StructureTemplate.StructureBlockInfo structureBlockInfo : this.templateOverlay.filterBlocks(this.templatePosition, this.placeSettingsOverlay, Blocks.JIGSAW)) {
 				if (structureBlockInfo.nbt() != null) {
-					String s = structureBlockInfo.nbt().getString("final_state");
+					String s = structureBlockInfo.nbt().getStringOr("final_state", "");
 					BlockState blockState = Blocks.AIR.defaultBlockState();
 					try {
 						BlockState parserState = BlockStateParser.parseForBlock(worldGenLevel.holderLookup(Registries.BLOCK), new StringReader(s), false).blockState();

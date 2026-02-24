@@ -4,7 +4,6 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -26,8 +25,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.PacketDistributor;
+import twilightforest.network.PacketDistributor;
 import twilightforest.tags.TFItemTags;
 import twilightforest.entity.ai.goal.FlockToSameKindGoal;
 import twilightforest.entity.ai.goal.PanicOnFlockDeathGoal;
@@ -208,7 +209,7 @@ public class Kobold extends Monster {
 
 			this.onItemPickup(item);
 			this.setItemSlot(EquipmentSlot.MAINHAND, itemstack.split(1));
-			this.handDropChances[EquipmentSlot.MAINHAND.getIndex()] = 2.0F;
+			this.setDropChance(EquipmentSlot.MAINHAND, 2.0F);
 			this.take(item, itemstack.getCount());
 			this.gameEvent(GameEvent.EQUIP);
 			item.discard();
@@ -240,17 +241,17 @@ public class Kobold extends Monster {
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag tag) {
-		super.addAdditionalSaveData(tag);
-		tag.putInt("EatingTimeLeft", this.eatingTime);
-		tag.putInt("TimeSinceBreadLastEaten", this.lastEatenBreadTicks);
+	public void addAdditionalSaveData(ValueOutput output) {
+		super.addAdditionalSaveData(output);
+		output.putInt("EatingTimeLeft", this.eatingTime);
+		output.putInt("TimeSinceBreadLastEaten", this.lastEatenBreadTicks);
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag tag) {
-		super.readAdditionalSaveData(tag);
-		this.eatingTime = tag.getInt("EatingTimeLeft");
-		this.lastEatenBreadTicks = tag.getInt("TimeSinceBreadLastEaten");
+	public void readAdditionalSaveData(ValueInput input) {
+		super.readAdditionalSaveData(input);
+		this.eatingTime = input.getIntOr("EatingTimeLeft", this.eatingTime);
+		this.lastEatenBreadTicks = input.getIntOr("TimeSinceBreadLastEaten", this.lastEatenBreadTicks);
 	}
 
 	@Override

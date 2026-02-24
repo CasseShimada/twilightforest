@@ -1,7 +1,7 @@
 package twilightforest.block;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -85,8 +85,9 @@ public class PatchBlock extends TFPlantBlock {
 	}
 
 	@Override
-	protected MapCodec<? extends BushBlock> codec() {
-		return CODEC;
+	@SuppressWarnings("unchecked")
+	public MapCodec<BushBlock> codec() {
+		return (MapCodec<BushBlock>)(MapCodec<?>) CODEC;
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.animal.sheep.Sheep;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
@@ -21,9 +21,10 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.util.Lazy;
+import com.google.common.base.Suppliers;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.TFBlocks;
+import twilightforest.mixin.accessor.StructurePieceFieldsAccessor;
 import twilightforest.util.ColorUtil;
 import twilightforest.world.components.structures.util.ProgressionPiece;
 
@@ -37,7 +38,7 @@ public abstract class TFStructureComponent extends StructurePiece implements Spa
 
 	public TFStructureDecorator deco = null;
 	protected int spawnListIndex = 0;
-	private static final Lazy<Set<Block>> BLOCKS_NEEDING_POSTPROCESSING = Lazy.of(() -> ImmutableSet.<Block>builder()
+	private static final java.util.function.Supplier<Set<Block>> BLOCKS_NEEDING_POSTPROCESSING = Suppliers.memoize(() -> ImmutableSet.<Block>builder()
 		.add(Blocks.NETHER_BRICK_FENCE)
 		.add(Blocks.TORCH)
 		.add(Blocks.WALL_TORCH)
@@ -79,15 +80,16 @@ public abstract class TFStructureComponent extends StructurePiece implements Spa
 
 	public TFStructureComponent(StructurePieceType piece, CompoundTag nbt) {
 		super(piece, nbt);
-		this.spawnListIndex = nbt.getInt("si");
-		this.deco = TFStructureDecorator.getDecoFor(nbt.getString("deco"));
-		this.rotation = Rotation.NONE;
-		this.rotation = Rotation.values()[nbt.getInt("rot") % Rotation.values().length];
+		this.spawnListIndex = nbt.getIntOr("si", 0);
+		this.deco = TFStructureDecorator.getDecoFor(nbt.getStringOr("deco", ""));
+		StructurePieceFieldsAccessor accessor = (StructurePieceFieldsAccessor) this;
+		accessor.twilightforest$setRotation(Rotation.NONE);
+		accessor.twilightforest$setRotation(Rotation.values()[nbt.getIntOr("rot", 0) % Rotation.values().length]);
 	}
 
 	public TFStructureComponent(StructurePieceType type, int i, BoundingBox boundingBox) {
 		super(type, i, boundingBox);
-		this.rotation = Rotation.NONE;
+		((StructurePieceFieldsAccessor) this).twilightforest$setRotation(Rotation.NONE);
 	}
 
 	@Deprecated // FIXME Boundingbox
@@ -101,7 +103,12 @@ public abstract class TFStructureComponent extends StructurePiece implements Spa
 
 	@SuppressWarnings({"SameParameterValue", "unused"})
 	protected void setDebugCorners(Level world) {
-		if (rotation == null) rotation = Rotation.NONE;
+		StructurePieceFieldsAccessor accessor = (StructurePieceFieldsAccessor) this;
+		Rotation rotation = accessor.twilightforest$getRotation();
+		if (rotation == null) {
+			rotation = Rotation.NONE;
+			accessor.twilightforest$setRotation(rotation);
+		}
 
 		if (shouldDebug()) { // && rotation!= Rotation.NONE) {
 			int i = rotation.ordinal() * 4;
@@ -121,7 +128,9 @@ public abstract class TFStructureComponent extends StructurePiece implements Spa
 				final Display.TextDisplay display = new Display.TextDisplay(EntityType.TEXT_DISPLAY, world.getLevel());
 				display.setText(Component.literal(s));
 				display.setBillboardConstraints(billboardConstraint);
-				display.moveTo(pos.getX() + 0.5, pos.getY() + additionalYOffset, pos.getZ() + 0.5, 0, 0);
+				display.setPos(pos.getX() + 0.5, pos.getY() + additionalYOffset, pos.getZ() + 0.5);
+				display.setYRot(0.0F);
+				display.setXRot(0.0F);
 
 				if (world.addFreshEntity(display))
 					positionAccumulator.accept(display.position());
@@ -137,12 +146,15 @@ public abstract class TFStructureComponent extends StructurePiece implements Spa
 		}
 
 		if (boundingboxIn.isInside(blockpos)) {
-			if (this.mirror != Mirror.NONE) {
-				blockstateIn = blockstateIn.mirror(this.mirror);
+			StructurePieceFieldsAccessor accessor = (StructurePieceFieldsAccessor) this;
+			Mirror mirror = accessor.twilightforest$getMirror();
+			if (mirror != Mirror.NONE) {
+				blockstateIn = blockstateIn.mirror(mirror);
 			}
 
-			if (this.rotation != Rotation.NONE) {
-				blockstateIn = blockstateIn.rotate(this.rotation);
+			Rotation rotation = accessor.twilightforest$getRotation();
+			if (rotation != Rotation.NONE) {
+				blockstateIn = blockstateIn.rotate(rotation);
 			}
 
 			worldIn.setBlock(blockpos, blockstateIn, Block.UPDATE_CLIENTS);
@@ -151,7 +163,7 @@ public abstract class TFStructureComponent extends StructurePiece implements Spa
 				worldIn.scheduleTick(blockpos, fluidstate.getType(), 0);
 			}
 
-			if (BLOCKS_NEEDING_POSTPROCESSING.get().contains(blockstateIn.getBlock())) {
+		if (BLOCKS_NEEDING_POSTPROCESSING.get().contains(blockstateIn.getBlock())) {
 				worldIn.getChunk(blockpos).markPosForPostprocessing(blockpos);
 			}
 
@@ -164,7 +176,10 @@ public abstract class TFStructureComponent extends StructurePiece implements Spa
 			final Sheep sheep = new Sheep(EntityType.SHEEP, world);
 			sheep.setCustomName(Component.literal(s));
 			sheep.setNoAi(true);
-			sheep.moveTo(blockpos.getX() + 0.5, blockpos.getY() + 10, blockpos.getZ() + 0.5, 0, 0);
+			sheep.setPos(blockpos.getX() + 0.5, blockpos.getY() + 10, blockpos.getZ() + 0.5);
+			sheep.setYRot(0.0F);
+			sheep.setXRot(0.0F);
+			sheep.setYHeadRot(0.0F);
 			sheep.setInvulnerable(true);
 			sheep.setInvisible(true);
 			sheep.setCustomNameVisible(true);
@@ -178,7 +193,7 @@ public abstract class TFStructureComponent extends StructurePiece implements Spa
 	protected void addAdditionalSaveData(StructurePieceSerializationContext ctx, CompoundTag tagCompound) {
 		tagCompound.putInt("si", this.spawnListIndex);
 		tagCompound.putString("deco", TFStructureDecorator.getDecoString(this.deco));
-		tagCompound.putInt("rot", this.rotation.ordinal());
+		tagCompound.putInt("rot", ((StructurePieceFieldsAccessor) this).twilightforest$getRotation().ordinal());
 	}
 
 	@Override

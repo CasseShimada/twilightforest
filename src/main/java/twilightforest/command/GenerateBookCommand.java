@@ -13,11 +13,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.neoforged.neoforge.common.util.FakePlayer;
+import net.fabricmc.fabric.api.entity.FakePlayer;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.world.components.structures.util.StructureHints;
 
-@tamaized.beanification.Component
 public class GenerateBookCommand {
 
 	private final SimpleCommandExceptionType ERROR_NOT_RUN_BY_PLAYER = new SimpleCommandExceptionType(Component.translatable("commands.tffeature.not_player"));
@@ -25,7 +24,7 @@ public class GenerateBookCommand {
 	public LiteralArgumentBuilder<CommandSourceStack> register() {
 		return Commands.literal("genbook")
 			.executes(context -> generateBook(context.getSource(), null))
-			.requires(cs -> cs.hasPermission(3))
+			.requires(cs -> Commands.LEVEL_ADMINS.check(cs.permissions()))
 			.then(Commands.argument("structure", ResourceKeyArgument.key(Registries.STRUCTURE))
 				.executes(context -> generateBook(context.getSource(), ResourceKeyArgument.getStructure(context, "structure"))));
 	}

@@ -35,17 +35,17 @@ public class MagicBeansItem extends Item {
 		ItemStack stack = context.getItemInHand();
 
 		int maxY = Math.max(pos.getY() + 100, 175);
-		if (pos.getY() < maxY && level.getBlockState(pos).is(TFBlocks.UBEROUS_SOIL) && level.getBlockState(pos.above()).isAir()) {
+		if (pos.getY() < maxY && level.getBlockState(pos).is(TFBlocks.UBEROUS_SOIL.get()) && level.getBlockState(pos.above()).isAir()) {
 			if (!level.isClientSide()) {
 				stack.shrink(1);
 				level.setBlockAndUpdate(pos.above(), TFBlocks.BEANSTALK_GROWER.get().defaultBlockState());
 				level.playSound(null, pos, TFSounds.BEANSTALK_GROWTH.get(), SoundSource.BLOCKS, 4.0F, 1.0F);
-				if (player instanceof ServerPlayer) {
-					player.awardStat(Stats.ITEM_USED.get(this));
+				if (player instanceof ServerPlayer serverPlayer) {
+					serverPlayer.awardStat(Stats.ITEM_USED.get(this));
 
 					//fallback if the other part doesnt work since its inconsistent
-					PlayerAdvancements advancements = ((ServerPlayer) player).getAdvancements();
-					ServerAdvancementManager manager = ((ServerLevel) player.getCommandSenderWorld()).getServer().getAdvancements();
+					PlayerAdvancements advancements = serverPlayer.getAdvancements();
+					ServerAdvancementManager manager = level.getServer().getAdvancements();
 					AdvancementHolder holder = manager.get(TwilightForestMod.prefix("beanstalk"));
 					if (holder != null && !manager.getAllAdvancements().contains(holder)) {
 						advancements.award(holder, "use_beans");

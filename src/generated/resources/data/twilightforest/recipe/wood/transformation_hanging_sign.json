@@ -4,7 +4,7 @@
   "group": "hanging_sign",
   "key": {
     "#": "twilightforest:stripped_transformation_log",
-    "|": "minecraft:chain"
+    "|": "minecraft:iron_chain"
   },
   "pattern": [
     "| |",

@@ -3,14 +3,12 @@ package twilightforest.world.components.structures.icetower;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
-import tamaized.beanification.Autowired;
 import twilightforest.init.TFBlocks;
 import twilightforest.world.components.structures.TFStructureDecorator;
 import twilightforest.world.components.structures.selectors.IceTowerRandomBlockSelectorFactory;
 
 public class IceTowerDecorator extends TFStructureDecorator {
-	@Autowired
-	private static IceTowerRandomBlockSelectorFactory iceTower;
+	private static final IceTowerRandomBlockSelectorFactory iceTower = new IceTowerRandomBlockSelectorFactory();
 
 	public IceTowerDecorator() {
 		this.blockState = TFBlocks.AURORA_BLOCK.get().defaultBlockState();

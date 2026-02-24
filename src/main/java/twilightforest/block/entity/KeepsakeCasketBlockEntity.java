@@ -34,7 +34,7 @@ public class KeepsakeCasketBlockEntity extends SkullChestBlockEntity {
 		}
 
 		@Override
-		protected boolean isOwnContainer(Player player) {
+		public boolean isOwnContainer(Player player) {
 			if (player.containerMenu instanceof ChestMenu) {
 				Container container = ((ChestMenu)player.containerMenu).getContainer();
 				return container == KeepsakeCasketBlockEntity.this;
@@ -55,7 +55,8 @@ public class KeepsakeCasketBlockEntity extends SkullChestBlockEntity {
 
 	@Override
 	public void displayLockedInfo(Player player) {
-		player.playNotifySound(TFSounds.CASKET_LOCKED.get(), SoundSource.BLOCKS, 0.5F, 0.5F);
-		player.displayClientMessage(Component.translatable("block.twilightforest.casket.locked", this.owner.gameProfile().getName()).withStyle(ChatFormatting.RED), true);
+		player.playSound(TFSounds.CASKET_LOCKED.get(), 0.5F, 0.5F);
+		String ownerName = this.owner != null ? this.owner.name().orElse("unknown") : "unknown";
+		player.displayClientMessage(Component.translatable("block.twilightforest.casket.locked", ownerName).withStyle(ChatFormatting.RED), true);
 	}
 }

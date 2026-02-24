@@ -5,12 +5,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
 import net.minecraft.world.level.biome.Biome;
-import tamaized.beanification.Component;
 import twilightforest.util.ColorUtil;
 import twilightforest.util.landmarks.LegacyLandmarkPlacements;
 import twilightforest.world.components.structures.type.QuestGroveStructure;
 
-@Component
+@SuppressWarnings("removal")
 public class BiomeColorAlgorithms {
 
 	public int enchanted(int originalColor, int x, int z) {  // TODO
@@ -50,17 +49,17 @@ public class BiomeColorAlgorithms {
 	}
 
 	public int darkForestCenterGrass(double x, double z) {
-		double noise = Biome.TEMPERATURE_NOISE.getValue(x * 0.0225D, z * 0.0225D, false); //TODO: Check
+		double noise = Biome.BIOME_INFO_NOISE.getValue(x * 0.0225D, z * 0.0225D, false); //TODO: Check
 		return noise < -0.2D ? 0x667540 : 0x554114;
 	}
 
 	public int darkForestCenterFoliage(double x, double z) {
-		double noise = (Biome.TEMPERATURE_NOISE.getValue(x * 0.0225D, z * 0.0225D, false) + 1D) / 2D;
+		double noise = (Biome.BIOME_INFO_NOISE.getValue(x * 0.0225D, z * 0.0225D, false) + 1D) / 2D;
 		return noise < -0.1D ? 0xF9821E : 0xE94E14;
 	}
 
 	public double spookyNoise(double x, double z) {
-		return (Biome.TEMPERATURE_NOISE.getValue(x * 0.0225D, z * 0.0225D, false) + 1D) / 2D;
+		return (Biome.BIOME_INFO_NOISE.getValue(x * 0.0225D, z * 0.0225D, false) + 1D) / 2D;
 	}
 
 	public int spookyGrass(double x, double z) {

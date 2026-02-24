@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -29,14 +28,15 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.PacketDistributor;
+import twilightforest.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
-import tamaized.beanification.Autowired;
 import twilightforest.entity.EnforcedHomePoint;
 import twilightforest.entity.ai.goal.QuestRamEatWoolGoal;
 import twilightforest.entity.passive.quest.ram.QuestingRamCurrentContext;
@@ -49,9 +49,6 @@ import twilightforest.util.landmarks.LandmarkUtil;
 import java.util.Optional;
 
 public class QuestRam extends Animal implements EnforcedHomePoint {
-
-	@Autowired
-	private static QuestingRamCurrentContext questingRamCurrentContext;
 
 	private static final EntityDataAccessor<Integer> DATA_COLOR = SynchedEntityData.defineId(QuestRam.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Boolean> DATA_REWARDED = SynchedEntityData.defineId(QuestRam.class, EntityDataSerializers.BOOLEAN);
@@ -76,7 +73,7 @@ public class QuestRam extends Animal implements EnforcedHomePoint {
 	}
 
 	public boolean isItemTempting(ItemStack stack) {
-		for (var questEntry : questingRamCurrentContext.getContext().questItems().entrySet()) {
+		for (var questEntry : QuestingRamCurrentContext.INSTANCE.getContext().questItems().entrySet()) {
 			if (questEntry.getValue().test(stack)) {
 				DyeColor color = questEntry.getKey();
 				return color != null && !this.isColorPresent(color);
@@ -133,7 +130,7 @@ public class QuestRam extends Animal implements EnforcedHomePoint {
 	private void rewardQuest(ServerLevel level) {
 		// todo flesh the context out more
 		LootParams ctx = new LootParams.Builder((ServerLevel) this.level()).withParameter(LootContextParams.THIS_ENTITY, this).create(LootContextParamSets.PIGLIN_BARTER);
-		ObjectArrayList<ItemStack> rewards = this.level().getServer().reloadableRegistries().getLootTable(questingRamCurrentContext.getContext().lootTable()).getRandomItems(ctx);
+		ObjectArrayList<ItemStack> rewards = this.level().getServer().reloadableRegistries().getLootTable(QuestingRamCurrentContext.INSTANCE.getContext().lootTable()).getRandomItems(ctx);
 		rewards.forEach(stack -> this.spawnAtLocation(level, stack, 1.0F));
 
 		for (ServerPlayer player : this.level().getEntitiesOfClass(ServerPlayer.class, getBoundingBox().inflate(16.0D, 16.0D, 16.0D))) {
@@ -157,7 +154,7 @@ public class QuestRam extends Animal implements EnforcedHomePoint {
 	}
 
 	public boolean tryAccept(ItemStack stack) {
-		for (var questEntry : questingRamCurrentContext.getContext().questItems().entrySet()) {
+		for (var questEntry : QuestingRamCurrentContext.INSTANCE.getContext().questItems().entrySet()) {
 			if (questEntry.getValue().test(stack)) {
 				DyeColor color = questEntry.getKey();
 				if (color != null && !this.isColorPresent(color)) {
@@ -172,19 +169,19 @@ public class QuestRam extends Animal implements EnforcedHomePoint {
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putInt("ColorFlags", this.getColorFlags());
-		compound.putBoolean("Rewarded", this.getRewarded());
-		this.saveHomePointToNbt(compound);
+	public void addAdditionalSaveData(ValueOutput output) {
+		super.addAdditionalSaveData(output);
+		output.putInt("ColorFlags", this.getColorFlags());
+		output.putBoolean("Rewarded", this.getRewarded());
+		this.saveHomePointToNbt(output);
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		this.setColorFlags(compound.getInt("ColorFlags"));
-		this.setRewarded(compound.getBoolean("Rewarded"));
-		this.loadHomePointFromNbt(compound);
+	public void readAdditionalSaveData(ValueInput input) {
+		super.readAdditionalSaveData(input);
+		this.setColorFlags(input.getIntOr("ColorFlags", 0));
+		this.setRewarded(input.getBooleanOr("Rewarded", false));
+		this.loadHomePointFromNbt(input);
 	}
 
 	public int getColorFlags() {

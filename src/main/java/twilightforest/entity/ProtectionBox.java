@@ -1,14 +1,16 @@
 package twilightforest.entity;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFEntities;
 
@@ -19,6 +21,7 @@ public class ProtectionBox extends Entity {
 	public final int sizeX;
 	public final int sizeY;
 	public final int sizeZ;
+	private final EntityDimensions boxDimensions;
 
 	@Nullable
 	private final BoundingBox sbb;
@@ -26,6 +29,7 @@ public class ProtectionBox extends Entity {
 	public ProtectionBox(EntityType<?> type, Level world) {
 		super(type, world);
 		this.sizeX = this.sizeY = this.sizeZ = 0;
+		this.boxDimensions = EntityDimensions.fixed(0.0F, 0.0F);
 		this.sbb = null;
 	}
 
@@ -34,13 +38,14 @@ public class ProtectionBox extends Entity {
 
 		this.sbb = sbb;
 
-		this.moveTo(sbb.minX(), sbb.minY(), sbb.minZ(), 0.0F, 0.0F);
+		this.setPos(sbb.minX(), sbb.minY(), sbb.minZ());
 
 		this.sizeX = sbb.getXSpan();
 		this.sizeY = sbb.getYSpan();
 		this.sizeZ = sbb.getZSpan();
 
-		this.dimensions = EntityDimensions.fixed(Math.max(this.sizeX, this.sizeZ), this.sizeY);
+		this.boxDimensions = EntityDimensions.fixed(Math.max(this.sizeX, this.sizeZ), this.sizeY);
+		this.refreshDimensions();
 
 		this.lifeTime = 60;
 	}
@@ -75,11 +80,16 @@ public class ProtectionBox extends Entity {
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundTag compound) {
+	public EntityDimensions getDimensions(Pose pose) {
+		return this.boxDimensions;
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundTag compound) {
+	protected void readAdditionalSaveData(ValueInput input) {
+	}
+
+	@Override
+	protected void addAdditionalSaveData(ValueOutput output) {
 	}
 
 	@Override

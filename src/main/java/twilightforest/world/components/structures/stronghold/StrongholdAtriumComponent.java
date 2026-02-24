@@ -29,7 +29,7 @@ public class StrongholdAtriumComponent extends KnightStrongholdComponent {
 
 	public StrongholdAtriumComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
 		super(TFStructurePieceTypes.TFSAt.get(), nbt);
-		this.enterBottom = nbt.getBoolean("enterBottom");
+		this.enterBottom = nbt.getBooleanOr("enterBottom", false);
 	}
 
 	public StrongholdAtriumComponent(int i, Direction facing, int x, int y, int z) {

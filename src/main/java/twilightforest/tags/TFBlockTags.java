@@ -1,9 +1,9 @@
 package twilightforest.tags;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.core.registries.Registries;
 import twilightforest.TwilightForestMod;
 
 public class TFBlockTags {
@@ -60,6 +60,7 @@ public class TFBlockTags {
 
 	public static final TagKey<Block> ORE_MAGNET_SAFE_REPLACE_BLOCK = create("ore_magnet/ore_safe_replace_block");
 	public static final TagKey<Block> ORE_MAGNET_IGNORE = create("ore_magnet/ignored_ores");
+	public static final TagKey<Block> COMMON_ORES = makeCommonTag("ores");
 
 	public static final TagKey<Block> ROOT_GROUND = makeCommonTag("ore_bearing_ground/root");
 	public static final TagKey<Block> ROOT_ORES = makeCommonTag("ores_in_ground/root");
@@ -102,7 +103,7 @@ public class TFBlockTags {
 	public static final TagKey<Block> FD_HEAT_SOURCES = create("farmersdelight", "heat_sources");
 
 	private static TagKey<Block> create(String tagName) {
-		return BlockTags.create(TwilightForestMod.prefix(tagName));
+		return TagKey.create(Registries.BLOCK, TwilightForestMod.prefix(tagName));
 	}
 
 	public static TagKey<Block> makeCommonTag(String tagName) {
@@ -110,6 +111,6 @@ public class TFBlockTags {
 	}
 
 	private static TagKey<Block> create(String modid, String tagName) {
-		return BlockTags.create(ResourceLocation.fromNamespaceAndPath(modid, tagName));
+		return TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(modid, tagName));
 	}
 }
