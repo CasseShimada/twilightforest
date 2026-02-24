@@ -13,17 +13,17 @@ import twilightforest.client.model.entity.FireflyModel;
 import twilightforest.client.renderer.block.FireflyRenderer;
 import org.joml.Vector3fc;
 
-public record FireflySpecialRenderer(FireflyModel model) implements NoDataSpecialModelRenderer {
+public record FireflySpecialRenderer(FireflyModel baseModel, FireflyModel glowModel) implements NoDataSpecialModelRenderer {
 
 	@Override
 	public void submit(ItemDisplayContext context, PoseStack stack, SubmitNodeCollector nodeCollector, int light, int overlay, boolean foil, int outlineColor) {
-		FireflyRenderer.renderFirefly(this.model(), BugModelAnimationHelper.currentYaw, BugModelAnimationHelper.glowIntensity, 0.0F, Direction.NORTH, stack, nodeCollector, light);
+		FireflyRenderer.renderFirefly(this.baseModel(), this.glowModel(), BugModelAnimationHelper.currentYaw, BugModelAnimationHelper.glowIntensity, 0.0F, Direction.NORTH, stack, nodeCollector, light);
 	}
 
 	@Override
 	public void getExtents(java.util.function.Consumer<Vector3fc> output) {
 		PoseStack poseStack = new PoseStack();
-		this.model.root().getExtentsForGui(poseStack, output);
+		this.baseModel.root().getExtentsForGui(poseStack, output);
 	}
 
 	public record Unbaked() implements SpecialModelRenderer.Unbaked {
@@ -36,7 +36,11 @@ public record FireflySpecialRenderer(FireflyModel model) implements NoDataSpecia
 
 		@Override
 		public SpecialModelRenderer<?> bake(SpecialModelRenderer.BakingContext context) {
-			return new FireflySpecialRenderer(new FireflyModel(context.entityModelSet().bakeLayer(TFModelLayers.FIREFLY)));
+			FireflyModel baseModel = new FireflyModel(context.entityModelSet().bakeLayer(TFModelLayers.FIREFLY));
+			FireflyModel glowModel = new FireflyModel(context.entityModelSet().bakeLayer(TFModelLayers.FIREFLY));
+			baseModel.setupBasePass();
+			glowModel.setupGlowPass();
+			return new FireflySpecialRenderer(baseModel, glowModel);
 		}
 	}
 }

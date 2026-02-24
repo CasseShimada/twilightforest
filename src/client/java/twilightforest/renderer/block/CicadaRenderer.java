@@ -20,11 +20,15 @@ import twilightforest.client.model.entity.CicadaModel;
 
 public class CicadaRenderer implements BlockEntityRenderer<CicadaBlockEntity, CicadaRenderer.CicadaRenderState> {
 
-	private final CicadaModel cicadaModel;
+	private final CicadaModel baseModel;
+	private final CicadaModel wingModel;
 	public static final Identifier TEXTURE = TwilightForestMod.getModelTexture("cicada-model.png");
 
 	public CicadaRenderer(BlockEntityRendererProvider.Context context) {
-		this.cicadaModel = new CicadaModel(context.bakeLayer(TFModelLayers.CICADA));
+		this.baseModel = new CicadaModel(context.bakeLayer(TFModelLayers.CICADA));
+		this.wingModel = new CicadaModel(context.bakeLayer(TFModelLayers.CICADA));
+		this.baseModel.setupBasePass();
+		this.wingModel.setupWingPass();
 	}
 
 	@Override
@@ -42,10 +46,10 @@ public class CicadaRenderer implements BlockEntityRenderer<CicadaBlockEntity, Ci
 
 	@Override
 	public void submit(CicadaRenderState state, PoseStack stack, SubmitNodeCollector collector, CameraRenderState cameraState) {
-		renderCicada(this.cicadaModel, state.yaw, state.rotation, state.facing, stack, collector, state.lightCoords);
+		renderCicada(this.baseModel, this.wingModel, state.yaw, state.rotation, state.facing, stack, collector, state.lightCoords);
 	}
 
-	public static void renderCicada(CicadaModel model, float yaw, float rotation, Direction facing, PoseStack stack, SubmitNodeCollector collector, int light) {
+	public static void renderCicada(CicadaModel baseModel, CicadaModel wingModel, float yaw, float rotation, Direction facing, PoseStack stack, SubmitNodeCollector collector, int light) {
 		stack.pushPose();
 		stack.translate(0.5F, 0.5F, 0.5F);
 		stack.mulPose(facing.getRotation());
@@ -53,7 +57,19 @@ public class CicadaRenderer implements BlockEntityRenderer<CicadaBlockEntity, Ci
 		stack.mulPose(Axis.YP.rotationDegrees(180.0F + rotation));
 		stack.mulPose(Axis.YN.rotationDegrees(yaw));
 
-		collector.submitModel(model, null, stack, RenderTypes.entityCutoutNoCull(TEXTURE), light, OverlayTexture.NO_OVERLAY, -1, null);
+		collector.submitCustomGeometry(stack, RenderTypes.entityCutoutNoCull(TEXTURE), (pose, consumer) -> {
+			PoseStack modelStack = new PoseStack();
+			modelStack.last().pose().set(pose.pose());
+			modelStack.last().normal().set(pose.normal());
+			baseModel.root().render(modelStack, consumer, light, OverlayTexture.NO_OVERLAY, -1);
+		});
+
+		collector.submitCustomGeometry(stack, RenderTypes.entityTranslucent(TEXTURE), (pose, consumer) -> {
+			PoseStack wingStack = new PoseStack();
+			wingStack.last().pose().set(pose.pose());
+			wingStack.last().normal().set(pose.normal());
+			wingModel.root().render(wingStack, consumer, light, OverlayTexture.NO_OVERLAY, -1);
+		});
 		stack.popPose();
 	}
 

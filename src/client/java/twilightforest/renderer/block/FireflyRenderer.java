@@ -20,11 +20,15 @@ import twilightforest.client.model.entity.FireflyModel;
 
 public class FireflyRenderer implements BlockEntityRenderer<FireflyBlockEntity, FireflyRenderer.FireflyRenderState> {
 
-	private final FireflyModel fireflyModel;
+	private final FireflyModel baseModel;
+	private final FireflyModel glowModel;
 	public static final Identifier TEXTURE = TwilightForestMod.getModelTexture("firefly-tiny.png");
 
 	public FireflyRenderer(BlockEntityRendererProvider.Context context) {
-		this.fireflyModel = new FireflyModel(context.bakeLayer(TFModelLayers.FIREFLY));
+		this.baseModel = new FireflyModel(context.bakeLayer(TFModelLayers.FIREFLY));
+		this.glowModel = new FireflyModel(context.bakeLayer(TFModelLayers.FIREFLY));
+		this.baseModel.setupBasePass();
+		this.glowModel.setupGlowPass();
 	}
 
 	@Override
@@ -43,10 +47,10 @@ public class FireflyRenderer implements BlockEntityRenderer<FireflyBlockEntity, 
 
 	@Override
 	public void submit(FireflyRenderState state, PoseStack stack, SubmitNodeCollector collector, CameraRenderState cameraState) {
-		renderFirefly(this.fireflyModel, state.yaw, state.glow, state.rotation, state.facing, stack, collector, state.lightCoords);
+		renderFirefly(this.baseModel, this.glowModel, state.yaw, state.glow, state.rotation, state.facing, stack, collector, state.lightCoords);
 	}
 
-	public static void renderFirefly(FireflyModel model, int yaw, float glow, float rotation, Direction facing, PoseStack stack, SubmitNodeCollector collector, int light) {
+	public static void renderFirefly(FireflyModel baseModel, FireflyModel glowModel, int yaw, float glow, float rotation, Direction facing, PoseStack stack, SubmitNodeCollector collector, int light) {
 		stack.pushPose();
 		stack.translate(0.5F, 0.5F, 0.5F);
 		stack.mulPose(facing.getRotation());
@@ -54,14 +58,18 @@ public class FireflyRenderer implements BlockEntityRenderer<FireflyBlockEntity, 
 		stack.mulPose(Axis.YP.rotationDegrees(180.0F + rotation));
 		stack.mulPose(Axis.YN.rotationDegrees(yaw));
 
-		model.setupGlow();
-		collector.submitModel(model, null, stack, RenderTypes.entityCutoutNoCull(TEXTURE), light, OverlayTexture.NO_OVERLAY, -1, null);
+		collector.submitCustomGeometry(stack, RenderTypes.entityCutout(TEXTURE), (pose, consumer) -> {
+			PoseStack baseStack = new PoseStack();
+			baseStack.last().pose().set(pose.pose());
+			baseStack.last().normal().set(pose.normal());
+			baseModel.root().render(baseStack, consumer, light, OverlayTexture.NO_OVERLAY, -1);
+		});
 
 		collector.submitCustomGeometry(stack, RenderTypes.entityTranslucentEmissive(TEXTURE), (pose, consumer) -> {
 			PoseStack glowStack = new PoseStack();
 			glowStack.last().pose().set(pose.pose());
 			glowStack.last().normal().set(pose.normal());
-			model.renderGlow(glowStack, consumer, OverlayTexture.NO_OVERLAY, glow);
+			glowModel.renderGlow(glowStack, consumer, OverlayTexture.NO_OVERLAY, glow);
 		});
 
 		stack.popPose();
