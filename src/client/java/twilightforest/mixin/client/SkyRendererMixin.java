@@ -4,7 +4,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.SkyRenderer;
+import net.minecraft.client.renderer.state.SkyRenderState;
 import net.minecraft.world.level.MoonPhase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,5 +29,20 @@ import twilightforest.init.TFDimension;
 		TFSkyRenderer.renderTwilightStars(poseStack);
 		poseStack.popPose();
 		ci.cancel();
+	}
+
+	@Inject(method = "renderSunriseAndSunset", at = @At("HEAD"), cancellable = true)
+	private void twilightforest$disableTwilightSunrise(PoseStack poseStack, float sunAngle, int color, CallbackInfo ci) {
+		ClientLevel level = Minecraft.getInstance().level;
+		if (level != null && TFDimension.isTwilightWorldOnClient(level)) {
+			ci.cancel();
+		}
+	}
+
+	@Inject(method = "extractRenderState", at = @At("TAIL"))
+	private void twilightforest$clearSunriseColor(ClientLevel level, float partialTicks, Camera camera, SkyRenderState state, CallbackInfo ci) {
+		if (TFDimension.isTwilightWorldOnClient(level)) {
+			state.sunriseAndSunsetColor = 0;
+		}
 	}
 }

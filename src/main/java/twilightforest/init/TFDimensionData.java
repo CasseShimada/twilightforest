@@ -6,7 +6,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TimelineTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.attribute.BedRule;
 import net.minecraft.world.attribute.EnvironmentAttributeMap;
@@ -40,7 +40,8 @@ public class TFDimensionData {
 	public static final ResourceKey<LevelStem> TWILIGHT_LEVEL_STEM = ResourceKey.create(Registries.LEVEL_STEM, TFDimension.DIMENSION);
 
 	private static DimensionType twilightDimType(BootstrapContext<DimensionType> context) {
-		HolderSet<Timeline> timelines = context.lookup(Registries.TIMELINE).getOrThrow(TimelineTags.IN_OVERWORLD);
+		TagKey<Timeline> timelineTag = TagKey.create(Registries.TIMELINE, TwilightForestMod.prefix("in_twilight"));
+		HolderSet<Timeline> timelines = context.lookup(Registries.TIMELINE).getOrThrow(timelineTag);
 		EnvironmentAttributeMap attributes = EnvironmentAttributeMap.builder()
 			.set(EnvironmentAttributes.BED_RULE, BedRule.CAN_SLEEP_WHEN_DARK)
 			.set(EnvironmentAttributes.CAN_START_RAID, false)
