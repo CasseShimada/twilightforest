@@ -96,7 +96,8 @@ public class TFMagicMapData extends MapItemSavedData {
 	}
 
 	public void addTFDecoration(Holder<MapDecorationType> decorationType, @Nullable LevelAccessor level, String id, double x, double z, double yRot, boolean conquered) {
-		this.addDecoration(decorationType, level, id, x, z, yRot, net.minecraft.network.chat.Component.literal(id));
+		// Keep structure IDs internal-only; rendering this name in 1.21.11 shows debug-like text labels on the map.
+		this.addDecoration(decorationType, level, id, x, z, yRot, null);
 		MapDecoration deco = this.decorations.get(id);
 		if (deco != null) {
 			String conqueredID = MagicMapItem.makeName(decorationType, deco.x(), deco.y());

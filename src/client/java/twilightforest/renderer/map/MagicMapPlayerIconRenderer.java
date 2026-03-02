@@ -3,14 +3,16 @@ package twilightforest.client.renderer.map;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.fabricmc.fabric.api.client.rendering.v1.FabricRenderState;
+import net.minecraft.resources.Identifier;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.MapRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import org.joml.Matrix4f;
-import twilightforest.client.renderer.map.TFMagicMapRenderKeys;
 
 public final class MagicMapPlayerIconRenderer {
+	private static final Identifier PLAYER_SPRITE = MapDecorationTypes.PLAYER.value().assetId();
 
 	private MagicMapPlayerIconRenderer() {
 	}
@@ -19,6 +21,7 @@ public final class MagicMapPlayerIconRenderer {
 	public static void render(MapRenderState.MapDecorationRenderState decoState, PoseStack stack, SubmitNodeCollector submitNodeCollector, MapRenderState state, int packedLight, int index) {
 		if (!(state instanceof FabricRenderState fabricState)) return;
 		if (!fabricState.getDataOrDefault(TFMagicMapRenderKeys.MAGIC_MAP, false)) return;
+		if (decoState.atlasSprite == null || !PLAYER_SPRITE.equals(decoState.atlasSprite.contents().name())) return;
 
 		stack.pushPose();
 		stack.translate(0.0F + (float) decoState.x / 2.0F + 64.0F, 0.0F + (float) decoState.y / 2.0F + 64.0F, -0.02F);

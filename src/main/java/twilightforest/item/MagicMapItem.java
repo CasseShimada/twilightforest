@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ColumnPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item.TooltipContext;
 import net.minecraft.world.item.ItemStack;
@@ -193,6 +194,21 @@ public class MagicMapItem extends MapItem {
 	@Override
 	public void onCraftedBy(ItemStack stack, Player player) {
 		// disable zooming
+	}
+
+	@Override
+	public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, EquipmentSlot slot) {
+		TFMagicMapData mapdata = this.getCustomMapData(stack, level);
+		if (mapdata != null) {
+			if (entity instanceof Player entityplayer) {
+				mapdata.tickCarriedBy(entityplayer, stack);
+			}
+
+			boolean isSelected = slot == EquipmentSlot.MAINHAND;
+			if (!mapdata.locked && (isSelected || (entity instanceof Player player && slot == EquipmentSlot.OFFHAND && player.getOffhandItem() == stack))) {
+				this.update(level, entity, mapdata);
+			}
+		}
 	}
 
 	@Override

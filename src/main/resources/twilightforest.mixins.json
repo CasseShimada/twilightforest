@@ -10,6 +10,7 @@
     "LevelDayTimeMixin",
     "NoiseBasedChunkGeneratorMixin",
     "EntityMixin",
+    "MapItemMixin",
     "LivingEntityMixin",
     "NaturalSpawnerMixin",
     "PathfinderMobMixin",

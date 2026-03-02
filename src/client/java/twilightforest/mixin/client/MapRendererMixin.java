@@ -2,13 +2,17 @@ package twilightforest.mixin.client;
 
 import net.fabricmc.fabric.api.client.rendering.v1.FabricRenderState;
 import net.minecraft.client.renderer.MapRenderer;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.state.MapRenderState;
 import net.minecraft.world.level.saveddata.maps.MapId;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
+import com.mojang.blaze3d.vertex.PoseStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import twilightforest.client.renderer.map.ConqueredMapIconRenderer;
+import twilightforest.client.renderer.map.MagicMapPlayerIconRenderer;
 import twilightforest.client.renderer.map.TFMagicMapRenderKeys;
 import twilightforest.item.mapdata.TFMagicMapData;
 
@@ -25,6 +29,18 @@ public class MapRendererMixin {
 		} else {
 			fabricState.setData(TFMagicMapRenderKeys.MAGIC_MAP, false);
 			fabricState.setData(TFMagicMapRenderKeys.CONQUERED_STRUCTURES, List.of());
+		}
+	}
+
+	@Inject(method = "render", at = @At("TAIL"))
+	private void twilightforest$renderDecorations(MapRenderState state, PoseStack stack, SubmitNodeCollector submitNodeCollector, boolean inItemFrame, int packedLight, CallbackInfo ci) {
+		for (int i = 0; i < state.decorations.size(); i++) {
+			MapRenderState.MapDecorationRenderState decoration = state.decorations.get(i);
+			if (inItemFrame && !decoration.renderOnFrame) {
+				continue;
+			}
+			MagicMapPlayerIconRenderer.render(decoration, stack, submitNodeCollector, state, packedLight, i);
+			ConqueredMapIconRenderer.render(decoration, stack, submitNodeCollector, state, packedLight, i);
 		}
 	}
 }

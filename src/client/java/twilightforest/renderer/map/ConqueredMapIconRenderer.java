@@ -10,9 +10,9 @@ import net.minecraft.client.renderer.state.MapRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.data.AtlasIds;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import org.joml.Matrix4f;
-import twilightforest.client.renderer.map.TFMagicMapRenderKeys;
 
 public final class ConqueredMapIconRenderer {
 
@@ -20,10 +20,18 @@ public final class ConqueredMapIconRenderer {
 	}
 
 	private static boolean isConquered(MapRenderState state, MapRenderState.MapDecorationRenderState decoration) {
-		if (decoration.name == null) return false;
 		if (!(state instanceof FabricRenderState fabricState)) return false;
 		var conquered = fabricState.getData(TFMagicMapRenderKeys.CONQUERED_STRUCTURES);
-		return conquered != null && conquered.contains(decoration.name.getString());
+		if (conquered == null || conquered.isEmpty()) return false;
+		if (decoration.atlasSprite == null) return false;
+
+		Identifier spriteName = decoration.atlasSprite.contents().name();
+		String decorationKey = spriteName + "_" + decoration.x + "_" + decoration.y;
+		if (conquered.contains(decorationKey)) {
+			return true;
+		}
+		// Keep compatibility with older key format based on decoration name.
+		return decoration.name != null && conquered.contains(decoration.name.getString());
 	}
 
 	public static void render(MapRenderState.MapDecorationRenderState decoState, PoseStack stack, SubmitNodeCollector submitNodeCollector, MapRenderState state, int light, int index) {
