@@ -41,7 +41,7 @@ public class SlimeBeetleRenderer extends MobRenderer<SlimeBeetle, LivingEntityRe
 		@Override
 		public void submit(PoseStack ms, net.minecraft.client.renderer.SubmitNodeCollector nodeCollector, int light, LivingEntityRenderState state, float netHeadYaw, float headPitch) {
 			if (!state.isInvisible) {
-				this.getParentModel().submitTail(ms, nodeCollector, light, LivingEntityRenderer.getOverlayCoords(state, 0), RenderTypes.entityTranslucent(TEXTURE), state.outlineColor);
+				this.getParentModel().submitTail(ms, nodeCollector.order(1), light, LivingEntityRenderer.getOverlayCoords(state, 0), RenderTypes.entityTranslucent(TEXTURE, false), state.outlineColor);
 			}
 		}
 	}

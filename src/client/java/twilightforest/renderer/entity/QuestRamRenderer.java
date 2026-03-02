@@ -51,7 +51,7 @@ public class QuestRamRenderer extends MobRenderer<QuestRam, QuestingRamRenderSta
 		public void submit(PoseStack stack, net.minecraft.client.renderer.SubmitNodeCollector nodeCollector, int light, QuestingRamRenderState state, float netHeadYaw, float headPitch) {
 			stack.scale(1.025F, 1.025F, 1.025F);
 			int overlay = LivingEntityRenderer.getOverlayCoords(state, QuestRamRenderer.this.getWhiteOverlayProgress(state));
-			nodeCollector.submitModel(this.getParentModel(), state, stack, RenderTypes.entityTranslucent(LINE_TEXTURE), 0xF000F0, overlay, -1, null);
+			nodeCollector.order(1).submitModel(this.getParentModel(), state, stack, RenderTypes.entityTranslucent(LINE_TEXTURE, false), 0xF000F0, overlay, -1, null);
 		}
 	}
 

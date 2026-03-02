@@ -66,11 +66,11 @@ public class MazeSlimeRenderer extends MobRenderer<MazeSlime, SlimeRenderState, 
 		public void submit(PoseStack stack, net.minecraft.client.renderer.SubmitNodeCollector nodeCollector, int light, SlimeRenderState renderState, float yRot, float xRot) {
 			boolean flag = renderState.appearsGlowing() && renderState.isInvisible;
 			if (!renderState.isInvisible || flag) {
-				nodeCollector.submitModel(
+				nodeCollector.order(1).submitModel(
 					this.model,
 					renderState,
 					stack,
-					flag ? RenderTypes.outline(TEXTURE) : RenderTypes.entityTranslucent(TEXTURE),
+					flag ? RenderTypes.outline(TEXTURE) : RenderTypes.entityTranslucent(TEXTURE, false),
 					light,
 					LivingEntityRenderer.getOverlayCoords(renderState, 0.0F),
 					-1,
