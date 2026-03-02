@@ -16,6 +16,7 @@ import twilightforest.components.entity.FortificationShieldAttachment;
 import twilightforest.config.TFConfig;
 import twilightforest.init.TFDataAttachments;
 import twilightforest.init.TFDimension;
+import twilightforest.network.UpdateFeatherFanFallPacket;
 import twilightforest.network.UpdateShieldPacket;
 import twilightforest.world.NoReturnTeleporter;
 import twilightforest.world.TFTeleporter;
@@ -29,6 +30,7 @@ public class CapabilityEvents {
 
 			if (player.onGround() || player.isSwimming() || player.isInWater()) {
 				TFDataAttachments.set(player, TFDataAttachments.FEATHER_FAN, false);
+				PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new UpdateFeatherFanFallPacket(player.getId(), false));
 			}
 		}
 		TFDataAttachments.get(player, TFDataAttachments.YETI_THROWING).tick(player);
