@@ -44,6 +44,7 @@
     "client.ClientAdvancementsAccessor",
     "client.EntityRenderDispatcherMixin",
     "client.FogEnvironmentMixin",
+    "client.PlayerModelMixin",
     "client.LevelRendererMixin",
     "client.LivingEntityRendererMixin",
     "client.ModelBlockRendererMixin",
