@@ -18,12 +18,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import twilightforest.TwilightForestMod;
 import twilightforest.init.TFSounds;
 
 public class GhastTearParticle extends SingleQuadParticle {
-	private static boolean loggedSprite = false;
-
 	public GhastTearParticle(ClientLevel level, double x, double y, double z, ItemStack stack) {
 		super(level, x, y, z, getMissingSprite());
 		TextureAtlas atlas = Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.ITEMS);
@@ -36,10 +33,6 @@ public class GhastTearParticle extends SingleQuadParticle {
 			this.setSprite(textureatlassprite);
 		} else {
 			this.setSprite(atlas.getSprite(MissingTextureAtlasSprite.getLocation()));
-		}
-		if (!loggedSprite) {
-			loggedSprite = true;
-			TwilightForestMod.LOGGER.info("[TF Debug] Ghast tear particle sprite resolved to {}", textureatlassprite);
 		}
 		this.hasPhysics = true;
 	}

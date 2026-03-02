@@ -45,7 +45,6 @@ import twilightforest.client.BakedMultiPartRenderers;
 import twilightforest.client.MagicPaintingTextureManager;
 import twilightforest.client.TextureGeneratorReloadListener;
 import twilightforest.client.UncraftingScreen;
-import twilightforest.client.debug.RenderDebugReloadListener;
 import twilightforest.client.model.TFModelLayers;
 import twilightforest.client.model.block.aurorablock.AuroraModelRegistry;
 import twilightforest.client.model.block.aurorablock.NoiseVaryingModelLoader;
@@ -147,7 +146,6 @@ public class RegistrationEvents {
 			TFBlocks.POTTED_MUSHGLOOM.get(),
 			TFBlocks.ROPE.get()
 		);
-		TwilightForestMod.LOGGER.info("[TF Debug] Registered cutout render layers for overlay and plant blocks.");
 	}
 
 	private static void registerModelLoaders() {
@@ -237,7 +235,6 @@ public class RegistrationEvents {
 		MagicPaintingTextureManager.instance = new MagicPaintingTextureManager();
 		ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(TextureGeneratorReloadListener.INSTANCE);
 		ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new TFSimpleArmorRenderer.ResourceReloadListener());
-		ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(RenderDebugReloadListener.INSTANCE);
 	}
 
 	private static void registerScreens() {

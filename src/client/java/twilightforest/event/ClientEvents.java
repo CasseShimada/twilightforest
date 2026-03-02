@@ -43,7 +43,6 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -108,8 +107,6 @@ public class ClientEvents {
 
 	private static int aurora = 0;
 	private static int lastAurora = 0;
-	private static int auroraDebugCooldown = 0;
-	private static boolean auroraDebugLogged = false;
 	private static GpuBuffer auroraUniformBuffer;
 
 	private static final HolderMatcher HOLDER_MATCHER = new HolderMatcher();
@@ -170,29 +167,6 @@ public class ClientEvents {
 				aurora = Mth.clamp(aurora, 0, 60);
 			} else {
 				aurora = 0;
-			}
-
-			if (mc.level != null && mc.getCameraEntity() != null) {
-				RegistryAccess access = mc.level.registryAccess();
-				List<Holder<Biome>> auroraBiomes = TFConfig.getValidAuroraBiomes(access);
-				if (!auroraDebugLogged) {
-					if (auroraBiomes.isEmpty()) {
-						TwilightForestMod.LOGGER.warn("[TF Debug] Aurora biomes list is empty; aurora effect will stay disabled.");
-					} else {
-						TwilightForestMod.LOGGER.info("[TF Debug] Aurora biomes loaded: {} entries.", auroraBiomes.size());
-					}
-					auroraDebugLogged = true;
-				}
-				if (auroraDebugCooldown-- <= 0) {
-					Holder<Biome> biome = mc.level.getBiome(mc.getCameraEntity().blockPosition());
-					Identifier biomeId = biome.unwrapKey().map(ResourceKey::identifier).orElse(Identifier.parse("unknown"));
-					boolean matches = auroraBiomes.stream().anyMatch(c -> HOLDER_MATCHER.match(c, biome));
-					TwilightForestMod.LOGGER.info(
-						"[TF Debug] Aurora tick: biome={}, matches={}, aurora={}, lastAurora={}",
-						biomeId, matches, aurora, lastAurora
-					);
-					auroraDebugCooldown = 200;
-				}
 			}
 
 			BugModelAnimationHelper.animate();
