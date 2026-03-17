@@ -25,6 +25,8 @@ public record TrophySpecialRenderer(Function<BossVariant, TrophyBlockModel> trop
 	@Override
 	public void submit(ItemDisplayContext context, PoseStack stack, SubmitNodeCollector nodeCollector, int light, int overlay, boolean foil, int outlineColor) {
 		TrophyBlockModel model = this.trophy().apply(this.variant());
+		// 1.21.11 item display transforms already provide the forward-facing trophy orientation.
+		float itemYaw = 0.0F;
 		float rotation = this.fixedRotation.orElse(TFConfig.rotateTrophyHeadsGui && !Minecraft.getInstance().isPaused() ? (int) (Util.getMillis() / 35) : 0);
 		float animation = !Minecraft.getInstance().isPaused() ? (int) (Util.getMillis() / 30) + Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks() : 0;
 		if (model != null) {
@@ -33,10 +35,10 @@ public record TrophySpecialRenderer(Function<BossVariant, TrophyBlockModel> trop
 				stack.translate(0.5F, 0.5F, 0.5F);
 				stack.mulPose(Axis.YN.rotationDegrees(rotation));
 				stack.translate(-0.5F, -0.5F, -0.5F);
-				TrophyRenderer.render(null, 180.0F, model, false, animation, stack, nodeCollector, light, overlay, context, null);
+				TrophyRenderer.render(null, itemYaw, model, false, animation, stack, nodeCollector, light, overlay, context, null);
 				stack.popPose();
 			} else {
-				TrophyRenderer.render(null, 180.0F, model, false, animation, stack, nodeCollector, light, overlay, context, null);
+				TrophyRenderer.render(null, itemYaw, model, false, animation, stack, nodeCollector, light, overlay, context, null);
 			}
 		}
 	}
