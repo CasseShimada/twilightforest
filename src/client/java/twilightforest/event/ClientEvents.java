@@ -366,8 +366,8 @@ public class ClientEvents {
 						f /= f3;
 						f1 /= f3;
 						f2 /= f3;
-						consumer.addVertex(pose, (float) (x1 + xyz.x()), (float) (y1 + xyz.y()), (float) (z1 + xyz.z())).setColor(0.0F, 0.0F, 0.0F, 0.45F).setNormal(pose, f, f1, f2);
-						consumer.addVertex(pose, (float) (x2 + xyz.x()), (float) (y2 + xyz.y()), (float) (z2 + xyz.z())).setColor(0.0F, 0.0F, 0.0F, 0.45F).setNormal(pose, f, f1, f2);
+						consumer.addVertex(pose, (float) (x1 + xyz.x()), (float) (y1 + xyz.y()), (float) (z1 + xyz.z())).setColor(0.0F, 0.0F, 0.0F, 0.45F).setNormal(pose, f, f1, f2).setLineWidth(1.0F);
+						consumer.addVertex(pose, (float) (x2 + xyz.x()), (float) (y2 + xyz.y()), (float) (z2 + xyz.z())).setColor(0.0F, 0.0F, 0.0F, 0.45F).setNormal(pose, f, f1, f2).setLineWidth(1.0F);
 					}
 				);
 			}
