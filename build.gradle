@@ -6,11 +6,11 @@ plugins {
 	id 'java-library'
 }
 
-version = "${project.mod_version}-fabric"
+version = project.mod_version
 group = project.group_name
 
 base {
-	archivesName = "${project.mod_id}-${project.minecraft_version}"
+	archivesName = "${project.mod_id}-${project.minecraft_version}-fabric"
 }
 
 java {
