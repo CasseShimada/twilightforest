@@ -32,6 +32,7 @@
     "accessor.CaveCarverConfigurationAccessor",
     "accessor.LivingEntityAccessor",
     "accessor.MobAccessor",
+    "accessor.PoiTypesInvoker",
     "accessor.SignBlockEntityAccessor",
     "accessor.SkullBlockEntityAccessor",
     "accessor.SpawnPlacementsInvoker",

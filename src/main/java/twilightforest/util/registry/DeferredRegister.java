@@ -9,9 +9,11 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.level.block.Block;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import twilightforest.mixin.accessor.PoiTypesInvoker;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -82,7 +84,15 @@ public class DeferredRegister<R> {
 
 		for (DeferredHolder<R, ? extends R> holder : entries.values()) {
 			R value = (R) holder.factory.get();
-			R registeredValue = Registry.register(registry, holder.getId(), value);
+			ResourceKey<R> valueKey = ResourceKey.create(registryKey, holder.getId());
+			R registeredValue;
+			if (registryKey.equals(Registries.POINT_OF_INTEREST_TYPE) && value instanceof PoiType poiType) {
+				Holder.Reference<R> reference = Registry.registerForHolder(registry, valueKey, value);
+				registeredValue = reference.value();
+				PoiTypesInvoker.twilightforest$registerBlockStates((Holder<PoiType>) (Holder<?>) reference, poiType.matchingStates());
+			} else {
+				registeredValue = Registry.register(registry, holder.getId(), value);
+			}
 			((DeferredHolder) holder).bind(registeredValue);
 		}
 		applyAliases(registry);
