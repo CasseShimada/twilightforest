@@ -6,7 +6,7 @@ plugins {
 	id 'java-library'
 }
 
-version = project.mod_version
+version = "${project.mod_version}-fabric"
 group = project.group_name
 
 base {
