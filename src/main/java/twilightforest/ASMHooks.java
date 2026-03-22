@@ -15,6 +15,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
@@ -29,6 +30,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.util.TriState;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFDataAttachments;
@@ -37,6 +39,7 @@ import twilightforest.util.multiparts.MultipartEntityUtil;
 import twilightforest.block.CloudBlock;
 import twilightforest.block.WroughtIronFenceBlock;
 import twilightforest.config.TFConfig;
+import twilightforest.entity.boss.UrGhast;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFDataComponents;
 import twilightforest.init.custom.ChunkBlanketProcessors;
@@ -159,6 +162,25 @@ public class ASMHooks {
 			}
 		}
 		return isRaining;
+	}
+
+	public static boolean isEntityInUrGhastTears(Entity entity) {
+		if (!(entity instanceof Player) || !entity.level().hasChunkAt(entity.blockPosition())) {
+			return false;
+		}
+
+		if (!entity.level().canSeeSkyFromBelowWater(entity.blockPosition())) {
+			return false;
+		}
+
+		AABB tearArea = entity.getBoundingBox().inflate(32.0D, 32.0D, 32.0D);
+		for (UrGhast urGhast : entity.level().getEntitiesOfClass(UrGhast.class, tearArea, UrGhast::isInTantrum)) {
+			if (urGhast.getBoundingBox().move(0.0D, -16.0D, 0.0D).inflate(0.0D, 16.0D, 0.0D).intersects(entity.getBoundingBox())) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

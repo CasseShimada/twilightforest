@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import twilightforest.ASMHooks;
 import twilightforest.events.HostileMountEvents;
 
 @Mixin(Entity.class)
@@ -43,5 +44,12 @@ public abstract class EntityMixin {
 	@Inject(method = "tick", at = @At("TAIL"))
 	private void twilightforest$hostileMountShiftKey(CallbackInfo ci) {
 		HostileMountEvents.enforcePassengerShiftKey((Entity) (Object) this);
+	}
+
+	@Inject(method = "isInWaterOrRain", at = @At("RETURN"), cancellable = true)
+	private void twilightforest$allowUrGhastTearsToCountAsRain(CallbackInfoReturnable<Boolean> cir) {
+		if (!cir.getReturnValueZ() && ASMHooks.isEntityInUrGhastTears((Entity) (Object) this)) {
+			cir.setReturnValue(true);
+		}
 	}
 }
