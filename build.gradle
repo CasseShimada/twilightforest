@@ -71,12 +71,21 @@ sourceSets {
 }
 
 repositories {
+	maven { // Local fallback for artifacts Windows Gradle cannot fetch over TLS
+		url = layout.projectDirectory.dir("gradle/local-maven")
+	}
 	maven { url = "https://maven.fabricmc.net/" }
-	mavenCentral()
+	maven { // Maven Central mirror for Windows Java TLS compatibility
+		url = "https://maven.aliyun.com/repository/public/"
+	}
 	maven { // Beanification
 		url = "https://maven.tamaized.com/releases/"
 	}
 	maven { // JEI
+		name = "ModMaven"
+		url = "https://modmaven.dev/"
+	}
+	maven { // JEI upstream
 		name = "Jared's Maven"
 		url = "https://maven.blamejared.com/"
 	}
@@ -95,8 +104,6 @@ dependencies {
 	compileOnly "com.google.code.findbugs:jsr305:3.0.2"
 	compileOnly "com.google.errorprone:error_prone_annotations:2.21.1"
 
-	testImplementation "tamaized:beanification:${project.beanification_version}:tests"
-	testCompileOnly "tamaized:beanification:${project.beanification_version}:test-sources"
 	testImplementation "org.junit.jupiter:junit-jupiter:5.10.3"
 	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.10.3"
 	testRuntimeOnly "org.junit.platform:junit-platform-launcher:1.10.3"

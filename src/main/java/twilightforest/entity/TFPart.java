@@ -21,6 +21,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import twilightforest.TwilightForestMod;
 import twilightforest.network.UpdateTFMultipartPacket;
+import twilightforest.util.multiparts.MultipartEntityUtil;
 
 import java.util.Objects;
 
@@ -183,6 +184,7 @@ public abstract class TFPart<T extends Entity> extends Entity {
 		if (!(parent instanceof TFMultipartEntity multipart)) return;
 		TFPart<?>[] parts = multipart.getParts();
 		if (parts == null) return;
+		MultipartEntityUtil.trackMultipartEntity(parent);
 		for (int i = 0; i < parts.length; i++) {
 			parts[i].setId(parent.getId() + i);
 		}
@@ -191,6 +193,11 @@ public abstract class TFPart<T extends Entity> extends Entity {
 	@Override
 	public boolean shouldBeSaved() {
 		return false;
+	}
+
+	@Override
+	public boolean isAttackable() {
+		return true;
 	}
 
 	@Override

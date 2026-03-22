@@ -71,6 +71,7 @@ import twilightforest.mixin.accessor.SkullBlockEntityAccessor;
 import twilightforest.util.datamaps.EntityTransformation;
 import twilightforest.util.entities.EntityUtil;
 import twilightforest.util.entities.OminousFireDamageSource;
+import twilightforest.util.multiparts.MultipartEntityUtil;
 import twilightforest.world.components.structures.SpawnIndexProvider;
 import twilightforest.world.components.structures.finalcastle.FinalCastleBossGazeboComponent;
 import twilightforest.world.components.structures.util.StructureConqueredData;
@@ -481,6 +482,7 @@ public class EntityEvents {
 	}
 
 	public static void handleEntityLoad(Entity entity) {
+		MultipartEntityUtil.trackMultipartEntity(entity);
 		if (!(entity instanceof PathfinderMob mob && TFDataAttachments.has(mob, TFDataAttachments.LEASH_PATHFINDER_OVERRIDE))) {
 			return;
 		}
