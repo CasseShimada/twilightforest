@@ -30,6 +30,7 @@
     "accessor.BlockRotProcessorAccessor",
     "accessor.BrewingStandBlockEntityAccessor",
     "accessor.CaveCarverConfigurationAccessor",
+    "accessor.LivingEntityAccessor",
     "accessor.MobAccessor",
     "accessor.SignBlockEntityAccessor",
     "accessor.SkullBlockEntityAccessor",

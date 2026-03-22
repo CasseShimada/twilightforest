@@ -41,10 +41,8 @@ import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
 import twilightforest.entity.EnforcedHomePoint;
 import twilightforest.init.TFSounds;
+import twilightforest.mixin.accessor.LivingEntityAccessor;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -88,49 +86,9 @@ public class EntityUtil {
 		return rayTrace(player, modifier == null ? range : modifier.applyAsDouble(range));
 	}
 
-	private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
-	private static final Method LivingEntity_getDeathSound = findMethod(LivingEntity.class, "getDeathSound");
-	private static final MethodHandle handle_LivingEntity_getDeathSound;
-
-	static {
-		MethodHandle tmp_handle_LivingEntity_getDeathSound = null;
-
-		try {
-			if (LivingEntity_getDeathSound != null) {
-				tmp_handle_LivingEntity_getDeathSound = LOOKUP.unreflect(LivingEntity_getDeathSound);
-			}
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		handle_LivingEntity_getDeathSound = tmp_handle_LivingEntity_getDeathSound;
-	}
-
-	@Nullable
-	private static Method findMethod(Class<?> owner, String name, Class<?>... params) {
-		try {
-			Method method = owner.getDeclaredMethod(name, params);
-			method.setAccessible(true);
-			return method;
-		} catch (NoSuchMethodException e) {
-			TwilightForestMod.LOGGER.warn("Missing method {} on {}", name, owner.getName());
-			return null;
-		} catch (Exception e) {
-			TwilightForestMod.LOGGER.warn("Failed accessing method {} on {}", name, owner.getName(), e);
-			return null;
-		}
-	}
-
 	@Nullable
 	public static SoundEvent getDeathSound(LivingEntity living) {
-		SoundEvent sound = null;
-		if (handle_LivingEntity_getDeathSound != null) {
-			try {
-				sound = (SoundEvent) handle_LivingEntity_getDeathSound.invokeExact(living);
-			} catch (Throwable e) {
-				// FAIL SILENTLY
-			}
-		}
-		return sound;
+		return ((LivingEntityAccessor) living).twilightforest$invokeGetDeathSound();
 	}
 
 	public static void killLavaAround(Entity entity) {
