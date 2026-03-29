@@ -53,6 +53,7 @@ public final class TFConfig {
 	private static int clientCloudBlockPrecipitationDistance = 32;
 	public static boolean prettifyOreMeterGui = true;
 	public static boolean spawnCharmAnimationAsTotem = false;
+	public static GiantBlockOutlineMode giantBlockOutlineMode = GiantBlockOutlineMode.AUTO;
 
 	// --- COMMON ---
 	public static boolean casketUUIDLocking = false;
@@ -184,5 +185,12 @@ public final class TFConfig {
 		public Component getTranslatedName() {
 			return Component.translatable(CONFIG_ID + "multiplayer_fight_adjuster." + this.name().toLowerCase(Locale.ROOT));
 		}
+	}
+
+	public enum GiantBlockOutlineMode {
+		AUTO,
+		SECONDARY,
+		SAFE_LINES,
+		VANILLA
 	}
 }

@@ -64,6 +64,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import org.lwjgl.opengl.GL11C;
 import org.lwjgl.system.MemoryStack;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.GiantBlock;
@@ -353,17 +354,79 @@ public class ClientEvents {
 
 		LocalPlayer player = mc.player;
 		if (player != null && (player.getMainHandItem().getItem() instanceof GiantPickItem || (player.getMainHandItem().getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof GiantBlock))) {
+			TFConfig.GiantBlockOutlineMode outlineMode = resolveGiantBlockOutlineMode();
+			if (outlineMode == TFConfig.GiantBlockOutlineMode.VANILLA) {
+				return true;
+			}
+
 			if (!state.isAir() && player.level().getWorldBorder().isWithinBounds(pos)) {
 				BlockPos offsetPos = new BlockPos(pos.getX() & ~0b11, pos.getY() & ~0b11, pos.getZ() & ~0b11);
 				PoseStack poseStack = context.matrices();
-				VertexConsumer consumer = context.consumers().getBuffer(RenderTypes.secondaryBlockOutline());
 				Vec3 xyz = Vec3.atLowerCornerOf(offsetPos).subtract(getCameraPosition());
-				ShapeRenderer.renderShape(poseStack, consumer, GIANT_BLOCK, xyz.x(), xyz.y(), xyz.z(), 0xFF000000, 7.0F);
+				switch (outlineMode) {
+					case SECONDARY -> {
+						VertexConsumer consumer = context.consumers().getBuffer(RenderTypes.secondaryBlockOutline());
+						ShapeRenderer.renderShape(poseStack, consumer, GIANT_BLOCK, xyz.x(), xyz.y(), xyz.z(), 0xFF000000, 7.0F);
+					}
+					case SAFE_LINES, AUTO -> renderGiantOutlineLines(context, poseStack, xyz);
+					case VANILLA -> {
+						return true;
+					}
+				}
 			}
 			return false;
 		}
 
 		return true;
+	}
+
+	private static TFConfig.GiantBlockOutlineMode resolveGiantBlockOutlineMode() {
+		TFConfig.GiantBlockOutlineMode configuredMode = TFConfig.giantBlockOutlineMode;
+		if (configuredMode != TFConfig.GiantBlockOutlineMode.AUTO) {
+			return configuredMode;
+		}
+
+		if (isWindowsIntelOpenGl()) {
+			return TFConfig.GiantBlockOutlineMode.SAFE_LINES;
+		}
+		return TFConfig.GiantBlockOutlineMode.SECONDARY;
+	}
+
+	private static boolean isWindowsIntelOpenGl() {
+		String osName = System.getProperty("os.name", "").toLowerCase(Locale.ROOT);
+		if (!osName.contains("windows")) {
+			return false;
+		}
+
+		try {
+			String vendor = GL11C.glGetString(GL11C.GL_VENDOR);
+			return vendor != null && vendor.toLowerCase(Locale.ROOT).contains("intel");
+		} catch (RuntimeException ignored) {
+			return false;
+		}
+	}
+
+	private static void renderGiantOutlineLines(WorldRenderContext context, PoseStack poseStack, Vec3 xyz) {
+		VertexConsumer consumer = context.consumers().getBuffer(RenderTypes.lines());
+		PoseStack.Pose pose = poseStack.last();
+		GIANT_BLOCK.forAllEdges((x1, y1, z1, x2, y2, z2) -> {
+				float xNormal = (float) (x2 - x1);
+				float yNormal = (float) (y2 - y1);
+				float zNormal = (float) (z2 - z1);
+				float normalLength = Mth.sqrt(xNormal * xNormal + yNormal * yNormal + zNormal * zNormal);
+				xNormal /= normalLength;
+				yNormal /= normalLength;
+				zNormal /= normalLength;
+				consumer.addVertex(pose, (float) (x1 + xyz.x()), (float) (y1 + xyz.y()), (float) (z1 + xyz.z()))
+					.setColor(0.0F, 0.0F, 0.0F, 0.45F)
+					.setNormal(pose, xNormal, yNormal, zNormal)
+					.setLineWidth(1.0F);
+				consumer.addVertex(pose, (float) (x2 + xyz.x()), (float) (y2 + xyz.y()), (float) (z2 + xyz.z()))
+					.setColor(0.0F, 0.0F, 0.0F, 0.45F)
+					.setNormal(pose, xNormal, yNormal, zNormal)
+					.setLineWidth(1.0F);
+			}
+		);
 	}
 
 	public static boolean areCuriosEquipped(LivingEntity entity) {
