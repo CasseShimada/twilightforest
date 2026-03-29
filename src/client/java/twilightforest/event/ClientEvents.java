@@ -355,21 +355,9 @@ public class ClientEvents {
 			if (!state.isAir() && player.level().getWorldBorder().isWithinBounds(pos)) {
 				BlockPos offsetPos = new BlockPos(pos.getX() & ~0b11, pos.getY() & ~0b11, pos.getZ() & ~0b11);
 				PoseStack poseStack = context.matrices();
-				VertexConsumer consumer = context.consumers().getBuffer(RenderTypes.lines());
+				VertexConsumer consumer = context.consumers().getBuffer(RenderTypes.debugFilledBox());
 				Vec3 xyz = Vec3.atLowerCornerOf(offsetPos).subtract(getCameraPosition());
-				PoseStack.Pose pose = poseStack.last();
-				GIANT_BLOCK.forAllEdges((x1, y1, z1, x2, y2, z2) -> {
-						float f = (float) (x2 - x1);
-						float f1 = (float) (y2 - y1);
-						float f2 = (float) (z2 - z1);
-						float f3 = Mth.sqrt(f * f + f1 * f1 + f2 * f2);
-						f /= f3;
-						f1 /= f3;
-						f2 /= f3;
-						consumer.addVertex(pose, (float) (x1 + xyz.x()), (float) (y1 + xyz.y()), (float) (z1 + xyz.z())).setColor(0.0F, 0.0F, 0.0F, 0.45F).setNormal(pose, f, f1, f2).setLineWidth(1.0F);
-						consumer.addVertex(pose, (float) (x2 + xyz.x()), (float) (y2 + xyz.y()), (float) (z2 + xyz.z())).setColor(0.0F, 0.0F, 0.0F, 0.45F).setNormal(pose, f, f1, f2).setLineWidth(1.0F);
-					}
-				);
+				renderGiantOutlineBoxes(poseStack, consumer, xyz.x(), xyz.y(), xyz.z());
 			}
 			return false;
 		}
@@ -393,5 +381,55 @@ public class ClientEvents {
 	private static Vec3 getCameraPosition() {
 		Entity cameraEntity = Minecraft.getInstance().getCameraEntity();
 		return cameraEntity != null ? cameraEntity.getEyePosition() : Vec3.ZERO;
+	}
+
+	private static void renderGiantOutlineBoxes(PoseStack poseStack, VertexConsumer consumer, double x, double y, double z) {
+		final double minX = x;
+		final double minY = y;
+		final double minZ = z;
+		final double maxX = x + 4.0D;
+		final double maxY = y + 4.0D;
+		final double maxZ = z + 4.0D;
+		final double halfThickness = 0.015625D;
+		final double extension = 0.001D;
+
+		// Use thin filled boxes instead of the line pipeline so giant outlines stay visible
+		// without depending on the 1.21.11 LineWidth vertex format or fragile driver support.
+		addOutlineEdge(poseStack, consumer, minX - extension, minY - halfThickness, minZ - halfThickness, maxX + extension, minY + halfThickness, minZ + halfThickness);
+		addOutlineEdge(poseStack, consumer, minX - extension, minY - halfThickness, maxZ - halfThickness, maxX + extension, minY + halfThickness, maxZ + halfThickness);
+		addOutlineEdge(poseStack, consumer, minX - extension, maxY - halfThickness, minZ - halfThickness, maxX + extension, maxY + halfThickness, minZ + halfThickness);
+		addOutlineEdge(poseStack, consumer, minX - extension, maxY - halfThickness, maxZ - halfThickness, maxX + extension, maxY + halfThickness, maxZ + halfThickness);
+
+		addOutlineEdge(poseStack, consumer, minX - halfThickness, minY - extension, minZ - halfThickness, minX + halfThickness, maxY + extension, minZ + halfThickness);
+		addOutlineEdge(poseStack, consumer, maxX - halfThickness, minY - extension, minZ - halfThickness, maxX + halfThickness, maxY + extension, minZ + halfThickness);
+		addOutlineEdge(poseStack, consumer, minX - halfThickness, minY - extension, maxZ - halfThickness, minX + halfThickness, maxY + extension, maxZ + halfThickness);
+		addOutlineEdge(poseStack, consumer, maxX - halfThickness, minY - extension, maxZ - halfThickness, maxX + halfThickness, maxY + extension, maxZ + halfThickness);
+
+		addOutlineEdge(poseStack, consumer, minX - halfThickness, minY - halfThickness, minZ - extension, minX + halfThickness, minY + halfThickness, maxZ + extension);
+		addOutlineEdge(poseStack, consumer, maxX - halfThickness, minY - halfThickness, minZ - extension, maxX + halfThickness, minY + halfThickness, maxZ + extension);
+		addOutlineEdge(poseStack, consumer, minX - halfThickness, maxY - halfThickness, minZ - extension, minX + halfThickness, maxY + halfThickness, maxZ + extension);
+		addOutlineEdge(poseStack, consumer, maxX - halfThickness, maxY - halfThickness, minZ - extension, maxX + halfThickness, maxY + halfThickness, maxZ + extension);
+	}
+
+	private static void addOutlineEdge(PoseStack poseStack, VertexConsumer consumer, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+		PoseStack.Pose pose = poseStack.last();
+
+		addQuad(consumer, pose, minX, minY, minZ, minX, maxY, minZ, maxX, maxY, minZ, maxX, minY, minZ);
+		addQuad(consumer, pose, minX, minY, maxZ, maxX, minY, maxZ, maxX, maxY, maxZ, minX, maxY, maxZ);
+		addQuad(consumer, pose, minX, minY, minZ, maxX, minY, minZ, maxX, minY, maxZ, minX, minY, maxZ);
+		addQuad(consumer, pose, minX, maxY, minZ, minX, maxY, maxZ, maxX, maxY, maxZ, maxX, maxY, minZ);
+		addQuad(consumer, pose, minX, minY, minZ, minX, minY, maxZ, minX, maxY, maxZ, minX, maxY, minZ);
+		addQuad(consumer, pose, maxX, minY, minZ, maxX, maxY, minZ, maxX, maxY, maxZ, maxX, minY, maxZ);
+	}
+
+	private static void addQuad(VertexConsumer consumer, PoseStack.Pose pose, double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double x4, double y4, double z4) {
+		addOutlineVertex(consumer, pose, x1, y1, z1);
+		addOutlineVertex(consumer, pose, x2, y2, z2);
+		addOutlineVertex(consumer, pose, x3, y3, z3);
+		addOutlineVertex(consumer, pose, x4, y4, z4);
+	}
+
+	private static void addOutlineVertex(VertexConsumer consumer, PoseStack.Pose pose, double x, double y, double z) {
+		consumer.addVertex(pose, (float) x, (float) y, (float) z).setColor(0.0F, 0.0F, 0.0F, 0.45F);
 	}
 }
