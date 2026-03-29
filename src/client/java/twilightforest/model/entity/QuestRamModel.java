@@ -14,8 +14,8 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.animal.sheep.Sheep;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemDisplayContext;
 import org.jetbrains.annotations.Nullable;
@@ -219,7 +219,7 @@ public class QuestRamModel extends EntityModel<QuestingRamRenderState> implement
 
 			boolean previousSkipDraw = segment.skipDraw;
 			segment.skipDraw = false;
-			int dyeRgb = DyeColor.byId(i).getTextureDiffuseColor();
+			int dyeRgb = ARGB.opaque(DyeColor.byId(i).getTextureDiffuseColor());
 			nodeCollector.submitModelPart(segment, stack, RenderTypes.entityCutoutNoCull(QuestRamRenderer.TEXTURE), light, overlay, null, false, false, dyeRgb, breakProgress, 0);
 			segment.skipDraw = previousSkipDraw;
 		}
