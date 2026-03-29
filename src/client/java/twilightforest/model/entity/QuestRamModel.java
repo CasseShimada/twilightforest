@@ -7,6 +7,7 @@
 package twilightforest.client.model.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.color.ColorLerper;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -14,7 +15,6 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -219,7 +219,7 @@ public class QuestRamModel extends EntityModel<QuestingRamRenderState> implement
 
 			boolean previousSkipDraw = segment.skipDraw;
 			segment.skipDraw = false;
-			int dyeRgb = ARGB.opaque(DyeColor.byId(i).getTextureDiffuseColor());
+			int dyeRgb = ColorLerper.Type.SHEEP.getColor(DyeColor.byId(i));
 			nodeCollector.submitModelPart(segment, stack, RenderTypes.entityCutoutNoCull(QuestRamRenderer.TEXTURE), light, overlay, null, false, false, dyeRgb, breakProgress, 0);
 			segment.skipDraw = previousSkipDraw;
 		}
