@@ -419,12 +419,10 @@ public class ClientEvents {
 				zNormal /= normalLength;
 				consumer.addVertex(pose, (float) (x1 + xyz.x()), (float) (y1 + xyz.y()), (float) (z1 + xyz.z()))
 					.setColor(0.0F, 0.0F, 0.0F, 0.45F)
-					.setNormal(pose, xNormal, yNormal, zNormal)
-					.setLineWidth(1.0F);
+					.setNormal(pose, xNormal, yNormal, zNormal);
 				consumer.addVertex(pose, (float) (x2 + xyz.x()), (float) (y2 + xyz.y()), (float) (z2 + xyz.z()))
 					.setColor(0.0F, 0.0F, 0.0F, 0.45F)
-					.setNormal(pose, xNormal, yNormal, zNormal)
-					.setLineWidth(1.0F);
+					.setNormal(pose, xNormal, yNormal, zNormal);
 			}
 		);
 	}
