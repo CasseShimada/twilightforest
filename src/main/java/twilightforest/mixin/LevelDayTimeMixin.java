@@ -11,7 +11,7 @@ import twilightforest.init.TFDimension;
 public abstract class LevelDayTimeMixin {
 	private static final long TWILIGHT_FIXED_DAY_TIME = 13000L;
 
-	@Inject(method = "getDayTime", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "getOverworldClockTime", at = @At("HEAD"), cancellable = true)
 	private void twilightforest$fixTwilightDayTime(CallbackInfoReturnable<Long> cir) {
 		Level level = (Level) (Object) this;
 		if (TFDimension.DIMENSION_KEY.equals(level.dimension())) {
