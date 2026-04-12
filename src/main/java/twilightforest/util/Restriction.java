@@ -27,19 +27,23 @@ import java.util.Optional;
  */
 
 public record Restriction(@Nullable ResourceKey<Structure> hintStructureKey, ResourceKey<Enforcement> enforcement,
-						  float multiplier, @Nullable ItemStack lockedBiomeToast, List<Identifier> advancements) {
+						  float multiplier, @Nullable ItemStackRef lockedBiomeToastData, List<Identifier> advancements) {
 
 	public static final Codec<Restriction> CODEC = RecordCodecBuilder.create((recordCodecBuilder) -> recordCodecBuilder.group(
 		ResourceKey.codec(Registries.STRUCTURE).optionalFieldOf("structure_key").forGetter((restriction) -> Optional.ofNullable(restriction.hintStructureKey())),
 		ResourceKey.codec(TFRegistries.Keys.ENFORCEMENT).fieldOf("enforcement").forGetter(Restriction::enforcement),
 		Codec.FLOAT.fieldOf("multiplier").forGetter(Restriction::multiplier),
-		ItemStack.CODEC.optionalFieldOf("locked_biome_toast").forGetter((restriction) -> Optional.ofNullable(restriction.lockedBiomeToast())),
+		ItemStackRef.CODEC.optionalFieldOf("locked_biome_toast").forGetter((restriction) -> Optional.ofNullable(restriction.lockedBiomeToastData())),
 		ExtraCodecs.nonEmptyList(Identifier.CODEC.listOf()).fieldOf("advancements").forGetter(Restriction::advancements)
 	).apply(recordCodecBuilder, Restriction::create));
 
 	@SuppressWarnings("OptionalUsedAsFieldOrParameterType") // Vanilla does this too
-	private static Restriction create(Optional<ResourceKey<Structure>> hintStructureKey, ResourceKey<Enforcement> enforcer, float multiplier, Optional<ItemStack> lockedBiomeToast, List<Identifier> advancements) {
+	private static Restriction create(Optional<ResourceKey<Structure>> hintStructureKey, ResourceKey<Enforcement> enforcer, float multiplier, Optional<ItemStackRef> lockedBiomeToast, List<Identifier> advancements) {
 		return new Restriction(hintStructureKey.orElse(null), enforcer, multiplier, lockedBiomeToast.orElse(null), advancements);
+	}
+
+	public @Nullable ItemStack lockedBiomeToast() {
+		return this.lockedBiomeToastData == null ? null : this.lockedBiomeToastData.create();
 	}
 
 	public static Optional<Restriction> getRestrictionForBiome(Biome biome, Entity entity) {

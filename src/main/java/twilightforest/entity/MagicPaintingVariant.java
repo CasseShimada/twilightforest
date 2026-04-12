@@ -15,6 +15,7 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.item.ItemStack;
 import twilightforest.TFRegistries;
 import twilightforest.init.custom.MagicPaintingVariants;
+import twilightforest.util.ItemStackRef;
 
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
@@ -91,21 +92,21 @@ public record MagicPaintingVariant(int width, int height, List<Layer> layers, Co
 			}
 		}
 
-		public record OpacityModifier(Type type, float multiplier, boolean invert, float min, float max, float from, float to, ItemStack item, Optional<MobEffectCategory> effectCategory) {
+		public record OpacityModifier(Type type, float multiplier, boolean invert, float min, float max, float from, float to, @Nullable ItemStackRef itemData, Optional<MobEffectCategory> effectCategory) {
 			public OpacityModifier(Type type, float multiplier, boolean invert, float min, float max) {
-				this(type, multiplier, invert, min, max, Float.NaN, Float.NaN, ItemStack.EMPTY, Optional.empty());
+				this(type, multiplier, invert, min, max, Float.NaN, Float.NaN, null, Optional.empty());
 			}
 
 			public OpacityModifier(Type type, float multiplier, boolean invert, float min, float max, float from, float to) {
-				this(type, multiplier, invert, min, max, from, to, ItemStack.EMPTY, Optional.empty());
+				this(type, multiplier, invert, min, max, from, to, null, Optional.empty());
 			}
 
 			public OpacityModifier(Type type, float multiplier, boolean invert, float min, float max, ItemStack item) {
-				this(type, multiplier, invert, min, max, Float.NaN, Float.NaN, item, Optional.empty());
+				this(type, multiplier, invert, min, max, Float.NaN, Float.NaN, ItemStackRef.of(item), Optional.empty());
 			}
 
 			public OpacityModifier(Type type, float multiplier, boolean invert, float min, float max, MobEffectCategory effectCategory) {
-				this(type, multiplier, invert, min, max, Float.NaN, Float.NaN, ItemStack.EMPTY, Optional.of(effectCategory));
+				this(type, multiplier, invert, min, max, Float.NaN, Float.NaN, null, Optional.of(effectCategory));
 			}
 
 			//Just so we can access MobEffectCategory in json
@@ -119,14 +120,18 @@ public record MagicPaintingVariant(int width, int height, List<Layer> layers, Co
 				ExtraCodecs.POSITIVE_FLOAT.fieldOf("max").forGetter(OpacityModifier::max),
 				Codec.FLOAT.optionalFieldOf("from").forGetter((modifier) -> Float.isNaN(modifier.from()) ? Optional.empty() : Optional.of(modifier.from())),
 				Codec.FLOAT.optionalFieldOf("to").forGetter((modifier) -> Float.isNaN(modifier.to()) ? Optional.empty() : Optional.of(modifier.to())),
-				ItemStack.CODEC.optionalFieldOf("item_stack").forGetter((modifier) -> modifier.item().isEmpty() ? Optional.empty() : Optional.of(modifier.item())),
+				ItemStackRef.CODEC.optionalFieldOf("item_stack").forGetter((modifier) -> Optional.ofNullable(modifier.itemData())),
 				MOB_EFFECT_CATEGORY_CODEC.optionalFieldOf("effect_category").forGetter((modifier) -> modifier.effectCategory().isEmpty() ? Optional.empty() : modifier.effectCategory())
 			).apply(recordCodecBuilder, OpacityModifier::create));
 
 			@SuppressWarnings("OptionalUsedAsFieldOrParameterType") // Vanilla does this too
-			private static OpacityModifier create(Type type, float multiplier, boolean invert, float min, float max, Optional<Float> from, Optional<Float> to, Optional<ItemStack> item, Optional<MobEffectCategory> effectCategory) {
+			private static OpacityModifier create(Type type, float multiplier, boolean invert, float min, float max, Optional<Float> from, Optional<Float> to, Optional<ItemStackRef> item, Optional<MobEffectCategory> effectCategory) {
 				if (type.usesRange() && (from.isEmpty() || to.isEmpty())) throw new NoSuchElementException("Range for opacity modifier is not defined!");
-				return new OpacityModifier(type, multiplier, invert, min, max, from.orElse(Float.NaN), to.orElse(Float.NaN), item.orElse(ItemStack.EMPTY), effectCategory);
+				return new OpacityModifier(type, multiplier, invert, min, max, from.orElse(Float.NaN), to.orElse(Float.NaN), item.orElse(null), effectCategory);
+			}
+
+			public ItemStack item() {
+				return this.itemData == null ? ItemStack.EMPTY : this.itemData.create();
 			}
 
 			public enum Type implements StringRepresentable {
