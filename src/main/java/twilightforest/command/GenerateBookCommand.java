@@ -45,7 +45,7 @@ public class GenerateBookCommand {
 					player.drop(hint.createHintBook(source.registryAccess()), true);
 				}
 			} else {
-				ItemStack book = StructureHints.HintConfig.defaultBook();
+				ItemStack book = StructureHints.HintConfig.defaultBook().create();
 				if (!player.addItem(book)) {
 					player.drop(book, true);
 				}

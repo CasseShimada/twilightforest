@@ -128,9 +128,9 @@ public interface StructureHints {
 	@Nullable
 	Mob createHintMonster(Level world);
 
-	record HintConfig(ItemStack hintItem, EntityType<? extends Mob> hintMob) {
+	record HintConfig(HintBook hintBook, EntityType<? extends Mob> hintMob) {
 		public static final MapCodec<HintConfig> FLAT_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-			ItemStack.CODEC.fieldOf("hint_item").forGetter(HintConfig::hintItem),
+			HintBook.CODEC.fieldOf("hint_item").forGetter(HintConfig::hintBook),
 			BuiltInRegistries.ENTITY_TYPE.byNameCodec().comapFlatMap(HintConfig::checkCastMob, entityType -> entityType).fieldOf("hint_mob").forGetter(HintConfig::hintMob)
 		).apply(instance, HintConfig::new));
 
@@ -144,14 +144,29 @@ public interface StructureHints {
 			return DataResult.success((EntityType<? extends Mob>) entityType);
 		}
 
-		public static ItemStack defaultBook() {
+		public ItemStack hintItem() {
+			return this.hintBook.create();
+		}
+
+		public static HintBook defaultBook() {
 			return book("unknown", 2);
 		}
 
-		public static ItemStack book(String name, int pageCount) {
-			ItemStack book = new ItemStack(Items.WRITTEN_BOOK);
-			StructureHints.addBookInformationStatic(book, name, pageCount);
-			return book;
+		public static HintBook book(String name, int pageCount) {
+			return new HintBook(name, pageCount);
+		}
+
+		public record HintBook(@Nullable String name, int pageCount) {
+			public static final Codec<HintBook> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.STRING.optionalFieldOf("name").forGetter(book -> Optional.ofNullable(book.name())),
+				Codec.intRange(1, 16).fieldOf("pages").forGetter(HintBook::pageCount)
+			).apply(instance, (name, pageCount) -> new HintBook(name.orElse(null), pageCount)));
+
+			public ItemStack create() {
+				ItemStack book = new ItemStack(Items.WRITTEN_BOOK);
+				StructureHints.addBookInformationStatic(book, this.name, this.pageCount);
+				return book;
+			}
 		}
 	}
 }
