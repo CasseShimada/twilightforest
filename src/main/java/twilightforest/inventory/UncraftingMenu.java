@@ -194,7 +194,7 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 				}
 
 				// store number of items this recipe produces (and thus how many input items are required for uncrafting)
-				this.uncraftingMatrix.numberOfInputItems = recipe instanceof UncraftingRecipe uncraftingRecipe ? uncraftingRecipe.getCount() : recipe.assemble(this.craftSlots.asCraftInput(), this.level.registryAccess()).getCount(); //Uncrafting recipes need this method call
+				this.uncraftingMatrix.numberOfInputItems = recipe instanceof UncraftingRecipe uncraftingRecipe ? uncraftingRecipe.getCount() : recipe.assemble(this.craftSlots.asCraftInput()).getCount(); // Uncrafting recipes need this method call
 				this.updateCosts(this.calculateUncraftingCost(), 0);
 			} else {
 				this.storedGhostRecipe = null;
@@ -272,7 +272,7 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 	}
 
 	public static boolean isIngredientProblematic(ItemStack ingredient) {
-		return (!ingredient.isEmpty() && !ingredient.getItem().getCraftingRemainder().isEmpty()) || ingredient.is(Items.BARRIER);
+		return (!ingredient.isEmpty() && !ingredient.getItem().getCraftingRemainder().create().isEmpty()) || ingredient.is(Items.BARRIER);
 	}
 
 	private static ItemStack normalizeIngredient(ItemStack ingredient) {
@@ -325,7 +325,7 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 	}
 
 	private static ItemStack getRecipeResult(CraftingRecipe recipe, RegistryAccess registryAccess) {
-		return recipe.assemble(CraftingInput.EMPTY, registryAccess);
+		return recipe.assemble(CraftingInput.EMPTY);
 	}
 
 	private static List<RecipeHolder<CraftingRecipe>> getRecipesFor(CraftingInput input, ServerLevel level) {
@@ -346,7 +346,7 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 
 			if (recipe != null && (!serverLevel.getGameRules().get(GameRules.LIMITED_CRAFTING) || ((ServerPlayer) this.player).getRecipeBook().contains(recipe.id()))) {
 				this.tinkerResult.setRecipeUsed(recipe);
-				this.tinkerResult.setItem(0, recipe.value().assemble(input, this.level.registryAccess()));
+				this.tinkerResult.setItem(0, recipe.value().assemble(input));
 			} else {
 				this.tinkerResult.setItem(0, ItemStack.EMPTY);
 			}
@@ -478,14 +478,14 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 	}
 
 	@Override
-	public void clicked(int slotNum, int mouseButton, ClickType clickType, Player player) {
+	public void clicked(int slotNum, int mouseButton, ContainerInput clickType, Player player) {
 
 		// if the player is trying to take an item out of the assembly grid, and the assembly grid is empty, take the item from the uncrafting grid.
 		if (slotNum > 0 && this.getSlotContainer(slotNum) == this.craftSlots
 			&& player.containerMenu.getCarried().isEmpty() && !this.slots.get(slotNum).hasItem()) {
 
 			// is the assembly matrix empty?
-			if (this.craftSlots.isEmpty() && (clickType != ClickType.SWAP || player.getInventory().getItem(mouseButton).isEmpty())) {
+			if (this.craftSlots.isEmpty() && (clickType != ContainerInput.SWAP || player.getInventory().getItem(mouseButton).isEmpty())) {
 				slotNum -= 9;
 			}
 		}

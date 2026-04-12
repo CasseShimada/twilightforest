@@ -80,12 +80,12 @@ public class CloudBlock extends Block {
 				particlePacket.queueParticle(TFParticleType.CLOUD_PUFF.get(), x, y, z, xSpeed, ySpeed, zSpeed);
 			}
 
-			PacketDistributor.sendToPlayersTrackingChunk(serverLevel, new ChunkPos(pos), particlePacket);
+			PacketDistributor.sendToPlayersTrackingChunk(serverLevel, ChunkPos.containing(pos), particlePacket);
 		}
 	}
 
 	@Override
-	public int getLightBlock(BlockState state) {
+	protected int getLightDampening(BlockState state) {
 		return 1;
 	}
 

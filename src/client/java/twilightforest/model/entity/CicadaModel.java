@@ -21,7 +21,7 @@ public class CicadaModel extends Model<Void> {
 	private final ModelPart wings;
 
 	public CicadaModel(ModelPart root) {
-		super(root, RenderTypes::entityCutoutNoCull);
+		super(root, RenderTypes::entityCutout);
 		this.wings = root.getChild(PART_WINGS);
 	}
 

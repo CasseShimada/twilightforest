@@ -47,7 +47,7 @@ public record SmashBlocksEffect(LevelBasedValue maxSmash, LevelBasedValue radius
 				if (blocksSmashed >= maxSmash) break;
 				BlockState state = level.getBlockState(pos);
 				if (!state.isAir()) {
-					if (this.immuneBlocks().isPresent() && this.immuneBlocks().get().contains(state.getBlockHolder())) continue;
+					if (this.immuneBlocks().isPresent() && this.immuneBlocks().get().contains(state.typeHolder())) continue;
 					if (ChainBlock.canBreakBlockAt(level, pos, state, item.itemStack(), player.gameMode.getGameModeForPlayer().isBlockPlacingRestricted()) && EntityUtil.canDestroyBlock(level, pos, state, player)) {
 						if (player.gameMode.destroyBlock(pos)) {
 							this.smashSound().ifPresent(sound -> level.playSound(null, pos, sound.value(), SoundSource.BLOCKS, 1.0F, 1.0F));

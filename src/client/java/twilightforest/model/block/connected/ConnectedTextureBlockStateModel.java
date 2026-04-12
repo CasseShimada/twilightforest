@@ -2,20 +2,20 @@ package twilightforest.client.model.block.connected;
 
 import com.mojang.serialization.MapCodec;
 import net.fabricmc.fabric.api.client.model.loading.v1.CustomUnbakedBlockStateModel;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.block.model.SingleVariant;
-import net.minecraft.client.renderer.block.model.Variant;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.SingleVariant;
+import net.minecraft.client.renderer.block.dispatch.Variant;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ResolvableModel;
 import net.minecraft.client.resources.model.ResolvedModel;
-import net.minecraft.client.resources.model.QuadCollection;
+import net.minecraft.client.resources.model.geometry.QuadCollection;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.client.model.block.BlockModelContext;
@@ -32,8 +32,9 @@ public final class ConnectedTextureBlockStateModel implements BlockStateModel {
 	private final List<Block> validConnectors;
 	private final Map<Direction, BakedQuad[]> baseQuads;
 	private final Map<Direction, BakedQuad[][]> connectedQuads;
-	private final TextureAtlasSprite particle;
+	private final Material.Baked particle;
 	private final boolean useAmbientOcclusion;
+	private final int materialFlags;
 
 	public ConnectedTextureBlockStateModel(
 		Set<Direction> connectedFaces,
@@ -42,8 +43,9 @@ public final class ConnectedTextureBlockStateModel implements BlockStateModel {
 		List<Block> connectableBlocks,
 		Map<Direction, BakedQuad[]> baseQuads,
 		Map<Direction, BakedQuad[][]> connectedQuads,
-		TextureAtlasSprite particle,
-		boolean useAmbientOcclusion
+		Material.Baked particle,
+		boolean useAmbientOcclusion,
+		int materialFlags
 	) {
 		this.connectedFaces = connectedFaces;
 		this.unculledFaces = unculledFaces;
@@ -53,16 +55,22 @@ public final class ConnectedTextureBlockStateModel implements BlockStateModel {
 		this.connectedQuads = connectedQuads;
 		this.particle = particle;
 		this.useAmbientOcclusion = useAmbientOcclusion;
+		this.materialFlags = materialFlags;
 	}
 
 	@Override
-	public void collectParts(RandomSource random, List<BlockModelPart> parts) {
+	public void collectParts(RandomSource random, List<BlockStateModelPart> parts) {
 		parts.add(new ConnectedTexturePart());
 	}
 
 	@Override
-	public TextureAtlasSprite particleIcon() {
+	public Material.Baked particleMaterial() {
 		return particle;
+	}
+
+	@Override
+	public int materialFlags() {
+		return this.materialFlags;
 	}
 
 	private QuadCollection buildQuads(@Nullable BlockAndTintGetter level, BlockPos pos) {
@@ -143,7 +151,7 @@ public final class ConnectedTextureBlockStateModel implements BlockStateModel {
 		return Block.shouldRenderFace(getter.getBlockState(pos), getter.getBlockState(pos.relative(face)), face);
 	}
 
-	private final class ConnectedTexturePart implements BlockModelPart {
+	private final class ConnectedTexturePart implements BlockStateModelPart {
 		@Override
 		public List<BakedQuad> getQuads(@Nullable Direction direction) {
 			BlockModelContext.Context ctx = BlockModelContext.get();
@@ -159,8 +167,13 @@ public final class ConnectedTextureBlockStateModel implements BlockStateModel {
 		}
 
 		@Override
-		public TextureAtlasSprite particleIcon() {
+		public Material.Baked particleMaterial() {
 			return particle;
+		}
+
+		@Override
+		public int materialFlags() {
+			return ConnectedTextureBlockStateModel.this.materialFlags;
 		}
 	}
 

@@ -144,20 +144,20 @@ public class KnightPhantomModel extends HumanoidModel<KnightPhantomRenderState> 
 
 			stack.pushPose();
 			stack.translate(0.0F, 0.3f, 0.0F);
-			nodeCollector.submitModelPart(this.helmet, stack, RenderTypes.entityCutoutNoCull(PHANTOM_ARMOR_TEXTURE), light, OverlayTexture.NO_OVERLAY, null, false, false, ARGB.colorFromFloat(0.0625F, 1.0F, 1.0F, 1.0F), breakProgress, 0);
+			nodeCollector.submitModelPart(this.helmet, stack, RenderTypes.entityCutout(PHANTOM_ARMOR_TEXTURE), light, OverlayTexture.NO_OVERLAY, null, false, false, ARGB.colorFromFloat(0.0625F, 1.0F, 1.0F, 1.0F), breakProgress, 0);
 			stack.popPose();
 
 			stack.scale(1 / 1.1F, 1 / 1.1F, 1 / 1.1F);
 			stack.translate(0.0F, 0.25F, 0.0F);
-			nodeCollector.submitModelPart(this.head, stack, RenderTypes.entityCutoutNoCull(KnightPhantomRenderer.TEXTURE), light, overlay, null, false, false, color, breakProgress, 0);
+			nodeCollector.submitModelPart(this.head, stack, RenderTypes.entityCutout(KnightPhantomRenderer.TEXTURE), light, overlay, null, false, false, color, breakProgress, 0);
 
 			stack.popPose();
 		} else {
 			stack.translate(0.0F, 0.25F, 0.0F);
-			nodeCollector.submitModelPart(this.head, stack, RenderTypes.entityCutoutNoCull(KnightPhantomRenderer.TEXTURE), light, overlay, null, false, false, color, breakProgress, 0);
+			nodeCollector.submitModelPart(this.head, stack, RenderTypes.entityCutout(KnightPhantomRenderer.TEXTURE), light, overlay, null, false, false, color, breakProgress, 0);
 			stack.scale(1.1F, 1.1F, 1.1F);
 			stack.translate(0.0F, 0.05F, 0.0F);
-			nodeCollector.submitModelPart(this.helmet, stack, RenderTypes.entityCutoutNoCull(PHANTOM_ARMOR_TEXTURE), light, OverlayTexture.NO_OVERLAY, null, false, false, ARGB.colorFromFloat(0.0625F, 1.0F, 1.0F, 1.0F), breakProgress, 0);
+			nodeCollector.submitModelPart(this.helmet, stack, RenderTypes.entityCutout(PHANTOM_ARMOR_TEXTURE), light, OverlayTexture.NO_OVERLAY, null, false, false, ARGB.colorFromFloat(0.0625F, 1.0F, 1.0F, 1.0F), breakProgress, 0);
 		}
 	}
 }

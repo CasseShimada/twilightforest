@@ -101,7 +101,7 @@ public class TFTeleporter {
 					}
 				});
 				// the last param is just an object for tracking, don't worry about it using columnPos instead of blockpos
-				destDim.getChunkSource().addTicketWithRadius(TicketType.PORTAL, new ChunkPos(blockpos), 3);
+				destDim.getChunkSource().addTicketWithRadius(TicketType.PORTAL, ChunkPos.containing(blockpos), 3);
 			}
 
 			// replace with our own placement logic
@@ -137,8 +137,8 @@ public class TFTeleporter {
 					continue;
 				}
 
-				ChunkPos chunkPos = new ChunkPos(pos.offset(i1, 0, j1));
-				LevelChunk chunk = destDim.getChunkSource().getChunkNow(chunkPos.x, chunkPos.z);
+				ChunkPos chunkPos = ChunkPos.containing(pos.offset(i1, 0, j1));
+				LevelChunk chunk = destDim.getChunkSource().getChunkNow(chunkPos.x(), chunkPos.z());
 
 				// skip chunks that aren't generated
 				if (chunk == null || chunk.getFullStatus() == FullChunkStatus.INACCESSIBLE) {

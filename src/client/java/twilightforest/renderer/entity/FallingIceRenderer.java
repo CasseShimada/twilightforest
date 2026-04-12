@@ -6,10 +6,11 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.FallingBlockRenderState;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
+import twilightforest.client.renderer.RenderStateUtil;
 import twilightforest.entity.projectile.FallingIce;
 
 /**
@@ -48,10 +49,12 @@ public class FallingIceRenderer extends EntityRenderer<FallingIce, FallingBlockR
 	public void extractRenderState(FallingIce entity, FallingBlockRenderState state, float partialTick) {
 		super.extractRenderState(entity, state, partialTick);
 		BlockPos blockPos = BlockPos.containing(entity.getX(), entity.getBoundingBox().maxY, entity.getZ());
-		state.movingBlockRenderState.randomSeedPos = entity.getStartPos();
-		state.movingBlockRenderState.blockPos = blockPos;
-		state.movingBlockRenderState.blockState = entity.getBlockState();
-		state.movingBlockRenderState.biome = entity.level().getBiome(blockPos);
-		state.movingBlockRenderState.level = entity.level();
+		RenderStateUtil.populateMovingBlockRenderState(
+			state.movingBlockRenderState,
+			entity.getBlockState(),
+			entity.level() instanceof net.minecraft.client.multiplayer.ClientLevel level ? level : null,
+			blockPos,
+			entity.getStartPos()
+		);
 	}
 }

@@ -11,7 +11,7 @@ public class SortingParticle extends SingleQuadParticle {
 	private final double zStart;
 
 	public SortingParticle(ClientLevel level, double x, double y, double z, double x2, double y2, double z2, SpriteSet sprites) {
-		super(level, x, y, z, sprites.get(level.random));
+		super(level, x, y, z, sprites.get(level.getRandom()));
 		this.xd = x2;
 		this.yd = y2;
 		this.zd = z2;
@@ -45,10 +45,10 @@ public class SortingParticle extends SingleQuadParticle {
 	}
 
 	@Override
-	public int getLightColor(float partialTicks) {
+	public int getLightCoords(float partialTicks) {
 		float f = ((float) this.age + partialTicks) / (float) this.lifetime;
 		f = Mth.clamp(f, 0.0F, 1.0F);
-		int i = super.getLightColor(partialTicks);
+		int i = super.getLightCoords(partialTicks);
 		int j = i & 255;
 		int k = i >> 16 & 255;
 		j += (int) (f * 15.0F * 16.0F);

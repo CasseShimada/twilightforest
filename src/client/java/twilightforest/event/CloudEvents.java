@@ -2,8 +2,8 @@ package twilightforest.client.event;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.minecraft.client.GraphicsPreset;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -45,7 +45,7 @@ public class CloudEvents {
 
 	public static void register() {
 		ClientTickEvents.END_CLIENT_TICK.register(CloudEvents::tickWeatherEffects);
-		WorldRenderEvents.BEFORE_TRANSLUCENT.register(CloudEvents::renderPrecipitation);
+		LevelRenderEvents.BEFORE_TRANSLUCENT_TERRAIN.register(CloudEvents::renderPrecipitation);
 	}
 
 	protected static void tickWeatherEffects(Minecraft mc) {
@@ -152,7 +152,7 @@ public class CloudEvents {
 		}
 	}
 
-	protected static void renderPrecipitation(WorldRenderContext context) {
+	protected static void renderPrecipitation(LevelRenderContext context) {
 		if (TFConfig.getClientCloudBlockPrecipitationDistance() <= 0 || RENDER_HELPER.isEmpty()) return;
 
 		Minecraft minecraft = Minecraft.getInstance();
@@ -171,7 +171,7 @@ public class CloudEvents {
 		int floorZ = Mth.floor(camZ);
 
 		int renderDistance = useFancyGraphics(minecraft) ? 10 : 5;
-		VertexConsumer buffer = context.consumers().getBuffer(RenderTypes.weather(TFWeatherRenderer.RAIN_TEXTURES, Minecraft.useShaderTransparency()));
+		VertexConsumer buffer = context.bufferSource().getBuffer(RenderTypes.entityTranslucent(TFWeatherRenderer.RAIN_TEXTURES));
 		BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
 
 		for (PrecipitationRenderHelper helper : RENDER_HELPER) {
@@ -199,7 +199,7 @@ public class CloudEvents {
 			float alpha = ((1.0F - distance * distance) * 0.5F + 0.5F) * helper.precipitationLevel();
 
 			mutableBlockPos.set(roofX, Math.max(helper.rainOnY(), floorY), roofZ);
-			int lightColor = LevelRenderer.getLightColor(minecraft.level, mutableBlockPos);
+			int lightColor = LevelRenderer.getLightCoords(minecraft.level, mutableBlockPos);
 
 			buffer.addVertex((float) (roofX - camX - rainX + 0.5D), (float) (topY - camY), (float) (roofZ - camZ - rainZ + 0.5D))
 				.setUv(0.0F, (float) botY * 0.25F + uvOffset)

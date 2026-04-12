@@ -58,7 +58,7 @@ public class TFCavesCarver extends WorldCarver<CaveCarverConfiguration> {
 
 	@Override
 	public boolean carve(CarvingContext ctx, CaveCarverConfiguration config, ChunkAccess access, Function<BlockPos, Holder<Biome>> biomePos, RandomSource random, Aquifer aquifer, ChunkPos accessPos, CarvingMask mask) {
-		if (this.isHighlands && (Mth.clamp(LegacyLandmarkPlacements.manhattanDistanceFromLandmarkCenter(accessPos.x, accessPos.z), 0, 0b11) & 0b1) == 1)
+		if (this.isHighlands && (Mth.clamp(LegacyLandmarkPlacements.manhattanDistanceFromLandmarkCenter(accessPos.x(), accessPos.z()), 0, 0b11) & 0b1) == 1)
 			return false; // If highlands, enforces a binary grid (diagonal range of 4 chunks) of possible placements around the structure center, with center being one of the zero tiles
 
 		int i = SectionPos.sectionToBlockCoord(this.getRange() * 2 - 1);
@@ -168,7 +168,7 @@ public class TFCavesCarver extends WorldCarver<CaveCarverConfiguration> {
 
 			if (this.isHighlands) {
 				if (rand.nextInt(4) == 0 && this.canReplaceBlock(config, access.getBlockState(directionalRelative))) {
-					access.setBlockState(directionalRelative, this.wallBlocks.getState(rand, directionalRelative), Block.UPDATE_NONE);
+					access.setBlockState(directionalRelative, this.wallBlocks.getState((net.minecraft.world.level.WorldGenLevel) null, rand, directionalRelative), Block.UPDATE_NONE);
 				}
 			} else if (facing != Direction.DOWN && (facing == Direction.UP || access.getBlockState(directionalRelative.above()).isAir() || this.checkNoiseThreshold(directionalRelative, 0.25f, 0.5f))) { //here's the code for making dirt roofs. Enjoy :)
 				// Dirt is never placed below, always on roof, and typically to the sides
@@ -176,7 +176,7 @@ public class TFCavesCarver extends WorldCarver<CaveCarverConfiguration> {
 				BlockState neighboringBlock = access.getBlockState(directionalRelative);
 
 				if (neighboringBlock.is(BlockTags.BASE_STONE_OVERWORLD) || neighboringBlock.getFluidState().is(FluidTags.WATER)) {
-					access.setBlockState(directionalRelative, this.wallBlocks.getState(rand, directionalRelative), Block.UPDATE_NONE);
+					access.setBlockState(directionalRelative, this.wallBlocks.getState((net.minecraft.world.level.WorldGenLevel) null, rand, directionalRelative), Block.UPDATE_NONE);
 				}
 			}
 		}

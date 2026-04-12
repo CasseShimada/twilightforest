@@ -36,10 +36,10 @@ public record RuinedFoundationConfig(RuinedFoundationDimensions dimensions, Ruin
 
 	public record RuinedFoundationDimensions(IntProvider wallWidth, IntProvider wallHeights, IntProvider basementHeight, FloatProvider placeFloorTest) {
 		public static final MapCodec<RuinedFoundationDimensions> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-			IntProvider.codec(1, 16).fieldOf("wall_width").forGetter(RuinedFoundationDimensions::wallWidth),
-			IntProvider.codec(1, 32).fieldOf("wall_heights").forGetter(RuinedFoundationDimensions::wallHeights),
-			IntProvider.codec(0, 16).fieldOf("basement_height").forGetter(RuinedFoundationDimensions::basementHeight),
-			FloatProvider.codec(-8, 8).fieldOf("random_floor_chance").forGetter(RuinedFoundationDimensions::placeFloorTest)
+			IntProviders.codec(1, 16).fieldOf("wall_width").forGetter(RuinedFoundationDimensions::wallWidth),
+			IntProviders.codec(1, 32).fieldOf("wall_heights").forGetter(RuinedFoundationDimensions::wallHeights),
+			IntProviders.codec(0, 16).fieldOf("basement_height").forGetter(RuinedFoundationDimensions::basementHeight),
+			FloatProviders.codec(-8.0F, 8.0F).fieldOf("random_floor_chance").forGetter(RuinedFoundationDimensions::placeFloorTest)
 		).apply(inst, RuinedFoundationDimensions::new));
 
 		public static RuinedFoundationDimensions makeDefault() {

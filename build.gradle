@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.16.0-alpha.20'
+	id 'net.fabricmc.fabric-loom' version '1.15.5'
 	id 'maven-publish'
 	id 'eclipse'
 	id 'idea'
@@ -15,20 +15,29 @@ base {
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
+		languageVersion = JavaLanguageVersion.of(25)
 	}
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
 	withSourcesJar()
 }
 
 tasks.withType(JavaCompile).configureEach {
 	options.compilerArgs << "-Xlint:all,-processing,-deprecation,-this-escape" << "-Werror"
 	options.encoding = 'UTF-8'
-	options.release.set(21)
+	options.release.set(25)
 }
 
 loom {
 	accessWidenerPath = file("src/main/resources/${project.mod_id}.accesswidener")
 	splitEnvironmentSourceSets()
+
+	mods {
+		"${project.mod_id}" {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
 
 	runs {
 		client {
@@ -93,13 +102,12 @@ repositories {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings loom.officialMojangMappings()
 
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
 	// Optional runtime/compile-time integrations.
-	modCompileOnly "mezz.jei:jei-${project.minecraft_version}-fabric:${project.jei_version}"
+	compileOnly "mezz.jei:jei-${project.minecraft_version}-fabric:${project.jei_version}"
 	compileOnly "javax.annotation:javax.annotation-api:1.3.2"
 	compileOnly "com.google.code.findbugs:jsr305:3.0.2"
 	compileOnly "com.google.errorprone:error_prone_annotations:2.21.1"

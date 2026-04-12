@@ -7,9 +7,7 @@ import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import twilightforest.init.TFDataAttachments;
-import twilightforest.init.TFLoot;
 
 import java.util.Set;
 
@@ -18,13 +16,13 @@ public record GiantPickUsedCondition(LootContext.EntityTarget target) implements
 	public static final MapCodec<GiantPickUsedCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(o -> o.target)).apply(instance, GiantPickUsedCondition::new));
 
 	@Override
-	public LootItemConditionType getType() {
-		return TFLoot.GIANT_PICK_USED_CONDITION.get();
+	public Set<ContextKey<?>> getReferencedContextParams() {
+		return ImmutableSet.of(this.target.contextParam());
 	}
 
 	@Override
-	public Set<ContextKey<?>> getReferencedContextParams() {
-		return ImmutableSet.of(this.target.contextParam());
+	public MapCodec<? extends LootItemCondition> codec() {
+		return CODEC;
 	}
 
 	@Override

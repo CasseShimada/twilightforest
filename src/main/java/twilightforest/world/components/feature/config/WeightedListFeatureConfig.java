@@ -25,14 +25,13 @@ public class WeightedListFeatureConfig implements FeatureConfiguration {
 		return this.randomFeatures.getRandom(random);
 	}
 
-	@Override
-	public Stream<ConfiguredFeature<?, ?>> getFeatures() {
+		public Stream<ConfiguredFeature<?, ?>> getFeatures() {
 		return this.randomFeatures.unwrap()
 			.stream()
 			.map(Weighted::value)
 			.map(Holder::value)
 			.map(PlacedFeature::feature)
 			.map(Holder::value)
-			.flatMap(ConfiguredFeature::getFeatures);
+			.flatMap(cfg -> java.util.stream.Stream.of(cfg));
 	}
 }

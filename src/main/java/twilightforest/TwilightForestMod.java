@@ -7,14 +7,15 @@ import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleBuilder;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.registry.FuelRegistryEvents;
+import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
+import net.fabricmc.fabric.api.registry.FuelValueEvents;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.Registry;
-import net.minecraft.core.cauldron.CauldronInteraction;
+import net.minecraft.core.cauldron.CauldronInteractions;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -58,6 +59,7 @@ import twilightforest.util.Restriction;
 import twilightforest.util.SaveDebug;
 import twilightforest.util.TFRemapper;
 import twilightforest.util.woods.WoodPalette;
+import twilightforest.mixin.accessor.CauldronInteractionDispatcherAccessor;
 import twilightforest.world.components.biomesources.TFBiomeProvider;
 import twilightforest.world.components.layer.BiomeDensitySource;
 import twilightforest.world.components.spelothem.StalactiteReloadListener;
@@ -183,10 +185,11 @@ public final class TwilightForestMod implements ModInitializer {
 		TFEventHandlers.register();
 		TFCreativeTabs.registerVanillaTabs();
 
-		CauldronInteraction.WATER.map().put(TFItems.ARCTIC_HELMET.get(), TwilightForestMod::cleanDyedItem);
-		CauldronInteraction.WATER.map().put(TFItems.ARCTIC_CHESTPLATE.get(), TwilightForestMod::cleanDyedItem);
-		CauldronInteraction.WATER.map().put(TFItems.ARCTIC_LEGGINGS.get(), TwilightForestMod::cleanDyedItem);
-		CauldronInteraction.WATER.map().put(TFItems.ARCTIC_BOOTS.get(), TwilightForestMod::cleanDyedItem);
+		CauldronInteractionDispatcherAccessor twilightforest$waterCauldron = (CauldronInteractionDispatcherAccessor) (Object) CauldronInteractions.WATER;
+		twilightforest$waterCauldron.twilightforest$put(TFItems.ARCTIC_HELMET.get(), TwilightForestMod::cleanDyedItem);
+		twilightforest$waterCauldron.twilightforest$put(TFItems.ARCTIC_CHESTPLATE.get(), TwilightForestMod::cleanDyedItem);
+		twilightforest$waterCauldron.twilightforest$put(TFItems.ARCTIC_LEGGINGS.get(), TwilightForestMod::cleanDyedItem);
+		twilightforest$waterCauldron.twilightforest$put(TFItems.ARCTIC_BOOTS.get(), TwilightForestMod::cleanDyedItem);
 
 		StrippableBlockRegistry.register(TFBlocks.TWILIGHT_OAK_LOG.get(), TFBlocks.STRIPPED_TWILIGHT_OAK_LOG.get());
 		StrippableBlockRegistry.register(TFBlocks.CANOPY_LOG.get(), TFBlocks.STRIPPED_CANOPY_LOG.get());
@@ -206,7 +209,7 @@ public final class TwilightForestMod implements ModInitializer {
 		StrippableBlockRegistry.register(TFBlocks.MINING_WOOD.get(), TFBlocks.STRIPPED_MINING_WOOD.get());
 		StrippableBlockRegistry.register(TFBlocks.SORTING_WOOD.get(), TFBlocks.STRIPPED_SORTING_WOOD.get());
 
-		FuelRegistryEvents.BUILD.register((builder, context) -> {
+		FuelValueEvents.BUILD.register((builder, context) -> {
 			int burnTime = 300;
 			builder.add(TFItems.HOLLOW_TWILIGHT_OAK_LOG.get(), burnTime);
 			builder.add(TFItems.HOLLOW_CANOPY_LOG.get(), burnTime);
@@ -229,35 +232,35 @@ public final class TwilightForestMod implements ModInitializer {
 			builder.add(TFItems.HOLLOW_PALE_OAK_LOG.get(), burnTime);
 		});
 
-		FireBlock fireblock = (FireBlock) Blocks.FIRE;
-		fireblock.setFlammable(TFBlocks.TWILIGHT_OAK_LOG.get(), 5, 5);
-		fireblock.setFlammable(TFBlocks.TWILIGHT_OAK_WOOD.get(), 5, 5);
-		fireblock.setFlammable(TFBlocks.STRIPPED_TWILIGHT_OAK_LOG.get(), 5, 5);
-		fireblock.setFlammable(TFBlocks.STRIPPED_TWILIGHT_OAK_WOOD.get(), 5, 5);
-		fireblock.setFlammable(TFBlocks.HOLLOW_TWILIGHT_OAK_LOG_HORIZONTAL.get(), 5, 5);
-		fireblock.setFlammable(TFBlocks.HOLLOW_TWILIGHT_OAK_LOG_VERTICAL.get(), 5, 5);
-		fireblock.setFlammable(TFBlocks.HOLLOW_TWILIGHT_OAK_LOG_CLIMBABLE.get(), 5, 5);
-		fireblock.setFlammable(TFBlocks.TWILIGHT_OAK_BANISTER.get(), 5, 20);
-		fireblock.setFlammable(TFBlocks.TWILIGHT_OAK_PLANKS.get(), 5, 20);
-		fireblock.setFlammable(TFBlocks.TWILIGHT_OAK_SLAB.get(), 5, 20);
-		fireblock.setFlammable(TFBlocks.TWILIGHT_OAK_STAIRS.get(), 5, 20);
-		fireblock.setFlammable(TFBlocks.TWILIGHT_OAK_FENCE.get(), 5, 20);
-		fireblock.setFlammable(TFBlocks.TWILIGHT_OAK_GATE.get(), 5, 20);
+		FlammableBlockRegistry flammables = FlammableBlockRegistry.getDefaultInstance();
+		flammables.add(TFBlocks.TWILIGHT_OAK_LOG.get(), 5, 5);
+		flammables.add(TFBlocks.TWILIGHT_OAK_WOOD.get(), 5, 5);
+		flammables.add(TFBlocks.STRIPPED_TWILIGHT_OAK_LOG.get(), 5, 5);
+		flammables.add(TFBlocks.STRIPPED_TWILIGHT_OAK_WOOD.get(), 5, 5);
+		flammables.add(TFBlocks.HOLLOW_TWILIGHT_OAK_LOG_HORIZONTAL.get(), 5, 5);
+		flammables.add(TFBlocks.HOLLOW_TWILIGHT_OAK_LOG_VERTICAL.get(), 5, 5);
+		flammables.add(TFBlocks.HOLLOW_TWILIGHT_OAK_LOG_CLIMBABLE.get(), 5, 5);
+		flammables.add(TFBlocks.TWILIGHT_OAK_BANISTER.get(), 5, 20);
+		flammables.add(TFBlocks.TWILIGHT_OAK_PLANKS.get(), 5, 20);
+		flammables.add(TFBlocks.TWILIGHT_OAK_SLAB.get(), 5, 20);
+		flammables.add(TFBlocks.TWILIGHT_OAK_STAIRS.get(), 5, 20);
+		flammables.add(TFBlocks.TWILIGHT_OAK_FENCE.get(), 5, 20);
+		flammables.add(TFBlocks.TWILIGHT_OAK_GATE.get(), 5, 20);
 
-		fireblock.setFlammable(TFBlocks.CANOPY_LOG.get(), 5, 5);
-		fireblock.setFlammable(TFBlocks.CANOPY_WOOD.get(), 5, 5);
-		fireblock.setFlammable(TFBlocks.STRIPPED_CANOPY_LOG.get(), 5, 5);
-		fireblock.setFlammable(TFBlocks.STRIPPED_CANOPY_WOOD.get(), 5, 5);
-		fireblock.setFlammable(TFBlocks.HOLLOW_CANOPY_LOG_HORIZONTAL.get(), 5, 5);
-		fireblock.setFlammable(TFBlocks.HOLLOW_CANOPY_LOG_VERTICAL.get(), 5, 5);
-		fireblock.setFlammable(TFBlocks.HOLLOW_CANOPY_LOG_CLIMBABLE.get(), 5, 5);
-		fireblock.setFlammable(TFBlocks.CANOPY_BANISTER.get(), 5, 20);
-		fireblock.setFlammable(TFBlocks.CANOPY_PLANKS.get(), 5, 20);
-		fireblock.setFlammable(TFBlocks.CANOPY_SLAB.get(), 5, 20);
-		fireblock.setFlammable(TFBlocks.CANOPY_STAIRS.get(), 5, 20);
-		fireblock.setFlammable(TFBlocks.CANOPY_FENCE.get(), 5, 20);
-		fireblock.setFlammable(TFBlocks.CANOPY_GATE.get(), 5, 20);
-		fireblock.setFlammable(TFBlocks.CANOPY_BOOKSHELF.get(), 5, 20);
+		flammables.add(TFBlocks.CANOPY_LOG.get(), 5, 5);
+		flammables.add(TFBlocks.CANOPY_WOOD.get(), 5, 5);
+		flammables.add(TFBlocks.STRIPPED_CANOPY_LOG.get(), 5, 5);
+		flammables.add(TFBlocks.STRIPPED_CANOPY_WOOD.get(), 5, 5);
+		flammables.add(TFBlocks.HOLLOW_CANOPY_LOG_HORIZONTAL.get(), 5, 5);
+		flammables.add(TFBlocks.HOLLOW_CANOPY_LOG_VERTICAL.get(), 5, 5);
+		flammables.add(TFBlocks.HOLLOW_CANOPY_LOG_CLIMBABLE.get(), 5, 5);
+		flammables.add(TFBlocks.CANOPY_BANISTER.get(), 5, 20);
+		flammables.add(TFBlocks.CANOPY_PLANKS.get(), 5, 20);
+		flammables.add(TFBlocks.CANOPY_SLAB.get(), 5, 20);
+		flammables.add(TFBlocks.CANOPY_STAIRS.get(), 5, 20);
+		flammables.add(TFBlocks.CANOPY_FENCE.get(), 5, 20);
+		flammables.add(TFBlocks.CANOPY_GATE.get(), 5, 20);
+		flammables.add(TFBlocks.CANOPY_BOOKSHELF.get(), 5, 20);
 
 		LootEvents.GIANT_PICK_CONVERSIONS.put(Blocks.COBBLESTONE, TFBlocks.GIANT_COBBLESTONE.get().asItem());
 		LootEvents.GIANT_PICK_CONVERSIONS.put(Blocks.OAK_LOG, TFBlocks.GIANT_LOG.get().asItem());
@@ -270,7 +273,7 @@ public final class TwilightForestMod implements ModInitializer {
 	}
 
 	private static InteractionResult cleanDyedItem(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, ItemStack stack) {
-		if (!stack.is(ItemTags.DYEABLE) || !stack.has(DataComponents.DYED_COLOR)) {
+		if (!stack.has(DataComponents.DYED_COLOR)) {
 			return InteractionResult.PASS;
 		}
 

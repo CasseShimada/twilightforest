@@ -48,7 +48,7 @@ public final class TFSkyRenderer implements AutoCloseable {
 		setupFog.run();
 
 		PoseStack posestack = new PoseStack();
-		net.minecraft.client.renderer.state.SkyRenderState skyState = new net.minecraft.client.renderer.state.SkyRenderState();
+		net.minecraft.client.renderer.state.level.SkyRenderState skyState = new net.minecraft.client.renderer.state.level.SkyRenderState();
 		skyRenderer.extractRenderState(level, partialTicks, camera, skyState);
 		int k = skyState.skyColor;
 		skyRenderer.renderSkyDisc(k);

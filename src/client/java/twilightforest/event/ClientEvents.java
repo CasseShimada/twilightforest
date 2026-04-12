@@ -22,8 +22,8 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.RenderStateDataKey;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -31,11 +31,10 @@ import net.minecraft.client.gui.components.SplashRenderer;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.ShapeRenderer;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.rendertype.OutputTarget;
-import net.minecraft.client.renderer.state.BlockOutlineRenderState;
+import net.minecraft.client.renderer.state.level.BlockOutlineRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -73,6 +72,7 @@ import twilightforest.block.entity.GrowingBeanstalkBlockEntity;
 import twilightforest.client.BugModelAnimationHelper;
 import twilightforest.client.OptifineWarningScreen;
 import twilightforest.client.renderer.TFRenderPipelines;
+import twilightforest.client.renderer.RenderStateUtil;
 import twilightforest.config.TFConfig;
 import twilightforest.events.HostileMountEvents;
 import twilightforest.init.TFDataAttachments;
@@ -118,12 +118,12 @@ public class ClientEvents {
 		ItemTooltipCallback.EVENT.register(ClientEvents::addCustomTooltips);
 		ItemTooltipCallback.EVENT.register(ClientEvents::translateBookAuthor);
 		ClientTickEvents.END_CLIENT_TICK.register(ClientEvents::clientTick);
-		WorldRenderEvents.BEFORE_TRANSLUCENT.register(ClientEvents::renderAurora);
-		WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register(ClientEvents::renderGiantBlockOutlines);
+		LevelRenderEvents.BEFORE_TRANSLUCENT_TERRAIN.register(ClientEvents::renderAurora);
+		LevelRenderEvents.BEFORE_BLOCK_OUTLINE.register(ClientEvents::renderGiantBlockOutlines);
 
 		HudElementRegistry.replaceElement(VanillaHudElements.MOUNT_HEALTH, original -> (context, tickCounter) -> {
 			if (!HostileMountEvents.isRidingUnfriendly(Minecraft.getInstance().player)) {
-				original.render(context, tickCounter);
+				original.extractRenderState(context, tickCounter);
 			}
 		});
 
@@ -181,8 +181,8 @@ public class ClientEvents {
 					}
 				}
 				for (ChunkPos pos : chunksInRange) {
-					if (mc.level.getChunk(pos.x, pos.z, ChunkStatus.FULL, false) != null) {
-						List<BlockEntity> beanstalksInChunk = mc.level.getChunk(pos.x, pos.z).getBlockEntities().values().stream()
+					if (mc.level.getChunk(pos.x(), pos.z(), ChunkStatus.FULL, false) != null) {
+						List<BlockEntity> beanstalksInChunk = mc.level.getChunk(pos.x(), pos.z()).getBlockEntities().values().stream()
 							.filter(blockEntity -> blockEntity instanceof GrowingBeanstalkBlockEntity beanstalkBlock && beanstalkBlock.isBeanstalkRumbling())
 							.toList();
 						if (!beanstalksInChunk.isEmpty()) {
@@ -233,7 +233,7 @@ public class ClientEvents {
 		}
 	}
 
-	private static void renderAurora(WorldRenderContext context) {
+	private static void renderAurora(LevelRenderContext context) {
 		Minecraft mc = Minecraft.getInstance();
 		if (mc.level == null) return;
 
@@ -241,7 +241,7 @@ public class ClientEvents {
 		float alpha = (Mth.lerp(partialTick, lastAurora, aurora)) / 60F * 0.5F;
 		if (alpha <= 0.001F) return;
 
-		final float scale = 2048F * (mc.gameRenderer.getRenderDistance() / 32F);
+		final float scale = 2048F * (mc.options.renderDistance().get() / 32F);
 		Vec3 pos = getCameraPosition();
 		float y = (float) (256F - pos.y());
 
@@ -334,12 +334,12 @@ public class ClientEvents {
 		consumer.addVertex(x, y, z)
 			.setUv(u, v)
 			.setColor(1.0F, 1.0F, 1.0F, alpha)
-			.setLight(LightTexture.FULL_BRIGHT)
+			.setLight(RenderStateUtil.FULL_BRIGHT)
 			.setOverlay(OverlayTexture.NO_OVERLAY)
 			.setNormal(0.0F, 1.0F, 0.0F);
 	}
 
-	private static boolean renderGiantBlockOutlines(WorldRenderContext context, BlockOutlineRenderState outlineState) {
+	private static boolean renderGiantBlockOutlines(LevelRenderContext context, BlockOutlineRenderState outlineState) {
 		Minecraft mc = Minecraft.getInstance();
 		if (mc.level == null) {
 			return true;
@@ -361,11 +361,11 @@ public class ClientEvents {
 
 			if (!state.isAir() && player.level().getWorldBorder().isWithinBounds(pos)) {
 				BlockPos offsetPos = new BlockPos(pos.getX() & ~0b11, pos.getY() & ~0b11, pos.getZ() & ~0b11);
-				PoseStack poseStack = context.matrices();
+				PoseStack poseStack = context.poseStack();
 				Vec3 xyz = Vec3.atLowerCornerOf(offsetPos).subtract(getCameraPosition());
 				switch (outlineMode) {
 					case SECONDARY -> {
-						VertexConsumer consumer = context.consumers().getBuffer(RenderTypes.secondaryBlockOutline());
+						VertexConsumer consumer = context.bufferSource().getBuffer(RenderTypes.secondaryBlockOutline());
 						ShapeRenderer.renderShape(poseStack, consumer, GIANT_BLOCK, xyz.x(), xyz.y(), xyz.z(), 0xFF000000, 7.0F);
 					}
 					case SAFE_LINES, AUTO -> renderGiantOutlineLines(context, poseStack, xyz);
@@ -406,8 +406,8 @@ public class ClientEvents {
 		}
 	}
 
-	private static void renderGiantOutlineLines(WorldRenderContext context, PoseStack poseStack, Vec3 xyz) {
-		VertexConsumer consumer = context.consumers().getBuffer(RenderTypes.lines());
+	private static void renderGiantOutlineLines(LevelRenderContext context, PoseStack poseStack, Vec3 xyz) {
+		VertexConsumer consumer = context.bufferSource().getBuffer(RenderTypes.lines());
 		PoseStack.Pose pose = poseStack.last();
 		GIANT_BLOCK.forAllEdges((x1, y1, z1, x2, y2, z2) -> {
 				float xNormal = (float) (x2 - x1);

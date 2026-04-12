@@ -19,7 +19,7 @@ public class CustomTextureParticle extends SingleQuadParticle {
 	}
 
 	protected CustomTextureParticle(ClientLevel level, double x, double y, double z, boolean fullBright, SpriteSet sprites) {
-		super(level, x, y, z, sprites.get(level.random));
+		super(level, x, y, z, sprites.get(level.getRandom()));
 		this.gravity = 1.0F;
 		this.quadSize /= 2.0F;
 		this.uo = this.random.nextFloat() * 3.0F;
@@ -33,8 +33,8 @@ public class CustomTextureParticle extends SingleQuadParticle {
 	}
 
 	@Override
-	public int getLightColor(float partialTick) {
-		return this.fullBright ? 0xF000F0 : super.getLightColor(partialTick);
+	public int getLightCoords(float partialTick) {
+		return this.fullBright ? 0xF000F0 : super.getLightCoords(partialTick);
 	}
 
 	@Override

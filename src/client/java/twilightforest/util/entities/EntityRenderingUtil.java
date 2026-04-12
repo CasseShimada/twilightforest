@@ -4,10 +4,8 @@ import com.mojang.math.Axis;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.entity.state.ItemEntityRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
@@ -41,6 +39,7 @@ public class EntityRenderingUtil {
 	private static final Set<EntityType<?>> IGNORED_ENTITIES = new HashSet<>();
 	private static final Map<EntityType<?>, Entity> ENTITY_MAP = new HashMap<>();
 	private static final float BASE_Y_OFFSET = 0.0625F;
+	private static final int FULL_BRIGHT = 15728880;
 
 	@Nullable
 	public static Entity fetchEntity(EntityType<?> type, @Nullable Level level) {
@@ -62,7 +61,7 @@ public class EntityRenderingUtil {
 		return null;
 	}
 
-	public static void renderEntity(GuiGraphics graphics, EntityType<?> type, int size) {
+	public static void renderEntity(GuiGraphicsExtractor graphics, EntityType<?> type, int size) {
 		Entity entity = fetchEntity(type, Minecraft.getInstance().level);
 		if (entity instanceof LivingEntity living) {
 			// scale down large mobs, but don't scale up small ones
@@ -83,7 +82,7 @@ public class EntityRenderingUtil {
 		}
 	}
 
-	private static void renderTheEntity(GuiGraphics graphics, int size, int scale, LivingEntity entity) {
+	private static void renderTheEntity(GuiGraphicsExtractor graphics, int size, int scale, LivingEntity entity) {
 		EntityRenderState state = extractRenderState(entity, 1.0F);
 		if (state instanceof LivingEntityRenderState livingState) {
 			livingState.bodyRot = 180.0F;
@@ -105,15 +104,13 @@ public class EntityRenderingUtil {
 		rotation.mul(Axis.XN.rotationDegrees(35.0F));
 		rotation.mul(Axis.YN.rotationDegrees(145.0F));
 
-		graphics.submitEntityRenderState(state, finalScale, translation, rotation, camera, 0, 0, size, size);
+		graphics.entity(state, finalScale, translation, rotation, camera, 0, 0, size, size);
 	}
 
 	private static EntityRenderState extractRenderState(Entity entity, float partialTicks) {
 		EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
-		@SuppressWarnings("unchecked")
-		EntityRenderer<Entity, EntityRenderState> renderer = (EntityRenderer<Entity, EntityRenderState>) dispatcher.getRenderer(entity);
-		EntityRenderState state = renderer.createRenderState(entity, partialTicks);
-		state.lightCoords = LightTexture.FULL_BRIGHT;
+		EntityRenderState state = dispatcher.extractEntity(entity, partialTicks);
+		state.lightCoords = FULL_BRIGHT;
 		state.shadowPieces.clear();
 		state.outlineColor = 0;
 		return state;
@@ -133,7 +130,7 @@ public class EntityRenderingUtil {
 		return 0.0F;
 	}
 
-	public static void renderItemEntity(GuiGraphics graphics, ItemStack stack, float bobOffset) {
+	public static void renderItemEntity(GuiGraphicsExtractor graphics, ItemStack stack, float bobOffset) {
 		if (stack.isEmpty()) return;
 		Minecraft minecraft = Minecraft.getInstance();
 		Level level = minecraft.level;
@@ -154,7 +151,7 @@ public class EntityRenderingUtil {
 		rotation.mul(Axis.XN.rotationDegrees(35.0F));
 		rotation.mul(Axis.YN.rotationDegrees(145.0F));
 
-		graphics.submitEntityRenderState(state, 50.0F, translation, rotation, camera, 0, 0, 32, 32);
+		graphics.entity(state, 50.0F, translation, rotation, camera, 0, 0, 32, 32);
 	}
 
 	public static List<Component> getMobTooltip(EntityType<?> type, ResourceKey<EntityType<?>> key) {

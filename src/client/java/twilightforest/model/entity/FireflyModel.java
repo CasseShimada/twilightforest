@@ -23,7 +23,7 @@ public class FireflyModel extends Model<Void> {
 	private final ModelPart glow;
 
 	public FireflyModel(ModelPart root) {
-		super(root, RenderTypes::entityCutoutNoCull);
+		super(root, RenderTypes::entityCutout);
 		this.glow = root.getChild(PART_GLOW);
 	}
 

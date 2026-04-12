@@ -75,7 +75,7 @@ public class HostileWolf extends Monster {
 
 	public Identifier getTexture() {
 		WolfVariant wolfvariant = this.getVariant().value();
-		return (this.isAggressive() ? wolfvariant.assetInfo().angry() : wolfvariant.assetInfo().wild()).id();
+		return (this.isAggressive() ? wolfvariant.adultInfo().angry() : wolfvariant.adultInfo().wild()).id();
 	}
 
 	public Holder<WolfVariant> getVariant() {
@@ -140,7 +140,7 @@ public class HostileWolf extends Monster {
 
 	@Override
 	protected void playStepSound(BlockPos pos, BlockState state) {
-		this.playSound(SoundEvents.WOLF_STEP, 0.15F, 1.0F);
+		this.playSound(SoundEvents.WOLF_STEP.value(), 0.15F, 1.0F);
 	}
 
 	@Override

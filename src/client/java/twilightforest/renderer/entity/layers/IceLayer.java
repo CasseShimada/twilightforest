@@ -2,6 +2,8 @@ package twilightforest.client.renderer.entity.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.MovingBlockRenderState;
 import net.fabricmc.fabric.api.client.rendering.v1.FabricRenderState;
 import net.fabricmc.fabric.api.client.rendering.v1.RenderStateDataKey;
 import net.minecraft.client.model.EntityModel;
@@ -9,11 +11,12 @@ import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
-import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import twilightforest.TwilightForestMod;
 import twilightforest.client.model.entity.DeathTomeModel;
+import twilightforest.client.renderer.RenderStateUtil;
 import twilightforest.potions.FrostedEffect;
 
 public class IceLayer<S extends LivingEntityRenderState, M extends EntityModel<S>> extends RenderLayer<S, M> {
@@ -53,7 +56,10 @@ public class IceLayer<S extends LivingEntityRenderState, M extends EntityModel<S
 			poseStack.mulPose(Axis.ZP.rotationDegrees(this.random.nextFloat() * 360F));
 			poseStack.translate(-0.5F, -0.5F, -0.5F);
 
-			nodeCollector.submitBlock(poseStack, Blocks.ICE.defaultBlockState(), packedLight, OverlayTexture.NO_OVERLAY, state.outlineColor);
+			MovingBlockRenderState iceState = new MovingBlockRenderState();
+			BlockPos pos = BlockPos.containing(state.x, state.y, state.z);
+			RenderStateUtil.populateMovingBlockRenderState(iceState, Blocks.ICE.defaultBlockState(), Minecraft.getInstance().level, pos, pos);
+			nodeCollector.submitMovingBlock(poseStack, iceState);
 			poseStack.popPose();
 		}
 	}

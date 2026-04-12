@@ -220,7 +220,7 @@ public class QuestRamModel extends EntityModel<QuestingRamRenderState> implement
 			boolean previousSkipDraw = segment.skipDraw;
 			segment.skipDraw = false;
 			int dyeRgb = ColorLerper.Type.SHEEP.getColor(DyeColor.byId(i));
-			nodeCollector.submitModelPart(segment, stack, RenderTypes.entityCutoutNoCull(QuestRamRenderer.TEXTURE), light, overlay, null, false, false, dyeRgb, breakProgress, 0);
+			nodeCollector.submitModelPart(segment, stack, RenderTypes.entityCutout(QuestRamRenderer.TEXTURE), light, overlay, null, false, false, dyeRgb, breakProgress, 0);
 			segment.skipDraw = previousSkipDraw;
 		}
 	}
@@ -230,7 +230,7 @@ public class QuestRamModel extends EntityModel<QuestingRamRenderState> implement
 		stack.scale(0.67F, 0.67F, 0.67F);
 		stack.translate(0.0F, 0.5F, context != ItemDisplayContext.NONE ? 0.5F : 0.67F);
 
-		nodeCollector.submitModelPart(this.head, stack, RenderTypes.entityCutoutNoCull(QuestRamRenderer.TEXTURE), light, overlay, null, false, false, color, breakProgress, 0);
+		nodeCollector.submitModelPart(this.head, stack, RenderTypes.entityCutout(QuestRamRenderer.TEXTURE), light, overlay, null, false, false, color, breakProgress, 0);
 		stack.pushPose();
 		stack.scale(1.025F, 1.025F, 1.025F);
 		nodeCollector.submitModelPart(this.head, stack, RenderTypes.entityTranslucent(QuestRamRenderer.LINE_TEXTURE), 0xF000F0, overlay, null, false, false, color, breakProgress, 0);

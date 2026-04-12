@@ -37,7 +37,7 @@ public class ToolEvents {
 		if (arrow.getOwner() == result.getEntity()) {
 			return;
 		}
-		if (result.getEntity().getType().is(ConventionalEntityTypeTags.BOSSES)) {
+		if (result.getEntity().getType().builtInRegistryHolder().is(ConventionalEntityTypeTags.BOSSES)) {
 			return;
 		}
 		if (!TFDataAttachments.has(arrow, TFDataAttachments.ENDER_BOW_ARROW)) {

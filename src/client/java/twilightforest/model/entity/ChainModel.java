@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 public class ChainModel extends Model<Void> {
 
 	public ChainModel(ModelPart root) {
-		super(root, RenderTypes::entityCutoutNoCull);
+		super(root, RenderTypes::entityCutout);
 	}
 
 	public static LayerDefinition create() {

@@ -5,8 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.fabricmc.fabric.api.client.model.loading.v1.UnbakedModelDeserializer;
-import net.minecraft.client.renderer.block.model.BlockElement;
-import net.minecraft.client.renderer.block.model.BlockModel;
+import net.minecraft.client.resources.model.cuboid.CuboidModelElement;
+import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.util.GsonHelper;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,7 +20,7 @@ public class ForceFieldModelLoader implements UnbakedModelDeserializer {
 
 	@Override
 	public UnbakedForceFieldModel deserialize(JsonObject json, JsonDeserializationContext context) throws JsonParseException {
-		Map<BlockElement, Condition> elementsAndConditions = new HashMap<>();
+		Map<CuboidModelElement, Condition> elementsAndConditions = new HashMap<>();
 
 		if (json.has("elements")) {
 			for (JsonElement jsonElement : GsonHelper.getAsJsonArray(json, "elements")) {
@@ -37,14 +37,14 @@ public class ForceFieldModelLoader implements UnbakedModelDeserializer {
 						}
 					}
 				}
-				elementsAndConditions.put(context.deserialize(jsonElement, BlockElement.class), new Condition(direction, b, parents));
+				elementsAndConditions.put(context.deserialize(jsonElement, CuboidModelElement.class), new Condition(direction, b, parents));
 			}
 		}
 
 		JsonObject stripped = json.deepCopy();
 		stripped.remove("fabric:type");
 		stripped.remove("loader");
-		BlockModel baseModel = context.deserialize(stripped, BlockModel.class);
+		UnbakedModel baseModel = context.deserialize(stripped, UnbakedModel.class);
 
 		return new UnbakedForceFieldModel(baseModel, elementsAndConditions);
 	}

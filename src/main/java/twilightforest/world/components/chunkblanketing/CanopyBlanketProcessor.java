@@ -8,6 +8,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -37,16 +38,16 @@ public record CanopyBlanketProcessor(HolderSet<Biome> biomesForApplication, Bloc
 	).apply(inst, CanopyBlanketProcessor::new));
 
 	@Override
-	public void processChunk(RandomSource random, Function<BlockPos, Holder<Biome>> biomeGetter, ChunkAccess chunkAccess) {
+	public void processChunk(WorldGenRegion worldGenRegion, RandomSource random, Function<BlockPos, Holder<Biome>> biomeGetter, ChunkAccess chunkAccess) {
 		Collection<Structure> avoidStructures = this.avoidStructures.stream().map(Holder::value).toList();
 
-		addDarkForestCanopy(biomeGetter, chunkAccess, this.height, this.biomesForApplication, this.blockState, avoidStructures);
+		addDarkForestCanopy(worldGenRegion, biomeGetter, chunkAccess, this.height, this.biomesForApplication, this.blockState, avoidStructures);
 	}
 
 	/**
 	 * Adds dark forest canopy.  This version uses the "unzoomed" array of biomes used in land generation to determine how many of the nearby blocks are dark forest
 	 */
-	private static boolean addDarkForestCanopy(Function<BlockPos, Holder<Biome>> biomeGetter, ChunkAccess chunk, int height, HolderSet<Biome> biomeFilter, BlockStateProvider canopyBlock, Collection<Structure> avoidStructures) {
+	private static boolean addDarkForestCanopy(WorldGenRegion worldGenRegion, Function<BlockPos, Holder<Biome>> biomeGetter, ChunkAccess chunk, int height, HolderSet<Biome> biomeFilter, BlockStateProvider canopyBlock, Collection<Structure> avoidStructures) {
 		ChunkPos chunkPos = chunk.getPos();
 		BlockPos chunkOrigin = chunkPos.getWorldPosition();
 		int[] thicks = new int[5 * 5];
@@ -72,7 +73,7 @@ public record CanopyBlanketProcessor(HolderSet<Biome> biomesForApplication, Bloc
 		Set<Structure> structuresThroughChunk = chunk.getAllReferences().keySet();
 		boolean clearingForStructureNearby = !(structuresThroughChunk.isEmpty() || Collections.disjoint(structuresThroughChunk, avoidStructures));
 		// make sure we're not too close to the tower. Skip that method call if the center pos won't be checked at all, substitute with zero pos instead
-		BlockPos nearestCenter = clearingForStructureNearby ? LegacyLandmarkPlacements.getNearestCenterXZ(chunkPos.x, chunkPos.z, height).subtract(chunkOrigin) : BlockPos.ZERO;
+		BlockPos nearestCenter = clearingForStructureNearby ? LegacyLandmarkPlacements.getNearestCenterXZ(chunkPos.x(), chunkPos.z(), height).subtract(chunkOrigin) : BlockPos.ZERO;
 		int hx = nearestCenter.getX();
 		int hz = nearestCenter.getZ();
 
@@ -122,7 +123,8 @@ public record CanopyBlanketProcessor(HolderSet<Biome> biomesForApplication, Bloc
 					int treeTop = treeBottom + (int) (thickness);
 
 					for (int y = treeBottom; y < treeTop; y++) {
-						chunk.setBlockState(pos.atY(y), canopyBlock.getState(random, pos), Block.UPDATE_NONE);
+						BlockPos canopyPos = pos.atY(y);
+						chunk.setBlockState(canopyPos, canopyBlock.getState(worldGenRegion, random, canopyPos), Block.UPDATE_NONE);
 					}
 				}
 			}

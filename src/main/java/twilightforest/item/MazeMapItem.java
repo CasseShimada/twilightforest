@@ -218,7 +218,7 @@ public class MazeMapItem extends MapItem {
 
 		if (mapdata != null) {
 			if (entity instanceof Player entityplayer) {
-				mapdata.tickCarriedBy(entityplayer, stack);
+				mapdata.tickCarriedBy(entityplayer, stack, null);
 
 				// TF - if player is far away vertically, show a dot
 				int yProximity = Mth.floor(entityplayer.getY() - mapdata.yCenter);

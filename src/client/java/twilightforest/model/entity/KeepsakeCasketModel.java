@@ -16,7 +16,7 @@ public class KeepsakeCasketModel extends Model<Unit> {
 	private final ModelPart lid;
 
 	public KeepsakeCasketModel(ModelPart root) {
-		super(root, RenderTypes::entityCutoutNoCull);
+		super(root, RenderTypes::entityCutout);
 		this.lid = root.getChild("lid");
 	}
 

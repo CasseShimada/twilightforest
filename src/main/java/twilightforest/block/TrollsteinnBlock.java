@@ -49,7 +49,7 @@ public class TrollsteinnBlock extends Block {
 	public static int calculateServerSkyDarken(Level level) {
 		double rainEffect = 1.0 - (double) (level.getRainLevel(1.0F) * 5.0F) / 16.0;
 		double thunderEffect = 1.0 - (double) (level.getThunderLevel(1.0F) * 5.0F) / 16.0;
-		double dayTime = (double) (level.getDayTime() % 24000L) / 24000.0;
+		double dayTime = (double) (level.getOverworldClockTime() % 24000L) / 24000.0;
 		double dayCycleEffect = 0.5 + 2.0 * Mth.clamp(Mth.cos((float) (dayTime * Math.PI * 2.0)), -0.25, 0.25);
 		return (int) ((1.0 - dayCycleEffect * rainEffect * thunderEffect) * 11.0);
 	}

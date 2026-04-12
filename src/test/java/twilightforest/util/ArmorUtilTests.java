@@ -1,10 +1,12 @@
 package twilightforest.util;
 
 import net.minecraft.util.Unit;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +32,7 @@ public class ArmorUtilTests {
 			// Registry may already be frozen in tests; fall back to manual binding.
 		}
 		ensureBound(TFDataComponents.EMPERORS_CLOTH);
+		bindItemComponents(Items.LEATHER_BOOTS, Items.STICK);
 	}
 
 	@BeforeEach
@@ -72,6 +75,16 @@ public class ArmorUtilTests {
 			bind.invoke(holder, value);
 		} catch (ReflectiveOperationException e) {
 			throw new IllegalStateException("Failed to bind deferred value for tests.", e);
+		}
+	}
+
+	private static void bindItemComponents(ItemLike... itemLikes) {
+		for (ItemLike itemLike : itemLikes) {
+			var item = itemLike.asItem();
+			var holder = item.builtInRegistryHolder();
+			if (!holder.areComponentsBound()) {
+				holder.bindComponents(DataComponentMap.EMPTY);
+			}
 		}
 	}
 

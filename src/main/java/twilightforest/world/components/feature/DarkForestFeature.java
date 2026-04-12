@@ -8,7 +8,7 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
+import twilightforest.world.components.feature.config.RandomPatchConfiguration;
 
 //Places single block features in patches around the dark forest
 public class DarkForestFeature extends Feature<RandomPatchConfiguration> {

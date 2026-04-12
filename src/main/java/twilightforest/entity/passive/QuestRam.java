@@ -141,7 +141,7 @@ public class QuestRam extends Animal implements EnforcedHomePoint {
 	}
 
 	@Override
-	public InteractionResult interactAt(Player player, Vec3 vec, InteractionHand hand) {
+	public InteractionResult interact(Player player, InteractionHand hand, Vec3 vec) {
 		ItemStack currentItem = player.getItemInHand(hand);
 
 		if (!level().isClientSide() && this.tryAccept(currentItem)) {
@@ -149,7 +149,7 @@ public class QuestRam extends Animal implements EnforcedHomePoint {
 
 			return InteractionResult.SUCCESS;
 		} else {
-			return super.interactAt(player, vec, hand);
+			return super.interact(player, hand, vec);
 		}
 	}
 

@@ -33,7 +33,7 @@ public class DarkLeavesBlock extends LeavesBlock {
 	}
 
 	@Override
-	public int getLightBlock(BlockState state) {
+	protected int getLightDampening(BlockState state) {
 		return 15;
 	}
 }

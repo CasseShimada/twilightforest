@@ -4,9 +4,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.BlockModelRenderState;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
@@ -27,6 +29,8 @@ import twilightforest.components.item.JarLid;
 import twilightforest.init.TFDataComponents;
 
 import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public record MasonJarSpecialRenderer(Optional<Item> defaultLid) implements SpecialModelRenderer<DataComponentMap> {
@@ -37,7 +41,7 @@ public record MasonJarSpecialRenderer(Optional<Item> defaultLid) implements Spec
 	}
 
 	@Override
-	public void submit(@Nullable DataComponentMap map, ItemDisplayContext displayContext, PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, boolean hasFoil, int outlineColor) {
+	public void submit(@Nullable DataComponentMap map, PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, boolean hasFoil, int outlineColor) {
 		if (map == null) return;
 
 		poseStack.pushPose();
@@ -49,26 +53,17 @@ public record MasonJarSpecialRenderer(Optional<Item> defaultLid) implements Spec
 			poseStack.pushPose();
 			BlockStateModel lidModel = lidItem != null ? JarLidModels.getModel(lidItem) : null;
 			if (lidModel != null) {
-				int color = Minecraft.getInstance().getBlockColors().getColor(lidState, null, null, 0);
-				float r = (float) (color >> 16 & 0xFF) / 255.0F;
-				float g = (float) (color >> 8 & 0xFF) / 255.0F;
-				float b = (float) (color & 0xFF) / 255.0F;
-				nodeCollector.submitBlockModel(
-					poseStack,
-					ItemBlockRenderTypes.getRenderType(lidState),
-					lidModel,
-					r,
-					g,
-					b,
-					packedLight,
-					packedOverlay,
-					outlineColor
-				);
+				List<BlockStateModelPart> parts = new ArrayList<>();
+				lidModel.collectParts(net.minecraft.util.RandomSource.create(0L), parts);
+				nodeCollector.submitBlockModel(poseStack, RenderTypes.solidMovingBlock(), parts, BlockModelRenderState.EMPTY_TINTS, packedLight, packedOverlay, outlineColor);
 			} else {
+				ItemStackRenderState lidRenderState = new ItemStackRenderState();
+				ItemModelResolver resolver = Minecraft.getInstance().getItemModelResolver();
+				resolver.updateForTopItem(lidRenderState, new ItemStack(lidItem), ItemDisplayContext.FIXED, null, null, 0);
 				poseStack.translate(0.5D, 0.875D, 0.5D);
 				poseStack.scale(0.5F, 0.25F, 0.5F);
 				poseStack.translate(-0.5D, -0.5D, -0.5D);
-				nodeCollector.submitBlock(poseStack, lidState, packedLight, packedOverlay, outlineColor);
+				lidRenderState.submit(poseStack, nodeCollector, packedLight, packedOverlay, outlineColor);
 			}
 			poseStack.popPose();
 		}
@@ -109,7 +104,7 @@ public record MasonJarSpecialRenderer(Optional<Item> defaultLid) implements Spec
 		return Blocks.OAK_LOG.defaultBlockState();
 	}
 
-	public record Unbaked(Optional<Item> defaultLid) implements SpecialModelRenderer.Unbaked {
+	public record Unbaked(Optional<Item> defaultLid) implements SpecialModelRenderer.Unbaked<DataComponentMap> {
 		public static final MapCodec<MasonJarSpecialRenderer.Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				BuiltInRegistries.ITEM.byNameCodec().optionalFieldOf("default_lid").forGetter(MasonJarSpecialRenderer.Unbaked::defaultLid))
 			.apply(instance, MasonJarSpecialRenderer.Unbaked::new));
@@ -128,7 +123,7 @@ public record MasonJarSpecialRenderer(Optional<Item> defaultLid) implements Spec
 		}
 
 		@Override
-		public SpecialModelRenderer<?> bake(SpecialModelRenderer.BakingContext context) {
+		public SpecialModelRenderer<DataComponentMap> bake(SpecialModelRenderer.BakingContext context) {
 			return new MasonJarSpecialRenderer(this.defaultLid());
 		}
 	}

@@ -74,7 +74,7 @@ public class MiscEvents {
 	public static InteractionResult handleDeathTomeUse(Player player, Level level, InteractionHand hand, BlockHitResult hit) {
 		ItemStack stack = player.getItemInHand(hand);
 
-		if (!(stack.getItem() instanceof SpawnEggItem spawnEggItem) || spawnEggItem.getType(stack) != TFEntities.DEATH_TOME.get())
+		if (!(stack.getItem() instanceof SpawnEggItem spawnEggItem) || SpawnEggItem.getType(stack) != TFEntities.DEATH_TOME.get())
 			return InteractionResult.PASS;
 
 		BlockPos pos = hit.getBlockPos();

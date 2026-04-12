@@ -9,7 +9,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -103,14 +103,14 @@ public class OverlayHandler {
 			if (player != null) {
 				TFPortalAttachment portal = TFDataAttachments.get(player, TFDataAttachments.TF_PORTAL_COOLDOWN);
 				if (portal.getPortalTimer() > 0) {
-					TextureAtlasSprite textureatlassprite = minecraft.getBlockRenderer().getBlockModelShaper().getParticleIcon(TFBlocks.TWILIGHT_PORTAL.get().defaultBlockState());
+					TextureAtlasSprite textureatlassprite = minecraft.getModelManager().getBlockStateModelSet().getParticleMaterial(TFBlocks.TWILIGHT_PORTAL.get().defaultBlockState()).sprite();
 					graphics.blitSprite(RenderPipelines.BLOCK_SCREEN_EFFECT, textureatlassprite, 0, 0, window.getGuiScaledWidth(), window.getGuiScaledHeight(), ARGB.white((float) portal.getPortalTimer() / (float) TFPortalAttachment.MAX_TICKS));
 				}
 			}
 		});
 	}
 
-	private static void renderIndicator(Minecraft minecraft, GuiGraphics graphics, Gui gui, Player player, int screenWidth, int screenHeight) {
+	private static void renderIndicator(Minecraft minecraft, GuiGraphicsExtractor graphics, Gui gui, Player player, int screenWidth, int screenHeight) {
 		if (minecraft.options.getCameraType().isFirstPerson() && (minecraft.gameMode.getPlayerMode() != GameType.SPECTATOR || canRenderCrosshairForSpectator(gui, minecraft.hitResult)) && minecraft.crosshairPickEntity instanceof QuestRam ram) {
 			ItemStack stack = player.getInventory().getSelectedItem();
 			if (!stack.isEmpty()) {
@@ -154,10 +154,10 @@ public class OverlayHandler {
 			&& TFConfig.showFortificationShieldIndicator;
 	}
 
-	private static void invokeRenderFood(Gui gui, GuiGraphics graphics, Player player, int yPos, int xPos) {
+	private static void invokeRenderFood(Gui gui, GuiGraphicsExtractor graphics, Player player, int yPos, int xPos) {
 		try {
 			if (renderFoodMethod == null) {
-				renderFoodMethod = Gui.class.getDeclaredMethod("renderFood", GuiGraphics.class, Player.class, int.class, int.class);
+				renderFoodMethod = Gui.class.getDeclaredMethod("renderFood", GuiGraphicsExtractor.class, Player.class, int.class, int.class);
 				renderFoodMethod.setAccessible(true);
 			}
 			renderFoodMethod.invoke(gui, graphics, player, yPos, xPos);
@@ -166,14 +166,14 @@ public class OverlayHandler {
 		}
 	}
 
-	private static void renderShieldCount(GuiGraphics graphics, Gui gui, int screenWidth, int screenHeight, int shieldCount) {
+	private static void renderShieldCount(GuiGraphicsExtractor graphics, Gui gui, int screenWidth, int screenHeight, int shieldCount) {
 		int yPos = screenHeight - HudStatusBarHeightRegistry.getHeight(FORTIFICATION_SHIELD_BAR);
 		for (int i = 0; i < Math.min(shieldCount, 10); i++) {
 			graphics.blitSprite(RenderPipelines.GUI_TEXTURED, FORTIFICATION_SHIELD_SPRITE, screenWidth / 2 - 91 + (i * 8), yPos, 9, 9);
 		}
 	}
 
-	private static void renderOreMeterStats(GuiGraphics graphics, Player player) {
+	private static void renderOreMeterStats(GuiGraphicsExtractor graphics, Player player) {
 		if (player.isHolding(TFItems.ORE_METER.get())) {
 			InteractionHand handToUse = player.getItemInHand(InteractionHand.MAIN_HAND).is(TFItems.ORE_METER.get()) ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
 			ItemStack selectedMeter = player.getItemInHand(handToUse);
@@ -184,7 +184,7 @@ public class OverlayHandler {
 					component = component.copy().append(".");
 				}
 				graphics.fill(0, 0, 56, 16, 0x9b000000);
-				graphics.drawString(Minecraft.getInstance().font, component, 4, 4, 16777215, false);
+				graphics.text(Minecraft.getInstance().font, component, 4, 4, 16777215, false);
 			} else {
 				OreScannerData oreScannerData = selectedMeter.get(TFDataComponents.ORE_DATA.get());
 
@@ -213,7 +213,7 @@ public class OverlayHandler {
 		int totalScanned = data.totalScannedBlocks();
 
 		List<Component> headerRowTexts = ImmutableList.of(
-			Component.translatable("misc.twilightforest.ore_meter_range", range, pos.x, pos.z),
+			Component.translatable("misc.twilightforest.ore_meter_range", range, pos.x(), pos.z()),
 			Component.translatable("misc.twilightforest.ore_meter_total", totalScanned)
 		);
 
@@ -318,11 +318,11 @@ public class OverlayHandler {
 			return new ComponentColumn(List.of(), forcedExtraMaxWidthBySpaces * Minecraft.getInstance().font.width(" "), ComponentAlignment.LEFT);
 		}
 
-		private int renderColumn(GuiGraphics graphics, ComponentColumn column, int xOff, int yOff, int verticalTextPixelsAdvance) {
+		private int renderColumn(GuiGraphicsExtractor graphics, ComponentColumn column, int xOff, int yOff, int verticalTextPixelsAdvance) {
 			for (Component rowText : column.textRows) {
 				int textPixelWidth = Minecraft.getInstance().font.width(rowText);
 				int textXPos = xOff + this.textAlignment.getTextOffset(textPixelWidth, this.maxPixelWidth);
-				graphics.drawString(Minecraft.getInstance().font, rowText, textXPos, yOff, 0x00_ff_ff_ff, false);
+				graphics.text(Minecraft.getInstance().font, rowText, textXPos, yOff, 0x00_ff_ff_ff, false);
 				yOff += verticalTextPixelsAdvance;
 			}
 
@@ -342,7 +342,7 @@ public class OverlayHandler {
 			return new OreMeterInfoCache(maxPixelWidth, totalRowCount, ImmutableList.copyOf(headers), ImmutableList.copyOf(columns));
 		}
 
-		public void renderData(GuiGraphics graphics) {
+		public void renderData(GuiGraphicsExtractor graphics) {
 			int verticalTextPixelsAdvance = Minecraft.getInstance().font.lineHeight + 1;
 
 			graphics.fill(0, 0, this.totalPixelWidth + 8, this.totalRowCount * verticalTextPixelsAdvance + 6, 0x9b_00_00_00);
@@ -351,7 +351,7 @@ public class OverlayHandler {
 			int yOff = 4;
 
 			for (Component headerRowText : this.headerRows) {
-				graphics.drawString(Minecraft.getInstance().font, headerRowText, xOff, yOff, 0x00_ff_ff_ff, false);
+				graphics.text(Minecraft.getInstance().font, headerRowText, xOff, yOff, 0x00_ff_ff_ff, false);
 				yOff += verticalTextPixelsAdvance;
 			}
 

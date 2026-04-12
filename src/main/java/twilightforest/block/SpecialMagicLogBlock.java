@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import twilightforest.util.PlayerMessaging;
 
 public abstract class SpecialMagicLogBlock extends RotatedPillarBlock {
 
@@ -56,7 +57,7 @@ public abstract class SpecialMagicLogBlock extends RotatedPillarBlock {
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
 		if (!this.doesCoreFunction()) {
 			level.setBlockAndUpdate(pos, state.setValue(ACTIVE, false));
-			player.displayClientMessage(Component.translatable("misc.twilightforest.core_disabled", this.getName()).withStyle(ChatFormatting.RED), true);
+			PlayerMessaging.displayClientMessage(player, Component.translatable("misc.twilightforest.core_disabled", this.getName()).withStyle(ChatFormatting.RED), true);
 			return InteractionResult.SUCCESS;
 		}
 

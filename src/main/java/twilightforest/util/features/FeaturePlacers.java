@@ -88,11 +88,11 @@ public final class FeaturePlacers {
 	}
 
 	public static void placeProvidedBlock(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> worldPlacer, BiFunction<LevelSimulatedReader, BlockPos, Boolean> predicate, BlockPos pos, BlockStateProvider config, RandomSource random) {
-		if (predicate.apply(world, pos)) worldPlacer.accept(pos, config.getState(random, pos));
+		if (predicate.apply(world, pos)) worldPlacer.accept(pos, config.getState((WorldGenLevel) world, random, pos));
 	}
 
 	public static void placeLeaf(LevelSimulatedReader world, FoliagePlacer.FoliageSetter setter, BiFunction<LevelSimulatedReader, BlockPos, Boolean> predicate, BlockPos pos, BlockStateProvider config, RandomSource random) {
-		if (predicate.apply(world, pos)) setter.set(pos, config.getState(random, pos));
+		if (predicate.apply(world, pos)) setter.set(pos, config.getState((WorldGenLevel) world, random, pos));
 	}
 
 	public static void placeCircleOdd(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> placer, BiFunction<LevelSimulatedReader, BlockPos, Boolean> predicate, RandomSource random, BlockPos centerPos, float radius, BlockStateProvider config) {
@@ -260,7 +260,7 @@ public final class FeaturePlacers {
 	// If possible, use TrunkPlacer.placeLog instead
 	public static boolean placeIfValidTreePos(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> placer, RandomSource random, BlockPos pos, BlockStateProvider config) {
 		if (validTreePos(world, pos)) {
-			placer.accept(pos, config.getState(random, pos));
+			placer.accept(pos, config.getState((WorldGenLevel) world, random, pos));
 			return true;
 		} else {
 			return false;
@@ -269,7 +269,7 @@ public final class FeaturePlacers {
 
 	public static boolean placeIfValidRootPos(LevelSimulatedReader world, RootPlacer placer, RandomSource random, BlockPos pos, BlockStateProvider config) {
 		if (!FeatureUtil.anyBelowMatch(pos, placer.getRootPenetrability() - 1, (blockPos -> !FeatureLogic.canRootGrowIn(world, blockPos)))) {
-			placer.getPlacer().accept(pos, config.getState(random, pos));
+			placer.getPlacer().accept(pos, config.getState((WorldGenLevel) world, random, pos));
 			return true;
 		} else {
 			return false;
@@ -345,11 +345,11 @@ public final class FeaturePlacers {
 			if (FeatureLogic.hasEmptyNeighborExceptBelow(worldReader, exposedPos)) {
 				// Check if the position is not replaceable
 				if (FeatureUtil.anyBelowMatch(exposedPos, worldPlacer.getRootPenetrability() - 1, (blockPos -> worldReader.isStateAtPosition(blockPos, (state) -> !FeatureLogic.worldGenReplaceable(state)
-					&& state != exposedRoot.getState(random, exposedPos)))))
+					&& state != exposedRoot.getState((WorldGenLevel) worldReader, random, exposedPos)))))
 					return; // Root must stop
 
 				// Good to go!
-				worldPlacer.getPlacer().accept(exposedPos, exposedRoot.getState(random, exposedPos));
+				worldPlacer.getPlacer().accept(exposedPos, exposedRoot.getState((WorldGenLevel) worldReader, random, exposedPos));
 			} else { // We are in-fact underground, finish tracing root's path by placing underground roots
 				// Retry placement at position as underground root. If successful, continue the tracing as regular root
 				if (FeaturePlacers.placeIfValidRootPos(worldReader, worldPlacer, random, exposedPos, dirtRoot))

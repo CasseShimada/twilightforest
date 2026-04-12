@@ -24,7 +24,7 @@ public final class ClientHandHelper {
 		if (minecraft.options.getCameraType().isFirstPerson() && living == minecraft.player) {
 			Vec3 vec3 = minecraft.getEntityRenderDispatcher()
 				.camera
-				.getNearPlane()
+				.getNearPlane((float) minecraft.options.fov().get())
 				.getPointOnPlane((float) hand * 0.525F, -0.1F)
 				.scale(960.0D / (double) minecraft.options.fov().get())
 				.yRot(armSwing * 0.5F)

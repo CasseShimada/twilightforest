@@ -7,7 +7,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 public class LeafRuneParticle extends SingleQuadParticle {
 
 	LeafRuneParticle(ClientLevel level, double x, double y, double z, double velX, double velY, double velZ, SpriteSet sprites) {
-		super(level, x, y, z, velX, velY, velZ, sprites.get(level.random));
+		super(level, x, y, z, velX, velY, velZ, sprites.get(level.getRandom()));
 		// super applies jittering, reset it
 		this.xd = velX;
 		this.yd = velY;

@@ -283,24 +283,24 @@ public class TFPlacedFeatures {
 
 		List<PlacementModifier> avoidLichTowerList = List.of(avoidLichTower);
 
-		Holder<ConfiguredFeature<?, ?>> grassConfig = features.getOrThrow(VegetationFeatures.PATCH_GRASS);
+		Holder<ConfiguredFeature<?, ?>> grassConfig = features.getOrThrow(VegetationFeatures.GRASS);
 		// PlacementUtils.register(context, PATCH_GRASS_PLAIN, grassConfig, NoiseThresholdCountPlacement.of(-0.8, 5, 10), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome(), avoidLichTower);
 		PlacementUtils.register(context, PATCH_GRASS_FOREST, grassConfig, ImmutableList.<PlacementModifier>builder().addAll(VegetationPlacements.worldSurfaceSquaredWithCount(2)).addAll(avoidLichTowerList).build());
 		PlacementUtils.register(context, PATCH_GRASS_BADLANDS, grassConfig, InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome(), avoidLichTower);
 		PlacementUtils.register(context, PATCH_GRASS_SAVANNA, grassConfig, ImmutableList.<PlacementModifier>builder().addAll(VegetationPlacements.worldSurfaceSquaredWithCount(20)).addAll(avoidLichTowerList).build());
 		// PlacementUtils.register(context, PATCH_GRASS_NORMAL, grassConfig, ConcatenatedListView.of(VegetationPlacements.worldSurfaceSquaredWithCount(5), avoidLichTowerList));
 
-		Holder<ConfiguredFeature<?, ?>> taigaGrassConfig = features.getOrThrow(VegetationFeatures.PATCH_TAIGA_GRASS);
+		Holder<ConfiguredFeature<?, ?>> taigaGrassConfig = features.getOrThrow(VegetationFeatures.TAIGA_GRASS);
 		PlacementUtils.register(context, PATCH_GRASS_TAIGA_2, taigaGrassConfig, InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome(), avoidLichTower);
 		PlacementUtils.register(context, PATCH_GRASS_TAIGA, taigaGrassConfig, ImmutableList.<PlacementModifier>builder().addAll(VegetationPlacements.worldSurfaceSquaredWithCount(7)).addAll(avoidLichTowerList).build());
 
-		Holder<ConfiguredFeature<?, ?>> jungleGrassConfig = features.getOrThrow(VegetationFeatures.PATCH_GRASS_JUNGLE);
+		Holder<ConfiguredFeature<?, ?>> jungleGrassConfig = features.getOrThrow(VegetationFeatures.GRASS_JUNGLE);
 		PlacementUtils.register(context, PATCH_GRASS_JUNGLE, jungleGrassConfig, ImmutableList.<PlacementModifier>builder().addAll(VegetationPlacements.worldSurfaceSquaredWithCount(25)).addAll(avoidLichTowerList).build());
 
-		Holder<ConfiguredFeature<?, ?>> tallGrassConfig = features.getOrThrow(VegetationFeatures.PATCH_TALL_GRASS);
+		Holder<ConfiguredFeature<?, ?>> tallGrassConfig = features.getOrThrow(VegetationFeatures.TALL_GRASS);
 		PlacementUtils.register(context, PATCH_TALL_GRASS, tallGrassConfig, RarityFilter.onAverageOnceEvery(5), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome(), avoidLichTower);
 
-		Holder<ConfiguredFeature<?, ?>> fernConfig = features.getOrThrow(VegetationFeatures.PATCH_LARGE_FERN);
+		Holder<ConfiguredFeature<?, ?>> fernConfig = features.getOrThrow(VegetationFeatures.LARGE_FERN);
 		PlacementUtils.register(context, PATCH_LARGE_FERN, fernConfig, RarityFilter.onAverageOnceEvery(5), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome(), avoidLichTower);
 
 		Holder<ConfiguredFeature<?, ?>> forestFlowersConfig = features.getOrThrow(VegetationFeatures.FOREST_FLOWERS);

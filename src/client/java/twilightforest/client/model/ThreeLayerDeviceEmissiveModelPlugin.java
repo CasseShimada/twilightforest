@@ -5,26 +5,25 @@ import java.util.Map;
 
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelModifier;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockModel;
-import net.minecraft.client.renderer.block.model.TextureSlots;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.client.resources.model.sprite.TextureSlots;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ModelDebugName;
-import net.minecraft.client.resources.model.ModelState;
-import net.minecraft.client.resources.model.QuadCollection;
-import net.minecraft.client.resources.model.SpriteGetter;
-import net.minecraft.client.resources.model.UnbakedGeometry;
+import net.minecraft.client.renderer.block.dispatch.ModelState;
+import net.minecraft.client.resources.model.geometry.QuadCollection;
+import net.minecraft.client.resources.model.geometry.UnbakedGeometry;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 
 public final class ThreeLayerDeviceEmissiveModelPlugin implements ModelLoadingPlugin {
-private static final Identifier MODEL_ID = Identifier.fromNamespaceAndPath("twilightforest", "block/util/three_layer_device_active");
+	private static final Identifier MODEL_ID = Identifier.fromNamespaceAndPath("twilightforest", "block/util/three_layer_device_active");
 	private static final Map<String, Integer> EMISSIVE_SLOTS = Map.of(
-			"top2", 10,
-			"side2", 15,
-			"top3", 7,
-			"side3", 10
+		"top2", 10,
+		"side2", 15,
+		"top3", 7,
+		"side3", 10
 	);
 
 	public static void register() {
@@ -37,21 +36,41 @@ private static final Identifier MODEL_ID = Identifier.fromNamespaceAndPath("twil
 			if (!MODEL_ID.equals(context.id())) {
 				return model;
 			}
-			if (!(model instanceof BlockModel blockModel)) {
+			if (!(model instanceof UnbakedModel unbakedModel)) {
 				return model;
 			}
-			if (blockModel.geometry() instanceof EmissiveGeometry) {
+			if (unbakedModel.geometry() instanceof EmissiveGeometry) {
 				return model;
 			}
-			return new BlockModel(
-					new EmissiveGeometry(blockModel.geometry(), EMISSIVE_SLOTS),
-					blockModel.guiLight(),
-					blockModel.ambientOcclusion(),
-					blockModel.transforms(),
-					blockModel.textureSlots(),
-					blockModel.parent()
-			);
+			return new EmissiveUnbakedModel(unbakedModel, new EmissiveGeometry(unbakedModel.geometry(), EMISSIVE_SLOTS));
 		});
+	}
+
+	private record EmissiveUnbakedModel(UnbakedModel delegate, UnbakedGeometry geometry) implements UnbakedModel {
+		@Override
+		public Boolean ambientOcclusion() {
+			return this.delegate.ambientOcclusion();
+		}
+
+		@Override
+		public GuiLight guiLight() {
+			return this.delegate.guiLight();
+		}
+
+		@Override
+		public net.minecraft.client.resources.model.cuboid.ItemTransforms transforms() {
+			return this.delegate.transforms();
+		}
+
+		@Override
+		public TextureSlots.Data textureSlots() {
+			return this.delegate.textureSlots();
+		}
+
+		@Override
+		public Identifier parent() {
+			return this.delegate.parent();
+		}
 	}
 
 	private static final class EmissiveGeometry implements UnbakedGeometry {
@@ -70,10 +89,9 @@ private static final Identifier MODEL_ID = Identifier.fromNamespaceAndPath("twil
 				return base;
 			}
 
-			SpriteGetter sprites = modelBaker.sprites();
 			Map<TextureAtlasSprite, Integer> emissiveSprites = new IdentityHashMap<>();
 			for (Map.Entry<String, Integer> entry : emissiveSlots.entrySet()) {
-				TextureAtlasSprite sprite = sprites.resolveSlot(textureSlots, entry.getKey(), debugName);
+				TextureAtlasSprite sprite = modelBaker.materials().resolveSlot(textureSlots, entry.getKey(), debugName).sprite();
 				if (sprite != null) {
 					emissiveSprites.put(sprite, entry.getValue());
 				}
@@ -106,15 +124,25 @@ private static final Identifier MODEL_ID = Identifier.fromNamespaceAndPath("twil
 
 	private static BakedQuad remapQuad(BakedQuad quad, Map<TextureAtlasSprite, Integer> emissiveSprites, IdentityHashMap<BakedQuad, BakedQuad> remapped) {
 		return remapped.computeIfAbsent(quad, existing -> {
-			Integer emissive = emissiveSprites.get(existing.sprite());
+			Integer emissive = emissiveSprites.get(existing.materialInfo().sprite());
 			if (emissive == null) {
 				return existing;
 			}
 
-			int emission = Math.max(existing.lightEmission(), Math.min(15, Math.max(0, emissive)));
-			if (emission == existing.lightEmission()) {
+			int currentEmission = existing.materialInfo().lightEmission();
+			int emission = Math.max(currentEmission, Math.min(15, Math.max(0, emissive)));
+			if (emission == currentEmission) {
 				return existing;
 			}
+
+			BakedQuad.MaterialInfo materialInfo = new BakedQuad.MaterialInfo(
+				existing.materialInfo().sprite(),
+				existing.materialInfo().layer(),
+				existing.materialInfo().itemRenderType(),
+				existing.materialInfo().tintIndex(),
+				existing.materialInfo().shade(),
+				emission
+			);
 
 			return new BakedQuad(
 				existing.position0(),
@@ -125,11 +153,8 @@ private static final Identifier MODEL_ID = Identifier.fromNamespaceAndPath("twil
 				existing.packedUV1(),
 				existing.packedUV2(),
 				existing.packedUV3(),
-				existing.tintIndex(),
 				existing.direction(),
-				existing.sprite(),
-				existing.shade(),
-				emission
+				materialInfo
 			);
 		});
 	}

@@ -90,7 +90,7 @@ public class CountLootCommand {
 
 			var rarityColor = new ItemStack(lootItem).getRarity().color();
 
-			context.getSource().sendSystemMessage(lootItem.getName().copy().withStyle(rarityColor).append(suffixCount));
+			context.getSource().sendSystemMessage(lootItem.getName(new ItemStack(lootItem)).copy().withStyle(rarityColor).append(suffixCount));
 		}
 
 		return lootCounts.values().intStream().sum();

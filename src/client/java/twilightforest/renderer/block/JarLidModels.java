@@ -1,11 +1,11 @@
 package twilightforest.client.renderer.block;
 
 import net.fabricmc.fabric.api.client.model.loading.v1.ExtraModelKey;
-import net.fabricmc.fabric.api.client.model.loading.v1.FabricBakedModelManager;
+import net.fabricmc.fabric.api.client.model.loading.v1.FabricModelManager;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.model.loading.v1.SimpleUnbakedExtraModel;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -86,7 +86,7 @@ public final class JarLidModels {
 			return null;
 		}
 
-		return ((FabricBakedModelManager) Minecraft.getInstance().getModelManager()).getModel(key);
+		return ((FabricModelManager) Minecraft.getInstance().getModelManager()).getModel(key);
 	}
 
 	private static LidResource lid(Item lid, String path) {

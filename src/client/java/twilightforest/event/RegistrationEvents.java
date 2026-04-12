@@ -1,13 +1,11 @@
 package twilightforest.client.event;
 
-import net.fabricmc.fabric.api.client.particle.v1.FabricSpriteProvider;
-import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.particle.v1.FabricSpriteSet;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.SpecialBlockRendererRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityRenderLayerRegistrationCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.ClientTooltipComponentCallback;
 import net.fabricmc.fabric.api.client.model.loading.v1.CustomUnbakedBlockStateModel;
 import net.fabricmc.fabric.api.client.model.loading.v1.UnbakedModelDeserializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -22,7 +20,6 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -124,28 +121,11 @@ public class RegistrationEvents {
 
 	private static void registerWoodType(WoodType woodType) {
 		Identifier id = Identifier.parse(woodType.name());
-		Sheets.SIGN_MATERIALS.put(woodType, Sheets.SIGN_MAPPER.apply(id));
-		Sheets.HANGING_SIGN_MATERIALS.put(woodType, Sheets.HANGING_SIGN_MAPPER.apply(id));
+		Sheets.SIGN_SPRITES.put(woodType, Sheets.SIGN_MAPPER.apply(id));
+		Sheets.HANGING_SIGN_SPRITES.put(woodType, Sheets.HANGING_SIGN_MAPPER.apply(id));
 	}
 
 	private static void registerRenderLayers() {
-		BlockRenderLayerMap.putBlocks(ChunkSectionLayer.CUTOUT,
-			TFBlocks.VANISHING_BLOCK.get(),
-			TFBlocks.UNBREAKABLE_VANISHING_BLOCK.get(),
-			TFBlocks.LOCKED_VANISHING_BLOCK.get(),
-			TFBlocks.REAPPEARING_BLOCK.get(),
-			TFBlocks.CARMINITE_BUILDER.get(),
-			TFBlocks.ANTIBUILDER.get(),
-			TFBlocks.CARMINITE_REACTOR.get(),
-			TFBlocks.CARMINITE_BLOCK.get(),
-			TFBlocks.GHAST_TRAP.get(),
-			TFBlocks.TORCHBERRY_PLANT.get(),
-			TFBlocks.MUSHGLOOM.get(),
-			TFBlocks.FIDDLEHEAD.get(),
-			TFBlocks.POTTED_FIDDLEHEAD.get(),
-			TFBlocks.POTTED_MUSHGLOOM.get(),
-			TFBlocks.ROPE.get()
-		);
 	}
 
 	private static void registerModelLoaders() {
@@ -202,7 +182,7 @@ public class RegistrationEvents {
 	}
 
 	private static void registerTooltipComponents() {
-		TooltipComponentCallback.EVENT.register(data -> {
+		ClientTooltipComponentCallback.EVENT.register(data -> {
 			if (data instanceof BrittleFlaskItem.Tooltip tooltip) {
 				return new PotionFlaskTooltipComponent(tooltip);
 			}
@@ -366,191 +346,132 @@ public class RegistrationEvents {
 	}
 
 	private static void registerLayerDefinitions() {
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.ARCTIC_ARMOR_INNER, () -> LayerDefinition.create(ArcticArmorModel.addPieces(INNER_ARMOR_DEFORMATION), 64, 32));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.ARCTIC_ARMOR_OUTER, () -> LayerDefinition.create(ArcticArmorModel.addPieces(OUTER_ARMOR_DEFORMATION), 64, 32));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.FIERY_ARMOR_INNER, () -> LayerDefinition.create(FieryArmorModel.createMesh(INNER_ARMOR_DEFORMATION, 0.0F), 64, 32));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.FIERY_ARMOR_OUTER, () -> LayerDefinition.create(FieryArmorModel.createMesh(OUTER_ARMOR_DEFORMATION, 0.0F), 64, 32));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.KNIGHTMETAL_ARMOR_INNER, () -> LayerDefinition.create(KnightmetalArmorModel.addPieces(INNER_ARMOR_DEFORMATION), 64, 32));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.KNIGHTMETAL_ARMOR_OUTER, () -> LayerDefinition.create(KnightmetalArmorModel.addPieces(OUTER_ARMOR_DEFORMATION), 64, 32));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.PHANTOM_ARMOR_INNER, () -> LayerDefinition.create(PhantomArmorModel.addPieces(INNER_ARMOR_DEFORMATION), 64, 32));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.PHANTOM_ARMOR_OUTER, () -> LayerDefinition.create(PhantomArmorModel.addPieces(OUTER_ARMOR_DEFORMATION), 64, 32));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.YETI_ARMOR_INNER, () -> LayerDefinition.create(YetiArmorModel.addPieces(INNER_ARMOR_DEFORMATION), 64, 32));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.YETI_ARMOR_OUTER, () -> LayerDefinition.create(YetiArmorModel.addPieces(OUTER_ARMOR_DEFORMATION), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.ARCTIC_ARMOR_INNER, () -> LayerDefinition.create(ArcticArmorModel.addPieces(INNER_ARMOR_DEFORMATION), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.ARCTIC_ARMOR_OUTER, () -> LayerDefinition.create(ArcticArmorModel.addPieces(OUTER_ARMOR_DEFORMATION), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.FIERY_ARMOR_INNER, () -> LayerDefinition.create(FieryArmorModel.createMesh(INNER_ARMOR_DEFORMATION, 0.0F), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.FIERY_ARMOR_OUTER, () -> LayerDefinition.create(FieryArmorModel.createMesh(OUTER_ARMOR_DEFORMATION, 0.0F), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.KNIGHTMETAL_ARMOR_INNER, () -> LayerDefinition.create(KnightmetalArmorModel.addPieces(INNER_ARMOR_DEFORMATION), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.KNIGHTMETAL_ARMOR_OUTER, () -> LayerDefinition.create(KnightmetalArmorModel.addPieces(OUTER_ARMOR_DEFORMATION), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.PHANTOM_ARMOR_INNER, () -> LayerDefinition.create(PhantomArmorModel.addPieces(INNER_ARMOR_DEFORMATION), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.PHANTOM_ARMOR_OUTER, () -> LayerDefinition.create(PhantomArmorModel.addPieces(OUTER_ARMOR_DEFORMATION), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.YETI_ARMOR_INNER, () -> LayerDefinition.create(YetiArmorModel.addPieces(INNER_ARMOR_DEFORMATION), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.YETI_ARMOR_OUTER, () -> LayerDefinition.create(YetiArmorModel.addPieces(OUTER_ARMOR_DEFORMATION), 64, 32));
 
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.ALPHA_YETI_TROPHY, AlphaYetiModel::createTrophy);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.HYDRA_TROPHY, HydraHeadModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.KNIGHT_PHANTOM_TROPHY, KnightPhantomModel::createTrophy);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.LICH_TROPHY, LichModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.MINOSHROOM_TROPHY, MinoshroomModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.NAGA_TROPHY, NagaModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.QUEST_RAM_TROPHY, QuestRamModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.SNOW_QUEEN_TROPHY, SnowQueenModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.UR_GHAST_TROPHY, UrGhastModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.ALPHA_YETI_TROPHY, AlphaYetiModel::createTrophy);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.HYDRA_TROPHY, HydraHeadModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.KNIGHT_PHANTOM_TROPHY, KnightPhantomModel::createTrophy);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.LICH_TROPHY, LichModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.MINOSHROOM_TROPHY, MinoshroomModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.NAGA_TROPHY, NagaModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.QUEST_RAM_TROPHY, QuestRamModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.SNOW_QUEEN_TROPHY, SnowQueenModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.UR_GHAST_TROPHY, UrGhastModel::create);
 
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.ADHERENT, AdherentModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.ALPHA_YETI, AlphaYetiModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.ARMORED_GIANT, () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 32));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.BIGHORN_SHEEP, BighornModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.BIGHORN_SHEEP_BABY, () -> BighornModel.create().apply(BighornModel.BABY_TRANSFORMER));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.BLOCKCHAIN_GOBLIN, BlockChainGoblinModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.BOAR, BoarModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.BUNNY, BunnyModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.CARMINITE_BROODLING, SpiderModel::createSpiderBodyLayer);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.CARMINITE_GOLEM, CarminiteGolemModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.CARMINITE_GHASTGUARD, TFGhastModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.CARMINITE_GHASTLING, TFGhastModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.CHAIN, ChainModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.CUBE_OF_ANNIHILATION, CubeOfAnnihilationModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.DEATH_TOME, DeathTomeModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.DEER, DeerModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.FIRE_BEETLE, FireBeetleModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.GIANT_MINER, () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 32));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.HARBINGER_CUBE, HarbingerCubeModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.HEDGE_SPIDER, SpiderModel::createSpiderBodyLayer);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.HELMET_CRAB, HelmetCrabModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.HOSTILE_WOLF, () -> LayerDefinition.create(WolfModel.createMeshDefinition(CubeDeformation.NONE), 64, 32));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.HYDRA_HEAD, HydraHeadModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.HYDRA, HydraModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.HYDRA_MORTAR, HydraMortarModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.HYDRA_NECK, HydraNeckModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.ICE_CRYSTAL, IceCrystalModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.KING_SPIDER, SpiderModel::createSpiderBodyLayer);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.KNIGHT_PHANTOM, KnightPhantomModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.KOBOLD, KoboldModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.LICH_MINION, () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 64));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.LICH, LichModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.LOWER_GOBLIN_KNIGHT, LowerGoblinKnightModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.LOYAL_ZOMBIE, () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 64));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.MAZE_SLIME, SlimeModel::createInnerBodyLayer);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.MAZE_SLIME_OUTER, SlimeModel::createOuterBodyLayer);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.MINOSHROOM, MinoshroomModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.MINOTAUR, MinotaurModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.MIST_WOLF, () -> LayerDefinition.create(WolfModel.createMeshDefinition(CubeDeformation.NONE), 64, 32));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.MOSQUITO_SWARM, MosquitoSwarmModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.NAGA, NagaModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.NAGA_BODY, NagaModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.NOOP, () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 0, 0));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.PENGUIN, PenguinModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.PINCH_BEETLE, PinchBeetleModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.PROTECTION_BOX, () -> LayerDefinition.create(ProtectionBoxModel.createMesh(), 16, 16));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.QUEST_RAM, QuestRamModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.RAVEN, RavenModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.REDCAP, RedcapModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.REDCAP_ARMOR_INNER, () -> LayerDefinition.create(HumanoidModel.createMesh(new CubeDeformation(0.25F), 0.7F), 64, 32));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.REDCAP_ARMOR_OUTER, () -> LayerDefinition.create(HumanoidModel.createMesh(new CubeDeformation(0.65F), 0.7F), 64, 32));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.RISING_ZOMBIE, () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 64));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.ROVING_CUBE, CubeOfAnnihilationModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.SKELETON_DRUID, SkeletonDruidModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.SLIME_BEETLE, SlimeBeetleModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.SLIME_BEETLE_TAIL, SlimeBeetleModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.SNOW_QUEEN, SnowQueenModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.CHAIN_BLOCK, SpikeBlockModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.SQUIRREL, SquirrelModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.STABLE_ICE_CORE, StableIceCoreModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.SWARM_SPIDER, SpiderModel::createSpiderBodyLayer);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.TINY_BIRD, TinyBirdModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.TOWERWOOD_BORER, SilverfishModel::createBodyLayer);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.TROLL, TrollModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.UNSTABLE_ICE_CORE, UnstableIceCoreModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.UPPER_GOBLIN_KNIGHT, UpperGoblinKnightModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.UR_GHAST, UrGhastModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.WINTER_WOLF, () -> LayerDefinition.create(WolfModel.createMeshDefinition(CubeDeformation.NONE), 64, 32));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.WRAITH, WraithModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.YETI, YetiModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.ADHERENT, AdherentModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.ALPHA_YETI, AlphaYetiModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.ARMORED_GIANT, () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.BIGHORN_SHEEP, BighornModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.BIGHORN_SHEEP_BABY, () -> BighornModel.create().apply(BighornModel.BABY_TRANSFORMER));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.BLOCKCHAIN_GOBLIN, BlockChainGoblinModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.BOAR, BoarModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.BUNNY, BunnyModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.CARMINITE_BROODLING, SpiderModel::createSpiderBodyLayer);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.CARMINITE_GOLEM, CarminiteGolemModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.CARMINITE_GHASTGUARD, TFGhastModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.CARMINITE_GHASTLING, TFGhastModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.CHAIN, ChainModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.CUBE_OF_ANNIHILATION, CubeOfAnnihilationModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.DEATH_TOME, DeathTomeModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.DEER, DeerModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.FIRE_BEETLE, FireBeetleModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.GIANT_MINER, () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.HARBINGER_CUBE, HarbingerCubeModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.HEDGE_SPIDER, SpiderModel::createSpiderBodyLayer);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.HELMET_CRAB, HelmetCrabModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.HOSTILE_WOLF, () -> LayerDefinition.create(net.minecraft.client.model.animal.wolf.AdultWolfModel.createBodyLayer(CubeDeformation.NONE), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.HYDRA_HEAD, HydraHeadModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.HYDRA, HydraModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.HYDRA_MORTAR, HydraMortarModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.HYDRA_NECK, HydraNeckModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.ICE_CRYSTAL, IceCrystalModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.KING_SPIDER, SpiderModel::createSpiderBodyLayer);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.KNIGHT_PHANTOM, KnightPhantomModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.KOBOLD, KoboldModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.LICH_MINION, () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 64));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.LICH, LichModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.LOWER_GOBLIN_KNIGHT, LowerGoblinKnightModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.LOYAL_ZOMBIE, () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 64));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.MAZE_SLIME, SlimeModel::createInnerBodyLayer);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.MAZE_SLIME_OUTER, SlimeModel::createOuterBodyLayer);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.MINOSHROOM, MinoshroomModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.MINOTAUR, MinotaurModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.MIST_WOLF, () -> LayerDefinition.create(net.minecraft.client.model.animal.wolf.AdultWolfModel.createBodyLayer(CubeDeformation.NONE), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.MOSQUITO_SWARM, MosquitoSwarmModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.NAGA, NagaModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.NAGA_BODY, NagaModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.NOOP, () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 0, 0));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.PENGUIN, PenguinModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.PINCH_BEETLE, PinchBeetleModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.PROTECTION_BOX, () -> LayerDefinition.create(ProtectionBoxModel.createMesh(), 16, 16));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.QUEST_RAM, QuestRamModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.RAVEN, RavenModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.REDCAP, RedcapModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.REDCAP_ARMOR_INNER, () -> LayerDefinition.create(HumanoidModel.createMesh(new CubeDeformation(0.25F), 0.7F), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.REDCAP_ARMOR_OUTER, () -> LayerDefinition.create(HumanoidModel.createMesh(new CubeDeformation(0.65F), 0.7F), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.RISING_ZOMBIE, () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 64));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.ROVING_CUBE, CubeOfAnnihilationModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.SKELETON_DRUID, SkeletonDruidModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.SLIME_BEETLE, SlimeBeetleModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.SLIME_BEETLE_TAIL, SlimeBeetleModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.SNOW_QUEEN, SnowQueenModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.CHAIN_BLOCK, SpikeBlockModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.SQUIRREL, SquirrelModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.STABLE_ICE_CORE, StableIceCoreModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.SWARM_SPIDER, SpiderModel::createSpiderBodyLayer);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.TINY_BIRD, TinyBirdModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.TOWERWOOD_BORER, SilverfishModel::createBodyLayer);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.TROLL, TrollModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.UNSTABLE_ICE_CORE, UnstableIceCoreModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.UPPER_GOBLIN_KNIGHT, UpperGoblinKnightModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.UR_GHAST, UrGhastModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.WINTER_WOLF, () -> LayerDefinition.create(net.minecraft.client.model.animal.wolf.AdultWolfModel.createBodyLayer(CubeDeformation.NONE), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.WRAITH, WraithModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.YETI, YetiModel::create);
 
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.CICADA, CicadaModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.FIREFLY, FireflyModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.KEEPSAKE_CASKET, () -> KeepsakeCasketModel.create(true));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.SKULL_CHEST, () -> KeepsakeCasketModel.create(false));
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.MOONWORM, MoonwormModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.BRAZIER, BrazierModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.CICADA, CicadaModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.FIREFLY, FireflyModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.KEEPSAKE_CASKET, () -> KeepsakeCasketModel.create(true));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.SKULL_CHEST, () -> KeepsakeCasketModel.create(false));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.MOONWORM, MoonwormModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.BRAZIER, BrazierModel::create);
 
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.RED_THREAD, RedThreadModel::create);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.KNIGHTMETAL_SHIELD, KnightmetalShieldModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.RED_THREAD, RedThreadModel::create);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.KNIGHTMETAL_SHIELD, KnightmetalShieldModel::create);
 
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.TWILIGHT_OAK_BOAT, BoatModel::createBoatModel);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.CANOPY_BOAT, BoatModel::createBoatModel);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.MANGROVE_BOAT, BoatModel::createBoatModel);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.DARK_BOAT, BoatModel::createBoatModel);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.TIME_BOAT, BoatModel::createBoatModel);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.TRANSFORMATION_BOAT, BoatModel::createBoatModel);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.MINING_BOAT, BoatModel::createBoatModel);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.SORTING_BOAT, BoatModel::createBoatModel);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.TWILIGHT_OAK_BOAT, BoatModel::createBoatModel);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.CANOPY_BOAT, BoatModel::createBoatModel);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.MANGROVE_BOAT, BoatModel::createBoatModel);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.DARK_BOAT, BoatModel::createBoatModel);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.TIME_BOAT, BoatModel::createBoatModel);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.TRANSFORMATION_BOAT, BoatModel::createBoatModel);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.MINING_BOAT, BoatModel::createBoatModel);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.SORTING_BOAT, BoatModel::createBoatModel);
 
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.TWILIGHT_OAK_CHEST_BOAT, BoatModel::createChestBoatModel);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.CANOPY_CHEST_BOAT, BoatModel::createChestBoatModel);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.MANGROVE_CHEST_BOAT, BoatModel::createChestBoatModel);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.DARK_CHEST_BOAT, BoatModel::createChestBoatModel);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.TIME_CHEST_BOAT, BoatModel::createChestBoatModel);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.TRANSFORMATION_CHEST_BOAT, BoatModel::createChestBoatModel);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.MINING_CHEST_BOAT, BoatModel::createChestBoatModel);
-		EntityModelLayerRegistry.registerModelLayer(TFModelLayers.SORTING_CHEST_BOAT, BoatModel::createChestBoatModel);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.TWILIGHT_OAK_CHEST_BOAT, BoatModel::createChestBoatModel);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.CANOPY_CHEST_BOAT, BoatModel::createChestBoatModel);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.MANGROVE_CHEST_BOAT, BoatModel::createChestBoatModel);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.DARK_CHEST_BOAT, BoatModel::createChestBoatModel);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.TIME_CHEST_BOAT, BoatModel::createChestBoatModel);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.TRANSFORMATION_CHEST_BOAT, BoatModel::createChestBoatModel);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.MINING_CHEST_BOAT, BoatModel::createChestBoatModel);
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.SORTING_CHEST_BOAT, BoatModel::createChestBoatModel);
 	}
 
 	private static void registerSpecialModels() {
-		SpecialBlockRendererRegistry.register(TFBlocks.TWILIGHT_OAK_CHEST.get(), new TFChestSpecialRenderer.Unbaked(TwilightForestMod.prefix("twilight_oak/normal")));
-		SpecialBlockRendererRegistry.register(TFBlocks.CANOPY_CHEST.get(), new TFChestSpecialRenderer.Unbaked(TwilightForestMod.prefix("canopy/normal")));
-		SpecialBlockRendererRegistry.register(TFBlocks.MANGROVE_CHEST.get(), new TFChestSpecialRenderer.Unbaked(TwilightForestMod.prefix("mangrove/normal")));
-		SpecialBlockRendererRegistry.register(TFBlocks.DARK_CHEST.get(), new TFChestSpecialRenderer.Unbaked(TwilightForestMod.prefix("darkwood/normal")));
-		SpecialBlockRendererRegistry.register(TFBlocks.TIME_CHEST.get(), new TFChestSpecialRenderer.Unbaked(TwilightForestMod.prefix("time/normal")));
-		SpecialBlockRendererRegistry.register(TFBlocks.TRANSFORMATION_CHEST.get(), new TFChestSpecialRenderer.Unbaked(TwilightForestMod.prefix("tranformation/normal")));
-		SpecialBlockRendererRegistry.register(TFBlocks.MINING_CHEST.get(), new TFChestSpecialRenderer.Unbaked(TwilightForestMod.prefix("mining/normal")));
-		SpecialBlockRendererRegistry.register(TFBlocks.SORTING_CHEST.get(), new TFChestSpecialRenderer.Unbaked(TwilightForestMod.prefix("sorting/normal")));
-		SpecialBlockRendererRegistry.register(TFBlocks.TWILIGHT_OAK_TRAPPED_CHEST.get(), new TFChestSpecialRenderer.Unbaked(TwilightForestMod.prefix("twilight_oak/trapped")));
-		SpecialBlockRendererRegistry.register(TFBlocks.CANOPY_TRAPPED_CHEST.get(), new TFChestSpecialRenderer.Unbaked(TwilightForestMod.prefix("canopy/trapped")));
-		SpecialBlockRendererRegistry.register(TFBlocks.MANGROVE_TRAPPED_CHEST.get(), new TFChestSpecialRenderer.Unbaked(TwilightForestMod.prefix("mangrove/trapped")));
-		SpecialBlockRendererRegistry.register(TFBlocks.DARK_TRAPPED_CHEST.get(), new TFChestSpecialRenderer.Unbaked(TwilightForestMod.prefix("darkwood/trapped")));
-		SpecialBlockRendererRegistry.register(TFBlocks.TIME_TRAPPED_CHEST.get(), new TFChestSpecialRenderer.Unbaked(TwilightForestMod.prefix("time/trapped")));
-		SpecialBlockRendererRegistry.register(TFBlocks.TRANSFORMATION_TRAPPED_CHEST.get(), new TFChestSpecialRenderer.Unbaked(TwilightForestMod.prefix("tranformation/trapped")));
-		SpecialBlockRendererRegistry.register(TFBlocks.MINING_TRAPPED_CHEST.get(), new TFChestSpecialRenderer.Unbaked(TwilightForestMod.prefix("mining/trapped")));
-		SpecialBlockRendererRegistry.register(TFBlocks.SORTING_TRAPPED_CHEST.get(), new TFChestSpecialRenderer.Unbaked(TwilightForestMod.prefix("sorting/trapped")));
-
-		SpecialBlockRendererRegistry.register(TFBlocks.SKULL_CHEST.get(), new SkullChestSpecialRenderer.Unbaked());
-		SpecialBlockRendererRegistry.register(TFBlocks.KEEPSAKE_CASKET.get(), new KeepsakeCasketSpecialRenderer.Unbaked());
-		SpecialBlockRendererRegistry.register(TFBlocks.CANDELABRA.get(), new CandelabraSpecialRenderer.Unbaked());
-		SpecialBlockRendererRegistry.register(TFBlocks.CICADA.get(), new CicadaSpecialRenderer.Unbaked());
-		SpecialBlockRendererRegistry.register(TFBlocks.FIREFLY.get(), new FireflySpecialRenderer.Unbaked());
-		SpecialBlockRendererRegistry.register(TFBlocks.MOONWORM.get(), new MoonwormSpecialRenderer.Unbaked());
-
-		SpecialBlockRendererRegistry.register(TFBlocks.FIREFLY_JAR.get(), new MasonJarSpecialRenderer.Unbaked(TFBlocks.TWILIGHT_OAK_LOG.asItem()));
-		SpecialBlockRendererRegistry.register(TFBlocks.CICADA_JAR.get(), new MasonJarSpecialRenderer.Unbaked(TFBlocks.CANOPY_LOG.asItem()));
-		SpecialBlockRendererRegistry.register(TFBlocks.MASON_JAR.get(), new MasonJarSpecialRenderer.Unbaked(TFBlocks.TWILIGHT_OAK_LOG.asItem()));
-
-		SpecialBlockRendererRegistry.register(TFBlocks.ZOMBIE_SKULL_CANDLE.get(), new SkullCandleSpecialRenderer.Unbaked(SkullBlock.Types.ZOMBIE));
-		SpecialBlockRendererRegistry.register(TFBlocks.ZOMBIE_WALL_SKULL_CANDLE.get(), new SkullCandleSpecialRenderer.Unbaked(SkullBlock.Types.ZOMBIE));
-		SpecialBlockRendererRegistry.register(TFBlocks.SKELETON_SKULL_CANDLE.get(), new SkullCandleSpecialRenderer.Unbaked(SkullBlock.Types.SKELETON));
-		SpecialBlockRendererRegistry.register(TFBlocks.SKELETON_WALL_SKULL_CANDLE.get(), new SkullCandleSpecialRenderer.Unbaked(SkullBlock.Types.SKELETON));
-		SpecialBlockRendererRegistry.register(TFBlocks.CREEPER_SKULL_CANDLE.get(), new SkullCandleSpecialRenderer.Unbaked(SkullBlock.Types.CREEPER));
-		SpecialBlockRendererRegistry.register(TFBlocks.CREEPER_WALL_SKULL_CANDLE.get(), new SkullCandleSpecialRenderer.Unbaked(SkullBlock.Types.CREEPER));
-		SpecialBlockRendererRegistry.register(TFBlocks.WITHER_SKELE_SKULL_CANDLE.get(), new SkullCandleSpecialRenderer.Unbaked(SkullBlock.Types.WITHER_SKELETON));
-		SpecialBlockRendererRegistry.register(TFBlocks.WITHER_SKELE_WALL_SKULL_CANDLE.get(), new SkullCandleSpecialRenderer.Unbaked(SkullBlock.Types.WITHER_SKELETON));
-		SpecialBlockRendererRegistry.register(TFBlocks.PLAYER_SKULL_CANDLE.get(), new SkullCandleSpecialRenderer.Unbaked(SkullBlock.Types.PLAYER));
-		SpecialBlockRendererRegistry.register(TFBlocks.PLAYER_WALL_SKULL_CANDLE.get(), new SkullCandleSpecialRenderer.Unbaked(SkullBlock.Types.PLAYER));
-		SpecialBlockRendererRegistry.register(TFBlocks.PIGLIN_SKULL_CANDLE.get(), new SkullCandleSpecialRenderer.Unbaked(SkullBlock.Types.PIGLIN));
-		SpecialBlockRendererRegistry.register(TFBlocks.PIGLIN_WALL_SKULL_CANDLE.get(), new SkullCandleSpecialRenderer.Unbaked(SkullBlock.Types.PIGLIN));
-
-		SpecialBlockRendererRegistry.register(TFBlocks.NAGA_TROPHY.get(), new TrophySpecialRenderer.Unbaked(BossVariant.NAGA));
-		SpecialBlockRendererRegistry.register(TFBlocks.NAGA_WALL_TROPHY.get(), new TrophySpecialRenderer.Unbaked(BossVariant.NAGA));
-		SpecialBlockRendererRegistry.register(TFBlocks.LICH_TROPHY.get(), new TrophySpecialRenderer.Unbaked(BossVariant.LICH));
-		SpecialBlockRendererRegistry.register(TFBlocks.LICH_WALL_TROPHY.get(), new TrophySpecialRenderer.Unbaked(BossVariant.LICH));
-		SpecialBlockRendererRegistry.register(TFBlocks.MINOSHROOM_TROPHY.get(), new TrophySpecialRenderer.Unbaked(BossVariant.MINOSHROOM));
-		SpecialBlockRendererRegistry.register(TFBlocks.MINOSHROOM_WALL_TROPHY.get(), new TrophySpecialRenderer.Unbaked(BossVariant.MINOSHROOM));
-		SpecialBlockRendererRegistry.register(TFBlocks.HYDRA_TROPHY.get(), new TrophySpecialRenderer.Unbaked(BossVariant.HYDRA));
-		SpecialBlockRendererRegistry.register(TFBlocks.HYDRA_WALL_TROPHY.get(), new TrophySpecialRenderer.Unbaked(BossVariant.HYDRA));
-		SpecialBlockRendererRegistry.register(TFBlocks.KNIGHT_PHANTOM_TROPHY.get(), new TrophySpecialRenderer.Unbaked(BossVariant.KNIGHT_PHANTOM));
-		SpecialBlockRendererRegistry.register(TFBlocks.KNIGHT_PHANTOM_WALL_TROPHY.get(), new TrophySpecialRenderer.Unbaked(BossVariant.KNIGHT_PHANTOM));
-		SpecialBlockRendererRegistry.register(TFBlocks.UR_GHAST_TROPHY.get(), new TrophySpecialRenderer.Unbaked(BossVariant.UR_GHAST));
-		SpecialBlockRendererRegistry.register(TFBlocks.UR_GHAST_WALL_TROPHY.get(), new TrophySpecialRenderer.Unbaked(BossVariant.UR_GHAST));
-		SpecialBlockRendererRegistry.register(TFBlocks.ALPHA_YETI_TROPHY.get(), new TrophySpecialRenderer.Unbaked(BossVariant.ALPHA_YETI));
-		SpecialBlockRendererRegistry.register(TFBlocks.ALPHA_YETI_WALL_TROPHY.get(), new TrophySpecialRenderer.Unbaked(BossVariant.ALPHA_YETI));
-		SpecialBlockRendererRegistry.register(TFBlocks.SNOW_QUEEN_TROPHY.get(), new TrophySpecialRenderer.Unbaked(BossVariant.SNOW_QUEEN));
-		SpecialBlockRendererRegistry.register(TFBlocks.SNOW_QUEEN_WALL_TROPHY.get(), new TrophySpecialRenderer.Unbaked(BossVariant.SNOW_QUEEN));
-		SpecialBlockRendererRegistry.register(TFBlocks.QUEST_RAM_TROPHY.get(), new TrophySpecialRenderer.Unbaked(BossVariant.QUEST_RAM));
-		SpecialBlockRendererRegistry.register(TFBlocks.QUEST_RAM_WALL_TROPHY.get(), new TrophySpecialRenderer.Unbaked(BossVariant.QUEST_RAM));
 	}
 
 	private static void registerParticleFactories() {
-		ParticleFactoryRegistry registry = ParticleFactoryRegistry.getInstance();
+		ParticleProviderRegistry registry = ParticleProviderRegistry.getInstance();
 		registry.register(TFParticleType.LARGE_FLAME.get(), LargeFlameParticle.Factory::new);
 		registry.register(TFParticleType.LEAF_RUNE.get(), LeafRuneParticle.Factory::new);
 		registry.register(TFParticleType.BOSS_TEAR.get(), new GhastTearParticle.Factory());
@@ -575,7 +496,7 @@ public class RegistrationEvents {
 		registry.register(TFParticleType.CLOUD_PUFF.get(), CloudPuffParticle.Factory::new);
 		registry.register(TFParticleType.MAGIC_EFFECT.get(), MagicEffectParticle.Factory::new);
 		registry.register(TFParticleType.ANGRY_LICH.get(), AngryLichParticle.Factory::new);
-		registry.register(TFParticleType.TWILIGHT_ORB.get(), (FabricSpriteProvider sprite) -> new CustomTextureParticle.Factory(sprite, true));
+		registry.register(TFParticleType.TWILIGHT_ORB.get(), (FabricSpriteSet sprite) -> new CustomTextureParticle.Factory(sprite, true));
 		registry.register(TFParticleType.SHIELD_BREAK.get(), CustomTextureParticle.ShieldBreak::new);
 	}
 
@@ -594,7 +515,7 @@ public class RegistrationEvents {
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private static void registerFeatureLayers() {
-		LivingEntityFeatureRendererRegistrationCallback.EVENT.register((entityType, renderer, registrationHelper, context) -> {
+		LivingEntityRenderLayerRegistrationCallback.EVENT.register((entityType, renderer, registrationHelper, context) -> {
 			BakedMultiPartRenderers.ensureInitialized(context);
 			if (renderer instanceof LivingEntityRenderer living) {
 				registrationHelper.register(new ShieldLayer(living));

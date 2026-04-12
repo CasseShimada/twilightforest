@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.Util;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -67,8 +66,18 @@ public class NoTemplateSmithingRecipe implements SmithingRecipe {
 	}
 
 	@Override
-	public ItemStack assemble(SmithingRecipeInput input, HolderLookup.Provider access) {
+	public ItemStack assemble(SmithingRecipeInput input) {
 		return Util.make(input.getItem(1).copy(), this::setComponents);
+	}
+
+	@Override
+	public boolean showNotification() {
+		return false;
+	}
+
+	@Override
+	public String group() {
+		return "";
 	}
 
 	private List<TypedDataComponent<?>> additionalData() {
@@ -126,28 +135,18 @@ public class NoTemplateSmithingRecipe implements SmithingRecipe {
 		return builder.build();
 	});
 
-	public static class Serializer implements RecipeSerializer<NoTemplateSmithingRecipe> {
-		private static final MapCodec<NoTemplateSmithingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-			Ingredient.CODEC.fieldOf("base").forGetter(NoTemplateSmithingRecipe::baseIngredient),
-			Ingredient.CODEC.optionalFieldOf("addition").forGetter(NoTemplateSmithingRecipe::additionIngredient),
-			DATA_COMPONENT_CODEC.optionalFieldOf("additional_data", List.of()).forGetter(NoTemplateSmithingRecipe::additionalData)
-		).apply(instance, NoTemplateSmithingRecipe::new));
+	public static final MapCodec<NoTemplateSmithingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+		Ingredient.CODEC.fieldOf("base").forGetter(NoTemplateSmithingRecipe::baseIngredient),
+		Ingredient.CODEC.optionalFieldOf("addition").forGetter(NoTemplateSmithingRecipe::additionIngredient),
+		DATA_COMPONENT_CODEC.optionalFieldOf("additional_data", List.of()).forGetter(NoTemplateSmithingRecipe::additionalData)
+	).apply(instance, NoTemplateSmithingRecipe::new));
 
-		private static final StreamCodec<RegistryFriendlyByteBuf, NoTemplateSmithingRecipe> STREAM_CODEC = StreamCodec.composite(
-			Ingredient.CONTENTS_STREAM_CODEC, NoTemplateSmithingRecipe::baseIngredient,
-			Ingredient.OPTIONAL_CONTENTS_STREAM_CODEC, NoTemplateSmithingRecipe::additionIngredient,
-			TypedDataComponent.STREAM_CODEC.apply(ByteBufCodecs.list()), NoTemplateSmithingRecipe::additionalData,
-			NoTemplateSmithingRecipe::new
-		);
+	public static final StreamCodec<RegistryFriendlyByteBuf, NoTemplateSmithingRecipe> STREAM_CODEC = StreamCodec.composite(
+		Ingredient.CONTENTS_STREAM_CODEC, NoTemplateSmithingRecipe::baseIngredient,
+		Ingredient.OPTIONAL_CONTENTS_STREAM_CODEC, NoTemplateSmithingRecipe::additionIngredient,
+		TypedDataComponent.STREAM_CODEC.apply(ByteBufCodecs.list()), NoTemplateSmithingRecipe::additionalData,
+		NoTemplateSmithingRecipe::new
+	);
 
-		@Override
-		public MapCodec<NoTemplateSmithingRecipe> codec() {
-			return CODEC;
-		}
-
-		@Override
-		public StreamCodec<RegistryFriendlyByteBuf, NoTemplateSmithingRecipe> streamCodec() {
-			return STREAM_CODEC;
-		}
-	}
+	public static final RecipeSerializer<NoTemplateSmithingRecipe> SERIALIZER = new RecipeSerializer<>(CODEC, STREAM_CODEC);
 }

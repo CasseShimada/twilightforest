@@ -4,7 +4,7 @@ import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
@@ -39,7 +39,7 @@ public class FakeItemEntityRenderer implements IIngredientRenderer<FakeItemEntit
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, @Nullable FakeItemEntity item) {
+	public void render(GuiGraphicsExtractor graphics, @Nullable FakeItemEntity item) {
 		Level level = Minecraft.getInstance().level;
 		if (item != null && level != null) {
 			try {
@@ -58,7 +58,7 @@ public class FakeItemEntityRenderer implements IIngredientRenderer<FakeItemEntit
 
 	@Override
 	public void getTooltip(ITooltipBuilder tooltip, FakeItemEntity item, TooltipFlag flag) {
-		tooltip.add(item.stack().getItem().getName());
+		tooltip.add(item.stack().getItem().getName(item.stack()));
 		if (flag.isAdvanced()) {
 			tooltip.add(Component.literal(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item.stack().getItem())).toString()).withStyle(ChatFormatting.DARK_GRAY));
 		}

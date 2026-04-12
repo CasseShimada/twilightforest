@@ -99,9 +99,9 @@ public interface StructureHints {
 	 */
 	default boolean didSpawnHintMonster(Level world, Player player, BlockPos pos) {
 		// find a target point
-		int dx = world.random.nextInt(16) - world.random.nextInt(16);
-		int dy = world.random.nextInt(4) - world.random.nextInt(4);
-		int dz = world.random.nextInt(16) - world.random.nextInt(16);
+		int dx = world.getRandom().nextInt(16) - world.getRandom().nextInt(16);
+		int dy = world.getRandom().nextInt(4) - world.getRandom().nextInt(4);
+		int dz = world.getRandom().nextInt(16) - world.getRandom().nextInt(16);
 
 		// make our hint monster
 		Mob hinty = this.createHintMonster(world);

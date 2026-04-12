@@ -3,19 +3,19 @@ package twilightforest.client.model.block.patch;
 import com.mojang.math.Quadrant;
 import com.mojang.serialization.MapCodec;
 import net.fabricmc.fabric.api.client.model.loading.v1.CustomUnbakedBlockStateModel;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockElementFace;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.block.model.FaceBakery;
-import net.minecraft.client.renderer.block.model.SingleVariant;
-import net.minecraft.client.renderer.block.model.Variant;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BlockModelRotation;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.resources.model.cuboid.FaceBakery;
+import net.minecraft.client.resources.model.cuboid.CuboidFace;
+import net.minecraft.client.renderer.block.dispatch.SingleVariant;
+import net.minecraft.client.renderer.block.dispatch.Variant;
+import net.minecraft.client.renderer.block.dispatch.BlockModelRotation;
 import net.minecraft.client.resources.model.ModelBaker;
-import net.minecraft.client.resources.model.QuadCollection;
+import net.minecraft.client.resources.model.geometry.QuadCollection;
 import net.minecraft.client.resources.model.ResolvableModel;
 import net.minecraft.client.resources.model.ResolvedModel;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -27,28 +27,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PatchModel implements BlockStateModel {
-	private final TextureAtlasSprite texture;
+	private final Material.Baked texture;
 	private final boolean shaggify;
-	private final TextureAtlasSprite particle;
+	private final Material.Baked particle;
 	private final boolean usesAmbientOcclusion;
-	private final ModelBaker.PartCache partCache;
+	private final ModelBaker baker;
+	private final int materialFlags;
 
-	public PatchModel(TextureAtlasSprite texture, boolean shaggify, TextureAtlasSprite particle, boolean usesAmbientOcclusion, ModelBaker.PartCache partCache) {
+	public PatchModel(Material.Baked texture, boolean shaggify, Material.Baked particle, boolean usesAmbientOcclusion, ModelBaker baker) {
 		this.texture = texture;
 		this.shaggify = shaggify;
 		this.particle = particle;
 		this.usesAmbientOcclusion = usesAmbientOcclusion;
-		this.partCache = partCache;
+		this.baker = baker;
+		this.materialFlags = this.buildQuads(false, false, false, false, RandomSource.create(0L)).materialFlags();
 	}
 
 	@Override
-	public void collectParts(RandomSource random, List<BlockModelPart> output) {
+	public void collectParts(RandomSource random, List<BlockStateModelPart> output) {
 		output.add(new PatchPart(random.nextLong()));
 	}
 
 	@Override
-	public TextureAtlasSprite particleIcon() {
+	public Material.Baked particleMaterial() {
 		return this.particle;
+	}
+
+	@Override
+	public int materialFlags() {
+		return this.materialFlags;
 	}
 
 	QuadCollection buildQuads(boolean north, boolean east, boolean south, boolean west, RandomSource posRandom) {
@@ -167,16 +174,16 @@ public class PatchModel implements BlockStateModel {
 
 	private BakedQuad quadFromVectors(Direction direction, float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
 		Quadrant rotation = (direction == Direction.EAST || direction == Direction.WEST) ? Quadrant.R90 : Quadrant.R0;
-		BlockElementFace face = new BlockElementFace(null, 0, this.texture.atlasLocation().toString(), switch (direction) {
-			case NORTH -> new BlockElementFace.UVs(maxX, minZ + 1f, minX, minZ);
-			case EAST -> new BlockElementFace.UVs(maxX, minZ, maxX - 1f, maxZ);
-			case SOUTH -> new BlockElementFace.UVs(minX, maxZ, maxX, maxZ - 1f);
-			case WEST -> new BlockElementFace.UVs(minX, maxZ, minX + 1f, minZ);
-			default -> new BlockElementFace.UVs(minX, minZ, maxX, maxZ);
+		CuboidFace face = new CuboidFace(null, 0, this.texture.sprite().atlasLocation().toString(), switch (direction) {
+			case NORTH -> new CuboidFace.UVs(maxX, minZ + 1f, minX, minZ);
+			case EAST -> new CuboidFace.UVs(maxX, minZ, maxX - 1f, maxZ);
+			case SOUTH -> new CuboidFace.UVs(minX, maxZ, maxX, maxZ - 1f);
+			case WEST -> new CuboidFace.UVs(minX, maxZ, minX + 1f, minZ);
+			default -> new CuboidFace.UVs(minX, minZ, maxX, maxZ);
 		}, rotation);
 
 		return FaceBakery.bakeQuad(
-			partCache,
+			baker,
 			new Vector3f(minX, minY, minZ),
 			new Vector3f(maxX, maxY, maxZ),
 			face,
@@ -189,7 +196,7 @@ public class PatchModel implements BlockStateModel {
 		);
 	}
 
-	private final class PatchPart implements BlockModelPart {
+	private final class PatchPart implements BlockStateModelPart {
 		private final long seed;
 
 		private PatchPart(long seed) {
@@ -220,8 +227,13 @@ public class PatchModel implements BlockStateModel {
 		}
 
 		@Override
-		public TextureAtlasSprite particleIcon() {
+		public Material.Baked particleMaterial() {
 			return particle;
+		}
+
+		@Override
+		public int materialFlags() {
+			return PatchModel.this.materialFlags;
 		}
 	}
 

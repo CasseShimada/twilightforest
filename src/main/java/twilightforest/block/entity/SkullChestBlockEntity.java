@@ -28,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.TFBlockEntities;
 import twilightforest.init.TFSounds;
+import twilightforest.util.PlayerMessaging;
 
 public class SkullChestBlockEntity extends RandomizableContainerBlockEntity implements LidBlockEntity {
 	private static final int SIZE = 9 * 5;
@@ -196,7 +197,7 @@ public class SkullChestBlockEntity extends RandomizableContainerBlockEntity impl
 	public void displayLockedInfo(Player player) {
 		player.playSound(TFSounds.SKULL_CHEST_LOCKED.get(), 0.5F, 0.5F);
 		String ownerName = this.owner != null ? this.owner.name().orElse("unknown") : "unknown";
-		player.displayClientMessage(Component.translatable("block.twilightforest.skull_chest.locked", ownerName).withStyle(ChatFormatting.RED), true);
+		PlayerMessaging.displayClientMessage(player, Component.translatable("block.twilightforest.skull_chest.locked", ownerName).withStyle(ChatFormatting.RED), true);
 	}
 
 	//remove stored player when chest is broken

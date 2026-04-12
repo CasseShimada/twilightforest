@@ -10,7 +10,7 @@ public class AngryLichParticle extends SingleQuadParticle {
 	private final SpriteSet sprites;
 
 	protected AngryLichParticle(ClientLevel level, double x, double y, double z, SpriteSet sprites) {
-		super(level, x, y, z, 0.0D, 0.0D, 0.0D, sprites.get(level.random));
+		super(level, x, y, z, 0.0D, 0.0D, 0.0D, sprites.get(level.getRandom()));
 		this.sprites = sprites;
 
 		this.lifetime = 10;

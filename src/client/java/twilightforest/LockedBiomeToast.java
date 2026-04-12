@@ -1,7 +1,7 @@
 package twilightforest.client;
 
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastManager;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -32,10 +32,10 @@ public class LockedBiomeToast implements Toast {
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, Font font, long timer) {
+	public void extractRenderState(GuiGraphicsExtractor graphics, Font font, long timer) {
 		graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND_SPRITE, 0, 0, this.width(), this.height());
-		graphics.renderFakeItem(this.icon, 6, 8);
-		graphics.drawString(font, TITLE, 25, 7, -256, false);
-		graphics.drawString(font, DESCRIPTION, 25, 18, 16777215, false);
+		graphics.fakeItem(this.icon, 6, 8);
+		graphics.text(font, TITLE, 25, 7, -256, false);
+		graphics.text(font, DESCRIPTION, 25, 18, 16777215, false);
 	}
 }

@@ -1,26 +1,26 @@
 package twilightforest.client.model.block.aurorablock;
 
-import net.minecraft.client.renderer.block.model.BlockModel;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.block.model.SimpleModelWrapper;
-import net.minecraft.client.renderer.block.model.TextureSlots;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.resources.model.cuboid.ItemTransforms;
+import net.minecraft.client.resources.model.SimpleModelWrapper;
+import net.minecraft.client.resources.model.sprite.TextureSlots;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelBaker;
-import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.renderer.block.dispatch.ModelState;
 import net.minecraft.client.resources.model.ResolvableModel;
 import net.minecraft.client.resources.model.ResolvedModel;
-import net.minecraft.client.resources.model.UnbakedGeometry;
+import net.minecraft.client.resources.model.geometry.UnbakedGeometry;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.Identifier;
 
 import java.util.Arrays;
 
 public class UnbakedNoiseVaryingModel implements UnbakedModel, ResolvableModel {
-	private final BlockModel baseModel;
+	private final UnbakedModel baseModel;
 	private final Identifier[] variants;
 
-	public UnbakedNoiseVaryingModel(BlockModel baseModel, String[] variants) {
+	public UnbakedNoiseVaryingModel(UnbakedModel baseModel, String[] variants) {
 		this.baseModel = baseModel;
 		this.variants = Arrays.stream(variants).map(Identifier::parse).toArray(Identifier[]::new);
 	}
@@ -70,14 +70,14 @@ public class UnbakedNoiseVaryingModel implements UnbakedModel, ResolvableModel {
 	}
 
 	public NoiseVaryingBlockStateModel bakeToBlockStateModel(ModelBaker baker, ResolvedModel resolvedModel, ModelState state) {
-		BlockModelPart[] parts = new BlockModelPart[this.variants.length];
+		BlockStateModelPart[] parts = new BlockStateModelPart[this.variants.length];
 		for (int i = 0; i < parts.length; i++) {
 			parts[i] = SimpleModelWrapper.bake(baker, variants[i], state);
 		}
 
-		TextureAtlasSprite particle = parts.length > 0
-			? parts[0].particleIcon()
-			: resolvedModel.resolveParticleSprite(resolvedModel.getTopTextureSlots(), baker);
+		Material.Baked particle = parts.length > 0
+			? parts[0].particleMaterial()
+			: resolvedModel.resolveParticleMaterial(resolvedModel.getTopTextureSlots(), baker);
 
 		return new NoiseVaryingBlockStateModel(parts, particle);
 	}

@@ -1,6 +1,6 @@
 package twilightforest.events;
 
-import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityLevelChangeEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.entity.event.v1.effect.ServerMobEffectEvents;
@@ -11,10 +11,12 @@ import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.networking.v1.EntityTrackingEvents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.clock.WorldClocks;
 import net.minecraft.world.entity.Mob;
 import twilightforest.init.TFDimension;
 import twilightforest.item.OreMagnetItem;
@@ -83,11 +85,12 @@ public final class TFEventHandlers {
 			return EntityEvents.handleAttackEntity(entity);
 		});
 
-		ServerTickEvents.END_WORLD_TICK.register(world -> {
+		ServerTickEvents.END_LEVEL_TICK.register(world -> {
 			if (world.dimension().equals(TFDimension.DIMENSION_KEY)) {
 				long targetTime = 13000L;
-				if (world.getDayTime() != targetTime) {
-					world.setDayTime(targetTime);
+				var overworldClock = world.registryAccess().lookupOrThrow(Registries.WORLD_CLOCK).getOrThrow(WorldClocks.OVERWORLD);
+				if (world.clockManager().getTotalTicks(overworldClock) != targetTime) {
+					world.clockManager().setTotalTicks(overworldClock, targetTime);
 				}
 			}
 
@@ -153,7 +156,7 @@ public final class TFEventHandlers {
 
 		ServerPlayerEvents.JOIN.register(CapabilityEvents::onPlayerJoin);
 
-		ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register((player, origin, destination) ->
+		ServerEntityLevelChangeEvents.AFTER_PLAYER_CHANGE_LEVEL.register((player, origin, destination) ->
 			CapabilityEvents.onPlayerChangeWorld(player)
 		);
 

@@ -52,6 +52,7 @@ import twilightforest.init.TFSounds;
 import twilightforest.network.MissingAdvancementToastPacket;
 import twilightforest.util.landmarks.LandmarkUtil;
 import twilightforest.util.PlayerHelper;
+import twilightforest.util.PlayerMessaging;
 import twilightforest.world.TFTeleporter;
 
 import java.util.*;
@@ -169,7 +170,7 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 					if (!TFTeleporter.isSafeAround(level, pos, catalyst, checkProgression)) {
 						// TODO: "failure" effect - particles?
 						if (player != null) {
-							player.displayClientMessage(Component.translatable("misc.twilightforest.portal_unsafe"), true);
+							PlayerMessaging.displayClientMessage(player, Component.translatable("misc.twilightforest.portal_unsafe"), true);
 						}
 						return false;
 					}
@@ -220,12 +221,12 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 				AdvancementHolder requirement = PlayerHelper.getAdvancement(player, Objects.requireNonNull(TFConfig.getPortalLockingAdvancement(player)));
 
 				if (requirement != null && !PlayerHelper.doesPlayerHaveRequiredAdvancement(player, requirement)) {
-					player.displayClientMessage(PORTAL_UNWORTHY, true);
+					PlayerMessaging.displayClientMessage(player, PORTAL_UNWORTHY, true);
 
 					if (!TFPortalBlock.isPlayerNotifiedOfRequirement(player)) {
 						// .doesPlayerHaveRequiredAdvancement null-checks already, so we can skip null-checking the `requirement`
 						DisplayInfo info = requirement.value().display().orElse(null);
-						PacketDistributor.sendToPlayer(player, info == null ? new MissingAdvancementToastPacket(Component.translatable("twilightforest.ui.advancement.no_title"), new ItemStack(TFBlocks.TWILIGHT_PORTAL_MINIATURE_STRUCTURE.get())) : new MissingAdvancementToastPacket(info.getTitle(), info.getIcon()));
+						PacketDistributor.sendToPlayer(player, info == null ? new MissingAdvancementToastPacket(Component.translatable("twilightforest.ui.advancement.no_title"), new ItemStack(TFBlocks.TWILIGHT_PORTAL_MINIATURE_STRUCTURE.get())) : new MissingAdvancementToastPacket(info.getTitle(), info.getIcon().create()));
 						TFPortalBlock.playerNotifiedOfRequirement(player);
 					}
 

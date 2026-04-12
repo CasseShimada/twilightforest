@@ -13,7 +13,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
-import net.minecraft.world.level.storage.DimensionDataStorage;
+import net.minecraft.world.level.storage.SavedDataStorage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +21,7 @@ import java.util.Objects;
 
 public class StructureConqueredData extends SavedData {
 	private static final Codec<StructureConqueredData> CODEC = CompoundTag.CODEC.xmap(StructureConqueredData::load, data -> data.save(new CompoundTag()));
-	private static final SavedDataType<StructureConqueredData> TYPE = new SavedDataType<>("twilightforest_structure_conquered", StructureConqueredData::new, CODEC, DataFixTypes.SAVED_DATA_COMMAND_STORAGE);
+	private static final SavedDataType<StructureConqueredData> TYPE = new SavedDataType<>(net.minecraft.resources.Identifier.withDefaultNamespace("twilightforest_structure_conquered"), StructureConqueredData::new, CODEC, DataFixTypes.SAVED_DATA_COMMAND_STORAGE);
 
 	private final Map<StructureKey, Boolean> conquered = new HashMap<>();
 
@@ -30,16 +30,16 @@ public class StructureConqueredData extends SavedData {
 
 	public static StructureConqueredData get(ServerLevel level) {
 		ServerLevel server = level.getServer().overworld();
-		DimensionDataStorage storage = server.getDataStorage();
+		SavedDataStorage storage = server.getDataStorage();
 		return storage.computeIfAbsent(TYPE);
 	}
 
 	public boolean isConquered(ResourceKey<Structure> structureKey, ChunkPos chunkPos) {
-		return this.conquered.getOrDefault(new StructureKey(structureKey, chunkPos.x, chunkPos.z), false);
+		return this.conquered.getOrDefault(new StructureKey(structureKey, chunkPos.x(), chunkPos.z()), false);
 	}
 
 	public void setConquered(ResourceKey<Structure> structureKey, ChunkPos chunkPos, boolean value) {
-		StructureKey key = new StructureKey(structureKey, chunkPos.x, chunkPos.z);
+		StructureKey key = new StructureKey(structureKey, chunkPos.x(), chunkPos.z());
 		Boolean previous = this.conquered.put(key, value);
 		if (!Objects.equals(previous, value)) {
 			this.setDirty();

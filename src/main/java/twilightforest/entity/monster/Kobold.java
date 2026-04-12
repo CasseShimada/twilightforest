@@ -23,6 +23,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.ValueInput;
@@ -151,7 +152,7 @@ public class Kobold extends Monster {
 
 	@Override
 	public void spawnItemParticles(ItemStack stack, int amount) {
-		ParticleOptions particleOptions = new ItemParticleOption(ParticleTypes.ITEM, stack);
+		ParticleOptions particleOptions = new ItemParticleOption(ParticleTypes.ITEM, ItemStackTemplate.fromNonEmptyStack(stack));
 		if (this.level().isClientSide()) {
 			for (int i = 0; i < amount; ++i) {
 				this.getItemParticleVectors((vec31, vec3) ->

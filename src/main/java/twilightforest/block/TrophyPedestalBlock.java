@@ -32,6 +32,7 @@ import twilightforest.init.TFSounds;
 import twilightforest.init.TFStats;
 import twilightforest.util.landmarks.LandmarkUtil;
 import twilightforest.util.PlayerHelper;
+import twilightforest.util.PlayerMessaging;
 
 public class TrophyPedestalBlock extends Block implements SimpleWaterloggedBlock {
 
@@ -108,7 +109,7 @@ public class TrophyPedestalBlock extends Block implements SimpleWaterloggedBlock
 	private void warnIneligiblePlayers(Level level, BlockPos pos) {
 		for (Player player : level.getEntitiesOfClass(Player.class, new AABB(pos).inflate(16.0D))) {
 			if (!this.isPlayerEligible(player)) {
-				player.displayClientMessage(Component.translatable("misc.twilightforest.pedestal_ineligible"), true);
+				PlayerMessaging.displayClientMessage(player, Component.translatable("misc.twilightforest.pedestal_ineligible"), true);
 			}
 		}
 	}

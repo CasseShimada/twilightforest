@@ -358,7 +358,7 @@ public class CandelabraBlock extends BaseEntityBlock implements LightableBlock, 
 			BlockEntity blockEntity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
 			if (blockEntity instanceof CandelabraBlockEntity candelabra) {
 				RegistryAccess access = blockEntity.getLevel().registryAccess();
-				ItemStack tool = builder.getParameter(LootContextParams.TOOL);
+				ItemStack tool = (ItemStack) builder.getParameter(LootContextParams.TOOL);
 				if (!tool.isEmpty() && EnchantmentHelper.getItemEnchantmentLevel(access.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH), tool) > 0) {
 					ItemStack newStack = new ItemStack(this);
 					newStack.applyComponents(candelabra.collectComponents());

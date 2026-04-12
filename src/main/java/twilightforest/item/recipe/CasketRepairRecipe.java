@@ -1,8 +1,6 @@
 package twilightforest.item.recipe;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -13,9 +11,7 @@ import twilightforest.init.TFRecipes;
 
 public class CasketRepairRecipe extends CustomRecipe {
 
-	public CasketRepairRecipe(CraftingBookCategory category) {
-		super(category);
-	}
+	public CasketRepairRecipe() {}
 
 	@Override
 	public boolean matches(CraftingInput input, Level level) {
@@ -40,7 +36,7 @@ public class CasketRepairRecipe extends CustomRecipe {
 	}
 
 	@Override
-	public ItemStack assemble(CraftingInput input, HolderLookup.Provider access) {
+	public ItemStack assemble(CraftingInput input) {
 		ItemStack casket = null;
 		for (int i = 0; i < input.size(); ++i) {
 			ItemStack itemstack = input.getItem(i);

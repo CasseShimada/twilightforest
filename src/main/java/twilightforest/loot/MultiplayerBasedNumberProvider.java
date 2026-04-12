@@ -6,7 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import twilightforest.config.TFConfig;
@@ -22,13 +21,13 @@ public record MultiplayerBasedNumberProvider(NumberProvider rollsPerPlayer, Numb
 		.apply(instance, MultiplayerBasedNumberProvider::new)
 	);
 
-	@Override
-	public LootNumberProviderType getType() {
-		return TFLoot.MULTIPLAYER_ROLLS.get();
-	}
-
 	public static MultiplayerBasedNumberProvider rollsForPlayers(NumberProvider rollsPerPlayer, NumberProvider defaultRolls) {
 		return new MultiplayerBasedNumberProvider(rollsPerPlayer, defaultRolls);
+	}
+
+	@Override
+	public MapCodec<? extends NumberProvider> codec() {
+		return CODEC;
 	}
 
 	@Override

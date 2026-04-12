@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.renderer.state.QuadParticleRenderState;
+import net.minecraft.client.renderer.state.level.QuadParticleRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
@@ -16,7 +16,7 @@ public class FireflyParticle extends SingleQuadParticle {
 	private final boolean checkSkylight;
 
 	public FireflyParticle(ClientLevel level, double x, double y, double z, float movementX, float movementY, float movementZ, int minlife, boolean checkSkylight, SpriteSet sprites) {
-		super(level, x, y, z, sprites.get(level.random));
+		super(level, x, y, z, sprites.get(level.getRandom()));
 		this.xd *= movementX;
 		this.yd *= movementY;
 		this.zd *= movementZ;
@@ -60,7 +60,7 @@ public class FireflyParticle extends SingleQuadParticle {
 	}
 
 	@Override
-	public int getLightColor(float partialTicks) {
+	public int getLightCoords(float partialTicks) {
 		return 0xF000F0;
 	}
 

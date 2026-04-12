@@ -22,7 +22,7 @@ public class MoonDialItem extends Item {
 		boolean aprilFools = LocalDate.of(LocalDate.now().getYear(), 4, 1).equals(LocalDate.now());
 		var level = ClientLevelHelper.getClientLevel();
 		String phaseType = (level != null && level.dimensionType().hasSkyLight()
-			? String.valueOf(Math.floorMod(level.getDayTime() / 24000L, 8))
+			? String.valueOf(Math.floorMod(level.getOverworldClockTime() / 24000L, 8))
 			: aprilFools ? "unknown_fools" : "unknown");
 		tooltip.accept(Component.translatable("item.twilightforest.moon_dial.phase_" + phaseType).withStyle(ChatFormatting.GRAY));
 	}

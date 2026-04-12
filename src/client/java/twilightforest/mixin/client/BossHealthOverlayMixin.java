@@ -1,6 +1,6 @@
 package twilightforest.mixin.client;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.BossHealthOverlay;
 import net.minecraft.world.BossEvent;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,7 +12,7 @@ import twilightforest.entity.boss.bar.ClientTFBossBar;
 @Mixin(BossHealthOverlay.class)
 public class BossHealthOverlayMixin {
 	@Inject(method = "drawBar", at = @At("HEAD"), cancellable = true)
-	private void twilightforest$drawCustomBossBar(GuiGraphics graphics, int x, int y, BossEvent event, CallbackInfo ci) {
+	private void twilightforest$drawCustomBossBar(GuiGraphicsExtractor graphics, int x, int y, BossEvent event, CallbackInfo ci) {
 		if (event instanceof ClientTFBossBar bossEvent) {
 			bossEvent.renderBossBar(graphics, x, y);
 			ci.cancel();

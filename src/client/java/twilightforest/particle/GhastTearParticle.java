@@ -17,6 +17,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import twilightforest.init.TFSounds;
 
@@ -28,7 +29,7 @@ public class GhastTearParticle extends SingleQuadParticle {
 		this.quadSize = 2.0F;
 		this.gravity = 0.6F;
 		this.lifetime = 60 + this.random.nextInt(40);
-		TextureAtlasSprite textureatlassprite = this.calculateState(stack, level).pickParticleIcon(this.random);
+		TextureAtlasSprite textureatlassprite = this.calculateState(stack, level).pickParticleMaterial(this.random).sprite();
 		if (textureatlassprite != null) {
 			this.setSprite(textureatlassprite);
 		} else {
@@ -52,7 +53,7 @@ public class GhastTearParticle extends SingleQuadParticle {
 
 	@Override
 	public SingleQuadParticle.Layer getLayer() {
-		return SingleQuadParticle.Layer.ITEMS;
+		return SingleQuadParticle.Layer.TRANSLUCENT_ITEMS;
 	}
 
 	@Override
@@ -68,7 +69,7 @@ public class GhastTearParticle extends SingleQuadParticle {
 				double gaussY = this.random.nextGaussian() * 0.2D;
 				double gaussZ = this.random.nextGaussian() * 0.1D;
 
-				this.level.addParticle(new ItemParticleOption(ParticleTypes.ITEM, itemID), this.x + this.random.nextFloat() - this.random.nextFloat(), this.y + 0.5F, this.z + this.random.nextFloat(), gaussX, gaussY, gaussZ);
+				this.level.addParticle(new ItemParticleOption(ParticleTypes.ITEM, ItemStackTemplate.fromNonEmptyStack(itemID)), this.x + this.random.nextFloat() - this.random.nextFloat(), this.y + 0.5F, this.z + this.random.nextFloat(), gaussX, gaussY, gaussZ);
 			}
 			this.remove();
 		}

@@ -9,7 +9,7 @@ public class CloudPuffParticle extends SingleQuadParticle {
 	private final SpriteSet sprites;
 
 	CloudPuffParticle(ClientLevel level, double X, double Y, double Z, double XSpeed, double YSpeed, double ZSpeed, SpriteSet sprites) {
-		super(level, X, Y, Z, sprites.get(level.random));
+		super(level, X, Y, Z, sprites.get(level.getRandom()));
 		this.friction = 0.96F;
 		this.sprites = sprites;
 		this.xd *= 0.1D;

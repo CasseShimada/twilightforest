@@ -1,7 +1,7 @@
 package twilightforest.client;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.navigation.ScreenPosition;
@@ -120,17 +120,17 @@ public class UncraftingScreen extends AbstractRecipeBookScreen<UncraftingMenu> {
 	}
 
 	@Override
-	protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-		graphics.drawString(this.font, this.title, 6, 6, 4210752, false);
+	protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+		graphics.text(this.font, this.title, 6, 6, 4210752, false);
 		if (TFConfig.disableUncraftingOnly) {
-			graphics.drawString(this.font, Component.translatable("container.twilightforest.uncrafting_table.uncrafting_disabled").withStyle(ChatFormatting.DARK_RED), 6, this.imageHeight - 96 + 2, 4210752, false);
+			graphics.text(this.font, Component.translatable("container.twilightforest.uncrafting_table.uncrafting_disabled").withStyle(ChatFormatting.DARK_RED), 6, this.imageHeight - 96 + 2, 4210752, false);
 		} else {
-			graphics.drawString(this.font, I18n.get("container.inventory"), 7, this.imageHeight - 96 + 2, 4210752, false);
+			graphics.text(this.font, I18n.get("container.inventory"), 7, this.imageHeight - 96 + 2, 4210752, false);
 		}
 	}
 
 	@Override
-	protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
+	public void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
 		int frameX = this.leftPos;
 		int frameY = (this.height - this.imageHeight) / 2;
 		graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, frameX, frameY, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
@@ -160,7 +160,7 @@ public class UncraftingScreen extends AbstractRecipeBookScreen<UncraftingMenu> {
 			} else {
 				color = 0x80FF20;
 			}
-			graphics.drawString(this.font, cost, frameX + 48 - this.font.width(cost), frameY + 38, color);
+			graphics.text(this.font, cost, frameX + 48 - this.font.width(cost), frameY + 38, color);
 		}
 
 		costVal = tfContainer.getRecraftingCost();
@@ -172,17 +172,17 @@ public class UncraftingScreen extends AbstractRecipeBookScreen<UncraftingMenu> {
 			} else {
 				color = 0x80FF20;
 			}
-			graphics.drawString(this.font, cost, frameX + 130 - this.font.width(cost), frameY + 38, color);
+			graphics.text(this.font, cost, frameX + 130 - this.font.width(cost), frameY + 38, color);
 		}
 	}
 
-	private void drawSlotAsBackground(GuiGraphics graphics, Slot backgroundSlot, Slot appearSlot) {
+	private void drawSlotAsBackground(GuiGraphicsExtractor graphics, Slot backgroundSlot, Slot appearSlot) {
 
 		int screenX = appearSlot.x;
 		int screenY = appearSlot.y;
 		ItemStack itemStackToRender = backgroundSlot.getItem();
 
-		graphics.renderFakeItem(itemStackToRender, screenX, screenY);
+		graphics.fakeItem(itemStackToRender, screenX, screenY);
 
 		boolean itemBroken = UncraftingMenu.isMarked(itemStackToRender);
 
@@ -195,7 +195,7 @@ public class UncraftingScreen extends AbstractRecipeBookScreen<UncraftingMenu> {
 	}
 
 	@Override
-	protected void renderTooltip(GuiGraphics graphics, int pX, int pY) {
+	protected void extractTooltip(GuiGraphicsExtractor graphics, int pX, int pY) {
 		UncraftingMenu container = this.menu;
 
 		for (int i = 0; i < 9; i++) {
@@ -208,7 +208,7 @@ public class UncraftingScreen extends AbstractRecipeBookScreen<UncraftingMenu> {
 		if (container.slots.getFirst().hasItem() && container.slots.getFirst().getItem().is(TFItemTags.BANNED_UNCRAFTABLES) && container.slots.getFirst().equals(this.hoveredSlot)) {
 			graphics.setTooltipForNextFrame(this.font, Component.translatable("container.twilightforest.uncrafting_table.disabled_item").withStyle(ChatFormatting.RED), pX, pY);
 		} else {
-			super.renderTooltip(graphics, pX, pY);
+			super.extractTooltip(graphics, pX, pY);
 		}
 	}
 
@@ -223,7 +223,7 @@ public class UncraftingScreen extends AbstractRecipeBookScreen<UncraftingMenu> {
 		}
 
 		@Override
-		protected void renderContents(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+		protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
 			int textureX = 176;
 			int textureY = 0;
 
@@ -246,7 +246,7 @@ public class UncraftingScreen extends AbstractRecipeBookScreen<UncraftingMenu> {
 		}
 
 		@Override
-		protected void renderContents(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+		protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
 			int textureX = 176;
 			int textureY = 41;
 

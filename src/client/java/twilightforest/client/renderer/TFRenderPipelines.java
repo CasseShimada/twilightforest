@@ -1,7 +1,10 @@
 package twilightforest.client.renderer;
 
 import com.mojang.blaze3d.pipeline.BlendFunction;
+import com.mojang.blaze3d.pipeline.ColorTargetState;
+import com.mojang.blaze3d.pipeline.DepthStencilState;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.blaze3d.platform.CompareOp;
 import com.mojang.blaze3d.shaders.UniformType;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
@@ -14,8 +17,8 @@ public final class TFRenderPipelines {
 			.withLocation(TwilightForestMod.prefix("pipeline/aurora"))
 			.withVertexShader(TwilightForestMod.prefix("core/aurora/aurora"))
 			.withFragmentShader(TwilightForestMod.prefix("core/aurora/aurora"))
-			.withBlend(BlendFunction.TRANSLUCENT)
-			.withDepthWrite(false)
+			.withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+			.withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
 			.withCull(false)
 			.withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS)
 			.withUniform("AuroraContext", UniformType.UNIFORM_BUFFER)

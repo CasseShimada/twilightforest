@@ -2,7 +2,7 @@ package twilightforest.compat.jei.renderers;
 
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.ingredients.IIngredientRenderer;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
@@ -32,7 +32,7 @@ public class EntityRenderer implements IIngredientRenderer<FakeEntityType> {
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, @Nullable FakeEntityType type) {
+	public void render(GuiGraphicsExtractor graphics, @Nullable FakeEntityType type) {
 		if (type != null) {
 			EntityType<?> entityType = BuiltInRegistries.ENTITY_TYPE.getValue(type.type());
 			if (entityType != null) EntityRenderingUtil.renderEntity(graphics, entityType, this.size);

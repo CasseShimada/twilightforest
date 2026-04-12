@@ -210,7 +210,7 @@ public class FallenTrunkPiece extends StructurePiece {
 	}
 
 	private BlockState getLogState(RandomSource random, BlockPos pos) {
-		return log.getState(random, pos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z);
+		return log.getState(null, random, pos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z);
 	}
 
 	private void placeLog(WorldGenLevel level, BlockState blockstate, int x, int y, int z, BoundingBox boundingbox, RandomSource random, boolean hasHole) {

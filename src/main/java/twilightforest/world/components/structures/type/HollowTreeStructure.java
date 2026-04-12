@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.IntProviders;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
@@ -41,8 +42,8 @@ public class HollowTreeStructure extends Structure implements DecorationClearanc
 	public static final MapCodec<HollowTreeStructure> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 		Structure.settingsCodec(instance),
 		DecorationConfig.FLAT_CODEC.forGetter(s -> s.decorationConfig),
-		IntProvider.codec(16, 128).fieldOf("height").forGetter(s -> s.height),
-		IntProvider.codec(1, 8).fieldOf("radius").forGetter(s -> s.radius),
+		IntProviders.codec(16, 128).fieldOf("height").forGetter(s -> s.height),
+		IntProviders.codec(1, 8).fieldOf("radius").forGetter(s -> s.radius),
 		BlockStateProvider.CODEC.fieldOf("log").forGetter(s -> s.log),
 		BlockStateProvider.CODEC.fieldOf("wood").forGetter(s -> s.wood),
 		BlockStateProvider.CODEC.fieldOf("root").forGetter(s -> s.root),
@@ -122,10 +123,10 @@ public class HollowTreeStructure extends Structure implements DecorationClearanc
 	public Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
 		ChunkPos chunkPos = context.chunkPos();
 
-		RandomSource random = RandomSource.create(context.seed() + chunkPos.x * 25117L + chunkPos.z * 151121L);
+		RandomSource random = RandomSource.create(context.seed() + chunkPos.x() * 25117L + chunkPos.z() * 151121L);
 
-		int x = SectionPos.sectionToBlockCoord(chunkPos.x, random.nextInt(16));
-		int z = SectionPos.sectionToBlockCoord(chunkPos.z, random.nextInt(16));
+		int x = SectionPos.sectionToBlockCoord(chunkPos.x(), random.nextInt(16));
+		int z = SectionPos.sectionToBlockCoord(chunkPos.z(), random.nextInt(16));
 		int seaFloorY = context.chunkGenerator().getFirstOccupiedHeight(x, z, Heightmap.Types.OCEAN_FLOOR_WG, context.heightAccessor(), context.randomState());
 		int worldY = context.chunkGenerator().getFirstOccupiedHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
 
@@ -166,8 +167,8 @@ public class HollowTreeStructure extends Structure implements DecorationClearanc
 
 	@Override
 	public StructureStart generateFromSapling(RegistryAccess registryAccess, ChunkGenerator generator, BiomeSource biomeSource, RandomState randomState, StructureTemplateManager templateManager, long seed, BlockPos blockPos, LevelHeightAccessor heightAccessor) {
-		ChunkPos chunkPos = new ChunkPos(blockPos);
-		RandomSource random = RandomSource.create(seed + chunkPos.x * 25117L + chunkPos.z * 151121L);
+		ChunkPos chunkPos = ChunkPos.containing(blockPos);
+		RandomSource random = RandomSource.create(seed + chunkPos.x() * 25117L + chunkPos.z() * 151121L);
 
 		int height = Math.min(this.height.sample(random) + blockPos.getY(), heightAccessor.getMaxY()) - blockPos.getY();
 

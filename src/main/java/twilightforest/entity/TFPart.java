@@ -142,8 +142,8 @@ public abstract class TFPart<T extends Entity> extends Entity {
 	}
 
 	@Override
-	public InteractionResult interact(Player player, InteractionHand hand) {
-		return this.parent.interact(player, hand);
+	public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
+		return this.parent.interact(player, hand, location);
 	}
 
 	@Override

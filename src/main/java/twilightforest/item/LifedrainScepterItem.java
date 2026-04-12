@@ -83,7 +83,7 @@ public class LifedrainScepterItem extends Item {
 	 * Animates the target falling apart into a rain of shatter particles
 	 */
 	public static void animateTargetShatter(ServerLevel level, LivingEntity target) {
-		ParticleOptions options = new ItemParticleOption(ParticleTypes.ITEM, Items.ROTTEN_FLESH.getDefaultInstance());
+		ParticleOptions options = new ItemParticleOption(ParticleTypes.ITEM, Items.ROTTEN_FLESH);
 		// 1 in 100 chance of a big pop, you're welcome KD
 		boolean big = level.getRandom().nextInt(100) == 0;
 		double explosionPower = big ? 1.0D : 0.3D;
@@ -96,9 +96,9 @@ public class LifedrainScepterItem extends Item {
 			double gaussY = level.getRandom().nextGaussian() * 0.01D;
 			double gaussZ = level.getRandom().nextGaussian() * 0.01D;
 			double speed = level.getRandom().nextFloat() * explosionPower;
-			double x = level.getRandom().nextFloat() * target.getBbWidth() * 1.5F - target.getBbWidth() - gaussX * gaussFactor + (level.random.nextGaussian() * gaussX);
-			double y = level.getRandom().nextFloat() * target.getBbHeight() - gaussY * gaussFactor + (level.random.nextGaussian() * gaussY);
-			double z = level.getRandom().nextFloat() * target.getBbWidth() * 1.5F - target.getBbWidth() - gaussZ * gaussFactor + (level.random.nextGaussian() * gaussZ);
+			double x = level.getRandom().nextFloat() * target.getBbWidth() * 1.5F - target.getBbWidth() - gaussX * gaussFactor + (level.getRandom().nextGaussian() * gaussX);
+			double y = level.getRandom().nextFloat() * target.getBbHeight() - gaussY * gaussFactor + (level.getRandom().nextGaussian() * gaussY);
+			double z = level.getRandom().nextFloat() * target.getBbWidth() * 1.5F - target.getBbWidth() - gaussZ * gaussFactor + (level.getRandom().nextGaussian() * gaussZ);
 
 			particlePacket.queueParticle(options, target.getX() + x, target.getY() + y, target.getZ() + z, x * speed, y * speed, z * speed);
 		}
@@ -166,8 +166,8 @@ public class LifedrainScepterItem extends Item {
 				DamageSource damageSource = TFDamageTypes.getEntityDamageSource(level, TFDamageTypes.LIFEDRAIN, living);
 				if (level instanceof ServerLevel serverLevel && target.hurtServer(serverLevel, damageSource, 1)) {
 					// make it explode
-					if (target.getHealth() <= 1 && !target.getType().is(TFEntityTypeTags.BOSSES)) {
-						if (!target.getType().is(TFEntityTypeTags.LIFEDRAIN_DROPS_NO_FLESH) && living instanceof Player player) {
+					if (target.getHealth() <= 1 && !target.getType().builtInRegistryHolder().is(TFEntityTypeTags.BOSSES)) {
+						if (!target.getType().builtInRegistryHolder().is(TFEntityTypeTags.LIFEDRAIN_DROPS_NO_FLESH) && living instanceof Player player) {
 							LootParams ctx = new LootParams.Builder(serverLevel)
 								.withParameter(LootContextParams.THIS_ENTITY, target)
 								.withParameter(LootContextParams.ORIGIN, target.getEyePosition())

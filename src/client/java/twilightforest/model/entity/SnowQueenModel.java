@@ -136,7 +136,7 @@ public class SnowQueenModel extends HumanoidModel<SnowQueenRenderState> implemen
 
 	@Override
 	public void submitTrophy(PoseStack stack, SubmitNodeCollector nodeCollector, int light, int overlay, int color, ItemDisplayContext context, @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress) {
-		nodeCollector.submitModelPart(this.head, stack, RenderTypes.entityCutoutNoCull(SnowQueenRenderer.TEXTURE), light, overlay, null, false, false, color, breakProgress, 0);
+		nodeCollector.submitModelPart(this.head, stack, RenderTypes.entityCutout(SnowQueenRenderer.TEXTURE), light, overlay, null, false, false, color, breakProgress, 0);
 	}
 
 	@Override

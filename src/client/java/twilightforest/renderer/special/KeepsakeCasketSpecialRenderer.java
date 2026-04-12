@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Unit;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3fc;
 import twilightforest.client.model.TFModelLayers;
@@ -26,7 +25,7 @@ public record KeepsakeCasketSpecialRenderer(KeepsakeCasketModel model, float ope
 	}
 
 	@Override
-	public void submit(Integer damage, ItemDisplayContext context, PoseStack stack, SubmitNodeCollector nodeCollector, int light, int overlay, boolean foil, int outlineColor) {
+	public void submit(Integer damage, PoseStack stack, SubmitNodeCollector nodeCollector, int light, int overlay, boolean foil, int outlineColor) {
 		stack.pushPose();
 		stack.translate(0.5F, 0.0F, 0.5F);
 		stack.mulPose(Axis.YP.rotationDegrees(-Direction.NORTH.toYRot()));
@@ -53,7 +52,7 @@ public record KeepsakeCasketSpecialRenderer(KeepsakeCasketModel model, float ope
 		this.model.root().getExtentsForGui(poseStack, output);
 	}
 
-	public record Unbaked(float openness) implements SpecialModelRenderer.Unbaked {
+	public record Unbaked(float openness) implements SpecialModelRenderer.Unbaked<Integer> {
 		public static final MapCodec<KeepsakeCasketSpecialRenderer.Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Codec.FLOAT.optionalFieldOf("openness", 0.0F).forGetter(KeepsakeCasketSpecialRenderer.Unbaked::openness))
 			.apply(instance, KeepsakeCasketSpecialRenderer.Unbaked::new));
@@ -68,7 +67,7 @@ public record KeepsakeCasketSpecialRenderer(KeepsakeCasketModel model, float ope
 		}
 
 		@Override
-		public SpecialModelRenderer<?> bake(SpecialModelRenderer.BakingContext context) {
+		public SpecialModelRenderer<Integer> bake(SpecialModelRenderer.BakingContext context) {
 			KeepsakeCasketModel model = new KeepsakeCasketModel(context.entityModelSet().bakeLayer(TFModelLayers.KEEPSAKE_CASKET));
 			return new KeepsakeCasketSpecialRenderer(model, this.openness);
 		}

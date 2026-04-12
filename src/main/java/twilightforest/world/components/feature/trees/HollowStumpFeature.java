@@ -46,7 +46,7 @@ public class HollowStumpFeature extends HollowTreeFeature {
 		return true;
 	}
 
-	protected void buildSmallTrunk(LevelAccessor world, BiConsumer<BlockPos, BlockState> trunkPlacer, RootPlacer decoPlacer, RandomSource random, BlockPos pos, int diameter, int maxheight, TFTreeFeatureConfig config) {
+	protected void buildSmallTrunk(WorldGenLevel world, BiConsumer<BlockPos, BlockState> trunkPlacer, RootPlacer decoPlacer, RandomSource random, BlockPos pos, int diameter, int maxheight, TFTreeFeatureConfig config) {
 		int hollow = diameter >> 1;
 
 		// go down 4 squares and fill in extra trunk as needed, in case we're on uneven terrain
@@ -62,7 +62,7 @@ public class HollowStumpFeature extends HollowTreeFeature {
 						BlockPos dPos = pos.offset(dx, dy, dz);
 						if (FeatureLogic.hasEmptyNeighborExceptBelow(world, dPos)) {
 							BlockStateProvider trunkProvider = dist > hollow ? config.trunkProvider : config.branchProvider;
-							trunkPlacer.accept(dPos, trunkProvider.getState(random, dPos));
+							trunkPlacer.accept(dPos, trunkProvider.getState(world, random, dPos));
 						} else {
 							FeaturePlacers.placeIfValidRootPos(world, decoPlacer, random, dPos, config.rootsProvider);
 						}

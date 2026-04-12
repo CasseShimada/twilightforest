@@ -182,7 +182,7 @@ public abstract class AbstractTrophyBlock extends BaseEntityBlock {
 					}
 					break;
 				case KNIGHT_PHANTOM:
-					ParticleOptions knightPhantomParticle = new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(TFItems.KNIGHTMETAL_SWORD.get()));
+					ParticleOptions knightPhantomParticle = new ItemParticleOption(ParticleTypes.ITEM, TFItems.KNIGHTMETAL_SWORD.get());
 					for (int brek = 0; brek < 10; brek++) {
 						particlePacket.queueParticle(knightPhantomParticle,
 							pos.getX() + 0.5D + (rand.nextFloat() - 0.5D),

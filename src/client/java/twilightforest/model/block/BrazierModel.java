@@ -13,7 +13,7 @@ import net.minecraft.util.Unit;
 public class BrazierModel extends Model<Unit> {
 
 	public BrazierModel(ModelPart root) {
-		super(root, RenderTypes::entityCutoutNoCull);
+		super(root, RenderTypes::entityCutout);
 	}
 
 	public static LayerDefinition create() {

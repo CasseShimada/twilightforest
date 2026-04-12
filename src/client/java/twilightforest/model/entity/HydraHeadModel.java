@@ -105,6 +105,6 @@ public class HydraHeadModel extends EntityModel<HydraHeadRenderState> implements
 			stack.translate(0.0F, 0.0F, 0.75f);
 		}
 		stack.translate(0.0F, -1.0F, itemForm ? -1.0F : 0.0F);
-		nodeCollector.submitModelPart(this.head, stack, RenderTypes.entityCutoutNoCull(HydraRenderer.TEXTURE), light, overlay, null, false, false, color, breakProgress, 0);
+		nodeCollector.submitModelPart(this.head, stack, RenderTypes.entityCutout(HydraRenderer.TEXTURE), light, overlay, null, false, false, color, breakProgress, 0);
 	}
 }

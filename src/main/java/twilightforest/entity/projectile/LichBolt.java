@@ -82,7 +82,7 @@ public class LichBolt extends TFThrowable {
 		if (id == EntityEvent.DEATH) {
 			ItemStack itemId = new ItemStack(Items.ENDER_PEARL);
 			for (int i = 0; i < 8; ++i) {
-				this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, itemId), this.getX(), this.getY(), this.getZ(), random.nextGaussian() * 0.05D, random.nextDouble() * 0.2D, random.nextGaussian() * 0.05D);
+				this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, Items.ENDER_PEARL), this.getX(), this.getY(), this.getZ(), random.nextGaussian() * 0.05D, random.nextDouble() * 0.2D, random.nextGaussian() * 0.05D);
 			}
 		} else {
 			super.handleEntityEvent(id);

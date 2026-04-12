@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.special.NoDataSpecialModelRenderer;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.ItemDisplayContext;
 import twilightforest.client.BugModelAnimationHelper;
 import twilightforest.client.model.TFModelLayers;
 import twilightforest.client.model.entity.FireflyModel;
@@ -16,7 +15,7 @@ import org.joml.Vector3fc;
 public record FireflySpecialRenderer(FireflyModel baseModel, FireflyModel glowModel) implements NoDataSpecialModelRenderer {
 
 	@Override
-	public void submit(ItemDisplayContext context, PoseStack stack, SubmitNodeCollector nodeCollector, int light, int overlay, boolean foil, int outlineColor) {
+	public void submit(PoseStack stack, SubmitNodeCollector nodeCollector, int light, int overlay, boolean foil, int outlineColor) {
 		FireflyRenderer.renderFirefly(this.baseModel(), this.glowModel(), BugModelAnimationHelper.currentYaw, BugModelAnimationHelper.glowIntensity, 0.0F, Direction.NORTH, stack, nodeCollector, light);
 	}
 
@@ -26,7 +25,7 @@ public record FireflySpecialRenderer(FireflyModel baseModel, FireflyModel glowMo
 		this.baseModel.root().getExtentsForGui(poseStack, output);
 	}
 
-	public record Unbaked() implements SpecialModelRenderer.Unbaked {
+	public record Unbaked() implements SpecialModelRenderer.Unbaked<Void> {
 		public static final MapCodec<FireflySpecialRenderer.Unbaked> MAP_CODEC = MapCodec.unit(FireflySpecialRenderer.Unbaked::new);
 
 		@Override
@@ -35,7 +34,7 @@ public record FireflySpecialRenderer(FireflyModel baseModel, FireflyModel glowMo
 		}
 
 		@Override
-		public SpecialModelRenderer<?> bake(SpecialModelRenderer.BakingContext context) {
+		public SpecialModelRenderer<Void> bake(SpecialModelRenderer.BakingContext context) {
 			FireflyModel baseModel = new FireflyModel(context.entityModelSet().bakeLayer(TFModelLayers.FIREFLY));
 			FireflyModel glowModel = new FireflyModel(context.entityModelSet().bakeLayer(TFModelLayers.FIREFLY));
 			baseModel.setupBasePass();

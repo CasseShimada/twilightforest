@@ -19,7 +19,7 @@ public class FakeItemEntityHelper implements IIngredientHelper<FakeItemEntity> {
 
 	@Override
 	public String getDisplayName(FakeItemEntity ingredient) {
-		return ingredient.stack().getItem().getName().getString();
+		return ingredient.stack().getItem().getName(ingredient.stack()).getString();
 	}
 
 	@Override

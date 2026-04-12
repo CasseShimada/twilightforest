@@ -2,11 +2,13 @@ package twilightforest.client.renderer.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.block.MovingBlockRenderState;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Unit;
 import net.minecraft.world.level.block.Blocks;
@@ -17,6 +19,7 @@ import twilightforest.block.BrazierBlock;
 import twilightforest.block.entity.BrazierBlockEntity;
 import twilightforest.client.model.TFModelLayers;
 import twilightforest.client.model.block.BrazierModel;
+import twilightforest.client.renderer.RenderStateUtil;
 import twilightforest.enums.BrazierLight;
 
 public class BrazierRenderer implements BlockEntityRenderer<BrazierBlockEntity, BrazierRenderer.RenderState> {
@@ -52,7 +55,9 @@ public class BrazierRenderer implements BlockEntityRenderer<BrazierBlockEntity, 
 		poseStack.scale(0.35F, y, 0.35F);
 		poseStack.mulPose(Axis.YP.rotationDegrees(45.0F));
 		if (lit.isLit() && y > 0.0F) {
-			nodeCollector.submitBlock(poseStack, fire, 0x0F00F0, 0, 0);
+			MovingBlockRenderState fireState = new MovingBlockRenderState();
+			RenderStateUtil.populateMovingBlockRenderState(fireState, fire, Minecraft.getInstance().level, renderState.blockPos, renderState.blockPos);
+			nodeCollector.submitMovingBlock(poseStack, fireState);
 		}
 		poseStack.popPose();
 

@@ -2,20 +2,24 @@ package twilightforest.client.renderer.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.block.BlockModelRenderState;
+import net.minecraft.client.renderer.block.MovingBlockRenderState;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -28,13 +32,15 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.block.entity.JarBlockEntity;
 import twilightforest.block.entity.MasonJarBlockEntity;
+import twilightforest.client.renderer.RenderStateUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class JarRenderer<T extends JarBlockEntity, S extends JarRenderer.JarRenderState> implements BlockEntityRenderer<T, S> {
 	protected static final float WOBBLE_AMPLITUDE = 0.125F;
-	private final BlockRenderDispatcher blockRenderer;
 
 	public JarRenderer(BlockEntityRendererProvider.Context context) {
-		this.blockRenderer = context.blockRenderDispatcher();
 	}
 
 	@Override
@@ -51,11 +57,17 @@ public class JarRenderer<T extends JarBlockEntity, S extends JarRenderer.JarRend
 	@Override
 	public void extractRenderState(T blockEntity, S renderState, float partialTick, Vec3 cameraPosition, ModelFeatureRenderer.@Nullable CrumblingOverlay breakProgress) {
 		BlockEntityRenderState.extractBase(blockEntity, renderState, breakProgress);
+		renderState.state = blockEntity.getBlockState();
+		renderState.level = blockEntity.getLevel() instanceof ClientLevel level ? level : null;
 		renderState.lidItem = blockEntity.lid;
 		renderState.lidState = resolveLidState(blockEntity.lid);
 		renderState.wobbleRotX = 0.0F;
 		renderState.wobbleRotY = 0.0F;
 		renderState.wobbleRotZ = 0.0F;
+		RenderStateUtil.populateMovingBlockRenderState(renderState.blockRenderState, renderState.state, renderState.level, renderState.blockPos, renderState.blockPos);
+		if (renderState.lidState != null) {
+			RenderStateUtil.populateMovingBlockRenderState(renderState.lidRenderState, renderState.lidState, renderState.level, renderState.blockPos, renderState.blockPos);
+		}
 
 		WobbleStyle wobbleStyle = blockEntity.lastWobbleStyle;
 		if (wobbleStyle != null && blockEntity.getLevel() != null) {
@@ -92,43 +104,20 @@ public class JarRenderer<T extends JarBlockEntity, S extends JarRenderer.JarRend
 			poseStack.rotateAround(Axis.ZP.rotation(renderState.wobbleRotZ), 0.5F, 0.0F, 0.5F);
 		}
 
-		BlockStateModel jarModel = this.blockRenderer.getBlockModel(renderState.blockState);
-		nodeCollector.submitBlockModel(
-			poseStack,
-			ItemBlockRenderTypes.getRenderType(renderState.blockState),
-			jarModel,
-			1.0F,
-			1.0F,
-			1.0F,
-			renderState.lightCoords,
-			OverlayTexture.NO_OVERLAY,
-			0
-		);
+		nodeCollector.submitMovingBlock(poseStack, renderState.blockRenderState);
 
 		if (renderState.lidState != null && renderState.lidItem != null) {
 			poseStack.pushPose();
 			BlockStateModel lidModel = JarLidModels.getModel(renderState.lidItem);
 			if (lidModel != null) {
-				int color = Minecraft.getInstance().getBlockColors().getColor(renderState.lidState, null, null, 0);
-				float r = (float) (color >> 16 & 0xFF) / 255.0F;
-				float g = (float) (color >> 8 & 0xFF) / 255.0F;
-				float b = (float) (color & 0xFF) / 255.0F;
-				nodeCollector.submitBlockModel(
-					poseStack,
-					ItemBlockRenderTypes.getRenderType(renderState.lidState),
-					lidModel,
-					r,
-					g,
-					b,
-					renderState.lightCoords,
-					OverlayTexture.NO_OVERLAY,
-					0
-				);
+				List<BlockStateModelPart> parts = new ArrayList<>();
+				lidModel.collectParts(RandomSource.create(0L), parts);
+				nodeCollector.submitBlockModel(poseStack, RenderTypes.solidMovingBlock(), parts, BlockModelRenderState.EMPTY_TINTS, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
 			} else {
 				poseStack.translate(0.5D, 0.875D, 0.5D);
 				poseStack.scale(0.5F, 0.25F, 0.5F);
 				poseStack.translate(-0.5D, -0.5D, -0.5D);
-				nodeCollector.submitBlock(poseStack, renderState.lidState, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+				nodeCollector.submitMovingBlock(poseStack, renderState.lidRenderState);
 			}
 			poseStack.popPose();
 		}
@@ -151,6 +140,10 @@ public class JarRenderer<T extends JarBlockEntity, S extends JarRenderer.JarRend
 	}
 
 	public static class JarRenderState extends BlockEntityRenderState {
+		public BlockState state = Blocks.AIR.defaultBlockState();
+		public @Nullable ClientLevel level;
+		public final MovingBlockRenderState blockRenderState = new MovingBlockRenderState();
+		public final MovingBlockRenderState lidRenderState = new MovingBlockRenderState();
 		public Item lidItem;
 		public @Nullable BlockState lidState = Blocks.OAK_LOG.defaultBlockState();
 		public float wobbleRotX;

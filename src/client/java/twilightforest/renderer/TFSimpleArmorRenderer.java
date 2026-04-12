@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.entity.layers.EquipmentLayerRenderer;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.client.resources.model.EquipmentAssetManager;
-import net.minecraft.client.resources.model.AtlasManager;
+import net.minecraft.client.resources.model.sprite.AtlasManager;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.AtlasIds;
 import net.minecraft.resources.Identifier;
@@ -112,7 +112,13 @@ public class TFSimpleArmorRenderer implements ArmorRenderer {
 	}
 
 	private static void setPartVisibility(HumanoidModel<HumanoidRenderState> model, EquipmentSlot slot) {
-		model.setAllVisible(false);
+		model.head.visible = false;
+		model.hat.visible = false;
+		model.body.visible = false;
+		model.rightArm.visible = false;
+		model.leftArm.visible = false;
+		model.rightLeg.visible = false;
+		model.leftLeg.visible = false;
 		switch (slot) {
 			case HEAD -> {
 				model.head.visible = true;

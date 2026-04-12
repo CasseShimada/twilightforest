@@ -10,7 +10,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 public class ProtectionParticle extends SingleQuadParticle {
 
 	public ProtectionParticle(ClientLevel level, double x, double y, double z, double velX, double velY, double velZ, SpriteSet sprites) {
-		super(level, x, y, z, velX, velY, velZ, sprites.get(level.random));
+		super(level, x, y, z, velX, velY, velZ, sprites.get(level.getRandom()));
 		float f = this.random.nextFloat() * 0.1F + 0.2F;
 		this.rCol = f;
 		this.gCol = f;
@@ -52,7 +52,7 @@ public class ProtectionParticle extends SingleQuadParticle {
 	}
 
 	@Override
-	public int getLightColor(float partialTicks) {
+	public int getLightCoords(float partialTicks) {
 		return 0xF000F0;
 	}
 

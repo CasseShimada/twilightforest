@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.IntProviders;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
@@ -35,8 +36,8 @@ import java.util.stream.Collectors;
 public class FallenTrunkStructure extends Structure implements CustomDensitySource, DecorationClearance {
 	public static final MapCodec<FallenTrunkStructure> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 		Structure.settingsCodec(instance),
-		IntProvider.codec(16, 32).fieldOf("length").forGetter(s -> s.length),
-		IntProvider.codec(20, 32).fieldOf("big_trunk_length").forGetter(s -> s.bigTrunkLength),
+		IntProviders.codec(16, 32).fieldOf("length").forGetter(s -> s.length),
+		IntProviders.codec(20, 32).fieldOf("big_trunk_length").forGetter(s -> s.bigTrunkLength),
 		BlockStateProvider.CODEC.fieldOf("log").forGetter(s -> s.log),
 		ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("chest_loot_table").forGetter(s -> s.chestLootTable)
 	).apply(instance, FallenTrunkStructure::new));
@@ -58,10 +59,10 @@ public class FallenTrunkStructure extends Structure implements CustomDensitySour
 	@Override
 	public Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
 		ChunkPos chunkPos = context.chunkPos();
-		RandomSource random = RandomSource.create(context.seed() + chunkPos.x * 14413411L + chunkPos.z * 43387781L);
+		RandomSource random = RandomSource.create(context.seed() + chunkPos.x() * 14413411L + chunkPos.z() * 43387781L);
 
-		int x = SectionPos.sectionToBlockCoord(chunkPos.x, random.nextInt(16));
-		int z = SectionPos.sectionToBlockCoord(chunkPos.z, random.nextInt(16));
+		int x = SectionPos.sectionToBlockCoord(chunkPos.x(), random.nextInt(16));
+		int z = SectionPos.sectionToBlockCoord(chunkPos.z(), random.nextInt(16));
 		int worldY = context.chunkGenerator().getFirstOccupiedHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
 		int radius = Util.getRandom(radiuses, random);
 		int length = radius == radiuses.getLast() ? this.bigTrunkLength.sample(random) : this.length.sample(random);
@@ -103,7 +104,7 @@ public class FallenTrunkStructure extends Structure implements CustomDensitySour
 	private boolean hasInvalidNearbyBiome(GenerationContext context, int x, int worldY, int z, RandomSource random) {
 		Pair<BlockPos, Holder<Biome>> invalidBiome = context.biomeSource().findBiomeHorizontal(
 			x, worldY, z,
-			this.length.getMaxValue(), 1,
+			this.length.maxInclusive(), 1,
 			biomeHolder -> !context.validBiome().test(biomeHolder),
 			random, false, context.randomState().sampler());
 		return invalidBiome != null;

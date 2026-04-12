@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
@@ -63,7 +63,7 @@ public abstract class TFPartRenderer<T extends TFPart<?>, S extends PartEntitySt
 	protected RenderType getRenderType(S state, boolean visible, boolean ghostly, boolean glowing) {
 		Identifier resourcelocation = this.getTextureLocation(state);
 		if (ghostly) {
-			return RenderTypes.itemEntityTranslucentCull(resourcelocation);
+			return RenderTypes.entityTranslucentCullItemTarget(resourcelocation);
 		} else if (visible) {
 			return this.model.renderType(resourcelocation);
 		} else {

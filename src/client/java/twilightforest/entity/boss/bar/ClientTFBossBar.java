@@ -1,7 +1,7 @@
 package twilightforest.entity.boss.bar;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.BossHealthOverlay;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -36,7 +36,7 @@ public class ClientTFBossBar extends LerpingBossEvent {
 	private static final Identifier BAR_BACKGROUND = Identifier.withDefaultNamespace("boss_bar/white_background");
 	private static final Identifier BAR_PROGRESS = Identifier.withDefaultNamespace("boss_bar/white_progress");
 
-	public void renderBossBar(GuiGraphics guiGraphics, int x, int y) {
+	public void renderBossBar(GuiGraphicsExtractor guiGraphics, int x, int y) {
 		int tint = 0xFF000000 | (this.color & 0xFFFFFF);
 		guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, BAR_BACKGROUND, x, y, 182, 5, tint);
 		if (this.overlay != BossEvent.BossBarOverlay.PROGRESS) {
@@ -56,6 +56,6 @@ public class ClientTFBossBar extends LerpingBossEvent {
 		int width = Minecraft.getInstance().font.width(title);
 		int fontX = guiGraphics.guiWidth() / 2 - width / 2;
 		int fontY = y - 9;
-		guiGraphics.drawString(Minecraft.getInstance().font, title, fontX, fontY, 0xFFFFFF);
+		guiGraphics.text(Minecraft.getInstance().font, title, fontX, fontY, 0xFFFFFF);
 	}
 }

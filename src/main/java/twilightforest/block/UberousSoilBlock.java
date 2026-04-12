@@ -56,14 +56,14 @@ public class UberousSoilBlock extends Block implements BonemealableBlock {
 		if (orientation != null && orientation.getSide() == Direction.UP) {
 			BlockState above = level.getBlockState(pos.above());
 			if (!(above.getBlock() instanceof BonemealableBlock bonemealableBlock && !above.is(this))) {
-				if (above.isSolid()) FarmBlock.turnToDirt(null, state, level, pos);
+				if (above.isSolid()) FarmlandBlock.turnToDirt(null, state, level, pos);
 				return;
 			}
 
 			BlockState newState = Blocks.DIRT.defaultBlockState();
 
 			if (above.is(BlockTags.CROPS))
-				newState = Blocks.FARMLAND.defaultBlockState().setValue(FarmBlock.MOISTURE, 7);
+				newState = Blocks.FARMLAND.defaultBlockState().setValue(FarmlandBlock.MOISTURE, 7);
 			else if (bonemealableBlock instanceof MushroomBlock)
 				newState = Blocks.MYCELIUM.defaultBlockState();
 			else if (bonemealableBlock instanceof BushBlock)
@@ -74,7 +74,7 @@ public class UberousSoilBlock extends Block implements BonemealableBlock {
 					//This seems a bit hacky, but it's the easiest way of letting the mushgloom only be grown by uberous soil
 					//If we make it growable by bonemeal as well, just delete this if statement and update the appropriate method inside the mushgloom class
 					level.setBlockAndUpdate(pos, pushEntitiesUp(state, newState, level, pos));
-					mushgloomBlock.growMushroom(serverLevel, pos.above(), above, serverLevel.random);
+					mushgloomBlock.growMushroom(serverLevel, pos.above(), above, serverLevel.getRandom());
 					level.levelEvent(2005, pos.above(), 0); // FIXME Nothing happens, used to call BoneMealItem.addGrowthParticles on client
 					return;
 				}
@@ -213,8 +213,8 @@ public class UberousSoilBlock extends Block implements BonemealableBlock {
 			if (!(targetState.getBlock() instanceof BonemealableBlock bonemealable)) continue;
 
 			if (bonemealable.isValidBonemealTarget(level, targetPos, targetState)
-				&& bonemealable.isBonemealSuccess(level, level.random, targetPos, targetState)) {
-				bonemealable.performBonemeal(level, level.random, targetPos, targetState);
+				&& bonemealable.isBonemealSuccess(level, level.getRandom(), targetPos, targetState)) {
+				bonemealable.performBonemeal(level, level.getRandom(), targetPos, targetState);
 			}
 		}
 	}

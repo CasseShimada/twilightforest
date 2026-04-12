@@ -44,7 +44,7 @@ public class TomeBolt extends TFThrowable implements ItemSupplier {
 	@Override
 	public void handleEntityEvent(byte id) {
 		if (id == EntityEvent.DEATH) {
-			ParticleOptions particle = new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Items.PAPER));
+			ParticleOptions particle = new ItemParticleOption(ParticleTypes.ITEM, Items.PAPER);
 			for (int i = 0; i < 8; ++i) {
 				this.level().addParticle(particle, this.getX(), this.getY(), this.getZ(), this.random.nextGaussian() * 0.05D, this.random.nextDouble() * 0.2D, this.random.nextGaussian() * 0.05D);
 			}

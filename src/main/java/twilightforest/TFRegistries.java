@@ -22,9 +22,9 @@ import java.util.Locale;
 
 public class TFRegistries {
 
-	public static final Registry<BiomeLayerType> BIOME_LAYER_TYPE = FabricRegistryBuilder.createSimple(Keys.BIOME_LAYER_TYPE).buildAndRegister();
-	public static final Registry<Enforcement> ENFORCEMENT = FabricRegistryBuilder.createSimple(Keys.ENFORCEMENT).attribute(RegistryAttribute.SYNCED).buildAndRegister();
-	public static final Registry<ChunkBlanketType> CHUNK_BLANKET_TYPES = FabricRegistryBuilder.createSimple(Keys.CHUNK_BLANKET_TYPE).buildAndRegister();
+	public static final Registry<BiomeLayerType> BIOME_LAYER_TYPE = FabricRegistryBuilder.create(Keys.BIOME_LAYER_TYPE).buildAndRegister();
+	public static final Registry<Enforcement> ENFORCEMENT = FabricRegistryBuilder.create(Keys.ENFORCEMENT).attribute(RegistryAttribute.SYNCED).buildAndRegister();
+	public static final Registry<ChunkBlanketType> CHUNK_BLANKET_TYPES = FabricRegistryBuilder.create(Keys.CHUNK_BLANKET_TYPE).buildAndRegister();
 
 	public static void bootstrap() {
 		// No-op: ensures static initialization runs before custom registries are queried.

@@ -7,7 +7,7 @@ import net.minecraft.util.Mth;
 
 public class LogCoreParticle extends RisingParticle {
 	LogCoreParticle(ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed, SpriteSet sprites) {
-		super(pLevel, pX, pY, pZ, 0.0, 0.02, 0.0, sprites.get(pLevel.random));
+		super(pLevel, pX, pY, pZ, 0.0, 0.02, 0.0, sprites.get(pLevel.getRandom()));
 		this.rCol = (float) pXSpeed;
 		this.gCol = (float) pYSpeed;
 		this.bCol = (float) pZSpeed;
@@ -32,10 +32,10 @@ public class LogCoreParticle extends RisingParticle {
 	}
 
 	@Override
-	public int getLightColor(float partialTicks) {
+	public int getLightCoords(float partialTicks) {
 		float f = ((float) this.age + partialTicks) / (float) this.lifetime;
 		f = Mth.clamp(f, 0.0F, 1.0F);
-		int i = super.getLightColor(partialTicks);
+		int i = super.getLightCoords(partialTicks);
 		int j = i & 255;
 		int k = i >> 16 & 255;
 		j += (int) (f * 15.0F * 16.0F);

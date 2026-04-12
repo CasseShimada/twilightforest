@@ -14,8 +14,12 @@ import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
+import net.minecraft.world.clock.WorldClock;
+import net.minecraft.world.clock.WorldClocks;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.timeline.Timeline;
+
+import java.util.Optional;
 import twilightforest.TFRegistries;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.custom.BiomeLayerStack;
@@ -42,6 +46,7 @@ public class TFDimensionData {
 	private static DimensionType twilightDimType(BootstrapContext<DimensionType> context) {
 		TagKey<Timeline> timelineTag = TagKey.create(Registries.TIMELINE, TwilightForestMod.prefix("in_twilight"));
 		HolderSet<Timeline> timelines = context.lookup(Registries.TIMELINE).getOrThrow(timelineTag);
+		HolderGetter<WorldClock> worldClocks = context.lookup(Registries.WORLD_CLOCK);
 		EnvironmentAttributeMap attributes = EnvironmentAttributeMap.builder()
 			.set(EnvironmentAttributes.BED_RULE, BedRule.CAN_SLEEP_WHEN_DARK)
 			.set(EnvironmentAttributes.CAN_START_RAID, false)
@@ -51,9 +56,10 @@ public class TFDimensionData {
 			.build();
 
 		return new DimensionType(
-			true, //fixed time
+			false, //fixed time
 			true, //skylight
 			false, //ceiling
+			false, //ender dragon fight
 			1 / 8.0, //coordinate scale
 			-32, // Minimum Y Level
 			32 + 256, // Height + Min Y = Max Y
@@ -62,9 +68,10 @@ public class TFDimensionData {
 			0.01f,
 			new DimensionType.MonsterSettings(UniformInt.of(0, 7), 7),
 			DimensionType.Skybox.OVERWORLD,
-			DimensionType.CardinalLightType.DEFAULT,
+			net.minecraft.world.level.CardinalLighting.Type.DEFAULT,
 			attributes,
-			timelines
+			timelines,
+			Optional.of(worldClocks.getOrThrow(WorldClocks.OVERWORLD))
 		);
 	}
 

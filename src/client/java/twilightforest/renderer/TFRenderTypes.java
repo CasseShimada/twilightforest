@@ -33,5 +33,5 @@ public final class TFRenderTypes {
 			.createRenderSetup()
 	);
 
-	public static final RenderType SHADOW_CLONE = RenderTypes.itemEntityTranslucentCull(LichRenderer.TEXTURE);
+	public static final RenderType SHADOW_CLONE = RenderTypes.entityTranslucentCullItemTarget(LichRenderer.TEXTURE);
 }

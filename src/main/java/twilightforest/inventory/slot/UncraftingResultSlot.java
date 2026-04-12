@@ -47,7 +47,7 @@ public class UncraftingResultSlot extends ResultSlot {
 
 		for (RecipeHolder<CraftingRecipe> recipe : RecipeMap.create(level.recipeAccess().getRecipes())
 			.getRecipesFor(RecipeType.CRAFTING, this.assemblyMatrix.asCraftInput(), level).toList()) {
-			if (ItemStack.isSameItemSameComponents(recipe.value().assemble(this.assemblyMatrix.asCraftInput(), player.level().registryAccess()), stack)) {
+			if (ItemStack.isSameItemSameComponents(recipe.value().assemble(this.assemblyMatrix.asCraftInput()), stack)) {
 				combined = false;
 				break;
 			}

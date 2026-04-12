@@ -37,16 +37,6 @@ public class GiantModel extends HumanoidModel<GiantRenderState> {
 	}
 
 	@Override
-	public void setAllVisible(boolean visible) {
-		super.setAllVisible(visible);
-		this.leftSleeve.visible = visible;
-		this.rightSleeve.visible = visible;
-		this.leftPants.visible = visible;
-		this.rightPants.visible = visible;
-		this.jacket.visible = visible;
-	}
-
-	@Override
 	public void translateToHand(GiantRenderState state, HumanoidArm side, PoseStack poseStack) {
 		this.root().translateAndRotate(poseStack);
 		ModelPart modelpart = this.getArm(side);

@@ -13,7 +13,7 @@ import net.minecraft.util.Mth;
 public class SpikeBlockModel extends Model<Void> {
 
 	public SpikeBlockModel(ModelPart root) {
-		super(root, RenderTypes::entityCutoutNoCull);
+		super(root, RenderTypes::entityCutout);
 	}
 
 	public static LayerDefinition create() {

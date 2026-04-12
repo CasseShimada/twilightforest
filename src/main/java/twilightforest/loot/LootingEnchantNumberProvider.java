@@ -12,10 +12,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
-import twilightforest.init.TFLoot;
 
 import java.util.Set;
 
@@ -34,14 +32,14 @@ public class LootingEnchantNumberProvider implements NumberProvider {
 		this.baseValue = baseValue;
 	}
 
-	@Override
-	public LootNumberProviderType getType() {
-		return TFLoot.LOOTING_ROLLS.get();
-	}
-
 	public static LootingEnchantNumberProvider applyLootingLevelTo(HolderLookup.Provider provider, NumberProvider baseValue) {
 		HolderLookup.RegistryLookup<Enchantment> registrylookup = provider.lookupOrThrow(Registries.ENCHANTMENT);
 		return new LootingEnchantNumberProvider(registrylookup.getOrThrow(Enchantments.LOOTING), baseValue);
+	}
+
+	@Override
+	public MapCodec<? extends NumberProvider> codec() {
+		return CODEC;
 	}
 
 	@Override

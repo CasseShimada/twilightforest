@@ -18,7 +18,7 @@ public class GhastTrapParticle extends SingleQuadParticle {
 	}
 
 	public GhastTrapParticle(ClientLevel level, double x, double y, double z, float scale, double mx, double my, double mz, SpriteSet sprites) {
-		super(level, x + mx, y + my, z + mz, mx, my, mz, sprites.get(level.random));
+		super(level, x + mx, y + my, z + mz, mx, my, mz, sprites.get(level.getRandom()));
 		this.xd = mx;
 		this.yd = my;
 		this.zd = mz;

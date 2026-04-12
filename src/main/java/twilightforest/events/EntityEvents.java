@@ -70,6 +70,7 @@ import twilightforest.network.SyncQuestsPacket;
 import twilightforest.mixin.accessor.SkullBlockEntityAccessor;
 import twilightforest.util.datamaps.EntityTransformation;
 import twilightforest.util.entities.EntityUtil;
+import twilightforest.util.PlayerMessaging;
 import twilightforest.util.entities.OminousFireDamageSource;
 import twilightforest.util.multiparts.MultipartEntityUtil;
 import twilightforest.world.components.structures.SpawnIndexProvider;
@@ -127,7 +128,7 @@ public class EntityEvents {
 
 	public static void handleAdvancementEarned(ServerPlayer player, AdvancementHolder advancement) {
 		if (advancement.id().equals(TwilightForestMod.prefix("progression_end"))) {
-			player.displayClientMessage(Component.translatable("gui.twilightforest.progression_end.message", Component.translatable("gui.twilightforest.progression_end.discord").withStyle(style -> style.withColor(ChatFormatting.BLUE).applyFormat(ChatFormatting.UNDERLINE).withClickEvent(new ClickEvent.OpenUrl(URI.create("https://discord.experiment115.com/"))))), false);
+			PlayerMessaging.displayClientMessage(player, Component.translatable("gui.twilightforest.progression_end.message", Component.translatable("gui.twilightforest.progression_end.discord").withStyle(style -> style.withColor(ChatFormatting.BLUE).applyFormat(ChatFormatting.UNDERLINE).withClickEvent(new ClickEvent.OpenUrl(URI.create("https://discord.experiment115.com/"))))), false);
 		}
 
 		for (var criteria : advancement.value().criteria().entrySet()) {
@@ -379,7 +380,7 @@ public class EntityEvents {
 
 	@Nullable
 	public static WeightedList<MobSpawnSettings.SpawnerData> gatherPotentialSpawns(ServerLevel level, MobCategory classification, BlockPos pos) {
-		List<StructureStart> structureStarts = level.structureManager().startsForStructure(new ChunkPos(pos), s -> s instanceof ControlledSpawns);
+		List<StructureStart> structureStarts = level.structureManager().startsForStructure(ChunkPos.containing(pos), s -> s instanceof ControlledSpawns);
 
 		// This is wretched FIXME make this method return void instead, make one of parameters the SpawnerData consumer (eg LevelEvent.PotentialSpawns::addSpawnerData or List::add)
 		for (StructureStart start : structureStarts) {
@@ -417,7 +418,7 @@ public class EntityEvents {
 		// For clearing our Display text entities at the Final Castle Gazebo, there's no other way to remove them otherwise
 		// The tag distinguishes our Interaction entities from other Mods' utilization
 		if (target.level() instanceof ServerLevel level && target instanceof Interaction interaction
-			&& interaction.getTags().contains(FinalCastleBossGazeboComponent.INTERACTION_TAG)) {
+			&& interaction.entityTags().contains(FinalCastleBossGazeboComponent.INTERACTION_TAG)) {
 			AABB bounds = interaction.getBoundingBox();
 			level.getEntities(interaction, bounds, e -> e instanceof Display).forEach(Entity::discard);
 			interaction.discard();
@@ -429,7 +430,7 @@ public class EntityEvents {
 	private static final Identifier GROUP_HEALTH_ID = TwilightForestMod.prefix("group_health_boost");
 
 	public static void adjustEntityHealthInMultiplayerFights(Entity entity, ServerLevel level) {
-		if (!entity.getType().is(TFEntityTypeTags.MULTIPLAYER_INCLUSIVE_ENTITIES)) {
+		if (!entity.getType().builtInRegistryHolder().is(TFEntityTypeTags.MULTIPLAYER_INCLUSIVE_ENTITIES)) {
 			return;
 		}
 		if (!TFConfig.multiplayerFightAdjuster.adjustsHealth()) {
@@ -458,7 +459,7 @@ public class EntityEvents {
 	}
 
 	public static void handleMultiplayerDamage(LivingEntity target, DamageSource source) {
-		if (!target.getType().is(TFEntityTypeTags.MULTIPLAYER_INCLUSIVE_ENTITIES)) {
+		if (!target.getType().builtInRegistryHolder().is(TFEntityTypeTags.MULTIPLAYER_INCLUSIVE_ENTITIES)) {
 			return;
 		}
 		var data = TFDataAttachments.get(target, TFDataAttachments.MULTIPLAYER_FIGHT);

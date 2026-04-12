@@ -29,6 +29,7 @@ import twilightforest.components.item.OreScannerData;
 import twilightforest.tags.TFBlockTags;
 import twilightforest.init.TFDataComponents;
 import twilightforest.init.TFSounds;
+import twilightforest.util.PlayerMessaging;
 
 import java.util.function.Consumer;
 
@@ -113,7 +114,7 @@ public class OreMeterItem extends Item {
 				int newRange = Mth.positiveModulo(getRange(stack) + 1, MAX_CHUNK_SEARCH_RANGE + 1);
 
 				stack.set(TFDataComponents.ORE_RANGE.get(), newRange);
-				player.displayClientMessage(Component.translatable("misc.twilightforest.ore_meter_new_range", newRange), true);
+				PlayerMessaging.displayClientMessage(player, Component.translatable("misc.twilightforest.ore_meter_new_range", newRange), true);
 				level.playSound(null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.PLAYERS, 0.25F, 0.75F + (newRange * 0.1F));
 			}
 			return InteractionResult.SUCCESS;
@@ -130,7 +131,7 @@ public class OreMeterItem extends Item {
 			BlockState state = context.getLevel().getBlockState(context.getClickedPos());
 			if (state.is(TFBlockTags.ORE_METER_TARGETABLE)) {
 				stack.set(TFDataComponents.ORE_FILTER.get(), state.getBlock());
-				context.getPlayer().displayClientMessage(Component.translatable("misc.twilightforest.ore_meter_set_block", Component.translatable(state.getBlock().getDescriptionId())), true);
+				PlayerMessaging.displayClientMessage(context.getPlayer(), Component.translatable("misc.twilightforest.ore_meter_set_block", Component.translatable(state.getBlock().getDescriptionId())), true);
 				context.getLevel().playSound(context.getPlayer(), context.getPlayer().blockPosition(), TFSounds.ORE_METER_TARGET_BLOCK.get(), SoundSource.PLAYERS, 0.5F, context.getLevel().getRandom().nextFloat() * 0.1F + 0.9F);
 				return InteractionResult.SUCCESS;
 			}

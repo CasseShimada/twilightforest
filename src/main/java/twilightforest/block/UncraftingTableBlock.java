@@ -23,6 +23,7 @@ import twilightforest.config.TFConfig;
 import twilightforest.init.TFSounds;
 import twilightforest.init.TFStats;
 import twilightforest.inventory.UncraftingMenu;
+import twilightforest.util.PlayerMessaging;
 
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class UncraftingTableBlock extends Block {
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
 		if (TFConfig.disableEntireTable) {
-			player.displayClientMessage(Component.translatable("block.twilightforest.uncrafting_table.disabled"), true);
+			PlayerMessaging.displayClientMessage(player, Component.translatable("block.twilightforest.uncrafting_table.disabled"), true);
 			return InteractionResult.PASS;
 		}
 		if (level.isClientSide()) {

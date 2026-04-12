@@ -2,16 +2,16 @@ package twilightforest.client.model.block.forcefield;
 
 import com.mojang.serialization.MapCodec;
 import net.fabricmc.fabric.api.client.model.loading.v1.CustomUnbakedBlockStateModel;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.block.model.SingleVariant;
-import net.minecraft.client.renderer.block.model.Variant;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.SingleVariant;
+import net.minecraft.client.renderer.block.dispatch.Variant;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ResolvableModel;
 import net.minecraft.client.resources.model.ResolvedModel;
-import net.minecraft.client.resources.model.QuadCollection;
+import net.minecraft.client.resources.model.geometry.QuadCollection;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -25,23 +25,30 @@ import java.util.Map;
 
 public final class ForceFieldBlockStateModel implements BlockStateModel {
 	private final List<Part> parts;
-	private final TextureAtlasSprite particle;
+	private final Material.Baked particle;
 	private final boolean useAmbientOcclusion;
+	private final int materialFlags;
 
-	public ForceFieldBlockStateModel(List<Part> parts, TextureAtlasSprite particle, boolean useAmbientOcclusion) {
+	public ForceFieldBlockStateModel(List<Part> parts, Material.Baked particle, boolean useAmbientOcclusion, int materialFlags) {
 		this.parts = parts;
 		this.particle = particle;
 		this.useAmbientOcclusion = useAmbientOcclusion;
+		this.materialFlags = materialFlags;
 	}
 
 	@Override
-	public void collectParts(RandomSource random, List<BlockModelPart> output) {
+	public void collectParts(RandomSource random, List<BlockStateModelPart> output) {
 		output.add(new ForceFieldPart());
 	}
 
 	@Override
-	public TextureAtlasSprite particleIcon() {
+	public Material.Baked particleMaterial() {
 		return particle;
+	}
+
+	@Override
+	public int materialFlags() {
+		return this.materialFlags;
 	}
 
 	private QuadCollection buildQuads(Map<ForceFieldModel.ExtraDirection, List<Direction>> directions) {
@@ -93,7 +100,7 @@ public final class ForceFieldBlockStateModel implements BlockStateModel {
 		return directions;
 	}
 
-	private final class ForceFieldPart implements BlockModelPart {
+	private final class ForceFieldPart implements BlockStateModelPart {
 		@Override
 		public List<BakedQuad> getQuads(@Nullable Direction direction) {
 			Map<ForceFieldModel.ExtraDirection, List<Direction>> directions = collectDirections(BlockModelContext.get());
@@ -106,8 +113,13 @@ public final class ForceFieldBlockStateModel implements BlockStateModel {
 		}
 
 		@Override
-		public TextureAtlasSprite particleIcon() {
+		public Material.Baked particleMaterial() {
 			return particle;
+		}
+
+		@Override
+		public int materialFlags() {
+			return ForceFieldBlockStateModel.this.materialFlags;
 		}
 	}
 

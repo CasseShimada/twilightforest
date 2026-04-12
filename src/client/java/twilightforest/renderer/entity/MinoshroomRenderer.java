@@ -4,18 +4,21 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.block.MovingBlockRenderState;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.Identifier;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import twilightforest.TwilightForestMod;
 import twilightforest.client.model.TFModelLayers;
 import twilightforest.client.model.entity.MinoshroomModel;
+import twilightforest.client.renderer.RenderStateUtil;
 import twilightforest.client.state.MinoshroomRenderState;
 import twilightforest.entity.boss.Minoshroom;
 
@@ -60,6 +63,9 @@ public class MinoshroomRenderer extends HumanoidMobRenderer<Minoshroom, Minoshro
 				boolean flag = state.appearsGlowing() && state.isInvisible;
 				if (!state.isInvisible || flag) {
 					BlockState blockstate = Blocks.RED_MUSHROOM.defaultBlockState(); // TF: hardcode mushroom state
+					MovingBlockRenderState mushroomState = new MovingBlockRenderState();
+					BlockPos pos = BlockPos.containing(state.x, state.y, state.z);
+					RenderStateUtil.populateMovingBlockRenderState(mushroomState, blockstate, Minecraft.getInstance().level, pos, pos);
 					int i = LivingEntityRenderer.getOverlayCoords(state, 0.0F);
 					float yOffs = -0.65F;
 					float zOffs = 0.25F;
@@ -70,7 +76,7 @@ public class MinoshroomRenderer extends HumanoidMobRenderer<Minoshroom, Minoshro
 					stack.mulPose(Axis.YP.rotationDegrees(-48.0F));
 					stack.scale(-1.0F, -1.0F, 1.0F);
 					stack.translate(-0.5D, -0.5D, -0.5D);
-					nodeCollector.submitBlock(stack, blockstate, light, i, state.outlineColor);
+					nodeCollector.submitMovingBlock(stack, mushroomState);
 					stack.popPose();
 					stack.pushPose();
 					this.getParentModel().cowTorso.translateAndRotate(stack);
@@ -81,7 +87,7 @@ public class MinoshroomRenderer extends HumanoidMobRenderer<Minoshroom, Minoshro
 					stack.mulPose(Axis.YP.rotationDegrees(-48.0F));
 					stack.scale(-1.0F, -1.0F, 1.0F);
 					stack.translate(-0.5D, -0.5D, -0.5D);
-					nodeCollector.submitBlock(stack, blockstate, light, i, state.outlineColor);
+					nodeCollector.submitMovingBlock(stack, mushroomState);
 					stack.popPose();
 					stack.pushPose();
 					this.getParentModel().head.translateAndRotate(stack);
@@ -90,7 +96,7 @@ public class MinoshroomRenderer extends HumanoidMobRenderer<Minoshroom, Minoshro
 					stack.mulPose(Axis.YP.rotationDegrees(-78.0F));
 					stack.scale(-1.0F, -1.0F, 1.0F);
 					stack.translate(-0.5D, -0.5D, -0.5D);
-					nodeCollector.submitBlock(stack, blockstate, light, i, state.outlineColor);
+					nodeCollector.submitMovingBlock(stack, mushroomState);
 					stack.popPose();
 				}
 			}

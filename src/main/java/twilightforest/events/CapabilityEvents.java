@@ -25,7 +25,7 @@ public class CapabilityEvents {
 
 	public static void onPlayerTick(ServerPlayer player) {
 		if (TFDataAttachments.get(player, TFDataAttachments.FEATHER_FAN)) {
-			player.setIgnoreFallDamageFromCurrentImpulse(true);
+			player.setIgnoreFallDamageFromCurrentImpulse(true, player.position());
 			player.currentImpulseImpactPos = player.position();
 
 			if (player.onGround() || player.isSwimming() || player.isInWater()) {

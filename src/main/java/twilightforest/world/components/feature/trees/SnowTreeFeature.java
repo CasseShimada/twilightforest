@@ -78,7 +78,7 @@ public class SnowTreeFeature extends Feature<TreeConfiguration> {
 		}
 	}
 
-	private int getMaxFreeTreeHeight(LevelSimulatedReader reader, int height, BlockPos pos, TreeConfiguration config) {
+	private int getMaxFreeTreeHeight(WorldGenLevel reader, int height, BlockPos pos, TreeConfiguration config) {
 		BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
 
 		for (int i = 0; i <= height + 1; ++i) {

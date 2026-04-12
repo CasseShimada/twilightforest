@@ -20,7 +20,7 @@ public class HostileWolfModel extends EntityModel<WolfRenderState> {
 	private final ModelPart tail;
 
 	public HostileWolfModel(ModelPart root) {
-		this(RenderTypes::entityCutoutNoCull, root);
+		this(RenderTypes::entityCutout, root);
 	}
 
 	public HostileWolfModel(Function<Identifier, RenderType> type, ModelPart root) {

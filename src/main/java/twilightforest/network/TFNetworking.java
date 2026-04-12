@@ -14,32 +14,32 @@ public final class TFNetworking {
 	}
 
 	private static void registerPayloadTypes() {
-		PayloadTypeRegistry.playS2C().register(AreaProtectionPacket.TYPE, AreaProtectionPacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(CreateMovingCicadaSoundPacket.TYPE, CreateMovingCicadaSoundPacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(EnforceProgressionStatusPacket.TYPE, EnforceProgressionStatusPacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(LifedrainParticlePacket.TYPE, LifedrainParticlePacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(MagicMapPacket.TYPE, MagicMapPacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(MazeMapPacket.TYPE, MazeMapPacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(MissingAdvancementToastPacket.TYPE, MissingAdvancementToastPacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(MovePlayerPacket.TYPE, MovePlayerPacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(ParticlePacket.TYPE, ParticlePacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(SetMasonJarItemPacket.TYPE, SetMasonJarItemPacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(SpawnCharmPacket.TYPE, SpawnCharmPacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(SpawnFallenLeafFromPacket.TYPE, SpawnFallenLeafFromPacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(StructureProtectionPacket.TYPE, StructureProtectionPacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(SyncQuestsPacket.TYPE, SyncQuestsPacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(SyncUncraftingTableConfigPacket.TYPE, SyncUncraftingTableConfigPacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(TFBossBarPacket.AddTFBossBarPacket.TYPE, TFBossBarPacket.AddTFBossBarPacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(TFBossBarPacket.UpdateTFBossBarStylePacket.TYPE, TFBossBarPacket.UpdateTFBossBarStylePacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(UpdateDeathTimePacket.TYPE, UpdateDeathTimePacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(UpdateFeatherFanFallPacket.TYPE, UpdateFeatherFanFallPacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(UpdateShieldPacket.TYPE, UpdateShieldPacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(UpdateTFMultipartPacket.TYPE, UpdateTFMultipartPacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(UpdateThrownPacket.TYPE, UpdateThrownPacket.STREAM_CODEC);
-		PayloadTypeRegistry.playS2C().register(UpdateUncraftingCostPacket.TYPE, UpdateUncraftingCostPacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(AreaProtectionPacket.TYPE, AreaProtectionPacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(CreateMovingCicadaSoundPacket.TYPE, CreateMovingCicadaSoundPacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(EnforceProgressionStatusPacket.TYPE, EnforceProgressionStatusPacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(LifedrainParticlePacket.TYPE, LifedrainParticlePacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(MagicMapPacket.TYPE, MagicMapPacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(MazeMapPacket.TYPE, MazeMapPacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(MissingAdvancementToastPacket.TYPE, MissingAdvancementToastPacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(MovePlayerPacket.TYPE, MovePlayerPacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(ParticlePacket.TYPE, ParticlePacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(SetMasonJarItemPacket.TYPE, SetMasonJarItemPacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(SpawnCharmPacket.TYPE, SpawnCharmPacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(SpawnFallenLeafFromPacket.TYPE, SpawnFallenLeafFromPacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(StructureProtectionPacket.TYPE, StructureProtectionPacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(SyncQuestsPacket.TYPE, SyncQuestsPacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(SyncUncraftingTableConfigPacket.TYPE, SyncUncraftingTableConfigPacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(TFBossBarPacket.AddTFBossBarPacket.TYPE, TFBossBarPacket.AddTFBossBarPacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(TFBossBarPacket.UpdateTFBossBarStylePacket.TYPE, TFBossBarPacket.UpdateTFBossBarStylePacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(UpdateDeathTimePacket.TYPE, UpdateDeathTimePacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(UpdateFeatherFanFallPacket.TYPE, UpdateFeatherFanFallPacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(UpdateShieldPacket.TYPE, UpdateShieldPacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(UpdateTFMultipartPacket.TYPE, UpdateTFMultipartPacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(UpdateThrownPacket.TYPE, UpdateThrownPacket.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(UpdateUncraftingCostPacket.TYPE, UpdateUncraftingCostPacket.STREAM_CODEC);
 
-		PayloadTypeRegistry.playC2S().register(UncraftingGuiPacket.TYPE, UncraftingGuiPacket.STREAM_CODEC);
-		PayloadTypeRegistry.playC2S().register(WipeOreMeterPacket.TYPE, WipeOreMeterPacket.STREAM_CODEC);
+		PayloadTypeRegistry.serverboundPlay().register(UncraftingGuiPacket.TYPE, UncraftingGuiPacket.STREAM_CODEC);
+		PayloadTypeRegistry.serverboundPlay().register(WipeOreMeterPacket.TYPE, WipeOreMeterPacket.STREAM_CODEC);
 	}
 
 	private static void registerServerReceivers() {

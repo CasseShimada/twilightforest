@@ -12,12 +12,13 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapedRecipe;
@@ -85,7 +86,7 @@ public class JEIUncraftingCategory implements IRecipeCategory<CraftingRecipe> {
 		outputs.replaceAll(ingredient -> {
 				Item[] array = extractItems(ingredient)
 					.filter(o -> !o.is(TFItemTags.BANNED_UNCRAFTING_INGREDIENTS)) //Remove any banned items
-					.filter(o -> o.value().getCraftingRemainder().isEmpty()) //Can't uncraft into items that don't get used
+					.filter(o -> o.value().getCraftingRemainder().create().isEmpty()) //Can't uncraft into items that don't get used
 					.map(Holder::value).toArray(Item[]::new);
 
 				return array.length > 0 ? Ingredient.of(array) : null;
@@ -122,11 +123,11 @@ public class JEIUncraftingCategory implements IRecipeCategory<CraftingRecipe> {
 	}
 
 	@Override
-	public void draw(CraftingRecipe recipe, IRecipeSlotsView views, GuiGraphics graphics, double mouseX, double mouseY) {
+	public void draw(CraftingRecipe recipe, IRecipeSlotsView views, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
 		int cost = recipe instanceof UncraftingRecipe ur ? ur.getCost() : RecipeViewerConstants.getRecipeCost(views.getSlotViews(RecipeIngredientRole.OUTPUT).stream().map(view -> view.getDisplayedItemStack().orElse(ItemStack.EMPTY)).toList());
 		if (cost > 0) {
 			String costStr = cost + "";
-			graphics.drawString(Minecraft.getInstance().font, costStr, 45 - Minecraft.getInstance().font.width(costStr), 22, RecipeViewerConstants.getXPColor(cost), true);
+			graphics.text(Minecraft.getInstance().font, costStr, 45 - Minecraft.getInstance().font.width(costStr), 22, RecipeViewerConstants.getXPColor(cost), true);
 		}
 	}
 
@@ -136,7 +137,7 @@ public class JEIUncraftingCategory implements IRecipeCategory<CraftingRecipe> {
 
 	public static SlotDisplay uncraftDisplay(UncraftingRecipe recipe) {
 		List<SlotDisplay> displayList = new ArrayList<>();
-		extractItems(recipe.getInput()).map(Holder::value).forEach(item -> displayList.add(new SlotDisplay.ItemStackSlotDisplay(new ItemStack(item, recipe.getCount()))));
+		extractItems(recipe.getInput()).map(Holder::value).forEach(item -> displayList.add(new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(new ItemStack(item, recipe.getCount())))));
 		return new SlotDisplay.Composite(displayList);
 	}
 }

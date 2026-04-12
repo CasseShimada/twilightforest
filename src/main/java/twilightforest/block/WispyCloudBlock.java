@@ -22,7 +22,7 @@ public class WispyCloudBlock extends CloudBlock {
 	}
 
 	@Override
-	public int getLightBlock(BlockState state) {
+	protected int getLightDampening(BlockState state) {
 		return 0;
 	}
 

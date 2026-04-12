@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.state.BlockState;
 import twilightforest.init.TFBlockEntities;
 import twilightforest.init.TFSounds;
+import twilightforest.util.PlayerMessaging;
 
 public class KeepsakeCasketBlockEntity extends SkullChestBlockEntity {
 
@@ -57,6 +58,6 @@ public class KeepsakeCasketBlockEntity extends SkullChestBlockEntity {
 	public void displayLockedInfo(Player player) {
 		player.playSound(TFSounds.CASKET_LOCKED.get(), 0.5F, 0.5F);
 		String ownerName = this.owner != null ? this.owner.name().orElse("unknown") : "unknown";
-		player.displayClientMessage(Component.translatable("block.twilightforest.casket.locked", ownerName).withStyle(ChatFormatting.RED), true);
+		PlayerMessaging.displayClientMessage(player, Component.translatable("block.twilightforest.casket.locked", ownerName).withStyle(ChatFormatting.RED), true);
 	}
 }

@@ -10,12 +10,13 @@ import net.minecraft.client.model.object.skull.SkullModel;
 import net.minecraft.client.model.object.skull.SkullModelBase;
 import net.minecraft.client.renderer.PlayerSkinRenderCache;
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.block.MovingBlockRenderState;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.core.Direction;
@@ -34,6 +35,7 @@ import twilightforest.block.LightableBlock;
 import twilightforest.block.SkullCandleBlock;
 import twilightforest.block.WallSkullCandleBlock;
 import twilightforest.block.entity.SkullCandleBlockEntity;
+import twilightforest.client.renderer.RenderStateUtil;
 
 import java.util.Map;
 
@@ -131,7 +133,9 @@ public class SkullCandleRenderer implements BlockEntityRenderer<SkullCandleBlock
 			.setValue(CandleBlock.CANDLES, renderState.candleCount)
 			.setValue(CandleBlock.LIT, renderState.lighting != LightableBlock.Lighting.NONE);
 
-		nodeCollector.submitBlock(poseStack, candle, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+		MovingBlockRenderState candleState = new MovingBlockRenderState();
+		RenderStateUtil.populateMovingBlockRenderState(candleState, candle, net.minecraft.client.Minecraft.getInstance().level, renderState.blockPos, renderState.blockPos);
+		nodeCollector.submitMovingBlock(poseStack, candleState);
 	}
 
 	private RenderType resolveRenderType(SkullBlock.Type type, @Nullable ResolvableProfile profile) {
@@ -139,7 +143,7 @@ public class SkullCandleRenderer implements BlockEntityRenderer<SkullCandleBlock
 		if (type == SkullBlock.Types.PLAYER && profile != null) {
 			return this.playerSkinRenderCache.getOrDefault(profile).renderType();
 		}
-		return RenderTypes.entityCutoutNoCullZOffset(texture);
+		return RenderTypes.entityCutoutZOffset(texture);
 	}
 
 	public static class RenderState extends BlockEntityRenderState {

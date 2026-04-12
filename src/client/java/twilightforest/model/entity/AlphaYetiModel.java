@@ -222,6 +222,6 @@ public class AlphaYetiModel extends HumanoidModel<AlphaYetiRenderState> implemen
 	public void submitTrophy(PoseStack stack, SubmitNodeCollector nodeCollector, int light, int overlay, int color, ItemDisplayContext context, @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress) {
 		stack.scale(0.2F, 0.2F, 0.2F);
 		stack.translate(0.0F, -1.5F, 0.0F);
-		nodeCollector.submitModelPart(this.head, stack, RenderTypes.entityCutoutNoCull(AlphaYetiRenderer.TEXTURE), light, overlay, null, false, false, color, breakProgress, 0);
+		nodeCollector.submitModelPart(this.head, stack, RenderTypes.entityCutout(AlphaYetiRenderer.TEXTURE), light, overlay, null, false, false, color, breakProgress, 0);
 	}
 }

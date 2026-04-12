@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.special.NoDataSpecialModelRenderer;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Unit;
-import net.minecraft.world.item.ItemDisplayContext;
 import org.joml.Vector3fc;
 import twilightforest.client.model.TFModelLayers;
 import twilightforest.client.model.entity.KeepsakeCasketModel;
@@ -20,7 +19,7 @@ import twilightforest.client.renderer.block.SkullChestRenderer;
 public record SkullChestSpecialRenderer(KeepsakeCasketModel model, float openness) implements NoDataSpecialModelRenderer {
 
 	@Override
-	public void submit(ItemDisplayContext context, PoseStack stack, SubmitNodeCollector nodeCollector, int light, int overlay, boolean foil, int outlineColor) {
+	public void submit(PoseStack stack, SubmitNodeCollector nodeCollector, int light, int overlay, boolean foil, int outlineColor) {
 		stack.pushPose();
 		stack.translate(0.5F, 0.0F, 0.5F);
 		stack.mulPose(Axis.YP.rotationDegrees(-Direction.NORTH.toYRot()));
@@ -47,7 +46,7 @@ public record SkullChestSpecialRenderer(KeepsakeCasketModel model, float opennes
 		this.model.root().getExtentsForGui(poseStack, output);
 	}
 
-	public record Unbaked(float openness) implements SpecialModelRenderer.Unbaked {
+	public record Unbaked(float openness) implements SpecialModelRenderer.Unbaked<Void> {
 		public static final MapCodec<SkullChestSpecialRenderer.Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Codec.FLOAT.optionalFieldOf("openness", 0.0F).forGetter(SkullChestSpecialRenderer.Unbaked::openness))
 			.apply(instance, SkullChestSpecialRenderer.Unbaked::new));
@@ -62,7 +61,7 @@ public record SkullChestSpecialRenderer(KeepsakeCasketModel model, float opennes
 		}
 
 		@Override
-		public SpecialModelRenderer<?> bake(SpecialModelRenderer.BakingContext context) {
+		public SpecialModelRenderer<Void> bake(SpecialModelRenderer.BakingContext context) {
 			KeepsakeCasketModel model = new KeepsakeCasketModel(context.entityModelSet().bakeLayer(TFModelLayers.SKULL_CHEST));
 			return new SkullChestSpecialRenderer(model, this.openness());
 		}

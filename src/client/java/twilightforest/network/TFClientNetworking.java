@@ -12,6 +12,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
@@ -157,7 +158,7 @@ public final class TFClientNetworking {
 			Entity camera = context.client().getCameraEntity();
 			if (TFConfig.spawnCharmAnimationAsTotem) {
 				context.client().gameRenderer.displayItemActivation(packet.charm());
-				context.client().particleEngine.createTrackingEmitter(camera != null ? camera : player, new ItemParticleOption(ParticleTypes.ITEM, packet.charm()), 20);
+				context.client().particleEngine.createTrackingEmitter(camera != null ? camera : player, new ItemParticleOption(ParticleTypes.ITEM, ItemStackTemplate.fromNonEmptyStack(packet.charm())), 20);
 			} else {
 				CharmEffect effect = new CharmEffect(TFEntities.CHARM_EFFECT.get(), player.level(), player, packet.charm());
 				effect.offset = (float) Math.PI;
@@ -172,9 +173,10 @@ public final class TFClientNetworking {
 
 	private static void handleSpawnFallenLeaf(SpawnFallenLeafFromPacket packet, ClientPlayNetworking.Context context) {
 		context.client().execute(() -> {
-			Level level = context.player().level();
+			ClientLevel level = context.client().level;
+			if (level == null) return;
 			Random rand = new Random();
-			int color = context.client().getBlockColors().getColor(Blocks.OAK_LEAVES.defaultBlockState(), level, packet.pos(), 0);
+			int color = context.client().getBlockColors().getTintSource(Blocks.OAK_LEAVES.defaultBlockState(), 0).colorInWorld(Blocks.OAK_LEAVES.defaultBlockState(), level, packet.pos());
 			int r = Mth.clamp(((color >> 16) & 0xFF) + rand.nextInt(0x22) - 0x11, 0x00, 0xFF);
 			int g = Mth.clamp(((color >> 8) & 0xFF) + rand.nextInt(0x22) - 0x11, 0x00, 0xFF);
 			int b = Mth.clamp((color & 0xFF) + rand.nextInt(0x22) - 0x11, 0x00, 0xFF);

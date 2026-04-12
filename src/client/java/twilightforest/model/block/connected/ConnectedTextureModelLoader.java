@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mojang.datafixers.util.Pair;
 import net.fabricmc.fabric.api.client.model.loading.v1.UnbakedModelDeserializer;
-import net.minecraft.client.renderer.block.model.BlockModel;
+import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -49,7 +49,7 @@ public class ConnectedTextureModelLoader implements UnbakedModelDeserializer {
 		JsonObject stripped = jsonObject.deepCopy();
 		stripped.remove("fabric:type");
 		stripped.remove("loader");
-		BlockModel baseModel = deserializationContext.deserialize(stripped, BlockModel.class);
+		UnbakedModel baseModel = deserializationContext.deserialize(stripped, UnbakedModel.class);
 
 		return new UnbakedConnectedTextureModel(
 			baseModel,

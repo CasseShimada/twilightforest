@@ -9,7 +9,7 @@ public class LargeFlameParticle extends SingleQuadParticle {
 	private final float flameScale;
 
 	public LargeFlameParticle(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, SpriteSet sprites) {
-		super(level, x, y, z, vx, vy, vz, sprites.get(level.random));
+		super(level, x, y, z, vx, vy, vz, sprites.get(level.getRandom()));
 		this.xd = this.xd * 0.01D + vx;
 		this.yd = this.yd * 0.01D + vy;
 		this.zd = this.zd * 0.01D + vz;
@@ -32,7 +32,7 @@ public class LargeFlameParticle extends SingleQuadParticle {
 	}
 
 	@Override
-	public int getLightColor(float partialTicks) {
+	public int getLightCoords(float partialTicks) {
 		float var2 = (this.age + partialTicks) / this.lifetime;
 
 		if (var2 < 0.0F) {
@@ -43,7 +43,7 @@ public class LargeFlameParticle extends SingleQuadParticle {
 			var2 = 1.0F;
 		}
 
-		int var3 = super.getLightColor(partialTicks);
+		int var3 = super.getLightCoords(partialTicks);
 		int var4 = var3 & 255;
 		int var5 = var3 >> 16 & 255;
 		var4 += (int) (var2 * 15.0F * 16.0F);

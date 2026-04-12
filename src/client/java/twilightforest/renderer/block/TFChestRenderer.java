@@ -2,21 +2,19 @@ package twilightforest.client.renderer.block;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.object.chest.ChestModel;
+import net.minecraft.client.resources.model.sprite.SpriteGetter;
+import net.minecraft.client.resources.model.sprite.SpriteId;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BrightnessCombiner;
+import net.minecraft.client.renderer.blockentity.ChestRenderer;
 import net.minecraft.client.renderer.blockentity.state.ChestRenderState;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.MaterialSet;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
@@ -37,10 +35,10 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class TFChestRenderer<T extends ChestBlockEntity> implements BlockEntityRenderer<T, TFChestRenderer.RenderState> {
-	public static final Map<Block, EnumMap<ChestType, Material>> MATERIALS;
+	public static final Map<Block, EnumMap<ChestType, SpriteId>> SPRITES;
 
 	static {
-		ImmutableMap.Builder<Block, EnumMap<ChestType, Material>> builder = ImmutableMap.builder();
+		ImmutableMap.Builder<Block, EnumMap<ChestType, SpriteId>> builder = ImmutableMap.builder();
 
 		builder.put(TFBlocks.TWILIGHT_OAK_CHEST.get(), chestMaterial("twilight_oak", false));
 		builder.put(TFBlocks.CANOPY_CHEST.get(), chestMaterial("canopy", false));
@@ -60,21 +58,17 @@ public class TFChestRenderer<T extends ChestBlockEntity> implements BlockEntityR
 		builder.put(TFBlocks.MINING_TRAPPED_CHEST.get(), chestMaterial("mining", true));
 		builder.put(TFBlocks.SORTING_TRAPPED_CHEST.get(), chestMaterial("sorting", true));
 
-		MATERIALS = builder.build();
+		SPRITES = builder.build();
 	}
 
-	private final MaterialSet materials;
-	private final ChestModel singleModel;
-	private final ChestModel doubleLeftModel;
-	private final ChestModel doubleRightModel;
+	private final SpriteGetter sprites;
+	private final net.minecraft.client.renderer.MultiblockChestResources<ChestModel> models;
 	private final boolean xmasTextures;
 
 	public TFChestRenderer(BlockEntityRendererProvider.Context context) {
-		this.materials = context.materials();
+		this.sprites = context.sprites();
 		this.xmasTextures = net.minecraft.client.renderer.blockentity.ChestRenderer.xmasTextures();
-		this.singleModel = new ChestModel(context.bakeLayer(ModelLayers.CHEST));
-		this.doubleLeftModel = new ChestModel(context.bakeLayer(ModelLayers.DOUBLE_CHEST_LEFT));
-		this.doubleRightModel = new ChestModel(context.bakeLayer(ModelLayers.DOUBLE_CHEST_RIGHT));
+		this.models = ChestRenderer.LAYERS.map(layer -> new ChestModel(context.bakeLayer(layer)));
 	}
 
 	@Override
@@ -92,9 +86,9 @@ public class TFChestRenderer<T extends ChestBlockEntity> implements BlockEntityR
 			: Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.SOUTH);
 
 		renderState.type = state.hasProperty(ChestBlock.TYPE) ? state.getValue(ChestBlock.TYPE) : ChestType.SINGLE;
-		renderState.angle = state.getValue(ChestBlock.FACING).toYRot();
+		renderState.facing = state.getValue(ChestBlock.FACING);
 		renderState.material = getChestMaterial(blockEntity, this.xmasTextures);
-		renderState.customMaterial = getCustomMaterial(blockEntity, renderState.type);
+		renderState.customSprite = getCustomSprite(blockEntity, renderState.type);
 
 		DoubleBlockCombiner.NeighborCombineResult<? extends ChestBlockEntity> combiner = hasLevel && state.getBlock() instanceof ChestBlock chestBlock
 			? chestBlock.combine(state, blockEntity.getLevel(), blockEntity.getBlockPos(), true)
@@ -110,34 +104,20 @@ public class TFChestRenderer<T extends ChestBlockEntity> implements BlockEntityR
 	@Override
 	public void submit(RenderState renderState, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
 		poseStack.pushPose();
-		poseStack.translate(0.5F, 0.5F, 0.5F);
-		poseStack.mulPose(Axis.YP.rotationDegrees(-renderState.angle));
-		poseStack.translate(-0.5F, -0.5F, -0.5F);
+		poseStack.mulPose(ChestRenderer.modelTransformation(renderState.facing));
 
 		float openness = renderState.open;
 		openness = 1.0F - openness;
 		openness = 1.0F - openness * openness * openness;
 
-		Material material = renderState.customMaterial;
-		if (material == null) {
-			material = Sheets.chooseMaterial(renderState.material, renderState.type);
-		}
-
-		RenderType renderType = material.renderType(id -> Sheets.chestSheet());
-		TextureAtlasSprite sprite = this.materials.get(material);
-
-		ChestModel model = switch (renderState.type) {
-			case LEFT -> this.doubleLeftModel;
-			case RIGHT -> this.doubleRightModel;
-			default -> this.singleModel;
-		};
-
-		nodeCollector.submitModel(model, openness, poseStack, renderType, renderState.lightCoords, OverlayTexture.NO_OVERLAY, -1, sprite, 0, renderState.breakProgress);
+		SpriteId sprite = renderState.customSprite != null ? renderState.customSprite : Sheets.chooseSprite(renderState.material, renderState.type);
+		ChestModel model = this.models.select(renderState.type);
+		nodeCollector.submitModel(model, openness, poseStack, renderState.lightCoords, OverlayTexture.NO_OVERLAY, -1, sprite, this.sprites, 0, renderState.breakProgress);
 		poseStack.popPose();
 	}
 
-	private static Material getCustomMaterial(BlockEntity blockEntity, ChestType type) {
-		EnumMap<ChestType, Material> map = MATERIALS.get(blockEntity.getBlockState().getBlock());
+	private static SpriteId getCustomSprite(BlockEntity blockEntity, ChestType type) {
+		EnumMap<ChestType, SpriteId> map = SPRITES.get(blockEntity.getBlockState().getBlock());
 		return map != null ? map.get(type) : null;
 	}
 
@@ -165,18 +145,18 @@ public class TFChestRenderer<T extends ChestBlockEntity> implements BlockEntityR
 		return ChestRenderState.ChestMaterialType.REGULAR;
 	}
 
-	private static EnumMap<ChestType, Material> chestMaterial(String wood, boolean trapped) {
-		EnumMap<ChestType, Material> map = new EnumMap<>(ChestType.class);
+	private static EnumMap<ChestType, SpriteId> chestMaterial(String wood, boolean trapped) {
+		EnumMap<ChestType, SpriteId> map = new EnumMap<>(ChestType.class);
 		String type = (trapped ? "trapped" : "normal");
 
-		map.put(ChestType.SINGLE, new Material(Sheets.CHEST_SHEET, TwilightForestMod.prefix("entity/chest/" + wood + "/" + type)));
-		map.put(ChestType.LEFT, new Material(Sheets.CHEST_SHEET, TwilightForestMod.prefix("entity/chest/" + wood + "/" + type + "_left")));
-		map.put(ChestType.RIGHT, new Material(Sheets.CHEST_SHEET, TwilightForestMod.prefix("entity/chest/" + wood + "/" + type + "_right")));
+		map.put(ChestType.SINGLE, Sheets.CHEST_MAPPER.apply(TwilightForestMod.prefix("entity/chest/" + wood + "/" + type)));
+		map.put(ChestType.LEFT, Sheets.CHEST_MAPPER.apply(TwilightForestMod.prefix("entity/chest/" + wood + "/" + type + "_left")));
+		map.put(ChestType.RIGHT, Sheets.CHEST_MAPPER.apply(TwilightForestMod.prefix("entity/chest/" + wood + "/" + type + "_right")));
 
 		return map;
 	}
 
 	public static class RenderState extends ChestRenderState {
-		public Material customMaterial;
+		public SpriteId customSprite;
 	}
 }

@@ -42,7 +42,7 @@ public final class WorldUtil {
 	}
 
 	public static long getOverworldSeed() {
-		return Objects.requireNonNull(PacketDistributor.getServer()).getWorldData().worldGenOptions().seed();
+		return Objects.requireNonNull(PacketDistributor.getServer()).overworld().getSeed();
 	}
 
 	public static RegistryAccess getRegistryAccess() {
@@ -128,7 +128,7 @@ public final class WorldUtil {
 						Holder<Biome> biome = level.getBiome(landmarkCenterPosition);
 
 						if (targetStructure.value().biomes().contains(biome)) {
-							if (skipKnownStructures && structureManager.checkStructurePresence(new ChunkPos(landmarkCenterPosition), targetStructure.value(), landmarkPlacement.getKey(), true) == StructureCheckResult.START_PRESENT)
+							if (skipKnownStructures && structureManager.checkStructurePresence(ChunkPos.containing(landmarkCenterPosition), targetStructure.value(), landmarkPlacement.getKey(), true) == StructureCheckResult.START_PRESENT)
 								break;
 
 							final double newDistance = landmarkCenterPosition.distToLowCornerSqr(pos.getX(), 0, pos.getZ());

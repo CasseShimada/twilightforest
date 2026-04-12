@@ -3,7 +3,7 @@ package twilightforest.client.renderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -74,9 +74,9 @@ public class PotionFlaskTooltipComponent implements ClientTooltipComponent {
 	}
 
 	@Override
-	public void renderImage(Font font, int x, int y, int xOffs, int yOffs, GuiGraphics graphics) {
+	public void extractImage(Font font, int x, int y, int xOffs, int yOffs, GuiGraphicsExtractor graphics) {
 		if (this.component.potion().potion().isEmpty()) {
-			graphics.drawWordWrap(font, EMPTY_DESCRIPTION, x, y, WIDTH, 11184810);
+			graphics.textWithWordWrap(font, EMPTY_DESCRIPTION, x, y, WIDTH, 11184810);
 		} else {
 			int height = 0;
 			for (var component : this.getPotionTooltips()) {
@@ -84,7 +84,7 @@ public class PotionFlaskTooltipComponent implements ClientTooltipComponent {
 				if (component.getString().isEmpty()) {
 					height += font.lineHeight;
 				} else {
-					graphics.drawWordWrap(font, component, x, y + height, WIDTH, color);
+					graphics.textWithWordWrap(font, component, x, y + height, WIDTH, color);
 				}
 				height += font.split(component, WIDTH).size() * font.lineHeight + 1;
 			}
@@ -92,10 +92,10 @@ public class PotionFlaskTooltipComponent implements ClientTooltipComponent {
 		this.drawPotionBar(x, y + this.getDescriptionHeight(font) + 4, font, graphics);
 	}
 
-	private void drawPotionBar(int x, int y, Font font, GuiGraphics graphics) {
+	private void drawPotionBar(int x, int y, Font font, GuiGraphicsExtractor graphics) {
 		int segmentSplit = this.getWidth(font) / this.maxDoses;
 		if (this.component.doses() <= 0) {
-			graphics.drawCenteredString(font, Component.translatable("item.twilightforest.flask.empty"), x + (WIDTH / 2) + 1, y + 3, 16777215);
+			graphics.centeredText(font, Component.translatable("item.twilightforest.flask.empty"), x + (WIDTH / 2) + 1, y + 3, 16777215);
 		}
 
 		int filledWidth = this.component.doses() * segmentSplit - 1;

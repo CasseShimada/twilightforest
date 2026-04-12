@@ -9,7 +9,7 @@ public class IceBeamParticle extends SingleQuadParticle {
 	final float initialParticleScale;
 
 	public IceBeamParticle(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, float scale, SpriteSet sprites) {
-		super(level, x, y, z, sprites.get(level.random));
+		super(level, x, y, z, sprites.get(level.getRandom()));
 		this.xd *= 0.1D;
 		this.yd *= 0.1D;
 		this.zd *= 0.1D;
@@ -52,7 +52,7 @@ public class IceBeamParticle extends SingleQuadParticle {
 	}
 
 	@Override
-	public int getLightColor(float partialTicks) {
+	public int getLightCoords(float partialTicks) {
 		return 240 | 240 << 16;
 	}
 

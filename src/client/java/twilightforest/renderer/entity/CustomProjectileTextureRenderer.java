@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
@@ -67,7 +67,7 @@ public class CustomProjectileTextureRenderer extends EntityRenderer<TFThrowable,
 		stack.mulPose(Axis.YP.rotationDegrees(180.0F));
 		int light = state.lightCoords;
 		int finalOverlay = overlay;
-		nodeCollector.submitCustomGeometry(stack, RenderTypes.entityCutoutNoCull(this.texture), (pose, consumer) -> {
+		nodeCollector.submitCustomGeometry(stack, RenderTypes.entityCutout(this.texture), (pose, consumer) -> {
 			vertex(consumer, pose, light, 0.0F, 0.0F, 0.0F, 1.0F, finalOverlay);
 			vertex(consumer, pose, light, 1.0F, 0.0F, 1.0F, 1.0F, finalOverlay);
 			vertex(consumer, pose, light, 1.0F, 1.0F, 1.0F, 0.0F, finalOverlay);

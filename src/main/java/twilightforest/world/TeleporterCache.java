@@ -12,7 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
-import net.minecraft.world.level.storage.DimensionDataStorage;
+import net.minecraft.world.level.storage.SavedDataStorage;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -21,7 +21,7 @@ import java.util.Map;
 public class TeleporterCache extends SavedData {
 
 	private static final Codec<TeleporterCache> CODEC = CompoundTag.CODEC.xmap(TeleporterCache::load, cache -> cache.save(new CompoundTag()));
-	private static final SavedDataType<TeleporterCache> TYPE = new SavedDataType<>("twilightforest_teleporter_cache", TeleporterCache::new, CODEC, DataFixTypes.SAVED_DATA_COMMAND_STORAGE);
+	private static final SavedDataType<TeleporterCache> TYPE = new SavedDataType<>(Identifier.fromNamespaceAndPath("twilightforest", "teleporter_cache"), TeleporterCache::new, CODEC, DataFixTypes.SAVED_DATA_COMMAND_STORAGE);
 
 	// destinationCoordinateCache is (src -> dest) [DestWorld, [SrcPos, DestPos]]
 	private final Map<Identifier, Map<ColumnPos, TFTeleporter.PortalPosition>> destinationCoordinateCache = new HashMap<>();
@@ -32,7 +32,7 @@ public class TeleporterCache extends SavedData {
 
 	public static TeleporterCache get(ServerLevel level) {
 		ServerLevel server = level.getServer().overworld();
-		DimensionDataStorage storage = server.getDataStorage();
+		SavedDataStorage storage = server.getDataStorage();
 		return storage.computeIfAbsent(TeleporterCache.TYPE);
 	}
 

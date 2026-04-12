@@ -3,7 +3,6 @@ package twilightforest.client.renderer.block;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -11,7 +10,7 @@ import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -24,6 +23,7 @@ import twilightforest.TwilightForestMod;
 import twilightforest.block.entity.RedThreadBlockEntity;
 import twilightforest.client.model.TFModelLayers;
 import twilightforest.client.model.entity.RedThreadModel;
+import twilightforest.client.renderer.RenderStateUtil;
 import twilightforest.init.TFBlocks;
 
 public class RedThreadRenderer implements BlockEntityRenderer<RedThreadBlockEntity, RedThreadRenderer.RenderState> {
@@ -53,7 +53,7 @@ public class RedThreadRenderer implements BlockEntityRenderer<RedThreadBlockEnti
 		if (renderState.state == null) return;
 
 		RenderType renderType = renderState.glow ? RenderTypes.entityTranslucentEmissive(TEXTURE) : RenderTypes.entityCutout(TEXTURE);
-		int light = renderState.glow ? LightTexture.FULL_BRIGHT : renderState.lightCoords;
+		int light = renderState.glow ? RenderStateUtil.FULL_BRIGHT : renderState.lightCoords;
 
 		for (Direction face : Direction.values()) {
 			if (renderState.state.getValue(PipeBlock.PROPERTY_BY_DIRECTION.get(face))) {

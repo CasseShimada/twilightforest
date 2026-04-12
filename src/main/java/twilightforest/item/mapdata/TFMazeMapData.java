@@ -7,6 +7,7 @@ import com.mojang.serialization.DynamicOps;
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundMapItemDataPacket;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.datafix.DataFixTypes;
@@ -88,7 +89,7 @@ public class TFMazeMapData extends MapItemSavedData {
 	}
 
 	private static SavedDataType<TFMazeMapData> type(String id) {
-		return TYPES.computeIfAbsent(id, key -> new SavedDataType<>(key, () -> {
+		return TYPES.computeIfAbsent(id, key -> new SavedDataType<>(Identifier.withDefaultNamespace(key), () -> {
 			throw new IllegalStateException("Should never create an empty map saved data");
 		}, CODEC, DataFixTypes.SAVED_DATA_MAP_DATA));
 	}

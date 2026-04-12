@@ -27,7 +27,7 @@ public class MoonwormModel extends Model<Void> {
 	private final ModelPart head;
 
 	public MoonwormModel(ModelPart root) {
-		super(root, RenderTypes::entityCutoutNoCull);
+		super(root, RenderTypes::entityCutout);
 
 		this.head = root.getChild("head");
 		this.shape1 = root.getChild("shape1");

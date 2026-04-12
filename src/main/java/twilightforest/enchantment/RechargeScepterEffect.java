@@ -54,7 +54,7 @@ public record RechargeScepterEffect() implements EnchantmentEntityEffect {
 						for (int slot : slotsToConsume) {
 							ItemStack stack = player.getInventory().getItem(slot);
 							stack.shrink(1);
-							ItemStack remainder = stack.getItem().getCraftingRemainder();
+							ItemStack remainder = stack.getItem().getCraftingRemainder().create();
 							if (!remainder.isEmpty()) {
 								if (!player.getInventory().add(remainder)) {
 									player.drop(remainder, false);

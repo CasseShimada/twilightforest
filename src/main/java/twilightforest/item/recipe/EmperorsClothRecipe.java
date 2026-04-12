@@ -1,10 +1,8 @@
 package twilightforest.item.recipe;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -16,9 +14,7 @@ import twilightforest.init.TFRecipes;
 
 public class EmperorsClothRecipe extends CustomRecipe {
 
-	public EmperorsClothRecipe(CraftingBookCategory category) {
-		super(category);
-	}
+	public EmperorsClothRecipe() {}
 
 	@Override
 	public boolean matches(CraftingInput input, Level level) {
@@ -31,7 +27,7 @@ public class EmperorsClothRecipe extends CustomRecipe {
 				if (stack.is(TFItems.EMPERORS_CLOTH.get()) && !foundInk) {
 					foundInk = true;
 				} else if (!foundItem) {
-					if (isHumanoidArmor(stack) && stack.getItem().getCraftingRemainder().isEmpty() && stack.get(TFDataComponents.EMPERORS_CLOTH.get()) == null) {
+					if (isHumanoidArmor(stack) && stack.getItem().getCraftingRemainder().create().isEmpty() && stack.get(TFDataComponents.EMPERORS_CLOTH.get()) == null) {
 						foundItem = true;
 					} else {
 						return false;
@@ -46,7 +42,7 @@ public class EmperorsClothRecipe extends CustomRecipe {
 	}
 
 	@Override
-	public ItemStack assemble(CraftingInput input, HolderLookup.Provider provider) {
+	public ItemStack assemble(CraftingInput input) {
 		ItemStack item = ItemStack.EMPTY;
 
 		for (int i = 0; i < input.size(); i++) {
@@ -62,7 +58,7 @@ public class EmperorsClothRecipe extends CustomRecipe {
 	}
 
 	@Override
-	public RecipeSerializer<? extends CustomRecipe> getSerializer() {
+	public RecipeSerializer<EmperorsClothRecipe> getSerializer() {
 		return TFRecipes.EMPERORS_CLOTH_RECIPE.get();
 	}
 

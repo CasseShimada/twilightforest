@@ -23,7 +23,7 @@ public class RedThreadModel extends Model<Unit> {
 	private final ModelPart right;
 
 	public RedThreadModel(ModelPart root) {
-		super(root, RenderTypes::entityCutoutNoCull);
+		super(root, RenderTypes::entityCutout);
 		this.center = root.getChild("center");
 		this.up = root.getChild("up");
 		this.down = root.getChild("down");

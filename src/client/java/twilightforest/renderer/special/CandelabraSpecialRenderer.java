@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3fc;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +22,7 @@ public record CandelabraSpecialRenderer() implements SpecialModelRenderer<Candel
 	}
 
 	@Override
-	public void submit(@Nullable CandelabraData data, ItemDisplayContext displayContext, PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, boolean hasFoil, int outlineColor) {
+	public void submit(@Nullable CandelabraData data, PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, boolean hasFoil, int outlineColor) {
 		if (data != null) {
 			CandelabraRenderer.renderCandles(TFBlocks.CANDELABRA.get().defaultBlockState(), data, poseStack, nodeCollector, packedLight, packedOverlay, outlineColor);
 		}
@@ -36,7 +35,7 @@ public record CandelabraSpecialRenderer() implements SpecialModelRenderer<Candel
 		output.accept(new org.joml.Vector3f(1.0F, 1.5F, 1.0F));
 	}
 
-	public record Unbaked() implements SpecialModelRenderer.Unbaked {
+	public record Unbaked() implements SpecialModelRenderer.Unbaked<CandelabraData> {
 		public static final MapCodec<CandelabraSpecialRenderer.Unbaked> MAP_CODEC = MapCodec.unit(CandelabraSpecialRenderer.Unbaked::new);
 
 		@Override
@@ -45,7 +44,7 @@ public record CandelabraSpecialRenderer() implements SpecialModelRenderer<Candel
 		}
 
 		@Override
-		public SpecialModelRenderer<?> bake(SpecialModelRenderer.BakingContext context) {
+		public SpecialModelRenderer<CandelabraData> bake(SpecialModelRenderer.BakingContext context) {
 			return new CandelabraSpecialRenderer();
 		}
 	}

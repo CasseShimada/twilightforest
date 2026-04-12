@@ -1,6 +1,10 @@
 package twilightforest.init;
 
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
@@ -246,15 +250,21 @@ public class TFItems {
 	public static final DeferredItem<Item> MUSIC_DISC_THREAD = register("music_disc_thread", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.THREAD));
 	public static final DeferredItem<Item> MUSIC_DISC_MOTION = register("music_disc_motion", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.MOTION));
 
-	public static final DeferredItem<Item> NAGA_BANNER_PATTERN = register("naga_banner_pattern", properties -> new Item(properties.component(DataComponents.PROVIDES_BANNER_PATTERNS, TFBannerPatternTags.NAGA_BANNER_PATTERN)), () -> new Item.Properties().stacksTo(1).rarity(TWILIGHT_RARITY));
-	public static final DeferredItem<Item> LICH_BANNER_PATTERN = register("lich_banner_pattern", properties -> new Item(properties.component(DataComponents.PROVIDES_BANNER_PATTERNS, TFBannerPatternTags.LICH_BANNER_PATTERN)), () -> new Item.Properties().stacksTo(1).rarity(TWILIGHT_RARITY));
-	public static final DeferredItem<Item> MINOSHROOM_BANNER_PATTERN = register("minoshroom_banner_pattern", properties -> new Item(properties.component(DataComponents.PROVIDES_BANNER_PATTERNS, TFBannerPatternTags.MINOSHROOM_BANNER_PATTERN)), () -> new Item.Properties().stacksTo(1).rarity(TWILIGHT_RARITY));
-	public static final DeferredItem<Item> HYDRA_BANNER_PATTERN = register("hydra_banner_pattern", properties -> new Item(properties.component(DataComponents.PROVIDES_BANNER_PATTERNS, TFBannerPatternTags.HYDRA_BANNER_PATTERN)), () -> new Item.Properties().stacksTo(1).rarity(TWILIGHT_RARITY));
-	public static final DeferredItem<Item> KNIGHT_PHANTOM_BANNER_PATTERN = register("knight_phantom_banner_pattern", properties -> new Item(properties.component(DataComponents.PROVIDES_BANNER_PATTERNS, TFBannerPatternTags.KNIGHT_PHANTOM_BANNER_PATTERN)), () -> new Item.Properties().stacksTo(1).rarity(TWILIGHT_RARITY));
-	public static final DeferredItem<Item> UR_GHAST_BANNER_PATTERN = register("ur_ghast_banner_pattern", properties -> new Item(properties.component(DataComponents.PROVIDES_BANNER_PATTERNS, TFBannerPatternTags.UR_GHAST_BANNER_PATTERN)), () -> new Item.Properties().stacksTo(1).rarity(TWILIGHT_RARITY));
-	public static final DeferredItem<Item> ALPHA_YETI_BANNER_PATTERN = register("alpha_yeti_banner_pattern", properties -> new Item(properties.component(DataComponents.PROVIDES_BANNER_PATTERNS, TFBannerPatternTags.ALPHA_YETI_BANNER_PATTERN)), () -> new Item.Properties().stacksTo(1).rarity(TWILIGHT_RARITY));
-	public static final DeferredItem<Item> SNOW_QUEEN_BANNER_PATTERN = register("snow_queen_banner_pattern", properties -> new Item(properties.component(DataComponents.PROVIDES_BANNER_PATTERNS, TFBannerPatternTags.SNOW_QUEEN_BANNER_PATTERN)), () -> new Item.Properties().stacksTo(1).rarity(TWILIGHT_RARITY));
-	public static final DeferredItem<Item> QUEST_RAM_BANNER_PATTERN = register("quest_ram_banner_pattern", properties -> new Item(properties.component(DataComponents.PROVIDES_BANNER_PATTERNS, TFBannerPatternTags.QUESTING_RAM_BANNER_PATTERN)), () -> new Item.Properties().stacksTo(1).rarity(TWILIGHT_RARITY));
+	public static final DeferredItem<Item> NAGA_BANNER_PATTERN = register("naga_banner_pattern", properties -> new Item(properties.component(DataComponents.PROVIDES_BANNER_PATTERNS, bannerPatterns(TFBannerPatternTags.NAGA_BANNER_PATTERN))), () -> new Item.Properties().stacksTo(1).rarity(TWILIGHT_RARITY));
+	public static final DeferredItem<Item> LICH_BANNER_PATTERN = register("lich_banner_pattern", properties -> new Item(properties.component(DataComponents.PROVIDES_BANNER_PATTERNS, bannerPatterns(TFBannerPatternTags.LICH_BANNER_PATTERN))), () -> new Item.Properties().stacksTo(1).rarity(TWILIGHT_RARITY));
+	public static final DeferredItem<Item> MINOSHROOM_BANNER_PATTERN = register("minoshroom_banner_pattern", properties -> new Item(properties.component(DataComponents.PROVIDES_BANNER_PATTERNS, bannerPatterns(TFBannerPatternTags.MINOSHROOM_BANNER_PATTERN))), () -> new Item.Properties().stacksTo(1).rarity(TWILIGHT_RARITY));
+	public static final DeferredItem<Item> HYDRA_BANNER_PATTERN = register("hydra_banner_pattern", properties -> new Item(properties.component(DataComponents.PROVIDES_BANNER_PATTERNS, bannerPatterns(TFBannerPatternTags.HYDRA_BANNER_PATTERN))), () -> new Item.Properties().stacksTo(1).rarity(TWILIGHT_RARITY));
+	public static final DeferredItem<Item> KNIGHT_PHANTOM_BANNER_PATTERN = register("knight_phantom_banner_pattern", properties -> new Item(properties.component(DataComponents.PROVIDES_BANNER_PATTERNS, bannerPatterns(TFBannerPatternTags.KNIGHT_PHANTOM_BANNER_PATTERN))), () -> new Item.Properties().stacksTo(1).rarity(TWILIGHT_RARITY));
+	public static final DeferredItem<Item> UR_GHAST_BANNER_PATTERN = register("ur_ghast_banner_pattern", properties -> new Item(properties.component(DataComponents.PROVIDES_BANNER_PATTERNS, bannerPatterns(TFBannerPatternTags.UR_GHAST_BANNER_PATTERN))), () -> new Item.Properties().stacksTo(1).rarity(TWILIGHT_RARITY));
+	public static final DeferredItem<Item> ALPHA_YETI_BANNER_PATTERN = register("alpha_yeti_banner_pattern", properties -> new Item(properties.component(DataComponents.PROVIDES_BANNER_PATTERNS, bannerPatterns(TFBannerPatternTags.ALPHA_YETI_BANNER_PATTERN))), () -> new Item.Properties().stacksTo(1).rarity(TWILIGHT_RARITY));
+	public static final DeferredItem<Item> SNOW_QUEEN_BANNER_PATTERN = register("snow_queen_banner_pattern", properties -> new Item(properties.component(DataComponents.PROVIDES_BANNER_PATTERNS, bannerPatterns(TFBannerPatternTags.SNOW_QUEEN_BANNER_PATTERN))), () -> new Item.Properties().stacksTo(1).rarity(TWILIGHT_RARITY));
+	public static final DeferredItem<Item> QUEST_RAM_BANNER_PATTERN = register("quest_ram_banner_pattern", properties -> new Item(properties.component(DataComponents.PROVIDES_BANNER_PATTERNS, bannerPatterns(TFBannerPatternTags.QUESTING_RAM_BANNER_PATTERN))), () -> new Item.Properties().stacksTo(1).rarity(TWILIGHT_RARITY));
+
+	@SuppressWarnings("unchecked")
+	private static HolderSet<BannerPattern> bannerPatterns(net.minecraft.tags.TagKey<BannerPattern> tag) {
+		Registry<BannerPattern> registry = (Registry<BannerPattern>) BuiltInRegistries.REGISTRY.getValue(Registries.BANNER_PATTERN.identifier());
+		return HolderSet.emptyNamed(registry, tag);
+	}
 
 	public static <T extends Item> DeferredItem<T> register(String name, Function<Item.Properties, T> item, Supplier<Item.Properties> properties) {
 		return ITEMS.register(name, () -> item.apply(properties.get().setId(ResourceKey.create(Registries.ITEM, TwilightForestMod.prefix(name)))));

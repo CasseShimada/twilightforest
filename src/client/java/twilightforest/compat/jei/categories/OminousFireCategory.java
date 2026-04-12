@@ -10,11 +10,13 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.types.IRecipeType;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
 import twilightforest.TwilightForestMod;
 import twilightforest.compat.RecipeViewerConstants;
@@ -70,7 +72,7 @@ public class OminousFireCategory implements IRecipeCategory<OminousFireRecipe> {
 	}
 
 	@Override
-	public void draw(OminousFireRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+	public void draw(OminousFireRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
 		this.arrow.draw(graphics, 46, 19);
 	}
 
@@ -80,7 +82,7 @@ public class OminousFireCategory implements IRecipeCategory<OminousFireRecipe> {
 			.setCustomRenderer(FakeEntityType.ENTITY_TYPE, this.entityRenderer)
 			.add(FakeEntityType.ENTITY_TYPE, recipe.input());
 
-		SpawnEggItem inputEgg = SpawnEggItem.byId(BuiltInRegistries.ENTITY_TYPE.getValue(recipe.input().type()));
+		Holder<Item> inputEgg = SpawnEggItem.byId(BuiltInRegistries.ENTITY_TYPE.getValue(recipe.input().type())).orElse(null);
 		if (inputEgg != null) {
 			//make it so hovering over the entity shows its name
 			builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).add(new ItemStack(inputEgg));
@@ -89,7 +91,7 @@ public class OminousFireCategory implements IRecipeCategory<OminousFireRecipe> {
 			.setCustomRenderer(FakeEntityType.ENTITY_TYPE, this.entityRenderer)
 			.add(FakeEntityType.ENTITY_TYPE, recipe.output());
 
-		SpawnEggItem outputEgg = SpawnEggItem.byId(BuiltInRegistries.ENTITY_TYPE.getValue(recipe.output().type()));
+		Holder<Item> outputEgg = SpawnEggItem.byId(BuiltInRegistries.ENTITY_TYPE.getValue(recipe.output().type())).orElse(null);
 		if (outputEgg != null) {
 			//make it so hovering over the entity shows its name
 			builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).add(new ItemStack(outputEgg));

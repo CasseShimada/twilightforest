@@ -5,7 +5,7 @@ import com.mojang.math.Axis;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
@@ -47,7 +47,7 @@ public class HydraHeadRenderer extends TFPartRenderer<HydraHead, HydraHeadRender
 	}
 
 	@Override
-	protected void submitNameTag(HydraHeadRenderState state, PoseStack stack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
+	protected void submitNameDisplay(HydraHeadRenderState state, PoseStack stack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
 		Vec3 vec3 = state.nameTagAttachment;
 		if (vec3 != null && state.nameTag != null) {
 			Vec3 adjusted = vec3.add(0.0D, 0.5D, 0.0D);

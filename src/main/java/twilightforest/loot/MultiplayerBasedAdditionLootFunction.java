@@ -6,7 +6,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -37,8 +36,8 @@ public class MultiplayerBasedAdditionLootFunction extends LootItemConditionalFun
 	}
 
 	@Override
-	public LootItemFunctionType<? extends LootItemConditionalFunction> getType() {
-		return TFLoot.MULTIPLAYER_MULTIPLIER.get();
+	public MapCodec<? extends LootItemConditionalFunction> codec() {
+		return CODEC;
 	}
 
 	@Override
@@ -50,7 +49,7 @@ public class MultiplayerBasedAdditionLootFunction extends LootItemConditionalFun
 					int participatingPlayers = qualifiedPlayers - 1;
 					int extraItems = this.value.getInt(context) * participatingPlayers;
 					stack.setCount(Mth.clamp(stack.getCount() + extraItems, 0, stack.getMaxStackSize()));
-					TwilightForestMod.LOGGER.debug("{} extra players participated in a fight against {}, dropping {} extra {} for a total of {}.", participatingPlayers, context.getParameter(LootContextParams.THIS_ENTITY).getType().getDescription().getString(), extraItems, stack.getItem().getName().getString(), stack.getCount());
+					TwilightForestMod.LOGGER.debug("{} extra players participated in a fight against {}, dropping {} extra {} for a total of {}.", participatingPlayers, context.getParameter(LootContextParams.THIS_ENTITY).getType().getDescription().getString(), extraItems, stack.getItem().getName(stack).getString(), stack.getCount());
 				}
 			}
 		}

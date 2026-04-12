@@ -4,7 +4,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.fabricmc.fabric.api.client.model.loading.v1.UnbakedModelDeserializer;
-import net.minecraft.client.renderer.block.model.BlockModel;
+import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.util.GsonHelper;
 
 public class GiantBlockModelLoader implements UnbakedModelDeserializer {
@@ -15,7 +15,7 @@ public class GiantBlockModelLoader implements UnbakedModelDeserializer {
 		JsonObject stripped = object.deepCopy();
 		stripped.remove("fabric:type");
 		stripped.remove("loader");
-		BlockModel baseModel = deserializationContext.deserialize(stripped, BlockModel.class);
+		UnbakedModel baseModel = deserializationContext.deserialize(stripped, UnbakedModel.class);
 
 		return new UnbakedGiantBlockModel(baseModel);
 	}

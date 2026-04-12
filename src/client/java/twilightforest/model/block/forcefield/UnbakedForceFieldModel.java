@@ -1,32 +1,32 @@
 package twilightforest.client.model.block.forcefield;
 
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockElement;
-import net.minecraft.client.renderer.block.model.BlockElementFace;
-import net.minecraft.client.renderer.block.model.BlockModel;
-import net.minecraft.client.renderer.block.model.FaceBakery;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.block.model.TextureSlots;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.resources.model.cuboid.FaceBakery;
+import net.minecraft.client.resources.model.cuboid.CuboidFace;
+import net.minecraft.client.resources.model.cuboid.CuboidModelElement;
+import net.minecraft.client.resources.model.cuboid.ItemTransforms;
+import net.minecraft.client.resources.model.sprite.TextureSlots;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ModelDebugName;
-import net.minecraft.client.resources.model.ModelState;
-import net.minecraft.client.resources.model.QuadCollection;
+import net.minecraft.client.renderer.block.dispatch.ModelState;
+import net.minecraft.client.resources.model.geometry.QuadCollection;
 import net.minecraft.client.resources.model.ResolvedModel;
-import net.minecraft.client.resources.model.UnbakedGeometry;
+import net.minecraft.client.resources.model.geometry.UnbakedGeometry;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
+import twilightforest.client.model.block.ModelBakingUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class UnbakedForceFieldModel implements UnbakedModel {
-	private final BlockModel baseModel;
-	private final Map<BlockElement, ForceFieldModelLoader.Condition> elementsAndConditions;
+	private final UnbakedModel baseModel;
+	private final Map<CuboidModelElement, ForceFieldModelLoader.Condition> elementsAndConditions;
 
-	public UnbakedForceFieldModel(BlockModel baseModel, Map<BlockElement, ForceFieldModelLoader.Condition> elementsAndConditions) {
+	public UnbakedForceFieldModel(UnbakedModel baseModel, Map<CuboidModelElement, ForceFieldModelLoader.Condition> elementsAndConditions) {
 		this.baseModel = baseModel;
 		this.elementsAndConditions = elementsAndConditions;
 	}
@@ -55,14 +55,14 @@ public class UnbakedForceFieldModel implements UnbakedModel {
 	public UnbakedGeometry geometry() {
 		return (textureSlots, baker, modelState, name) -> {
 			QuadCollection.Builder builder = new QuadCollection.Builder();
-			for (BlockElement element : elementsAndConditions.keySet()) {
+			for (CuboidModelElement element : elementsAndConditions.keySet()) {
 				for (var faceEntry : element.faces().entrySet()) {
 					Direction side = faceEntry.getKey();
-					BlockElementFace face = faceEntry.getValue();
+					CuboidFace face = faceEntry.getValue();
 					if (face == null) continue;
-					TextureAtlasSprite sprite = resolveSprite(baker, textureSlots, stripReference(face.texture()), name);
+					Material.Baked sprite = ModelBakingUtil.resolveMaterial(baker, textureSlots, stripReference(face.texture()), name);
 					BakedQuad quad = FaceBakery.bakeQuad(
-						baker.parts(),
+						baker,
 						element.from(),
 						element.to(),
 						face,
@@ -92,16 +92,17 @@ public class UnbakedForceFieldModel implements UnbakedModel {
 	public ForceFieldBlockStateModel bakeToBlockStateModel(ModelBaker baker, ResolvedModel resolvedModel, ModelState state) {
 		TextureSlots slots = resolvedModel.getTopTextureSlots();
 		List<ForceFieldBlockStateModel.Part> bakedParts = new ArrayList<>();
+		int materialFlags = 0;
 
-		for (Map.Entry<BlockElement, ForceFieldModelLoader.Condition> entry : this.elementsAndConditions.entrySet()) {
-			BlockElement element = entry.getKey();
+		for (Map.Entry<CuboidModelElement, ForceFieldModelLoader.Condition> entry : this.elementsAndConditions.entrySet()) {
+			CuboidModelElement element = entry.getKey();
 			for (var faceEntry : element.faces().entrySet()) {
 				Direction side = faceEntry.getKey();
-				BlockElementFace face = faceEntry.getValue();
+				CuboidFace face = faceEntry.getValue();
 				if (face == null) continue;
-				TextureAtlasSprite sprite = resolveSprite(baker, slots, stripReference(face.texture()), resolvedModel);
+				Material.Baked sprite = ModelBakingUtil.resolveMaterial(baker, slots, stripReference(face.texture()), resolvedModel);
 				BakedQuad quad = FaceBakery.bakeQuad(
-					baker.parts(),
+					baker,
 					element.from(),
 					element.to(),
 					face,
@@ -112,15 +113,16 @@ public class UnbakedForceFieldModel implements UnbakedModel {
 					element.shade(),
 					element.lightEmission()
 				);
+				materialFlags |= quad.materialInfo().flags();
 				bakedParts.add(new ForceFieldBlockStateModel.Part(side, face.cullForDirection(), quad, entry.getValue()));
 			}
 		}
 
-		TextureAtlasSprite particle = slots.getMaterial("particle") != null
-			? resolveSprite(baker, slots, "particle", resolvedModel)
-			: resolveSprite(baker, slots, stripReference(firstTextureSlot()), resolvedModel);
+		Material.Baked particle = slots.getMaterial("particle") != null
+			? ModelBakingUtil.resolveMaterial(baker, slots, "particle", resolvedModel)
+			: ModelBakingUtil.resolveMaterial(baker, slots, stripReference(firstTextureSlot()), resolvedModel);
 
-		return new ForceFieldBlockStateModel(bakedParts, particle, resolvedModel.getTopAmbientOcclusion());
+		return new ForceFieldBlockStateModel(bakedParts, particle, resolvedModel.getTopAmbientOcclusion(), materialFlags);
 	}
 
 	private static String stripReference(String texture) {
@@ -132,9 +134,5 @@ public class UnbakedForceFieldModel implements UnbakedModel {
 			return key;
 		}
 		return "particle";
-	}
-
-	private static TextureAtlasSprite resolveSprite(ModelBaker baker, TextureSlots slots, String key, ModelDebugName name) {
-		return baker.sprites().resolveSlot(slots, key, name);
 	}
 }

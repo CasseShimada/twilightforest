@@ -1,8 +1,8 @@
 package twilightforest.client.model.block;
 
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,12 +16,17 @@ public final class ReactorDebrisModel implements BlockStateModel {
 	}
 
 	@Override
-	public void collectParts(@NotNull RandomSource random, @NotNull List<BlockModelPart> output) {
+	public void collectParts(@NotNull RandomSource random, @NotNull List<BlockStateModelPart> output) {
 		delegate.collectParts(random, output);
 	}
 
 	@Override
-	public @NotNull TextureAtlasSprite particleIcon() {
-		return delegate.particleIcon();
+	public @NotNull Material.Baked particleMaterial() {
+		return delegate.particleMaterial();
+	}
+
+	@Override
+	public int materialFlags() {
+		return delegate.materialFlags();
 	}
 }

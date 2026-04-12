@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
@@ -262,7 +262,7 @@ public class MagicPaintingRenderer extends EntityRenderer<MagicPainting, MagicPa
 			case STORM -> a = (level.getRainLevel(partialTicks) + level.getThunderLevel(partialTicks)) * 0.5F;
 			case LIGHTNING -> a = ((ClientLevelAccessor) level).twilightforest$getSkyFlashTime() * opacityModifier.multiplier();
 			case DAY_TIME -> {
-				float time = level.getDayTime() + partialTicks;
+				float time = (level.getOverworldClockTime() % (long) DAY_LENGTH) + partialTicks;
 
 				if (opacityModifier.from() < opacityModifier.to()) {
 					a = 1.0F - Math.abs(((time - opacityModifier.from()) / (opacityModifier.to() - opacityModifier.from())) - 0.5F) * 2.0F;
@@ -371,7 +371,7 @@ public class MagicPaintingRenderer extends EntityRenderer<MagicPainting, MagicPa
 						lightZ = Mth.floor(lightZ + (double)widthOffset);
 				}
 
-				state.lightCoords[w + h * widthAsBlock] = LevelRenderer.getLightColor(level, new BlockPos(lightX, lightY, lightZ));
+				state.lightCoords[w + h * widthAsBlock] = LevelRenderer.getLightCoords(level, new BlockPos(lightX, lightY, lightZ));
 			}
 		}
 	}

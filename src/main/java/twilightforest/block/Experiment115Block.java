@@ -103,7 +103,7 @@ public class Experiment115Block extends Block {
 		else {
 			player.awardStat(TFStats.E115_SLICES_EATEN.get());
 			player.getFoodData().eat(4, 0.3F);
-			level.playSound(null, pos, SoundEvents.GENERIC_EAT.value(), SoundSource.PLAYERS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
+			level.playSound(null, pos, SoundEvents.GENERIC_EAT.value(), SoundSource.PLAYERS, 0.5F, level.getRandom().nextFloat() * 0.1F + 0.9F);
 			int i = state.getValue(BITES_TAKEN);
 
 			if (i < 7) {

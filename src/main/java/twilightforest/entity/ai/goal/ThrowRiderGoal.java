@@ -29,7 +29,7 @@ public class ThrowRiderGoal extends MeleeAttackGoal {
 	public boolean canUse() {
 		return this.mob.getPassengers().isEmpty() &&
 			this.mob.getTarget() != null &&
-			!this.mob.getTarget().getType().is(TFEntityTypeTags.BOSSES) &&
+			!this.mob.getTarget().getType().builtInRegistryHolder().is(TFEntityTypeTags.BOSSES) &&
 			TFDataAttachments.get(this.mob.getTarget(), TFDataAttachments.YETI_THROWING).getThrowCooldown() <= 0 &&
 			super.canUse();
 	}
@@ -60,7 +60,7 @@ public class ThrowRiderGoal extends MeleeAttackGoal {
 			if (this.mob.getPassengers().isEmpty()) {
 				var v = victim.getVehicle();
 
-				if (v == null || !v.getType().is(TFEntityTypeTags.RIDES_OBSTRUCT_SNATCHING)) {
+				if (v == null || !v.getType().builtInRegistryHolder().is(TFEntityTypeTags.RIDES_OBSTRUCT_SNATCHING)) {
 					// Pluck them from the boat, minecart, donkey, or whatever
 					victim.stopRiding();
 

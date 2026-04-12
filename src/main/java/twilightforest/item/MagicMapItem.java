@@ -201,7 +201,7 @@ public class MagicMapItem extends MapItem {
 		TFMagicMapData mapdata = this.getCustomMapData(stack, level);
 		if (mapdata != null) {
 			if (entity instanceof Player entityplayer) {
-				mapdata.tickCarriedBy(entityplayer, stack);
+				mapdata.tickCarriedBy(entityplayer, stack, null);
 			}
 
 			boolean isSelected = slot == EquipmentSlot.MAINHAND;

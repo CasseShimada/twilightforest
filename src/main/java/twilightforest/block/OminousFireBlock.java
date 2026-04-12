@@ -51,7 +51,7 @@ public class OminousFireBlock extends BaseFireBlock {
 
 	@Override
 	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean movedByPiston) {
-		if (!entity.getType().is(EntityTypeTags.UNDEAD) && level instanceof ServerLevel serverLevel) {
+		if (!entity.getType().builtInRegistryHolder().is(EntityTypeTags.UNDEAD) && level instanceof ServerLevel serverLevel) {
 			entity.hurtServer(serverLevel, serverLevel.damageSources().source(TFDamageTypes.OMINOUS_FIRE), 1.0F);
 		}
 	}

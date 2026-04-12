@@ -300,6 +300,6 @@ public class MinoshroomModel extends HumanoidModel<MinoshroomRenderState> implem
 	@Override
 	public void submitTrophy(PoseStack stack, SubmitNodeCollector nodeCollector, int light, int overlay, int color, ItemDisplayContext context, @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress) {
 		stack.translate(0.0F, 0.375F, 0.56F);
-		nodeCollector.submitModelPart(this.head, stack, RenderTypes.entityCutoutNoCull(MinoshroomRenderer.TEXTURE), light, overlay, null, false, false, color, breakProgress, 0);
+		nodeCollector.submitModelPart(this.head, stack, RenderTypes.entityCutout(MinoshroomRenderer.TEXTURE), light, overlay, null, false, false, color, breakProgress, 0);
 	}
 }

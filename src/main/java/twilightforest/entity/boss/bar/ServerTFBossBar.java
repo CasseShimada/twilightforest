@@ -6,11 +6,13 @@ import net.minecraft.server.level.ServerPlayer;
 import twilightforest.network.PacketDistributor;
 import twilightforest.network.TFBossBarPacket;
 
+import java.util.UUID;
+
 public class ServerTFBossBar extends ServerBossEvent {
 	private int color;
 
 	public ServerTFBossBar(Component name, int color, BossBarOverlay overlay) {
-		super(name, BossBarColor.WHITE, overlay);
+		super(UUID.randomUUID(), name, BossBarColor.WHITE, overlay);
 		this.color = color;
 	}
 

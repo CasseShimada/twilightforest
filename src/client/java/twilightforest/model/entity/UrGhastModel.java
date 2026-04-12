@@ -136,6 +136,6 @@ public class UrGhastModel extends TFGhastModel implements TrophyBlockModel {
 			stack.translate(0.0F, -1.0F, 0.0F);
 		}
 		stack.scale(0.5F, 0.5F, 0.5F);
-		nodeCollector.submitModelPart(this.body, stack, RenderTypes.entityCutoutNoCull(UrGhastRenderer.TEXTURE), light, overlay, null, false, false, color, breakProgress, 0);
+		nodeCollector.submitModelPart(this.body, stack, RenderTypes.entityCutout(UrGhastRenderer.TEXTURE), light, overlay, null, false, false, color, breakProgress, 0);
 	}
 }

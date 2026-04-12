@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
@@ -15,6 +16,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -57,6 +59,11 @@ public class HollowLogVerticalTests {
 		}
 	}
 
+	@BeforeAll
+	public static void ensureItemComponentsBound() {
+		bindItemComponents(Items.STICK, Blocks.VINE, Blocks.LADDER);
+	}
+
 	@BeforeEach
 	public void setup() {
 		Identifier verticalId = Identifier.fromNamespaceAndPath("twilightforest", "test_vertical");
@@ -67,6 +74,16 @@ public class HollowLogVerticalTests {
 		instance = new VerticalHollowLogBlock(climbableRef::get, verticalProps);
 		climbable = new ClimbableHollowLogBlock(verticalId, () -> instance, climbableProps);
 		climbableRef.set(climbable);
+	}
+
+	private static void bindItemComponents(ItemLike... itemLikes) {
+		for (ItemLike itemLike : itemLikes) {
+			var item = itemLike.asItem();
+			var holder = item.builtInRegistryHolder();
+			if (!holder.areComponentsBound()) {
+				holder.bindComponents(DataComponentMap.EMPTY);
+			}
+		}
 	}
 
 	@Test

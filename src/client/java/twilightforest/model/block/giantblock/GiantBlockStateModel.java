@@ -3,18 +3,18 @@ package twilightforest.client.model.block.giantblock;
 import com.mojang.math.Quadrant;
 import com.mojang.serialization.MapCodec;
 import net.fabricmc.fabric.api.client.model.loading.v1.CustomUnbakedBlockStateModel;
-import net.minecraft.client.renderer.block.model.BlockElementFace;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.block.model.FaceBakery;
-import net.minecraft.client.renderer.block.model.SingleVariant;
-import net.minecraft.client.renderer.block.model.Variant;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.QuadCollection;
-import net.minecraft.client.resources.model.BlockModelRotation;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.resources.model.cuboid.FaceBakery;
+import net.minecraft.client.resources.model.cuboid.CuboidFace;
+import net.minecraft.client.renderer.block.dispatch.SingleVariant;
+import net.minecraft.client.renderer.block.dispatch.Variant;
+import net.minecraft.client.resources.model.geometry.QuadCollection;
+import net.minecraft.client.renderer.block.dispatch.BlockModelRotation;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ResolvableModel;
 import net.minecraft.client.resources.model.ResolvedModel;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -26,36 +26,43 @@ import twilightforest.util.Vec2i;
 import java.util.List;
 
 public final class GiantBlockStateModel implements BlockStateModel {
-	private final TextureAtlasSprite[] textures;
-	private final TextureAtlasSprite particle;
+	private final Material.Baked[] textures;
+	private final Material.Baked particle;
 	private final boolean useAmbientOcclusion;
-	private final ModelBaker.PartCache partCache;
+	private final ModelBaker baker;
+	private final int materialFlags;
 
-	public GiantBlockStateModel(TextureAtlasSprite[] textures, TextureAtlasSprite particle, boolean useAmbientOcclusion, ModelBaker.PartCache partCache) {
+	public GiantBlockStateModel(Material.Baked[] textures, Material.Baked particle, boolean useAmbientOcclusion, ModelBaker baker) {
 		this.textures = textures;
 		this.particle = particle;
 		this.useAmbientOcclusion = useAmbientOcclusion;
-		this.partCache = partCache;
+		this.baker = baker;
+		this.materialFlags = this.buildQuads(null, BlockPos.ZERO).materialFlags();
 	}
 
 	@Override
-	public void collectParts(RandomSource random, List<BlockModelPart> output) {
+	public void collectParts(RandomSource random, List<BlockStateModelPart> output) {
 		output.add(new GiantBlockPart());
 	}
 
 	@Override
-	public TextureAtlasSprite particleIcon() {
+	public Material.Baked particleMaterial() {
 		return particle;
 	}
 
-	private QuadCollection buildQuads(net.minecraft.world.level.BlockAndTintGetter level, BlockPos pos) {
+	@Override
+	public int materialFlags() {
+		return this.materialFlags;
+	}
+
+	private QuadCollection buildQuads(net.minecraft.client.renderer.block.BlockAndTintGetter level, BlockPos pos) {
 		QuadCollection.Builder builder = new QuadCollection.Builder();
 
 		for (Direction side : Direction.values()) {
 			if (level == null || shouldRenderSide(level, pos, side)) {
 				Vec2i coords = calculateOffset(side, pos.offset(magicOffsetFromDir(side)));
-				TextureAtlasSprite sprite = this.textures[this.textures.length > 1 ? side.ordinal() : 0];
-				BlockElementFace face = new BlockElementFace(side, side.ordinal(), side.name(), new BlockElementFace.UVs(
+				Material.Baked sprite = this.textures[this.textures.length > 1 ? side.ordinal() : 0];
+				CuboidFace face = new CuboidFace(side, side.ordinal(), side.name(), new CuboidFace.UVs(
 					0.0F + coords.x,
 					0.0F + coords.z,
 					4.0F + coords.x,
@@ -63,7 +70,7 @@ public final class GiantBlockStateModel implements BlockStateModel {
 				), Quadrant.R0);
 
 				builder.addCulledFace(side, FaceBakery.bakeQuad(
-					partCache,
+					baker,
 					new Vector3f(0.0F, 0.0F, 0.0F),
 					new Vector3f(16.0F, 16.0F, 16.0F),
 					face,
@@ -80,13 +87,13 @@ public final class GiantBlockStateModel implements BlockStateModel {
 		return builder.build();
 	}
 
-	private boolean shouldRenderSide(net.minecraft.world.level.BlockAndTintGetter level, BlockPos pos, Direction side) {
+	private boolean shouldRenderSide(net.minecraft.client.renderer.block.BlockAndTintGetter level, BlockPos pos, Direction side) {
 		return !com.google.common.collect.Iterables.contains(GiantBlock.getVolume(pos), pos.offset(side.getUnitVec3i()));
 	}
 
-	private final class GiantBlockPart implements BlockModelPart {
+	private final class GiantBlockPart implements BlockStateModelPart {
 		@Override
-		public List<net.minecraft.client.renderer.block.model.BakedQuad> getQuads(Direction direction) {
+		public List<net.minecraft.client.resources.model.geometry.BakedQuad> getQuads(Direction direction) {
 			BlockModelContext.Context ctx = BlockModelContext.get();
 			if (ctx == null) {
 				return buildQuads(null, BlockPos.ZERO).getQuads(direction);
@@ -100,8 +107,13 @@ public final class GiantBlockStateModel implements BlockStateModel {
 		}
 
 		@Override
-		public TextureAtlasSprite particleIcon() {
+		public Material.Baked particleMaterial() {
 			return particle;
+		}
+
+		@Override
+		public int materialFlags() {
+			return GiantBlockStateModel.this.materialFlags;
 		}
 	}
 

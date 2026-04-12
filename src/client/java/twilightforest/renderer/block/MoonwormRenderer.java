@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
@@ -56,7 +56,7 @@ public class MoonwormRenderer implements BlockEntityRenderer<MoonwormBlockEntity
 		stack.mulPose(Axis.YN.rotationDegrees(yaw));
 
 		model.setupAnim(wiggleRotation, delay);
-		collector.submitModel(model, null, stack, RenderTypes.entityCutoutNoCull(TEXTURE), light, OverlayTexture.NO_OVERLAY, -1, null);
+		collector.submitModel(model, null, stack, RenderTypes.entityCutout(TEXTURE), light, OverlayTexture.NO_OVERLAY, -1, null);
 
 		stack.popPose();
 	}

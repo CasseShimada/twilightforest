@@ -120,7 +120,7 @@ public class PinchBeetle extends Monster implements IHostileMount {
 		if (this.getPassengers().isEmpty()) {
 			var v = entity.getVehicle();
 
-			if (v == null || !v.getType().is(TFEntityTypeTags.RIDES_OBSTRUCT_SNATCHING)) {
+			if (v == null || !v.getType().builtInRegistryHolder().is(TFEntityTypeTags.RIDES_OBSTRUCT_SNATCHING)) {
 				// Pluck them from the boat, minecart, donkey, or whatever
 				entity.stopRiding();
 

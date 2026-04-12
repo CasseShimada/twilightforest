@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.HugeBrownMushroomFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.HugeMushroomFeatureConfiguration;
@@ -21,8 +21,8 @@ public class TrollHugeBrownMushroomFeature extends HugeBrownMushroomFeature {
 	}
 
 	@Override
-	protected void makeCap(LevelAccessor levelAccessor, RandomSource random, BlockPos pos, int height, BlockPos.MutableBlockPos mutableBlockPos, HugeMushroomFeatureConfiguration featureConfiguration) {
-		int foliageRadius = featureConfiguration.foliageRadius;
+	protected void makeCap(WorldGenLevel levelAccessor, RandomSource random, BlockPos pos, int height, BlockPos.MutableBlockPos mutableBlockPos, HugeMushroomFeatureConfiguration featureConfiguration) {
+		int foliageRadius = featureConfiguration.foliageRadius();
 
 		for (int x = -foliageRadius; x <= foliageRadius; x++) {
 			for (int z = -foliageRadius; z <= foliageRadius; z++) {
@@ -30,7 +30,7 @@ public class TrollHugeBrownMushroomFeature extends HugeBrownMushroomFeature {
 					mutableBlockPos.setWithOffset(pos, x, height, z);
 
 					if (!levelAccessor.getBlockState(mutableBlockPos).is(BlockTags.FEATURES_CANNOT_REPLACE)) {
-						BlockState blockState = featureConfiguration.capProvider.getState(random, pos);
+						BlockState blockState = featureConfiguration.capProvider().getState(levelAccessor, random, pos);
 						if (FeatureLogic.hasHorizontalMushroomProperties(blockState)) {
 							blockState = FeatureLogic.getHorizontalMushroomBlockState(blockState, x, z, foliageRadius);
 						}

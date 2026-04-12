@@ -40,7 +40,7 @@ public class LichSpawnerBlockEntity extends BossSpawnerBlockEntity<Lich> {
 
 		mutableBlockPos.move(Direction.UP);
 
-		float yaw = accessor.getLevel().random.nextFloat() * 360F;
+		float yaw = accessor.getLevel().getRandom().nextFloat() * 360F;
 		myCreature.setPos(mutableBlockPos.getX() + 0.5D, mutableBlockPos.getY(), mutableBlockPos.getZ() + 0.5D);
 		myCreature.setYRot(yaw);
 		myCreature.setXRot(0.0F);

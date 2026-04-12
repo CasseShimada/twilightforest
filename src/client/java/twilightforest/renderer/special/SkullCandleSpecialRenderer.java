@@ -8,11 +8,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.renderer.PlayerSkinRenderCache;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
+import net.minecraft.client.renderer.item.ItemModelResolver;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.block.CandleBlock;
@@ -40,7 +41,7 @@ public record SkullCandleSpecialRenderer(
 	}
 
 	@Override
-	public void submit(@Nullable Pair<ResolvableProfile, SkullCandles> data, ItemDisplayContext displayContext, PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, boolean hasFoil, int outlineColor) {
+	public void submit(@Nullable Pair<ResolvableProfile, SkullCandles> data, PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, boolean hasFoil, int outlineColor) {
 		ResolvableProfile profile = data != null ? data.getFirst() : null;
 		SkullCandles candles = data != null ? data.getSecond() : null;
 
@@ -54,20 +55,16 @@ public record SkullCandleSpecialRenderer(
 			renderType = SkullBlockRenderer.getSkullRenderType(this.skullType, null);
 		}
 
-		SkullBlockRenderer.submitSkull(null, 180.0F, this.animation, poseStack, nodeCollector, packedLight, this.model, renderType, outlineColor, null);
+		SkullBlockRenderer.submitSkull(this.animation, poseStack, nodeCollector, packedLight, this.model, renderType, outlineColor, null);
 
 		if (candles != null) {
+			ItemModelResolver resolver = net.minecraft.client.Minecraft.getInstance().getItemModelResolver();
+			ItemStackRenderState candleRenderState = new ItemStackRenderState();
+			ItemStack candleStack = new ItemStack(AbstractSkullCandleBlock.candleColorToCandle(AbstractSkullCandleBlock.CandleColors.colorFromInt(candles.color())));
+			resolver.updateForTopItem(candleRenderState, candleStack, net.minecraft.world.item.ItemDisplayContext.FIXED, null, null, 0);
 			poseStack.pushPose();
 			poseStack.translate(0.0F, 0.5F, 0.0F);
-			nodeCollector.submitBlock(
-				poseStack,
-				AbstractSkullCandleBlock.candleColorToCandle(AbstractSkullCandleBlock.CandleColors.colorFromInt(candles.color()))
-					.defaultBlockState()
-					.setValue(CandleBlock.CANDLES, candles.count()),
-				packedLight,
-				packedOverlay,
-				outlineColor
-			);
+			candleRenderState.submit(poseStack, nodeCollector, packedLight, packedOverlay, outlineColor);
 			poseStack.popPose();
 		}
 	}
@@ -84,7 +81,7 @@ public record SkullCandleSpecialRenderer(
 		output.accept(new org.joml.Vector3f(1.0F, 1.5F, 1.0F));
 	}
 
-	public record Unbaked(SkullBlock.Type kind, Optional<Identifier> textureOverride, float animation) implements SpecialModelRenderer.Unbaked {
+	public record Unbaked(SkullBlock.Type kind, Optional<Identifier> textureOverride, float animation) implements SpecialModelRenderer.Unbaked<Pair<ResolvableProfile, SkullCandles>> {
 		public static final MapCodec<SkullCandleSpecialRenderer.Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				SkullBlock.Type.CODEC.fieldOf("kind").forGetter(SkullCandleSpecialRenderer.Unbaked::kind),
 				Identifier.CODEC.optionalFieldOf("texture").forGetter(SkullCandleSpecialRenderer.Unbaked::textureOverride),
@@ -101,7 +98,7 @@ public record SkullCandleSpecialRenderer(
 		}
 
 		@Override
-		public @Nullable SpecialModelRenderer<?> bake(SpecialModelRenderer.BakingContext context) {
+		public @Nullable SpecialModelRenderer<Pair<ResolvableProfile, SkullCandles>> bake(SpecialModelRenderer.BakingContext context) {
 			var skullModel = SkullBlockRenderer.createModel(context.entityModelSet(), this.kind());
 			Identifier texture = this.textureOverride()
 				.map(location -> location.withPath(path -> "textures/entity/" + path + ".png"))

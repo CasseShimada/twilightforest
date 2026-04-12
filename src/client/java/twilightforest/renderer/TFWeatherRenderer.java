@@ -149,7 +149,7 @@ public class TFWeatherRenderer {
 							double zRange = (double) ((float) dz + 0.5F) - camera.z();
 							float distanceToPlayer = Mth.sqrt((float) (xRange * xRange + zRange * zRange)) / (float) range;
 							float alpha = ((1.0F - distanceToPlayer * distanceToPlayer) * 0.3F + 0.5F);
-							int worldBrightness = LevelRenderer.getLightColor(level, pos);
+							int worldBrightness = LevelRenderer.getLightCoords(level, pos);
 							int fullbright = 15 << 20 | 15 << 4;
 
 							switch (currentType) {
@@ -296,7 +296,7 @@ public class TFWeatherRenderer {
 	}
 
 	private static void renderEffect(Identifier type, double rainX, double rainZ, int minY, int maxY, Vec3 camera, int dx, int dz, float countFactor, float uFactor, float vFactor, float[] color, int light) {
-		VertexConsumer consumer = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderTypes.weather(type, Minecraft.useShaderTransparency()));
+		VertexConsumer consumer = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderTypes.entityTranslucent(type));
 		consumer
 			.addVertex((float) (dx - camera.x() - rainX + 0.5F), (float) (minY - camera.y()), (float) (dz - camera.z() - rainZ + 0.5F))
 			.setUv(0.0F + uFactor, minY * 0.25F + countFactor + vFactor)

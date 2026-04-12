@@ -23,7 +23,7 @@ public class BlockCapabilityDirectionalCache<R> {
 	public R get(BlockApiLookup<R, Direction> lookup, ServerLevel level, BlockPos pos, Direction direction) {
 		BlockPosAndLookup<R> key = new BlockPosAndLookup<>(pos, lookup);
 		BlockApiCache<R, Direction> cache = this.data.get(key);
-		if (cache == null || cache.getWorld() != level) {
+		if (cache == null) {
 			cache = BlockApiCache.create(lookup, level, pos);
 			this.data.put(key, cache);
 		}

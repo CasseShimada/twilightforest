@@ -2,7 +2,7 @@ package twilightforest.client;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -47,14 +47,12 @@ public class OptifineWarningScreen extends Screen {
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(graphics, mouseX, mouseY, partialTicks);
-		graphics.drawCenteredString(this.font, this.title, this.width / 2, 30, 16777215);
+	public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
+		this.extractBackground(graphics, mouseX, mouseY, partialTicks);
+		graphics.centeredText(this.font, this.title, this.width / 2, 30, 16777215);
 		renderCenteredLines(graphics, this.messageLines, this.width / 2, 70);
 		renderCenteredLines(graphics, this.suggestionLines, this.width / 2, 160);
-		super.render(graphics, mouseX, mouseY, partialTicks);
-
-		this.exitButton.render(graphics, mouseX, mouseY, partialTicks);
+		super.extractRenderState(graphics, mouseX, mouseY, partialTicks);
 	}
 
 	@Override
@@ -91,10 +89,10 @@ public class OptifineWarningScreen extends Screen {
 		return super.mouseClicked(event, canceled);
 	}
 
-	private void renderCenteredLines(GuiGraphics graphics, List<FormattedCharSequence> lines, int centerX, int startY) {
+	private void renderCenteredLines(GuiGraphicsExtractor graphics, List<FormattedCharSequence> lines, int centerX, int startY) {
 		int y = startY;
 		for (FormattedCharSequence line : lines) {
-			graphics.drawCenteredString(this.font, line, centerX, y, 0xFFFFFF);
+			graphics.centeredText(this.font, line, centerX, y, 0xFFFFFF);
 			y += this.font.lineHeight;
 		}
 	}

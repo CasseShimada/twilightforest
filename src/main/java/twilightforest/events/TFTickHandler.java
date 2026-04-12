@@ -30,6 +30,7 @@ import twilightforest.network.MissingAdvancementToastPacket;
 import twilightforest.network.StructureProtectionPacket;
 import twilightforest.util.Enforcement;
 import twilightforest.util.PlayerHelper;
+import twilightforest.util.PlayerMessaging;
 import twilightforest.util.landmarks.LandmarkUtil;
 import twilightforest.world.components.structures.util.AdvancementLockedStructure;
 import twilightforest.world.components.structures.util.ProgressionPiece;
@@ -85,7 +86,7 @@ public class TFTickHandler {
 	@SuppressWarnings("UnusedReturnValue")
 	private static boolean checkForLockedStructuresSendPacket(Player player, ServerLevel world) {
 		ChunkPos chunkPlayer = player.chunkPosition();
-		return LandmarkUtil.locateNearestLandmarkStart(world, chunkPlayer.x, chunkPlayer.z).map(structureStart -> {
+		return LandmarkUtil.locateNearestLandmarkStart(world, chunkPlayer.x(), chunkPlayer.z()).map(structureStart -> {
 			if (structureStart.getStructure() instanceof AdvancementLockedStructure advancementLockedStructure && !advancementLockedStructure.doesPlayerHaveRequiredAdvancements(player)) {
 				List<Pair<BoundingBox, Boolean>> boundingBoxesData = structureStart.getPieces().stream()
 					.map(piece -> Pair.of(isProtected(piece) ? piece.getBoundingBox().inflatedBy(4) : piece.getBoundingBox(), isProtected(piece)))
@@ -128,12 +129,12 @@ public class TFTickHandler {
 			if (!player.isCreative() && !player.isSpectator() && TFConfig.getPortalLockingAdvancement(player) != null) {
 				AdvancementHolder requirement = PlayerHelper.getAdvancement(player, Objects.requireNonNull(TFConfig.getPortalLockingAdvancement(player)));
 				if (requirement != null && !PlayerHelper.doesPlayerHaveRequiredAdvancement(player, requirement)) {
-					player.displayClientMessage(TFPortalBlock.PORTAL_UNWORTHY, true);
+					PlayerMessaging.displayClientMessage(player, TFPortalBlock.PORTAL_UNWORTHY, true);
 
 					if (!TFPortalBlock.isPlayerNotifiedOfRequirement(player)) {
 						// .doesPlayerHaveRequiredAdvancement null-checks already, so we can skip null-checking the `requirement`
 						DisplayInfo info = requirement.value().display().orElse(null);
-						PacketDistributor.sendToPlayer(player, info == null ? new MissingAdvancementToastPacket(Component.translatable("twilightforest.ui.advancement.no_title"), new ItemStack(TFBlocks.TWILIGHT_PORTAL_MINIATURE_STRUCTURE.get())) : new MissingAdvancementToastPacket(info.getTitle(), info.getIcon()));
+						PacketDistributor.sendToPlayer(player, info == null ? new MissingAdvancementToastPacket(Component.translatable("twilightforest.ui.advancement.no_title"), new ItemStack(TFBlocks.TWILIGHT_PORTAL_MINIATURE_STRUCTURE.get())) : new MissingAdvancementToastPacket(info.getTitle(), info.getIcon().create()));
 
 						TFPortalBlock.playerNotifiedOfRequirement(player);
 					}

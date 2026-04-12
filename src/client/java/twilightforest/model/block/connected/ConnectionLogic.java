@@ -1,6 +1,7 @@
 package twilightforest.client.model.block.connected;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
 
 //let the magic begin.
@@ -56,6 +57,10 @@ public enum ConnectionLogic {
 
 	public TextureAtlasSprite chooseTexture(TextureAtlasSprite[] sprites) {
 		return sprites[this.texture];
+	}
+
+	public Material.Baked chooseMaterial(Material.Baked[] materials) {
+		return materials[this.texture];
 	}
 
 	public float[] remapUVs(float[] uvs) {

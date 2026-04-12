@@ -88,7 +88,7 @@ public final class LootEvents {
 	}
 
 	private static void applyFierySmelting(LootContext context, List<ItemStack> drops) {
-		ItemStack tool = context.getOptionalParameter(LootContextParams.TOOL);
+		ItemStack tool = context.getOptionalParameter(LootContextParams.TOOL) != null ? (ItemStack) context.getOptionalParameter(LootContextParams.TOOL) : null;
 		if (tool == null || !tool.is(TFItems.FIERY_PICKAXE.get())) {
 			return;
 		}
@@ -97,7 +97,7 @@ public final class LootEvents {
 			var input = new SingleRecipeInput(stack);
 			return context.getLevel().recipeAccess().getRecipeFor(RecipeType.SMELTING, input, context.getLevel())
 				.map(holder -> {
-					ItemStack result = holder.value().assemble(input, context.getLevel().registryAccess()).copy();
+					ItemStack result = holder.value().assemble(input).copy();
 					result.setCount(stack.getCount() * result.getCount());
 					return Pair.of(result, holder.value().experience());
 				})

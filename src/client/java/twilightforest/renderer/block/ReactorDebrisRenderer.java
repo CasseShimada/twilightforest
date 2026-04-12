@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.data.AtlasIds;
@@ -60,7 +60,7 @@ public class ReactorDebrisRenderer implements BlockEntityRenderer<ReactorDebrisB
 
 	@Override
 	public void submit(RenderState renderState, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
-		nodeCollector.submitCustomGeometry(poseStack, RenderTypes.itemEntityTranslucentCull(TextureAtlas.LOCATION_BLOCKS), (pose, consumer) -> {
+		nodeCollector.submitCustomGeometry(poseStack, RenderTypes.entityTranslucentCullItemTarget(TextureAtlas.LOCATION_BLOCKS), (pose, consumer) -> {
 			QuadRenderInfo info = new QuadRenderInfo(consumer, pose.pose(), renderState.lightCoords, 0);
 			renderBlock(info, renderState);
 		});

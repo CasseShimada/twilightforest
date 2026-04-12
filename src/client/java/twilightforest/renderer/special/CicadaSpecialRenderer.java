@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.special.NoDataSpecialModelRenderer;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.ItemDisplayContext;
 import twilightforest.client.BugModelAnimationHelper;
 import twilightforest.client.model.TFModelLayers;
 import twilightforest.client.model.entity.CicadaModel;
@@ -18,7 +17,7 @@ import java.util.function.Consumer;
 public record CicadaSpecialRenderer(CicadaModel baseModel, CicadaModel wingModel) implements NoDataSpecialModelRenderer {
 
 	@Override
-	public void submit(ItemDisplayContext context, PoseStack stack, SubmitNodeCollector nodeCollector, int light, int overlay, boolean foil, int outlineColor) {
+	public void submit(PoseStack stack, SubmitNodeCollector nodeCollector, int light, int overlay, boolean foil, int outlineColor) {
 		CicadaRenderer.renderCicada(this.baseModel(), this.wingModel(), BugModelAnimationHelper.currentYaw, 0.0F, Direction.NORTH, stack, nodeCollector, light);
 	}
 
@@ -28,7 +27,7 @@ public record CicadaSpecialRenderer(CicadaModel baseModel, CicadaModel wingModel
 		this.baseModel.root().getExtentsForGui(poseStack, output);
 	}
 
-	public record Unbaked() implements SpecialModelRenderer.Unbaked {
+	public record Unbaked() implements SpecialModelRenderer.Unbaked<Void> {
 		public static final MapCodec<CicadaSpecialRenderer.Unbaked> MAP_CODEC = MapCodec.unit(CicadaSpecialRenderer.Unbaked::new);
 
 		@Override
@@ -37,7 +36,7 @@ public record CicadaSpecialRenderer(CicadaModel baseModel, CicadaModel wingModel
 		}
 
 		@Override
-		public SpecialModelRenderer<?> bake(SpecialModelRenderer.BakingContext context) {
+		public SpecialModelRenderer<Void> bake(SpecialModelRenderer.BakingContext context) {
 			CicadaModel baseModel = new CicadaModel(context.entityModelSet().bakeLayer(TFModelLayers.CICADA));
 			CicadaModel wingModel = new CicadaModel(context.entityModelSet().bakeLayer(TFModelLayers.CICADA));
 			baseModel.setupBasePass();

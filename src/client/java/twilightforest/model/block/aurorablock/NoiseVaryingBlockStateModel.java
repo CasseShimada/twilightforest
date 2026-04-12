@@ -2,42 +2,50 @@ package twilightforest.client.model.block.aurorablock;
 
 import com.mojang.serialization.MapCodec;
 import net.fabricmc.fabric.api.client.model.loading.v1.CustomUnbakedBlockStateModel;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.block.model.SingleVariant;
-import net.minecraft.client.renderer.block.model.Variant;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.SingleVariant;
+import net.minecraft.client.renderer.block.dispatch.Variant;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ResolvableModel;
 import net.minecraft.client.resources.model.ResolvedModel;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.util.RandomSource;
 import twilightforest.util.SimplexNoiseHelper;
 import twilightforest.client.model.block.BlockModelContext;
+import twilightforest.client.model.block.ModelBakingUtil;
 
 import java.util.List;
 
 public final class NoiseVaryingBlockStateModel implements BlockStateModel {
-	private final BlockModelPart[] variants;
-	private final TextureAtlasSprite particle;
+	private final BlockStateModelPart[] variants;
+	private final Material.Baked particle;
+	private final int materialFlags;
 
-	public NoiseVaryingBlockStateModel(BlockModelPart[] variants, TextureAtlasSprite particle) {
+	public NoiseVaryingBlockStateModel(BlockStateModelPart[] variants, Material.Baked particle) {
 		this.variants = variants;
 		this.particle = particle;
+		this.materialFlags = ModelBakingUtil.materialFlags(variants);
 	}
 
 	@Override
-	public void collectParts(RandomSource random, List<BlockModelPart> output) {
+	public void collectParts(RandomSource random, List<BlockStateModelPart> output) {
 		output.add(new NoiseVaryingPart());
 	}
 
 	@Override
-	public TextureAtlasSprite particleIcon() {
+	public Material.Baked particleMaterial() {
 		return particle;
 	}
 
-	private final class NoiseVaryingPart implements BlockModelPart {
+	@Override
+	public int materialFlags() {
+		return materialFlags;
+	}
+
+	private final class NoiseVaryingPart implements BlockStateModelPart {
 		@Override
-		public List<net.minecraft.client.renderer.block.model.BakedQuad> getQuads(net.minecraft.core.Direction direction) {
+		public List<net.minecraft.client.resources.model.geometry.BakedQuad> getQuads(net.minecraft.core.Direction direction) {
 			BlockModelContext.Context ctx = BlockModelContext.get();
 			int variant = ctx != null ? SimplexNoiseHelper.calcVariant(ctx.pos(), variants.length) : 0;
 			return variants[variant].getQuads(direction);
@@ -49,8 +57,13 @@ public final class NoiseVaryingBlockStateModel implements BlockStateModel {
 		}
 
 		@Override
-		public TextureAtlasSprite particleIcon() {
+		public Material.Baked particleMaterial() {
 			return particle;
+		}
+
+		@Override
+		public int materialFlags() {
+			return NoiseVaryingBlockStateModel.this.materialFlags;
 		}
 	}
 

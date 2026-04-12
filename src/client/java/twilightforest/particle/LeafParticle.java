@@ -3,7 +3,7 @@ package twilightforest.client.particle;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.renderer.state.QuadParticleRenderState;
+import net.minecraft.client.renderer.state.level.QuadParticleRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
@@ -15,7 +15,7 @@ public class LeafParticle extends SingleQuadParticle {
 	private float rot;
 
 	public LeafParticle(ClientLevel world, double x, double y, double z, double vx, double vy, double vz, float scale, SpriteSet sprites) {
-		super(world, x, y, z, sprites.get(world.random));
+		super(world, x, y, z, sprites.get(world.getRandom()));
 		target = new Vec3(x, y, z);
 		this.xd *= 0.1D;
 		this.yd *= 0.1D;
@@ -83,7 +83,7 @@ public class LeafParticle extends SingleQuadParticle {
 	}
 
 	@Override
-	public int getLightColor(float partialTicks) {
+	public int getLightCoords(float partialTicks) {
 		return 240 | 240 << 16;
 	}
 

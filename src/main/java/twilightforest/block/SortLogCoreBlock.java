@@ -9,7 +9,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ContainerStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -71,11 +71,11 @@ public class SortLogCoreBlock extends SpecialMagicLogBlock {
 
 		List<Entity> alreadyUsedForInput = new ArrayList<>(); // Keep track of entities we already have for inputs, so we can skip over them when looking for outputs
 
-		level.getEntities((Entity) null, new AABB(pos).inflate(2), entity -> entity.isAlive() && entity.getType().is(TFEntityTypeTags.SORTABLE_ENTITIES)).forEach(entity -> {
+		level.getEntities((Entity) null, new AABB(pos).inflate(2), entity -> entity.isAlive() && entity.getType().builtInRegistryHolder().is(TFEntityTypeTags.SORTABLE_ENTITIES)).forEach(entity -> {
 			if (entity instanceof Container container) {
 				List<Storage<ItemVariant>> storages = new ArrayList<>();
 				for (Direction side : Direction.values()) {
-					storages.add(InventoryStorage.of(container, side));
+					storages.add(ContainerStorage.of(container, side));
 				}
 				inputMap.put(storages, entity.position().add(0D, entity.getBbHeight() + 0.9D, 0D));
 				alreadyUsedForInput.add(entity);
@@ -84,10 +84,10 @@ public class SortLogCoreBlock extends SpecialMagicLogBlock {
 
 		if (inputMap.isEmpty()) return; // No input
 
-		level.getEntities((Entity) null, new AABB(pos).inflate(16), entity -> entity.isAlive() && !alreadyUsedForInput.contains(entity) && entity.getType().is(TFEntityTypeTags.SORTABLE_ENTITIES)).forEach(entity -> {
+		level.getEntities((Entity) null, new AABB(pos).inflate(16), entity -> entity.isAlive() && !alreadyUsedForInput.contains(entity) && entity.getType().builtInRegistryHolder().is(TFEntityTypeTags.SORTABLE_ENTITIES)).forEach(entity -> {
 			if (entity instanceof Container container) {
 				for (Direction side : Direction.values()) {
-					outputMap.put(InventoryStorage.of(container, side), entity.position().add(0D, entity.getBbHeight() + 0.9D, 0D));
+					outputMap.put(ContainerStorage.of(container, side), entity.position().add(0D, entity.getBbHeight() + 0.9D, 0D));
 				}
 			}
 		});
