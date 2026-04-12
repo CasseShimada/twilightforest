@@ -7,6 +7,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
@@ -20,11 +21,16 @@ public class UncraftingRecipe extends ShapedRecipe {
 	private final ShapedRecipePattern pattern;
 
 	public UncraftingRecipe(int cost, Ingredient input, int count, ShapedRecipePattern pattern) {
-		super(new Recipe.CommonInfo(false), new CraftingRecipe.CraftingBookInfo(CraftingBookCategory.MISC, "uncrafting"), pattern, new ItemStackTemplate(Items.AIR, count));
+		super(new Recipe.CommonInfo(false), new CraftingRecipe.CraftingBookInfo(CraftingBookCategory.MISC, "uncrafting"), pattern, createPlaceholderResult(input, count));
 		this.cost = cost;
 		this.input = input;
 		this.count = count;
 		this.pattern = pattern;
+	}
+
+	private static ItemStackTemplate createPlaceholderResult(Ingredient input, int count) {
+		Item placeholder = input.items().findFirst().map(holder -> holder.value()).orElse(Items.KNOWLEDGE_BOOK);
+		return new ItemStackTemplate(placeholder, Math.max(1, count));
 	}
 
 	@Override //This method is never used, but it has to be implemented
