@@ -1,12 +1,12 @@
 package twilightforest.client.event;
 
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockTintSource;
 import net.minecraft.client.color.item.ItemTintSources;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.core.BlockPos;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockColorRegistry;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
 import net.minecraft.world.level.block.Block;
@@ -153,7 +153,7 @@ public class ColorHandler {
 	}
 
 	private static void register(List<BlockTintSource> sources, Block... blocks) {
-		Minecraft.getInstance().getBlockColors().register(sources, blocks);
+		BlockColorRegistry.register(sources, blocks);
 	}
 
 	private static BlockTintSource noTint() {
