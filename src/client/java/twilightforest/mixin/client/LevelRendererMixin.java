@@ -30,7 +30,7 @@ public class LevelRendererMixin {
 	}
 
 	@Inject(
-		method = "lambda$addSkyPass$7",
+		method = "lambda$addSkyPass$0",
 		at = @At(
 			value = "INVOKE",
 			target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderFog(Lcom/mojang/blaze3d/buffers/GpuBufferSlice;)V",
