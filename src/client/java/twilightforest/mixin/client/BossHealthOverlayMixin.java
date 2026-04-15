@@ -11,7 +11,7 @@ import twilightforest.entity.boss.bar.ClientTFBossBar;
 
 @Mixin(BossHealthOverlay.class)
 public class BossHealthOverlayMixin {
-	@Inject(method = "drawBar", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "extractBar", at = @At("HEAD"), cancellable = true)
 	private void twilightforest$drawCustomBossBar(GuiGraphicsExtractor graphics, int x, int y, BossEvent event, CallbackInfo ci) {
 		if (event instanceof ClientTFBossBar bossEvent) {
 			bossEvent.renderBossBar(graphics, x, y);

@@ -1,8 +1,6 @@
 package twilightforest.entity.boss.bar;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.BossHealthOverlay;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -51,11 +49,5 @@ public class ClientTFBossBar extends LerpingBossEvent {
 				guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, overlaySprite, x, y, progress, 5, tint);
 			}
 		}
-
-		Component title = this.getName();
-		int width = Minecraft.getInstance().font.width(title);
-		int fontX = guiGraphics.guiWidth() / 2 - width / 2;
-		int fontY = y - 9;
-		guiGraphics.text(Minecraft.getInstance().font, title, fontX, fontY, 0xFFFFFF);
 	}
 }
