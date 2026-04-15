@@ -50,7 +50,7 @@ public class TFTickHandler {
 		if (!TFConfig.disablePortalCreation && player.tickCount % (!TFConfig.checkPortalPlacement ? 100 : 20) == 0) {
 			// skip non admin players when the option is on
 			PermissionLevel requiredLevel = PermissionLevel.byId(TFConfig.portalCreationPermission);
-			if (player.permissions() instanceof LevelBasedPermissionSet permissionSet && permissionSet.level().isEqualOrHigherThan(requiredLevel)) {
+			if (hasPortalCreationPermission(player, requiredLevel)) {
 				// reduce range to 4.0 if config is set to admins/owners only
 				checkForPortalCreation(player, world, requiredLevel.isEqualOrHigherThan(PermissionLevel.ADMINS) ? 4.0F : 32.0F);
 			}
@@ -104,6 +104,16 @@ public class TFTickHandler {
 	@SuppressWarnings("deprecation")
 	private static boolean isProtected(StructurePiece piece) {
 		return !(piece instanceof ProgressionPiece progressionPiece) || progressionPiece.isComponentProtected();
+	}
+
+	private static boolean hasPortalCreationPermission(ServerPlayer player, PermissionLevel requiredLevel) {
+		return switch (requiredLevel) {
+			case ALL -> Commands.LEVEL_ALL.check(player.permissions());
+			case MODERATORS -> Commands.LEVEL_MODERATORS.check(player.permissions());
+			case GAMEMASTERS -> Commands.LEVEL_GAMEMASTERS.check(player.permissions());
+			case ADMINS -> Commands.LEVEL_ADMINS.check(player.permissions());
+			case OWNERS -> Commands.LEVEL_OWNERS.check(player.permissions());
+		};
 	}
 
 	private static void checkForPortalCreation(ServerPlayer player, ServerLevel level, float rangeToCheck) {
