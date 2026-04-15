@@ -36,6 +36,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.rendertype.OutputTarget;
 import net.minecraft.client.renderer.state.level.BlockOutlineRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
@@ -53,6 +54,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.WrittenBookItem;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -73,6 +75,7 @@ import twilightforest.client.BugModelAnimationHelper;
 import twilightforest.client.OptifineWarningScreen;
 import twilightforest.client.renderer.TFRenderPipelines;
 import twilightforest.client.renderer.RenderStateUtil;
+import twilightforest.client.renderer.TFWeatherRenderer;
 import twilightforest.config.TFConfig;
 import twilightforest.events.HostileMountEvents;
 import twilightforest.init.TFDataAttachments;
@@ -83,6 +86,7 @@ import twilightforest.item.GiantPickItem;
 import twilightforest.item.IceBowItem;
 import twilightforest.item.SeekerBowItem;
 import twilightforest.item.TripleBowItem;
+import twilightforest.mixin.client.accessor.ClientLevelAccessor;
 import twilightforest.mixin.client.accessor.BiomeManagerAccessor;
 import twilightforest.tags.TFItemTags;
 import twilightforest.util.HolderMatcher;
@@ -106,6 +110,7 @@ public class ClientEvents {
 
 	public static int time = 0;
 	private static float shakeIntensity = 0.0F;
+	private static long lastTwilightLightingLogTick = Long.MIN_VALUE;
 
 	private static int aurora = 0;
 	private static int lastAurora = 0;
@@ -205,9 +210,49 @@ public class ClientEvents {
 			mc.gui.vignetteBrightness = 0.0F;
 		}
 
+		logTwilightLighting(mc);
+
 		if (mc.player != null && HostileMountEvents.isRidingUnfriendly(mc.player)) {
 			mc.gui.setOverlayMessage(Component.empty(), false);
 		}
+	}
+
+	private static void logTwilightLighting(Minecraft mc) {
+		if (mc.level == null || mc.player == null || !TFDimension.isTwilightWorldOnClient(mc.level)) {
+			return;
+		}
+
+		long gameTime = mc.level.getGameTime();
+		if (gameTime % 40L != 0L || gameTime == lastTwilightLightingLogTick) {
+			return;
+		}
+		lastTwilightLightingLogTick = gameTime;
+
+		float partialTick = mc.getDeltaTracker().getGameTimeDeltaPartialTick(false);
+		BlockPos pos = mc.player.blockPosition();
+		Identifier biomeId = mc.level.registryAccess().lookupOrThrow(Registries.BIOME).getKey(mc.level.getBiome(pos).value());
+		Vec3 cameraPos = mc.gameRenderer.getMainCamera().position();
+
+		TwilightForestMod.LOGGER.info(
+			"TF sky trace: client snapshot dim={} biome={} pos={} camera={} gameTime={} cycleTime={} skyDarken={} brightOutside={} darkOutside={} skyLight={} blockLight={} rawBrightness={} rainLevel={} effectiveRainLevel={} hasSkyLight={} skyFlash={} vignette={}",
+			mc.level.dimension().identifier(),
+			biomeId,
+			pos,
+			cameraPos,
+			gameTime,
+			gameTime % 24000L,
+			mc.level.getSkyDarken(),
+			mc.level.isBrightOutside(),
+			mc.level.isDarkOutside(),
+			mc.level.getBrightness(LightLayer.SKY, pos),
+			mc.level.getBrightness(LightLayer.BLOCK, pos),
+			mc.level.getMaxLocalRawBrightness(pos),
+			mc.level.getRainLevel(partialTick),
+			TFWeatherRenderer.getEffectiveRainLevel(mc.level, partialTick),
+			mc.level.dimensionType().hasSkyLight(),
+			((ClientLevelAccessor) mc.level).twilightforest$getSkyFlashTime(),
+			mc.gui.vignetteBrightness
+		);
 	}
 
 	private static void addCustomTooltips(ItemStack item, Item.TooltipContext context, TooltipFlag flag, List<Component> lines) {

@@ -29,11 +29,13 @@ import org.joml.Vector4f;
 
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
+import twilightforest.TwilightForestMod;
 import twilightforest.mixin.client.accessor.LevelRendererAccessor;
 
 public final class TFSkyRenderer implements AutoCloseable {
 	private static final long STAR_SEED = 10842L;
 	private static final int STAR_COUNT = 3000;
+	private static long lastSkyTraceTick = Long.MIN_VALUE;
 
 	private static GpuBuffer starVertexBuffer;
 	private static int starIndexCount;
@@ -51,6 +53,8 @@ public final class TFSkyRenderer implements AutoCloseable {
 		net.minecraft.client.renderer.state.level.SkyRenderState skyState = new net.minecraft.client.renderer.state.level.SkyRenderState();
 		skyRenderer.extractRenderState(level, partialTicks, camera, skyState);
 		int k = skyState.skyColor;
+		boolean darkDisc = shouldDarkenSky(level, camera, partialTicks);
+		logSkyState(level, partialTicks, camera, skyState, darkDisc);
 		skyRenderer.renderSkyDisc(k);
 
 		// TF: replace sun, moon, and vanilla star rendering with our own star renderer.
@@ -61,7 +65,7 @@ public final class TFSkyRenderer implements AutoCloseable {
 		posestack.popPose();
 
 		// TF: use custom height checks for the void sky as vanilla hardcodes to 63.
-		if (shouldDarkenSky(level, camera, partialTicks)) {
+		if (darkDisc) {
 			skyRenderer.renderDarkDisc();
 		}
 
@@ -74,6 +78,28 @@ public final class TFSkyRenderer implements AutoCloseable {
 
 	private static boolean shouldDarkenSky(ClientLevel level, Camera camera, float partialTicks) {
 		return camera.entity().getEyePosition(partialTicks).y - level.getMinY() < 0.0;
+	}
+
+	private static void logSkyState(ClientLevel level, float partialTicks, Camera camera, net.minecraft.client.renderer.state.level.SkyRenderState skyState, boolean darkDisc) {
+		long gameTime = level.getGameTime();
+		if (gameTime % 40L != 0L || gameTime == lastSkyTraceTick) {
+			return;
+		}
+		lastSkyTraceTick = gameTime;
+
+		TwilightForestMod.LOGGER.info(
+			"TF sky trace: render sky dim={} gameTime={} cycleTime={} partial={} skyColor=0x{} sunriseColor=0x{} cameraPos={} eyeY={} minY={} darkDisc={}",
+			level.dimension().identifier(),
+			gameTime,
+			gameTime % 24000L,
+			partialTicks,
+			String.format("%08X", skyState.skyColor),
+			String.format("%08X", skyState.sunriseAndSunsetColor),
+			camera.position(),
+			camera.position().y,
+			level.getMinY(),
+			darkDisc
+		);
 	}
 
 	private static void ensureStarsBuilt() {
