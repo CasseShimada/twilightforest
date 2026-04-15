@@ -92,6 +92,10 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 	}
 
 	public static boolean recursivelyValidatePortal(Level level, BlockPos pos, Map<BlockPos, Boolean> blocksChecked, MutableInt portalSize, BlockState poolBlock) {
+		return recursivelyValidatePortal(level, pos, blocksChecked, portalSize, poolBlock, false);
+	}
+
+	private static boolean recursivelyValidatePortal(Level level, BlockPos pos, Map<BlockPos, Boolean> blocksChecked, MutableInt portalSize, BlockState poolBlock, boolean traceValidation) {
 		if (portalSize.incrementAndGet() > TFConfig.maxPortalSize) return false;
 
 		boolean isPoolProbablyEnclosed = true;
@@ -101,17 +105,54 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 
 			if (!blocksChecked.containsKey(positionCheck)) {
 				BlockState state = level.getBlockState(positionCheck);
+				BlockState stateBelow = level.getBlockState(positionCheck.below());
+				BlockState stateAbove = level.getBlockState(positionCheck.above());
+				boolean matchesPoolStateByIdentity = state == poolBlock;
+				boolean matchesPoolStateByEquality = state.equals(poolBlock);
+				boolean canFormPortal = state.is(TFBlockTags.PORTAL_POOL);
+				boolean sturdyBelow = stateBelow.isFaceSturdy(level, pos, Direction.UP);
+				boolean isEdge = isGrassOrDirt(state);
+				boolean hasDecoAbove = isNatureBlock(stateAbove);
 
-				if (state == poolBlock && level.getBlockState(positionCheck.below()).isFaceSturdy(level, pos, Direction.UP)) {
+				if (traceValidation) {
+					TwilightForestMod.LOGGER.info(
+						"TF portal trace: validate neighbor from={} to={} state={} stateDesc={} matchesPoolIdentity={} matchesPoolEquals={} canFormPortal={} below={} sturdyBelow={} isEdge={} above={} hasDecoAbove={}",
+						pos,
+						positionCheck,
+						BuiltInRegistries.BLOCK.getKey(state.getBlock()),
+						state,
+						matchesPoolStateByIdentity,
+						matchesPoolStateByEquality,
+						canFormPortal,
+						BuiltInRegistries.BLOCK.getKey(stateBelow.getBlock()),
+						sturdyBelow,
+						isEdge,
+						BuiltInRegistries.BLOCK.getKey(stateAbove.getBlock()),
+						hasDecoAbove
+					);
+				}
+
+				if (matchesPoolStateByIdentity && sturdyBelow) {
 					blocksChecked.put(positionCheck, true);
 					if (isPoolProbablyEnclosed) {
-						isPoolProbablyEnclosed = recursivelyValidatePortal(level, positionCheck, blocksChecked, portalSize, poolBlock);
+						isPoolProbablyEnclosed = recursivelyValidatePortal(level, positionCheck, blocksChecked, portalSize, poolBlock, traceValidation);
 					}
 
-				} else if (isGrassOrDirt(state) && isNatureBlock(level.getBlockState(positionCheck.above()))) {
+				} else if (isEdge && hasDecoAbove) {
 					blocksChecked.put(positionCheck, false);
 
-				} else return false;
+				} else {
+					if (traceValidation) {
+						TwilightForestMod.LOGGER.info(
+							"TF portal trace: rejected neighbor from={} to={} state={} stateDesc={} reason=no_pool_or_edge_match",
+							pos,
+							positionCheck,
+							BuiltInRegistries.BLOCK.getKey(state.getBlock()),
+							state
+						);
+					}
+					return false;
+				}
 			}
 		}
 
@@ -177,7 +218,7 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 			blocksChecked.put(pos, true);
 
 			MutableInt size = new MutableInt(0);
-			boolean validPortalShape = recursivelyValidatePortal(level, pos, blocksChecked, size, state);
+			boolean validPortalShape = recursivelyValidatePortal(level, pos, blocksChecked, size, state, true);
 			long portalBlocks = blocksChecked.values().stream().filter(Boolean::booleanValue).count();
 			long borderBlocks = blocksChecked.size() - portalBlocks;
 			TwilightForestMod.LOGGER.info(
