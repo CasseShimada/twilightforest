@@ -86,6 +86,7 @@ import twilightforest.item.GiantPickItem;
 import twilightforest.item.IceBowItem;
 import twilightforest.item.SeekerBowItem;
 import twilightforest.item.TripleBowItem;
+import twilightforest.mixin.client.accessor.ClientLevelDataAccessor;
 import twilightforest.mixin.client.accessor.ClientLevelAccessor;
 import twilightforest.mixin.client.accessor.BiomeManagerAccessor;
 import twilightforest.tags.TFItemTags;
@@ -223,6 +224,7 @@ public class ClientEvents {
 		}
 
 		long gameTime = mc.level.getGameTime();
+		long dayTime = ((ClientLevelDataAccessor) mc.level.getLevelData()).twilightforest$getDayTime();
 		if (gameTime % 40L != 0L || gameTime == lastTwilightLightingLogTick) {
 			return;
 		}
@@ -234,13 +236,14 @@ public class ClientEvents {
 		Vec3 cameraPos = mc.gameRenderer.getMainCamera().position();
 
 		TwilightForestMod.LOGGER.info(
-			"TF sky trace: client snapshot dim={} biome={} pos={} camera={} gameTime={} cycleTime={} skyDarken={} brightOutside={} darkOutside={} skyLight={} blockLight={} rawBrightness={} rainLevel={} effectiveRainLevel={} hasSkyLight={} skyFlash={} vignette={}",
+			"TF sky trace: client snapshot dim={} biome={} pos={} camera={} gameTime={} dayTime={} cycleTime={} skyDarken={} brightOutside={} darkOutside={} skyLight={} blockLight={} rawBrightness={} rainLevel={} effectiveRainLevel={} hasSkyLight={} skyFlash={} vignette={}",
 			mc.level.dimension().identifier(),
 			biomeId,
 			pos,
 			cameraPos,
 			gameTime,
-			gameTime % 24000L,
+			dayTime,
+			dayTime % 24000L,
 			mc.level.getSkyDarken(),
 			mc.level.isBrightOutside(),
 			mc.level.isDarkOutside(),
