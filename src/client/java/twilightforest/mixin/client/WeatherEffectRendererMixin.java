@@ -3,7 +3,6 @@ package twilightforest.mixin.client;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.WeatherEffectRenderer;
 import net.minecraft.client.renderer.state.level.WeatherRenderState;
 import net.minecraft.server.level.ParticleStatus;
@@ -20,7 +19,7 @@ import twilightforest.init.TFDimension;
 @Mixin(WeatherEffectRenderer.class)
 public class WeatherEffectRendererMixin {
 	@Inject(method = "render", at = @At("TAIL"))
-	private void twilightforest$renderProgressionWeather(MultiBufferSource buffers, Vec3 camera, WeatherRenderState state, CallbackInfo ci) {
+	private void twilightforest$renderProgressionWeather(Vec3 camera, WeatherRenderState state, CallbackInfo ci) {
 		ClientLevel level = Minecraft.getInstance().level;
 		if (level == null || !TFDimension.isTwilightWorldOnClient(level)) {
 			return;
