@@ -6,18 +6,21 @@ import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SpellParticleOption;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.permissions.LevelBasedPermissionSet;
 import net.minecraft.server.permissions.PermissionLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import org.jetbrains.annotations.Nullable;
 import twilightforest.network.PacketDistributor;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.TFPortalBlock;
@@ -123,22 +126,64 @@ public class TFTickHandler {
 
 			List<ItemEntity> itemList = level.getEntitiesOfClass(ItemEntity.class, player.getBoundingBox().inflate(rangeToCheck));
 			ItemEntity qualified = null;
+			boolean sawPortalActivator = false;
 
 			for (ItemEntity entityItem : itemList) {
-				if (entityItem.getItem().is(TFItemTags.PORTAL_ACTIVATOR) &&
-					TFBlocks.TWILIGHT_PORTAL.get().canFormPortal(level.getBlockState(entityItem.blockPosition())) &&
-					Objects.equals(entityItem.getOwner(), player)) {
+				if (!entityItem.getItem().is(TFItemTags.PORTAL_ACTIVATOR)) {
+					continue;
+				}
+
+				sawPortalActivator = true;
+				BlockState stateAtItem = level.getBlockState(entityItem.blockPosition());
+				boolean ownerMatches = Objects.equals(entityItem.getOwner(), player);
+				boolean canFormPortal = TFBlocks.TWILIGHT_PORTAL.get().canFormPortal(stateAtItem);
+				TwilightForestMod.LOGGER.info(
+					"TF portal trace: activator candidate player={} item={} count={} pos={} ownerMatches={} owner={} canFormPortal={} poolBlock={} belowBlock={}",
+					player.getName().getString(),
+					BuiltInRegistries.ITEM.getKey(entityItem.getItem().getItem()),
+					entityItem.getItem().getCount(),
+					entityItem.blockPosition(),
+					ownerMatches,
+					describeOwner(entityItem.getOwner()),
+					canFormPortal,
+					BuiltInRegistries.BLOCK.getKey(stateAtItem.getBlock()),
+					BuiltInRegistries.BLOCK.getKey(level.getBlockState(entityItem.blockPosition().below()).getBlock())
+				);
+
+				if (canFormPortal && ownerMatches) {
 
 					qualified = entityItem;
 					break;
 				}
 			}
 
-			if (qualified == null) return;
+			if (qualified == null) {
+				if (sawPortalActivator) {
+					TwilightForestMod.LOGGER.info(
+						"TF portal trace: no qualifying activator found for player={} in {}",
+						player.getName().getString(),
+						level.dimension().identifier()
+					);
+				}
+				return;
+			}
+
+			TwilightForestMod.LOGGER.info(
+				"TF portal trace: attempting creation for player={} at {} in {} with {}",
+				player.getName().getString(),
+				qualified.blockPosition(),
+				level.dimension().identifier(),
+				BuiltInRegistries.ITEM.getKey(qualified.getItem().getItem())
+			);
 
 			if (!player.isCreative() && !player.isSpectator() && TFConfig.getPortalLockingAdvancement(player) != null) {
 				AdvancementHolder requirement = PlayerHelper.getAdvancement(player, Objects.requireNonNull(TFConfig.getPortalLockingAdvancement(player)));
 				if (requirement != null && !PlayerHelper.doesPlayerHaveRequiredAdvancement(player, requirement)) {
+					TwilightForestMod.LOGGER.info(
+						"TF portal trace: blocked by advancement requirement player={} advancement={}",
+						player.getName().getString(),
+						requirement.id()
+					);
 					PlayerMessaging.displayClientMessage(player, TFPortalBlock.PORTAL_UNWORTHY, true);
 
 					if (!TFPortalBlock.isPlayerNotifiedOfRequirement(player)) {
@@ -161,10 +206,24 @@ public class TFTickHandler {
 				level.addParticle(SpellParticleOption.create(ParticleTypes.EFFECT, 0.0F, 0.0F, 0.0F, 1.0F), qualified.getX(), qualified.getY() + 0.2, qualified.getZ(), vx, vy, vz);
 			}
 
-			if (TFBlocks.TWILIGHT_PORTAL.get().tryToCreatePortal(level, qualified.blockPosition(), qualified, player))
+			boolean created = TFBlocks.TWILIGHT_PORTAL.get().tryToCreatePortal(level, qualified.blockPosition(), qualified, player);
+			TwilightForestMod.LOGGER.info(
+				"TF portal trace: creation result player={} pos={} success={}",
+				player.getName().getString(),
+				qualified.blockPosition(),
+				created
+			);
+			if (created)
 				TFAdvancements.MADE_TF_PORTAL.get().trigger(player);
 
 		}
+	}
+
+	private static String describeOwner(@Nullable Entity owner) {
+		if (owner == null) {
+			return "<none>";
+		}
+		return owner.getName().getString() + "/" + owner.getUUID();
 	}
 
 }

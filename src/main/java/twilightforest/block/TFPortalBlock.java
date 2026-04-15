@@ -5,6 +5,7 @@ import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -43,6 +44,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import twilightforest.network.PacketDistributor;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.jetbrains.annotations.Nullable;
+import twilightforest.TwilightForestMod;
 import twilightforest.config.TFConfig;
 import twilightforest.tags.TFBlockTags;
 import twilightforest.init.TFBlocks;
@@ -156,18 +158,48 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 	public boolean tryToCreatePortal(ServerLevel level, BlockPos pos, ItemEntity catalyst, @Nullable Player player) {
 
 		BlockState state = level.getBlockState(pos);
+		boolean canFormPortal = this.canFormPortal(state);
+		boolean sturdyBelow = level.getBlockState(pos.below()).isFaceSturdy(level, pos, Direction.UP);
+		TwilightForestMod.LOGGER.info(
+			"TF portal trace: tryToCreatePortal pos={} player={} catalyst={} count={} canFormPortal={} poolBlock={} belowBlock={} sturdyBelow={}",
+			pos,
+			player == null ? "<none>" : player.getName().getString(),
+			BuiltInRegistries.ITEM.getKey(catalyst.getItem().getItem()),
+			catalyst.getItem().getCount(),
+			canFormPortal,
+			BuiltInRegistries.BLOCK.getKey(state.getBlock()),
+			BuiltInRegistries.BLOCK.getKey(level.getBlockState(pos.below()).getBlock()),
+			sturdyBelow
+		);
 
-		if (this.canFormPortal(state) && level.getBlockState(pos.below()).isFaceSturdy(level, pos, Direction.UP)) {
+		if (canFormPortal && sturdyBelow) {
 			Map<BlockPos, Boolean> blocksChecked = new HashMap<>();
 			blocksChecked.put(pos, true);
 
 			MutableInt size = new MutableInt(0);
+			boolean validPortalShape = recursivelyValidatePortal(level, pos, blocksChecked, size, state);
+			long portalBlocks = blocksChecked.values().stream().filter(Boolean::booleanValue).count();
+			long borderBlocks = blocksChecked.size() - portalBlocks;
+			TwilightForestMod.LOGGER.info(
+				"TF portal trace: portal validation pos={} validShape={} size={} portalBlocks={} borderBlocks={} minRequired={}",
+				pos,
+				validPortalShape,
+				size.intValue(),
+				portalBlocks,
+				borderBlocks,
+				MIN_PORTAL_SIZE
+			);
 
-			if (recursivelyValidatePortal(level, pos, blocksChecked, size, state) && size.intValue() >= MIN_PORTAL_SIZE) {
+			if (validPortalShape && size.intValue() >= MIN_PORTAL_SIZE) {
 
 				if (!TFConfig.checkPortalPlacement) {
 					boolean checkProgression = LandmarkUtil.isProgressionEnforced(level);
 					if (!TFTeleporter.isSafeAround(level, pos, catalyst, checkProgression)) {
+						TwilightForestMod.LOGGER.info(
+							"TF portal trace: portal rejected as unsafe pos={} checkProgression={}",
+							pos,
+							checkProgression
+						);
 						// TODO: "failure" effect - particles?
 						if (player != null) {
 							PlayerMessaging.displayClientMessage(player, Component.translatable("misc.twilightforest.portal_unsafe"), true);
@@ -185,10 +217,22 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 					}
 				}
 
+				TwilightForestMod.LOGGER.info(
+					"TF portal trace: portal created pos={} convertedBlocks={} remainingCatalyst={}",
+					pos,
+					portalBlocks,
+					catalyst.getItem().getCount()
+				);
 				return true;
 			}
 		}
 
+		TwilightForestMod.LOGGER.info(
+			"TF portal trace: portal creation failed pos={} canFormPortal={} sturdyBelow={}",
+			pos,
+			canFormPortal,
+			sturdyBelow
+		);
 		return false;
 	}
 
