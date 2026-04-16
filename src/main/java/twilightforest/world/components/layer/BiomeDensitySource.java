@@ -17,13 +17,16 @@ import twilightforest.world.components.chunkgenerators.TerrainColumn;
 import twilightforest.world.components.layer.vanillalegacy.BiomeLayerFactory;
 import twilightforest.world.components.layer.vanillalegacy.area.LazyArea;
 import twilightforest.world.components.layer.vanillalegacy.context.LazyAreaContext;
+import twilightforest.TwilightForestMod;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -103,6 +106,13 @@ public class BiomeDensitySource {
 	private static final double BLEND_RADIUS = 8.75;
 	private static final int BLEND_RADIUS_INT = Mth.floor(BLEND_RADIUS + 1.0);
 	private static final int BLOCK_XYZ_OFFSET = QuartPos.SIZE / 2;
+	private static final Set<String> LOGGED_WORLDGEN_ANOMALIES = ConcurrentHashMap.newKeySet();
+
+	private static void logWorldgenAnomalyOnce(String key, String message, Object... args) {
+		if (LOGGED_WORLDGEN_ANOMALIES.add(key)) {
+			TwilightForestMod.LOGGER.warn(message, args);
+		}
+	}
 
 	public DensityData sampleTerrain(int blockX, int blockZ, DensityFunction.FunctionContext context) {
 		double totalMappedDepth = 0.0;
@@ -130,7 +140,9 @@ public class BiomeDensitySource {
 			double distSq = dX * dX + dZ * dZ;
 
 			if (distSq < BLEND_RADIUS * BLEND_RADIUS) {
-				Optional<TerrainColumn> terrainColumn = this.getTerrainColumn(cx + xQuartStart, cz + zQuartStart);
+				int sampleBiomeX = cx + xQuartStart;
+				int sampleBiomeZ = cz + zQuartStart;
+				Optional<TerrainColumn> terrainColumn = this.getTerrainColumn(sampleBiomeX, sampleBiomeZ);
 				if (terrainColumn.isPresent()) {
 					double falloff = BLEND_RADIUS * BLEND_RADIUS * terrainColumn.get().weight(context);
 					double scaleFalloff = BLEND_RADIUS * BLEND_RADIUS * terrainColumn.get().weight(context);
@@ -145,6 +157,17 @@ public class BiomeDensitySource {
 					scaleFalloff *= Math.exp((distSq * 2f + neighborScale) * -0.4f);
 					totalScale += neighborScale * scaleFalloff;
 					totalScaleContribution += scaleFalloff;
+				} else {
+					ResourceKey<Biome> missingBiome = this.genBiomes.get().getBiome(sampleBiomeX, sampleBiomeZ);
+					logWorldgenAnomalyOnce(
+						"missing_column:" + missingBiome.identifier(),
+						"TF terrain trace: missing terrain column for biome={} sampledAtQuart=({}, {}) block=({}, {})",
+						missingBiome.identifier(),
+						sampleBiomeX,
+						sampleBiomeZ,
+						blockX,
+						blockZ
+					);
 				}
 			}
 
@@ -155,6 +178,34 @@ public class BiomeDensitySource {
 			if (cx >= xCount) break;
 		}
 
-		return new DensityData(totalMappedDepth / totalContribution, totalScale / totalScaleContribution);
+		if (totalContribution <= 0.0D || totalScaleContribution <= 0.0D) {
+			logWorldgenAnomalyOnce(
+				"zero_contribution:" + (blockX >> 4) + ":" + (blockZ >> 4),
+				"TF terrain trace: zero terrain contribution at block=({}, {}) chunk=({}, {}) depthContribution={} scaleContribution={}",
+				blockX,
+				blockZ,
+				blockX >> 4,
+				blockZ >> 4,
+				totalContribution,
+				totalScaleContribution
+			);
+		}
+
+		DensityData result = new DensityData(totalMappedDepth / totalContribution, totalScale / totalScaleContribution);
+		if (!Double.isFinite(result.depth) || !Double.isFinite(result.scale)) {
+			logWorldgenAnomalyOnce(
+				"nonfinite_density:" + (blockX >> 4) + ":" + (blockZ >> 4),
+				"TF terrain trace: non-finite terrain sample at block=({}, {}) chunk=({}, {}) depth={} scale={} depthContribution={} scaleContribution={}",
+				blockX,
+				blockZ,
+				blockX >> 4,
+				blockZ >> 4,
+				result.depth,
+				result.scale,
+				totalContribution,
+				totalScaleContribution
+			);
+		}
+		return result;
 	}
 }
