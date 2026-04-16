@@ -110,7 +110,6 @@ public class ClientEvents {
 
 	public static int time = 0;
 	private static float shakeIntensity = 0.0F;
-	private static long lastTwilightLightingLogTick = Long.MIN_VALUE;
 
 	private static int aurora = 0;
 	private static int lastAurora = 0;
@@ -210,49 +209,9 @@ public class ClientEvents {
 			mc.gui.vignetteBrightness = 0.0F;
 		}
 
-		logTwilightLighting(mc);
-
 		if (mc.player != null && HostileMountEvents.isRidingUnfriendly(mc.player)) {
 			mc.gui.setOverlayMessage(Component.empty(), false);
 		}
-	}
-
-	private static void logTwilightLighting(Minecraft mc) {
-		if (mc.level == null || mc.player == null || !TFDimension.isTwilightWorldOnClient(mc.level)) {
-			return;
-		}
-
-		long gameTime = mc.level.getGameTime();
-		if (gameTime % 40L != 0L || gameTime == lastTwilightLightingLogTick) {
-			return;
-		}
-		lastTwilightLightingLogTick = gameTime;
-
-		float partialTick = mc.getDeltaTracker().getGameTimeDeltaPartialTick(false);
-		BlockPos pos = mc.player.blockPosition();
-		Identifier biomeId = mc.level.registryAccess().lookupOrThrow(Registries.BIOME).getKey(mc.level.getBiome(pos).value());
-		Vec3 cameraPos = mc.gameRenderer.getMainCamera().position();
-
-		TwilightForestMod.LOGGER.info(
-			"TF sky trace: client snapshot dim={} biome={} pos={} camera={} gameTime={} cycleTime={} skyDarken={} brightOutside={} darkOutside={} skyLight={} blockLight={} rawBrightness={} rainLevel={} effectiveRainLevel={} hasSkyLight={} skyFlash={} vignette={}",
-			mc.level.dimension().identifier(),
-			biomeId,
-			pos,
-			cameraPos,
-			gameTime,
-			gameTime % 24000L,
-			mc.level.getSkyDarken(),
-			mc.level.isBrightOutside(),
-			mc.level.isDarkOutside(),
-			mc.level.getBrightness(LightLayer.SKY, pos),
-			mc.level.getBrightness(LightLayer.BLOCK, pos),
-			mc.level.getMaxLocalRawBrightness(pos),
-			mc.level.getRainLevel(partialTick),
-			TFWeatherRenderer.getEffectiveRainLevel(mc.level, partialTick),
-			mc.level.dimensionType().hasSkyLight(),
-			((ClientLevelAccessor) mc.level).twilightforest$getSkyFlashTime(),
-			mc.gui.vignetteBrightness
-		);
 	}
 
 	private static void addCustomTooltips(ItemStack item, Item.TooltipContext context, TooltipFlag flag, List<Component> lines) {

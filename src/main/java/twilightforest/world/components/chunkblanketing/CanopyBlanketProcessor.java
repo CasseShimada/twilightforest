@@ -20,7 +20,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import twilightforest.TwilightForestMod;
 import twilightforest.init.custom.ChunkBlanketProcessors;
 import twilightforest.util.landmarks.LegacyLandmarkPlacements;
 import twilightforest.util.WorldUtil;
@@ -79,11 +78,6 @@ public record CanopyBlanketProcessor(HolderSet<Biome> biomesForApplication, Bloc
 		int hz = nearestCenter.getZ();
 
 		RandomSource random = new XoroshiroRandomSource(WorldUtil.getOverworldSeed(), Mth.getSeed(chunkOrigin));
-		int canopyColumns = 0;
-		float totalThickness = 0.0F;
-		float maxThickness = 0.0F;
-		int minCanopyY = Integer.MAX_VALUE;
-		int maxCanopyY = Integer.MIN_VALUE;
 
 		for (int dZ = 0; dZ < 16; dZ++) {
 			for (int dX = 0; dX < 16; dX++) {
@@ -127,11 +121,6 @@ public record CanopyBlanketProcessor(HolderSet<Biome> biomesForApplication, Bloc
 					// manipulate top and bottom
 					int treeBottom = pos.getY() + height - (int) (thickness * 0.5F);
 					int treeTop = treeBottom + (int) (thickness);
-					canopyColumns++;
-					totalThickness += thickness;
-					maxThickness = Math.max(maxThickness, thickness);
-					minCanopyY = Math.min(minCanopyY, treeBottom);
-					maxCanopyY = Math.max(maxCanopyY, treeTop - 1);
 
 					for (int y = treeBottom; y < treeTop; y++) {
 						BlockPos canopyPos = pos.atY(y);
@@ -140,19 +129,6 @@ public record CanopyBlanketProcessor(HolderSet<Biome> biomesForApplication, Bloc
 				}
 			}
 		}
-
-		TwilightForestMod.LOGGER.info(
-			"TF dark forest canopy trace: chunk={} canopy_columns={} avg_thickness={} max_thickness={} canopy_y_range={}..{} structures_in_chunk={} clearing_near_structure={} nearest_center_offset={}",
-			chunkPos,
-			canopyColumns,
-			canopyColumns == 0 ? 0.0F : totalThickness / canopyColumns,
-			maxThickness,
-			canopyColumns == 0 ? -1 : minCanopyY,
-			canopyColumns == 0 ? -1 : maxCanopyY,
-			structuresThroughChunk,
-			clearingForStructureNearby,
-			clearingForStructureNearby ? nearestCenter : BlockPos.ZERO
-		);
 
 		return true;
 	}
