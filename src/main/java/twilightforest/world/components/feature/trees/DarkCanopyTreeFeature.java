@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelSimulatedReader;
 import net.minecraft.world.level.LevelWriter;
@@ -24,11 +25,13 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.shapes.BitSetDiscreteVoxelShape;
 import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
+import twilightforest.TwilightForestMod;
 import twilightforest.util.features.FeaturePlacers;
 
 import java.util.List;
 import java.util.OptionalInt;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
 /**
@@ -39,6 +42,8 @@ import java.util.function.BiConsumer;
 
 //Lots of things from TreeFeature, but we're checking for dirt to place on
 public class DarkCanopyTreeFeature extends Feature<TreeConfiguration> {
+	private static final Set<Long> LOGGED_FAILURE_CHUNKS = ConcurrentHashMap.newKeySet();
+	private static final Set<Long> LOGGED_SUCCESS_CHUNKS = ConcurrentHashMap.newKeySet();
 
 	public DarkCanopyTreeFeature(Codec<TreeConfiguration> config) {
 		super(config);
@@ -47,8 +52,11 @@ public class DarkCanopyTreeFeature extends Feature<TreeConfiguration> {
 	@Override
 	public boolean place(FeaturePlaceContext<TreeConfiguration> ctx) {
 		WorldGenLevel reader = ctx.level();
-		BlockPos pos = ctx.origin();
+		BlockPos origin = ctx.origin();
+		BlockPos pos = origin;
 		RandomSource rand = ctx.random();
+		BlockPos adjustedBase = origin;
+		BlockState searchStopState = reader.getBlockState(origin.below());
 
 		// if we are given leaves as a starting position, seek dirt or grass underneath
 		boolean foundDirt = false;
@@ -58,27 +66,39 @@ public class DarkCanopyTreeFeature extends Feature<TreeConfiguration> {
 				// yes!
 				foundDirt = true;
 				pos = new BlockPos(pos.getX(), dy, pos.getZ());
+				adjustedBase = pos;
 				break;
 			} else if (state.is(BlockTags.BASE_STONE_OVERWORLD) || state.is(BlockTags.SAND)) {
+				searchStopState = state;
 				// nope
 				break;
+			} else {
+				searchStopState = state;
 			}
 		}
 
 		if (!foundDirt) {
+			logFailureOnce(origin, "no_dirt_below", "search_stop=" + searchStopState + " below_origin=" + reader.getBlockState(origin.below()));
 			return false;
 		}
 
 		for (int i = 0; i < 4; i++) {
 			//We check against the TreeFeature's validTreePos method, to see if the tree can grow here, cuz the trunk placer uses this as well
 			//If we don't, some trees end up growing only one or two blocks tall
-			if (!FeaturePlacers.validTreePos(reader, pos.relative(Direction.UP, i))) return false;
+			BlockPos trunkPos = pos.relative(Direction.UP, i);
+			if (!FeaturePlacers.validTreePos(reader, trunkPos)) {
+				logFailureOnce(origin, "blocked_trunk_clearance", "adjusted_base=" + adjustedBase + " blocked_at=" + trunkPos + " state=" + reader.getBlockState(trunkPos));
+				return false;
+			}
 		}
 
 		// do not grow next to another tree
 		for (Direction e : Direction.Plane.HORIZONTAL) {
-			if (reader.getBlockState(pos.relative(e)).is(BlockTags.LOGS))
+			BlockPos neighborPos = pos.relative(e);
+			if (reader.getBlockState(neighborPos).is(BlockTags.LOGS)) {
+				logFailureOnce(origin, "adjacent_logs", "adjusted_base=" + adjustedBase + " neighbor=" + neighborPos + " state=" + reader.getBlockState(neighborPos));
 				return false;
+			}
 		}
 
 		//Taken from TreeFeature.generate, adjusting our BoundingBox to fit where the dirt is
@@ -113,6 +133,7 @@ public class DarkCanopyTreeFeature extends Feature<TreeConfiguration> {
 		};
 		boolean flag = this.doPlace(reader, rand, pos, biconsumer, biconsumer1, setter, treeconfiguration);
 		if (flag && (!set1.isEmpty() || !set2.isEmpty())) {
+			logSuccessOnce(origin, adjustedBase, set1.size(), set2.size(), set3.size());
 			if (!treeconfiguration.decorators.isEmpty()) {
 				TreeDecorator.Context treedecorator$context = new TreeDecorator.Context(reader, biconsumer3, rand, set1, set2, set);
 				treeconfiguration.decorators.forEach((p_225282_) -> {
@@ -126,7 +147,32 @@ public class DarkCanopyTreeFeature extends Feature<TreeConfiguration> {
 				return true;
 			}).orElse(false);
 		} else {
+			logFailureOnce(origin, "do_place_failed", "adjusted_base=" + adjustedBase + " trunk_blocks=" + set1.size() + " foliage_blocks=" + set2.size() + " decorator_blocks=" + set3.size());
 			return false;
+		}
+	}
+
+	private static void logFailureOnce(BlockPos origin, String reason, String details) {
+		ChunkPos chunkPos = ChunkPos.containing(origin);
+		long chunkKey = chunkPos.pack();
+		if (LOGGED_FAILURE_CHUNKS.add(chunkKey)) {
+			TwilightForestMod.LOGGER.info("TF dark forest tree trace: chunk={} origin={} result=fail reason={} {}", chunkPos, origin, reason, details);
+		}
+	}
+
+	private static void logSuccessOnce(BlockPos origin, BlockPos adjustedBase, int trunkBlocks, int foliageBlocks, int decoratorBlocks) {
+		ChunkPos chunkPos = ChunkPos.containing(origin);
+		long chunkKey = chunkPos.pack();
+		if (LOGGED_SUCCESS_CHUNKS.add(chunkKey)) {
+			TwilightForestMod.LOGGER.info(
+				"TF dark forest tree trace: chunk={} origin={} adjusted_base={} result=success trunk_blocks={} foliage_blocks={} decorator_blocks={}",
+				chunkPos,
+				origin,
+				adjustedBase,
+				trunkBlocks,
+				foliageBlocks,
+				decoratorBlocks
+			);
 		}
 	}
 
