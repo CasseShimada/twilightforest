@@ -82,6 +82,13 @@ public class DarkCanopyTreeFeature extends Feature<TreeConfiguration> {
 			return false;
 		}
 
+		// 26.1.2 placement can hand us a position inside the soil column instead of the first open block above it.
+		// Climb to the actual trunk base before checking clearance so grass/dirt surfaces do not reject every tree.
+		while (pos.getY() <= reader.getMaxY() && reader.getBlockState(pos).is(BlockTags.DIRT)) {
+			pos = pos.above();
+		}
+		adjustedBase = pos;
+
 		for (int i = 0; i < 4; i++) {
 			//We check against the TreeFeature's validTreePos method, to see if the tree can grow here, cuz the trunk placer uses this as well
 			//If we don't, some trees end up growing only one or two blocks tall
