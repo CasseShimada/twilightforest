@@ -26,6 +26,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.minecraft.world.phys.shapes.BitSetDiscreteVoxelShape;
 import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
 import twilightforest.TwilightForestMod;
+import twilightforest.init.TFBlocks;
 import twilightforest.util.features.FeaturePlacers;
 
 import java.util.List;
@@ -56,16 +57,18 @@ public class DarkCanopyTreeFeature extends Feature<TreeConfiguration> {
 		BlockPos pos = origin;
 		RandomSource rand = ctx.random();
 		BlockPos adjustedBase = origin;
+		BlockState saplingState = TFBlocks.DARKWOOD_SAPLING.get().defaultBlockState();
 		BlockState searchStopState = reader.getBlockState(origin.below());
 
 		// if we are given leaves as a starting position, seek dirt or grass underneath
 		boolean foundDirt = false;
 		for (int dy = pos.getY(); dy >= reader.getMinY(); dy--) {
-			BlockState state = reader.getBlockState(new BlockPos(pos.getX(), dy - 1, pos.getZ()));
-			if (state.is(BlockTags.DIRT)) {
-				// yes!
+			BlockPos candidatePos = new BlockPos(pos.getX(), dy, pos.getZ());
+			BlockState state = reader.getBlockState(candidatePos.below());
+			if (FeaturePlacers.validTreePos(reader, candidatePos) && saplingState.canSurvive(reader, candidatePos)) {
+				// yes: we found the first space above a valid sapling surface.
 				foundDirt = true;
-				pos = new BlockPos(pos.getX(), dy, pos.getZ());
+				pos = candidatePos;
 				adjustedBase = pos;
 				break;
 			} else if (state.is(BlockTags.BASE_STONE_OVERWORLD) || state.is(BlockTags.SAND)) {
@@ -81,13 +84,6 @@ public class DarkCanopyTreeFeature extends Feature<TreeConfiguration> {
 			logFailureOnce(origin, "no_dirt_below", "search_stop=" + searchStopState + " below_origin=" + reader.getBlockState(origin.below()));
 			return false;
 		}
-
-		// 26.1.2 placement can hand us a position inside the soil column instead of the first open block above it.
-		// Climb to the actual trunk base before checking clearance so grass/dirt surfaces do not reject every tree.
-		while (pos.getY() <= reader.getMaxY() && reader.getBlockState(pos).is(BlockTags.DIRT)) {
-			pos = pos.above();
-		}
-		adjustedBase = pos;
 
 		for (int i = 0; i < 4; i++) {
 			//We check against the TreeFeature's validTreePos method, to see if the tree can grow here, cuz the trunk placer uses this as well
