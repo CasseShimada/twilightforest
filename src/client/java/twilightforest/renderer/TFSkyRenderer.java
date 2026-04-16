@@ -30,7 +30,6 @@ import org.joml.Vector4f;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import twilightforest.TwilightForestMod;
-import twilightforest.mixin.client.accessor.ClientLevelDataAccessor;
 import twilightforest.mixin.client.accessor.LevelRendererAccessor;
 
 public final class TFSkyRenderer implements AutoCloseable {
@@ -83,18 +82,16 @@ public final class TFSkyRenderer implements AutoCloseable {
 
 	private static void logSkyState(ClientLevel level, float partialTicks, Camera camera, net.minecraft.client.renderer.state.level.SkyRenderState skyState, boolean darkDisc) {
 		long gameTime = level.getGameTime();
-		long dayTime = ((ClientLevelDataAccessor) level.getLevelData()).twilightforest$getDayTime();
 		if (gameTime % 40L != 0L || gameTime == lastSkyTraceTick) {
 			return;
 		}
 		lastSkyTraceTick = gameTime;
 
 		TwilightForestMod.LOGGER.info(
-			"TF sky trace: render sky dim={} gameTime={} dayTime={} cycleTime={} partial={} skyColor=0x{} sunriseColor=0x{} cameraPos={} eyeY={} minY={} darkDisc={}",
+			"TF sky trace: render sky dim={} gameTime={} cycleTime={} partial={} skyColor=0x{} sunriseColor=0x{} cameraPos={} eyeY={} minY={} darkDisc={}",
 			level.dimension().identifier(),
 			gameTime,
-			dayTime,
-			dayTime % 24000L,
+			gameTime % 24000L,
 			partialTicks,
 			String.format("%08X", skyState.skyColor),
 			String.format("%08X", skyState.sunriseAndSunsetColor),

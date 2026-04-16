@@ -58,7 +58,6 @@
     "client.ModelBlockRendererMixin",
     "client.WeatherEffectRendererMixin",
     "client.accessor.ClientLevelAccessor",
-    "client.accessor.ClientLevelDataAccessor",
     "client.accessor.BossHealthOverlayAccessor",
     "client.accessor.CameraAccessor",
     "client.accessor.BiomeManagerAccessor",
