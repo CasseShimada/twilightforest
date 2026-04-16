@@ -24,6 +24,7 @@
     "ServerLevelMultipartMixin",
     "WalkNodeEvaluatorMixin",
     "accessor.AbstractArrowAccessor",
+    "accessor.AgeableMobAccessor",
     "accessor.BaseSpawnerAccessor",
     "accessor.BaseContainerBlockEntityAccessor",
     "accessor.BeardifierInvoker",

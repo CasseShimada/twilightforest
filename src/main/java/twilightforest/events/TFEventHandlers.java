@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.networking.v1.EntityTrackingEvents;
 import net.minecraft.core.registries.Registries;
@@ -84,6 +85,10 @@ public final class TFEventHandlers {
 			}
 			return EntityEvents.handleAttackEntity(entity);
 		});
+
+		UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) ->
+			EntityEvents.handleGoldenDandelionUse(player, world, hand, entity)
+		);
 
 		ServerTickEvents.END_LEVEL_TICK.register(world -> {
 			if (world.dimension().equals(TFDimension.DIMENSION_KEY)) {

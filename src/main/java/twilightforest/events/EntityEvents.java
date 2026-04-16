@@ -7,6 +7,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.permissions.Permissions;
@@ -66,6 +67,7 @@ import twilightforest.entity.projectile.LichBomb;
 import twilightforest.init.*;
 import twilightforest.item.FieryArmorItem;
 import twilightforest.item.YetiArmorItem;
+import twilightforest.mixin.accessor.AgeableMobAccessor;
 import twilightforest.network.SyncQuestsPacket;
 import twilightforest.mixin.accessor.SkullBlockEntityAccessor;
 import twilightforest.util.datamaps.EntityTransformation;
@@ -79,9 +81,8 @@ import twilightforest.world.components.structures.util.StructureConqueredData;
 import twilightforest.world.components.structures.type.HollowHillStructure;
 import twilightforest.world.components.structures.util.ControlledSpawns;
 
-import java.util.List;
 import java.net.URI;
-import net.minecraft.resources.Identifier;
+import java.util.List;
 
 public class EntityEvents {
 
@@ -152,6 +153,30 @@ public class EntityEvents {
 			}
 		}
 		return InteractionResult.PASS;
+	}
+
+	public static InteractionResult handleGoldenDandelionUse(Player player, Level level, InteractionHand hand, Entity entity) {
+		if (!(entity instanceof Animal animal) || !(animal instanceof AgeableMob ageable)) {
+			return InteractionResult.PASS;
+		}
+
+		Identifier entityId = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
+		if (entityId == null || !TwilightForestMod.ID.equals(entityId.getNamespace())) {
+			return InteractionResult.PASS;
+		}
+
+		ItemStack stack = player.getItemInHand(hand);
+		int particleTimer = ((AgeableMobAccessor) ageable).twilightforest$getAgeLockParticleTimer();
+		if (!AgeableMob.canUseGoldenDandelion(stack, ageable.isBaby(), particleTimer, animal)) {
+			return InteractionResult.PASS;
+		}
+
+		if (!level.isClientSide()) {
+			AgeableMob.setAgeLocked(animal, ageable::isAgeLocked, player, stack,
+				mob -> ((AgeableMobAccessor) mob).twilightforest$invokeSetAgeLocked(!((AgeableMob) mob).isAgeLocked()));
+		}
+
+		return InteractionResult.SUCCESS;
 	}
 
 	public static void handleAfterDamage(LivingEntity living, DamageSource source, float finalDamage) {
