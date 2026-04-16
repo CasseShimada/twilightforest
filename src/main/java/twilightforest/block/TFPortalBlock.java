@@ -5,7 +5,6 @@ import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -44,7 +43,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import twilightforest.network.PacketDistributor;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.jetbrains.annotations.Nullable;
-import twilightforest.TwilightForestMod;
 import twilightforest.config.TFConfig;
 import twilightforest.tags.TFBlockTags;
 import twilightforest.init.TFBlocks;
@@ -92,10 +90,6 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 	}
 
 	public static boolean recursivelyValidatePortal(Level level, BlockPos pos, Map<BlockPos, Boolean> blocksChecked, MutableInt portalSize, BlockState poolBlock) {
-		return recursivelyValidatePortal(level, pos, blocksChecked, portalSize, poolBlock, false);
-	}
-
-	private static boolean recursivelyValidatePortal(Level level, BlockPos pos, Map<BlockPos, Boolean> blocksChecked, MutableInt portalSize, BlockState poolBlock, boolean traceValidation) {
 		if (portalSize.incrementAndGet() > TFConfig.maxPortalSize) return false;
 
 		boolean isPoolProbablyEnclosed = true;
@@ -108,49 +102,20 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 				BlockState stateBelow = level.getBlockState(positionCheck.below());
 				BlockState stateAbove = level.getBlockState(positionCheck.above());
 				boolean matchesPoolStateByIdentity = state == poolBlock;
-				boolean matchesPoolStateByEquality = state.equals(poolBlock);
-				boolean canFormPortal = state.is(TFBlockTags.PORTAL_POOL);
 				boolean sturdyBelow = stateBelow.isFaceSturdy(level, pos, Direction.UP);
 				boolean isEdge = isGrassOrDirt(state);
 				boolean hasDecoAbove = isNatureBlock(stateAbove);
 
-				if (traceValidation) {
-					TwilightForestMod.LOGGER.info(
-						"TF portal trace: validate neighbor from={} to={} state={} stateDesc={} matchesPoolIdentity={} matchesPoolEquals={} canFormPortal={} below={} sturdyBelow={} isEdge={} above={} hasDecoAbove={}",
-						pos,
-						positionCheck,
-						BuiltInRegistries.BLOCK.getKey(state.getBlock()),
-						state,
-						matchesPoolStateByIdentity,
-						matchesPoolStateByEquality,
-						canFormPortal,
-						BuiltInRegistries.BLOCK.getKey(stateBelow.getBlock()),
-						sturdyBelow,
-						isEdge,
-						BuiltInRegistries.BLOCK.getKey(stateAbove.getBlock()),
-						hasDecoAbove
-					);
-				}
-
 				if (matchesPoolStateByIdentity && sturdyBelow) {
 					blocksChecked.put(positionCheck, true);
 					if (isPoolProbablyEnclosed) {
-						isPoolProbablyEnclosed = recursivelyValidatePortal(level, positionCheck, blocksChecked, portalSize, poolBlock, traceValidation);
+						isPoolProbablyEnclosed = recursivelyValidatePortal(level, positionCheck, blocksChecked, portalSize, poolBlock);
 					}
 
 				} else if (isEdge && hasDecoAbove) {
 					blocksChecked.put(positionCheck, false);
 
 				} else {
-					if (traceValidation) {
-						TwilightForestMod.LOGGER.info(
-							"TF portal trace: rejected neighbor from={} to={} state={} stateDesc={} reason=no_pool_or_edge_match",
-							pos,
-							positionCheck,
-							BuiltInRegistries.BLOCK.getKey(state.getBlock()),
-							state
-						);
-					}
 					return false;
 				}
 			}
@@ -201,46 +166,19 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 		BlockState state = level.getBlockState(pos);
 		boolean canFormPortal = this.canFormPortal(state);
 		boolean sturdyBelow = level.getBlockState(pos.below()).isFaceSturdy(level, pos, Direction.UP);
-		TwilightForestMod.LOGGER.info(
-			"TF portal trace: tryToCreatePortal pos={} player={} catalyst={} count={} canFormPortal={} poolBlock={} belowBlock={} sturdyBelow={}",
-			pos,
-			player == null ? "<none>" : player.getName().getString(),
-			BuiltInRegistries.ITEM.getKey(catalyst.getItem().getItem()),
-			catalyst.getItem().getCount(),
-			canFormPortal,
-			BuiltInRegistries.BLOCK.getKey(state.getBlock()),
-			BuiltInRegistries.BLOCK.getKey(level.getBlockState(pos.below()).getBlock()),
-			sturdyBelow
-		);
 
 		if (canFormPortal && sturdyBelow) {
 			Map<BlockPos, Boolean> blocksChecked = new HashMap<>();
 			blocksChecked.put(pos, true);
 
 			MutableInt size = new MutableInt(0);
-			boolean validPortalShape = recursivelyValidatePortal(level, pos, blocksChecked, size, state, true);
-			long portalBlocks = blocksChecked.values().stream().filter(Boolean::booleanValue).count();
-			long borderBlocks = blocksChecked.size() - portalBlocks;
-			TwilightForestMod.LOGGER.info(
-				"TF portal trace: portal validation pos={} validShape={} size={} portalBlocks={} borderBlocks={} minRequired={}",
-				pos,
-				validPortalShape,
-				size.intValue(),
-				portalBlocks,
-				borderBlocks,
-				MIN_PORTAL_SIZE
-			);
+			boolean validPortalShape = recursivelyValidatePortal(level, pos, blocksChecked, size, state);
 
 			if (validPortalShape && size.intValue() >= MIN_PORTAL_SIZE) {
 
 				if (!TFConfig.checkPortalPlacement) {
 					boolean checkProgression = LandmarkUtil.isProgressionEnforced(level);
 					if (!TFTeleporter.isSafeAround(level, pos, catalyst, checkProgression)) {
-						TwilightForestMod.LOGGER.info(
-							"TF portal trace: portal rejected as unsafe pos={} checkProgression={}",
-							pos,
-							checkProgression
-						);
 						// TODO: "failure" effect - particles?
 						if (player != null) {
 							PlayerMessaging.displayClientMessage(player, Component.translatable("misc.twilightforest.portal_unsafe"), true);
@@ -258,22 +196,10 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 					}
 				}
 
-				TwilightForestMod.LOGGER.info(
-					"TF portal trace: portal created pos={} convertedBlocks={} remainingCatalyst={}",
-					pos,
-					portalBlocks,
-					catalyst.getItem().getCount()
-				);
 				return true;
 			}
 		}
 
-		TwilightForestMod.LOGGER.info(
-			"TF portal trace: portal creation failed pos={} canFormPortal={} sturdyBelow={}",
-			pos,
-			canFormPortal,
-			sturdyBelow
-		);
 		return false;
 	}
 
