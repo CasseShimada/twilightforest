@@ -120,12 +120,14 @@ dependencies {
 
 processResources {
 	inputs.property "version", project.version
+	exclude("**/.*")
 	filesMatching("fabric.mod.json") {
 		expand "version": project.version
 	}
 }
 
 jar {
+	exclude("**/.*")
 	from("LICENSE") {
 		rename { "${it}_${project.base.archivesName.get()}" }
 	}
