@@ -383,7 +383,7 @@ public class TFTeleporter {
 	protected static void loadSurroundingArea(ServerLevel world, Vec3 pos) {
 
 		int x = Mth.floor(pos.x()) >> 4;
-		int z = Mth.floor(pos.y()) >> 4;
+		int z = Mth.floor(pos.z()) >> 4;
 
 		for (int dx = -2; dx <= 2; dx++) {
 			for (int dz = -2; dz <= 2; dz++) {
@@ -516,8 +516,7 @@ public class TFTeleporter {
 		// dirt under it
 		BlockState dirt = Blocks.DIRT.defaultBlockState();
 		for (BlockPos blockpos : positions) {
-			if (world.getBlockState(pos).is(BlockTags.FEATURES_CANNOT_REPLACE))
-				world.setBlockAndUpdate(blockpos, dirt);
+			world.setBlockAndUpdate(blockpos, dirt);
 		}
 
 		// portal in it
