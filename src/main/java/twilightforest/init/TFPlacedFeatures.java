@@ -156,7 +156,8 @@ public class TFPlacedFeatures {
 	}
 
 	private static List<PlacementModifier> darkForestTreeCheck(PlacementModifier count) {
-		return ImmutableList.of(count, InSquarePlacement.spread(), SurfaceWaterDepthFilter.forMaxDepth(0), PlacementUtils.HEIGHTMAP_OCEAN_FLOOR, new AvoidLandmarkModifier(true, false, 10, HolderSet.empty()), BiomeFilter.biome());
+		// Dark forest canopy blanketing runs before vegetation placement, so tree starts must ignore the hardened canopy leaves above them.
+		return ImmutableList.of(count, InSquarePlacement.spread(), SurfaceWaterDepthFilter.forMaxDepth(0), PlacementUtils.HEIGHTMAP_NO_LEAVES, new AvoidLandmarkModifier(true, false, 10, HolderSet.empty()), BiomeFilter.biome());
 	}
 
 	private static ImmutableList.Builder<PlacementModifier> tfFeatureCheckArea(AvoidLandmarkModifier filter, int rarity) {
@@ -264,7 +265,7 @@ public class TFPlacedFeatures {
 		context.register(PLACED_SWAMPY_OAK_TREE, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.SWAMPY_OAK_TREE), tfTreeCheckArea(PlacementUtils.countExtra(4, 0.1F, 1), TFBlocks.TWILIGHT_OAK_SAPLING.get().defaultBlockState())));
 		context.register(PLACED_OAK_BUSH, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.OAK_BUSH), tfTreeCheckArea(PlacementUtils.countExtra(1, 1 / 3F, 1), Blocks.OAK_SAPLING.defaultBlockState())));  // 0.33F raise exception
 		context.register(PLACED_OAK_BUSH_DENSE, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.OAK_BUSH), tfTreeCheckArea(PlacementUtils.countExtra(2, 1 / 3F, 2), Blocks.OAK_SAPLING.defaultBlockState())));  // 0.33F raise exception
-		context.register(PLACED_DARKWOOD_TREE, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.DARKWOOD_TREE), List.of(PlacementUtils.countExtra(5, 0.1F, 1), InSquarePlacement.spread(), SurfaceWaterDepthFilter.forMaxDepth(0), PlacementUtils.HEIGHTMAP_OCEAN_FLOOR, new AvoidLandmarkModifier(true, false, 16, HolderSet.empty()), PlacementUtils.filteredByBlockSurvival(TFBlocks.DARKWOOD_SAPLING.get()), BiomeFilter.biome())));
+		context.register(PLACED_DARKWOOD_TREE, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.DARKWOOD_TREE), List.of(PlacementUtils.countExtra(5, 0.1F, 1), InSquarePlacement.spread(), SurfaceWaterDepthFilter.forMaxDepth(0), PlacementUtils.HEIGHTMAP_NO_LEAVES, new AvoidLandmarkModifier(true, false, 16, HolderSet.empty()), PlacementUtils.filteredByBlockSurvival(TFBlocks.DARKWOOD_SAPLING.get()), BiomeFilter.biome())));
 
 		context.register(PLACED_CANOPY_TREES, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.CANOPY_TREES), tfTreeCheckArea(PlacementUtils.countExtra(7, 0.1F, 1), TFBlocks.CANOPY_SAPLING.get().defaultBlockState(), allowLichTower)));
 		context.register(PLACED_DENSE_CANOPY_TREES, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.DENSE_CANOPY_TREES), tfTreeCheckArea(PlacementUtils.countExtra(5, 0.1F, 1), TFBlocks.CANOPY_SAPLING.get().defaultBlockState(), allowLichTower)));
