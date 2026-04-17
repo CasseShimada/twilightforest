@@ -435,6 +435,10 @@ public class TFTeleporter {
 						}
 					}
 
+					if (isTreeTopPortalCandidate(world, pos)) {
+						continue;
+					}
+
 					double yWeight = (ry + 0.5D) - loc.y() * yFactor;
 					double rPosWeight = xWeight * xWeight + yWeight * yWeight + zWeight * zWeight;
 
@@ -450,6 +454,19 @@ public class TFTeleporter {
 		}
 
 		return spot;
+	}
+
+	private static boolean isTreeTopPortalCandidate(ServerLevel world, BlockPos pos) {
+		return isTreeSupport(world.getBlockState(pos.below()))
+			|| isTreeSupport(world.getBlockState(pos.east().below()))
+			|| isTreeSupport(world.getBlockState(pos.south().below()))
+			|| isTreeSupport(world.getBlockState(pos.east().south().below()));
+	}
+
+	private static boolean isTreeSupport(BlockState state) {
+		return state.is(BlockTags.LOGS)
+			|| state.is(BlockTags.LEAVES)
+			|| state.is(TFBlocks.HARDENED_DARK_LEAVES.get());
 	}
 
 	protected static double getYFactor(ServerLevel world) {
