@@ -28,7 +28,8 @@
       "base": "twilightforest:item/smaller_gui_trophy",
       "model": {
         "type": "twilightforest:boss_trophy",
-        "kind": "quest_ram"
+        "kind": "quest_ram",
+        "fixed_rotation": 180
       }
     },
     "property": "minecraft:display_context"

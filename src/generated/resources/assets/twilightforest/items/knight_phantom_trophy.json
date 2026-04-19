@@ -28,7 +28,8 @@
       "base": "twilightforest:item/smaller_gui_trophy",
       "model": {
         "type": "twilightforest:boss_trophy",
-        "kind": "knight_phantom"
+        "kind": "knight_phantom",
+        "fixed_rotation": 180
       }
     },
     "property": "minecraft:display_context"

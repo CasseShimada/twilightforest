@@ -28,7 +28,8 @@
       "base": "twilightforest:item/ur_ghast_trophy",
       "model": {
         "type": "twilightforest:boss_trophy",
-        "kind": "ur_ghast"
+        "kind": "ur_ghast",
+        "fixed_rotation": 180
       }
     },
     "property": "minecraft:display_context"

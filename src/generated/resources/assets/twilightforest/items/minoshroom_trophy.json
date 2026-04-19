@@ -28,7 +28,8 @@
       "base": "twilightforest:item/smaller_gui_trophy",
       "model": {
         "type": "twilightforest:boss_trophy",
-        "kind": "minoshroom"
+        "kind": "minoshroom",
+        "fixed_rotation": 180
       }
     },
     "property": "minecraft:display_context"

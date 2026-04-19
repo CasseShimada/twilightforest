@@ -28,7 +28,8 @@
       "base": "twilightforest:item/alpha_yeti_trophy",
       "model": {
         "type": "twilightforest:boss_trophy",
-        "kind": "alpha_yeti"
+        "kind": "alpha_yeti",
+        "fixed_rotation": 180
       }
     },
     "property": "minecraft:display_context"

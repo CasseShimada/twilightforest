@@ -28,7 +28,8 @@
       "base": "twilightforest:item/hydra_trophy",
       "model": {
         "type": "twilightforest:boss_trophy",
-        "kind": "hydra"
+        "kind": "hydra",
+        "fixed_rotation": 180
       }
     },
     "property": "minecraft:display_context"

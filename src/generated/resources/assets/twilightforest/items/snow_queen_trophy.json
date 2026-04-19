@@ -28,7 +28,8 @@
       "base": "twilightforest:item/template_trophy",
       "model": {
         "type": "twilightforest:boss_trophy",
-        "kind": "snow_queen"
+        "kind": "snow_queen",
+        "fixed_rotation": 180
       }
     },
     "property": "minecraft:display_context"
