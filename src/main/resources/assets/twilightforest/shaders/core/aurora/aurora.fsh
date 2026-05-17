@@ -1,8 +1,6 @@
-#version 330
+#version 150
 
-#moj_import <minecraft:fog.glsl>
-#moj_import <minecraft:dynamictransforms.glsl>
-#moj_import <minecraft:globals.glsl>
+#moj_import <fog.glsl>
 
 //////////////// K.jpg's Re-oriented 4-Point BCC Noise (OpenSimplex2) ////////////////
 ////////////////////// Output: vec4(dF/dx, dF/dy, dF/dz, value) //////////////////////
@@ -22,7 +20,16 @@ vec3 grad(float hash) {
     // Also a cuboctahedral vertex
     // And corresponds to the face of its dual, the rhombic dodecahedron
     vec3 cuboct = cube;
-    cuboct[int(hash / 16.0)] = 0.0;
+    // cuboct[int(hash / 16.0)] = 0.0;
+    // Copy the OpenSimplex2 HLSL version to avoid an Intel Driver crash
+    int idx = int(hash * (1.0 / 16.0));
+
+    if (idx == 0)
+        cuboct.x = 0.0;
+    else if (idx == 1)
+        cuboct.y = 0.0;
+    else
+        cuboct.z = 0.0;
 
     // In a funky way, pick one of the four points on the rhombic face
     float type = mod(floor(hash / 8.0), 2.0);
@@ -80,14 +87,6 @@ vec4 openSimplex2Base(vec3 X) {
     return vec4(derivative, dot(aaaa, extrapolations));
 }
 
-// Use this if you don't want Z to look different from X and Y
-vec4 openSimplex2_Conventional(vec3 X) {
-
-    // Rotate around the main diagonal. Not a skew transform.
-    vec4 result = openSimplex2Base(dot(X, vec3(2.0/3.0)) - X);
-    return vec4(dot(result.xyz, vec3(2.0/3.0)) - result.xyz, result.w);
-}
-
 // Use this if you want to show X and Y in a plane, then use Z for time, vertical, etc.
 vec4 openSimplex2_ImproveXY(vec3 X) {
 
@@ -103,10 +102,13 @@ vec4 openSimplex2_ImproveXY(vec3 X) {
 
 //////////////////////////////// End noise code ////////////////////////////////
 
-layout(std140) uniform AuroraContext {
-    int SeedContext;
-    vec3 PositionContext;
-};
+uniform vec4 ColorModulator;
+uniform float GameTime;
+uniform float FogStart;
+uniform float FogEnd;
+uniform vec4 FogColor;
+uniform int SeedContext;
+uniform vec3 PositionContext;
 
 out vec4 fragColor;
 
@@ -162,16 +164,6 @@ void main() {
 
     colorNoise = ((colorNoise + 1.0) / 2.0) * 0.5;
     vec4 color = vec4(0.0, 0.5 + colorNoise, 1.0 - colorNoise, noise);
-    float fogFade = 1.0 - linear_fog_value(length(pixelPos.xz / 2.75), FogRenderDistanceStart, FogRenderDistanceEnd);
-    vec4 baseColor = vec4(vertexColor.rgb * ColorModulator.rgb * color.rgb, vertexColor.a * ColorModulator.a * color.a * fogFade);
-    fragColor = apply_fog(
-        baseColor,
-        fog_spherical_distance(pixelPos.xyz / 2.5),
-        fog_cylindrical_distance(pixelPos.xyz / 2.5),
-        FogEnvironmentalStart,
-        FogEnvironmentalEnd,
-        FogRenderDistanceStart,
-        FogRenderDistanceEnd,
-        FogColor
-    );
+    float fogFade = linear_fog_fade(length(pixelPos.xz / 2.75), FogStart, FogEnd);
+    fragColor = linear_fog(vec4(vertexColor.rgb * ColorModulator.rgb * color.rgb, vertexColor.a * ColorModulator.a * color.a * fogFade), length(pixelPos.xz / 2.5), FogStart, FogEnd, FogColor);
 }
