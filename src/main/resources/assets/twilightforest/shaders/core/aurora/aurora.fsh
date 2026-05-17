@@ -1,6 +1,8 @@
-#version 150
+#version 330
 
-#moj_import <fog.glsl>
+#moj_import <minecraft:dynamictransforms.glsl>
+#moj_import <minecraft:fog.glsl>
+#moj_import <minecraft:globals.glsl>
 
 //////////////// K.jpg's Re-oriented 4-Point BCC Noise (OpenSimplex2) ////////////////
 ////////////////////// Output: vec4(dF/dx, dF/dy, dF/dz, value) //////////////////////
@@ -102,13 +104,10 @@ vec4 openSimplex2_ImproveXY(vec3 X) {
 
 //////////////////////////////// End noise code ////////////////////////////////
 
-uniform vec4 ColorModulator;
-uniform float GameTime;
-uniform float FogStart;
-uniform float FogEnd;
-uniform vec4 FogColor;
-uniform int SeedContext;
-uniform vec3 PositionContext;
+layout(std140) uniform AuroraContext {
+    int SeedContext;
+    vec3 PositionContext;
+};
 
 out vec4 fragColor;
 
@@ -164,6 +163,17 @@ void main() {
 
     colorNoise = ((colorNoise + 1.0) / 2.0) * 0.5;
     vec4 color = vec4(0.0, 0.5 + colorNoise, 1.0 - colorNoise, noise);
-    float fogFade = linear_fog_fade(length(pixelPos.xz / 2.75), FogStart, FogEnd);
-    fragColor = linear_fog(vec4(vertexColor.rgb * ColorModulator.rgb * color.rgb, vertexColor.a * ColorModulator.a * color.a * fogFade), length(pixelPos.xz / 2.5), FogStart, FogEnd, FogColor);
+    float sphericalDistance = fog_spherical_distance(vec3(pixelPos.xz / 2.75, 0.0));
+    float cylindricalDistance = fog_cylindrical_distance(vec3(pixelPos.xz / 2.5, 0.0));
+    float fogFade = 1.0 - linear_fog_value(cylindricalDistance, FogEnvironmentalStart, FogEnvironmentalEnd);
+    fragColor = apply_fog(
+        vec4(vertexColor.rgb * ColorModulator.rgb * color.rgb, vertexColor.a * ColorModulator.a * color.a * fogFade),
+        sphericalDistance,
+        cylindricalDistance,
+        FogEnvironmentalStart,
+        FogEnvironmentalEnd,
+        FogRenderDistanceStart,
+        FogRenderDistanceEnd,
+        FogColor
+    );
 }
