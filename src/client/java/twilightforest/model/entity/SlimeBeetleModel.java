@@ -157,7 +157,7 @@ public class SlimeBeetleModel extends EntityModel<LivingEntityRenderState> {
 
 	public void submitTail(PoseStack stack, OrderedSubmitNodeCollector nodeCollector, int light, int overlay, RenderType renderType, int outlineColor) {
 		this.slime.visible = true;
-		nodeCollector.submitModelPart(this.tailBottom, stack, renderType, light, overlay, null, false, false, -1, null, outlineColor);
+		nodeCollector.submitModelPart(this.tailBottom, stack, renderType, light, overlay, null, -1, null, outlineColor);
 	}
 
 	@Override

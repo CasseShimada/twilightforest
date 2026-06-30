@@ -13,6 +13,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -53,7 +54,7 @@ public abstract class TFPart<T extends Entity> extends Entity {
 
 	protected TFPart(T parent) {
 		// Marker is inert and safe for parts that should never be spawned via vanilla networking.
-		this(EntityType.MARKER, parent.level(), parent);
+		this(EntityTypes.MARKER, parent.level(), parent);
 	}
 
 	protected TFPart(EntityType<?> type, Level level, T parent) {

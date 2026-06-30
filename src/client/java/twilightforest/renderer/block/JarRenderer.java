@@ -104,7 +104,7 @@ public class JarRenderer<T extends JarBlockEntity, S extends JarRenderer.JarRend
 			poseStack.rotateAround(Axis.ZP.rotation(renderState.wobbleRotZ), 0.5F, 0.0F, 0.5F);
 		}
 
-		nodeCollector.submitMovingBlock(poseStack, renderState.blockRenderState);
+		nodeCollector.submitMovingBlock(poseStack, renderState.blockRenderState, 0);
 
 		if (renderState.lidState != null && renderState.lidItem != null) {
 			poseStack.pushPose();
@@ -117,7 +117,7 @@ public class JarRenderer<T extends JarBlockEntity, S extends JarRenderer.JarRend
 				poseStack.translate(0.5D, 0.875D, 0.5D);
 				poseStack.scale(0.5F, 0.25F, 0.5F);
 				poseStack.translate(-0.5D, -0.5D, -0.5D);
-				nodeCollector.submitMovingBlock(poseStack, renderState.lidRenderState);
+				nodeCollector.submitMovingBlock(poseStack, renderState.lidRenderState, 0);
 			}
 			poseStack.popPose();
 		}

@@ -8,6 +8,7 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.structure.*;
@@ -52,7 +53,7 @@ public class FinalCastleStructure extends ControlledSpawningStructure {
 				//new MobSpawnSettings.SpawnerData(TFEntities.KOBOLD.get(), 10, 1, 2),
 				//new MobSpawnSettings.SpawnerData(TFEntities.ADHERENT.get(), 10, 1, 1),
 				//new MobSpawnSettings.SpawnerData(TFEntities.HARBINGER_CUBE.get(), 10, 1, 1),
-				//new MobSpawnSettings.SpawnerData(EntityType.ENDERMAN, 10, 1, 1)
+				//new MobSpawnSettings.SpawnerData(EntityTypes.ENDERMAN, 10, 1, 1)
 			), List.of(
 				// internal castle
 				//new MobSpawnSettings.SpawnerData(TFEntities.KOBOLD.get(), 10, 1, 2),
@@ -64,7 +65,7 @@ public class FinalCastleStructure extends ControlledSpawningStructure {
 				//new MobSpawnSettings.SpawnerData(TFEntities.ADHERENT.get(), 10, 1, 1)
 			), List.of(
 				// forge
-				//new MobSpawnSettings.SpawnerData(EntityType.BLAZE, 10, 1, 1)
+				//new MobSpawnSettings.SpawnerData(EntityTypes.BLAZE, 10, 1, 1)
 			)), List.of(), List.of()),
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_troll"))),
 			// TODO: change this when we make a book for the castle

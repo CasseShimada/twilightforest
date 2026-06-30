@@ -8,6 +8,7 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.MobSpawnSettings;
@@ -74,10 +75,10 @@ public class TrollCaveStructure extends ProgressionStructure implements Configur
 	public static TrollCaveStructure buildTrollCaveConfig(BootstrapContext<Structure> context) {
 		return new TrollCaveStructure(
 			ControlledSpawningConfig.create(List.of(List.of(
-				weightedSpawn(EntityType.CREEPER, 5, 1, 2),
-				weightedSpawn(EntityType.SKELETON, 10, 1, 2),
+				weightedSpawn(EntityTypes.CREEPER, 5, 1, 2),
+				weightedSpawn(EntityTypes.SKELETON, 10, 1, 2),
 				weightedSpawn(TFEntities.TROLL.get(), 20, 1, 2),
-				weightedSpawn(EntityType.WITCH, 5, 1, 1)
+				weightedSpawn(EntityTypes.WITCH, 5, 1, 1)
 			), List.of(
 				// cloud monsters
 				weightedSpawn(TFEntities.GIANT_MINER.get(), 10, 1, 1),

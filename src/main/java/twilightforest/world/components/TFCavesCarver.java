@@ -127,7 +127,7 @@ public class TFCavesCarver extends WorldCarver<CaveCarverConfiguration> {
 				boolean blockPlaced = access.setBlockState(pos, blockStateToPlace, Block.UPDATE_NONE) != null;
 
 				if (aquifer.shouldScheduleFluidUpdate() && !blockStateToPlace.getFluidState().isEmpty()) {
-					access.markPosForPostprocessing(pos);
+					access.markPosForPostProcessing(pos);
 				}
 
 				if (isSurface.isTrue()) {
@@ -136,7 +136,7 @@ public class TFCavesCarver extends WorldCarver<CaveCarverConfiguration> {
 						ctx.topMaterial(biomePos, access, posDown, !blockStateToPlace.getFluidState().isEmpty()).ifPresent(state -> {
 							access.setBlockState(posDown, state, Block.UPDATE_NONE);
 							if (!state.getFluidState().isEmpty()) {
-								access.markPosForPostprocessing(posDown);
+								access.markPosForPostProcessing(posDown);
 							}
 						});
 					}

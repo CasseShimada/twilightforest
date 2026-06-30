@@ -59,7 +59,7 @@ public class OverlayHandler {
 			Minecraft minecraft = Minecraft.getInstance();
 			LocalPlayer player = minecraft.player;
 			Gui gui = minecraft.gui;
-			if (player != null && !minecraft.options.hideGui && TFConfig.showQuestRamCrosshairIndicator) {
+			if (player != null && !minecraft.gui.hud.isHidden() && TFConfig.showQuestRamCrosshairIndicator) {
 				renderIndicator(minecraft, graphics, gui, player, graphics.guiWidth(), graphics.guiHeight());
 			}
 		});
@@ -80,7 +80,7 @@ public class OverlayHandler {
 			Minecraft minecraft = Minecraft.getInstance();
 			LocalPlayer player = minecraft.player;
 			Gui gui = minecraft.gui;
-			if (player != null && !minecraft.options.hideGui && !gui.getDebugOverlay().showDebugScreen() && minecraft.screen == null) {
+			if (player != null && !minecraft.gui.hud.isHidden() && !gui.hud.getDebugOverlay().showDebugScreen() && minecraft.gui.screen() == null) {
 				renderOreMeterStats(graphics, player);
 			}
 		});
@@ -143,11 +143,11 @@ public class OverlayHandler {
 	}
 
 	private static boolean shouldRenderHostileMountBar(Minecraft minecraft, Player player) {
-		return !minecraft.options.hideGui && minecraft.gameMode.canHurtPlayer() && HostileMountEvents.isRidingUnfriendly(player);
+		return !minecraft.gui.hud.isHidden() && minecraft.gameMode.canHurtPlayer() && HostileMountEvents.isRidingUnfriendly(player);
 	}
 
 	private static boolean shouldRenderFortificationShieldBar(Minecraft minecraft, Player player) {
-		return !minecraft.options.hideGui
+		return !minecraft.gui.hud.isHidden()
 			&& (minecraft.gameMode.canHurtPlayer() || TFConfig.showFortificationShieldIndicatorInCreative)
 			&& TFDataAttachments.has(player, TFDataAttachments.FORTIFICATION_SHIELDS)
 			&& TFDataAttachments.get(player, TFDataAttachments.FORTIFICATION_SHIELDS).shieldsLeft() > 0

@@ -212,7 +212,7 @@ public abstract class BookshelfSpawner {
 				return false;
 			}
 
-			Entity entity = EntityType.loadEntityRecursive(tag, level, EntitySpawnReason.SPAWNER, processed -> {
+			Entity entity = EntityType.loadEntityRecursive(tag, level, new EntitySpawnRequest(EntitySpawnReason.SPAWNER, true), processed -> {
 				processed.setPos(x, y, z);
 				//set entity on fire if told to do so
 				if (fire) {

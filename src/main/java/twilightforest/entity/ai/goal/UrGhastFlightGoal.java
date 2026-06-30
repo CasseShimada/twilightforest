@@ -28,7 +28,7 @@ public class UrGhastFlightGoal extends Goal {
 	// [VanillaCopy] Ghast.RandomFloatAroundGoal
 	@Override
 	public boolean canUse() {
-		MoveControl entitymovehelper = this.ghast.getMoveControl();
+		MoveControl<?> entitymovehelper = this.ghast.getMoveControl();
 		this.pointsToVisit = this.createPath();
 		if (this.pointsToVisit.isEmpty()) return false;
 

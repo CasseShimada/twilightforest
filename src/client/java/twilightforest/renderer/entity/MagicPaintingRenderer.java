@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -16,6 +15,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -196,7 +196,7 @@ public class MagicPaintingRenderer extends EntityRenderer<MagicPainting, MagicPa
 			case VIEW_ANGLE -> {
 				Vec3 camPos = Minecraft.getInstance().getCameraEntity() != null ?
 					Minecraft.getInstance().getCameraEntity().getEyePosition(partialTicks) :
-					Minecraft.getInstance().gameRenderer.getMainCamera().position();
+					Minecraft.getInstance().gameRenderer.mainCamera().position();
 
 				Vec3 paintPos = state.position.relative(state.direction.getOpposite(), 1.0D);
 
@@ -222,7 +222,7 @@ public class MagicPaintingRenderer extends EntityRenderer<MagicPainting, MagicPa
 			case VIEW_ANGLE -> {
 				Vec3 camPos = Minecraft.getInstance().getCameraEntity() != null ?
 					Minecraft.getInstance().getCameraEntity().getEyePosition(partialTicks) :
-					Minecraft.getInstance().gameRenderer.getMainCamera().position();
+					Minecraft.getInstance().gameRenderer.mainCamera().position();
 
 				Vec3 paintPos = state.position.relative(state.direction.getOpposite(), 1.0D);
 
@@ -255,7 +255,7 @@ public class MagicPaintingRenderer extends EntityRenderer<MagicPainting, MagicPa
 		float a = 1.0F;
 		switch (opacityModifier.type()) {
 			case DISTANCE -> {
-				Vec3 camPos = Optional.ofNullable(Minecraft.getInstance().getCameraEntity()).map(Entity::getEyePosition).orElse(Minecraft.getInstance().gameRenderer.getMainCamera().position());
+				Vec3 camPos = Optional.ofNullable(Minecraft.getInstance().getCameraEntity()).map(Entity::getEyePosition).orElse(Minecraft.getInstance().gameRenderer.mainCamera().position());
 				a = fromTo(opacityModifier.from(), opacityModifier.to(), (float) camPos.distanceTo(state.position));
 			}
 			case WEATHER -> a = level.getRainLevel(partialTicks);
@@ -371,7 +371,7 @@ public class MagicPaintingRenderer extends EntityRenderer<MagicPainting, MagicPa
 						lightZ = Mth.floor(lightZ + (double)widthOffset);
 				}
 
-				state.lightCoords[w + h * widthAsBlock] = LevelRenderer.getLightCoords(level, new BlockPos(lightX, lightY, lightZ));
+				state.lightCoords[w + h * widthAsBlock] = LightCoordsUtil.getLightCoords(level, new BlockPos(lightX, lightY, lightZ));
 			}
 		}
 	}

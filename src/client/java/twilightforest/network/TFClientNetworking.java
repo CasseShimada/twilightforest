@@ -147,7 +147,7 @@ public final class TFClientNetworking {
 	}
 
 	private static void handleMissingAdvancementToast(MissingAdvancementToastPacket packet, ClientPlayNetworking.Context context) {
-		context.client().execute(() -> context.client().getToastManager().addToast(new MissingAdvancementToast(packet.title(), packet.icon())));
+		context.client().execute(() -> context.client().gui.toastManager().addToast(new MissingAdvancementToast(packet.title(), packet.icon())));
 	}
 
 	private static void handleSpawnCharm(SpawnCharmPacket packet, ClientPlayNetworking.Context context) {
@@ -198,7 +198,7 @@ public final class TFClientNetworking {
 	private static void handleBossBarAdd(TFBossBarPacket.AddTFBossBarPacket packet, ClientPlayNetworking.Context context) {
 		context.client().execute(() -> {
 			Minecraft minecraft = context.client();
-			BossHealthOverlayAccessor overlay = (BossHealthOverlayAccessor) minecraft.gui.getBossOverlay();
+			BossHealthOverlayAccessor overlay = (BossHealthOverlayAccessor) minecraft.gui.hud.getBossOverlay();
 			overlay.twilightforest$getEvents().put(packet.id(), new ClientTFBossBar(packet.id(), packet.name(), packet.progress(), packet.color(), packet.overlay(), packet.darkenScreen(), packet.playMusic(), packet.createWorldFog()));
 		});
 	}
@@ -206,7 +206,7 @@ public final class TFClientNetworking {
 	private static void handleBossBarStyle(TFBossBarPacket.UpdateTFBossBarStylePacket packet, ClientPlayNetworking.Context context) {
 		context.client().execute(() -> {
 			Minecraft minecraft = context.client();
-			BossHealthOverlayAccessor overlay = (BossHealthOverlayAccessor) minecraft.gui.getBossOverlay();
+			BossHealthOverlayAccessor overlay = (BossHealthOverlayAccessor) minecraft.gui.hud.getBossOverlay();
 			if (overlay.twilightforest$getEvents().get(packet.id()) instanceof ClientTFBossBar bossEvent) {
 				bossEvent.setBarColor(packet.color());
 				bossEvent.setOverlay(packet.overlay());

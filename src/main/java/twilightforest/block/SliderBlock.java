@@ -138,7 +138,7 @@ public class SliderBlock extends RotatedPillarBlock implements SimpleWaterlogged
 			double kx = (pos.getX() + 0.5 - entity.getX()) * 2.0;
 			double kz = (pos.getZ() + 0.5 - entity.getZ()) * 2.0;
 
-			living.knockback(2, kx, kz);
+			living.knockback(2, kx, kz, serverLevel.damageSources().source(TFDamageTypes.SLIDER), BLOCK_DAMAGE);
 		}
 	}
 }

@@ -16,6 +16,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -45,7 +46,7 @@ public class EntityRenderingUtil {
 	public static Entity fetchEntity(EntityType<?> type, @Nullable Level level) {
 		if (level != null && !IGNORED_ENTITIES.contains(type)) {
 			Entity entity;
-			if (type == EntityType.PLAYER) {
+			if (type == EntityTypes.PLAYER) {
 				entity = Minecraft.getInstance().player;
 			} else {
 				entity = ENTITY_MAP.computeIfAbsent(type, t -> {
@@ -117,16 +118,16 @@ public class EntityRenderingUtil {
 	}
 
 	private static float additionalScale(EntityType<?> entity) {
-		if (entity == EntityType.GHAST) return 0.5F;
-		if (entity == EntityType.ELDER_GUARDIAN) return 0.6F;
+		if (entity == EntityTypes.GHAST) return 0.5F;
+		if (entity == EntityTypes.ELDER_GUARDIAN) return 0.6F;
 		return 1.0F;
 	}
 
 	private static float additionalYOffset(EntityType<?> entity) {
-		if (entity == EntityType.GHAST) return -12.5F;
-		if (entity == EntityType.ENDER_DRAGON) return -4.0F;
-		if (entity == EntityType.WITHER) return 8.0F;
-		if (entity == EntityType.SQUID || entity == EntityType.GLOW_SQUID) return -19.0F;
+		if (entity == EntityTypes.GHAST) return -12.5F;
+		if (entity == EntityTypes.ENDER_DRAGON) return -4.0F;
+		if (entity == EntityTypes.WITHER) return 8.0F;
+		if (entity == EntityTypes.SQUID || entity == EntityTypes.GLOW_SQUID) return -19.0F;
 		return 0.0F;
 	}
 

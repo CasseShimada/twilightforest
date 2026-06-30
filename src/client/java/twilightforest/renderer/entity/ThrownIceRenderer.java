@@ -34,7 +34,7 @@ public class ThrownIceRenderer extends EntityRenderer<IceBomb, FallingBlockRende
 		if (blockState.getRenderShape() == RenderShape.MODEL) {
 			poseStack.pushPose();
 			poseStack.translate(-0.5, 0.0, -0.5);
-			nodeCollector.submitMovingBlock(poseStack, state.movingBlockRenderState);
+			nodeCollector.submitMovingBlock(poseStack, state.movingBlockRenderState, 0);
 			poseStack.popPose();
 			super.submit(state, poseStack, nodeCollector, cameraRenderState);
 		}

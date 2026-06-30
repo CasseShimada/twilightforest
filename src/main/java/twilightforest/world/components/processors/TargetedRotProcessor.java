@@ -9,34 +9,35 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockRotProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import twilightforest.init.TFStructureProcessors;
-import twilightforest.mixin.accessor.BlockRotProcessorAccessor;
 
 import java.util.ArrayList;
 
-public final class TargetedRotProcessor extends BlockRotProcessor {
+public final class TargetedRotProcessor implements net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor {
 	public static final MapCodec<TargetedRotProcessor> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 		BlockState.CODEC.listOf().xmap(ImmutableSet::copyOf, ArrayList::new).fieldOf("blocks_to_rot").forGetter(p -> p.blocksToRot),
-		Codec.FLOAT.fieldOf("integrity").orElse(1.0f).forGetter(p -> ((BlockRotProcessorAccessor) (Object) p).twilightforest$getIntegrity())
+		Codec.FLOAT.fieldOf("integrity").orElse(1.0f).forGetter(p -> p.integrity)
 	).apply(instance, TargetedRotProcessor::new));
 
 	private final ImmutableSet<BlockState> blocksToRot;
+	private final float integrity;
+	private final BlockRotProcessor delegate;
 
 	public TargetedRotProcessor(ImmutableSet<BlockState> blocksToRot, float integrity) {
-		super(integrity);
 		this.blocksToRot = blocksToRot;
+		this.integrity = integrity;
+		this.delegate = new BlockRotProcessor(integrity);
 	}
 
 	@Override
-	public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos origin, BlockPos centerBottom, StructureTemplate.StructureBlockInfo originalBlockInfo, StructureTemplate.StructureBlockInfo modifiedBlockInfo, StructurePlaceSettings settings) {
+	public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos origin, BlockPos centerBottom, BlockPos originalPos, StructureTemplate.StructureBlockInfo modifiedBlockInfo, StructurePlaceSettings settings) {
 		if (!this.blocksToRot.contains(modifiedBlockInfo.state())) return modifiedBlockInfo;
-		return super.processBlock(level, origin, centerBottom, originalBlockInfo, modifiedBlockInfo, settings);
+		return this.delegate.processBlock(level, origin, centerBottom, originalPos, modifiedBlockInfo, settings);
 	}
 
 	@Override
-	protected StructureProcessorType<?> getType() {
+	public MapCodec<TargetedRotProcessor> codec() {
 		return TFStructureProcessors.TARGETED_ROT.get();
 	}
 }

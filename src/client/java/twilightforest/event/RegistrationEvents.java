@@ -19,9 +19,6 @@ import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.renderer.Sheets;
-import net.minecraft.resources.Identifier;
-import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.BoatRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -32,6 +29,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.model.object.boat.BoatModel;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
@@ -71,7 +69,6 @@ import twilightforest.client.renderer.PotionFlaskTooltipComponent;
 import twilightforest.enums.BossVariant;
 import twilightforest.init.*;
 import twilightforest.item.BrittleFlaskItem;
-import twilightforest.util.woods.TFWoodTypes;
 
 public class RegistrationEvents {
 	private static boolean optifinePresent = false;
@@ -81,7 +78,6 @@ public class RegistrationEvents {
 	public static void register() {
 		detectOptifine();
 		TFRenderPipelines.init();
-		registerWoodTypes();
 		registerRenderLayers();
 		registerModelLoaders();
 		registerItemModelTypes();
@@ -106,23 +102,6 @@ public class RegistrationEvents {
 		} catch (ClassNotFoundException e) {
 			optifinePresent = false;
 		}
-	}
-
-	private static void registerWoodTypes() {
-		registerWoodType(TFWoodTypes.TWILIGHT_OAK_WOOD_TYPE);
-		registerWoodType(TFWoodTypes.CANOPY_WOOD_TYPE);
-		registerWoodType(TFWoodTypes.MANGROVE_WOOD_TYPE);
-		registerWoodType(TFWoodTypes.DARK_WOOD_TYPE);
-		registerWoodType(TFWoodTypes.TIME_WOOD_TYPE);
-		registerWoodType(TFWoodTypes.TRANSFORMATION_WOOD_TYPE);
-		registerWoodType(TFWoodTypes.MINING_WOOD_TYPE);
-		registerWoodType(TFWoodTypes.SORTING_WOOD_TYPE);
-	}
-
-	private static void registerWoodType(WoodType woodType) {
-		Identifier id = Identifier.parse(woodType.name());
-		Sheets.SIGN_SPRITES.put(woodType, Sheets.SIGN_MAPPER.apply(id));
-		Sheets.HANGING_SIGN_SPRITES.put(woodType, Sheets.HANGING_SIGN_MAPPER.apply(id));
 	}
 
 	private static void registerRenderLayers() {

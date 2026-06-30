@@ -17,7 +17,7 @@ public record MysticCrownSpecialRenderer(LichModel model) implements NoDataSpeci
 		stack.pushPose();
 		stack.translate(0.5F, 0.0F, 0.5F);
 		stack.scale(1.0F, -1.0F, -1.0F);
-		nodeCollector.submitModelPart(this.model().hat, stack, this.model.renderType(LichRenderer.TEXTURE), light, overlay, null, false, false, -1, null, outlineColor);
+		nodeCollector.submitModelPart(this.model().hat, stack, this.model.renderType(LichRenderer.TEXTURE), light, overlay, null, -1, null, outlineColor);
 		stack.popPose();
 	}
 

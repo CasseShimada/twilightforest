@@ -19,11 +19,11 @@ public final class ClientPortalHelper {
 		}
 
 		Minecraft minecraft = Minecraft.getInstance();
-		if (minecraft.screen != null && !minecraft.screen.isPauseScreen() && !(minecraft.screen instanceof DeathScreen)) {
-			if (minecraft.screen instanceof AbstractContainerScreen) {
+		if (minecraft.gui.screen() != null && !minecraft.gui.screen().isPauseScreen() && !(minecraft.gui.screen() instanceof DeathScreen)) {
+			if (minecraft.gui.screen() instanceof AbstractContainerScreen) {
 				local.closeContainer();
 			}
-			minecraft.setScreen(null);
+			minecraft.gui.setScreen(null);
 		}
 		return true;
 	}

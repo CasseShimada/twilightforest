@@ -47,6 +47,7 @@ public class TFDimensionData {
 		TagKey<Timeline> timelineTag = TagKey.create(Registries.TIMELINE, TwilightForestMod.prefix("in_twilight"));
 		HolderSet<Timeline> timelines = context.lookup(Registries.TIMELINE).getOrThrow(timelineTag);
 		HolderGetter<WorldClock> worldClocks = context.lookup(Registries.WORLD_CLOCK);
+		HolderSet<net.minecraft.world.level.block.Block> infiniburn = context.lookup(Registries.BLOCK).getOrThrow(BlockTags.INFINIBURN_OVERWORLD);
 		EnvironmentAttributeMap attributes = EnvironmentAttributeMap.builder()
 			.set(EnvironmentAttributes.BED_RULE, BedRule.CAN_SLEEP_WHEN_DARK)
 			.set(EnvironmentAttributes.CAN_START_RAID, false)
@@ -64,7 +65,7 @@ public class TFDimensionData {
 			-32, // Minimum Y Level
 			32 + 256, // Height + Min Y = Max Y
 			32 + 256, // Logical Height
-			BlockTags.INFINIBURN_OVERWORLD, //infiburn
+			infiniburn,
 			0.01f,
 			new DimensionType.MonsterSettings(UniformInt.of(0, 7), 7),
 			DimensionType.Skybox.OVERWORLD,
@@ -111,7 +112,7 @@ public class TFDimensionData {
 				DensityFunctions.zero(),
 				DensityFunctions.zero()
 			),
-			TFSurfaceRules.tfSurface(),
+			TFSurfaceRules.tfSurface(context.lookup(Registries.BIOME)),
 			List.of(),
 			TFDimensionData.SEALEVEL,
 			false,

@@ -1,5 +1,7 @@
 package twilightforest.client.event;
 
+import com.mojang.blaze3d.IndexType;
+import com.mojang.blaze3d.PrimitiveTopology;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.mojang.blaze3d.buffers.GpuBuffer;
 import com.mojang.blaze3d.buffers.GpuBufferSlice;
@@ -10,12 +12,11 @@ import com.mojang.blaze3d.systems.RenderPass;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.textures.GpuTextureView;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -31,7 +32,6 @@ import net.minecraft.client.gui.components.SplashRenderer;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.ShapeRenderer;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.rendertype.OutputTarget;
 import net.minecraft.client.renderer.state.level.BlockOutlineRenderState;
@@ -96,8 +96,8 @@ import java.time.Month;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.OptionalDouble;
-import java.util.OptionalInt;
 
 public class ClientEvents {
 	private static final VoxelShape GIANT_BLOCK = Shapes.box(0.0D, 0.0D, 0.0D, 4.0D, 4.0D, 4.0D);
@@ -123,6 +123,7 @@ public class ClientEvents {
 		ItemTooltipCallback.EVENT.register(ClientEvents::translateBookAuthor);
 		ClientTickEvents.END_CLIENT_TICK.register(ClientEvents::clientTick);
 		LevelRenderEvents.BEFORE_TRANSLUCENT_TERRAIN.register(ClientEvents::renderAurora);
+		LevelRenderEvents.BEFORE_TRANSLUCENT_TERRAIN.register(ClientEvents::renderProgressionWeather);
 		LevelRenderEvents.BEFORE_BLOCK_OUTLINE.register(ClientEvents::renderGiantBlockOutlines);
 
 		HudElementRegistry.replaceElement(VanillaHudElements.MOUNT_HEALTH, original -> (context, tickCounter) -> {
@@ -144,7 +145,7 @@ public class ClientEvents {
 		if (firstTitleScreenShown || !(screen instanceof TitleScreen)) return;
 
 		if (RegistrationEvents.isOptifinePresent() && !TFConfig.disableOptifineNagScreen) {
-			Minecraft.getInstance().setScreen(new OptifineWarningScreen(screen));
+			Minecraft.getInstance().gui.setScreen(new OptifineWarningScreen(screen));
 		}
 
 		firstTitleScreenShown = true;
@@ -206,11 +207,11 @@ public class ClientEvents {
 		}
 
 		if (mc.level != null && TFDimension.DIMENSION_KEY.equals(mc.level.dimension())) {
-			mc.gui.vignetteBrightness = 0.0F;
+			mc.gui.hud.vignetteBrightness = 0.0F;
 		}
 
 		if (mc.player != null && HostileMountEvents.isRidingUnfriendly(mc.player)) {
-			mc.gui.setOverlayMessage(Component.empty(), false);
+			mc.gui.hud.setOverlayMessage(Component.empty(), false);
 		}
 	}
 
@@ -249,7 +250,8 @@ public class ClientEvents {
 		Vec3 pos = getCameraPosition();
 		float y = (float) (256F - pos.y());
 
-		BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+		ByteBufferBuilder byteBuffer = ByteBufferBuilder.exactlySized(DefaultVertexFormat.POSITION_COLOR.getVertexSize() * 4);
+		BufferBuilder buffer = new BufferBuilder(byteBuffer, PrimitiveTopology.QUADS, DefaultVertexFormat.POSITION_COLOR);
 		addAuroraVertex(buffer, -scale, y, scale, 0.0F, 1.0F, alpha);
 		addAuroraVertex(buffer, -scale, y, -scale, 0.0F, 0.0F, alpha);
 		addAuroraVertex(buffer, scale, y, -scale, 1.0F, 0.0F, alpha);
@@ -267,10 +269,21 @@ public class ClientEvents {
 		renderAuroraMesh(mesh, pos, seed);
 	}
 
+	private static void renderProgressionWeather(LevelRenderContext context) {
+		Minecraft mc = Minecraft.getInstance();
+		if (mc.level == null || !TFDimension.isTwilightWorldOnClient(mc.level)) {
+			return;
+		}
+
+		int ticks = (int) mc.level.getGameTime();
+		float partialTicks = mc.getDeltaTracker().getGameTimeDeltaPartialTick(false);
+		TFWeatherRenderer.renderSnowAndRain(mc.level, ticks, partialTicks, getCameraPosition(), context.submitNodeCollector());
+	}
+
 	private static void renderAuroraMesh(MeshData mesh, Vec3 cameraPos, int seed) {
 		RenderPipeline pipeline = TFRenderPipelines.AURORA;
 		CommandEncoder encoder = RenderSystem.getDevice().createCommandEncoder();
-		Matrix4f modelView = new Matrix4f(RenderSystem.getModelViewMatrix()).setTranslation(0.0F, 0.0F, 0.0F);
+		Matrix4f modelView = new Matrix4f(RenderSystem.getModelViewMatrixCopy()).setTranslation(0.0F, 0.0F, 0.0F);
 		GpuBufferSlice transformSlice = RenderSystem.getDynamicUniforms().writeTransform(
 			modelView,
 			new Vector4f(1.0F, 1.0F, 1.0F, 1.0F),
@@ -285,16 +298,26 @@ public class ClientEvents {
 			encoder.writeToBuffer(auroraBuffer.slice(), builder.get());
 		}
 
-		GpuBuffer vertexBuffer = pipeline.getVertexFormat().uploadImmediateVertexBuffer(mesh.vertexBuffer());
+		GpuBuffer vertexBuffer = RenderSystem.getDevice().createBuffer(
+			() -> "twilightforest_aurora_vertices",
+			GpuBuffer.USAGE_VERTEX | GpuBuffer.USAGE_COPY_DST,
+			mesh.vertexBuffer()
+		);
 		GpuBuffer indexBuffer;
-		VertexFormat.IndexType indexType;
+		IndexType indexType;
+		boolean closeIndexBuffer = false;
 		if (mesh.indexBuffer() == null) {
-			RenderSystem.AutoStorageIndexBuffer indexBufferSource = RenderSystem.getSequentialBuffer(mesh.drawState().mode());
+			RenderSystem.AutoStorageIndexBuffer indexBufferSource = RenderSystem.getSequentialBuffer(mesh.drawState().primitiveTopology());
 			indexBuffer = indexBufferSource.getBuffer(mesh.drawState().indexCount());
 			indexType = indexBufferSource.type();
 		} else {
-			indexBuffer = pipeline.getVertexFormat().uploadImmediateIndexBuffer(mesh.indexBuffer());
+			indexBuffer = RenderSystem.getDevice().createBuffer(
+				() -> "twilightforest_aurora_indices",
+				GpuBuffer.USAGE_INDEX | GpuBuffer.USAGE_COPY_DST,
+				mesh.indexBuffer()
+			);
 			indexType = mesh.drawState().indexType();
+			closeIndexBuffer = true;
 		}
 
 		GpuTextureView color = RenderSystem.outputColorTextureOverride;
@@ -308,17 +331,21 @@ public class ClientEvents {
 			depth = RenderSystem.outputDepthTextureOverride != null ? RenderSystem.outputDepthTextureOverride : target.getDepthTextureView();
 		}
 
-		try (RenderPass pass = encoder.createRenderPass(() -> "twilightforest_aurora", color, OptionalInt.empty(), depth, OptionalDouble.empty())) {
+		try (RenderPass pass = encoder.createRenderPass(() -> "twilightforest_aurora", color, Optional.empty(), depth, OptionalDouble.empty())) {
 			pass.setPipeline(pipeline);
 			RenderSystem.bindDefaultUniforms(pass);
 			pass.setUniform("DynamicTransforms", transformSlice);
 			pass.setUniform("AuroraContext", auroraBuffer.slice());
 
-			pass.setVertexBuffer(0, vertexBuffer);
+			pass.setVertexBuffer(0, vertexBuffer.slice());
 
 			pass.setIndexBuffer(indexBuffer, indexType);
-			pass.drawIndexed(0, 0, mesh.drawState().indexCount(), 1);
+			pass.drawIndexed(0, 0, mesh.drawState().indexCount(), 1, 0);
 		} finally {
+			vertexBuffer.close();
+			if (closeIndexBuffer) {
+				indexBuffer.close();
+			}
 			mesh.close();
 		}
 	}
@@ -369,8 +396,10 @@ public class ClientEvents {
 				Vec3 xyz = Vec3.atLowerCornerOf(offsetPos).subtract(getCameraPosition());
 				switch (outlineMode) {
 					case SECONDARY -> {
-						VertexConsumer consumer = context.bufferSource().getBuffer(RenderTypes.secondaryBlockOutline());
-						ShapeRenderer.renderShape(poseStack, consumer, GIANT_BLOCK, xyz.x(), xyz.y(), xyz.z(), 0xFF000000, 7.0F);
+						poseStack.pushPose();
+						poseStack.translate(xyz.x(), xyz.y(), xyz.z());
+						context.submitNodeCollector().submitShapeOutline(poseStack, GIANT_BLOCK, RenderTypes.secondaryBlockOutline(), 0xFF000000, 7.0F, false);
+						poseStack.popPose();
 					}
 					case SAFE_LINES, AUTO -> renderGiantOutlineLines(context, poseStack, xyz);
 					case VANILLA -> {
@@ -411,25 +440,25 @@ public class ClientEvents {
 	}
 
 	private static void renderGiantOutlineLines(LevelRenderContext context, PoseStack poseStack, Vec3 xyz) {
-		VertexConsumer consumer = context.bufferSource().getBuffer(RenderTypes.lines());
-		PoseStack.Pose pose = poseStack.last();
-		GIANT_BLOCK.forAllEdges((x1, y1, z1, x2, y2, z2) -> {
-				float xNormal = (float) (x2 - x1);
-				float yNormal = (float) (y2 - y1);
-				float zNormal = (float) (z2 - z1);
-				float normalLength = Mth.sqrt(xNormal * xNormal + yNormal * yNormal + zNormal * zNormal);
-				xNormal /= normalLength;
-				yNormal /= normalLength;
-				zNormal /= normalLength;
-				consumer.addVertex(pose, (float) (x1 + xyz.x()), (float) (y1 + xyz.y()), (float) (z1 + xyz.z()))
-					.setColor(0.0F, 0.0F, 0.0F, 0.45F)
-					.setLineWidth(1.0F)
-					.setNormal(pose, xNormal, yNormal, zNormal);
-				consumer.addVertex(pose, (float) (x2 + xyz.x()), (float) (y2 + xyz.y()), (float) (z2 + xyz.z()))
-					.setColor(0.0F, 0.0F, 0.0F, 0.45F)
-					.setLineWidth(1.0F)
-					.setNormal(pose, xNormal, yNormal, zNormal);
-			}
+		context.submitNodeCollector().submitCustomGeometry(poseStack, RenderTypes.lines(), (pose, consumer) ->
+			GIANT_BLOCK.forAllEdges((x1, y1, z1, x2, y2, z2) -> {
+					float xNormal = (float) (x2 - x1);
+					float yNormal = (float) (y2 - y1);
+					float zNormal = (float) (z2 - z1);
+					float normalLength = Mth.sqrt(xNormal * xNormal + yNormal * yNormal + zNormal * zNormal);
+					xNormal /= normalLength;
+					yNormal /= normalLength;
+					zNormal /= normalLength;
+					consumer.addVertex(pose, (float) (x1 + xyz.x()), (float) (y1 + xyz.y()), (float) (z1 + xyz.z()))
+						.setColor(0.0F, 0.0F, 0.0F, 0.45F)
+						.setLineWidth(1.0F)
+						.setNormal(pose, xNormal, yNormal, zNormal);
+					consumer.addVertex(pose, (float) (x2 + xyz.x()), (float) (y2 + xyz.y()), (float) (z2 + xyz.z()))
+						.setColor(0.0F, 0.0F, 0.0F, 0.45F)
+						.setLineWidth(1.0F)
+						.setNormal(pose, xNormal, yNormal, zNormal);
+				}
+			)
 		);
 	}
 

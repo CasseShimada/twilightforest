@@ -222,7 +222,7 @@ public class GraveyardFeature extends Feature<NoneFeatureConfiguration> {
 		}
 	}
 
-	public static class WebTemplateProcessor extends StructureProcessor {
+	public static class WebTemplateProcessor implements StructureProcessor {
 		public static final WebTemplateProcessor INSTANCE = new WebTemplateProcessor();
 		public static final MapCodec<WebTemplateProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
@@ -230,13 +230,13 @@ public class GraveyardFeature extends Feature<NoneFeatureConfiguration> {
 		}
 
 		@Override
-		protected StructureProcessorType<?> getType() {
+		public MapCodec<WebTemplateProcessor> codec() {
 			return TFStructureProcessors.WEB.get();
 		}
 
 		@Override
-		public StructureTemplate.StructureBlockInfo processBlock(LevelReader worldIn, BlockPos pos, BlockPos piecepos, StructureTemplate.StructureBlockInfo originalInfo, StructureTemplate.StructureBlockInfo blockInfo, StructurePlaceSettings settings) {
-			return blockInfo.state().getBlock() == Blocks.GRASS_BLOCK ? blockInfo : settings.getRandom(pos).nextInt(5) == 0 ? new StructureTemplate.StructureBlockInfo(pos, Blocks.COBWEB.defaultBlockState(), null) : blockInfo;
+		public StructureTemplate.StructureBlockInfo processBlock(LevelReader worldIn, BlockPos pos, BlockPos piecepos, BlockPos originalPos, StructureTemplate.StructureBlockInfo blockInfo, StructurePlaceSettings settings) {
+			return blockInfo.state().getBlock() == Blocks.GRASS_BLOCK ? blockInfo : settings.getRandom(blockInfo.pos()).nextInt(5) == 0 ? new StructureTemplate.StructureBlockInfo(blockInfo.pos(), Blocks.COBWEB.defaultBlockState(), null) : blockInfo;
 		}
 	}
 }

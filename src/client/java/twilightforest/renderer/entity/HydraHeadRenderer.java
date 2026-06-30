@@ -51,7 +51,7 @@ public class HydraHeadRenderer extends TFPartRenderer<HydraHead, HydraHeadRender
 		Vec3 vec3 = state.nameTagAttachment;
 		if (vec3 != null && state.nameTag != null) {
 			Vec3 adjusted = vec3.add(0.0D, 0.5D, 0.0D);
-			nodeCollector.submitNameTag(stack, adjusted, 0, state.nameTag, !state.isDiscrete, state.lightCoords, state.distanceToCameraSq, cameraRenderState);
+			nodeCollector.submitNameTag(stack, adjusted, 0, state.nameTag, !state.isDiscrete, state.lightCoords, cameraRenderState);
 		}
 	}
 

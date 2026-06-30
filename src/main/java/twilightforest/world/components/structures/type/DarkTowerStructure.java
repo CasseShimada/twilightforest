@@ -8,6 +8,7 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.MobSpawnSettings;
@@ -53,10 +54,10 @@ public class DarkTowerStructure extends ControlledSpawningStructure {
 		return new DarkTowerStructure(
 			ControlledSpawningConfig.create(List.of(List.of(
 				weightedSpawn(TFEntities.CARMINITE_GOLEM.get(), 10, 1, 2),
-				weightedSpawn(EntityType.SKELETON, 10, 1, 2),
-				weightedSpawn(EntityType.CREEPER, 5, 1, 1),
-				weightedSpawn(EntityType.ENDERMAN, 2, 1, 2),
-				weightedSpawn(EntityType.WITCH, 1, 1, 1),
+				weightedSpawn(EntityTypes.SKELETON, 10, 1, 2),
+				weightedSpawn(EntityTypes.CREEPER, 5, 1, 1),
+				weightedSpawn(EntityTypes.ENDERMAN, 2, 1, 2),
+				weightedSpawn(EntityTypes.WITCH, 1, 1, 1),
 				weightedSpawn(TFEntities.CARMINITE_GHASTLING.get(), 10, 1, 2),
 				weightedSpawn(TFEntities.CARMINITE_BROODLING.get(), 10, 4, 4),
 				weightedSpawn(TFEntities.PINCH_BEETLE.get(), 10, 1, 1)
@@ -65,7 +66,7 @@ public class DarkTowerStructure extends ControlledSpawningStructure {
 				weightedSpawn(TFEntities.CARMINITE_GHASTGUARD.get(), 10, 1, 2)
 			)), List.of(), List.of(
 				// aquarium squids (only in aquariums between y = 35 and y = 64. :/
-				weightedSpawn(EntityType.SQUID, 10, 4, 4)
+				weightedSpawn(EntityTypes.SQUID, 10, 4, 4)
 			)),
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_knights"))),
 			new HintConfig(HintConfig.book("darktower", 3), TFEntities.KOBOLD.get()),

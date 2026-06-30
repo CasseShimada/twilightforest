@@ -148,6 +148,6 @@ public class LichModel extends HumanoidModel<LichRenderState> implements TrophyB
 	@Override
 	public void submitTrophy(PoseStack stack, SubmitNodeCollector nodeCollector, int light, int overlay, int color, ItemDisplayContext context, @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress) {
 		stack.translate(0.0F, 0.25F, 0.0F);
-		nodeCollector.submitModelPart(this.head, stack, RenderTypes.entityCutout(LichRenderer.TEXTURE), light, overlay, null, false, false, color, breakProgress, 0);
+		nodeCollector.submitModelPart(this.head, stack, RenderTypes.entityCutout(LichRenderer.TEXTURE), light, overlay, null, color, breakProgress, 0);
 	}
 }

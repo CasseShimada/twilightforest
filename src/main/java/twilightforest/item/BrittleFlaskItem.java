@@ -118,8 +118,8 @@ public class BrittleFlaskItem extends Item {
 						if (mobeffectinstance.is(MobEffects.INSTANT_DAMAGE) != entity.isInvertedHealAndHarm() && mobeffectinstance.getAmplifier() > 0) {
 							//custom harming death message for the advancement
 							entity.hurt(entity.damageSources().source(TFDamageTypes.FAILED_CHALLENGE), (float)(6 << mobeffectinstance.getAmplifier()));
-						} else if (mobeffectinstance.getEffect().value().isInstantenous()) {
-							mobeffectinstance.getEffect().value().applyInstantenousEffect(serverLevel, player, player, player, mobeffectinstance.getAmplifier(), 1.0D);
+						} else if (mobeffectinstance.getEffect().value().isInstantaneous()) {
+							mobeffectinstance.getEffect().value().applyInstantaneousEffect(serverLevel, player, player, player, mobeffectinstance.getAmplifier(), 1.0D);
 						} else {
 							player.addEffect(new MobEffectInstance(mobeffectinstance));
 						}

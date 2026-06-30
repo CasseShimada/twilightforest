@@ -34,7 +34,7 @@ public class FallingIceRenderer extends EntityRenderer<FallingIce, FallingBlockR
 		if (blockState.getRenderShape() == RenderShape.MODEL) {
 			poseStack.pushPose();
 			poseStack.translate(-0.5D, 0.0, -0.5D);
-			nodeCollector.submitMovingBlock(poseStack, state.movingBlockRenderState);
+			nodeCollector.submitMovingBlock(poseStack, state.movingBlockRenderState, 0);
 			poseStack.popPose();
 			super.submit(state, poseStack, nodeCollector, cameraRenderState);
 		}

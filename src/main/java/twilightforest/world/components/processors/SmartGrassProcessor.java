@@ -9,14 +9,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFStructureProcessors;
 import twilightforest.util.RotationUtil;
 
-public class SmartGrassProcessor extends StructureProcessor {
+public class SmartGrassProcessor implements StructureProcessor {
 	public static final SmartGrassProcessor INSTANCE = new SmartGrassProcessor();
 	public static final MapCodec<SmartGrassProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
@@ -25,8 +24,8 @@ public class SmartGrassProcessor extends StructureProcessor {
 
 	@Nullable
 	@Override
-	public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos origin, BlockPos centerBottom, StructureTemplate.StructureBlockInfo originalBlockInfo, StructureTemplate.StructureBlockInfo modifiedBlockInfo, StructurePlaceSettings settings) {
-		if (originalBlockInfo.state().getBlock() != Blocks.GRASS_BLOCK)
+	public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos origin, BlockPos centerBottom, BlockPos originalPos, StructureTemplate.StructureBlockInfo modifiedBlockInfo, StructurePlaceSettings settings) {
+		if (modifiedBlockInfo.state().getBlock() != Blocks.GRASS_BLOCK)
 			return modifiedBlockInfo;
 
 		if (level.getBlockState(modifiedBlockInfo.pos()).is(BlockTags.DIRT) || !level.isEmptyBlock(modifiedBlockInfo.pos().above()))
@@ -47,7 +46,7 @@ public class SmartGrassProcessor extends StructureProcessor {
 	}
 
 	@Override
-	protected StructureProcessorType<?> getType() {
+	public MapCodec<SmartGrassProcessor> codec() {
 		return TFStructureProcessors.SMART_GRASS.get();
 	}
 }

@@ -59,7 +59,7 @@ public class IceLayer<S extends LivingEntityRenderState, M extends EntityModel<S
 			MovingBlockRenderState iceState = new MovingBlockRenderState();
 			BlockPos pos = BlockPos.containing(state.x, state.y, state.z);
 			RenderStateUtil.populateMovingBlockRenderState(iceState, Blocks.ICE.defaultBlockState(), Minecraft.getInstance().level, pos, pos);
-			nodeCollector.submitMovingBlock(poseStack, iceState);
+			nodeCollector.submitMovingBlock(poseStack, iceState, 0);
 			poseStack.popPose();
 		}
 	}

@@ -1,5 +1,6 @@
 package twilightforest.client.renderer;
 
+import com.mojang.blaze3d.PrimitiveTopology;
 import com.mojang.blaze3d.buffers.GpuBuffer;
 import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.pipeline.RenderTarget;
@@ -12,7 +13,6 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -27,8 +27,8 @@ import org.joml.Matrix4fStack;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import java.util.Optional;
 import java.util.OptionalDouble;
-import java.util.OptionalInt;
 import twilightforest.mixin.client.accessor.LevelRendererAccessor;
 
 public final class TFSkyRenderer implements AutoCloseable {
@@ -84,7 +84,7 @@ public final class TFSkyRenderer implements AutoCloseable {
 		RandomSource random = RandomSource.create(STAR_SEED);
 		int bytes = DefaultVertexFormat.POSITION.getVertexSize() * STAR_COUNT * 4;
 		ByteBufferBuilder byteBuffer = ByteBufferBuilder.exactlySized(bytes);
-		BufferBuilder builder = new BufferBuilder(byteBuffer, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
+		BufferBuilder builder = new BufferBuilder(byteBuffer, PrimitiveTopology.QUADS, DefaultVertexFormat.POSITION);
 
 		buildStars(builder, random);
 
@@ -130,11 +130,11 @@ public final class TFSkyRenderer implements AutoCloseable {
 		modelView.pushMatrix();
 		modelView.mul(stack.last().pose());
 
-		RenderTarget target = Minecraft.getInstance().getMainRenderTarget();
+		RenderTarget target = Minecraft.getInstance().gameRenderer.mainRenderTarget();
 		var color = target.getColorTextureView();
 		var depth = target.getDepthTextureView();
 
-		var quadIndices = RenderSystem.getSequentialBuffer(VertexFormat.Mode.QUADS);
+		var quadIndices = RenderSystem.getSequentialBuffer(PrimitiveTopology.QUADS);
 		GpuBuffer indexBuffer = quadIndices.getBuffer(starIndexCount);
 
 		GpuBufferSlice transforms = RenderSystem.getDynamicUniforms().writeTransform(
@@ -145,13 +145,13 @@ public final class TFSkyRenderer implements AutoCloseable {
 		);
 
 		CommandEncoder encoder = RenderSystem.getDevice().createCommandEncoder();
-		try (RenderPass pass = encoder.createRenderPass(() -> "twilightforest_stars", color, OptionalInt.empty(), depth, OptionalDouble.empty())) {
+		try (RenderPass pass = encoder.createRenderPass(() -> "twilightforest_stars", color, Optional.empty(), depth, OptionalDouble.empty())) {
 			pass.setPipeline(RenderPipelines.STARS);
 			RenderSystem.bindDefaultUniforms(pass);
 			pass.setUniform("DynamicTransforms", transforms);
-			pass.setVertexBuffer(0, starVertexBuffer);
+			pass.setVertexBuffer(0, starVertexBuffer.slice());
 			pass.setIndexBuffer(indexBuffer, quadIndices.type());
-			pass.drawIndexed(0, 0, starIndexCount, 1);
+			pass.drawIndexed(0, 0, starIndexCount, 1, 0);
 		}
 
 		setupFog.run();

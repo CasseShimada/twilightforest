@@ -8,7 +8,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.block.BanisterBlock;
@@ -17,7 +16,7 @@ import twilightforest.init.TFStructureProcessors;
 import java.util.Collections;
 import java.util.List;
 
-public class VerticalDecayProcessor extends StructureProcessor {
+public class VerticalDecayProcessor implements StructureProcessor {
 	public static final MapCodec<VerticalDecayProcessor> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
 		Block.CODEC.codec().listOf().fieldOf("decay_blocks").forGetter(VerticalDecayProcessor::getDecayBlocks),
 		Codec.FLOAT.fieldOf("decay_chance").forGetter(p -> p.decayChance)
@@ -33,7 +32,7 @@ public class VerticalDecayProcessor extends StructureProcessor {
 
 	@Nullable
 	@Override
-	public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos offset, BlockPos piecePos, StructureTemplate.StructureBlockInfo originalInfo, StructureTemplate.StructureBlockInfo modifiedInfo, StructurePlaceSettings placeSettings) {
+	public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos offset, BlockPos piecePos, BlockPos originalPos, StructureTemplate.StructureBlockInfo modifiedInfo, StructurePlaceSettings placeSettings) {
 		Block block = modifiedInfo.state().getBlock();
 		if (this.decayBlocks.contains(block)) {
 			// Banister Blocks should use RNG from below block pos, to match the absence of block below itself
@@ -53,7 +52,7 @@ public class VerticalDecayProcessor extends StructureProcessor {
 	}
 
 	@Override
-	protected StructureProcessorType<VerticalDecayProcessor> getType() {
+	public MapCodec<VerticalDecayProcessor> codec() {
 		return TFStructureProcessors.VERTICAL_DECAY.value();
 	}
 }

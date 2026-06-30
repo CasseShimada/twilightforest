@@ -65,7 +65,7 @@ public class CandelabraRenderer<T extends CandelabraBlockEntity> implements Bloc
 			if (!candle.isAir()) {
 				MovingBlockRenderState candleState = new MovingBlockRenderState();
 				RenderStateUtil.populateMovingBlockRenderState(candleState, candle, Minecraft.getInstance().level, BlockPos.ZERO, BlockPos.ZERO);
-				nodeCollector.submitMovingBlock(stack, candleState);
+				nodeCollector.submitMovingBlock(stack, candleState, 0);
 			}
 			stack.popPose();
 		}

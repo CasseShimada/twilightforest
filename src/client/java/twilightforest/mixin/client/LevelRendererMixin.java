@@ -44,7 +44,7 @@ public class LevelRendererMixin {
 			return;
 		}
 
-		Camera camera = mc.gameRenderer.getMainCamera();
+		Camera camera = mc.gameRenderer.mainCamera();
 		float partialTicks = mc.getDeltaTracker().getGameTimeDeltaPartialTick(false);
 		TFSkyRenderer.renderSky(mc.level, partialTicks, camera, () -> RenderSystem.setShaderFog(fog));
 		ci.cancel();

@@ -76,7 +76,7 @@ public class MinoshroomRenderer extends HumanoidMobRenderer<Minoshroom, Minoshro
 					stack.mulPose(Axis.YP.rotationDegrees(-48.0F));
 					stack.scale(-1.0F, -1.0F, 1.0F);
 					stack.translate(-0.5D, -0.5D, -0.5D);
-					nodeCollector.submitMovingBlock(stack, mushroomState);
+					nodeCollector.submitMovingBlock(stack, mushroomState, 0);
 					stack.popPose();
 					stack.pushPose();
 					this.getParentModel().cowTorso.translateAndRotate(stack);
@@ -87,7 +87,7 @@ public class MinoshroomRenderer extends HumanoidMobRenderer<Minoshroom, Minoshro
 					stack.mulPose(Axis.YP.rotationDegrees(-48.0F));
 					stack.scale(-1.0F, -1.0F, 1.0F);
 					stack.translate(-0.5D, -0.5D, -0.5D);
-					nodeCollector.submitMovingBlock(stack, mushroomState);
+					nodeCollector.submitMovingBlock(stack, mushroomState, 0);
 					stack.popPose();
 					stack.pushPose();
 					this.getParentModel().head.translateAndRotate(stack);
@@ -96,7 +96,7 @@ public class MinoshroomRenderer extends HumanoidMobRenderer<Minoshroom, Minoshro
 					stack.mulPose(Axis.YP.rotationDegrees(-78.0F));
 					stack.scale(-1.0F, -1.0F, 1.0F);
 					stack.translate(-0.5D, -0.5D, -0.5D);
-					nodeCollector.submitMovingBlock(stack, mushroomState);
+					nodeCollector.submitMovingBlock(stack, mushroomState, 0);
 					stack.popPose();
 				}
 			}

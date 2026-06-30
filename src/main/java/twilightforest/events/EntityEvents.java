@@ -98,7 +98,7 @@ public class EntityEvents {
 		EntityTransformation dataMap = TFDataMaps.getOminousFire(victim.getType());
 
 		if (victim instanceof ServerPlayer player) {
-			var zombie = EntityType.ZOMBIE.create(player.level(), EntitySpawnReason.CONVERSION);
+			var zombie = EntityTypes.ZOMBIE.create(player.level(), EntitySpawnReason.CONVERSION);
 			TFDataAttachments.set(zombie, TFDataAttachments.ZOMBIFIED_PLAYER, player.getGameProfile());
 			zombie.copyPosition(player);
 			zombie.setCanPickUpLoot(true);

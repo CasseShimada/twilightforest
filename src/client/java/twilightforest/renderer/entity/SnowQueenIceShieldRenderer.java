@@ -26,7 +26,7 @@ public class SnowQueenIceShieldRenderer extends EntityRenderer<SnowQueenIceShiel
 		MovingBlockRenderState blockState = new MovingBlockRenderState();
 		BlockPos pos = BlockPos.containing(state.x, state.y, state.z);
 		RenderStateUtil.populateMovingBlockRenderState(blockState, Blocks.PACKED_ICE.defaultBlockState(), Minecraft.getInstance().level, pos, pos);
-		nodeCollector.submitMovingBlock(poseStack, blockState);
+		nodeCollector.submitMovingBlock(poseStack, blockState, 0);
 		poseStack.popPose();
 		super.submit(state, poseStack, nodeCollector, cameraRenderState);
 	}

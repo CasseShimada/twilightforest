@@ -167,7 +167,7 @@ public class SlideBlock extends Entity {
 			if (this.level() instanceof ServerLevel level && entity instanceof LivingEntity living && living.hurtServer(level, level.damageSources().source(TFDamageTypes.SLIDER), 5.0F)) {
 				double kx = (this.getX() - entity.getX()) * 2.0D;
 				double kz = (this.getZ() - entity.getZ()) * 2.0D;
-				living.knockback(2.0F, kx, kz);
+				living.knockback(2.0F, kx, kz, level.damageSources().source(TFDamageTypes.SLIDER), 5.0F);
 			}
 		}
 	}

@@ -39,18 +39,18 @@ public class MiscEvents {
 	public static void addPrey(Mob mob) {
 		EntityType<?> type = mob.getType();
 		var targetSelector = ((MobAccessor) mob).twilightforest$getTargetSelector();
-		if (type == EntityType.CAT) {
+		if (type == EntityTypes.CAT) {
 			targetSelector.addGoal(1, new NonTameRandomTargetGoal<>((TamableAnimal) mob, DwarfRabbit.class, true, null));
 			targetSelector.addGoal(1, new NonTameRandomTargetGoal<>((TamableAnimal) mob, Squirrel.class, true, null));
 			targetSelector.addGoal(1, new NonTameRandomTargetGoal<>((TamableAnimal) mob, TinyBird.class, true, null));
-		} else if (type == EntityType.OCELOT) {
+		} else if (type == EntityTypes.OCELOT) {
 			targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(mob, DwarfRabbit.class, true));
 			targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(mob, Squirrel.class, true));
 			targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(mob, TinyBird.class, true));
-		} else if (type == EntityType.FOX) {
+		} else if (type == EntityTypes.FOX) {
 			targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(mob, DwarfRabbit.class, true));
 			targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(mob, Squirrel.class, true));
-		} else if (type == EntityType.WOLF) {
+		} else if (type == EntityTypes.WOLF) {
 			targetSelector.addGoal(7, new NonTameRandomTargetGoal<>((TamableAnimal) mob, DwarfRabbit.class, true, null));
 			targetSelector.addGoal(7, new NonTameRandomTargetGoal<>((TamableAnimal) mob, Squirrel.class, true, null));
 			targetSelector.addGoal(7, new NonTameRandomTargetGoal<>((TamableAnimal) mob, Bighorn.class, true, null));

@@ -9,13 +9,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import twilightforest.init.TFStructureProcessors;
 
 import java.util.HashSet;
 
-public final class CourtyardTerraceTemplateProcessor extends StructureProcessor {
+public final class CourtyardTerraceTemplateProcessor implements StructureProcessor {
 	public static final CourtyardTerraceTemplateProcessor INSTANCE = new CourtyardTerraceTemplateProcessor();
 	public static final MapCodec<CourtyardTerraceTemplateProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
@@ -33,7 +32,7 @@ public final class CourtyardTerraceTemplateProcessor extends StructureProcessor 
 	}
 
 	@Override
-	public StructureTemplate.StructureBlockInfo processBlock(LevelReader world, BlockPos pos, BlockPos piecepos, StructureTemplate.StructureBlockInfo oldinfo, StructureTemplate.StructureBlockInfo newInfo, StructurePlaceSettings settings) {
+	public StructureTemplate.StructureBlockInfo processBlock(LevelReader world, BlockPos pos, BlockPos piecepos, BlockPos originalPos, StructureTemplate.StructureBlockInfo newInfo, StructurePlaceSettings settings) {
 		BlockState newState = newInfo.state();
 
 		if (newState.getBlock() == Blocks.SANDSTONE_SLAB) {
@@ -58,7 +57,7 @@ public final class CourtyardTerraceTemplateProcessor extends StructureProcessor 
 	}
 
 	@Override
-	public StructureProcessorType<?> getType() {
+	public MapCodec<CourtyardTerraceTemplateProcessor> codec() {
 		return TFStructureProcessors.COURTYARD_TERRACE.get();
 	}
 }

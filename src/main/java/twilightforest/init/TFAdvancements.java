@@ -1,6 +1,6 @@
 package twilightforest.init;
 
-import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.advancements.triggers.CriterionTrigger;
 import net.minecraft.core.registries.Registries;
 import twilightforest.util.registry.DeferredHolder;
 import twilightforest.util.registry.DeferredRegister;

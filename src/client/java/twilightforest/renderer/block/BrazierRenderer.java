@@ -57,7 +57,7 @@ public class BrazierRenderer implements BlockEntityRenderer<BrazierBlockEntity, 
 		if (lit.isLit() && y > 0.0F) {
 			MovingBlockRenderState fireState = new MovingBlockRenderState();
 			RenderStateUtil.populateMovingBlockRenderState(fireState, fire, Minecraft.getInstance().level, renderState.blockPos, renderState.blockPos);
-			nodeCollector.submitMovingBlock(poseStack, fireState);
+			nodeCollector.submitMovingBlock(poseStack, fireState, 0);
 		}
 		poseStack.popPose();
 

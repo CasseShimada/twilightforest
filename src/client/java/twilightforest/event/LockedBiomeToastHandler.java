@@ -33,7 +33,7 @@ public class LockedBiomeToastHandler {
 			if (restriction.isPresent() && restriction.get().lockedBiomeToast() != null) {
 				timeUntilToast--;
 				if (!shownToast && timeUntilToast <= 0) {
-					client.getToastManager().addToast(new LockedBiomeToast(restriction.get().lockedBiomeToast()));
+					client.gui.toastManager().addToast(new LockedBiomeToast(restriction.get().lockedBiomeToast()));
 					shownToast = true;
 				}
 			} else {

@@ -9,6 +9,7 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.MobSpawnSettings;
@@ -66,10 +67,10 @@ public class LabyrinthStructure extends ControlledSpawningStructure implements C
 		return new LabyrinthStructure(
 			ControlledSpawningConfig.justMonsters(List.of(List.of(
 				weightedSpawn(TFEntities.MINOTAUR.get(), 20, 2, 3),
-				weightedSpawn(EntityType.CAVE_SPIDER, 10, 1, 2),
-				weightedSpawn(EntityType.CREEPER, 10, 1, 2),
+				weightedSpawn(EntityTypes.CAVE_SPIDER, 10, 1, 2),
+				weightedSpawn(EntityTypes.CREEPER, 10, 1, 2),
 				weightedSpawn(TFEntities.MAZE_SLIME.get(), 10, 2, 4),
-				weightedSpawn(EntityType.ENDERMAN, 1, 1, 2),
+				weightedSpawn(EntityTypes.ENDERMAN, 1, 1, 2),
 				weightedSpawn(TFEntities.FIRE_BEETLE.get(), 10, 1, 2),
 				weightedSpawn(TFEntities.SLIME_BEETLE.get(), 10, 1, 2),
 				weightedSpawn(TFEntities.PINCH_BEETLE.get(), 10, 1, 1)

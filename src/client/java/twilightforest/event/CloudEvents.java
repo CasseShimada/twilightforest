@@ -6,7 +6,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.minecraft.client.GraphicsPreset;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -16,6 +15,7 @@ import net.minecraft.server.level.ParticleStatus;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -171,7 +171,6 @@ public class CloudEvents {
 		int floorZ = Mth.floor(camZ);
 
 		int renderDistance = useFancyGraphics(minecraft) ? 10 : 5;
-		VertexConsumer buffer = context.bufferSource().getBuffer(RenderTypes.entityTranslucent(TFWeatherRenderer.RAIN_TEXTURES));
 		BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
 
 		for (PrecipitationRenderHelper helper : RENDER_HELPER) {
@@ -199,24 +198,25 @@ public class CloudEvents {
 			float alpha = ((1.0F - distance * distance) * 0.5F + 0.5F) * helper.precipitationLevel();
 
 			mutableBlockPos.set(roofX, Math.max(helper.rainOnY(), floorY), roofZ);
-			int lightColor = LevelRenderer.getLightCoords(minecraft.level, mutableBlockPos);
-
-			buffer.addVertex((float) (roofX - camX - rainX + 0.5D), (float) (topY - camY), (float) (roofZ - camZ - rainZ + 0.5D))
-				.setUv(0.0F, (float) botY * 0.25F + uvOffset)
-				.setColor(1.0F, 1.0F, 1.0F, alpha)
-				.setLight(lightColor);
-			buffer.addVertex((float) (roofX - camX + rainX + 0.5D), (float) (topY - camY), (float) (roofZ - camZ + rainZ + 0.5D))
-				.setUv(1.0F, (float) botY * 0.25F + uvOffset)
-				.setColor(1.0F, 1.0F, 1.0F, alpha)
-				.setLight(lightColor);
-			buffer.addVertex((float) (roofX - camX + rainX + 0.5D), (float) (botY - camY), (float) (roofZ - camZ + rainZ + 0.5D))
-				.setUv(1.0F, (float) topY * 0.25F + uvOffset)
-				.setColor(1.0F, 1.0F, 1.0F, alpha)
-				.setLight(lightColor);
-			buffer.addVertex((float) (roofX - camX - rainX + 0.5D), (float) (botY - camY), (float) (roofZ - camZ - rainZ + 0.5D))
-				.setUv(0.0F, (float) topY * 0.25F + uvOffset)
-				.setColor(1.0F, 1.0F, 1.0F, alpha)
-				.setLight(lightColor);
+			int lightColor = LightCoordsUtil.getLightCoords(minecraft.level, mutableBlockPos);
+			context.submitNodeCollector().submitCustomGeometry(context.poseStack(), RenderTypes.entityTranslucent(TFWeatherRenderer.RAIN_TEXTURES), (pose, buffer) -> {
+				buffer.addVertex((float) (roofX - camX - rainX + 0.5D), (float) (topY - camY), (float) (roofZ - camZ - rainZ + 0.5D))
+					.setUv(0.0F, (float) botY * 0.25F + uvOffset)
+					.setColor(1.0F, 1.0F, 1.0F, alpha)
+					.setLight(lightColor);
+				buffer.addVertex((float) (roofX - camX + rainX + 0.5D), (float) (topY - camY), (float) (roofZ - camZ + rainZ + 0.5D))
+					.setUv(1.0F, (float) botY * 0.25F + uvOffset)
+					.setColor(1.0F, 1.0F, 1.0F, alpha)
+					.setLight(lightColor);
+				buffer.addVertex((float) (roofX - camX + rainX + 0.5D), (float) (botY - camY), (float) (roofZ - camZ + rainZ + 0.5D))
+					.setUv(1.0F, (float) topY * 0.25F + uvOffset)
+					.setColor(1.0F, 1.0F, 1.0F, alpha)
+					.setLight(lightColor);
+				buffer.addVertex((float) (roofX - camX - rainX + 0.5D), (float) (botY - camY), (float) (roofZ - camZ - rainZ + 0.5D))
+					.setUv(0.0F, (float) topY * 0.25F + uvOffset)
+					.setColor(1.0F, 1.0F, 1.0F, alpha)
+					.setLight(lightColor);
+			});
 		}
 	}
 

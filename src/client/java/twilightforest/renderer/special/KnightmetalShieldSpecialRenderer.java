@@ -29,8 +29,8 @@ public record KnightmetalShieldSpecialRenderer(SpriteGetter sprites, Knightmetal
 
 		Identifier atlas = SHIELD_BASE.atlasLocation();
 		TextureAtlasSprite sprite = this.sprites.get(SHIELD_BASE);
-		nodeCollector.submitModelPart(this.model.handle(), poseStack, this.model.renderType(atlas), packedLight, packedOverlay, sprite, false, hasFoil, -1, null, outlineColor);
-		nodeCollector.submitModelPart(this.model.plate(), poseStack, this.model.renderType(atlas), packedLight, packedOverlay, sprite, false, hasFoil, -1, null, outlineColor);
+		nodeCollector.submitModelPart(this.model.handle(), poseStack, this.model.renderType(atlas), packedLight, packedOverlay, sprite, -1, null, outlineColor);
+		nodeCollector.submitModelPart(this.model.plate(), poseStack, this.model.renderType(atlas), packedLight, packedOverlay, sprite, -1, null, outlineColor);
 		poseStack.popPose();
 	}
 

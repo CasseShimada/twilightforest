@@ -29,7 +29,7 @@ public class MinecraftMusicMixin {
 			return;
 		}
 
-		Camera camera = mc.gameRenderer.getMainCamera();
+		Camera camera = mc.gameRenderer.mainCamera();
 		BackgroundMusic backgroundMusic = camera.attributeProbe().getValue(EnvironmentAttributes.BACKGROUND_MUSIC, mc.getDeltaTracker().getGameTimeDeltaPartialTick(false));
 		if (backgroundMusic == null) {
 			return;

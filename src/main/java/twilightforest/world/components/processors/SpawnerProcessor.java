@@ -19,7 +19,6 @@ import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFBlocks;
@@ -29,7 +28,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @SuppressWarnings("OptionalIsPresent")
-public class SpawnerProcessor extends StructureProcessor {
+public class SpawnerProcessor implements StructureProcessor {
 	public static final MapCodec<SpawnerProcessor> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
 		Codec.SHORT.optionalFieldOf("range").forGetter(SpawnerProcessor::serializeRange),
 		Codec.FLOAT.optionalFieldOf("start_delay_factor").forGetter(SpawnerProcessor::getDelayFactor),
@@ -69,7 +68,7 @@ public class SpawnerProcessor extends StructureProcessor {
 
 	@Nullable
 	@Override
-	public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos offset, BlockPos piecePos, StructureTemplate.StructureBlockInfo originalInfo, StructureTemplate.StructureBlockInfo modifiedInfo, StructurePlaceSettings placeSettings) {
+	public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos offset, BlockPos piecePos, BlockPos originalPos, StructureTemplate.StructureBlockInfo modifiedInfo, StructurePlaceSettings placeSettings) {
 		CompoundTag nbtInfo = modifiedInfo.nbt();
 
 		if (nbtInfo != null && (modifiedInfo.state().is(Blocks.SPAWNER) || modifiedInfo.state().is(TFBlocks.SINISTER_SPAWNER.get()))) {
@@ -128,7 +127,7 @@ public class SpawnerProcessor extends StructureProcessor {
 	}
 
 	@Override
-	protected StructureProcessorType<?> getType() {
+	public MapCodec<SpawnerProcessor> codec() {
 		return TFStructureProcessors.SPAWNER_PROCESSOR.value();
 	}
 

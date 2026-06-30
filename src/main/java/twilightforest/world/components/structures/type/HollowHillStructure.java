@@ -11,6 +11,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.MobSpawnSettings;
@@ -96,8 +97,8 @@ public class HollowHillStructure extends LandmarkStructure implements Configurab
 		return new HollowHillStructure(
 			1,
 			ControlledSpawningConfig.create(List.of(List.of(
-				weightedSpawn(EntityType.SPIDER, 10, 4, 4),
-				weightedSpawn(EntityType.ZOMBIE, 10, 4, 4),
+				weightedSpawn(EntityTypes.SPIDER, 10, 4, 4),
+				weightedSpawn(EntityTypes.ZOMBIE, 10, 4, 4),
 				weightedSpawn(TFEntities.REDCAP.get(), 10, 4, 4),
 				weightedSpawn(TFEntities.SWARM_SPIDER.get(), 10, 4, 4),
 				weightedSpawn(TFEntities.KOBOLD.get(), 10, 4, 8)
@@ -121,13 +122,13 @@ public class HollowHillStructure extends LandmarkStructure implements Configurab
 				weightedSpawn(TFEntities.REDCAP.get(), 10, 1, 2),
 				weightedSpawn(TFEntities.REDCAP_SAPPER.get(), 1, 1, 2),
 				weightedSpawn(TFEntities.KOBOLD.get(), 10, 2, 4),
-				weightedSpawn(EntityType.SKELETON, 10, 2, 3),
+				weightedSpawn(EntityTypes.SKELETON, 10, 2, 3),
 				weightedSpawn(TFEntities.SWARM_SPIDER.get(), 10, 2, 4),
-				weightedSpawn(EntityType.SPIDER, 10, 1, 3),
-				weightedSpawn(EntityType.CREEPER, 10, 1, 2),
+				weightedSpawn(EntityTypes.SPIDER, 10, 1, 3),
+				weightedSpawn(EntityTypes.CREEPER, 10, 1, 2),
 				weightedSpawn(TFEntities.FIRE_BEETLE.get(), 5, 1, 1),
 				weightedSpawn(TFEntities.SLIME_BEETLE.get(), 5, 1, 1),
-				weightedSpawn(EntityType.WITCH, 1, 1, 1)
+				weightedSpawn(EntityTypes.WITCH, 1, 1, 1)
 			)), List.of(), List.of()),
 			context.lookup(TFRegistries.Keys.STRUCTURE_SPELEOTHEM_SETTINGS).getOrThrow(StructureSpeleothemConfigs.MEDIUM_HILL),
 			new DecorationConfig(2, true, false, false),
@@ -147,15 +148,15 @@ public class HollowHillStructure extends LandmarkStructure implements Configurab
 			ControlledSpawningConfig.justMonsters(List.of(List.of(
 				weightedSpawn(TFEntities.REDCAP.get(), 10, 2, 4),
 				weightedSpawn(TFEntities.REDCAP_SAPPER.get(), 2, 1, 2),
-				weightedSpawn(EntityType.SKELETON, 10, 2, 3),
-				weightedSpawn(EntityType.CAVE_SPIDER, 10, 1, 2),
-				weightedSpawn(EntityType.CREEPER, 10, 1, 1),
-				weightedSpawn(EntityType.ENDERMAN, 1, 1, 1),
+				weightedSpawn(EntityTypes.SKELETON, 10, 2, 3),
+				weightedSpawn(EntityTypes.CAVE_SPIDER, 10, 1, 2),
+				weightedSpawn(EntityTypes.CREEPER, 10, 1, 1),
+				weightedSpawn(EntityTypes.ENDERMAN, 1, 1, 1),
 				weightedSpawn(TFEntities.WRAITH.get(), 2, 1, 2),
 				weightedSpawn(TFEntities.FIRE_BEETLE.get(), 10, 1, 2),
 				weightedSpawn(TFEntities.SLIME_BEETLE.get(), 10, 1, 2),
 				weightedSpawn(TFEntities.PINCH_BEETLE.get(), 10, 1, 2),
-				weightedSpawn(EntityType.WITCH, 1, 1, 1)
+				weightedSpawn(EntityTypes.WITCH, 1, 1, 1)
 			))),
 			context.lookup(TFRegistries.Keys.STRUCTURE_SPELEOTHEM_SETTINGS).getOrThrow(StructureSpeleothemConfigs.LARGE_HILL),
 			new DecorationConfig(3, true, false, false),

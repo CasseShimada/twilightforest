@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.MobSpawnSettings;
@@ -61,8 +62,8 @@ public class KnightStrongholdStructure extends ControlledSpawningStructure {
 				weightedSpawn(TFEntities.SLIME_BEETLE.get(), 10, 2, 3),
 				weightedSpawn(TFEntities.REDCAP_SAPPER.get(), 2, 1, 2),
 				weightedSpawn(TFEntities.KOBOLD.get(), 10, 2, 4),
-				weightedSpawn(EntityType.CREEPER, 5, 1, 2),
-				weightedSpawn(EntityType.SLIME, 5, 4, 4)
+				weightedSpawn(EntityTypes.CREEPER, 5, 1, 2),
+				weightedSpawn(EntityTypes.SLIME, 5, 4, 4)
 			))),
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_trophy_pedestal"))),
 			new HintConfig(HintConfig.book("tfstronghold", 4), TFEntities.KOBOLD.get()),

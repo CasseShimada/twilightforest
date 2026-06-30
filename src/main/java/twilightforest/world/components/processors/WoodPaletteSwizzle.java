@@ -7,14 +7,13 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFStructureProcessors;
 import twilightforest.init.custom.WoodPalettes;
 import twilightforest.util.woods.WoodPalette;
 
-public final class WoodPaletteSwizzle extends StructureProcessor {
+public final class WoodPaletteSwizzle implements StructureProcessor {
 	private final Holder<WoodPalette> targetPalette;
 	private final Holder<WoodPalette> replacementPalette;
 
@@ -29,12 +28,12 @@ public final class WoodPaletteSwizzle extends StructureProcessor {
 	}
 
 	@Override
-	public StructureTemplate.StructureBlockInfo processBlock(LevelReader worldIn, BlockPos pos, BlockPos piecepos, StructureTemplate.StructureBlockInfo p_215194_3_, StructureTemplate.StructureBlockInfo blockInfo, StructurePlaceSettings settings) {
+	public StructureTemplate.StructureBlockInfo processBlock(LevelReader worldIn, BlockPos pos, BlockPos piecepos, BlockPos originalPos, StructureTemplate.StructureBlockInfo blockInfo, StructurePlaceSettings settings) {
 		return this.replacementPalette.value().modifyBlockWithType(this.targetPalette.value(), blockInfo);
 	}
 
 	@Override
-	protected StructureProcessorType<?> getType() {
+	public MapCodec<WoodPaletteSwizzle> codec() {
 		return TFStructureProcessors.PLANK_SWIZZLE.get();
 	}
 }

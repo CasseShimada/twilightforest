@@ -679,7 +679,7 @@ public class Hydra extends BaseTFBoss implements TFMultipartEntity {
 	}
 
 	@Override
-	public void knockback(double strength, double xRatio, double zRatio) {
+	public void knockback(double strength, double xRatio, double zRatio, DamageSource source, float damage) {
 	}
 
 	@Override

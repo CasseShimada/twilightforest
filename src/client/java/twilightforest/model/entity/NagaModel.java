@@ -43,7 +43,7 @@ public class NagaModel<T extends EntityRenderState> extends EntityModel<T> imple
 		stack.scale(0.5F, 0.5F, 0.5F);
 		stack.translate(0.0F, -0.25F, 0.0F);
 
-		nodeCollector.submitModelPart(this.head, stack, RenderTypes.entityCutout(NagaRenderer.TEXTURE), light, overlay, null, false, false, color, breakProgress, 0);
+		nodeCollector.submitModelPart(this.head, stack, RenderTypes.entityCutout(NagaRenderer.TEXTURE), light, overlay, null, color, breakProgress, 0);
 	}
 
 	@Override

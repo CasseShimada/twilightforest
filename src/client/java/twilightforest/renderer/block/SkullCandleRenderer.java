@@ -135,7 +135,7 @@ public class SkullCandleRenderer implements BlockEntityRenderer<SkullCandleBlock
 
 		MovingBlockRenderState candleState = new MovingBlockRenderState();
 		RenderStateUtil.populateMovingBlockRenderState(candleState, candle, net.minecraft.client.Minecraft.getInstance().level, renderState.blockPos, renderState.blockPos);
-		nodeCollector.submitMovingBlock(poseStack, candleState);
+		nodeCollector.submitMovingBlock(poseStack, candleState, 0);
 	}
 
 	private RenderType resolveRenderType(SkullBlock.Type type, @Nullable ResolvableProfile profile) {

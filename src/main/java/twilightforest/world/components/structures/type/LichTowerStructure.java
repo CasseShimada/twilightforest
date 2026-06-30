@@ -12,6 +12,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.Weighted;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.MobSpawnSettings;
@@ -85,12 +86,12 @@ public class LichTowerStructure extends ControlledSpawningStructure implements C
 			weightedSpawn(TFEntities.RISING_ZOMBIE.value(), 2, 1, 2)
 		);
 		List<Weighted<MobSpawnSettings.SpawnerData>> interiorSpawns = List.of(
-			weightedSpawn(EntityType.ZOMBIE, 10, 1, 2),
-			weightedSpawn(EntityType.SKELETON, 10, 1, 2),
-			weightedSpawn(EntityType.CREEPER, 1, 1, 1),
-			weightedSpawn(EntityType.ENDERMAN, 1, 1, 2),
+			weightedSpawn(EntityTypes.ZOMBIE, 10, 1, 2),
+			weightedSpawn(EntityTypes.SKELETON, 10, 1, 2),
+			weightedSpawn(EntityTypes.CREEPER, 1, 1, 1),
+			weightedSpawn(EntityTypes.ENDERMAN, 1, 1, 2),
 			weightedSpawn(TFEntities.DEATH_TOME.value(), 10, 2, 3),
-			weightedSpawn(EntityType.WITCH, 1, 1, 1)
+			weightedSpawn(EntityTypes.WITCH, 1, 1, 1)
 		);
 		monsters = ControlledSpawningConfig.justMonsters(List.of(
 			yardSpawns,

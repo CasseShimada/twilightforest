@@ -51,7 +51,7 @@ public class SlideBlockRenderer extends EntityRenderer<SlideBlock, FallingBlockR
 				poseStack.translate(0.0D, -0.5D, 0.0D);
 			}
 
-			nodeCollector.submitMovingBlock(poseStack, state.movingBlockRenderState);
+			nodeCollector.submitMovingBlock(poseStack, state.movingBlockRenderState, 0);
 			poseStack.popPose();
 			super.submit(state, poseStack, nodeCollector, cameraRenderState);
 		}

@@ -74,7 +74,7 @@ public class OminousCandleRenderer implements BlockEntityRenderer<OminousCandleB
 			poseStack.translate(-offsets.get(i).x, yHeight, -offsets.get(i).y);
 			MovingBlockRenderState candleState = new MovingBlockRenderState();
 			RenderStateUtil.populateMovingBlockRenderState(candleState, candle, this.minecraft.level, renderState.blockPos, renderState.blockPos);
-			nodeCollector.submitMovingBlock(poseStack, candleState);
+			nodeCollector.submitMovingBlock(poseStack, candleState, 0);
 			poseStack.popPose();
 		}
 
