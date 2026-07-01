@@ -28,14 +28,22 @@ import twilightforest.item.MagicMapItem;
 
 import java.io.Reader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class TFDataMaps {
-	private static final Map<Identifier, EntityTransformation> TRANSFORMATION_POWDER = new HashMap<>();
-	private static final Map<Identifier, EntityTransformation> OMINOUS_FIRE = new HashMap<>();
-	private static final Map<Identifier, CrumbledBlock> CRUMBLE_HORN = new HashMap<>();
-	private static final Map<Identifier, MagicMapBiomeColor> MAGIC_MAP_BIOME_COLOR = new HashMap<>();
-	private static final Map<Identifier, OreMapOreColor> ORE_MAP_ORE_COLOR = new HashMap<>();
+	private static final ReloadedDataMap<EntityTransformation> TRANSFORMATION_POWDER = dataMap("entity_type/transformation_powder", EntityTransformation.CODEC);
+	private static final ReloadedDataMap<EntityTransformation> OMINOUS_FIRE = dataMap("entity_type/ominous_fire", EntityTransformation.CODEC);
+	private static final ReloadedDataMap<CrumbledBlock> CRUMBLE_HORN = dataMap("block/crumble_horn", CrumbledBlock.CODEC);
+	private static final ReloadedDataMap<MagicMapBiomeColor> MAGIC_MAP_BIOME_COLOR = dataMap("worldgen/biome/magic_map_color", MagicMapBiomeColor.CODEC);
+	private static final ReloadedDataMap<OreMapOreColor> ORE_MAP_ORE_COLOR = dataMap("block/ore_map_color", OreMapOreColor.CODEC);
+	private static final List<ReloadedDataMap<?>> DATA_MAPS = List.of(
+		CRUMBLE_HORN,
+		ORE_MAP_ORE_COLOR,
+		TRANSFORMATION_POWDER,
+		OMINOUS_FIRE,
+		MAGIC_MAP_BIOME_COLOR
+	);
 
 	private TFDataMaps() {
 	}
@@ -80,44 +88,12 @@ public final class TFDataMaps {
 		return key == null ? null : MAGIC_MAP_BIOME_COLOR.get(key);
 	}
 
-	private static void clear() {
-		TRANSFORMATION_POWDER.clear();
-		OMINOUS_FIRE.clear();
-		CRUMBLE_HORN.clear();
-		MAGIC_MAP_BIOME_COLOR.clear();
-		ORE_MAP_ORE_COLOR.clear();
+	private static <T> ReloadedDataMap<T> dataMap(String path, Codec<T> codec) {
+		return new ReloadedDataMap<>(TwilightForestMod.prefix("data_maps/" + path + ".json"), codec);
 	}
 
-	private static <T> void loadMap(ResourceManager manager, String path, Map<Identifier, T> target, Codec<T> codec) {
-		Identifier id = Identifier.fromNamespaceAndPath(TwilightForestMod.ID, path);
-		Resource resource = manager.getResource(id).orElse(null);
-		if (resource == null) {
-			TwilightForestMod.LOGGER.warn("Missing data map resource {}", id);
-			return;
-		}
-
-		try (Reader reader = resource.openAsReader()) {
-			JsonObject root = JsonParser.parseReader(reader).getAsJsonObject();
-			JsonObject values = root.getAsJsonObject("values");
-			if (values == null) {
-				TwilightForestMod.LOGGER.warn("Data map {} has no values object", id);
-				return;
-			}
-
-			for (Map.Entry<String, JsonElement> entry : values.entrySet()) {
-				Identifier key = Identifier.tryParse(entry.getKey());
-				if (key == null) {
-					TwilightForestMod.LOGGER.warn("Invalid data map key {} in {}", entry.getKey(), id);
-					continue;
-				}
-
-				DataResult<T> result = codec.parse(JsonOps.INSTANCE, entry.getValue());
-				result.resultOrPartial(error -> TwilightForestMod.LOGGER.warn("Failed to parse data map {} entry {}: {}", id, key, error))
-					.ifPresent(value -> target.put(key, value));
-			}
-		} catch (Exception e) {
-			TwilightForestMod.LOGGER.error("Failed reading data map {}", id, e);
-		}
+	private static void clear() {
+		DATA_MAPS.forEach(ReloadedDataMap::clear);
 	}
 
 	private static final class ReloadListener implements SimpleSynchronousResourceReloadListener {
@@ -130,11 +106,58 @@ public final class TFDataMaps {
 		public void onResourceManagerReload(ResourceManager manager) {
 			MagicMapItem.clearBiomeCache();
 			clear();
-			loadMap(manager, "data_maps/block/crumble_horn.json", CRUMBLE_HORN, CrumbledBlock.CODEC);
-			loadMap(manager, "data_maps/block/ore_map_color.json", ORE_MAP_ORE_COLOR, OreMapOreColor.CODEC);
-			loadMap(manager, "data_maps/entity_type/transformation_powder.json", TRANSFORMATION_POWDER, EntityTransformation.CODEC);
-			loadMap(manager, "data_maps/entity_type/ominous_fire.json", OMINOUS_FIRE, EntityTransformation.CODEC);
-			loadMap(manager, "data_maps/worldgen/biome/magic_map_color.json", MAGIC_MAP_BIOME_COLOR, MagicMapBiomeColor.CODEC);
+			DATA_MAPS.forEach(dataMap -> dataMap.load(manager));
+		}
+	}
+
+	private static final class ReloadedDataMap<T> {
+		private final Identifier id;
+		private final Codec<T> codec;
+		private final Map<Identifier, T> values = new HashMap<>();
+
+		private ReloadedDataMap(Identifier id, Codec<T> codec) {
+			this.id = id;
+			this.codec = codec;
+		}
+
+		@Nullable
+		private T get(Identifier key) {
+			return this.values.get(key);
+		}
+
+		private void clear() {
+			this.values.clear();
+		}
+
+		private void load(ResourceManager manager) {
+			Resource resource = manager.getResource(this.id).orElse(null);
+			if (resource == null) {
+				TwilightForestMod.LOGGER.warn("Missing data map resource {}", this.id);
+				return;
+			}
+
+			try (Reader reader = resource.openAsReader()) {
+				JsonObject root = JsonParser.parseReader(reader).getAsJsonObject();
+				JsonObject entries = root.getAsJsonObject("values");
+				if (entries == null) {
+					TwilightForestMod.LOGGER.warn("Data map {} has no values object", this.id);
+					return;
+				}
+
+				for (Map.Entry<String, JsonElement> entry : entries.entrySet()) {
+					Identifier key = Identifier.tryParse(entry.getKey());
+					if (key == null) {
+						TwilightForestMod.LOGGER.warn("Invalid data map key {} in {}", entry.getKey(), this.id);
+						continue;
+					}
+
+					DataResult<T> result = this.codec.parse(JsonOps.INSTANCE, entry.getValue());
+					result.resultOrPartial(error -> TwilightForestMod.LOGGER.warn("Failed to parse data map {} entry {}: {}", this.id, key, error))
+						.ifPresent(value -> this.values.put(key, value));
+				}
+			} catch (Exception e) {
+				TwilightForestMod.LOGGER.error("Failed reading data map {}", this.id, e);
+			}
 		}
 	}
 }
