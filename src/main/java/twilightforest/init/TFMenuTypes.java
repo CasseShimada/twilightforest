@@ -1,17 +1,23 @@
 package twilightforest.init;
 
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
-import twilightforest.util.registry.DeferredHolder;
-import twilightforest.util.registry.DeferredRegister;
 import twilightforest.TwilightForestMod;
 import twilightforest.inventory.UncraftingMenu;
 
 public class TFMenuTypes {
+	private static boolean registered;
 
-	public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(Registries.MENU, TwilightForestMod.ID);
+	public static final MenuType<UncraftingMenu> UNCRAFTING = new MenuType<>(UncraftingMenu::fromNetwork, FeatureFlags.REGISTRY.allFlags());
 
-	public static final DeferredHolder<MenuType<?>, MenuType<UncraftingMenu>> UNCRAFTING = CONTAINERS.register("uncrafting",
-		() -> new MenuType<>(UncraftingMenu::fromNetwork, FeatureFlags.REGISTRY.allFlags()));
+	public static void register() {
+		if (registered) {
+			return;
+		}
+
+		registered = true;
+		Registry.register(BuiltInRegistries.MENU, TwilightForestMod.prefix("uncrafting"), UNCRAFTING);
+	}
 }

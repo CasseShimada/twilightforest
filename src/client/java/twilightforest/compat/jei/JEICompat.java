@@ -64,7 +64,7 @@ public class JEICompat implements IModPlugin {
 
 	@Override
 	public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
-		registration.addRecipeTransferHandler(UncraftingMenu.class, TFMenuTypes.UNCRAFTING.get(), RecipeTypes.CRAFTING, 11, 9, 20, 36);
+		registration.addRecipeTransferHandler(UncraftingMenu.class, TFMenuTypes.UNCRAFTING, RecipeTypes.CRAFTING, 11, 9, 20, 36);
 	}
 
 	@Override

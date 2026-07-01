@@ -76,7 +76,7 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 	}
 
 	public UncraftingMenu(int id, Inventory inventory, Level level, ContainerLevelAccess positionData) {
-		super(TFMenuTypes.UNCRAFTING.get(), id, 3, 3);
+		super(TFMenuTypes.UNCRAFTING, id, 3, 3);
 
 		this.positionData = positionData;
 		this.level = level;

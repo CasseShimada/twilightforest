@@ -197,7 +197,7 @@ public class RegistrationEvents {
 	}
 
 	private static void registerScreens() {
-		net.minecraft.client.gui.screens.MenuScreens.register(TFMenuTypes.UNCRAFTING.get(), UncraftingScreen::new);
+		net.minecraft.client.gui.screens.MenuScreens.register(TFMenuTypes.UNCRAFTING, UncraftingScreen::new);
 	}
 
 	private static void registerEntityRenderers() {
