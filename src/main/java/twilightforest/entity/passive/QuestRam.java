@@ -134,7 +134,7 @@ public class QuestRam extends Animal implements EnforcedHomePoint {
 		rewards.forEach(stack -> this.spawnAtLocation(level, stack, 1.0F));
 
 		for (ServerPlayer player : this.level().getEntitiesOfClass(ServerPlayer.class, getBoundingBox().inflate(16.0D, 16.0D, 16.0D))) {
-			TFAdvancements.QUEST_RAM_COMPLETED.get().trigger(player);
+			TFAdvancements.QUEST_RAM_COMPLETED.trigger(player);
 		}
 
 		LandmarkUtil.markStructureConquered(this.level(), this, TFStructures.QUEST_GROVE, true);

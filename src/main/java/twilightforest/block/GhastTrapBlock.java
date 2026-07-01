@@ -61,7 +61,7 @@ public class GhastTrapBlock extends BaseEntityBlock {
 
 		if (!state.getValue(ACTIVE) && isInactiveTrapCharged(level, pos) && level.hasNeighborSignal(pos)) {
 			for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, new AABB(pos).inflate(6.0D))) {
-				TFAdvancements.ACTIVATED_GHAST_TRAP.get().trigger(player);
+				TFAdvancements.ACTIVATED_GHAST_TRAP.trigger(player);
 			}
 
 			level.setBlockAndUpdate(pos, state.setValue(ACTIVE, true));

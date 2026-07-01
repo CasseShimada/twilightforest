@@ -72,7 +72,7 @@ public class GlassSwordItem extends Item {
 				}
 
 				CriteriaTriggers.ITEM_DURABILITY_CHANGED.trigger(player, stack, 0);
-				TFAdvancements.BROKE_GLASS_SWORD.get().trigger(player);
+				TFAdvancements.BROKE_GLASS_SWORD.trigger(player);
 			}
 
 			return true;

@@ -133,7 +133,7 @@ public class TrophyPedestalBlock extends Block implements SimpleWaterloggedBlock
 
 	private void rewardNearbyPlayers(Level level, BlockPos pos) {
 		for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, new AABB(pos).inflate(16.0D))) {
-			TFAdvancements.PLACED_TROPHY_ON_PEDESTAL.get().trigger(player);
+			TFAdvancements.PLACED_TROPHY_ON_PEDESTAL.trigger(player);
 			player.awardStat(TFStats.TROPHY_PEDESTALS_ACTIVATED);
 		}
 	}

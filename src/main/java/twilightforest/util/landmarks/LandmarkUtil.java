@@ -91,7 +91,7 @@ public final class LandmarkUtil {
 			StructureConqueredData.get(serverLevel).setConquered(structureKey, nearStart.get().getChunkPos(), conquered);
 
 			for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, new AABB(pos.pos()).inflate(32.0F))) {
-				TFAdvancements.STRUCTURE_CLEARED.get().trigger(player, structureKey);
+				TFAdvancements.STRUCTURE_CLEARED.trigger(player, structureKey);
 			}
 		}
 	}

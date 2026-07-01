@@ -255,9 +255,9 @@ public class KnightPhantom extends BaseTFBoss {
 			}
 			//trigger criteria for killing every phantom in a group
 			if (cause.getEntity() instanceof ServerPlayer player) {
-				TFAdvancements.KILL_ALL_PHANTOMS.get().trigger(player);
+				TFAdvancements.KILL_ALL_PHANTOMS.trigger(player);
 				for (ServerPlayer otherPlayer : this.level().getEntitiesOfClass(ServerPlayer.class, new AABB(treasurePos).inflate(32.0D))) {
-					TFAdvancements.KILL_ALL_PHANTOMS.get().trigger(otherPlayer);
+					TFAdvancements.KILL_ALL_PHANTOMS.trigger(otherPlayer);
 				}
 			}
 

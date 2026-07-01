@@ -45,11 +45,11 @@ public class DrinkFromFlaskTrigger extends SimpleCriterionTrigger<DrinkFromFlask
 				.apply(instance, DrinkFromFlaskTrigger.TriggerInstance::new));
 
 			public Criterion<DrinkFromFlaskTrigger.TriggerInstance> drankPotion(int doses, MinMaxBounds.Ints seconds, Holder<Potion> potion) {
-				return TFAdvancements.DRINK_FROM_FLASK.get().createCriterion(new TriggerInstance(Optional.empty(), MinMaxBounds.Ints.exactly(doses), seconds, potion));
+				return TFAdvancements.DRINK_FROM_FLASK.createCriterion(new TriggerInstance(Optional.empty(), MinMaxBounds.Ints.exactly(doses), seconds, potion));
 			}
 
 			public Criterion<DrinkFromFlaskTrigger.TriggerInstance> drankPotion(MinMaxBounds.Ints doses, MinMaxBounds.Ints seconds, Holder<Potion> potion) {
-				return TFAdvancements.DRINK_FROM_FLASK.get().createCriterion(new TriggerInstance(Optional.empty(), doses, seconds, potion));
+				return TFAdvancements.DRINK_FROM_FLASK.createCriterion(new TriggerInstance(Optional.empty(), doses, seconds, potion));
 			}
 		}
 

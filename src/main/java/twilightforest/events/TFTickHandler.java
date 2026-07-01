@@ -169,7 +169,7 @@ public class TFTickHandler {
 
 			boolean created = TFBlocks.TWILIGHT_PORTAL.get().tryToCreatePortal(level, qualified.blockPosition(), qualified, player);
 			if (created)
-				TFAdvancements.MADE_TF_PORTAL.get().trigger(player);
+				TFAdvancements.MADE_TF_PORTAL.trigger(player);
 
 		}
 	}
