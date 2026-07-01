@@ -1,20 +1,19 @@
 package twilightforest.client.renderer.special;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
-import net.minecraft.core.Direction;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3fc;
 import twilightforest.client.model.TFModelLayers;
 import twilightforest.client.model.entity.KeepsakeCasketModel;
 import twilightforest.client.renderer.block.KeepsakeCasketRenderer;
+import twilightforest.client.renderer.block.SkullChestRenderer;
 import twilightforest.init.TFDataComponents;
 
 public record KeepsakeCasketSpecialRenderer(KeepsakeCasketModel model, float openness) implements SpecialModelRenderer<Integer> {
@@ -27,9 +26,7 @@ public record KeepsakeCasketSpecialRenderer(KeepsakeCasketModel model, float ope
 	@Override
 	public void submit(Integer damage, PoseStack stack, SubmitNodeCollector nodeCollector, int light, int overlay, boolean foil, int outlineColor) {
 		stack.pushPose();
-		stack.translate(0.5F, 0.0F, 0.5F);
-		stack.mulPose(Axis.YP.rotationDegrees(-Direction.NORTH.toYRot()));
-		stack.scale(1.0F, -1.0F, -1.0F);
+		SkullChestRenderer.applyModelTransform(stack, SkullChestRenderer.ITEM_FACING);
 
 		float lidRotation = 1.0F - this.openness;
 		lidRotation = 1.0F - lidRotation * lidRotation * lidRotation;
@@ -42,9 +39,7 @@ public record KeepsakeCasketSpecialRenderer(KeepsakeCasketModel model, float ope
 	@Override
 	public void getExtents(java.util.function.Consumer<Vector3fc> output) {
 		PoseStack poseStack = new PoseStack();
-		poseStack.translate(0.5F, 0.0F, 0.5F);
-		poseStack.mulPose(Axis.YP.rotationDegrees(-Direction.NORTH.toYRot()));
-		poseStack.scale(1.0F, -1.0F, -1.0F);
+		SkullChestRenderer.applyModelTransform(poseStack, SkullChestRenderer.ITEM_FACING);
 
 		float lidRotation = 1.0F - this.openness;
 		lidRotation = 1.0F - lidRotation * lidRotation * lidRotation;

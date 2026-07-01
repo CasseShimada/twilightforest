@@ -107,8 +107,6 @@ public final class TFEventHandlers {
 		);
 
 		ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {
-			ToolEvents.applyFieryToolFire(entity, source.getEntity());
-
 			if (ProgressionEvents.shouldCancelAttackInProtectedArea(entity, source.getEntity())) {
 				return false;
 			}
@@ -118,7 +116,11 @@ public final class TFEventHandlers {
 			if (!HostileMountEvents.handleIncomingDamage(entity, source, amount)) {
 				return false;
 			}
-			return EntityEvents.handleZombifiedPlayerAttack(entity, source, amount);
+			boolean allowed = EntityEvents.handleZombifiedPlayerAttack(entity, source, amount);
+			if (allowed) {
+				ToolEvents.applyFieryToolFire(entity, source.getEntity());
+			}
+			return allowed;
 		});
 
 		ServerLivingEntityEvents.AFTER_DAMAGE.register((entity, source, amount, finalDamage, blocked) -> {

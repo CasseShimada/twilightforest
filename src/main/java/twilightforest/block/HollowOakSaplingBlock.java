@@ -1,7 +1,6 @@
 package twilightforest.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -53,8 +52,8 @@ public class HollowOakSaplingBlock extends SaplingBlock {
 		}
 
 		BoundingBox boundingbox = structurestart.getBoundingBox();
-		ChunkPos start = new ChunkPos(SectionPos.blockToSectionCoord(boundingbox.minX()), SectionPos.blockToSectionCoord(boundingbox.minZ()));
-		ChunkPos end = new ChunkPos(SectionPos.blockToSectionCoord(boundingbox.maxX()), SectionPos.blockToSectionCoord(boundingbox.maxZ()));
+		ChunkPos start = ChunkPos.containing(new BlockPos(boundingbox.minX(), boundingbox.minY(), boundingbox.minZ()));
+		ChunkPos end = ChunkPos.containing(new BlockPos(boundingbox.maxX(), boundingbox.maxY(), boundingbox.maxZ()));
 
 		if (ChunkPos.rangeClosed(start, end).noneMatch(currentChunkPos -> level.isLoaded(currentChunkPos.getWorldPosition()))) {
 			return false;

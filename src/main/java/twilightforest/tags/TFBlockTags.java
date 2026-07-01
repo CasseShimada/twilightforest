@@ -30,6 +30,7 @@ public class TFBlockTags {
 	public static final TagKey<Block> HOLLOW_LOGS_CLIMBABLE = create("hollow_logs_climbable");
 
 	public static final TagKey<Block> BANISTERS = create("banisters");
+	public static final TagKey<Block> DRYING_RACKS = create("drying_racks");
 	public static final TagKey<Block> TF_CHESTS = create("chests");
 
 	public static final TagKey<Block> PORTAL_EDGE = create("portal/edge");

@@ -8,7 +8,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.server.level.WorldGenRegion;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -38,16 +38,16 @@ public record CanopyBlanketProcessor(HolderSet<Biome> biomesForApplication, Bloc
 	).apply(inst, CanopyBlanketProcessor::new));
 
 	@Override
-	public void processChunk(WorldGenRegion worldGenRegion, RandomSource random, Function<BlockPos, Holder<Biome>> biomeGetter, ChunkAccess chunkAccess) {
+	public void processChunk(WorldGenLevel level, RandomSource random, Function<BlockPos, Holder<Biome>> biomeGetter, ChunkAccess chunkAccess) {
 		Collection<Structure> avoidStructures = this.avoidStructures.stream().map(Holder::value).toList();
 
-		addDarkForestCanopy(worldGenRegion, biomeGetter, chunkAccess, this.height, this.biomesForApplication, this.blockState, avoidStructures);
+		addDarkForestCanopy(level, biomeGetter, chunkAccess, this.height, this.biomesForApplication, this.blockState, avoidStructures);
 	}
 
 	/**
 	 * Adds dark forest canopy.  This version uses the "unzoomed" array of biomes used in land generation to determine how many of the nearby blocks are dark forest
 	 */
-	private static boolean addDarkForestCanopy(WorldGenRegion worldGenRegion, Function<BlockPos, Holder<Biome>> biomeGetter, ChunkAccess chunk, int height, HolderSet<Biome> biomeFilter, BlockStateProvider canopyBlock, Collection<Structure> avoidStructures) {
+	private static boolean addDarkForestCanopy(WorldGenLevel level, Function<BlockPos, Holder<Biome>> biomeGetter, ChunkAccess chunk, int height, HolderSet<Biome> biomeFilter, BlockStateProvider canopyBlock, Collection<Structure> avoidStructures) {
 		ChunkPos chunkPos = chunk.getPos();
 		BlockPos chunkOrigin = chunkPos.getWorldPosition();
 		int[] thicks = new int[5 * 5];
@@ -124,7 +124,7 @@ public record CanopyBlanketProcessor(HolderSet<Biome> biomesForApplication, Bloc
 
 					for (int y = treeBottom; y < treeTop; y++) {
 						BlockPos canopyPos = pos.atY(y);
-						chunk.setBlockState(canopyPos, canopyBlock.getState(worldGenRegion, random, canopyPos), Block.UPDATE_NONE);
+						chunk.setBlockState(canopyPos, canopyBlock.getState(level, random, canopyPos), Block.UPDATE_NONE);
 					}
 				}
 			}

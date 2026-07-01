@@ -26,6 +26,7 @@ import net.minecraft.world.item.MapItem;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
+import twilightforest.inventory.InventoryUtil;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -76,7 +77,7 @@ public class MapLocatorCommand {
 		MapItemSavedData.addTargetDecoration(itemstack, foundPos, "+", MapDecorationTypes.RED_X);
 
 		for (ServerPlayer player : players)
-			player.getInventory().add(itemstack.copy());
+			InventoryUtil.giveItemToPlayer(player, itemstack.copy());
 
 		return LocateCommand.showLocateResult(source, structure, foundPos, pair, "commands.locate.structure.success", false, stopwatch.elapsed());
 	}

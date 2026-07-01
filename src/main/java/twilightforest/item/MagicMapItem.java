@@ -104,7 +104,11 @@ public class MagicMapItem extends MapItem {
 		return STR_ID + "_" + id;
 	}
 
-	private static final Map<ChunkPos, Holder<Biome>[]> CACHE = new HashMap<>();
+	private static final Map<BiomeCacheKey, Holder<Biome>[]> CACHE = new HashMap<>();
+
+	public static void clearBiomeCache() {
+		CACHE.clear();
+	}
 
 	@Override
 	public void update(Level level, Entity viewer, MapItemSavedData data) {
@@ -119,7 +123,7 @@ public class MagicMapItem extends MapItem {
 
 			int startX = (centerX / blocksPerPixel - 64) * biomesPerPixel;
 			int startZ = (centerZ / blocksPerPixel - 64) * biomesPerPixel;
-			Holder<Biome>[] biomes = CACHE.computeIfAbsent(new ChunkPos(startX, startZ), pos -> {
+			Holder<Biome>[] biomes = CACHE.computeIfAbsent(new BiomeCacheKey(level.dimension(), new ChunkPos(startX, startZ)), pos -> {
 				@SuppressWarnings({"unchecked", "rawtypes"})
 				Holder<Biome>[] array = new Holder[128 * biomesPerPixel * 128 * biomesPerPixel];
 				for (int l = 0; l < 128 * biomesPerPixel; ++l) {
@@ -189,6 +193,9 @@ public class MagicMapItem extends MapItem {
 	private MagicMapBiomeColor getMapColorPerBiome(Holder<Biome> biome) {
 		MagicMapBiomeColor color = TFDataMaps.getMagicMapColor(biome);
 		return color != null ? color : new MagicMapBiomeColor(MapColor.COLOR_MAGENTA);
+	}
+
+	private record BiomeCacheKey(ResourceKey<Level> dimension, ChunkPos start) {
 	}
 
 	@Override

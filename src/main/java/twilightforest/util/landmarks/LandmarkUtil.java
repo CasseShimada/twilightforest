@@ -28,6 +28,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @SuppressWarnings("OptionalIsPresent")
 public final class LandmarkUtil {
@@ -36,12 +37,14 @@ public final class LandmarkUtil {
 	}
 
 	public static Optional<StructureStart> locateNearestMatchingLandmark(LevelAccessor level, TagKey<Structure> matching, int chunkX, int chunkZ) {
-		var structureRegistry = level.registryAccess().lookup(Registries.STRUCTURE);
-		if (structureRegistry.isEmpty()) return Optional.empty();
-		var holders = structureRegistry.get().get(matching);
-		if (holders.isEmpty()) return Optional.empty();
+		var structureRegistry = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
+		if (structureRegistry.size() == 0) return Optional.empty();
+		var holders = structureRegistry.getTagOrEmpty(matching);
+		if (!holders.iterator().hasNext()) return Optional.empty();
 
-		return locateNearestMatchingLandmark(level, holders.get(), chunkX, chunkZ);
+		HolderSet<Structure> holderSet = HolderSet.direct(StreamSupport.stream(holders.spliterator(), false).toList());
+
+		return locateNearestMatchingLandmark(level, holderSet, chunkX, chunkZ);
 	}
 
 	public static Optional<StructureStart> locateNearestMatchingLandmark(LevelAccessor level, HolderSet<Structure> matching, int chunkX, int chunkZ) {
@@ -95,9 +98,7 @@ public final class LandmarkUtil {
 
 	@Nullable
 	public static Structure structureForKey(LevelReader level, ResourceKey<Structure> structureKey) {
-		Optional<Registry<Structure>> registry = level.registryAccess().lookup(Registries.STRUCTURE);
-
-		return registry.isPresent() ? registry.get().getValue(structureKey) : null;
+		return level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(structureKey).orElseThrow().value();
 	}
 
 	public static Optional<StructureStart> locateNearestLandmarkStart(LevelAccessor level, ResourceKey<Structure> structureKey, BlockPos pos) {
@@ -139,6 +140,6 @@ public final class LandmarkUtil {
 
 	@Nullable
 	private static ResourceKey<Structure> getStructureKey(LevelAccessor level, Structure structure) {
-		return level.registryAccess().lookup(Registries.STRUCTURE).flatMap(registry -> registry.getResourceKey(structure)).orElse(null);
+		return level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getResourceKey(structure).orElse(null);
 	}
 }

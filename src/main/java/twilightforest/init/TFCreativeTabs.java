@@ -52,6 +52,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.TWILIGHT_OAK_FENCE);
 			output.accept(TFBlocks.TWILIGHT_OAK_GATE);
 			output.accept(TFBlocks.TWILIGHT_OAK_BANISTER);
+			output.accept(TFBlocks.TWILIGHT_OAK_DRYING_RACK);
 			output.accept(TFBlocks.TWILIGHT_OAK_DOOR);
 			output.accept(TFBlocks.TWILIGHT_OAK_TRAPDOOR);
 			output.accept(TFBlocks.TWILIGHT_OAK_PLATE);
@@ -78,6 +79,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.CANOPY_FENCE);
 			output.accept(TFBlocks.CANOPY_GATE);
 			output.accept(TFBlocks.CANOPY_BANISTER);
+			output.accept(TFBlocks.CANOPY_DRYING_RACK);
 			output.accept(TFBlocks.CANOPY_DOOR);
 			output.accept(TFBlocks.CANOPY_TRAPDOOR);
 			output.accept(TFBlocks.CANOPY_PLATE);
@@ -101,6 +103,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.MANGROVE_FENCE);
 			output.accept(TFBlocks.MANGROVE_GATE);
 			output.accept(TFBlocks.MANGROVE_BANISTER);
+			output.accept(TFBlocks.MANGROVE_DRYING_RACK);
 			output.accept(TFBlocks.MANGROVE_DOOR);
 			output.accept(TFBlocks.MANGROVE_TRAPDOOR);
 			output.accept(TFBlocks.MANGROVE_PLATE);
@@ -123,6 +126,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.DARK_FENCE);
 			output.accept(TFBlocks.DARK_GATE);
 			output.accept(TFBlocks.DARK_BANISTER);
+			output.accept(TFBlocks.DARK_DRYING_RACK);
 			output.accept(TFBlocks.DARK_DOOR);
 			output.accept(TFBlocks.DARK_TRAPDOOR);
 			output.accept(TFBlocks.DARK_PLATE);
@@ -146,6 +150,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.TIME_FENCE);
 			output.accept(TFBlocks.TIME_GATE);
 			output.accept(TFBlocks.TIME_BANISTER);
+			output.accept(TFBlocks.TIME_DRYING_RACK);
 			output.accept(TFBlocks.TIME_DOOR);
 			output.accept(TFBlocks.TIME_TRAPDOOR);
 			output.accept(TFBlocks.TIME_PLATE);
@@ -169,6 +174,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.TRANSFORMATION_FENCE);
 			output.accept(TFBlocks.TRANSFORMATION_GATE);
 			output.accept(TFBlocks.TRANSFORMATION_BANISTER);
+			output.accept(TFBlocks.TRANSFORMATION_DRYING_RACK);
 			output.accept(TFBlocks.TRANSFORMATION_DOOR);
 			output.accept(TFBlocks.TRANSFORMATION_TRAPDOOR);
 			output.accept(TFBlocks.TRANSFORMATION_PLATE);
@@ -192,6 +198,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.MINING_FENCE);
 			output.accept(TFBlocks.MINING_GATE);
 			output.accept(TFBlocks.MINING_BANISTER);
+			output.accept(TFBlocks.MINING_DRYING_RACK);
 			output.accept(TFBlocks.MINING_DOOR);
 			output.accept(TFBlocks.MINING_TRAPDOOR);
 			output.accept(TFBlocks.MINING_PLATE);
@@ -215,6 +222,7 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.SORTING_FENCE);
 			output.accept(TFBlocks.SORTING_GATE);
 			output.accept(TFBlocks.SORTING_BANISTER);
+			output.accept(TFBlocks.SORTING_DRYING_RACK);
 			output.accept(TFBlocks.SORTING_DOOR);
 			output.accept(TFBlocks.SORTING_TRAPDOOR);
 			output.accept(TFBlocks.SORTING_PLATE);
@@ -623,15 +631,25 @@ public class TFCreativeTabs {
 			entries.insertAfter(new ItemStack(Items.PALE_OAK_WOOD), TFItems.HOLLOW_PALE_OAK_LOG.toStack());
 
 			entries.insertAfter(new ItemStack(Items.OAK_FENCE_GATE), TFBlocks.OAK_BANISTER.toStack());
+			entries.insertAfter(TFBlocks.OAK_BANISTER.toStack(), TFBlocks.OAK_DRYING_RACK.toStack());
 			entries.insertAfter(new ItemStack(Items.SPRUCE_FENCE_GATE), TFBlocks.SPRUCE_BANISTER.toStack());
+			entries.insertAfter(TFBlocks.SPRUCE_BANISTER.toStack(), TFBlocks.SPRUCE_DRYING_RACK.toStack());
 			entries.insertAfter(new ItemStack(Items.BIRCH_FENCE_GATE), TFBlocks.BIRCH_BANISTER.toStack());
+			entries.insertAfter(TFBlocks.BIRCH_BANISTER.toStack(), TFBlocks.BIRCH_DRYING_RACK.toStack());
 			entries.insertAfter(new ItemStack(Items.JUNGLE_FENCE_GATE), TFBlocks.JUNGLE_BANISTER.toStack());
+			entries.insertAfter(TFBlocks.JUNGLE_BANISTER.toStack(), TFBlocks.JUNGLE_DRYING_RACK.toStack());
 			entries.insertAfter(new ItemStack(Items.ACACIA_FENCE_GATE), TFBlocks.ACACIA_BANISTER.toStack());
+			entries.insertAfter(TFBlocks.ACACIA_BANISTER.toStack(), TFBlocks.ACACIA_DRYING_RACK.toStack());
 			entries.insertAfter(new ItemStack(Items.DARK_OAK_FENCE_GATE), TFBlocks.DARK_OAK_BANISTER.toStack());
+			entries.insertAfter(TFBlocks.DARK_OAK_BANISTER.toStack(), TFBlocks.DARK_OAK_DRYING_RACK.toStack());
 			entries.insertAfter(new ItemStack(Items.CRIMSON_FENCE_GATE), TFBlocks.CRIMSON_BANISTER.toStack());
+			entries.insertAfter(TFBlocks.CRIMSON_BANISTER.toStack(), TFBlocks.CRIMSON_DRYING_RACK.toStack());
 			entries.insertAfter(new ItemStack(Items.WARPED_FENCE_GATE), TFBlocks.WARPED_BANISTER.toStack());
+			entries.insertAfter(TFBlocks.WARPED_BANISTER.toStack(), TFBlocks.WARPED_DRYING_RACK.toStack());
 			entries.insertAfter(new ItemStack(Items.MANGROVE_FENCE_GATE), TFBlocks.VANGROVE_BANISTER.toStack());
+			entries.insertAfter(TFBlocks.VANGROVE_BANISTER.toStack(), TFBlocks.VANGROVE_DRYING_RACK.toStack());
 			entries.insertAfter(new ItemStack(Items.CHERRY_FENCE_GATE), TFBlocks.CHERRY_BANISTER.toStack());
+			entries.insertAfter(TFBlocks.CHERRY_BANISTER.toStack(), TFBlocks.CHERRY_DRYING_RACK.toStack());
 			entries.insertAfter(new ItemStack(Items.PALE_OAK_FENCE_GATE), TFBlocks.PALE_OAK_BANISTER.toStack());
 		});
 

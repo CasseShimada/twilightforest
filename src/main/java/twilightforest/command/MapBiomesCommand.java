@@ -17,9 +17,9 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.storage.LevelResource;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
+import twilightforest.TwilightForestMod;
 import twilightforest.init.TFBiomes;
 import twilightforest.init.TFDataMaps;
-import twilightforest.util.ColorUtil;
 import twilightforest.util.datamaps.MagicMapBiomeColor;
 
 import javax.imageio.ImageIO;
@@ -69,9 +69,9 @@ public class MapBiomesCommand {
 
 	public LiteralArgumentBuilder<CommandSourceStack> register() {
 		return Commands.literal("biomepng").requires(cs -> Commands.LEVEL_GAMEMASTERS.check(cs.permissions())).executes(context -> createMap(context.getSource(), 4096, 4096, true))
-			.then(Commands.argument("width", IntegerArgumentType.integer(0))
+			.then(Commands.argument("width", IntegerArgumentType.integer(1))
 				.executes(context -> createMap(context.getSource(), IntegerArgumentType.getInteger(context, "width"), IntegerArgumentType.getInteger(context, "width"), true))
-				.then(Commands.argument("height", IntegerArgumentType.integer(0))
+				.then(Commands.argument("height", IntegerArgumentType.integer(1))
 					.executes(context -> createMap(context.getSource(), IntegerArgumentType.getInteger(context, "width"), IntegerArgumentType.getInteger(context, "height"), true))
 					.then(Commands.argument("showBiomePercents", BoolArgumentType.bool())
 						.executes(context -> createMap(context.getSource(), IntegerArgumentType.getInteger(context, "width"), IntegerArgumentType.getInteger(context, "height"), BoolArgumentType.getBool(context, "showBiomePercents"))))));
@@ -90,10 +90,10 @@ public class MapBiomesCommand {
 		Map<Holder<Biome>, Integer> biomeCount = new HashMap<>();
 		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
-		int progressUpdate = img.getHeight() / 8;
+		int progressUpdate = Math.max(1, img.getWidth() / 8);
 
-		for (int x = 0; x < img.getHeight(); x++) {
-			for (int z = 0; z < img.getWidth(); z++) {
+		for (int x = 0; x < img.getWidth(); x++) {
+			for (int z = 0; z < img.getHeight(); z++) {
 				ServerLevel level = source.getLevel();
 				Holder<Biome> b = level.getNoiseBiome(x - (img.getWidth() / 2), 0, z - (img.getHeight() / 2));
 				Identifier key = level.registryAccess().lookupOrThrow(Registries.BIOME).getKey(b.value());
@@ -108,11 +108,7 @@ public class MapBiomesCommand {
 					BIOME2COLOR.put(key, color = new BiomeMapColor(colorInt | 0xFF000000));
 				}
 
-				if (!biomeCount.containsKey(b)) {
-					biomeCount.put(b, 0);
-				} else {
-					biomeCount.put(b, biomeCount.get(b) + 1);
-				}
+				biomeCount.merge(b, 1, Integer::sum);
 
 				//set the color
 				img.setRGB(x, z, color.getARGB());
@@ -121,12 +117,14 @@ public class MapBiomesCommand {
 			//send a progress update to let people know the server isn't dying
 			if (x % progressUpdate == 0) {
 				int finalX = x;
-				source.sendSuccess(() -> Component.translatable(((double) finalX / img.getHeight()) * 100 + "% Done mapping"), false);
+				double percentComplete = (double) finalX / img.getWidth() * 100;
+				String percentDisplay = this.numberFormat.format(percentComplete);
+				source.sendSuccess(() -> Component.translatable("commands.tffeature.biomepng.progress", percentDisplay), false);
 			}
 		}
 
 		if (showBiomePercents) {
-			source.sendSuccess(() -> Component.literal("Approximate biome-block counts within a " + (width + "x" + height) + " region"), false);
+			source.sendSuccess(() -> Component.translatable("commands.tffeature.biomepng.counts_header", width, height), false);
 			int totalCount = biomeCount.values().stream().mapToInt(i -> i).sum();
 			biomeCount.forEach((biome, integer) -> source.sendSuccess(() -> Component.literal(
 					source.getLevel().registryAccess().lookupOrThrow(Registries.BIOME).getKey(biome.value()).toString())
@@ -144,12 +142,12 @@ public class MapBiomesCommand {
 				ImageIO.write(img, "png", path.toFile());
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
-			source.sendFailure(Component.literal("Could not save image! Please report this!"));
+			TwilightForestMod.LOGGER.error("Failed to save biome map to {}", path, e);
+			source.sendFailure(Component.translatable("commands.tffeature.biomepng.save_failed"));
 			return 0;
 		}
 
-		source.sendSuccess(() -> Component.literal("Image saved!"), false);
+		source.sendSuccess(() -> Component.translatable("commands.tffeature.biomepng.save_success"), false);
 
 		return Command.SINGLE_SUCCESS;
 	}

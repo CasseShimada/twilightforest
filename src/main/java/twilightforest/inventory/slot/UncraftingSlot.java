@@ -1,5 +1,6 @@
 package twilightforest.inventory.slot;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
@@ -9,6 +10,7 @@ import twilightforest.config.TFConfig;
 import twilightforest.init.TFAdvancements;
 import twilightforest.inventory.UncraftingContainer;
 import twilightforest.inventory.UncraftingMenu;
+import twilightforest.inventory.InventoryUtil;
 import twilightforest.item.recipe.UncraftingRecipe;
 
 public class UncraftingSlot extends Slot {
@@ -84,6 +86,11 @@ public class UncraftingSlot extends Slot {
 		if (!inputStack.isEmpty()) {
 			if (player instanceof ServerPlayer server) {
 				TFAdvancements.UNCRAFT_ITEM.get().trigger(server, inputStack);
+			}
+			if (inputStack.has(DataComponents.CONTAINER)) {
+				inputStack.get(DataComponents.CONTAINER).nonEmptyItemCopyStream().forEach(stack1 -> {
+					InventoryUtil.giveItemToPlayer(player, stack1);
+				});
 			}
 			this.inputSlot.removeItem(0, this.uncraftingMatrix.numberOfInputItems);
 		}

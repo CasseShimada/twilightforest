@@ -12,6 +12,7 @@ public class MultipartEntityIteratorWrapper implements Iterator<Entity> {
 	private final Iterator<Entity> delegate;
 	private TFPart<?> @Nullable [] parts;
 	private int partIndex;
+	private boolean lastReturnedPart;
 
 	MultipartEntityIteratorWrapper(Iterator<Entity> iter) {
 		this.delegate = iter;
@@ -26,12 +27,14 @@ public class MultipartEntityIteratorWrapper implements Iterator<Entity> {
 	public Entity next() {
 		if (parts != null) {
 			Entity next = parts[partIndex];
+			lastReturnedPart = true;
 			partIndex++;
 			if (partIndex >= parts.length)
 				parts = null;
 			return next;
 		}
 		Entity next = delegate.next();
+		lastReturnedPart = false;
 		if (next instanceof TFMultipartEntity multipart) {
 			TFPart<?>[] arr = multipart.getParts();
 			if (arr != null) {
@@ -45,8 +48,8 @@ public class MultipartEntityIteratorWrapper implements Iterator<Entity> {
 					parts = new TFPart<?>[size];
 					int index = 0;
 					for (TFPart<?> partEntity : arr) {
-						parts[index] = partEntity;
-						index++;
+						if (partEntity != null)
+							parts[index++] = partEntity;
 					}
 				}
 			}
@@ -56,15 +59,10 @@ public class MultipartEntityIteratorWrapper implements Iterator<Entity> {
 
 	@Override
 	public void remove() {
-		if (parts == null || partIndex <= 0) {
-			delegate.remove();
-		} else {
-			if (partIndex >= parts.length) {
-				parts = null;
-			} else {
-				System.arraycopy(parts, partIndex, parts, partIndex - 1, parts.length - 1 - partIndex - 1);
-			}
-		}
+		if (lastReturnedPart)
+			throw new UnsupportedOperationException("Cannot remove multipart child entities from a rendering iterator");
+
+		delegate.remove();
 	}
 
 }

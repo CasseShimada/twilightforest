@@ -238,18 +238,20 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 			ItemStack result = this.tinkerResult.getItem(0);
 
 			if (!result.isEmpty() && isValidMatchForInput(input, result)) {
-				//store copy of input enchants
-				ItemEnchantments.Mutable enchants = new ItemEnchantments.Mutable(input.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY));
-				//add all resulting item enchants to the list. This allows pre-enchanted gear to keep its enchants
-				if (result.has(DataComponents.ENCHANTMENTS)) {
-					result.get(DataComponents.ENCHANTMENTS).entrySet().forEach(enchantment -> enchants.set(enchantment.getKey(), enchantment.getIntValue()));
-				}
-				//remove any incompatible enchants
-				enchants.removeIf(holder -> !holder.value().canEnchant(result));
+				if (result.isEnchantable()) {
+					//store copy of input enchants
+					ItemEnchantments.Mutable enchants = new ItemEnchantments.Mutable(input.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY));
+					//add all resulting item enchants to the list. This allows pre-enchanted gear to keep its enchants
+					if (result.has(DataComponents.ENCHANTMENTS)) {
+						result.get(DataComponents.ENCHANTMENTS).entrySet().forEach(enchantment -> enchants.set(enchantment.getKey(), enchantment.getIntValue()));
+					}
+					//remove any incompatible enchants
+					enchants.removeIf(holder -> !holder.value().canEnchant(result));
 
-				//remove enchantments and replace with filtered list
-				result.remove(DataComponents.ENCHANTMENTS);
-				EnchantmentHelper.setEnchantments(result, enchants.toImmutable());
+					//remove enchantments and replace with filtered list
+					result.remove(DataComponents.ENCHANTMENTS);
+					EnchantmentHelper.setEnchantments(result, enchants.toImmutable());
+				}
 
 				this.tinkerResult.setItem(0, result);
 				this.updateCosts(0, this.calculateRecraftingCost());
@@ -272,7 +274,7 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 	}
 
 	public static boolean isIngredientProblematic(ItemStack ingredient) {
-		return (!ingredient.isEmpty() && !ingredient.getItem().getCraftingRemainder().create().isEmpty()) || ingredient.is(Items.BARRIER);
+		return (!ingredient.isEmpty() && ingredient.getItem().getCraftingRemainder() != null) || ingredient.is(Items.BARRIER);
 	}
 
 	private static ItemStack normalizeIngredient(ItemStack ingredient) {
@@ -431,6 +433,10 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 		}
 
 		// okay, if we're here the input item must be enchanted, and we are repairing or recrafting it
+		if (!output.isEnchantable()) {
+			return 0;
+		}
+
 		int cost = 0;
 
 		if (!ItemStack.isSameItem(input, output)) {

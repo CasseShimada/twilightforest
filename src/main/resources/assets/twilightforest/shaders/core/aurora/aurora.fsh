@@ -1,7 +1,7 @@
 #version 330
 
-#moj_import <minecraft:fog.glsl>
 #moj_import <minecraft:dynamictransforms.glsl>
+#moj_import <minecraft:fog.glsl>
 #moj_import <minecraft:globals.glsl>
 
 //////////////// K.jpg's Re-oriented 4-Point BCC Noise (OpenSimplex2) ////////////////
@@ -22,7 +22,16 @@ vec3 grad(float hash) {
     // Also a cuboctahedral vertex
     // And corresponds to the face of its dual, the rhombic dodecahedron
     vec3 cuboct = cube;
-    cuboct[int(hash / 16.0)] = 0.0;
+    // cuboct[int(hash / 16.0)] = 0.0;
+    // Copy the OpenSimplex2 HLSL version to avoid an Intel Driver crash
+    int idx = int(hash * (1.0 / 16.0));
+
+    if (idx == 0)
+        cuboct.x = 0.0;
+    else if (idx == 1)
+        cuboct.y = 0.0;
+    else
+        cuboct.z = 0.0;
 
     // In a funky way, pick one of the four points on the rhombic face
     float type = mod(floor(hash / 8.0), 2.0);
@@ -78,14 +87,6 @@ vec4 openSimplex2Base(vec3 X) {
 
     // Return it all as a vec4
     return vec4(derivative, dot(aaaa, extrapolations));
-}
-
-// Use this if you don't want Z to look different from X and Y
-vec4 openSimplex2_Conventional(vec3 X) {
-
-    // Rotate around the main diagonal. Not a skew transform.
-    vec4 result = openSimplex2Base(dot(X, vec3(2.0/3.0)) - X);
-    return vec4(dot(result.xyz, vec3(2.0/3.0)) - result.xyz, result.w);
 }
 
 // Use this if you want to show X and Y in a plane, then use Z for time, vertical, etc.
@@ -162,12 +163,13 @@ void main() {
 
     colorNoise = ((colorNoise + 1.0) / 2.0) * 0.5;
     vec4 color = vec4(0.0, 0.5 + colorNoise, 1.0 - colorNoise, noise);
-    float fogFade = 1.0 - linear_fog_value(length(pixelPos.xz / 2.75), FogRenderDistanceStart, FogRenderDistanceEnd);
-    vec4 baseColor = vec4(vertexColor.rgb * ColorModulator.rgb * color.rgb, vertexColor.a * ColorModulator.a * color.a * fogFade);
+    float sphericalDistance = fog_spherical_distance(vec3(pixelPos.xz / 2.75, 0.0));
+    float cylindricalDistance = fog_cylindrical_distance(vec3(pixelPos.xz / 2.5, 0.0));
+    float fogFade = 1.0 - linear_fog_value(cylindricalDistance, FogEnvironmentalStart, FogEnvironmentalEnd);
     fragColor = apply_fog(
-        baseColor,
-        fog_spherical_distance(pixelPos.xyz / 2.5),
-        fog_cylindrical_distance(pixelPos.xyz / 2.5),
+        vec4(vertexColor.rgb * ColorModulator.rgb * color.rgb, vertexColor.a * ColorModulator.a * color.a * fogFade),
+        sphericalDistance,
+        cylindricalDistance,
         FogEnvironmentalStart,
         FogEnvironmentalEnd,
         FogRenderDistanceStart,

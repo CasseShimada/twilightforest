@@ -5,7 +5,6 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -84,9 +83,7 @@ public interface StructureHints {
 	void trySpawnHintMonster(Level world, Player player, BlockPos pos);
 
 	static void tryHintForStructure(Player player, ServerLevel level, ResourceKey<Structure> forStructure) {
-		Optional<Registry<Structure>> optStructureReg = level.registryAccess().lookup(Registries.STRUCTURE);
-
-		if (optStructureReg.isEmpty() || !(optStructureReg.get().getValue(forStructure) instanceof StructureHints structureHints))
+		if (!(level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValueOrThrow(forStructure) instanceof StructureHints structureHints))
 			return;
 
 		structureHints.trySpawnHintMonster(level, player);

@@ -50,10 +50,14 @@
     "client.BossHealthOverlayMixin",
     "client.AtlasManagerMixin",
     "client.BiomeColorsMixin",
+    "client.ClientLevelMixin",
     "client.ClientAdvancementsAccessor",
     "client.EntityRenderDispatcherMixin",
     "client.FogEnvironmentMixin",
+    "client.CapeLayerMixin",
     "client.PlayerModelMixin",
+    "client.HumanoidArmorLayerMixin",
+    "client.LevelExtractorMixin",
     "client.LevelRendererMixin",
     "client.LivingEntityRendererMixin",
     "client.ModelBlockRendererMixin",
@@ -63,11 +67,11 @@
     "client.accessor.CameraAccessor",
     "client.accessor.BiomeManagerAccessor",
     "client.accessor.LevelRendererAccessor",
-    "client.accessor.WeatherEffectRendererAccessor",
     "client.MapRendererMixin",
     "client.MinecraftMusicMixin",
     "client.MinecraftMixin",
-    "client.SkyRendererMixin"
+    "client.SkyRendererMixin",
+    "client.WingsLayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

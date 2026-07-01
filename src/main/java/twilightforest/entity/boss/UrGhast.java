@@ -266,13 +266,12 @@ public class UrGhast extends BaseTFBoss {
 			minion.setYHeadRot(yaw);
 			minion.makeBossMinion();
 			minion.finalizeSpawn(level, level.getCurrentDifficultyAt(minion.blockPosition()), EntitySpawnReason.MOB_SUMMONED, null);
-			if (minion.checkSpawnRules(level, EntitySpawnReason.MOB_SUMMONED)) {
-				level.addFreshEntity(minion);
+			if (minion.checkSpawnRules(level, EntitySpawnReason.MOB_SUMMONED) && level.addFreshEntity(minion)) {
 				minion.spawnAnim();
-			}
 
-			if (++spawns >= maxSpawns) {
-				break;
+				if (++spawns >= maxSpawns) {
+					break;
+				}
 			}
 		}
 	}
@@ -476,7 +475,7 @@ public class UrGhast extends BaseTFBoss {
 	//[VanillaCopy] of FlyingMob.travel
 	@Override
 	public void travel(Vec3 vec3) {
-		if (this.isEffectiveAi()) {
+		if (this.isLocalInstanceAuthoritative()) {
 			if (this.isInWater()) {
 				this.moveRelative(0.02F, vec3);
 				this.move(MoverType.SELF, this.getDeltaMovement());

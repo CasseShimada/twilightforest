@@ -5,12 +5,13 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
 import net.minecraft.world.phys.Vec3;
 import twilightforest.init.TFItems;
+import twilightforest.inventory.InventoryUtil;
 import twilightforest.item.recipe.ScepterRepairRecipe;
 
 import java.util.ArrayList;
@@ -28,37 +29,37 @@ public record RechargeScepterEffect() implements EnchantmentEntityEffect {
 	public static void applyRecharge(ServerLevel level, ItemStack item, Entity entity) {
 		if (entity instanceof Player player && item.getDamageValue() == item.getMaxDamage()) {
 			List<ScepterRepairRecipe> recipes = level.recipeAccess().getRecipes().stream().filter(holder -> holder.value() instanceof ScepterRepairRecipe).map(RecipeHolder::value).map(ScepterRepairRecipe.class::cast).toList();
-			List<Integer> slotsToConsume = new ArrayList<>();
 			for (var recipe : recipes) {
 				if (item.is(recipe.getScepter())) {
-					var ingredientCopy = new ArrayList<>(recipe.placementInfo().ingredients());
+					List<Integer> slotsToConsume = new ArrayList<>();
+					var ingredientCopy = new ArrayList<>(recipe.getRepairItems());
+					var inventory = player.getInventory().getNonEquipmentItems();
 					scepterItemsCheck:
-					for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
-						var stack = player.getInventory().getItem(i);
+					for (int i = 0; i < inventory.size(); i++) {
+						var stack = inventory.get(i);
 						if (stack.isEmpty()) continue;
 						if (stack.is(TFItems.EXANIMATE_ESSENCE.get())) {
 							stack.shrink(1);
 							item.setDamageValue(0);
 							return;
 						}
-						for (var ingredient : recipe.placementInfo().ingredients()) {
-							if (ingredientCopy.contains(ingredient) && ingredient.test(stack)) {
-								ingredientCopy.remove(ingredient);
+						for (int ingredientIndex = 0; ingredientIndex < ingredientCopy.size(); ingredientIndex++) {
+							if (ingredientCopy.get(ingredientIndex).test(stack)) {
+								ingredientCopy.remove(ingredientIndex);
 								slotsToConsume.add(i);
 								if (ingredientCopy.isEmpty()) break scepterItemsCheck;
+								continue scepterItemsCheck;
 							}
 						}
 					}
 
-					if (slotsToConsume.size() == recipe.placementInfo().ingredients().size()) {
+					if (slotsToConsume.size() == recipe.getRepairItems().size()) {
 						for (int slot : slotsToConsume) {
-							ItemStack stack = player.getInventory().getItem(slot);
+							ItemStack stack = inventory.get(slot);
+							ItemStackTemplate remainder = stack.getCraftingRemainder();
 							stack.shrink(1);
-							ItemStack remainder = stack.getItem().getCraftingRemainder().create();
-							if (!remainder.isEmpty()) {
-								if (!player.getInventory().add(remainder)) {
-									player.drop(remainder, false);
-								}
+							if (remainder != null) {
+								InventoryUtil.giveItemToPlayer(player, remainder.create());
 							}
 						}
 						item.setDamageValue(item.getDamageValue() - recipe.getRepairDurability());

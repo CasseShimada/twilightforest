@@ -24,7 +24,7 @@ public abstract class PlayerModelMixin {
 			headedModel.getHead().visible = !wearingTrophy;
 		}
 		if ((Object) this instanceof HumanoidModel<?> humanoidModel) {
-			humanoidModel.hat.visible = humanoidModel.hat.visible && !wearingTrophy;
+			humanoidModel.hat.visible = state.showHat && !wearingTrophy;
 		}
 	}
 }

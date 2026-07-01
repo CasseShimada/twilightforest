@@ -59,7 +59,7 @@ public class MasonJarBlock extends JarBlock implements SimpleWaterloggedBlock {
 						ItemStack test = handler.extractItem(0, Integer.MAX_VALUE, true);
 						if (!test.isEmpty()) {
 							if (player.isSecondaryUseActive()) {
-								PlayerMessaging.displayClientMessage(player, Component.literal(test.getItem().getName(test).getString() + " x" + test.getCount()), true);
+								PlayerMessaging.displayClientMessage(player, Component.literal(test.getItemName().getString() + " x" + test.getCount()), true);
 								serverLevel.playSound(null, pos, TFSounds.JAR_WIGGLE.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
 								blockEntity.wobble(DecoratedPotBlockEntity.WobbleStyle.NEGATIVE);
 							} else {

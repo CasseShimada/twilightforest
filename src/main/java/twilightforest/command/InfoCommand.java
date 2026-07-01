@@ -42,16 +42,16 @@ public class InfoCommand {
 
 		BlockPos pos = BlockPos.containing(source.getPosition());
 
-		Optional<Registry<Structure>> possibleStructureRegistry = level.registryAccess().lookup(Registries.STRUCTURE);
+		Registry<Structure> structureRegistry = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
 		Optional<StructureStart> possibleNearLandmark = LandmarkUtil.locateNearestLandmarkStart(level, SectionPos.blockToSectionCoord(pos.getX()), SectionPos.blockToSectionCoord(pos.getZ()));
 
-		if (possibleStructureRegistry.isEmpty() || possibleNearLandmark.isEmpty() || !(possibleNearLandmark.get().getStructure() instanceof LandmarkStructure landmarkStructure)) return 0;
+		if (possibleNearLandmark.isEmpty() || !(possibleNearLandmark.get().getStructure() instanceof LandmarkStructure landmarkStructure)) return 0;
 		StructureStart structureStart = possibleNearLandmark.get();
 
-		Identifier key = possibleStructureRegistry.get().getKey(landmarkStructure);
+		Identifier key = structureRegistry.getKey(landmarkStructure);
 
 		if (!FabricLoader.getInstance().isDevelopmentEnvironment())
-			source.sendSuccess(() -> Component.translatable("This command is still WIP, some things may still be broken.").withStyle(ChatFormatting.RED, ChatFormatting.BOLD), false);
+			source.sendSuccess(() -> Component.translatable("commands.tffeature.info.wip").withStyle(ChatFormatting.RED, ChatFormatting.BOLD), false);
 
 		// nearest feature
 		String structureName = Component.translatable("structure." + key.getNamespace() + "." + key.getPath()).getString();
@@ -72,7 +72,7 @@ public class InfoCommand {
 			source.sendSuccess(() -> Component.translatable("commands.tffeature.structure.inside").withStyle(ChatFormatting.BOLD, ChatFormatting.GREEN), false);
 
 			boolean conquered = false;
-			var structureKey = possibleStructureRegistry.get().getResourceKey(structureStart.getStructure()).orElse(null);
+			var structureKey = structureRegistry.getResourceKey(structureStart.getStructure()).orElse(null);
 			if (structureKey != null) {
 				conquered = StructureConqueredData.get(level).isConquered(structureKey, structureStart.getChunkPos());
 			}

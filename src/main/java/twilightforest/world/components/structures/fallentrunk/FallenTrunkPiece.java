@@ -146,7 +146,7 @@ public class FallenTrunkPiece extends StructurePiece {
 	private void generateTrunkMainRod(WorldGenLevel level, RandomSource random, BoundingBox box, BlockPos pos, int dx, int dy, boolean hasHole) {
 		for (int dz = ERODED_LENGTH; dz < length - 1 - ERODED_LENGTH; dz++) {
 			BlockPos offsetPos = pos.offset(dx, dy, dz);
-			this.placeLog(level, getLogState(random, offsetPos), dx, dy, dz, box, random, hasHole);
+			this.placeLog(level, getLogState(level, random, offsetPos), dx, dy, dz, box, random, hasHole);
 		}
 	}
 
@@ -156,7 +156,7 @@ public class FallenTrunkPiece extends StructurePiece {
 				break;
 
 			BlockPos offsetPos = pos.offset(dx, dy, dz);
-			this.placeLog(level, getLogState(random, offsetPos), dx, dy, dz, box, random, hasHole);
+			this.placeLog(level, getLogState(level, random, offsetPos), dx, dy, dz, box, random, hasHole);
 		}
 
 		for (int dz = length - 1 - ERODED_LENGTH; dz < length - 1; dz++) {
@@ -164,7 +164,7 @@ public class FallenTrunkPiece extends StructurePiece {
 				break;
 
 			BlockPos offsetPos = pos.offset(dx, dy, dz);
-			this.placeLog(level, getLogState(random, offsetPos), dx, dy, dz, box, random, hasHole);
+			this.placeLog(level, getLogState(level, random, offsetPos), dx, dy, dz, box, random, hasHole);
 		}
 	}
 
@@ -210,8 +210,8 @@ public class FallenTrunkPiece extends StructurePiece {
 		return (int) (Math.max(ax, az) + (Math.min(ax, az) * 0.5));
 	}
 
-	private BlockState getLogState(RandomSource random, BlockPos pos) {
-		return log.getState(null, random, pos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z);
+	private BlockState getLogState(WorldGenLevel level, RandomSource random, BlockPos pos) {
+		return log.getState(level, random, pos).trySetValue(RotatedPillarBlock.AXIS, Direction.Axis.Z);
 	}
 
 	private void placeLog(WorldGenLevel level, BlockState blockstate, int x, int y, int z, BoundingBox boundingbox, RandomSource random, boolean hasHole) {

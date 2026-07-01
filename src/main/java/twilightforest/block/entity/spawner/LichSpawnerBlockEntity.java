@@ -29,6 +29,9 @@ public class LichSpawnerBlockEntity extends BossSpawnerBlockEntity<Lich> {
 	@Override
 	protected boolean spawnMyBoss(ServerLevelAccessor accessor) {
 		Lich myCreature = this.makeMyCreature();
+		if (myCreature == null) {
+			return false;
+		}
 
 		BlockPos.MutableBlockPos mutableBlockPos = this.getBlockPos().mutable();
 		while (true) {

@@ -44,6 +44,17 @@ public class TFBlockEntities {
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<JarBlockEntity>> JAR = BLOCK_ENTITIES.register("jar", () -> FabricBlockEntityTypeBuilder.create(JarBlockEntity::new, TFBlocks.FIREFLY_JAR.get(), TFBlocks.CICADA_JAR.get()).build());
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MasonJarBlockEntity>> MASON_JAR = BLOCK_ENTITIES.register("mason_jar", () -> FabricBlockEntityTypeBuilder.create(MasonJarBlockEntity::new, TFBlocks.MASON_JAR.get()).build());
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SinisterSpawnerBlockEntity>> SINISTER_SPAWNER = BLOCK_ENTITIES.register("sinister_spawner", () -> FabricBlockEntityTypeBuilder.create(SinisterSpawnerBlockEntity::new, TFBlocks.SINISTER_SPAWNER.get()).build());
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<DryingRackBlockEntity>> DRYING_RACK = BLOCK_ENTITIES.register("drying_rack", () -> FabricBlockEntityTypeBuilder.create(DryingRackBlockEntity::new,
+		TFBlocks.OAK_DRYING_RACK.get(), TFBlocks.SPRUCE_DRYING_RACK.get(),
+		TFBlocks.BIRCH_DRYING_RACK.get(), TFBlocks.JUNGLE_DRYING_RACK.get(),
+		TFBlocks.ACACIA_DRYING_RACK.get(), TFBlocks.DARK_OAK_DRYING_RACK.get(),
+		TFBlocks.CRIMSON_DRYING_RACK.get(), TFBlocks.WARPED_DRYING_RACK.get(),
+		TFBlocks.VANGROVE_DRYING_RACK.get(), TFBlocks.BAMBOO_DRYING_RACK.get(),
+		TFBlocks.CHERRY_DRYING_RACK.get(), TFBlocks.TWILIGHT_OAK_DRYING_RACK.get(),
+		TFBlocks.CANOPY_DRYING_RACK.get(), TFBlocks.MANGROVE_DRYING_RACK.get(),
+		TFBlocks.DARK_DRYING_RACK.get(), TFBlocks.TIME_DRYING_RACK.get(),
+		TFBlocks.TRANSFORMATION_DRYING_RACK.get(), TFBlocks.MINING_DRYING_RACK.get(),
+		TFBlocks.SORTING_DRYING_RACK.get()).build());
 
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TrophyBlockEntity>> TROPHY = BLOCK_ENTITIES.register("trophy", () -> FabricBlockEntityTypeBuilder.create(TrophyBlockEntity::new,
 		TFBlocks.NAGA_TROPHY.get(), TFBlocks.LICH_TROPHY.get(), TFBlocks.MINOSHROOM_TROPHY.get(),

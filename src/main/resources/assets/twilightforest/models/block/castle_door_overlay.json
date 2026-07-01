@@ -1,0 +1,55 @@
+{
+  "parent": "block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "twilightforest:block/forcefield_white",
+    "overlay": "twilightforest:block/castle_door_rune_corners"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "shade": false,
+      "faces": {
+        "down": {
+          "texture": "#overlay",
+          "cullface": "down",
+          "tintindex": 0
+        },
+        "up": {
+          "texture": "#overlay",
+          "cullface": "up",
+          "tintindex": 0
+        },
+        "north": {
+          "texture": "#overlay",
+          "cullface": "north",
+          "tintindex": 0
+        },
+        "south": {
+          "texture": "#overlay",
+          "cullface": "south",
+          "tintindex": 0
+        },
+        "west": {
+          "texture": "#overlay",
+          "cullface": "west",
+          "tintindex": 0
+        },
+        "east": {
+          "texture": "#overlay",
+          "cullface": "east",
+          "tintindex": 0
+        }
+      }
+    }
+  ]
+}

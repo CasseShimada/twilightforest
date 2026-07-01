@@ -24,6 +24,7 @@ import twilightforest.util.datamaps.EntityTransformation;
 import twilightforest.util.datamaps.MagicMapBiomeColor;
 import twilightforest.util.datamaps.OreMapOreColor;
 import twilightforest.network.PacketDistributor;
+import twilightforest.item.MagicMapItem;
 
 import java.io.Reader;
 import java.util.HashMap;
@@ -127,6 +128,7 @@ public final class TFDataMaps {
 
 		@Override
 		public void onResourceManagerReload(ResourceManager manager) {
+			MagicMapItem.clearBiomeCache();
 			clear();
 			loadMap(manager, "data_maps/block/crumble_horn.json", CRUMBLE_HORN, CrumbledBlock.CODEC);
 			loadMap(manager, "data_maps/block/ore_map_color.json", ORE_MAP_ORE_COLOR, OreMapOreColor.CODEC);

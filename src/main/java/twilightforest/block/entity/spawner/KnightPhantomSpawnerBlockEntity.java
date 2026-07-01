@@ -37,6 +37,9 @@ public class KnightPhantomSpawnerBlockEntity extends BossSpawnerBlockEntity<Knig
 		for (int i = spawned; i < COUNT; i++) {
 			// create creature
 			KnightPhantom myCreature = this.makeMyCreature();
+			if (myCreature == null) {
+				return false;
+			}
 
 			float angle = (360F / COUNT) * i;
 			final float distance = 4F;
@@ -64,6 +67,8 @@ public class KnightPhantomSpawnerBlockEntity extends BossSpawnerBlockEntity<Knig
 			// spawn it
 			if (accessor.addFreshEntity(myCreature)) {
 				spawned++;
+			} else {
+				return false;
 			}
 		}
 		return spawned == COUNT;

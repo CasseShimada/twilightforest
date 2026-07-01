@@ -29,6 +29,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import twilightforest.init.TFItems;
 import twilightforest.init.TFStats;
+import twilightforest.inventory.InventoryUtil;
 
 public class Experiment115Block extends Block {
 
@@ -86,10 +87,7 @@ public class Experiment115Block extends Block {
 				}
 				player.playSound(SoundEvents.ITEM_PICKUP, 0.5F, 1.0F);
 				if (!player.isCreative()) {
-					ItemStack give = new ItemStack(TFItems.EXPERIMENT_115.get());
-					if (!player.addItem(give)) {
-						player.drop(give, false);
-					}
+					InventoryUtil.giveItemToPlayer(player, new ItemStack(TFItems.EXPERIMENT_115.get()));
 				}
 				return InteractionResult.SUCCESS;
 			}

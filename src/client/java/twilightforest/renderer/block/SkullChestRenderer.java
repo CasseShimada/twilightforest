@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.Mth;
 import net.minecraft.util.Unit;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -24,6 +23,7 @@ import twilightforest.client.model.entity.KeepsakeCasketModel;
 
 public class SkullChestRenderer<T extends BlockEntity & LidBlockEntity> implements BlockEntityRenderer<T, SkullChestRenderer.RenderState> {
 	public static final Identifier SKULL_CHEST_TEXTURE = TwilightForestMod.getModelTexture("casket/skull_chest.png");
+	public static final Direction ITEM_FACING = Direction.SOUTH;
 
 	private final KeepsakeCasketModel model;
 
@@ -56,9 +56,7 @@ public class SkullChestRenderer<T extends BlockEntity & LidBlockEntity> implemen
 	@Override
 	public void submit(RenderState renderState, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
 		poseStack.pushPose();
-		poseStack.translate(0.5F, 0.0F, 0.5F);
-		poseStack.mulPose(Axis.YP.rotationDegrees(-renderState.facing.toYRot()));
-		poseStack.scale(1.0F, -1.0F, -1.0F);
+		applyModelTransform(poseStack, renderState.facing);
 
 		float lidRotation = 1.0F - renderState.openness;
 		lidRotation = 1.0F - lidRotation * lidRotation * lidRotation;
@@ -77,9 +75,15 @@ public class SkullChestRenderer<T extends BlockEntity & LidBlockEntity> implemen
 		poseStack.popPose();
 	}
 
+	public static void applyModelTransform(PoseStack poseStack, Direction facing) {
+		poseStack.translate(0.5F, 0.0F, 0.5F);
+		poseStack.mulPose(Axis.YP.rotationDegrees(-facing.toYRot()));
+		poseStack.scale(1.0F, -1.0F, -1.0F);
+	}
+
 	public static class RenderState extends BlockEntityRenderState {
 		public Identifier texture = SKULL_CHEST_TEXTURE;
-		public Direction facing = Direction.NORTH;
+		public Direction facing = ITEM_FACING;
 		public float openness;
 	}
 }

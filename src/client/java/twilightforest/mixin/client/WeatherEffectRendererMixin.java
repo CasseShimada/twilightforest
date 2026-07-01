@@ -1,38 +1,22 @@
 package twilightforest.mixin.client;
 
-import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.WeatherEffectRenderer;
-import net.minecraft.server.level.ParticleStatus;
-import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import twilightforest.client.renderer.TFWeatherRenderer;
 import twilightforest.init.TFDimension;
 
 @Mixin(WeatherEffectRenderer.class)
 public class WeatherEffectRendererMixin {
-	@Inject(method = "tickRainParticles", at = @At("HEAD"), cancellable = true)
-	private void twilightforest$tickProgressionRain(ClientLevel level, Camera camera, int ticks, ParticleStatus particleStatus, int radius, CallbackInfo ci) {
-		if (!TFDimension.isTwilightWorldOnClient(level)) {
-			return;
-		}
-
-		if (TFWeatherRenderer.tickRain(level, ticks, camera.blockPosition(), particleStatus, radius)) {
-			ci.cancel();
-		}
-	}
-
 	@Redirect(
 		method = "extractRenderState",
-		at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getRainLevel(F)F")
+		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;getRainLevel(F)F")
 	)
-	private float twilightforest$useEffectiveRainLevel(Level level, float partialTicks) {
-		if (level instanceof ClientLevel clientLevel && TFDimension.isTwilightWorldOnClient(clientLevel)) {
-			return TFWeatherRenderer.getEffectiveRainLevel(clientLevel, partialTicks);
+	private float twilightforest$useEffectiveRainLevel(ClientLevel level, float partialTicks) {
+		if (TFDimension.isTwilightWorldOnClient(level)) {
+			return TFWeatherRenderer.getEffectiveRainLevel(level, partialTicks);
 		}
 		return level.getRainLevel(partialTicks);
 	}

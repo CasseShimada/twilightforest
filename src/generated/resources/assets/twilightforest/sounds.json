@@ -159,6 +159,24 @@
     ],
     "subtitle": "subtitles.twilightforest.block.door.vanish"
   },
+  "block.twilightforest.drying_rack.add_item": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "item.bucket.empty"
+      }
+    ],
+    "subtitle": "subtitles.twilightforest.block.drying_rack.add_item"
+  },
+  "block.twilightforest.drying_rack.remove_item": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "item.bucket.fill"
+      }
+    ],
+    "subtitle": "subtitles.twilightforest.block.drying_rack.remove_item"
+  },
   "block.twilightforest.generic.annihilation": {
     "sounds": [
       {

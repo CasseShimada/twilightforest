@@ -1,26 +1,28 @@
 package twilightforest.util;
 
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.EquipmentSlot;
 import twilightforest.init.TFDataComponents;
 
 public class ArmorUtil {
 
 	public float getShroudedArmorPercentage(LivingEntity entity) {
 		int shroudedArmor = 0;
-		int nonShroudedArmor = 0;
+		int armorSlots = 0;
 
-		for (EquipmentSlot slot : EquipmentSlot.VALUES) {
-			if (!slot.isArmor()) continue;
+		for (EquipmentSlot slot : EquipmentSlotGroup.ARMOR) {
 			ItemStack stack = entity.getItemBySlot(slot);
+
 			if (!stack.isEmpty() && stack.get(TFDataComponents.EMPERORS_CLOTH.get()) != null) {
 				shroudedArmor++;
 			}
-			nonShroudedArmor++;
+
+			armorSlots++;
 		}
 
-		return nonShroudedArmor > 0 && shroudedArmor > 0 ? (float) shroudedArmor / (float) nonShroudedArmor : 0.0F;
+		return armorSlots > 0 ? (float) shroudedArmor / (float) armorSlots : 0.0F;
 	}
 
 }

@@ -7,7 +7,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import twilightforest.ASMHooks;
 import twilightforest.events.EntityEvents;
 import twilightforest.events.ToolEvents;
 
@@ -25,5 +27,16 @@ public abstract class LivingEntityMixin {
 	@Inject(method = "jumpFromGround", at = @At("TAIL"))
 	private void twilightforest$onJump(CallbackInfo ci) {
 		EntityEvents.handleLivingJump((LivingEntity) (Object) this);
+	}
+
+	@Redirect(
+		method = "getVisibilityPercent",
+		at = @At(
+			value = "INVOKE",
+			target = "Lnet/minecraft/world/entity/LivingEntity;getArmorCoverPercentage()F"
+		)
+	)
+	private float twilightforest$hideShroudedArmorFromVisibility(LivingEntity entity) {
+		return ASMHooks.modifyArmorVisibility(entity.getArmorCoverPercentage(), entity);
 	}
 }

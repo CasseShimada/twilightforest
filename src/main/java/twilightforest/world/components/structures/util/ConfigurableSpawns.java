@@ -4,8 +4,6 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.util.random.WeightedList;
 
-import java.util.List;
-
 public interface ConfigurableSpawns extends ControlledSpawns {
 	ControlledSpawningConfig getConfig();
 
@@ -31,6 +29,6 @@ public interface ConfigurableSpawns extends ControlledSpawns {
 
 	@Override
 	default WeightedList<MobSpawnSettings.SpawnerData> getSpawnableMonsterList(int index) {
-		return this.getConfig().getForLabel("" + index);
+		return this.getConfig().getForLabel(String.valueOf(index));
 	}
 }

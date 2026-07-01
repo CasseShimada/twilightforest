@@ -49,10 +49,11 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.block.entity.CandelabraBlockEntity;
 import twilightforest.components.item.CandelabraData;
-import twilightforest.tags.TFItemTags;
+import twilightforest.inventory.InventoryUtil;
 import twilightforest.init.TFItems;
 import twilightforest.init.TFParticleType;
 import twilightforest.init.TFSounds;
+import twilightforest.tags.TFItemTags;
 
 import java.util.List;
 import java.util.Optional;
@@ -156,9 +157,7 @@ public class CandelabraBlock extends BaseEntityBlock implements LightableBlock, 
 							player.getInventory().add(itemstack);
 						}
 					} else {
-						if (!player.getInventory().add(itemstack)) {
-							player.drop(itemstack, false);
-						}
+						InventoryUtil.giveItemToPlayer(player, itemstack);
 					}
 					level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
 					return InteractionResult.SUCCESS;

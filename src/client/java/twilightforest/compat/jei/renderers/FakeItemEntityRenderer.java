@@ -58,7 +58,7 @@ public class FakeItemEntityRenderer implements IIngredientRenderer<FakeItemEntit
 
 	@Override
 	public void getTooltip(ITooltipBuilder tooltip, FakeItemEntity item, TooltipFlag flag) {
-		tooltip.add(item.stack().getItem().getName(item.stack()));
+		tooltip.add(item.stack().getItemName());
 		if (flag.isAdvanced()) {
 			tooltip.add(Component.literal(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item.stack().getItem())).toString()).withStyle(ChatFormatting.DARK_GRAY));
 		}

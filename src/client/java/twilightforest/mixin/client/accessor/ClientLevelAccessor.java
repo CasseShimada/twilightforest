@@ -8,4 +8,10 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface ClientLevelAccessor {
 	@Accessor("skyFlashTime")
 	int twilightforest$getSkyFlashTime();
+
+	@Accessor("rainSoundTime")
+	int twilightforest$getRainSoundTime();
+
+	@Accessor("rainSoundTime")
+	void twilightforest$setRainSoundTime(int value);
 }

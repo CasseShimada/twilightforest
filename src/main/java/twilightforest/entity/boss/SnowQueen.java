@@ -354,6 +354,11 @@ public class SnowQueen extends BaseTFBoss implements IBreathAttacker, TFMultipar
 
 	public void summonMinionAt(LivingEntity targetedEntity) {
 		IceCrystal minion = TFEntities.ICE_CRYSTAL.get().create(this.level(), EntitySpawnReason.MOB_SUMMONED);
+		if (minion == null) {
+			this.summonsRemaining--;
+			return;
+		}
+
 		minion.setPos(this.getX(), this.getY(), this.getZ());
 		minion.setYRot(0.0F);
 		minion.setXRot(0.0F);

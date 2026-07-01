@@ -15,16 +15,16 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.world.level.storage.loot.LootTable;
 import twilightforest.block.entity.spawner.SinisterSpawnerBlockEntity;
 
 public class SinisterSpawnerCommand {
-	// Copied from LootCommand.SUGGEST_LOOT_TABLE
 	public static final SuggestionProvider<CommandSourceStack> SUGGEST_LOOT_TABLE = (context, builder) -> {
-		var registry = context.getSource().getServer().registryAccess().lookupOrThrow(Registries.LOOT_TABLE);
-		return SharedSuggestionProvider.suggestResource(registry.keySet(), builder);
+		var registryAccess = context.getSource().getServer().registryAccess();
+
+		var lootTables = registryAccess.lookupOrThrow(Registries.LOOT_TABLE).listElements().map(holder -> holder.key().identifier());
+
+		return SharedSuggestionProvider.suggestResource(lootTables, builder);
 	};
 
 	public LiteralArgumentBuilder<CommandSourceStack> register(CommandBuildContext buildContext) {

@@ -10,7 +10,6 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import twilightforest.config.TFConfig;
 import twilightforest.init.TFDataAttachments;
-import twilightforest.init.TFLoot;
 
 import java.util.Set;
 

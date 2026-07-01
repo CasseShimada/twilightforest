@@ -1,11 +1,9 @@
 package twilightforest.util;
 
 import net.minecraft.advancements.AdvancementHolder;
-import net.minecraft.advancements.AdvancementProgress;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -14,29 +12,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class PlayerHelper {
-	/**
-	 * Fulfills all remaining criteria of the given advancement
-	 */
-	@Deprecated
-	public static void grantAdvancement(ServerPlayer player, Identifier id) {
-		PlayerAdvancements advancements = player.getAdvancements();
-		AdvancementHolder holder = player.level().getServer().getAdvancements().get(id);
-		if (holder != null) {
-			for (String criterion : advancements.getOrStartProgress(holder).getRemainingCriteria()) {
-				advancements.award(holder, criterion);
-			}
-		}
-	}
-
-	@Deprecated
-	public static void grantCriterion(ServerPlayer player, Identifier id, String criterion) {
-		PlayerAdvancements advancements = player.getAdvancements();
-		AdvancementHolder holder = player.level().getServer().getAdvancements().get(id);
-		if (holder != null) {
-			advancements.award(holder, criterion);
-		}
-	}
-
 	@Nullable
 	public static AdvancementHolder getAdvancement(Player player, Identifier advancementLocation) {
 		if (player instanceof ServerPlayer serverPlayer) {

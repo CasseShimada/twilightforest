@@ -14,7 +14,7 @@ import twilightforest.TwilightForestMod;
 
 public final class TFRenderPipelines {
 	public static final RenderPipeline AURORA = RenderPipelines.register(
-		RenderPipeline.builder(RenderPipelines.MATRICES_FOG_SNIPPET, RenderPipelines.GLOBALS_SNIPPET)
+		RenderPipeline.builder(RenderPipelines.MATRICES_FOG_SNIPPET)
 			.withLocation(TwilightForestMod.prefix("pipeline/aurora"))
 			.withVertexShader(TwilightForestMod.prefix("core/aurora/aurora"))
 			.withFragmentShader(TwilightForestMod.prefix("core/aurora/aurora"))

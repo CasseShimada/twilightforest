@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import twilightforest.inventory.InventoryUtil;
 import twilightforest.tags.TFDimensionTypeTags;
 import twilightforest.util.PlayerMessaging;
 
@@ -41,9 +42,7 @@ public class EmptyMagicMapItem extends Item {
 		if (emptyMapStack.isEmpty()) {
 			return InteractionResult.SUCCESS.heldItemTransformedTo(newMapStack);
 		} else {
-			if (!player.getInventory().add(newMapStack.copy())) {
-				player.drop(newMapStack, false);
-			}
+			InventoryUtil.giveItemToPlayer(player, newMapStack.copy());
 			return InteractionResult.SUCCESS;
 		}
 	}

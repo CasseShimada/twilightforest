@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.special.NoDataSpecialModelRenderer;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
+import net.minecraft.world.item.ItemDisplayContext;
 import org.joml.Vector3fc;
 import twilightforest.client.model.entity.TrophyBlockModel;
 import twilightforest.client.renderer.block.TrophyRenderer;
@@ -27,11 +28,12 @@ public record TrophySpecialRenderer(Function<BossVariant, TrophyBlockModel> trop
 		float rotation = this.fixedRotation.orElse(TFConfig.rotateTrophyHeadsGui && !Minecraft.getInstance().isPaused() ? (int) (Util.getMillis() / 35) : 0);
 		float animation = !Minecraft.getInstance().isPaused() ? (int) (Util.getMillis() / 30) + Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks() : 0;
 		if (model != null) {
+			ItemDisplayContext context = this.fixedRotation.isPresent() ? ItemDisplayContext.FIXED : ItemDisplayContext.GUI;
 			stack.pushPose();
 			stack.translate(0.5F, 0.5F, 0.5F);
 			stack.mulPose(Axis.YN.rotationDegrees(rotation));
 			stack.translate(-0.5F, -0.5F, -0.5F);
-			TrophyRenderer.render(null, 0.0F, model, false, animation, stack, nodeCollector, light, overlay, net.minecraft.world.item.ItemDisplayContext.GUI, null);
+			TrophyRenderer.render(null, 0.0F, model, false, animation, stack, nodeCollector, light, overlay, context, null);
 			stack.popPose();
 		}
 	}

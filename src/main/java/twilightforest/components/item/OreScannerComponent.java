@@ -120,7 +120,7 @@ public class OreScannerComponent {
 	}
 
 	public ChunkPos centerChunkPos() {
-		return new ChunkPos(Mth.floor(this.origin.getX() + this.xSpan / 2f) >> 4, Mth.floor(this.origin.getZ() + this.zSpan / 2f) >> 4);
+		return ChunkPos.containing(BlockPos.containing(this.origin.getX() + this.xSpan / 2f, this.origin.getY(), this.origin.getZ() + this.zSpan / 2f));
 	}
 
 	public boolean isEmpty() {

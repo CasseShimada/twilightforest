@@ -13,7 +13,6 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import twilightforest.TwilightForestMod;
 import twilightforest.config.TFConfig;
 import twilightforest.init.TFDataAttachments;
-import twilightforest.init.TFLoot;
 
 import java.util.List;
 
@@ -49,7 +48,7 @@ public class MultiplayerBasedAdditionLootFunction extends LootItemConditionalFun
 					int participatingPlayers = qualifiedPlayers - 1;
 					int extraItems = this.value.getInt(context) * participatingPlayers;
 					stack.setCount(Mth.clamp(stack.getCount() + extraItems, 0, stack.getMaxStackSize()));
-					TwilightForestMod.LOGGER.debug("{} extra players participated in a fight against {}, dropping {} extra {} for a total of {}.", participatingPlayers, context.getParameter(LootContextParams.THIS_ENTITY).getType().getDescription().getString(), extraItems, stack.getItem().getName(stack).getString(), stack.getCount());
+					TwilightForestMod.LOGGER.debug("{} extra players participated in a fight against {}, dropping {} extra {} for a total of {}.", participatingPlayers, context.getParameter(LootContextParams.THIS_ENTITY).getType().getDescription().getString(), extraItems, stack.getItemName().getString(), stack.getCount());
 				}
 			}
 		}

@@ -13,9 +13,8 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 import twilightforest.entity.EnforcedHomePoint;
-
-import java.util.Objects;
 
 public abstract class BossSpawnerBlockEntity<T extends Mob & EnforcedHomePoint> extends BlockEntity {
 
@@ -56,6 +55,9 @@ public abstract class BossSpawnerBlockEntity<T extends Mob & EnforcedHomePoint> 
 	protected boolean spawnMyBoss(ServerLevelAccessor accessor) {
 		// create creature
 		T myCreature = this.makeMyCreature();
+		if (myCreature == null) {
+			return false;
+		}
 
 		BlockPos spawnPos = accessor.getBlockState(this.getBlockPos().below()).getCollisionShape(accessor, this.getBlockPos().below()).isEmpty() ? this.getBlockPos().below() : this.getBlockPos();
 		float yaw = accessor.getLevel().getRandom().nextFloat() * 360F;
@@ -82,7 +84,7 @@ public abstract class BossSpawnerBlockEntity<T extends Mob & EnforcedHomePoint> 
 		return SHORT_RANGE;
 	}
 
-	protected T makeMyCreature() {
-		return Objects.requireNonNull(this.entityType.create(this.getLevel(), EntitySpawnReason.SPAWNER));
+	protected @Nullable T makeMyCreature() {
+		return this.getLevel() == null ? null : this.entityType.create(this.getLevel(), EntitySpawnReason.SPAWNER);
 	}
 }

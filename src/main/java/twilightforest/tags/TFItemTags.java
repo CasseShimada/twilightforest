@@ -19,6 +19,8 @@ public class TFItemTags {
 	public static final TagKey<Item> TWILIGHT_LOGS = create("logs");
 
 	public static final TagKey<Item> BANISTERS = create("banisters");
+	public static final TagKey<Item> DRYING_RACKS = create("drying_racks");
+	public static final TagKey<Item> RENDER_LOWER_ON_DRYING_RACK = create("lower_on_drying_rack");
 
 	public static final TagKey<Item> PAPER = makeCommonTag("paper");
 
@@ -63,6 +65,7 @@ public class TFItemTags {
 
 	public static final TagKey<Item> KEPT_ON_DEATH = create("kept_on_death");
 	public static final TagKey<Item> BLOCK_AND_CHAIN_ENCHANTABLE = create("enchantable/block_and_chain");
+	public static final TagKey<Item> EMPERORS_CLOTH_APPLICABLE = create("emperors_cloth_applicable");
 
 	public static final TagKey<Item> REPAIRS_IRONWOOD_TOOLS = create("repairs_ironwood_tools");
 	public static final TagKey<Item> REPAIRS_STEELEAF_TOOLS = create("repairs_steeleaf_tools");

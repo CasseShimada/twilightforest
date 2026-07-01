@@ -41,6 +41,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.block.entity.SkullCandleBlockEntity;
 import twilightforest.components.item.SkullCandles;
+import twilightforest.inventory.InventoryUtil;
 import twilightforest.init.TFBlockEntities;
 import twilightforest.init.TFDataComponents;
 
@@ -203,9 +204,7 @@ public abstract class AbstractSkullCandleBlock extends BaseEntityBlock implement
 					player.getInventory().add(candle);
 				}
 			} else {
-				if (!player.getInventory().add(candle)) {
-					player.drop(candle, false);
-				}
+				InventoryUtil.giveItemToPlayer(player, candle);
 			}
 			return InteractionResult.SUCCESS;
 		}

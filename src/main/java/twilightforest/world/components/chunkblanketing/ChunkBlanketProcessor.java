@@ -3,8 +3,8 @@ package twilightforest.world.components.chunkblanketing;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -32,7 +32,7 @@ public interface ChunkBlanketProcessor {
 	 * @param biomeGetter A function for obtaining biomes per-block, in respect to noise per-block distortion of biomes existing in 4x4x4 in a chunk section.
 	 * @param chunkAccess The chunk to modify blocks.
 	 */
-	void processChunk(WorldGenRegion worldGenRegion, RandomSource random, Function<BlockPos, Holder<Biome>> biomeGetter, ChunkAccess chunkAccess);
+	void processChunk(WorldGenLevel level, RandomSource random, Function<BlockPos, Holder<Biome>> biomeGetter, ChunkAccess chunkAccess);
 
 	/**
 	 * @return Supplier[Codec[? extends ChunkBlanketProcessor]]
@@ -45,7 +45,7 @@ public interface ChunkBlanketProcessor {
 	 */
 	interface SimpleProcessor extends ChunkBlanketProcessor {
 		@Override
-		default void processChunk(WorldGenRegion worldGenRegion, RandomSource random, Function<BlockPos, Holder<Biome>> biomeGetter, ChunkAccess chunkAccess) {
+		default void processChunk(WorldGenLevel level, RandomSource random, Function<BlockPos, Holder<Biome>> biomeGetter, ChunkAccess chunkAccess) {
 			for (int dX = 0; dX < 16; dX++) {
 				for (int dZ = 0; dZ < 16; dZ++) {
 					BlockPos firstAvailableBlock = chunkAccess.getPos().getBlockAt(dX, chunkAccess.getHeight(this.heightmap(), dX, dZ) + 1, dZ);
@@ -53,12 +53,12 @@ public interface ChunkBlanketProcessor {
 					if (!this.biomesForApplication().contains(biomeGetter.apply(firstAvailableBlock)))
 						continue;
 
-					this.processColumn(worldGenRegion, random, chunkAccess, firstAvailableBlock);
+					this.processColumn(level, random, chunkAccess, firstAvailableBlock);
 				}
 			}
 		}
 
-		void processColumn(WorldGenRegion worldGenRegion, RandomSource random, ChunkAccess chunkAccess, BlockPos aboveFloor);
+		void processColumn(WorldGenLevel level, RandomSource random, ChunkAccess chunkAccess, BlockPos aboveFloor);
 
 		Heightmap.Types heightmap();
 	}

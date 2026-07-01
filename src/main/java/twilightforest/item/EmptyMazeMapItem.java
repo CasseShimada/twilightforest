@@ -9,6 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import twilightforest.inventory.InventoryUtil;
 
 public class EmptyMazeMapItem extends Item {
 	final boolean mapOres;
@@ -32,9 +33,7 @@ public class EmptyMazeMapItem extends Item {
 			if (itemstack.isEmpty()) {
 				return InteractionResult.SUCCESS.heldItemTransformedTo(itemstack1);
 			} else {
-				if (!player.getInventory().add(itemstack1.copy())) {
-					player.drop(itemstack1, false);
-				}
+				InventoryUtil.giveItemToPlayer(player, itemstack1.copy());
 
 				return InteractionResult.SUCCESS;
 			}

@@ -1,16 +1,15 @@
 package twilightforest.item.recipe;
 
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.Level;
 import twilightforest.init.TFDataComponents;
 import twilightforest.init.TFItems;
 import twilightforest.init.TFRecipes;
+import twilightforest.tags.TFItemTags;
 
 public class EmperorsClothRecipe extends CustomRecipe {
 
@@ -18,16 +17,16 @@ public class EmperorsClothRecipe extends CustomRecipe {
 
 	@Override
 	public boolean matches(CraftingInput input, Level level) {
-		boolean foundInk = false;
+		boolean foundCloth = false;
 		boolean foundItem = false;
 
 		for (int i = 0; i < input.size(); i++) {
 			ItemStack stack = input.getItem(i);
 			if (!stack.isEmpty()) {
-				if (stack.is(TFItems.EMPERORS_CLOTH.get()) && !foundInk) {
-					foundInk = true;
+				if (stack.is(TFItems.EMPERORS_CLOTH.get()) && !foundCloth) {
+					foundCloth = true;
 				} else if (!foundItem) {
-					if (isHumanoidArmor(stack) && stack.getItem().getCraftingRemainder().create().isEmpty() && stack.get(TFDataComponents.EMPERORS_CLOTH.get()) == null) {
+					if (isApplicable(stack) && stack.getItem().getCraftingRemainder() == null && stack.get(TFDataComponents.EMPERORS_CLOTH.get()) == null) {
 						foundItem = true;
 					} else {
 						return false;
@@ -38,7 +37,7 @@ public class EmperorsClothRecipe extends CustomRecipe {
 			}
 		}
 
-		return foundInk && foundItem;
+		return foundCloth && foundItem;
 	}
 
 	@Override
@@ -47,7 +46,7 @@ public class EmperorsClothRecipe extends CustomRecipe {
 
 		for (int i = 0; i < input.size(); i++) {
 			ItemStack stack = input.getItem(i);
-			if (!stack.isEmpty() && isHumanoidArmor(stack) && item.isEmpty()) {
+			if (!stack.isEmpty() && isApplicable(stack) && item.isEmpty()) {
 				item = stack;
 			}
 		}
@@ -62,8 +61,7 @@ public class EmperorsClothRecipe extends CustomRecipe {
 		return TFRecipes.EMPERORS_CLOTH_RECIPE.get();
 	}
 
-	private static boolean isHumanoidArmor(ItemStack stack) {
-		Equippable equippable = stack.get(DataComponents.EQUIPPABLE);
-		return equippable != null && equippable.slot().isArmor();
+	private static boolean isApplicable(ItemStack stack) {
+		return stack.is(TFItemTags.EMPERORS_CLOTH_APPLICABLE);
 	}
 }

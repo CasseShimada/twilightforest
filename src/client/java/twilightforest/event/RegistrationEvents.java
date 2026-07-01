@@ -322,6 +322,7 @@ public class RegistrationEvents {
 		BlockEntityRenderers.register(TFBlockEntities.OMINOUS_CANDLE.get(), OminousCandleRenderer::new);
 		BlockEntityRenderers.register(TFBlockEntities.SINISTER_SPAWNER.get(), SinisterSpawnerRenderer::new);
 		BlockEntityRenderers.register(TFBlockEntities.BRAZIER.get(), BrazierRenderer::new);
+		BlockEntityRenderers.register(TFBlockEntities.DRYING_RACK.get(), DryingRackRenderer::new);
 	}
 
 	private static void registerLayerDefinitions() {
@@ -477,6 +478,7 @@ public class RegistrationEvents {
 		registry.register(TFParticleType.ANGRY_LICH.get(), AngryLichParticle.Factory::new);
 		registry.register(TFParticleType.TWILIGHT_ORB.get(), (FabricSpriteSet sprite) -> new CustomTextureParticle.Factory(sprite, true));
 		registry.register(TFParticleType.SHIELD_BREAK.get(), CustomTextureParticle.ShieldBreak::new);
+		registry.register(TFParticleType.DRYING_RACK.get(), DryingRackParticle.Provider::new);
 	}
 
 	private static void registerArmorRenderers() {

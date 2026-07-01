@@ -40,8 +40,7 @@ import twilightforest.network.EnforceProgressionStatusPacket;
 import twilightforest.util.IntervalUtils;
 import twilightforest.util.TFClientFlags;
 import twilightforest.util.Restriction;
-import twilightforest.mixin.client.accessor.LevelRendererAccessor;
-import twilightforest.mixin.client.accessor.WeatherEffectRendererAccessor;
+import twilightforest.mixin.client.accessor.ClientLevelAccessor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -382,9 +381,9 @@ public class TFWeatherRenderer {
 
 	/**
 	 * [VanillaCopy]:<br>
-	 * {@link net.minecraft.client.renderer.WeatherEffectRenderer#tickRainParticles(ClientLevel, Camera, int, ParticleStatus, int)}<br>
+	 * {@link ClientLevel#tickWeatherEffects()}<br>
 	 */
-	public static boolean tickRain(ClientLevel level, int ticks, BlockPos blockpos, ParticleStatus particleStatus, int radius) {
+	public static boolean tickRain(ClientLevel level, BlockPos blockpos, ParticleStatus particleStatus, int radius) {
 		//TF - render rain if the Ur-Ghast is alive as well
 		if (TFClientFlags.urGhastAlive) {
 			urGhastRain = Math.min(1.0F, urGhastRain + 0.1F);
@@ -397,7 +396,7 @@ public class TFWeatherRenderer {
 			return true;
 		}
 
-		RandomSource randomsource = RandomSource.create((long) ticks * 312987231L);
+		RandomSource randomsource = RandomSource.createThreadLocalInstance(level.getGameTime() * 312987231L);
 		BlockPos blockpos1 = null;
 		int diameter = radius * 2 + 1;
 		int area = diameter * diameter;
@@ -426,18 +425,17 @@ public class TFWeatherRenderer {
 			}
 		}
 
-		var weatherRenderer = ((LevelRendererAccessor) Minecraft.getInstance().levelRenderer).twilightforest$getWeatherEffectRenderer();
-		var weatherAccessor = (WeatherEffectRendererAccessor) weatherRenderer;
-		int rainSoundTime = weatherAccessor.twilightforest$getRainSoundTime();
+		var levelAccessor = (ClientLevelAccessor) level;
+		int rainSoundTime = levelAccessor.twilightforest$getRainSoundTime();
 		if (blockpos1 != null && randomsource.nextInt(3) < rainSoundTime++) {
-			weatherAccessor.twilightforest$setRainSoundTime(0);
+			levelAccessor.twilightforest$setRainSoundTime(0);
 			if (blockpos1.getY() > blockpos.getY() + 1 && level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, blockpos).getY() > Mth.floor((float) blockpos.getY())) {
 				level.playLocalSound(blockpos1, SoundEvents.WEATHER_RAIN_ABOVE, SoundSource.WEATHER, 0.1F, 0.5F, false);
 			} else {
 				level.playLocalSound(blockpos1, SoundEvents.WEATHER_RAIN, SoundSource.WEATHER, 0.2F, 1.0F, false);
 			}
 		} else {
-			weatherAccessor.twilightforest$setRainSoundTime(rainSoundTime);
+			levelAccessor.twilightforest$setRainSoundTime(rainSoundTime);
 		}
 
 		return true;

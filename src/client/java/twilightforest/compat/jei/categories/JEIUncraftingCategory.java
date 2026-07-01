@@ -86,7 +86,7 @@ public class JEIUncraftingCategory implements IRecipeCategory<CraftingRecipe> {
 		outputs.replaceAll(ingredient -> {
 				Item[] array = extractItems(ingredient)
 					.filter(o -> !o.is(TFItemTags.BANNED_UNCRAFTING_INGREDIENTS)) //Remove any banned items
-					.filter(o -> o.value().getCraftingRemainder().create().isEmpty()) //Can't uncraft into items that don't get used
+					.filter(o -> o.value().getCraftingRemainder() == null) //Can't uncraft into items that don't get used
 					.map(Holder::value).toArray(Item[]::new);
 
 				return array.length > 0 ? Ingredient.of(array) : null;

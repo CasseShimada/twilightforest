@@ -47,17 +47,19 @@ public record Restriction(@Nullable ResourceKey<Structure> hintStructureKey, Res
 	}
 
 	public static Optional<Restriction> getRestrictionForBiome(Biome biome, Entity entity) {
-		if (entity instanceof Player player) {
-			RegistryAccess access = entity.level().registryAccess();
-			Identifier biomeLocation = access.lookupOrThrow(Registries.BIOME).getKey(biome);
-			if (biomeLocation != null) {
-				Restriction restrictions = access.lookupOrThrow(TFRegistries.Keys.RESTRICTIONS).getValue(biomeLocation);
-				if (restrictions != null && !PlayerHelper.doesPlayerHaveRequiredAdvancements(player, restrictions.advancements())) {
-					return Optional.of(restrictions);
-				}
-			}
+		if (!(entity instanceof Player player)) {
+			return Optional.empty();
 		}
-		return Optional.empty();
+
+		RegistryAccess access = entity.level().registryAccess();
+		Identifier biomeLocation = access.lookupOrThrow(Registries.BIOME).getKey(biome);
+		if (biomeLocation == null) {
+			return Optional.empty();
+		}
+
+		return access.lookup(TFRegistries.Keys.RESTRICTIONS)
+			.map(registry -> registry.getValue(biomeLocation))
+			.filter(restriction -> !PlayerHelper.doesPlayerHaveRequiredAdvancements(player, restriction.advancements()));
 	}
 
 	public static boolean isBiomeSafeFor(Biome biome, Entity entity) {

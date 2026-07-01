@@ -2,6 +2,7 @@ package twilightforest.util;
 
 import net.minecraft.util.Unit;
 import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
@@ -54,7 +55,7 @@ public class ArmorUtilTests {
 
 		float result = instance.getShroudedArmorPercentage(entity);
 
-		long armorSlots = EquipmentSlot.values().length == 0 ? 0 : java.util.Arrays.stream(EquipmentSlot.values()).filter(EquipmentSlot::isArmor).count();
+		long armorSlots = EquipmentSlotGroup.ARMOR.slots().size();
 		assertEquals(1F / (float) armorSlots, result);
 	}
 

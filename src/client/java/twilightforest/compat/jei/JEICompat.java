@@ -51,6 +51,10 @@ public class JEICompat implements IModPlugin {
 		registration.addCraftingStation(OminousFireCategory.OMINOUS_FIRE, TFItems.EXANIMATE_ESSENCE);
 		registration.addCraftingStation(CrumbleHornCategory.CRUMBLE_HORN, TFItems.CRUMBLE_HORN);
 		registration.addCraftingStation(MoonwormQueenCategory.MOONWORM_QUEEN, TFItems.MOONWORM_QUEEN);
+		registration.addCraftingStation(DryingRackCategory.DRYING, TFBlocks.OAK_DRYING_RACK, TFBlocks.SPRUCE_DRYING_RACK, TFBlocks.BIRCH_DRYING_RACK, TFBlocks.JUNGLE_DRYING_RACK,
+			TFBlocks.ACACIA_DRYING_RACK, TFBlocks.DARK_OAK_DRYING_RACK, TFBlocks.CRIMSON_DRYING_RACK, TFBlocks.WARPED_DRYING_RACK, TFBlocks.VANGROVE_DRYING_RACK,
+			TFBlocks.BAMBOO_DRYING_RACK, TFBlocks.CHERRY_DRYING_RACK, TFBlocks.TWILIGHT_OAK_DRYING_RACK, TFBlocks.CANOPY_DRYING_RACK, TFBlocks.MANGROVE_DRYING_RACK,
+			TFBlocks.DARK_DRYING_RACK, TFBlocks.TIME_DRYING_RACK, TFBlocks.TRANSFORMATION_DRYING_RACK, TFBlocks.MINING_DRYING_RACK, TFBlocks.SORTING_DRYING_RACK);
 	}
 
 	@Override
@@ -80,6 +84,7 @@ public class JEICompat implements IModPlugin {
 		registration.addRecipeCategories(new TransformationPowderCategory(registration.getJeiHelpers().getGuiHelper()));
 		registration.addRecipeCategories(new OminousFireCategory(registration.getJeiHelpers().getGuiHelper()));
 		registration.addRecipeCategories(new CrumbleHornCategory(registration.getJeiHelpers().getGuiHelper()));
+		registration.addRecipeCategories(new DryingRackCategory(registration.getJeiHelpers().getGuiHelper()));
 		if (!Internal.getClientSyncedRecipes().byType(RecipeType.CRAFTING).stream().filter(holder -> holder.value() instanceof MoonwormQueenRepairRecipe).toList().isEmpty()) {
 			registration.addRecipeCategories(new MoonwormQueenCategory(registration.getJeiHelpers().getGuiHelper()));
 		}
@@ -102,6 +107,7 @@ public class JEICompat implements IModPlugin {
 		registration.addRecipes(OminousFireCategory.OMINOUS_FIRE, RecipeViewerConstants.getOminousFireRecipes().stream().map(info -> new OminousFireRecipe(new FakeEntityType(info.input()), new FakeEntityType(info.output()))).toList());
 		registration.addRecipes(CrumbleHornCategory.CRUMBLE_HORN, RecipeViewerConstants.getCrumbleHornRecipes().stream().map(info -> new CrumbleRecipe(info.getFirst(), info.getSecond())).toList());
 		registration.addRecipes(MoonwormQueenCategory.MOONWORM_QUEEN, List.of(new MoonwormQueenRepairRecipe()));
+		registration.addRecipes(DryingRackCategory.DRYING, Internal.getClientSyncedRecipes().byType(twilightforest.init.TFRecipes.DRYING_RECIPE.get()).stream().map(RecipeHolder::value).toList());
 
 		//registration.addRecipes(RecipeTypes.CRAFTING, manager.getAllRecipesFor(RecipeType.CRAFTING).stream().filter(holder -> holder.value() instanceof ScepterRepairRecipe).toList());
 	}

@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import org.jetbrains.annotations.Nullable;
+import twilightforest.inventory.InventoryUtil;
 import twilightforest.world.components.structures.util.StructureHints;
 
 public class GenerateBookCommand {
@@ -34,21 +35,16 @@ public class GenerateBookCommand {
 		if (structureKey == null) {
 			for (Structure structure : source.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE).stream().toList()) {
 				if (structure instanceof StructureHints hint) {
-					if (!player.addItem(hint.createHintBook(source.registryAccess()))) {
-						player.drop(hint.createHintBook(source.registryAccess()), true);
-					}
+					InventoryUtil.giveItemToPlayer(player, hint.createHintBook(source.registryAccess()));
 				}
 			}
 		} else {
 			if (source.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE).getValueOrThrow(structureKey.key()) instanceof StructureHints hint) {
-				if (!player.addItem(hint.createHintBook(source.registryAccess()))) {
-					player.drop(hint.createHintBook(source.registryAccess()), true);
-				}
+				ItemStack book = hint.createHintBook(source.registryAccess());
+				InventoryUtil.giveItemToPlayer(player, book);
 			} else {
 				ItemStack book = StructureHints.HintConfig.defaultBook().create();
-				if (!player.addItem(book)) {
-					player.drop(book, true);
-				}
+				InventoryUtil.giveItemToPlayer(player, book);
 			}
 		}
 		return Command.SINGLE_SUCCESS;

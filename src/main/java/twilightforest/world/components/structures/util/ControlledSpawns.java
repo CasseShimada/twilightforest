@@ -1,6 +1,5 @@
 package twilightforest.world.components.structures.util;
 
-import com.google.common.collect.Streams;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -74,7 +73,7 @@ public interface ControlledSpawns {
 			Map<String, WeightedList<MobSpawnSettings.SpawnerData>> map = new HashMap<>();
 
 			for (List<Weighted<MobSpawnSettings.SpawnerData>> list : lists) {
-				map.put("" + i, WeightedList.of(list));
+				map.put(String.valueOf(i), WeightedList.of(list));
 				i++;
 			}
 

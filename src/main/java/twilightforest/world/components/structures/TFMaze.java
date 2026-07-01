@@ -16,6 +16,7 @@ import twilightforest.TwilightForestMod;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFConfiguredFeatures;
 
+import java.util.Arrays;
 import java.util.stream.IntStream;
 
 /**
@@ -65,8 +66,6 @@ public class TFMaze {
 	public static final int ROOM = 5;
 	public static final int DOOR = 6;
 
-	public final RandomSource rand;
-
 	public TFMaze(int cellsWidth, int cellsDepth, RandomSource random) {
 		// default values
 		oddBias = 3;
@@ -90,8 +89,6 @@ public class TFMaze {
 		this.rawWidth = width * 2 + 1;
 		this.rawDepth = depth * 2 + 1;
 		storage = new int[rawWidth * rawDepth];
-
-		this.rand = random;
 	}
 
 	/**
@@ -132,7 +129,7 @@ public class TFMaze {
 			return getRaw(sx * 2 + 1, sz * 2);
 		}
 
-		TwilightForestMod.LOGGER.info("Wall check out of bounds; s = {}, {}; d = {}, {}", sx, sz, dx, dz);
+		TwilightForestMod.LOGGER.debug("Wall check out of bounds; s = {}, {}; d = {}, {}", sx, sz, dx, dz);
 
 		return OUT_OF_BOUNDS;
 	}
@@ -187,22 +184,13 @@ public class TFMaze {
 
 
 	public void resetCells() {
-		IntStream.range(0, width)
-			.forEach(x -> IntStream.range(0, depth)
-				.forEach(z -> putCell(x, z, 0)));
-	}
-
-	/**
-	 * Sets the random seed to a specific value
-	 */
-	public void setSeed(long newSeed) {
-		rand.setSeed(newSeed);
+		Arrays.fill(storage, 0);
 	}
 
 	/**
 	 * Copy the maze into a StructureTFComponentOld
 	 */
-	public void copyToStructure(WorldGenLevel world, StructureManager manager, ChunkGenerator generator, int dx, int dy, int dz, TFStructureComponentOld component, BoundingBox sbb) {
+	public void copyToStructure(WorldGenLevel world, StructureManager manager, ChunkGenerator generator, int dx, int dy, int dz, TFStructureComponentOld component, BoundingBox sbb, RandomSource rand) {
 		for (int x = 0; x < rawWidth; x++) {
 			for (int z = 0; z < rawDepth; z++) {
 				// only draw walls.  if the data is 0 the there's a wall
@@ -216,7 +204,7 @@ public class TFMaze {
 					}
 
 					if (isEven(x) && isEven(z)) {
-						if (type == 4 && shouldTree(x, z)) {
+						if (type == 4 && shouldTree(x, z, rand)) {
 							// occasionally make a tree
 							putCanopyTree(world, generator, mdx, dy, mdz, component, sbb);
 						} else {
@@ -310,7 +298,7 @@ public class TFMaze {
 					int mdz = dz + (z / 2 * (evenBias + oddBias));
 
 					if (isEven(x) && isEven(z)) {
-						if (shouldTorch(x, z) && component.getBlock(world, mdx, mdy, mdz, sbb).getBlock() == wallBlockState.getBlock()) {
+						if (shouldTorch(x, z, rand) && component.getBlock(world, mdx, mdy, mdz, sbb).getBlock() == wallBlockState.getBlock()) {
 							component.placeBlock(world, torchBlockState, mdx, mdy, mdz, sbb);
 						}
 					}
@@ -396,7 +384,7 @@ public class TFMaze {
 	/**
 	 * Should we put a torch here?  Intended to be called on the in-between spots where x and y are even.
 	 */
-	public boolean shouldTorch(int rx, int rz) {
+	public boolean shouldTorch(int rx, int rz, RandomSource rand) {
 		// if there is out of bounds in any direction, no
 		if (getRaw(rx + 1, rz) == OOB || getRaw(rx - 1, rz) == OOB || getRaw(rx, rz + 1) == OOB || getRaw(rx, rz - 1) == OOB) {
 			return false;
@@ -437,7 +425,7 @@ public class TFMaze {
 	 * Should we put a tree instead of a post?
 	 * Essentially the answer is yes for the corners and the exits.
 	 */
-	public boolean shouldTree(int rx, int rz) {
+	public boolean shouldTree(int rx, int rz, RandomSource rand) {
 		if ((rx == 0 || rx == rawWidth - 1) && (getRaw(rx, rz + 1) != 0 || getRaw(rx, rz - 1) != 0)) {
 			return true;
 		}
@@ -502,14 +490,14 @@ public class TFMaze {
 	 * @param sx The starting x coordinate
 	 * @param sz The starting y coordinate
 	 */
-	public void generateRecursiveBacktracker(int sx, int sz) {
-		rbGen(sx, sz);
+	public void generateRecursiveBacktracker(int sx, int sz, RandomSource rand) {
+		rbGen(sx, sz, rand);
 	}
 
 	/**
 	 * Mark the cell as visited.  If we have any unvisited neighbors, pick one randomly, carve the wall between them, then call this function on that neighbor.
 	 */
-	public void rbGen(int sx, int sz) {
+	public void rbGen(int sx, int sz, RandomSource rand) {
 		// mark cell as visited
 		putCell(sx, sz, 1);
 
@@ -574,10 +562,10 @@ public class TFMaze {
 		}
 
 		// call function recursively at the destination
-		rbGen(dx, dz);
+		rbGen(dx, dz, rand);
 
 		// the destination has run out of free spaces, let's try this square again, up to 2 more times
-		rbGen(sx, sz);
-		rbGen(sx, sz);
+		rbGen(sx, sz, rand);
+		rbGen(sx, sz, rand);
 	}
 }

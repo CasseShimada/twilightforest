@@ -1,7 +1,6 @@
 package twilightforest.item;
 
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
@@ -20,6 +19,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import twilightforest.components.item.PotionFlaskComponent;
+import twilightforest.inventory.InventoryUtil;
 import twilightforest.init.TFDamageTypes;
 import twilightforest.init.TFDataAttachments;
 import twilightforest.init.TFDataComponents;
@@ -56,6 +56,15 @@ public class BrittleFlaskItem extends Item {
 
 	@Override
 	public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access) {
+		return this.tryFillFlask(stack, other, action, player);
+	}
+
+	@Override
+	public boolean overrideStackedOnOther(ItemStack stack, Slot slot, ClickAction action, Player player) {
+		return this.tryFillFlask(stack, slot.getItem(), action, player);
+	}
+
+	private boolean tryFillFlask(ItemStack stack, ItemStack other, ClickAction action, Player player) {
 		PotionFlaskComponent flaskContents = stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS.get(), PotionFlaskComponent.EMPTY);
 		PotionContents potionContents = other.get(DataComponents.POTION_CONTENTS);
 
@@ -63,9 +72,7 @@ public class BrittleFlaskItem extends Item {
 			if ((flaskContents.potion().potion().isEmpty() || flaskContents.potion().equals(potionContents)) && flaskContents.doses() < DOSES - flaskContents.breakage()) {
 				if (!player.getAbilities().instabuild) {
 					other.shrink(1);
-					if (!player.getInventory().add(new ItemStack(Items.GLASS_BOTTLE))) {
-						player.drop(new ItemStack(Items.GLASS_BOTTLE), false);
-					}
+					InventoryUtil.giveItemToPlayer(player, new ItemStack(Items.GLASS_BOTTLE));
 				}
 
 				this.changeAndConsumeFlask(stack, player, flask -> {
@@ -111,9 +118,6 @@ public class BrittleFlaskItem extends Item {
 		if (flaskContents.potion() != PotionContents.EMPTY) {
 			if (entity instanceof Player player) {
 				if (level instanceof ServerLevel serverLevel) {
-					if (!player.isCreative() && !player.isSpectator() && player instanceof ServerPlayer serverPlayer) {
-						flaskContents.potion().potion().ifPresent(potion -> TFDataAttachments.get(player, TFDataAttachments.FLASK_DOSES).trackDrink(potion, serverPlayer));
-					}
 					for (MobEffectInstance mobeffectinstance : flaskContents.potion().getAllEffects()) {
 						if (mobeffectinstance.is(MobEffects.INSTANT_DAMAGE) != entity.isInvertedHealAndHarm() && mobeffectinstance.getAmplifier() > 0) {
 							//custom harming death message for the advancement
@@ -159,9 +163,7 @@ public class BrittleFlaskItem extends Item {
 			stack.shrink(1);
 
 			onDrink.accept(copy);
-			if (!player.getInventory().add(copy)) {
-				player.drop(copy, false);
-			}
+			InventoryUtil.giveItemToPlayer(player, copy);
 		} else {
 			//otherwise just use the existing stack. Having it jump around the inventory is weird
 			onDrink.accept(stack);

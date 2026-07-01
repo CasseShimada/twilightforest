@@ -23,6 +23,12 @@
         "Name": "minecraft:dirt"
       }
     },
+    "below_trunk_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:dirt"
+      }
+    },
     "foliage_placer": {
       "type": "twilightforest:spheroid_foliage_placer",
       "horizontal_radius": 4.5,

@@ -16,6 +16,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -66,6 +67,7 @@ import twilightforest.entity.passive.quest.ram.QuestingRamCurrentContext;
 import twilightforest.entity.projectile.ITFProjectile;
 import twilightforest.entity.projectile.LichBomb;
 import twilightforest.init.*;
+import twilightforest.inventory.InventoryUtil;
 import twilightforest.item.FieryArmorItem;
 import twilightforest.item.YetiArmorItem;
 import twilightforest.mixin.accessor.AgeableMobAccessor;
@@ -224,9 +226,9 @@ public class EntityEvents {
 	public static void handleCrafting(Player player, ItemStack crafted, net.minecraft.world.inventory.CraftingContainer craftingInventory) {
 		// if we've crafted 64 planks from a giant log, sneak 192 more planks into the player's inventory or drop them nearby
 		if (crafted.is(Items.OAK_PLANKS) && crafted.getCount() == 64 && craftingInventory.countItem(TFBlocks.GIANT_LOG.get().asItem()) > 0) {
-			giveItemToPlayer(player, new ItemStack(Items.OAK_PLANKS, 64));
-			giveItemToPlayer(player, new ItemStack(Items.OAK_PLANKS, 64));
-			giveItemToPlayer(player, new ItemStack(Items.OAK_PLANKS, 64));
+			InventoryUtil.giveItemToPlayer(player, new ItemStack(Items.OAK_PLANKS, 64));
+			InventoryUtil.giveItemToPlayer(player, new ItemStack(Items.OAK_PLANKS, 64));
+			InventoryUtil.giveItemToPlayer(player, new ItemStack(Items.OAK_PLANKS, 64));
 		}
 	}
 
@@ -373,10 +375,7 @@ public class EntityEvents {
 	public static int getGearCoverage(LivingEntity entity, boolean yeti) {
 		int amount = 0;
 
-		for (EquipmentSlot slot : EquipmentSlot.VALUES) {
-			if (!slot.isArmor()) {
-				continue;
-			}
+		for (EquipmentSlot slot : EquipmentSlotGroup.ARMOR) {
 			ItemStack armor = entity.getItemBySlot(slot);
 			if (!armor.isEmpty() && (yeti ? armor.getItem() instanceof YetiArmorItem : armor.getItem() instanceof FieryArmorItem)) {
 				amount++;
@@ -418,7 +417,7 @@ public class EntityEvents {
 				if (classification != MobCategory.MONSTER)
 					return landmark.getSpawnableList(classification);
 
-				var key = level.registryAccess().lookup(Registries.STRUCTURE).flatMap(registry -> registry.getResourceKey(start.getStructure())).orElse(null);
+				var key = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getResourceKey(start.getStructure()).orElse(null);
 				if (key != null && StructureConqueredData.get(level).isConquered(key, start.getChunkPos()))
 					return null;
 
@@ -518,9 +517,4 @@ public class EntityEvents {
 		}
 	}
 
-	private static void giveItemToPlayer(Player player, ItemStack stack) {
-		if (!player.getInventory().add(stack)) {
-			player.drop(stack, false);
-		}
-	}
 }

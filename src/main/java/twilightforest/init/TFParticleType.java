@@ -63,4 +63,5 @@ public class TFParticleType {
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> ANGRY_LICH = PARTICLE_TYPES.register("angry_lich", () -> FabricParticleTypes.simple(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> TWILIGHT_ORB = PARTICLE_TYPES.register("twilight_orb", () -> FabricParticleTypes.simple(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SHIELD_BREAK = PARTICLE_TYPES.register("shield_break", () -> FabricParticleTypes.simple(false));
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> DRYING_RACK = PARTICLE_TYPES.register("drying_rack", () -> FabricParticleTypes.simple(false));
 }

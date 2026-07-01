@@ -3,8 +3,8 @@ package twilightforest.world;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
-import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ColumnPos;
 import net.minecraft.server.level.FullChunkStatus;
 import net.minecraft.server.level.ServerLevel;
@@ -19,8 +19,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraft.world.level.levelgen.structure.StructureStart;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.portal.TeleportTransition;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.jetbrains.annotations.Nullable;
@@ -28,9 +30,11 @@ import twilightforest.TwilightForestMod;
 import twilightforest.block.TFPortalBlock;
 import twilightforest.config.TFConfig;
 import twilightforest.tags.TFBlockTags;
+import twilightforest.tags.TFStructureTags;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFDimension;
-import twilightforest.item.MagicMapItem;
+import twilightforest.util.iterators.DiagonalSpiralIterator;
+import twilightforest.util.iterators.XZQuadrantIterator;
 import twilightforest.util.landmarks.LandmarkUtil;
 import twilightforest.util.landmarks.LegacyLandmarkPlacements;
 import twilightforest.util.Restriction;
@@ -50,7 +54,7 @@ public class TFTeleporter {
 		}
 
 		if (transition != null) return transition;
-		return new TeleportTransition(dest, Vec3.atCenterOf(pos.atY(dest.getSeaLevel())), Vec3.ZERO, entity.getYRot(), entity.getXRot(), TeleportTransition.PLACE_PORTAL_TICKET);
+		return makePortalInfo(dest, entity, Vec3.atCenterOf(dest.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos)));
 	}
 
 	@Nullable
@@ -235,58 +239,46 @@ public class TFTeleporter {
 
 		TwilightForestMod.LOGGER.debug("Portal destination looks unsafe, rerouting!");
 
-		BlockPos safeCoords = findSafeCoords(level, 200, pos, entity, checkProgression);
+		BlockPos safeCoords = scanIntoSafeBiomes(level, pos, entity, checkProgression);
 		if (safeCoords != null) {
 			TwilightForestMod.LOGGER.debug("Safely rerouted!");
-			return makePortalInfo(level, entity, safeCoords.getX(), entity.getY(), safeCoords.getZ());
+			return makePortalInfo(level, entity, Vec3.atCenterOf(safeCoords));
 		}
 
-		TwilightForestMod.LOGGER.info("Did not find a safe portal spot first try, trying again with longer range.");
-		safeCoords = findSafeCoords(level, 400, pos, entity, checkProgression);
-
-		if (safeCoords != null) {
-			TwilightForestMod.LOGGER.info("Safely rerouted to long range portal. Return trip not guaranteed.");
-			return makePortalInfo(level, entity, safeCoords.getX(), entity.getY(), safeCoords.getZ());
-		}
-
-		TwilightForestMod.LOGGER.info("Did not find a safe portal spot second try, trying to move slightly towards the center between key biomes.");
-		safeCoords = findSafeCoords(level, 400, moveTowardsCenter(pos, 0.5F), entity, checkProgression);
-
-		if (safeCoords != null) {
-			TwilightForestMod.LOGGER.info("Safely rerouted to slightly centered portal. Return trip not guaranteed.");
-			return makePortalInfo(level, entity, safeCoords.getX(), entity.getY(), safeCoords.getZ());
-		}
-
-		TwilightForestMod.LOGGER.info("Did not find a safe portal spot third try, trying to move further towards the center between key biomes.");
-		safeCoords = findSafeCoords(level, 400, moveTowardsCenter(pos, 0.9F), entity, checkProgression);
-
-		if (safeCoords != null) {
-			TwilightForestMod.LOGGER.info("Safely rerouted to very centered portal. Return trip not guaranteed.");
-			return makePortalInfo(level, entity, safeCoords.getX(), entity.getY(), safeCoords.getZ());
-		}
-
-		TwilightForestMod.LOGGER.warn("Still did not find a safe portal spot.");
+		TwilightForestMod.LOGGER.warn("Did not find a safe portal spot.");
 
 		return makePortalInfo(level, entity, Vec3.atCenterOf(pos));
 	}
 
-	private static BlockPos moveTowardsCenter(BlockPos pos, float lerp) {
-		ColumnPos centerPos = MagicMapItem.getMagicMapCenter(pos.getX(), pos.getZ());
-		float vx = centerPos.x() - pos.getX();
-		float vz = centerPos.z() - pos.getZ();
-		float nx = pos.getX() + vx * lerp;
-		float nz = pos.getZ() + vz * lerp;
-		return BlockPos.containing(nx, pos.getY(), nz);
+	@Nullable
+	private static BlockPos scanIntoSafeBiomes(ServerLevel level, BlockPos pos, Entity entity, boolean checkProgression) {
+		Iterable<BlockPos> biomeCenterGrid = new DiagonalSpiralIterator<>(pos.getX() >> 4, pos.getZ() >> 4, false, 128, 16, LegacyLandmarkPlacements::getNearestCenterXZ);
+
+		for (BlockPos biomeCenter : biomeCenterGrid) {
+			if (checkProgression && biomeUnsafe(level, biomeCenter, entity)) {
+				continue;
+			}
+
+			Iterable<BlockPos> gridAroundLandmark = new XZQuadrantIterator<>(biomeCenter.getX(), biomeCenter.getZ(), true, 8, 16, (x, z) -> new BlockPos(x, 4, z));
+			for (BlockPos posInBiome : gridAroundLandmark) {
+				if (isSafeAround(level, posInBiome, entity, checkProgression)) {
+					TwilightForestMod.LOGGER.debug("Found {} in biome-scanning for safe portal placement", posInBiome.toShortString());
+					return posInBiome;
+				}
+			}
+		}
+
+		return null;
 	}
 
 	public static boolean isSafeAround(Level world, BlockPos pos, Entity entity, boolean checkProgression) {
 
-		if (!isSafe(world, pos, entity, checkProgression)) {
+		if (isUnsafe(world, pos, entity, checkProgression)) {
 			return false;
 		}
 
 		for (Direction facing : Direction.Plane.HORIZONTAL) {
-			if (!isSafe(world, pos.relative(facing, 16), entity, checkProgression)) {
+			if (isUnsafe(world, pos.relative(facing, 16), entity, checkProgression)) {
 				return false;
 			}
 		}
@@ -294,39 +286,38 @@ public class TFTeleporter {
 		return true;
 	}
 
-	private static boolean isSafe(Level world, BlockPos pos, Entity entity, boolean checkProgression) {
-		return !world.dimension().equals(TFDimension.DIMENSION_KEY) || (checkPos(world, pos) && (!checkProgression || checkBiome(world, pos, entity)) && checkStructure(world, pos));
+	private static boolean isUnsafe(Level world, BlockPos pos, Entity entity, boolean checkProgression) {
+		if (!world.dimension().equals(TFDimension.DIMENSION_KEY)) {
+			return false;
+		}
+
+		if (!world.getWorldBorder().isWithinBounds(pos)) {
+			return true;
+		}
+
+		if (checkProgression && biomeUnsafe(world, pos, entity)) {
+			return true;
+		}
+
+		return posOverlapsRestrictedStructureChunk(world, pos);
 	}
 
-	private static boolean checkPos(Level world, BlockPos pos) {
-		return world.getWorldBorder().isWithinBounds(pos);
-	}
+	public static boolean posOverlapsRestrictedStructureChunk(Level destLevel, BlockPos pos) {
+		Iterator<Holder<Structure>> landmarksInChunk = destLevel.registryAccess().lookupOrThrow(Registries.STRUCTURE).getTagOrEmpty(TFStructureTags.LANDMARK).iterator();
+		LevelChunk chunkAt = destLevel.getChunkAt(pos);
 
-	private static boolean checkStructure(Level world, BlockPos pos) {
-		boolean outsideLandmarkRange = !LegacyLandmarkPlacements.blockNearLandmarkCenter(pos.getX(), pos.getZ(), 5);
-		if (!outsideLandmarkRange) return false;
-
-		Optional<StructureStart> possibleNearLandmark = LandmarkUtil.locateNearestLandmarkStart(world, SectionPos.blockToSectionCoord(pos.getX()), SectionPos.blockToSectionCoord(pos.getZ()));
-		return possibleNearLandmark.isEmpty() || possibleNearLandmark.get().getBoundingBox().isInside(pos);
-	}
-
-	private static boolean checkBiome(Level world, BlockPos pos, Entity entity) {
-		return Restriction.isBiomeSafeFor(world.getBiome(pos).value(), entity);
-	}
-
-	@Nullable
-	private static BlockPos findSafeCoords(ServerLevel world, int range, BlockPos pos, Entity entity, boolean checkProgression) {
-		int attempts = range / 8;
-		for (int x = 0; x < attempts; x++) {
-			for (int z = 0; z < attempts; z++) {
-				BlockPos dPos = new BlockPos(pos.getX() + (x * attempts) - (range / 2), 100, pos.getZ() + (z * attempts) - (range / 2));
-
-				if (isSafeAround(world, dPos, entity, checkProgression)) {
-					return dPos;
-				}
+		while (landmarksInChunk.hasNext()) {
+			Holder<Structure> structureHolder = landmarksInChunk.next();
+			if (!chunkAt.getReferencesForStructure(structureHolder.value()).isEmpty()) {
+				return true;
 			}
 		}
-		return null;
+
+		return false;
+	}
+
+	private static boolean biomeUnsafe(Level world, BlockPos pos, Entity entity) {
+		return !Restriction.isBiomeSafeFor(world.getBiome(pos).value(), entity);
 	}
 
 	protected static void makePortal(TeleporterCache cache, Entity entity, ServerLevel world, Vec3 pos, boolean locked) {
@@ -533,7 +524,10 @@ public class TFTeleporter {
 		// dirt under it
 		BlockState dirt = Blocks.DIRT.defaultBlockState();
 		for (BlockPos blockpos : positions) {
-			world.setBlockAndUpdate(blockpos, dirt);
+			BlockState state = world.getBlockState(blockpos);
+			if (state.is(BlockTags.DIRT) || state.is(BlockTags.REPLACEABLE) || state.is(BlockTags.AIR)) {
+				world.setBlockAndUpdate(blockpos, dirt);
+			}
 		}
 
 		// portal in it
@@ -620,7 +614,18 @@ public class TFTeleporter {
 	}
 
 	protected static TeleportTransition makePortalInfo(ServerLevel level, Entity entity, Vec3 pos) {
-		return new TeleportTransition(level, pos, Vec3.ZERO, entity.getYRot(), entity.getXRot(), TeleportTransition.PLACE_PORTAL_TICKET);
+		return new TeleportTransition(level, safePosInColumn(level, entity, pos), Vec3.ZERO, entity.getYRot(), entity.getXRot(), TeleportTransition.PLACE_PORTAL_TICKET);
+	}
+
+	protected static Vec3 safePosInColumn(ServerLevel level, Entity entity, Vec3 pos) {
+		AABB aabb = entity.getDimensions(entity.getPose()).makeBoundingBox(pos);
+
+		if (level.noCollision(aabb)) {
+			return pos;
+		}
+
+		int height = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mth.floor(pos.x), Mth.floor(pos.z));
+		return pos.with(Direction.Axis.Y, height);
 	}
 
 	static class PortalPosition {

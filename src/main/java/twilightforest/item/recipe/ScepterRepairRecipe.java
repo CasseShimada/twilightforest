@@ -47,7 +47,7 @@ public class ScepterRepairRecipe extends CustomRecipe {
 				}
 			}
 			int duraRes = ingredients * this.getRepairDurability();
-			return scepter != null && (ingredients > 0 && (duraRes + (scepter.getMaxDamage() - scepter.getDamageValue())) < scepter.getMaxDamage());
+			return scepter != null && (ingredients > 0 && (scepter.getDamageValue() + this.getRepairDurability() - duraRes) > 0);
 		} else {
 			for (int i = 0; i < input.size(); ++i) {
 				ItemStack stackInQuestion = input.getItem(i);

@@ -182,7 +182,7 @@ public class ClientEvents {
 				HashSet<ChunkPos> chunksInRange = new HashSet<>();
 				for (int x = -16; x <= 16; x += 16) {
 					for (int z = -16; z <= 16; z += 16) {
-						chunksInRange.add(new ChunkPos((int) (mc.player.getX() + x) >> 4, (int) (mc.player.getZ() + z) >> 4));
+						chunksInRange.add(ChunkPos.containing(BlockPos.containing(mc.player.getX() + x, mc.player.getY(), mc.player.getZ() + z)));
 					}
 				}
 				for (ChunkPos pos : chunksInRange) {
