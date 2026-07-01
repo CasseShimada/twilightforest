@@ -51,7 +51,7 @@ public class TwilightWandBolt extends TFThrowable {
 			float s2 = ((this.random.nextFloat() * 0.5F) + 0.5F) * 0.80F;  // color
 			float s3 = ((this.random.nextFloat() * 0.5F) + 0.5F) * 0.69F;  // color
 
-			this.level().addParticle(ColorParticleOption.create(TFParticleType.MAGIC_EFFECT.get(), s1, s2, s3), dx, dy, dz, 0.0D, 0.0D, 0.0D);
+			this.level().addParticle(ColorParticleOption.create(TFParticleType.MAGIC_EFFECT, s1, s2, s3), dx, dy, dz, 0.0D, 0.0D, 0.0D);
 		}
 	}
 
@@ -69,7 +69,7 @@ public class TwilightWandBolt extends TFThrowable {
 	public void handleEntityEvent(byte id) {
 		if (id == EntityEvent.DEATH) {
 			for (int i = 0; i < 8; i++) {
-				this.level().addParticle(TFParticleType.TWILIGHT_ORB.get(), this.getX(), this.getY(), this.getZ(), this.random.nextGaussian() * 0.05D, random.nextDouble() * 0.2D, random.nextGaussian() * 0.05D);
+				this.level().addParticle(TFParticleType.TWILIGHT_ORB, this.getX(), this.getY(), this.getZ(), this.random.nextGaussian() * 0.05D, random.nextDouble() * 0.2D, random.nextGaussian() * 0.05D);
 			}
 		} else {
 			super.handleEntityEvent(id);

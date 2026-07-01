@@ -113,7 +113,7 @@ public class IceBomb extends TFThrowable {
 				this.discard();
 			}
 		} else {
-			this.makeTrail(TFParticleType.SNOW_GUARDIAN.get(), this.getOwner() instanceof AlphaYeti ? 2 : 5);
+			this.makeTrail(TFParticleType.SNOW_GUARDIAN, this.getOwner() instanceof AlphaYeti ? 2 : 5);
 		}
 	}
 
@@ -134,7 +134,7 @@ public class IceBomb extends TFThrowable {
 				double dy = this.getY() + (this.random.nextFloat() - this.random.nextFloat()) * 3.5F;
 				double dz = this.getZ() + (this.random.nextFloat() - this.random.nextFloat()) * 3.5F;
 
-				this.level().addParticle(TFParticleType.SNOW_GUARDIAN.get(), dx, dy, dz, 0, 0, 0);
+				this.level().addParticle(TFParticleType.SNOW_GUARDIAN, dx, dy, dz, 0, 0, 0);
 			}
 		} else {
 			if (this.zoneTimer == 99) this.doTerrainEffects(3);

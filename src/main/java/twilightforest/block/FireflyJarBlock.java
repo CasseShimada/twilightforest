@@ -56,7 +56,7 @@ public class FireflyJarBlock extends JarBlock {
 			double dx = pos.getX() + ((random.nextFloat() - random.nextFloat()) * 0.2F + 0.5F);
 			double dy = pos.getY() + 0.4F + ((random.nextFloat() - random.nextFloat()) * 0.3F);
 			double dz = pos.getZ() + ((random.nextFloat() - random.nextFloat()) * 0.2F + 0.5F);
-			level.addParticle(TFParticleType.FIREFLY.get(), dx, dy, dz, 0, 0, 0);
+			level.addParticle(TFParticleType.FIREFLY, dx, dy, dz, 0, 0, 0);
 		}
 	}
 }

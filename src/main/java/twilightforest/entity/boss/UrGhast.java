@@ -135,7 +135,7 @@ public class UrGhast extends BaseTFBoss {
 			}
 
 			if (this.isInTantrum() && !this.isDeadOrDying()) {
-				this.level().addParticle(TFParticleType.BOSS_TEAR.get(),
+				this.level().addParticle(TFParticleType.BOSS_TEAR,
 					this.getX() + (this.getRandom().nextDouble() - 0.5D) * this.getBbWidth() * 0.75D,
 					this.getY() + this.getRandom().nextDouble() * this.getBbHeight() * 0.5D,
 					this.getZ() + (this.getRandom().nextDouble() - 0.5D) * this.getBbWidth() * 0.75D,

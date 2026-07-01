@@ -50,7 +50,7 @@ public class FireflySpawnerBlock extends AbstractParticleSpawnerBlock implements
 			double dx = pos.getX() + ((rand.nextFloat() - rand.nextFloat()) * 0.2F + 0.5F);
 			double dy = pos.getY() + 0.4F + ((rand.nextFloat() - rand.nextFloat()) * 0.3F);
 			double dz = pos.getZ() + ((rand.nextFloat() - rand.nextFloat()) * 0.2F + 0.5F);
-			level.addParticle(TFParticleType.FIREFLY.get(), dx, dy, dz, 0, 0, 0);
+			level.addParticle(TFParticleType.FIREFLY, dx, dy, dz, 0, 0, 0);
 		}
 	}
 
@@ -73,7 +73,7 @@ public class FireflySpawnerBlock extends AbstractParticleSpawnerBlock implements
 
 	@Override
 	public ParticleOptions getParticlesToSpawn() {
-		return TFParticleType.PARTICLE_SPAWNER_FIREFLY.get();
+		return TFParticleType.PARTICLE_SPAWNER_FIREFLY;
 	}
 
 	@Override

@@ -266,7 +266,7 @@ public class Lich extends BaseTFBoss {
 		if (this.isDeadOrDying()) return;
 
 		if (this.getPhase() == 3) {
-			this.level().addParticle(TFParticleType.ANGRY_LICH.get(),
+			this.level().addParticle(TFParticleType.ANGRY_LICH,
 				this.getRandomX(0.65f),
 				this.getEyeY() + 0.25D + this.getRandom().nextFloat() * 0.5D,
 				this.getRandomZ(0.65f),
@@ -303,7 +303,7 @@ public class Lich extends BaseTFBoss {
 				blu = 0.00F * sparkle;
 			}
 
-			this.level().addParticle(ColorParticleOption.create(TFParticleType.MAGIC_EFFECT.get(), red, grn, blu), dx + (this.getRandom().nextGaussian() * 0.025), dy + (this.getRandom().nextGaussian() * 0.025), dz + (this.getRandom().nextGaussian() * 0.025), 0.0F, 0.0F, 0.0F);
+			this.level().addParticle(ColorParticleOption.create(TFParticleType.MAGIC_EFFECT, red, grn, blu), dx + (this.getRandom().nextGaussian() * 0.025), dy + (this.getRandom().nextGaussian() * 0.025), dz + (this.getRandom().nextGaussian() * 0.025), 0.0F, 0.0F, 0.0F);
 		}
 	}
 
@@ -670,7 +670,7 @@ public class Lich extends BaseTFBoss {
 			if (appear) {
 				for(int j = 0; j < 64; ++j) {
 					Vec3 pos = this.position().add(0.0D, this.getBbHeight() * 0.5D, 0.0D);
-					ParticleOptions options = this.isShadowClone() ? ParticleTypes.SMOKE : TFParticleType.OMINOUS_FLAME.get();
+					ParticleOptions options = this.isShadowClone() ? ParticleTypes.SMOKE : TFParticleType.OMINOUS_FLAME;
 					double x = this.getX(this.random.nextDouble() * this.random.nextDouble() * (this.random.nextBoolean() ? 1.0D : -1.0D));
 					double y =  this.getY(this.random.nextDouble());
 					double z = this.getZ(this.random.nextDouble() * this.random.nextDouble() * (this.random.nextBoolean() ? 1.0D : -1.0D));
@@ -701,7 +701,7 @@ public class Lich extends BaseTFBoss {
 						double tx = source.x() + (target.x() - source.x()) * trailFactor + this.getRandom().nextGaussian() * 0.005D;
 						double ty = source.y() + 0.2D + (target.y() - source.y()) * trailFactor + this.getRandom().nextGaussian() * 0.005D;
 						double tz = source.z() + (target.z() - source.z()) * trailFactor + this.getRandom().nextGaussian() * 0.005D;
-						packet.queueParticle(ColorParticleOption.create(TFParticleType.MAGIC_EFFECT.get(), red, green, blue), tx, ty, tz, 0.0D, 0.0D, 0.0D);
+						packet.queueParticle(ColorParticleOption.create(TFParticleType.MAGIC_EFFECT, red, green, blue), tx, ty, tz, 0.0D, 0.0D, 0.0D);
 					}
 
 					PacketDistributor.sendToPlayersTrackingEntity(this, packet);
@@ -1010,7 +1010,7 @@ public class Lich extends BaseTFBoss {
 			for (double i = 0.0D; i < 1.0D; i += 0.2D) {
 				double x = Math.sin((powFactor + i) * Math.PI * 2.0D) * expandFactor * 1.75D;
 				double z = Math.cos((powFactor + i) * Math.PI * 2.0D) * expandFactor * 1.75D;
-				this.level().addParticle(TFParticleType.OMINOUS_FLAME.get(), particlePos.x() + x, particlePos.y() - 0.25D, particlePos.z() + z, 0.0D, 0.0D, 0.0D);
+				this.level().addParticle(TFParticleType.OMINOUS_FLAME, particlePos.x() + x, particlePos.y() - 0.25D, particlePos.z() + z, 0.0D, 0.0D, 0.0D);
 			}
 		}
 

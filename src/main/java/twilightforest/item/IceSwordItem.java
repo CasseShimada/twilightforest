@@ -23,7 +23,7 @@ public class IceSwordItem extends Item {
 
 		ParticlePacket particlePacket = new ParticlePacket();
 		for (int i = 0; i < 20; i++) {
-			particlePacket.queueParticle(TFParticleType.SNOW.get(),
+			particlePacket.queueParticle(TFParticleType.SNOW,
 				target.getX() + (target.getRandom().nextGaussian() * target.getBbWidth() * 0.5),
 				target.getY() + target.getBbHeight() * 0.5F + (target.getRandom().nextGaussian() * target.getBbHeight() * 0.5),
 				target.getZ() + (target.getRandom().nextGaussian() * target.getBbWidth() * 0.5),

@@ -24,6 +24,6 @@ public class SnowQueenSpawnerBlockEntity extends BossSpawnerBlockEntity<SnowQuee
 
 	@Override
 	public ParticleOptions getSpawnerParticle() {
-		return TFParticleType.SNOW.get();
+		return TFParticleType.SNOW;
 	}
 }

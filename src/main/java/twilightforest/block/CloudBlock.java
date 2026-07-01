@@ -52,7 +52,7 @@ public class CloudBlock extends Block {
 		if (blockpos1.getX() != pos.getX()) x = Mth.clamp(x, pos.getX(), (double) pos.getX() + 1.0D);
 		if (blockpos1.getZ() != pos.getZ()) z = Mth.clamp(z, pos.getZ(), (double) pos.getZ() + 1.0D);
 
-		level.addParticle(TFParticleType.CLOUD_PUFF.get(), x, y, z, deltaMovement.x * -0.5D, 0.015D * jumpMultiplier, deltaMovement.z * -0.5D);
+		level.addParticle(TFParticleType.CLOUD_PUFF, x, y, z, deltaMovement.x * -0.5D, 0.015D * jumpMultiplier, deltaMovement.z * -0.5D);
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class CloudBlock extends Block {
 				double xSpeed = xSpd * 0.0035D * maxI;
 				double zSpeed = zSpd * 0.0035D * maxI;
 
-				particlePacket.queueParticle(TFParticleType.CLOUD_PUFF.get(), x, y, z, xSpeed, ySpeed, zSpeed);
+				particlePacket.queueParticle(TFParticleType.CLOUD_PUFF, x, y, z, xSpeed, ySpeed, zSpeed);
 			}
 
 			PacketDistributor.sendToPlayersTrackingChunk(serverLevel, ChunkPos.containing(pos), particlePacket);

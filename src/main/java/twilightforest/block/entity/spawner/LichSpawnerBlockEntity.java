@@ -62,6 +62,6 @@ public class LichSpawnerBlockEntity extends BossSpawnerBlockEntity<Lich> {
 
 	@Override
 	public ParticleOptions getSpawnerParticle() {
-		return TFParticleType.OMINOUS_FLAME.get();
+		return TFParticleType.OMINOUS_FLAME;
 	}
 }

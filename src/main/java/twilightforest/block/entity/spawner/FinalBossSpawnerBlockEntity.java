@@ -23,6 +23,6 @@ public class FinalBossSpawnerBlockEntity extends BossSpawnerBlockEntity<PlateauB
 
 	@Override
 	public ParticleOptions getSpawnerParticle() {
-		return TFParticleType.ANNIHILATE.get();
+		return TFParticleType.ANNIHILATE;
 	}
 }

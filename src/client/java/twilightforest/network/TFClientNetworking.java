@@ -98,7 +98,7 @@ public final class TFClientNetworking {
 				double y = packet.pos().getY() + 0.5D + level.getRandom().nextFloat() - level.getRandom().nextFloat();
 				double z = packet.pos().getZ() + 0.5D + level.getRandom().nextFloat() - level.getRandom().nextFloat();
 
-				level.addParticle(TFParticleType.PROTECTION.get(), x, y, z, vx, vy, vz);
+				level.addParticle(TFParticleType.PROTECTION, x, y, z, vx, vy, vz);
 			}
 		});
 	}

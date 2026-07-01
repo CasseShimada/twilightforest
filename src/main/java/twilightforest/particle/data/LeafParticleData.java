@@ -26,6 +26,6 @@ public record LeafParticleData(int r, int g, int b) implements ParticleOptions {
 
 	@Override
 	public ParticleType<?> getType() {
-		return TFParticleType.FALLEN_LEAF.get();
+		return TFParticleType.FALLEN_LEAF;
 	}
 }

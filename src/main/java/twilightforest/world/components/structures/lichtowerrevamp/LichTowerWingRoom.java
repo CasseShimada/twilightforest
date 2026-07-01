@@ -636,7 +636,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		if (!(level.getBlockEntity(pos) instanceof SinisterSpawnerBlockEntity spawner))
 			return;
 
-		spawner.addParticle(TFParticleType.OMINOUS_FLAME.value(), false);
+		spawner.addParticle(TFParticleType.OMINOUS_FLAME, false);
 		spawner.setLootTable(TFLootTables.OMINOUS_SPAWNER_DROPS);
 
 		this.configureBaseSpawner(pos, random, parameters, spawner.getSpawner());

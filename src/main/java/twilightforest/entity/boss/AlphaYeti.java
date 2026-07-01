@@ -152,7 +152,7 @@ public class AlphaYeti extends BaseTFBoss implements RangedAttackMob, IHostileMo
 		double py = hgt % 5.0F;
 		double pz = 3.0F * Math.sin(rotation);
 
-		this.level().addParticle(TFParticleType.SNOW.get(), this.xOld + px, this.yOld + py, this.zOld + pz, 0.0F, 0.0F, 0.0F);
+		this.level().addParticle(TFParticleType.SNOW, this.xOld + px, this.yOld + py, this.zOld + pz, 0.0F, 0.0F, 0.0F);
 	}
 
 	@Override

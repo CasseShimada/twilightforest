@@ -132,7 +132,7 @@ public class DryingRackBlock extends BaseEntityBlock implements SimpleWaterlogge
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
 		if (level.getBlockEntity(pos) instanceof DryingRackBlockEntity rack && rack.isDrying() && random.nextInt(5) == 0) {
 			Direction direction = state.getValue(FACING);
-			ParticleUtils.spawnParticleOnFace(level, pos, direction, TFParticleType.DRYING_RACK.get(), Vec3.ZERO, 0.3F);
+			ParticleUtils.spawnParticleOnFace(level, pos, direction, TFParticleType.DRYING_RACK, Vec3.ZERO, 0.3F);
 		}
 	}
 

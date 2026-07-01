@@ -569,7 +569,7 @@ public class HydraHeadContainer {
 				dy *= velocity;
 				dz *= velocity;
 
-				this.headEntity.level().addAlwaysVisibleParticle(TFParticleType.LARGE_FLAME.get(), px, py, pz, dx, dy, dz);
+				this.headEntity.level().addAlwaysVisibleParticle(TFParticleType.LARGE_FLAME, px, py, pz, dx, dy, dz);
 			}
 		}
 

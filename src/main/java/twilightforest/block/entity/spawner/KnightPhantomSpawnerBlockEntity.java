@@ -76,6 +76,6 @@ public class KnightPhantomSpawnerBlockEntity extends BossSpawnerBlockEntity<Knig
 
 	@Override
 	public ParticleOptions getSpawnerParticle() {
-		return TFParticleType.OMINOUS_FLAME.get();
+		return TFParticleType.OMINOUS_FLAME;
 	}
 }

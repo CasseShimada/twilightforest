@@ -139,7 +139,7 @@ public class OminousCandleBlock extends BaseEntityBlock {
 			}
 		}
 
-		level.addParticle(TFParticleType.OMINOUS_FLAME.get(), offset.x, offset.y, offset.z, 0.0, 0.0, 0.0);
+		level.addParticle(TFParticleType.OMINOUS_FLAME, offset.x, offset.y, offset.z, 0.0, 0.0, 0.0);
 	}
 
 	@Override
@@ -191,7 +191,7 @@ public class OminousCandleBlock extends BaseEntityBlock {
 		Vec3 start = Vec3.atLowerCornerOf(pos);
 		for (Vec2 vec2 : CANDLE_OFFSETS.get(state.getValue(CANDLES).intValue())) {
 			for (int j = 0; j < 5; j++) {
-				level.addParticle(TFParticleType.OMINOUS_FLAME.get(), start.x + vec2.x, start.y + 0.5D, start.z + vec2.y, (level.getRandom().nextDouble() - 0.5D) * 0.05D, 0.015F, (level.getRandom().nextDouble() - 0.5D) * 0.05D);
+				level.addParticle(TFParticleType.OMINOUS_FLAME, start.x + vec2.x, start.y + 0.5D, start.z + vec2.y, (level.getRandom().nextDouble() - 0.5D) * 0.05D, 0.015F, (level.getRandom().nextDouble() - 0.5D) * 0.05D);
 			}
 		}
 	}

@@ -434,12 +434,12 @@ public abstract class BiomeHelper {
 	}
 
 	public static TFBiomeEffectsBuilder fireflyForestParticles(TFBiomeEffectsBuilder builder) {
-		builder.ambientParticle(TFParticleType.WANDERING_FIREFLY.get(), 0.001f);
+		builder.ambientParticle(TFParticleType.WANDERING_FIREFLY, 0.001f);
 		return builder;
 	}
 
 	public static TFBiomeEffectsBuilder fireflyParticles(TFBiomeEffectsBuilder builder) {
-		builder.ambientParticle(TFParticleType.WANDERING_FIREFLY.get(), 0.00025f);
+		builder.ambientParticle(TFParticleType.WANDERING_FIREFLY, 0.00025f);
 		return builder;
 	}
 

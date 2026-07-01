@@ -145,7 +145,7 @@ public class SnowQueen extends BaseTFBoss implements IBreathAttacker, TFMultipar
 			float py = this.getEyeHeight() + (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.5F;
 			float pz = (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.3F;
 
-			this.level().addParticle(TFParticleType.SNOW_GUARDIAN.get(), this.xOld + px, this.yOld + py, this.zOld + pz, 0.0D, 0.0D, 0.0D);
+			this.level().addParticle(TFParticleType.SNOW_GUARDIAN, this.xOld + px, this.yOld + py, this.zOld + pz, 0.0D, 0.0D, 0.0D);
 		}
 
 		// during drop phase, all the ice blocks should make particles
@@ -155,7 +155,7 @@ public class SnowQueen extends BaseTFBoss implements IBreathAttacker, TFMultipar
 				float py = (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.5F;
 				float pz = (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.5F;
 
-				this.level().addParticle(TFParticleType.SNOW_WARNING.get(), ice.xOld + px, ice.yOld + py, ice.zOld + pz, 0.0D, 0.0D, 0.0D);
+				this.level().addParticle(TFParticleType.SNOW_WARNING, ice.xOld + px, ice.yOld + py, ice.zOld + pz, 0.0D, 0.0D, 0.0D);
 			}
 		}
 
@@ -184,7 +184,7 @@ public class SnowQueen extends BaseTFBoss implements IBreathAttacker, TFMultipar
 				dy *= velocity;
 				dz *= velocity;
 
-				this.level().addParticle(TFParticleType.ICE_BEAM.get(), px, py, pz, dx, dy, dz);
+				this.level().addParticle(TFParticleType.ICE_BEAM, px, py, pz, dx, dy, dz);
 			}
 		}
 	}

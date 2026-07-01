@@ -452,33 +452,33 @@ public class RegistrationEvents {
 
 	private static void registerParticleFactories() {
 		ParticleProviderRegistry registry = ParticleProviderRegistry.getInstance();
-		registry.register(TFParticleType.LARGE_FLAME.get(), LargeFlameParticle.Factory::new);
-		registry.register(TFParticleType.LEAF_RUNE.get(), LeafRuneParticle.Factory::new);
-		registry.register(TFParticleType.BOSS_TEAR.get(), new GhastTearParticle.Factory());
-		registry.register(TFParticleType.GHAST_TRAP.get(), GhastTrapParticle.Factory::new);
-		registry.register(TFParticleType.PROTECTION.get(), ProtectionParticle.Factory::new);
-		registry.register(TFParticleType.SNOW.get(), SnowParticle.Factory::new);
-		registry.register(TFParticleType.SNOW_GUARDIAN.get(), SnowGuardianParticle.Factory::new);
-		registry.register(TFParticleType.SNOW_WARNING.get(), SnowWarningParticle.SimpleFactory::new);
-		registry.register(TFParticleType.EXTENDED_SNOW_WARNING.get(), SnowWarningParticle.ExtendedFactory::new);
-		registry.register(TFParticleType.ICE_BEAM.get(), IceBeamParticle.Factory::new);
-		registry.register(TFParticleType.ANNIHILATE.get(), AnnihilateParticle.Factory::new);
-		registry.register(TFParticleType.HUGE_SMOKE.get(), SmokeScaleParticle.Factory::new);
-		registry.register(TFParticleType.FIREFLY.get(), FireflyParticle.StationaryProvider::new);
-		registry.register(TFParticleType.WANDERING_FIREFLY.get(), FireflyParticle.WanderingProvider::new);
-		registry.register(TFParticleType.PARTICLE_SPAWNER_FIREFLY.get(), FireflyParticle.ParticleSpawnerProvider::new);
-		registry.register(TFParticleType.FALLEN_LEAF.get(), LeafParticle.Factory::new);
-		registry.register(TFParticleType.DIM_FLAME.get(), FlameParticle.SmallFlameProvider::new);
-		registry.register(TFParticleType.OMINOUS_FLAME.get(), FlameParticle.SmallFlameProvider::new);
-		registry.register(TFParticleType.SORTING_PARTICLE.get(), SortingParticle.Factory::new);
-		registry.register(TFParticleType.TRANSFORMATION_PARTICLE.get(), TransformationParticle.Factory::new);
-		registry.register(TFParticleType.LOG_CORE_PARTICLE.get(), LogCoreParticle.Factory::new);
-		registry.register(TFParticleType.CLOUD_PUFF.get(), CloudPuffParticle.Factory::new);
-		registry.register(TFParticleType.MAGIC_EFFECT.get(), MagicEffectParticle.Factory::new);
-		registry.register(TFParticleType.ANGRY_LICH.get(), AngryLichParticle.Factory::new);
-		registry.register(TFParticleType.TWILIGHT_ORB.get(), (FabricSpriteSet sprite) -> new CustomTextureParticle.Factory(sprite, true));
-		registry.register(TFParticleType.SHIELD_BREAK.get(), CustomTextureParticle.ShieldBreak::new);
-		registry.register(TFParticleType.DRYING_RACK.get(), DryingRackParticle.Provider::new);
+		registry.register(TFParticleType.LARGE_FLAME, LargeFlameParticle.Factory::new);
+		registry.register(TFParticleType.LEAF_RUNE, LeafRuneParticle.Factory::new);
+		registry.register(TFParticleType.BOSS_TEAR, new GhastTearParticle.Factory());
+		registry.register(TFParticleType.GHAST_TRAP, GhastTrapParticle.Factory::new);
+		registry.register(TFParticleType.PROTECTION, ProtectionParticle.Factory::new);
+		registry.register(TFParticleType.SNOW, SnowParticle.Factory::new);
+		registry.register(TFParticleType.SNOW_GUARDIAN, SnowGuardianParticle.Factory::new);
+		registry.register(TFParticleType.SNOW_WARNING, SnowWarningParticle.SimpleFactory::new);
+		registry.register(TFParticleType.EXTENDED_SNOW_WARNING, SnowWarningParticle.ExtendedFactory::new);
+		registry.register(TFParticleType.ICE_BEAM, IceBeamParticle.Factory::new);
+		registry.register(TFParticleType.ANNIHILATE, AnnihilateParticle.Factory::new);
+		registry.register(TFParticleType.HUGE_SMOKE, SmokeScaleParticle.Factory::new);
+		registry.register(TFParticleType.FIREFLY, FireflyParticle.StationaryProvider::new);
+		registry.register(TFParticleType.WANDERING_FIREFLY, FireflyParticle.WanderingProvider::new);
+		registry.register(TFParticleType.PARTICLE_SPAWNER_FIREFLY, FireflyParticle.ParticleSpawnerProvider::new);
+		registry.register(TFParticleType.FALLEN_LEAF, LeafParticle.Factory::new);
+		registry.register(TFParticleType.DIM_FLAME, FlameParticle.SmallFlameProvider::new);
+		registry.register(TFParticleType.OMINOUS_FLAME, FlameParticle.SmallFlameProvider::new);
+		registry.register(TFParticleType.SORTING_PARTICLE, SortingParticle.Factory::new);
+		registry.register(TFParticleType.TRANSFORMATION_PARTICLE, TransformationParticle.Factory::new);
+		registry.register(TFParticleType.LOG_CORE_PARTICLE, LogCoreParticle.Factory::new);
+		registry.register(TFParticleType.CLOUD_PUFF, CloudPuffParticle.Factory::new);
+		registry.register(TFParticleType.MAGIC_EFFECT, MagicEffectParticle.Factory::new);
+		registry.register(TFParticleType.ANGRY_LICH, AngryLichParticle.Factory::new);
+		registry.register(TFParticleType.TWILIGHT_ORB, (FabricSpriteSet sprite) -> new CustomTextureParticle.Factory(sprite, true));
+		registry.register(TFParticleType.SHIELD_BREAK, CustomTextureParticle.ShieldBreak::new);
+		registry.register(TFParticleType.DRYING_RACK, DryingRackParticle.Provider::new);
 	}
 
 	private static void registerArmorRenderers() {

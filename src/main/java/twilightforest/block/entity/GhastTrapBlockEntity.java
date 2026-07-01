@@ -86,7 +86,7 @@ public class GhastTrapBlockEntity extends BlockEntity {
 		Vec3 diff = top.subtract(to);
 
 		for (int i = 0; i < 5; i++) {
-			level.addParticle(TFParticleType.GHAST_TRAP.get(), top.x, top.y, top.z, -diff.x, -diff.y, -diff.z);
+			level.addParticle(TFParticleType.GHAST_TRAP, top.x, top.y, top.z, -diff.x, -diff.y, -diff.z);
 		}
 	}
 
@@ -114,7 +114,7 @@ public class GhastTrapBlockEntity extends BlockEntity {
 		if (!(level instanceof ServerLevel serverLevel)) {
 			// smoke when done
 			if (te.counter > 100 && te.counter % 4 == 0) {
-				level.addParticle(TFParticleType.HUGE_SMOKE.get(), pos.getX() + 0.5, pos.getY() + 0.95, pos.getZ() + 0.5, Math.cos(te.counter / 10.0) * 0.05, 0.25D, Math.sin(te.counter / 10.0) * 0.05);
+				level.addParticle(TFParticleType.HUGE_SMOKE, pos.getX() + 0.5, pos.getY() + 0.95, pos.getZ() + 0.5, Math.cos(te.counter / 10.0) * 0.05, 0.25D, Math.sin(te.counter / 10.0) * 0.05);
 			} else if (te.counter < 100) {
 				double x = pos.getX() + 0.5D;
 				double y = pos.getY() + 1.0D;
@@ -124,12 +124,12 @@ public class GhastTrapBlockEntity extends BlockEntity {
 				double dy = 20D;
 				double dz = Math.sin(te.counter / 10.0) * 2.5;
 
-				level.addParticle(TFParticleType.GHAST_TRAP.get(), x, y, z, dx, dy, dz);
-				level.addParticle(TFParticleType.GHAST_TRAP.get(), x, y, z, -dx, dy, -dz);
-				level.addParticle(TFParticleType.GHAST_TRAP.get(), x, y, z, -dx, dy / 2, dz);
-				level.addParticle(TFParticleType.GHAST_TRAP.get(), x, y, z, dx, dy / 2, -dz);
-				level.addParticle(TFParticleType.GHAST_TRAP.get(), x, y, z, dx / 2, dy / 4, dz / 2);
-				level.addParticle(TFParticleType.GHAST_TRAP.get(), x, y, z, -dx / 2, dy / 4, -dz / 2);
+				level.addParticle(TFParticleType.GHAST_TRAP, x, y, z, dx, dy, dz);
+				level.addParticle(TFParticleType.GHAST_TRAP, x, y, z, -dx, dy, -dz);
+				level.addParticle(TFParticleType.GHAST_TRAP, x, y, z, -dx, dy / 2, dz);
+				level.addParticle(TFParticleType.GHAST_TRAP, x, y, z, dx, dy / 2, -dz);
+				level.addParticle(TFParticleType.GHAST_TRAP, x, y, z, dx / 2, dy / 4, dz / 2);
+				level.addParticle(TFParticleType.GHAST_TRAP, x, y, z, -dx / 2, dy / 4, -dz / 2);
 			}
 
 			// appropriate sound

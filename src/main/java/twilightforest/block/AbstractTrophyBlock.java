@@ -164,7 +164,7 @@ public abstract class AbstractTrophyBlock extends BaseEntityBlock {
 					break;
 				case LICH:
 					for (int a = 0; a < 5; a++) {
-						particlePacket.queueParticle(TFParticleType.ANGRY_LICH.get(),
+						particlePacket.queueParticle(TFParticleType.ANGRY_LICH,
 							(double) pos.getX() + rand.nextFloat() * 0.5D * 2.0F + rand.nextGaussian() * 0.02D,
 							(double) pos.getY() + 0.5D + rand.nextFloat() * 0.25 + rand.nextGaussian() * 0.02D,
 							(double) pos.getZ() + rand.nextFloat() * 0.5D * 2.0F + rand.nextGaussian() * 0.02D,
@@ -211,7 +211,7 @@ public abstract class AbstractTrophyBlock extends BaseEntityBlock {
 					break;
 				case SNOW_QUEEN:
 					for (int b = 0; b < 20; b++) {
-						particlePacket.queueParticle(TFParticleType.SNOW_WARNING.get(),
+						particlePacket.queueParticle(TFParticleType.SNOW_WARNING,
 							(double) pos.getX() - 1 + (rand.nextDouble() * 3.25D),
 							(double) pos.getY() + 5 + rand.nextGaussian(),
 							(double) pos.getZ() - 1 + (rand.nextDouble() * 3.25D),
@@ -220,7 +220,7 @@ public abstract class AbstractTrophyBlock extends BaseEntityBlock {
 					break;
 				case QUEST_RAM:
 					for (int p = 0; p < 10; p++) {
-						particlePacket.queueParticle(ColorParticleOption.create(TFParticleType.MAGIC_EFFECT.get(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat()),
+						particlePacket.queueParticle(ColorParticleOption.create(TFParticleType.MAGIC_EFFECT, rand.nextFloat(), rand.nextFloat(), rand.nextFloat()),
 							(double) pos.getX() + 0.5 + (rand.nextDouble() - 0.5),
 							(double) pos.getY() + (rand.nextDouble() - 0.5),
 							(double) pos.getZ() + 0.5 + (rand.nextDouble() - 0.5),

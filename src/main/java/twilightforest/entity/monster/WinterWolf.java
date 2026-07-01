@@ -104,7 +104,7 @@ public class WinterWolf extends HostileWolf implements IBreathAttacker {
 			dy *= velocity;
 			dz *= velocity;
 
-			this.level().addParticle(TFParticleType.SNOW.get(), px, py, pz, dx, dy, dz);
+			this.level().addParticle(TFParticleType.SNOW, px, py, pz, dx, dy, dz);
 		}
 	}
 
