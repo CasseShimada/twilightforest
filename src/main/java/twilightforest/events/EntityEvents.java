@@ -324,7 +324,7 @@ public class EntityEvents {
 			stack.consume(1, player);
 			player.swing(hand);
 			if (player instanceof ServerPlayer) {
-				player.awardStat(TFStats.SKULL_CANDLES_MADE.get());
+				player.awardStat(TFStats.SKULL_CANDLES_MADE);
 			}
 			return InteractionResult.SUCCESS;
 		}

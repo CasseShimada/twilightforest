@@ -101,7 +101,7 @@ public class CharmEvents {
 
 			if (player instanceof ServerPlayer serverPlayer) {
 				PacketDistributor.sendToPlayer(serverPlayer, new SpawnCharmPacket(new ItemStack(charm1 ? TFItems.CHARM_OF_LIFE_1.get() : TFItems.CHARM_OF_LIFE_2.get()), ResourceKey.create(Registries.SOUND_EVENT, TFSounds.CHARM_LIFE.getId())));
-				serverPlayer.awardStat(TFStats.LIFE_CHARMS_ACTIVATED.get());
+				serverPlayer.awardStat(TFStats.LIFE_CHARMS_ACTIVATED);
 			}
 
 			return true;
@@ -297,7 +297,7 @@ public class CharmEvents {
 
 			if (player instanceof ServerPlayer serverPlayer) {
 				PacketDistributor.sendToPlayer(serverPlayer, new SpawnCharmPacket(stack, ResourceKey.create(Registries.SOUND_EVENT, TFSounds.CHARM_KEEP.getId())));
-				serverPlayer.awardStat(TFStats.KEEPING_CHARMS_ACTIVATED.get());
+				serverPlayer.awardStat(TFStats.KEEPING_CHARMS_ACTIVATED);
 			}
 			playerData.remove(CONSUMED_CHARM_TAG);
 		}

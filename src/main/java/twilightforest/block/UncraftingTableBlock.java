@@ -46,7 +46,7 @@ public class UncraftingTableBlock extends Block {
 			return InteractionResult.SUCCESS;
 		} else {
 			player.openMenu(state.getMenuProvider(level, pos));
-			player.awardStat(TFStats.UNCRAFTING_TABLE_INTERACTIONS.get());
+			player.awardStat(TFStats.UNCRAFTING_TABLE_INTERACTIONS);
 			return InteractionResult.CONSUME;
 		}
 	}

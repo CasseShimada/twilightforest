@@ -78,7 +78,7 @@ public class FortificationShieldAttachment {
 		}
 
 		if (entity instanceof ServerPlayer player && !expired) {
-			player.awardStat(TFStats.TF_SHIELDS_BROKEN.get());
+			player.awardStat(TFStats.TF_SHIELDS_BROKEN);
 		}
 
 		this.sendUpdatePacket(entity);

@@ -74,7 +74,7 @@ public class CrumbleHornItem extends Item {
 		for (BlockPos pos : WorldUtil.getAllInBB(box)) {
 			if (this.crumbleBlock(serverLevel, living, pos)) {
 				if (living instanceof ServerPlayer player) {
-					player.awardStat(TFStats.BLOCKS_CRUMBLED.get());
+					player.awardStat(TFStats.BLOCKS_CRUMBLED);
 					TFItemStackUtils.hurtWithoutBreaking(stack, 1, player);
 				}
 				if (TFItemStackUtils.isAtZeroDurability(stack)) break;

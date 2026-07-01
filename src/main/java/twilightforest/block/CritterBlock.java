@@ -176,7 +176,7 @@ public abstract class CritterBlock extends BaseEntityBlock implements SimpleWate
 					0.0D, 0.0D, 0.0D);
 			}
 			if (entity instanceof Projectile projectile && projectile.getOwner() instanceof ServerPlayer player) {
-				player.awardStat(TFStats.BUGS_SQUISHED.get());
+				player.awardStat(TFStats.BUGS_SQUISHED);
 				TFAdvancements.KILL_BUG.get().trigger(player, state);
 			}
 		}

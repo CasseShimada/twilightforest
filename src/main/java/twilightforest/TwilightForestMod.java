@@ -112,7 +112,7 @@ public final class TwilightForestMod implements ModInitializer {
 		TFBlocks.BLOCKS.register();
 		TFEntities.ENTITY_TYPES.register();
 		TFItems.ITEMS.register();
-		TFStats.STATS.register();
+		TFStats.register();
 		TFLoot.NUMBERS.register();
 		TFPOITypes.POIS.register();
 		TFLoot.FUNCTIONS.register();
