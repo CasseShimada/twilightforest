@@ -132,7 +132,7 @@ public class LichMinion extends Zombie {
 
 		if (this.master != null && difficulty.getDifficulty() == Difficulty.HARD) {
 			int babiesSummoned = this.master.getBabyMinionsSummoned();
-			if (babiesSummoned < this.master.getAttributeValue(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(TFAttributes.MINION_COUNT.get())) / 4) { // One quarter can be babies on hard, by default: 9 / 4 = 2
+			if (babiesSummoned < this.master.getAttributeValue(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(TFAttributes.MINION_COUNT)) / 4) { // One quarter can be babies on hard, by default: 9 / 4 = 2
 				baby = this.getRandom().nextInt(100) <= 20; // 20%
 			}
 			if (baby) this.master.setBabyMinionsSummoned(babiesSummoned + 1);

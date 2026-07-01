@@ -103,8 +103,8 @@ public class Lich extends BaseTFBoss {
 	public Lich(EntityType<? extends Lich> type, Level level) {
 		super(type, level);
 		this.xpReward = 217;
-		this.setShieldStrength((int) this.getAttributeValue(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(TFAttributes.SHIELD_STRENGTH.get())));
-		this.setMinionsToSummon((int) this.getAttributeValue(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(TFAttributes.MINION_COUNT.get())));
+		this.setShieldStrength((int) this.getAttributeValue(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(TFAttributes.SHIELD_STRENGTH)));
+		this.setMinionsToSummon((int) this.getAttributeValue(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(TFAttributes.MINION_COUNT)));
 	}
 
 	public Lich(Level level, Lich otherLich) {
@@ -133,9 +133,9 @@ public class Lich extends BaseTFBoss {
 			.add(Attributes.ATTACK_DAMAGE, 3.0D)
 			.add(Attributes.MOVEMENT_SPEED, 0.45D) // Same speed as an angry enderman
 			.add(Attributes.FOLLOW_RANGE, 35.0)
-			.add(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(TFAttributes.CLONE_COUNT.get()), MAX_SHADOW_CLONES)
-			.add(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(TFAttributes.SHIELD_STRENGTH.get()), MAX_SHIELD_STRENGTH)
-			.add(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(TFAttributes.MINION_COUNT.get()), MAX_MINIONS_TO_SUMMON);
+			.add(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(TFAttributes.CLONE_COUNT), MAX_SHADOW_CLONES)
+			.add(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(TFAttributes.SHIELD_STRENGTH), MAX_SHIELD_STRENGTH)
+			.add(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(TFAttributes.MINION_COUNT), MAX_MINIONS_TO_SUMMON);
 	}
 
 	@Override
@@ -502,7 +502,7 @@ public class Lich extends BaseTFBoss {
 	}
 
 	public boolean wantsNewClone(Lich clone) {
-		return clone.isShadowClone() && this.countMyClones() < this.getAttributeValue(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(TFAttributes.CLONE_COUNT.get()));
+		return clone.isShadowClone() && this.countMyClones() < this.getAttributeValue(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(TFAttributes.CLONE_COUNT));
 	}
 
 	public int countMyClones() {
@@ -1055,7 +1055,7 @@ public class Lich extends BaseTFBoss {
 	protected void tickBossBar() {
 		this.getBossBar().setVisible(!this.isShadowClone());
 		int phase = this.getPhase();
-		if (phase == 1) this.getBossBar().setProgress((float) (this.getShieldStrength()) / (float) (this.getAttributeValue(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(TFAttributes.SHIELD_STRENGTH.get()))));
+		if (phase == 1) this.getBossBar().setProgress((float) (this.getShieldStrength()) / (float) (this.getAttributeValue(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(TFAttributes.SHIELD_STRENGTH))));
 		else this.getBossBar().setProgress(this.getHealth() / this.getMaxHealth());
 		if (phase != this.previousPhase) this.getBossBar().updateStyle(this.getBossBarColor(), this.getBossBarOverlay(), this.previousPhase != 1);
 		this.previousPhase = phase;

@@ -122,7 +122,7 @@ public final class TwilightForestMod implements ModInitializer {
 		TFEntities.SPAWN_EGGS.register();
 		TFMenuTypes.CONTAINERS.register();
 		TFRecipes.RECIPE_TYPES.register();
-		TFAttributes.ATTRIBUTES.register();
+		TFAttributes.register();
 		TFAdvancements.register();
 		TFMobEffects.register();
 		TFItemSubPredicates.register();

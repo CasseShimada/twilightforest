@@ -96,7 +96,7 @@ public class LichShadowsGoal extends Goal {
 
 	public void checkAndSpawnClones(LivingEntity targetedEntity) {
 		// if not, spawn one!
-		if (this.lich.countMyClones() < this.lich.getAttributeValue(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(TFAttributes.CLONE_COUNT.get()))) this.spawnShadowClone(targetedEntity);
+		if (this.lich.countMyClones() < this.lich.getAttributeValue(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(TFAttributes.CLONE_COUNT))) this.spawnShadowClone(targetedEntity);
 	}
 
 	private void spawnShadowClone(LivingEntity targetedEntity) {
