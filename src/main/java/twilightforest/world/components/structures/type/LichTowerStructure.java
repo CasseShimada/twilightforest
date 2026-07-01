@@ -76,7 +76,7 @@ public class LichTowerStructure extends ControlledSpawningStructure implements C
 
 	@Override
 	public StructureType<?> type() {
-		return TFStructureTypes.LICH_TOWER.get();
+		return TFStructureTypes.LICH_TOWER;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -50,7 +50,7 @@ public class KnightStrongholdStructure extends ControlledSpawningStructure {
 
 	@Override
 	public StructureType<?> type() {
-		return TFStructureTypes.KNIGHT_STRONGHOLD.get();
+		return TFStructureTypes.KNIGHT_STRONGHOLD;
 	}
 
 	public static KnightStrongholdStructure buildKnightStrongholdConfig(BootstrapContext<Structure> context) {

@@ -193,7 +193,7 @@ public class HollowTreeStructure extends Structure implements DecorationClearanc
 
 	@Override
 	public StructureType<?> type() {
-		return TFStructureTypes.HOLLOW_TREE.get();
+		return TFStructureTypes.HOLLOW_TREE;
 	}
 
 	@Override

@@ -85,7 +85,7 @@ public class HollowHillStructure extends LandmarkStructure implements Configurab
 
 	@Override
 	public StructureType<?> type() {
-		return TFStructureTypes.HOLLOW_HILL.get();
+		return TFStructureTypes.HOLLOW_HILL;
 	}
 
 	@Override

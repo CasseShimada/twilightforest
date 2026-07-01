@@ -40,7 +40,7 @@ public class HedgeMazeStructure extends LandmarkStructure implements CustomDensi
 
 	@Override
 	public StructureType<?> type() {
-		return TFStructureTypes.HEDGE_MAZE.get();
+		return TFStructureTypes.HEDGE_MAZE;
 	}
 
 	public static HedgeMazeStructure buildStructureConfig(BootstrapContext<Structure> context) {

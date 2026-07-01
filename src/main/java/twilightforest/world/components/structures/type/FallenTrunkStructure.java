@@ -120,7 +120,7 @@ public class FallenTrunkStructure extends Structure implements CustomDensitySour
 
 	@Override
 	public StructureType<?> type() {
-		return TFStructureTypes.FALLEN_TRUNK.get();
+		return TFStructureTypes.FALLEN_TRUNK;
 	}
 
 	public static FallenTrunkStructure buildStructureConfig(HolderSet<Biome> biomes) {

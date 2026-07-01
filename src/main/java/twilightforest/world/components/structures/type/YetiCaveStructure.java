@@ -59,7 +59,7 @@ public class YetiCaveStructure extends ControlledSpawningStructure implements Cu
 
 	@Override
 	public StructureType<?> type() {
-		return TFStructureTypes.YETI_CAVE.get();
+		return TFStructureTypes.YETI_CAVE;
 	}
 
 	public static YetiCaveStructure buildYetiCaveConfig(BootstrapContext<Structure> context) {

@@ -64,7 +64,7 @@ public class TrollCaveStructure extends ProgressionStructure implements Configur
 
 	@Override
 	public StructureType<?> type() {
-		return TFStructureTypes.TROLL_CAVE.get();
+		return TFStructureTypes.TROLL_CAVE;
 	}
 
 	@Override

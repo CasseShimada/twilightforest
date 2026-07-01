@@ -43,7 +43,7 @@ public class FinalCastleStructure extends ControlledSpawningStructure {
 
 	@Override
 	public StructureType<?> type() {
-		return TFStructureTypes.FINAL_CASTLE.get();
+		return TFStructureTypes.FINAL_CASTLE;
 	}
 
 	public static FinalCastleStructure buildFinalCastleConfig(BootstrapContext<Structure> context) {

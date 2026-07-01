@@ -51,7 +51,7 @@ public class GiantHouseStructure extends ProgressionStructure implements Configu
 
 	@Override
 	public StructureType<?> type() {
-		return TFStructureTypes.GIANT_HOUSE.get();
+		return TFStructureTypes.GIANT_HOUSE;
 	}
 
 	@Override

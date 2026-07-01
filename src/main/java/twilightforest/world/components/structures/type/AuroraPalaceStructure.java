@@ -45,7 +45,7 @@ public class AuroraPalaceStructure extends ControlledSpawningStructure {
 
 	@Override
 	public StructureType<?> type() {
-		return TFStructureTypes.AURORA_PALACE.get();
+		return TFStructureTypes.AURORA_PALACE;
 	}
 
 	public static AuroraPalaceStructure buildAuroraPalaceConfig(BootstrapContext<Structure> context) {

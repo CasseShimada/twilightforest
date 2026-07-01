@@ -58,7 +58,7 @@ public class HydraLairStructure extends ProgressionStructure implements CustomDe
 
 	@Override
 	public StructureType<?> type() {
-		return TFStructureTypes.HYDRA_LAIR.get();
+		return TFStructureTypes.HYDRA_LAIR;
 	}
 
 	public static HydraLairStructure buildHydraLairConfig(BootstrapContext<Structure> context) {

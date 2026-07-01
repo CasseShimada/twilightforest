@@ -60,7 +60,7 @@ public class LabyrinthStructure extends ControlledSpawningStructure implements C
 
 	@Override
 	public StructureType<?> type() {
-		return TFStructureTypes.LABYRINTH.get();
+		return TFStructureTypes.LABYRINTH;
 	}
 
 	public static LabyrinthStructure buildLabyrinthConfig(BootstrapContext<Structure> context) {

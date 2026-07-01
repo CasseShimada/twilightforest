@@ -47,7 +47,7 @@ public class DarkTowerStructure extends ControlledSpawningStructure {
 
 	@Override
 	public StructureType<?> type() {
-		return TFStructureTypes.DARK_TOWER.get();
+		return TFStructureTypes.DARK_TOWER;
 	}
 
 	public static DarkTowerStructure buildDarkTowerConfig(BootstrapContext<Structure> context) {

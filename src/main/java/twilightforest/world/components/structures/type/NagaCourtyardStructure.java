@@ -39,7 +39,7 @@ public class NagaCourtyardStructure extends ConquerableStructure implements Cust
 
 	@Override
 	public StructureType<?> type() {
-		return TFStructureTypes.NAGA_COURTYARD.get();
+		return TFStructureTypes.NAGA_COURTYARD;
 	}
 
 	public static NagaCourtyardStructure buildStructureConfig(BootstrapContext<Structure> context) {

@@ -130,7 +130,7 @@ public final class TwilightForestMod implements ModInitializer {
 		TFMapDecorations.register();
 		TFParticleType.PARTICLE_TYPES.register();
 		TFBlockEntities.BLOCK_ENTITIES.register();
-		TFStructureTypes.STRUCTURE_TYPES.register();
+		TFStructureTypes.register();
 		TFBiomeSources.register();
 		BiomeLayerTypes.register();
 		TFDataSerializers.register();
