@@ -125,7 +125,7 @@ public final class TwilightForestMod implements ModInitializer {
 		TFAttributes.ATTRIBUTES.register();
 		TFAdvancements.TRIGGERS.register();
 		TFMobEffects.MOB_EFFECTS.register();
-		TFItemSubPredicates.TYPES.register();
+		TFItemSubPredicates.register();
 		Enforcements.ENFORCEMENTS.register();
 		TFCaveCarvers.CARVER_TYPES.register();
 		TFRecipes.RECIPE_SERIALIZERS.register();
