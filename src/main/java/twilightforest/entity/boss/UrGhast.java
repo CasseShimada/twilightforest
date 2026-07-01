@@ -355,7 +355,7 @@ public class UrGhast extends BaseTFBoss {
 	private List<BlockPos> scanForTraps(ServerLevel level) {
 		PoiManager poimanager = level.getPoiManager();
 		Stream<PoiRecord> stream = poimanager.getInRange(type ->
-				type.is(TFPOITypes.GHAST_TRAP.getId()),
+				type.is(TFPOITypes.GHAST_TRAP_KEY),
 			this.getLogicalScanPoint(),
 			this.getHomeRadius(),
 			PoiManager.Occupancy.ANY);
