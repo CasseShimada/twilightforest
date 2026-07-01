@@ -135,6 +135,6 @@ public record CanopyBlanketProcessor(HolderSet<Biome> biomesForApplication, Bloc
 
 	@Override
 	public ChunkBlanketType getType() {
-		return ChunkBlanketProcessors.CANOPY.value();
+		return ChunkBlanketProcessors.CANOPY;
 	}
 }

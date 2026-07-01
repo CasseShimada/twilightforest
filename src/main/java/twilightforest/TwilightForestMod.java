@@ -142,7 +142,7 @@ public final class TwilightForestMod implements ModInitializer {
 		TFDensityFunctions.register();
 		TFStructureProcessors.STRUCTURE_PROCESSORS.register();
 		TFStructurePieceTypes.STRUCTURE_PIECE_TYPES.register();
-		ChunkBlanketProcessors.CHUNK_BLANKETING_TYPES.register();
+		ChunkBlanketProcessors.register();
 		TFStructurePlacementTypes.register();
 	}
 
