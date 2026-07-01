@@ -234,7 +234,7 @@ public class EntityEvents {
 
 	@SuppressWarnings("UnstableApiUsage")
 	public static float applyFrostyDamageModifiers(LivingEntity living, DamageSource source, float amount) {
-		var frostyHolder = BuiltInRegistries.MOB_EFFECT.wrapAsHolder(TFMobEffects.FROSTY.get());
+		var frostyHolder = BuiltInRegistries.MOB_EFFECT.wrapAsHolder(TFMobEffects.FROSTY);
 		var mobEffectInstance = living.getEffect(frostyHolder);
 		if (mobEffectInstance == null) {
 			return amount;

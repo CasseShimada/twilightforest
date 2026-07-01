@@ -39,7 +39,7 @@ public class Enforcements {
 
 	public static final DeferredHolder<Enforcement, Enforcement> FROST = ENFORCEMENTS.register("frost", () -> new Enforcement((player, level, restriction) -> {
 		if (player.tickCount % 60 == 0 && level.tickRateManager().runsNormally()) {
-			player.addEffect(new MobEffectInstance(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(TFMobEffects.FROSTY.get()), 100, (int) restriction.multiplier(), false, true));
+			player.addEffect(new MobEffectInstance(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(TFMobEffects.FROSTY), 100, (int) restriction.multiplier(), false, true));
 		}
 	}));
 
