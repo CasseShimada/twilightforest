@@ -3,7 +3,9 @@ package twilightforest.init;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -18,7 +20,6 @@ import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.fabricmc.loader.api.FabricLoader;
 import twilightforest.util.registry.DeferredHolder;
-import twilightforest.util.registry.DeferredRegister;
 import twilightforest.TFRegistries;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.AbstractSkullCandleBlock;
@@ -32,10 +33,9 @@ import java.util.Comparator;
 import java.util.List;
 
 public class TFCreativeTabs {
+	private static boolean registered;
 
-	public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, TwilightForestMod.ID);
-
-	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> BLOCKS = TABS.register("blocks", () -> FabricCreativeModeTab.builder()
+	public static final CreativeModeTab BLOCKS = FabricCreativeModeTab.builder()
 		.title(Component.translatable("itemGroup.twilightforest.blocks"))
 		.icon(() -> new ItemStack(TFBlocks.NAGA_COURTYARD_MINIATURE_STRUCTURE.get()))
 		.displayItems((parameters, output) -> {
@@ -403,9 +403,9 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.KNIGHTMETAL_BLOCK);
 			output.accept(TFBlocks.CARMINITE_BLOCK);
 			output.accept(TFBlocks.ARCTIC_FUR_BLOCK);
-		}).build());
+		}).build();
 
-	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ITEMS = TABS.register("items", () -> FabricCreativeModeTab.builder()
+	public static final CreativeModeTab ITEMS = FabricCreativeModeTab.builder()
 		.title(Component.translatable("itemGroup.twilightforest.items"))
 		.icon(() -> new ItemStack(TFBlocks.TWILIGHT_PORTAL_MINIATURE_STRUCTURE.get()))
 		.displayItems((parameters, output) -> {
@@ -489,9 +489,9 @@ public class TFCreativeTabs {
 			output.accept(TFItems.MINING_CHEST_BOAT);
 			output.accept(TFItems.SORTING_CHEST_BOAT);
 			createSpawnEggsAlphabetical(output);
-		}).build());
+		}).build();
 
-	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EQUIPMENT = TABS.register("equipment", () -> FabricCreativeModeTab.builder()
+	public static final CreativeModeTab EQUIPMENT = FabricCreativeModeTab.builder()
 		.title(Component.translatable("itemGroup.twilightforest.equipment"))
 		.icon(() -> new ItemStack(TFItems.KNIGHTMETAL_PICKAXE.get()))
 		.displayItems((parameters, output) -> {
@@ -567,9 +567,18 @@ public class TFCreativeTabs {
 			output.accept(TFItems.CRUMBLE_HORN);
 			output.accept(TFItems.PEACOCK_FEATHER_FAN);
 			output.accept(TFItems.MOONWORM_QUEEN);
-		}).build());
+		}).build();
 
+	public static void register() {
+		if (registered) {
+			return;
+		}
 
+		registered = true;
+		Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, TwilightForestMod.prefix("blocks"), BLOCKS);
+		Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, TwilightForestMod.prefix("items"), ITEMS);
+		Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, TwilightForestMod.prefix("equipment"), EQUIPMENT);
+	}
 
 	private static void generateGearWithEnchants(CreativeModeTab.Output output, ItemLike item, EnchantmentInstance... instances) {
 		ItemStack stack = new ItemStack(item);
