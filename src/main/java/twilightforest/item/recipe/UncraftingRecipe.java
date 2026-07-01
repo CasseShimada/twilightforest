@@ -51,12 +51,12 @@ public class UncraftingRecipe extends ShapedRecipe {
 	@Override
 	@SuppressWarnings("unchecked")
 	public RecipeSerializer<ShapedRecipe> getSerializer() {
-		return (RecipeSerializer<ShapedRecipe>) (RecipeSerializer<?>) TFRecipes.UNCRAFTING_SERIALIZER.get();
+		return (RecipeSerializer<ShapedRecipe>) (RecipeSerializer<?>) TFRecipes.UNCRAFTING_SERIALIZER;
 	}
 
 	@Override
 	public RecipeType<CraftingRecipe> getType() {
-		return TFRecipes.UNCRAFTING_RECIPE.get();
+		return TFRecipes.UNCRAFTING_RECIPE;
 	}
 
 	public Ingredient getInput() {

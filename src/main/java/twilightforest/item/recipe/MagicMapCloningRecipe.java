@@ -74,6 +74,6 @@ public class MagicMapCloningRecipe extends CustomRecipe {
 
 	@Override
 	public RecipeSerializer<MagicMapCloningRecipe> getSerializer() {
-		return TFRecipes.MAGIC_MAP_CLONING_RECIPE.get();
+		return TFRecipes.MAGIC_MAP_CLONING_RECIPE;
 	}
 }

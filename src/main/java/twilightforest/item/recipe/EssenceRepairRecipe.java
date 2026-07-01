@@ -63,6 +63,6 @@ public class EssenceRepairRecipe extends CustomRecipe {
 
 	@Override
 	public RecipeSerializer<EssenceRepairRecipe> getSerializer() {
-		return TFRecipes.ESSENCE_REPAIR_RECIPE.get();
+		return TFRecipes.ESSENCE_REPAIR_RECIPE;
 	}
 }

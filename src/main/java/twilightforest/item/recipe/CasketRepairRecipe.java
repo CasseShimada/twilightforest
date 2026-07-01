@@ -63,6 +63,6 @@ public class CasketRepairRecipe extends CustomRecipe {
 
 	@Override
 	public RecipeSerializer<CasketRepairRecipe> getSerializer() {
-		return TFRecipes.CASKET_REPAIR_RECIPE.get();
+		return TFRecipes.CASKET_REPAIR_RECIPE;
 	}
 }

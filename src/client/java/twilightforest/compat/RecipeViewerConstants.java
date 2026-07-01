@@ -55,7 +55,7 @@ public class RecipeViewerConstants {
 				}
 			}
 		}
-		recipes.addAll(manager.byType(TFRecipes.UNCRAFTING_RECIPE.get()));
+		recipes.addAll(manager.byType(TFRecipes.UNCRAFTING_RECIPE));
 		return recipes;
 	}
 

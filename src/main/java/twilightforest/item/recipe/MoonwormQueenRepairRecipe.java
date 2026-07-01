@@ -72,6 +72,6 @@ public class MoonwormQueenRepairRecipe extends CustomRecipe {
 
 	@Override
 	public RecipeSerializer<MoonwormQueenRepairRecipe> getSerializer() {
-		return TFRecipes.MOONWORM_QUEEN_REPAIR_RECIPE.get();
+		return TFRecipes.MOONWORM_QUEEN_REPAIR_RECIPE;
 	}
 }

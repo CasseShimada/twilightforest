@@ -34,7 +34,7 @@ public class DryingRackBlockEntity extends BlockEntity {
 
 	public static final int DEFAULT_DRYING_TIME = 20 * 60 * 5;
 	private ItemStack stack = ItemStack.EMPTY;
-	private final RecipeManager.CachedCheck<SingleRecipeInput, DryingRecipe> quickCheck = RecipeManager.createCheck(TFRecipes.DRYING_RECIPE.get());
+	private final RecipeManager.CachedCheck<SingleRecipeInput, DryingRecipe> quickCheck = RecipeManager.createCheck(TFRecipes.DRYING_RECIPE);
 
 	protected boolean drying;
 	protected int dryTime;

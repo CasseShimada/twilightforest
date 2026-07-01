@@ -57,12 +57,12 @@ public class DryingRecipe implements Recipe<SingleRecipeInput> {
 
 	@Override
 	public RecipeSerializer<? extends Recipe<SingleRecipeInput>> getSerializer() {
-		return TFRecipes.DRYING_SERIALIZER.get();
+		return TFRecipes.DRYING_SERIALIZER;
 	}
 
 	@Override
 	public RecipeType<? extends Recipe<SingleRecipeInput>> getType() {
-		return TFRecipes.DRYING_RECIPE.get();
+		return TFRecipes.DRYING_RECIPE;
 	}
 
 	@Override

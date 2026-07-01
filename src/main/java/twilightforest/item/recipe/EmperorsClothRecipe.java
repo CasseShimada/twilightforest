@@ -58,7 +58,7 @@ public class EmperorsClothRecipe extends CustomRecipe {
 
 	@Override
 	public RecipeSerializer<EmperorsClothRecipe> getSerializer() {
-		return TFRecipes.EMPERORS_CLOTH_RECIPE.get();
+		return TFRecipes.EMPERORS_CLOTH_RECIPE;
 	}
 
 	private static boolean isApplicable(ItemStack stack) {
