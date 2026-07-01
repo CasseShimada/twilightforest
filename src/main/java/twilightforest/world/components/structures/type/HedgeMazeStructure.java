@@ -46,7 +46,7 @@ public class HedgeMazeStructure extends LandmarkStructure implements CustomDensi
 	public static HedgeMazeStructure buildStructureConfig(BootstrapContext<Structure> context) {
 		return new HedgeMazeStructure(
 			new DecorationClearance.DecorationConfig(2, false, true, true),
-			true, Optional.of(Holder.direct(TFMapDecorations.HEDGE_MAZE.get())),
+			true, Optional.of(Holder.direct(TFMapDecorations.HEDGE_MAZE)),
 			new Structure.StructureSettings(
 				context.lookup(Registries.BIOME).getOrThrow(TFBiomeTags.VALID_HEDGE_MAZE_BIOMES),
 				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedList.of()))), // Landmarks have Controlled Mob spawning

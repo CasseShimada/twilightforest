@@ -70,7 +70,7 @@ public class YetiCaveStructure extends ControlledSpawningStructure implements Cu
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_lich"))),
 			new HintConfig(HintConfig.book("yeticave", 3), TFEntities.KOBOLD.get()),
 			new DecorationConfig(2, true, false, false),
-			false, Optional.of(Holder.direct(TFMapDecorations.YETI_LAIR.get())),
+			false, Optional.of(Holder.direct(TFMapDecorations.YETI_LAIR)),
 			new StructureSettings(
 				context.lookup(Registries.BIOME).getOrThrow(TFBiomeTags.VALID_YETI_CAVE_BIOMES),
 				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedList.of()))), // Landmarks have Controlled Mob spawning

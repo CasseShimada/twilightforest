@@ -102,7 +102,7 @@ public class LichTowerStructure extends ControlledSpawningStructure implements C
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_naga"))),
 			new HintConfig(HintConfig.book("lichtower", 4), TFEntities.KOBOLD.get()),
 			new DecorationConfig(0, false, true, false, true),
-			true, Optional.of(Holder.direct(TFMapDecorations.LICH_TOWER.get())),
+			true, Optional.of(Holder.direct(TFMapDecorations.LICH_TOWER)),
 			new StructureSettings(
 				context.lookup(Registries.BIOME).getOrThrow(TFBiomeTags.VALID_LICH_TOWER_BIOMES),
 				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedList.of()))), // Landmarks have Controlled Mob spawning

@@ -45,7 +45,7 @@ public class NagaCourtyardStructure extends ConquerableStructure implements Cust
 	public static NagaCourtyardStructure buildStructureConfig(BootstrapContext<Structure> context) {
 		return new NagaCourtyardStructure(
 			new DecorationConfig(3, false, true, true),
-			true, Optional.of(Holder.direct(TFMapDecorations.NAGA_COURTYARD.get())),
+			true, Optional.of(Holder.direct(TFMapDecorations.NAGA_COURTYARD)),
 			new StructureSettings(
 				context.lookup(Registries.BIOME).getOrThrow(TFBiomeTags.VALID_NAGA_COURTYARD_BIOMES),
 				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedList.of()))), // Landmarks have Controlled Mob spawning

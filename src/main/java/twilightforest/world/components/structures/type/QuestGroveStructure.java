@@ -44,7 +44,7 @@ public class QuestGroveStructure extends ConquerableStructure {
 	public static QuestGroveStructure buildStructureConfig(BootstrapContext<Structure> context) {
 		return new QuestGroveStructure(
 			new DecorationConfig(2, false, true, true),
-			true, Optional.of(Holder.direct(TFMapDecorations.QUEST_GROVE.get())),
+			true, Optional.of(Holder.direct(TFMapDecorations.QUEST_GROVE)),
 			new StructureSettings(
 				context.lookup(Registries.BIOME).getOrThrow(TFBiomeTags.VALID_QUEST_GROVE_BIOMES),
 				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedList.of()))), // Landmarks have Controlled Mob spawning
