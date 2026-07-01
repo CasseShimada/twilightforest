@@ -133,7 +133,7 @@ public final class TwilightForestMod implements ModInitializer {
 		TFStructureTypes.STRUCTURE_TYPES.register();
 		TFFeatureModifiers.TRUNK_PLACERS.register();
 		TFBiomeSources.register();
-		BiomeLayerTypes.BIOME_LAYER_TYPES.register();
+		BiomeLayerTypes.register();
 		TFDataSerializers.register();
 		TFFeatureModifiers.FOLIAGE_PLACERS.register();
 		TFFeatureModifiers.TREE_DECORATORS.register();
