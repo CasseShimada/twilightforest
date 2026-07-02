@@ -18,7 +18,6 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.equipment.ArmorType;
 import twilightforest.TwilightForestMod;
 import twilightforest.util.registry.DeferredItem;
-import twilightforest.util.registry.DeferredRegister;
 import twilightforest.components.item.PotionFlaskComponent;
 import twilightforest.item.*;
 import twilightforest.item.food.TFConsumables;
@@ -27,6 +26,8 @@ import twilightforest.tags.TFBannerPatternTags;
 import twilightforest.util.TFToolMaterials;
 
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -34,7 +35,9 @@ public class TFItems {
 
 	private static final Rarity TWILIGHT_RARITY = Rarity.RARE;
 
-	private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(TwilightForestMod.ID);
+	private static final Map<Identifier, DeferredItem<? extends Item>> ITEMS = new LinkedHashMap<>();
+	private static final Map<Identifier, Identifier> ITEM_ALIASES = new LinkedHashMap<>();
+	private static boolean registered;
 
 	public static final DeferredItem<Item> NAGA_SCALE = register("naga_scale", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> NAGA_CHESTPLATE = register("naga_chestplate", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.NAGA, ArmorType.CHESTPLATE)), () -> new Item.Properties().durability(ArmorType.CHESTPLATE.getDurability(21)).rarity(Rarity.UNCOMMON));
@@ -268,18 +271,35 @@ public class TFItems {
 	}
 
 	public static <T extends Item> DeferredItem<T> register(String name, Function<Item.Properties, T> item, Supplier<Item.Properties> properties) {
-		return ITEMS.register(name, () -> item.apply(properties.get().setId(ResourceKey.create(Registries.ITEM, TwilightForestMod.prefix(name)))));
+		if (registered) throw new IllegalStateException("Cannot register new items after item registry has been frozen.");
+		Identifier id = TwilightForestMod.prefix(name);
+		DeferredItem<T> holder = DeferredItem.create(id, () -> item.apply(properties.get().setId(ResourceKey.create(Registries.ITEM, id))));
+		ITEMS.put(id, holder);
+		return holder;
 	}
 
 	public static void addAlias(Identifier from, Identifier to) {
-		ITEMS.addAlias(from, to);
+		if (registered) throw new IllegalStateException("Cannot add aliases after items have been registered.");
+		ITEM_ALIASES.put(from, to);
 	}
 
 	public static Collection<? extends Item> registeredItems() {
-		return ITEMS.getEntries().stream().map(Supplier::get).toList();
+		return ITEMS.values().stream().map(Supplier::get).toList();
 	}
 
 	public static void register() {
-		ITEMS.register();
+		if (registered) {
+			return;
+		}
+
+		registered = true;
+		ITEMS.values().forEach(item -> item.register(BuiltInRegistries.ITEM));
+		applyItemAliases();
+	}
+
+	private static void applyItemAliases() {
+		if (!ITEM_ALIASES.isEmpty()) {
+			TwilightForestMod.LOGGER.warn("Skipping item registry aliases on Fabric to avoid registry sync duplicates.");
+		}
 	}
 }
