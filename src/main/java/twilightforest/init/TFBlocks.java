@@ -170,7 +170,7 @@ public class TFBlocks {
 	public static final DeferredBlock<Block> MAZESTONE_MOSAIC = registerWithItem("mazestone_mosaic", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(MAZESTONE.get()));
 	public static final DeferredBlock<Block> MAZESTONE_BORDER = registerWithItem("mazestone_border", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(MAZESTONE.get()));
 	public static final DeferredBlock<Block> RED_THREAD = registerWithItem("red_thread", RedThreadBlock::new, () -> BlockBehaviour.Properties.of().instabreak().mapColor(MapColor.FIRE).isValidSpawn(TFBlocks::noSpawning).noCollision().noOcclusion().noTerrainParticles().pushReaction(PushReaction.DESTROY));
-	public static final DeferredBlock<Block> MAZE_SLIME_BLOCK = registerWithItem("maze_slime_block", MazeSlimeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SLIME_BLOCK).mapColor(MapColor.STONE));
+	public static final MazeSlimeBlock MAZE_SLIME_BLOCK = registerDirectWithItem("maze_slime_block", MazeSlimeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SLIME_BLOCK).mapColor(MapColor.STONE));
 
 	//stronghold
 	public static final StrongholdShieldBlock STRONGHOLD_SHIELD = registerDirectWithItem("stronghold_shield", StrongholdShieldBlock::new, () -> BlockBehaviour.Properties.of().noLootTable().mapColor(MapColor.STONE).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().sound(SoundType.METAL).strength(-1.0F, 6000000.0F));

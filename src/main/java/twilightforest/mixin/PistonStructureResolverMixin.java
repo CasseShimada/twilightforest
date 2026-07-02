@@ -13,15 +13,15 @@ import twilightforest.init.TFBlocks;
 public class PistonStructureResolverMixin {
 	@Inject(method = "isSticky", at = @At("HEAD"), cancellable = true)
 	private static void twilightforest$isSticky(BlockState state, CallbackInfoReturnable<Boolean> cir) {
-		if (state.is(TFBlocks.MAZE_SLIME_BLOCK.get())) {
+		if (state.is(TFBlocks.MAZE_SLIME_BLOCK)) {
 			cir.setReturnValue(true);
 		}
 	}
 
 	@Inject(method = "canStickToEachOther", at = @At("HEAD"), cancellable = true)
 	private static void twilightforest$canStickToEachOther(BlockState first, BlockState second, CallbackInfoReturnable<Boolean> cir) {
-		boolean firstMaze = first.is(TFBlocks.MAZE_SLIME_BLOCK.get());
-		boolean secondMaze = second.is(TFBlocks.MAZE_SLIME_BLOCK.get());
+		boolean firstMaze = first.is(TFBlocks.MAZE_SLIME_BLOCK);
+		boolean secondMaze = second.is(TFBlocks.MAZE_SLIME_BLOCK);
 		if (!(firstMaze || secondMaze)) {
 			return;
 		}
