@@ -162,7 +162,7 @@ public class TFItems {
 	public static final DeferredItem<Item> CUBE_OF_ANNIHILATION = register("cube_of_annihilation", CubeOfAnnihilationItem::new, () -> new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> MOON_DIAL = register("moon_dial", MoonDialItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> POCKET_WATCH = register("pocket_watch", PocketWatchItem::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> EMPERORS_CLOTH = register("emperors_cloth", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final Item EMPERORS_CLOTH = registerDirect("emperors_cloth", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final Item FOUR_LEAF_CLOVER = registerDirect("four_leaf_clover", Item::new, Item.Properties::new);
 	public static final Item CROWN_SPLINTER = registerDirect("crown_splinter", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> MYSTIC_CROWN = register("mystic_crown", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1).attributes(ItemAttributeModifiers.builder().add(Attributes.ARMOR, new AttributeModifier(Identifier.withDefaultNamespace("armor." + EquipmentSlot.HEAD.getName()), 2.0F, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.HEAD).build()).equippable(EquipmentSlot.HEAD));

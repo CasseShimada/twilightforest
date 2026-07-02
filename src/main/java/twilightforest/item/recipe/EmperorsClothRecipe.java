@@ -23,7 +23,7 @@ public class EmperorsClothRecipe extends CustomRecipe {
 		for (int i = 0; i < input.size(); i++) {
 			ItemStack stack = input.getItem(i);
 			if (!stack.isEmpty()) {
-				if (stack.is(TFItems.EMPERORS_CLOTH.get()) && !foundCloth) {
+				if (stack.is(TFItems.EMPERORS_CLOTH) && !foundCloth) {
 					foundCloth = true;
 				} else if (!foundItem) {
 					if (isApplicable(stack) && stack.getItem().getCraftingRemainder() == null && stack.get(TFDataComponents.EMPERORS_CLOTH) == null) {
