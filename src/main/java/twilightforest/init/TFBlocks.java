@@ -134,7 +134,7 @@ public class TFBlocks {
 	public static final AbstractSkullCandleBlock PLAYER_WALL_SKULL_CANDLE = registerDirect("player_wall_skull_candle", properties -> new WallSkullCandleBlock(SkullBlock.Types.PLAYER, properties), () -> BlockBehaviour.Properties.of().strength(1.0F).pushReaction(PushReaction.DESTROY).overrideLootTable(PLAYER_SKULL_CANDLE.getLootTable()).overrideDescription(PLAYER_SKULL_CANDLE.getDescriptionId()));
 	public static final AbstractSkullCandleBlock PIGLIN_SKULL_CANDLE = registerDirect("piglin_skull_candle", properties -> new SkullCandleBlock(SkullBlock.Types.PIGLIN, properties), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.PIGLIN_HEAD));
 	public static final AbstractSkullCandleBlock PIGLIN_WALL_SKULL_CANDLE = registerDirect("piglin_wall_skull_candle", properties -> new WallSkullCandleBlock(SkullBlock.Types.PIGLIN, properties), () -> BlockBehaviour.Properties.of().strength(1.0F).pushReaction(PushReaction.DESTROY).overrideLootTable(PIGLIN_SKULL_CANDLE.getLootTable()).overrideDescription(PIGLIN_SKULL_CANDLE.getDescriptionId()));
-	public static final DeferredBlock<WroughtIronFenceBlock> WROUGHT_IRON_FENCE = registerWroughtFence("wrought_iron_fence", WroughtIronFenceBlock::new, () -> BlockBehaviour.Properties.of().strength(8.0F, 20.0F).sound(SoundType.METAL).requiresCorrectToolForDrops().noOcclusion());
+	public static final WroughtIronFenceBlock WROUGHT_IRON_FENCE = registerWroughtFence("wrought_iron_fence", WroughtIronFenceBlock::new, () -> BlockBehaviour.Properties.of().strength(8.0F, 20.0F).sound(SoundType.METAL).requiresCorrectToolForDrops().noOcclusion());
 	public static final RotatedPillarBlock TERRORCOTTA_ARCS = registerDirectWithItem("terrorcotta_arcs", RotatedPillarBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F));
 	public static final GlazedTerracottaBlock TERRORCOTTA_CURVES = registerDirectWithItem("terrorcotta_curves", GlazedTerracottaBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F));
 	public static final BinaryRotatedBlock TERRORCOTTA_LINES = registerDirectWithItem("terrorcotta_lines", BinaryRotatedBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F));
@@ -728,10 +728,10 @@ public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CL
 		return ret;
 	}
 
-	public static <T extends Block> DeferredBlock<T> registerWroughtFence(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
-		DeferredBlock<T> ret = registerBlock(name, () -> block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, TwilightForestMod.prefix(name)))));
-		BLOCK_ITEM_REGISTRATIONS.add(() -> TFItems.registerBlockItem(name, itemProps -> new WroughtIronFenceItem(ret.get(), itemProps), () -> new Item.Properties().useBlockDescriptionPrefix()));
-		return ret;
+	public static <T extends Block> T registerWroughtFence(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
+		T value = registerDirect(name, block, properties);
+		BLOCK_ITEM_REGISTRATIONS.add(() -> TFItems.registerBlockItem(name, itemProps -> new WroughtIronFenceItem(value, itemProps), () -> new Item.Properties().useBlockDescriptionPrefix()));
+		return value;
 	}
 
 	private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<? extends T> factory) {

@@ -68,7 +68,7 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 		this.placeSettings.addProcessor(JigsawReplacementProcessor.INSTANCE);
 		this.placeSettings.addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK);
 
-		List<StructureTemplate.StructureBlockInfo> fenceBlocks = random.nextFloat() > 0.25 ? List.of() : this.template.filterBlocks(BlockPos.ZERO, this.placeSettings, TFBlocks.WROUGHT_IRON_FENCE.value(), true);
+		List<StructureTemplate.StructureBlockInfo> fenceBlocks = random.nextFloat() > 0.25 ? List.of() : this.template.filterBlocks(BlockPos.ZERO, this.placeSettings, TFBlocks.WROUGHT_IRON_FENCE, true);
 		if (!fenceBlocks.isEmpty()) {
 			fenceBlocks.removeIf(info -> info.state().getValue(WroughtIronFenceBlock.POST) != WroughtIronFenceBlock.PostState.POST);
 			Util.shuffle(fenceBlocks, random);

@@ -148,7 +148,7 @@ public class EntityEvents {
 		if (stack.is(Items.LEAD)) {
 			BlockPos pos = hit.getBlockPos();
 			BlockState state = level.getBlockState(pos);
-			if (state.is(TFBlocks.WROUGHT_IRON_FENCE.get()) && state.getValue(WroughtIronFenceBlock.POST) != WroughtIronFenceBlock.PostState.NONE) {
+			if (state.is(TFBlocks.WROUGHT_IRON_FENCE) && state.getValue(WroughtIronFenceBlock.POST) != WroughtIronFenceBlock.PostState.NONE) {
 				if (!level.isClientSide()) {
 					LeadItem.bindPlayerMobs(player, level, pos);
 				}

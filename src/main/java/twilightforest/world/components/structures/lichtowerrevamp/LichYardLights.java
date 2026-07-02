@@ -53,7 +53,7 @@ public class LichYardLights extends StructurePiece implements PieceBeardifierMod
 				// Check for specifically normal air so that cave air is avoided
 				if (level.getBlockState(placeAt).is(Blocks.AIR) && random.nextFloat() <= 0.125f && level.getBlockState(placeAt.north()).is(Blocks.AIR) && level.getBlockState(placeAt.south()).is(Blocks.AIR) && level.getBlockState(placeAt.east()).is(Blocks.AIR) && level.getBlockState(placeAt.west()).is(Blocks.AIR)) {
 					if (this.placeAxis == Direction.Axis.Z ? (Math.min(x - this.boundingBox.minX(), this.boundingBox.maxX() - x) < 3) : (Math.min(z - this.boundingBox.minZ(), this.boundingBox.maxZ() - z) < 3)) {
-						level.setBlock(placeAt, TFBlocks.WROUGHT_IRON_FENCE.value().defaultBlockState(), Block.UPDATE_ALL);
+						level.setBlock(placeAt, TFBlocks.WROUGHT_IRON_FENCE.defaultBlockState(), Block.UPDATE_ALL);
 						level.setBlock(placeAt.above(), Blocks.CANDLE.defaultBlockState().setValue(CandleBlock.LIT, true), Block.UPDATE_ALL);
 					}
 				}

@@ -215,7 +215,7 @@ public class ASMHooks {
 	public static boolean leashFenceKnotSurvives(boolean o, LeashFenceKnotEntity entity) {
 		if (o) return true; // Short-circuit to avoid an unnecessary #getBlockState call
 		BlockState fenceState = entity.level().getBlockState(entity.getPos());
-		return fenceState.is(TFBlocks.WROUGHT_IRON_FENCE.get()) && fenceState.getValue(WroughtIronFenceBlock.POST) != WroughtIronFenceBlock.PostState.NONE;
+		return fenceState.is(TFBlocks.WROUGHT_IRON_FENCE) && fenceState.getValue(WroughtIronFenceBlock.POST) != WroughtIronFenceBlock.PostState.NONE;
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

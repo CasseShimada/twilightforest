@@ -69,7 +69,7 @@ public class LichTowerUtil {
 		Blocks.MOSSY_STONE_BRICK_WALL,
 		Blocks.COBBLESTONE_WALL,
 		Blocks.MOSSY_COBBLESTONE_WALL,
-		TFBlocks.WROUGHT_IRON_FENCE.value(),
+		TFBlocks.WROUGHT_IRON_FENCE,
 		TFBlocks.CANOPY_FENCE.value(),
 		TFBlocks.TWISTED_STONE_PILLAR
 	));
