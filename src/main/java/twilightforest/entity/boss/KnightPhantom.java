@@ -144,8 +144,8 @@ public class KnightPhantom extends BaseTFBoss {
 	@Override
 	protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
 		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFItems.KNIGHTMETAL_SWORD.get()));
-		this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(TFItems.PHANTOM_CHESTPLATE.get()));
-		this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(TFItems.PHANTOM_HELMET.get()));
+		this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(TFItems.PHANTOM_CHESTPLATE));
+		this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(TFItems.PHANTOM_HELMET));
 	}
 
 	public Formation getCurrentFormation() {
@@ -171,7 +171,7 @@ public class KnightPhantom extends BaseTFBoss {
 		if (this.level().isClientSide() && this.isChargingAtPlayer() && this.hasYetToDisappear()) {
 			// make particles
 			for (int i = 0; i < 4; ++i) {
-				Item particleID = this.getRandom().nextBoolean() ? TFItems.PHANTOM_HELMET.get() : TFItems.KNIGHTMETAL_SWORD.get();
+				Item particleID = this.getRandom().nextBoolean() ? TFItems.PHANTOM_HELMET : TFItems.KNIGHTMETAL_SWORD.get();
 
 				this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, particleID), this.getX() + (this.getRandom().nextFloat() - 0.5D) * this.getBbWidth(), this.getY() + this.getRandom().nextFloat() * (this.getBbHeight() - 0.75D) + 0.5D, this.getZ() + (this.getRandom().nextFloat() - 0.5D) * this.getBbWidth(), 0.0D, -0.1D, 0.0D);
 				this.level().addParticle(ParticleTypes.SMOKE, this.getX() + (this.getRandom().nextFloat() - 0.5D) * this.getBbWidth(), this.getY() + this.getRandom().nextFloat() * (this.getBbHeight() - 0.75D) + 0.5D, this.getZ() + (this.getRandom().nextFloat() - 0.5D) * this.getBbWidth(), 0.0D, 0.1D, 0.0D);
@@ -668,7 +668,7 @@ public class KnightPhantom extends BaseTFBoss {
 					}
 
 					if (this.random.nextInt(5) == 0) {
-						Item particleID = this.getRandom().nextBoolean() ? TFItems.PHANTOM_HELMET.get() : TFItems.KNIGHTMETAL_SWORD.get();
+						Item particleID = this.getRandom().nextBoolean() ? TFItems.PHANTOM_HELMET : TFItems.KNIGHTMETAL_SWORD.get();
 						this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, particleID), this.getX() + (this.getRandom().nextFloat() - 0.5D) * this.getBbWidth(), this.getY() + this.getRandom().nextFloat() * (this.getBbHeight() - 0.75D) + 0.5D, this.getZ() + (this.getRandom().nextFloat() - 0.5D) * this.getBbWidth(), 0.0D, -0.1D, 0.0D);
 					}
 				}
