@@ -289,11 +289,11 @@ public class TFBlocks {
 //	public static final DeferredBlock<Block> FINAL_CASTLE_MINIATURE_STRUCTURE = register("final_castle_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
 
 	//storage blocks
-	public static final DeferredBlock<Block> KNIGHTMETAL_BLOCK = registerWithTooltipItem("knightmetal_block", KnightmetalBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().sound(SoundType.NETHERITE_BLOCK).strength(5.0F, 40.0F), simpleTooltip("block.twilightforest.knightmetal_block.desc", ChatFormatting.GRAY));
+	public static final KnightmetalBlock KNIGHTMETAL_BLOCK = registerDirectWithTooltipItem("knightmetal_block", KnightmetalBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().sound(SoundType.NETHERITE_BLOCK).strength(5.0F, 40.0F), simpleTooltip("block.twilightforest.knightmetal_block.desc", ChatFormatting.GRAY));
 	public static final Block IRONWOOD_BLOCK = registerDirectWithItem("ironwood_block", Block::new, () -> BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(5.0F, 6.0F));
 	public static final DeferredBlock<Block> FIERY_BLOCK = registerFireResistantItem("fiery_block", FieryBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BLACK).noOcclusion().requiresCorrectToolForDrops().sound(SoundType.METAL).strength(5.0F, 6.0F).emissiveRendering(state -> true));
 	public static final Block STEELEAF_BLOCK = registerDirectWithItem("steeleaf_block", Block::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).sound(SoundType.NETHERITE_BLOCK).strength(5.0F, 6.0F));
-	public static final DeferredBlock<Block> ARCTIC_FUR_BLOCK = registerWithTooltipItem("arctic_fur_block", ArcticFurBlock::new, () -> BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.WOOL).sound(SoundType.WOOL).strength(0.8F), simpleTooltip("block.twilightforest.arctic_fur_block.desc", ChatFormatting.GRAY));
+	public static final ArcticFurBlock ARCTIC_FUR_BLOCK = registerDirectWithTooltipItem("arctic_fur_block", ArcticFurBlock::new, () -> BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.WOOL).sound(SoundType.WOOL).strength(0.8F), simpleTooltip("block.twilightforest.arctic_fur_block.desc", ChatFormatting.GRAY));
 	public static final Block CARMINITE_BLOCK = registerDirectWithItem("carminite_block", Block::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(1.5F, 10.0F).requiresCorrectToolForDrops().sound(SoundType.METAL));
 
 	//boss trophies and spawners
@@ -714,6 +714,12 @@ public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CL
 		DeferredBlock<T> ret = registerBlock(name, () -> block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, TwilightForestMod.prefix(name)))));
 		BLOCK_ITEM_REGISTRATIONS.add(() -> TFItems.registerBlockItem(name, itemProps -> new TooltipBlockItem(ret.get(), itemProps, tooltipAppender), () -> new Item.Properties().useBlockDescriptionPrefix()));
 		return ret;
+	}
+
+	private static <T extends Block> T registerDirectWithTooltipItem(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties, TooltipBlockItem.TooltipAppender tooltipAppender) {
+		T value = registerDirect(name, block, properties);
+		BLOCK_ITEM_REGISTRATIONS.add(() -> TFItems.registerBlockItem(name, itemProps -> new TooltipBlockItem(value, itemProps, tooltipAppender), () -> new Item.Properties().useBlockDescriptionPrefix()));
+		return value;
 	}
 
 	public static <T extends Block> DeferredBlock<T> registerFireResistantItem(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
