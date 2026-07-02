@@ -9,12 +9,12 @@ public class StructureDecoratorDarkTower extends TFStructureDecorator {
 	private static final TowerwoodRandomBlockSelectorFactory towerwood = new TowerwoodRandomBlockSelectorFactory();
 
 	public StructureDecoratorDarkTower() {
-		this.blockState = TFBlocks.TOWERWOOD.get().defaultBlockState();
-		this.accentState = TFBlocks.ENCASED_TOWERWOOD.get().defaultBlockState();
+		this.blockState = TFBlocks.TOWERWOOD.defaultBlockState();
+		this.accentState = TFBlocks.ENCASED_TOWERWOOD.defaultBlockState();
 		this.fenceState = Blocks.OAK_FENCE.defaultBlockState();
 		this.stairState = Blocks.SPRUCE_STAIRS.defaultBlockState();
-		this.pillarState = TFBlocks.ENCASED_TOWERWOOD.get().defaultBlockState();
-		this.platformState = TFBlocks.ENCASED_TOWERWOOD.get().defaultBlockState();
+		this.pillarState = TFBlocks.ENCASED_TOWERWOOD.defaultBlockState();
+		this.platformState = TFBlocks.ENCASED_TOWERWOOD.defaultBlockState();
 		this.randomBlocks = towerwood.make();
 	}
 

@@ -181,11 +181,11 @@ public class TFBlocks {
 	public static final Block UNDERBRICK_FLOOR = registerDirectWithItem("underbrick_floor", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(UNDERBRICK));
 
 	//dark tower
-	public static final DeferredBlock<Block> TOWERWOOD = registerWithItem("towerwood", Block::new, () -> BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).mapColor(MapColor.COLOR_ORANGE).strength(40.0F, 6.0F).sound(SoundType.WOOD));
-	public static final DeferredBlock<Block> ENCASED_TOWERWOOD = registerWithItem("encased_towerwood", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(TOWERWOOD.get()).mapColor(MapColor.SAND));
-	public static final DeferredBlock<Block> CRACKED_TOWERWOOD = registerWithItem("cracked_towerwood", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(TOWERWOOD.get()));
-	public static final DeferredBlock<Block> MOSSY_TOWERWOOD = registerWithItem("mossy_towerwood", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(TOWERWOOD.get()));
-	public static final DeferredBlock<Block> INFESTED_TOWERWOOD = registerWithItem("infested_towerwood", InfestedTowerwoodBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TOWERWOOD.get()).instrument(NoteBlockInstrument.FLUTE).noLootTable().strength(2.0F, 6.0F));
+	public static final Block TOWERWOOD = registerDirectWithItem("towerwood", Block::new, () -> BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).mapColor(MapColor.COLOR_ORANGE).strength(40.0F, 6.0F).sound(SoundType.WOOD));
+	public static final Block ENCASED_TOWERWOOD = registerDirectWithItem("encased_towerwood", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(TOWERWOOD).mapColor(MapColor.SAND));
+	public static final Block CRACKED_TOWERWOOD = registerDirectWithItem("cracked_towerwood", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(TOWERWOOD));
+	public static final Block MOSSY_TOWERWOOD = registerDirectWithItem("mossy_towerwood", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(TOWERWOOD));
+	public static final InfestedTowerwoodBlock INFESTED_TOWERWOOD = registerDirectWithItem("infested_towerwood", InfestedTowerwoodBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TOWERWOOD).instrument(NoteBlockInstrument.FLUTE).noLootTable().strength(2.0F, 6.0F));
 	public static final DeferredBlock<Block> REAPPEARING_BLOCK = registerWithItem("reappearing_block", ReappearingBlock::new, () -> BlockBehaviour.Properties.of().forceSolidOn().lightLevel((state) -> 4).mapColor(MapColor.SAND).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().sound(SoundType.WOOD).strength(10.0F, 35.0F));
 	public static final DeferredBlock<Block> VANISHING_BLOCK = registerWithItem("vanishing_block", VanishingBlock::new, () -> BlockBehaviour.Properties.of().lightLevel((state) -> state.getValue(VanishingBlock.ACTIVE) ? 4 : 0).mapColor(MapColor.SAND).pushReaction(PushReaction.BLOCK).sound(SoundType.WOOD).strength(10.0F, 35.0F));
 	public static final DeferredBlock<Block> UNBREAKABLE_VANISHING_BLOCK = register("unbreakable_vanishing_block", VanishingBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(VANISHING_BLOCK.get()).noLootTable().strength(-1.0F, 6000000.0F));

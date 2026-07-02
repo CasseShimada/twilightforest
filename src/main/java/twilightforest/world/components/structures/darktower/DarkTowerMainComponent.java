@@ -782,15 +782,15 @@ public class DarkTowerMainComponent extends DarkTowerWingComponent {
 		placeItemFrameRotated(world, 14, y + 4, 1, rotation, Direction.SOUTH, new ItemStack(Items.REDSTONE), sbb);
 		placeItemFrameRotated(world, 15, y + 4, 1, rotation, Direction.SOUTH, new ItemStack(TFItems.BORER_ESSENCE), sbb);
 
-		placeItemFrameRotated(world, 17, y + 2, 3, rotation, Direction.WEST, new ItemStack(TFBlocks.ENCASED_TOWERWOOD.get()), sbb);
-		placeItemFrameRotated(world, 17, y + 2, 4, rotation, Direction.WEST, new ItemStack(TFBlocks.TOWERWOOD.get()), sbb);
-		placeItemFrameRotated(world, 17, y + 2, 5, rotation, Direction.WEST, new ItemStack(TFBlocks.ENCASED_TOWERWOOD.get()), sbb);
-		placeItemFrameRotated(world, 17, y + 3, 3, rotation, Direction.WEST, new ItemStack(TFBlocks.TOWERWOOD.get()), sbb);
+		placeItemFrameRotated(world, 17, y + 2, 3, rotation, Direction.WEST, new ItemStack(TFBlocks.ENCASED_TOWERWOOD), sbb);
+		placeItemFrameRotated(world, 17, y + 2, 4, rotation, Direction.WEST, new ItemStack(TFBlocks.TOWERWOOD), sbb);
+		placeItemFrameRotated(world, 17, y + 2, 5, rotation, Direction.WEST, new ItemStack(TFBlocks.ENCASED_TOWERWOOD), sbb);
+		placeItemFrameRotated(world, 17, y + 3, 3, rotation, Direction.WEST, new ItemStack(TFBlocks.TOWERWOOD), sbb);
 		placeItemFrameRotated(world, 17, y + 3, 4, rotation, Direction.WEST, new ItemStack(TFItems.CARMINITE), sbb);
-		placeItemFrameRotated(world, 17, y + 3, 5, rotation, Direction.WEST, new ItemStack(TFBlocks.TOWERWOOD.get()), sbb);
-		placeItemFrameRotated(world, 17, y + 4, 3, rotation, Direction.WEST, new ItemStack(TFBlocks.ENCASED_TOWERWOOD.get()), sbb);
-		placeItemFrameRotated(world, 17, y + 4, 4, rotation, Direction.WEST, new ItemStack(TFBlocks.TOWERWOOD.get()), sbb);
-		placeItemFrameRotated(world, 17, y + 4, 5, rotation, Direction.WEST, new ItemStack(TFBlocks.ENCASED_TOWERWOOD.get()), sbb);
+		placeItemFrameRotated(world, 17, y + 3, 5, rotation, Direction.WEST, new ItemStack(TFBlocks.TOWERWOOD), sbb);
+		placeItemFrameRotated(world, 17, y + 4, 3, rotation, Direction.WEST, new ItemStack(TFBlocks.ENCASED_TOWERWOOD), sbb);
+		placeItemFrameRotated(world, 17, y + 4, 4, rotation, Direction.WEST, new ItemStack(TFBlocks.TOWERWOOD), sbb);
+		placeItemFrameRotated(world, 17, y + 4, 5, rotation, Direction.WEST, new ItemStack(TFBlocks.ENCASED_TOWERWOOD), sbb);
 
 		if (y < this.height - 13) {
 			// device bottom

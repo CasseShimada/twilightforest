@@ -54,7 +54,7 @@ public class DarkTowerBeardComponent extends TFStructureComponentOld {
 	}
 
 	protected void makeDarkBeard(WorldGenLevel world, BoundingBox sbb, int minX, int minZ, int maxX, int maxY, int maxZ) {
-		BlockState frameState = TFBlocks.ENCASED_TOWERWOOD.get().defaultBlockState();
+		BlockState frameState = TFBlocks.ENCASED_TOWERWOOD.defaultBlockState();
 
 		for (int x = minX; x <= maxX; x++) {
 			for (int z = minZ; z <= maxZ; z++) {

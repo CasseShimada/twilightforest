@@ -79,7 +79,7 @@ public class ColorHandler {
 				float f = safeRippleNoise(2, 32.0f, pos, 0.4f, 1.0f, 2f, 0.7f);
 				return 0xFF000000 | ColorUtil.hsvToRGB(0.1f, 1f - f, (f + 2f) / 3f);
 			}
-		), TFBlocks.TOWERWOOD.get(), TFBlocks.CRACKED_TOWERWOOD.get(), TFBlocks.INFESTED_TOWERWOOD.get(), TFBlocks.MOSSY_TOWERWOOD.get());
+		), TFBlocks.TOWERWOOD, TFBlocks.CRACKED_TOWERWOOD, TFBlocks.INFESTED_TOWERWOOD, TFBlocks.MOSSY_TOWERWOOD);
 
 		register(tint(
 			state -> FoliageColor.FOLIAGE_DEFAULT,

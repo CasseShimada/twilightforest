@@ -129,7 +129,7 @@ public class TowerwoodBorer extends Monster {
 					BlockState state = this.mob.level().getBlockState(blockpos);
 
 					// TF - Change block check
-					if (state.is(TFBlocks.TOWERWOOD.get())) {
+					if (state.is(TFBlocks.TOWERWOOD)) {
 						this.doMerge = true;
 						return true;
 					}
@@ -156,9 +156,9 @@ public class TowerwoodBorer extends Monster {
 
 				// TF - Change block check
 				// TF - add a random chance to dig. This should prevent them from instantly digging away
-				if (state.is(TFBlocks.TOWERWOOD.get()) && this.mob.getRandom().nextInt(5) == 0) {
+				if (state.is(TFBlocks.TOWERWOOD) && this.mob.getRandom().nextInt(5) == 0) {
 					// TF - Change block type
-					level.setBlock(blockpos, TFBlocks.INFESTED_TOWERWOOD.get().defaultBlockState(), Block.UPDATE_ALL);
+					level.setBlock(blockpos, TFBlocks.INFESTED_TOWERWOOD.defaultBlockState(), Block.UPDATE_ALL);
 					this.mob.spawnAnim();
 					this.mob.discard();
 				}
@@ -205,13 +205,13 @@ public class TowerwoodBorer extends Monster {
 							BlockState state = world.getBlockState(offsetPos);
 
 							// TF - Change block check
-							if (state.is(TFBlocks.INFESTED_TOWERWOOD.get())) {
+							if (state.is(TFBlocks.INFESTED_TOWERWOOD)) {
 								if (((ServerLevel) world).getGameRules().get(GameRules.MOB_GRIEFING)) {
 									world.destroyBlock(offsetPos, true);
 									this.borer.gameEvent(GameEvent.BLOCK_DESTROY);
 								} else {
 									// TF - reset to normal tower wood
-									world.setBlock(offsetPos, TFBlocks.TOWERWOOD.get().defaultBlockState(), Block.UPDATE_ALL);
+									world.setBlock(offsetPos, TFBlocks.TOWERWOOD.defaultBlockState(), Block.UPDATE_ALL);
 								}
 
 								if (random.nextBoolean()) {
