@@ -129,7 +129,7 @@ public class GrowingBeanstalkBlockEntity extends BlockEntity {
 					}
 					te.layer++;
 				} else {
-					level.setBlockAndUpdate(pos, TFBlocks.HUGE_STALK.get().defaultBlockState());
+					level.setBlockAndUpdate(pos, TFBlocks.HUGE_STALK.defaultBlockState());
 					level.removeBlockEntity(pos);
 				}
 			}
@@ -138,7 +138,7 @@ public class GrowingBeanstalkBlockEntity extends BlockEntity {
 
 	private void placeLeaves(Level level, BlockPos pos) {
 		// stalk at center
-		level.setBlockAndUpdate(pos, TFBlocks.HUGE_STALK.get().defaultBlockState());
+		level.setBlockAndUpdate(pos, TFBlocks.HUGE_STALK.defaultBlockState());
 
 		// small squares
 		for (int dx = -1; dx <= 1; dx++) {
@@ -164,7 +164,7 @@ public class GrowingBeanstalkBlockEntity extends BlockEntity {
 	private boolean tryToPlaceStalk(Level level, BlockPos pos, boolean checkBlocked) {
 		BlockState state = level.getBlockState(pos);
 		if (state.isAir() || (state.canBeReplaced() && !state.is(TFBlocks.BEANSTALK_GROWER)) || (state.isAir() || state.is(BlockTags.LEAVES)) || state.is(TFBlocks.FLUFFY_CLOUD)) {
-			level.setBlockAndUpdate(pos, TFBlocks.HUGE_STALK.get().defaultBlockState());
+			level.setBlockAndUpdate(pos, TFBlocks.HUGE_STALK.defaultBlockState());
 			if (pos.getY() > 150) {
 				for (int i = 0; i < 7; i++) {
 					if (level.getBlockState(pos.relative(Direction.UP, i)).is(TFBlocks.WISPY_CLOUD) || level.getBlockState(pos.relative(Direction.UP, i)).is(TFBlocks.FLUFFY_CLOUD)) {
@@ -174,7 +174,7 @@ public class GrowingBeanstalkBlockEntity extends BlockEntity {
 			}
 			return true;
 		} else {
-			if (!state.is(TFBlocks.HUGE_STALK.get()) && checkBlocked) {
+			if (!state.is(TFBlocks.HUGE_STALK) && checkBlocked) {
 				this.blocksSkipped++;
 			}
 			return this.blocksSkipped < 15;
@@ -184,7 +184,7 @@ public class GrowingBeanstalkBlockEntity extends BlockEntity {
 	private void tryToPlaceLeaves(Level level, BlockPos pos, int distance) {
 		BlockState state = level.getBlockState(pos);
 		if (state.isAir() || state.is(BlockTags.LEAVES)) {
-			level.setBlock(pos, TFBlocks.BEANSTALK_LEAVES.get().defaultBlockState().setValue(LeavesBlock.DISTANCE, distance), Block.UPDATE_CLIENTS);
+			level.setBlock(pos, TFBlocks.BEANSTALK_LEAVES.defaultBlockState().setValue(LeavesBlock.DISTANCE, distance), Block.UPDATE_CLIENTS);
 		}
 	}
 
