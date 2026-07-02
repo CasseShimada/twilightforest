@@ -73,8 +73,8 @@ public abstract class TFStructureComponent extends StructurePiece implements Spa
 		.add(TFBlocks.PINK_FORCE_FIELD.get())
 		.add(TFBlocks.VIOLET_FORCE_FIELD.get())
 		.add(TFBlocks.ORANGE_FORCE_FIELD.get())
-		.add(TFBlocks.BROWN_THORNS.get())
-		.add(TFBlocks.GREEN_THORNS.get())
+			.add(TFBlocks.BROWN_THORNS)
+			.add(TFBlocks.GREEN_THORNS)
 		.add(Blocks.GRAVEL)
 		.build());
 

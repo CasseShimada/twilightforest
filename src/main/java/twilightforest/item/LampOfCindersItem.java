@@ -67,8 +67,8 @@ public class LampOfCindersItem extends Item {
 
 	private boolean burnBlock(Level level, BlockPos pos) {
 		BlockState state = level.getBlockState(pos);
-		if (state.is(TFBlocks.BROWN_THORNS.get()) || state.is(TFBlocks.GREEN_THORNS.get())) {
-			level.setBlockAndUpdate(pos, TFBlocks.BURNT_THORNS.get().withPropertiesOf(state));
+		if (state.is(TFBlocks.BROWN_THORNS) || state.is(TFBlocks.GREEN_THORNS)) {
+			level.setBlockAndUpdate(pos, TFBlocks.BURNT_THORNS.withPropertiesOf(state));
 			return true;
 		} else return false;
 	}

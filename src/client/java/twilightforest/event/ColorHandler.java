@@ -101,7 +101,7 @@ public class ColorHandler {
 			(state, getter, pos) -> rainbowLeafColor(pos)
 		), TFBlocks.RAINBOW_OAK_LEAVES.get());
 
-		register(tint(state -> FoliageColor.FOLIAGE_EVERGREEN), TFBlocks.BEANSTALK_LEAVES, TFBlocks.THORN_LEAVES.get());
+		register(tint(state -> FoliageColor.FOLIAGE_EVERGREEN), TFBlocks.BEANSTALK_LEAVES, TFBlocks.THORN_LEAVES);
 
 		register(tint(
 			state -> GrassColor.getDefaultColor(),

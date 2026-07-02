@@ -41,7 +41,7 @@ public class ThornRoseBlock extends BushBlock {
 	@Override
 	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
 		BlockState blockstate = level.getBlockState(pos.relative(state.getValue(DirectionalBlock.FACING).getOpposite()));
-		return blockstate.is(TFBlocks.BROWN_THORNS.get()) || blockstate.is(TFBlocks.GREEN_THORNS.get()) || blockstate.isFaceSturdy(level, pos, state.getValue(DirectionalBlock.FACING));
+		return blockstate.is(TFBlocks.BROWN_THORNS) || blockstate.is(TFBlocks.GREEN_THORNS) || blockstate.isFaceSturdy(level, pos, state.getValue(DirectionalBlock.FACING));
 	}
 
 	@Override
