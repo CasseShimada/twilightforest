@@ -12,7 +12,7 @@ public class CasketSubtypeInterpreter implements ISubtypeInterpreter<ItemStack> 
 
 	@Override
 	public @Nullable Object getSubtypeData(ItemStack stack, UidContext context) {
-		Integer damage = stack.get(TFDataComponents.CASKET_DAMAGE.get());
+		Integer damage = stack.get(TFDataComponents.CASKET_DAMAGE);
 		if (damage == null) return null;
 		return damage.toString();
 	}

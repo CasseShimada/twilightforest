@@ -39,19 +39,19 @@ public class BrittleFlaskItem extends Item {
 	@Override
 	public ItemStack getDefaultInstance() {
 		ItemStack itemstack = super.getDefaultInstance();
-		itemstack.set(TFDataComponents.POTION_FLASK_CONTENTS.get(), PotionFlaskComponent.EMPTY);
+		itemstack.set(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY);
 		updateMaxStackSize(itemstack);
 		return itemstack;
 	}
 
 	@Override
 	public boolean isBarVisible(ItemStack stack) {
-		return stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS.get(), PotionFlaskComponent.EMPTY).potion().potion().isPresent();
+		return stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY).potion().potion().isPresent();
 	}
 
 	@Override
 	public int getBarColor(ItemStack stack) {
-		return ARGB.opaque(stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS.get(), PotionFlaskComponent.EMPTY).potion().getColor());
+		return ARGB.opaque(stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY).potion().getColor());
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class BrittleFlaskItem extends Item {
 	}
 
 	private boolean tryFillFlask(ItemStack stack, ItemStack other, ClickAction action, Player player) {
-		PotionFlaskComponent flaskContents = stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS.get(), PotionFlaskComponent.EMPTY);
+		PotionFlaskComponent flaskContents = stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY);
 		PotionContents potionContents = other.get(DataComponents.POTION_CONTENTS);
 
 		if (action == ClickAction.SECONDARY && potionContents != null) {
@@ -76,7 +76,7 @@ public class BrittleFlaskItem extends Item {
 				}
 
 				this.changeAndConsumeFlask(stack, player, flask -> {
-					flask.update(TFDataComponents.POTION_FLASK_CONTENTS.get(), flaskContents, component -> component.tryAddDose(potionContents));
+					flask.update(TFDataComponents.POTION_FLASK_CONTENTS, flaskContents, component -> component.tryAddDose(potionContents));
 					updateMaxStackSize(flask);
 				});
 				player.playSound(TFSounds.FLASK_FILL, (flaskContents.doses() + 1) * 0.25F, player.level().getRandom().nextFloat() * 0.1F + 0.9F);
@@ -89,7 +89,7 @@ public class BrittleFlaskItem extends Item {
 	@Override
 	public InteractionResult use(Level level, Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
-		PotionFlaskComponent flaskContents = stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS.get(), PotionFlaskComponent.EMPTY);
+		PotionFlaskComponent flaskContents = stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY);
 
 		if (flaskContents.potion() == PotionContents.EMPTY) {
 			return InteractionResult.FAIL;
@@ -114,7 +114,7 @@ public class BrittleFlaskItem extends Item {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
-		PotionFlaskComponent flaskContents = stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS.get(), PotionFlaskComponent.EMPTY);
+		PotionFlaskComponent flaskContents = stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY);
 		if (flaskContents.potion() != PotionContents.EMPTY) {
 			if (entity instanceof Player player) {
 				if (level instanceof ServerLevel serverLevel) {
@@ -136,7 +136,7 @@ public class BrittleFlaskItem extends Item {
 				if (!player.getAbilities().instabuild) {
 
 					this.changeAndConsumeFlask(stack, player, flask -> {
-						flask.update(TFDataComponents.POTION_FLASK_CONTENTS.get(), flaskContents, component -> {
+						flask.update(TFDataComponents.POTION_FLASK_CONTENTS, flaskContents, component -> {
 							component = component.removeDose();
 							if (component.breakable()) {
 								if (component.breakage() >= DOSES) {
@@ -172,17 +172,17 @@ public class BrittleFlaskItem extends Item {
 
 	@Override
 	public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
-		return Optional.of(new Tooltip(stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS.get(), PotionFlaskComponent.EMPTY), DOSES));
+		return Optional.of(new Tooltip(stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY), DOSES));
 	}
 
 	//copied from Item.getBarWidth, but reversed the "durability" check so it increments up, not down
 	@Override
 	public int getBarWidth(ItemStack stack) {
-		return Math.round(13.0F - Math.abs(stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS.get(), PotionFlaskComponent.EMPTY).doses() - DOSES) * 13.0F / DOSES);
+		return Math.round(13.0F - Math.abs(stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY).doses() - DOSES) * 13.0F / DOSES);
 	}
 
 	private void updateMaxStackSize(ItemStack stack) {
-		boolean hasPotion = stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS.get(), PotionFlaskComponent.EMPTY).potion().potion().isPresent();
+		boolean hasPotion = stack.getOrDefault(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY).potion().potion().isPresent();
 		stack.set(DataComponents.MAX_STACK_SIZE, hasPotion ? 1 : this.getDefaultMaxStackSize());
 	}
 

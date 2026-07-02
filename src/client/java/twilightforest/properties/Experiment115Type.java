@@ -19,7 +19,7 @@ public class Experiment115Type implements SelectItemModelProperty<String> {
 	@Nullable
 	@Override
 	public String get(ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity entity, int seed, ItemDisplayContext displayContext) {
-		return stack.get(TFDataComponents.EXPERIMENT_115_VARIANTS.get());
+		return stack.get(TFDataComponents.EXPERIMENT_115_VARIANTS);
 	}
 
 	@Override

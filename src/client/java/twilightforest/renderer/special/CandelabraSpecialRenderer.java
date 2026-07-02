@@ -18,7 +18,7 @@ public record CandelabraSpecialRenderer() implements SpecialModelRenderer<Candel
 
 	@Override
 	public @Nullable CandelabraData extractArgument(ItemStack stack) {
-		return stack.get(TFDataComponents.CANDELABRA_DATA.get());
+		return stack.get(TFDataComponents.CANDELABRA_DATA);
 	}
 
 	@Override

@@ -193,7 +193,7 @@ private static final EntityDataAccessor<Holder<MagicPaintingVariant>> MAGIC_PAIN
 	@NotNull
 	public ItemStack getPickResult() {
 		ItemStack itemStack = new ItemStack(TFItems.MAGIC_PAINTING.get());
-		itemStack.set(TFDataComponents.MAGIC_PAINTING_VARIANT.get(), this.getVariant());
+		itemStack.set(TFDataComponents.MAGIC_PAINTING_VARIANT, this.getVariant());
 		return itemStack;
 	}
 

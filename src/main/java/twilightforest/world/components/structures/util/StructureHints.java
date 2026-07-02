@@ -66,7 +66,7 @@ public interface StructureHints {
 			true
 		));
 
-		book.set(TFDataComponents.TRANSLATABLE_BOOK.get(), Unit.INSTANCE); //for the author
+		book.set(TFDataComponents.TRANSLATABLE_BOOK, Unit.INSTANCE); //for the author
 		book.set(DataComponents.ITEM_NAME, Component.translatable(TwilightForestMod.ID + ".book." + key));
 	}
 

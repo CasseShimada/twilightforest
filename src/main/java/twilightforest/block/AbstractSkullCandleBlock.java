@@ -98,7 +98,7 @@ public abstract class AbstractSkullCandleBlock extends BaseEntityBlock implement
 		super.setPlacedBy(level, pos, state, placer, stack);
 		BlockEntity blockentity = level.getBlockEntity(pos);
 		if (blockentity instanceof SkullCandleBlockEntity sc) {
-			SkullCandles skullCandles = stack.getOrDefault(TFDataComponents.SKULL_CANDLES.get(), SkullCandles.DEFAULT);
+			SkullCandles skullCandles = stack.getOrDefault(TFDataComponents.SKULL_CANDLES, SkullCandles.DEFAULT);
 			sc.setCandleColor(skullCandles.color());
 
 			if (this.type == SkullBlock.Types.PLAYER && stack.has(DataComponents.PROFILE)) {
@@ -120,7 +120,7 @@ public abstract class AbstractSkullCandleBlock extends BaseEntityBlock implement
 					if (!tool.isEmpty() && EnchantmentHelper.getItemEnchantmentLevel(sc.getLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH), tool) > 0) {
 					ItemStack newStack = new ItemStack(this);
 
-					newStack.set(TFDataComponents.SKULL_CANDLES.get(), new SkullCandles(sc.getCandleColor(), state.getValue(CANDLES)));
+					newStack.set(TFDataComponents.SKULL_CANDLES, new SkullCandles(sc.getCandleColor(), state.getValue(CANDLES)));
 
 					if (this.type == SkullBlock.Types.PLAYER && sc.getOwnerProfile() != null)
 						newStack.set(DataComponents.PROFILE, sc.getOwnerProfile());
@@ -141,7 +141,7 @@ public abstract class AbstractSkullCandleBlock extends BaseEntityBlock implement
 		ItemStack newStack = new ItemStack(this);
 
 		if (level.getBlockEntity(pos) instanceof SkullCandleBlockEntity sc) {
-			newStack.set(TFDataComponents.SKULL_CANDLES.get(), new SkullCandles(sc.getCandleColor(), state.getValue(CANDLES)));
+			newStack.set(TFDataComponents.SKULL_CANDLES, new SkullCandles(sc.getCandleColor(), state.getValue(CANDLES)));
 
 			if (this.type == SkullBlock.Types.PLAYER && sc.getOwnerProfile() != null)
 				newStack.set(DataComponents.PROFILE, sc.getOwnerProfile());

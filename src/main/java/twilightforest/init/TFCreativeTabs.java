@@ -597,14 +597,14 @@ public class TFCreativeTabs {
 
 	private static void createDefaultSkullCandle(CreativeModeTab.Output output, ItemLike item) {
 		ItemStack stack = new ItemStack(item);
-		stack.set(TFDataComponents.SKULL_CANDLES.get(), new SkullCandles(AbstractSkullCandleBlock.CandleColors.PLAIN.getValue(), 1));
+		stack.set(TFDataComponents.SKULL_CANDLES, new SkullCandles(AbstractSkullCandleBlock.CandleColors.PLAIN.getValue(), 1));
 		output.accept(stack);
 	}
 
 	private static void createCaskets(CreativeModeTab.Output output) {
 		for (int i = 0; i< 3; i++) {
 			ItemStack stack = new ItemStack(TFItems.KEEPSAKE_CASKET.get());
-			stack.set(TFDataComponents.CASKET_DAMAGE.get(), i);
+			stack.set(TFDataComponents.CASKET_DAMAGE, i);
 			output.accept(stack);
 		}
 	}
@@ -617,7 +617,7 @@ public class TFCreativeTabs {
 		List<Component> GLASS_SWORD_COMPONENTS = List.of(Component.translatable("item.twilightforest.glass_sword.desc").setStyle(Style.EMPTY.withColor(ChatFormatting.GRAY)));
 		loreSword.set(DataComponents.LORE, new ItemLore(GLASS_SWORD_COMPONENTS, GLASS_SWORD_COMPONENTS));
 		loreSword.set(DataComponents.UNBREAKABLE, Unit.INSTANCE);
-		loreSword.set(TFDataComponents.INFINITE_GLASS_SWORD.get(), Unit.INSTANCE);
+		loreSword.set(TFDataComponents.INFINITE_GLASS_SWORD, Unit.INSTANCE);
 
 		output.accept(loreSword);
 	}
@@ -668,7 +668,7 @@ public class TFCreativeTabs {
 			}
 			entries.getContext().holders().lookupOrThrow(TFRegistries.Keys.MAGIC_PAINTINGS).listElements().sorted(MAGIC_COMPARATOR).forEach(holder -> {
 				ItemStack itemstack = new ItemStack(TFItems.MAGIC_PAINTING.get());
-				itemstack.set(TFDataComponents.MAGIC_PAINTING_VARIANT.get(), holder);
+				itemstack.set(TFDataComponents.MAGIC_PAINTING_VARIANT, holder);
 				entries.accept(itemstack);
 			});
 

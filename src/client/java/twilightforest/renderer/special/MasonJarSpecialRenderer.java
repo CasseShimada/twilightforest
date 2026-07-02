@@ -46,7 +46,7 @@ public record MasonJarSpecialRenderer(Optional<Item> defaultLid) implements Spec
 
 		poseStack.pushPose();
 
-		JarLid jarLid = map.get(TFDataComponents.JAR_LID.get());
+		JarLid jarLid = map.get(TFDataComponents.JAR_LID);
 		Item lidItem = jarLid != null ? jarLid.lid() : this.defaultLid.orElse(null);
 		BlockState lidState = resolveLidState(lidItem);
 		if (lidState != null) {

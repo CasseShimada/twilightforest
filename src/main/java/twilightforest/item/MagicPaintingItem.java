@@ -44,7 +44,7 @@ public class MagicPaintingItem extends Item {
 			if (optional.isEmpty()) return InteractionResult.CONSUME;
 			MagicPainting painting = optional.get();
 
-			Holder<MagicPaintingVariant> magicPaintingVariantHolder = stack.get(TFDataComponents.MAGIC_PAINTING_VARIANT.get());
+			Holder<MagicPaintingVariant> magicPaintingVariantHolder = stack.get(TFDataComponents.MAGIC_PAINTING_VARIANT);
 
 			if (magicPaintingVariantHolder != null) {
 				painting.setVariant(magicPaintingVariantHolder);
@@ -72,7 +72,7 @@ public class MagicPaintingItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> components, TooltipFlag isAdvanced) {
 		super.appendHoverText(stack, context, display, components, isAdvanced);
-		Holder<MagicPaintingVariant> magicPainting = stack.get(TFDataComponents.MAGIC_PAINTING_VARIANT.get());
+		Holder<MagicPaintingVariant> magicPainting = stack.get(TFDataComponents.MAGIC_PAINTING_VARIANT);
 
 		if (magicPainting != null) {
 			MagicPaintingVariant painting = magicPainting.value();

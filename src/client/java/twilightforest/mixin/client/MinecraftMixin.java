@@ -34,13 +34,13 @@ public class MinecraftMixin {
 		if (!stack.is(TFItems.ORE_METER.get())) {
 			return;
 		}
-		if (!stack.has(TFDataComponents.ORE_DATA.get()) && !stack.has(TFDataComponents.ORE_FILTER.get())) {
+		if (!stack.has(TFDataComponents.ORE_DATA) && !stack.has(TFDataComponents.ORE_FILTER)) {
 			return;
 		}
 
 		ClientPacketDistributor.sendToServer(new WipeOreMeterPacket(InteractionHand.MAIN_HAND));
-		stack.remove(TFDataComponents.ORE_DATA.get());
-		stack.remove(TFDataComponents.ORE_FILTER.get());
+		stack.remove(TFDataComponents.ORE_DATA);
+		stack.remove(TFDataComponents.ORE_FILTER);
 		this.level.playSound(this.player, this.player.blockPosition(), TFSounds.ORE_METER_CLEAR, SoundSource.PLAYERS, 1.25F, this.level.getRandom().nextFloat() * 0.2F + 0.6F);
 	}
 }

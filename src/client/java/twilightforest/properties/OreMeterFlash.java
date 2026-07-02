@@ -21,7 +21,7 @@ public record OreMeterFlash() implements ConditionalItemModelProperty {
 			int progress = OreMeterItem.getLoadProgress(stack);
 			return progress % 5 >= 2 + (int) (Math.random() * 2) && progress <= totalLoadTime - 15;
 		}
-		return stack.has(TFDataComponents.ORE_DATA.get());
+		return stack.has(TFDataComponents.ORE_DATA);
 	}
 
 	@Override

@@ -63,7 +63,7 @@ public class GlassSwordItem extends Item {
 	}
 
 	private boolean hurt(ItemStack stack, @Nullable ServerPlayer player) {
-		if (stack.get(TFDataComponents.INFINITE_GLASS_SWORD.get()) != null) {
+		if (stack.get(TFDataComponents.INFINITE_GLASS_SWORD) != null) {
 			return false;
 		} else {
 			if (player != null) {

@@ -32,8 +32,8 @@ public record WipeOreMeterPacket(InteractionHand hand) implements CustomPacketPa
 		ctx.enqueueWork(() -> {
 			ItemStack heldStack = ctx.player().getItemInHand(message.hand());
 			if (heldStack.is(TFItems.ORE_METER.get())) {
-				heldStack.remove(TFDataComponents.ORE_DATA.get());
-				heldStack.remove(TFDataComponents.ORE_FILTER.get());
+				heldStack.remove(TFDataComponents.ORE_DATA);
+				heldStack.remove(TFDataComponents.ORE_FILTER);
 			}
 		});
 	}

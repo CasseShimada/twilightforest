@@ -51,8 +51,8 @@ public class TFItemStackUtils {
 					String propertyValueString = blockItemStateProperties.properties().get(KeepsakeCasketBlock.BREAKAGE.getName());
 
 					persistentTag.putInt(CharmEvents.CASKET_DAMAGE_TAG, isNumeric(propertyValueString) ? Integer.parseInt(propertyValueString) : 0);
-				} else if (stack.has(TFDataComponents.CASKET_DAMAGE.get())) {
-					persistentTag.putInt(CharmEvents.CASKET_DAMAGE_TAG, stack.getOrDefault(TFDataComponents.CASKET_DAMAGE.get(), 0));
+				} else if (stack.has(TFDataComponents.CASKET_DAMAGE)) {
+					persistentTag.putInt(CharmEvents.CASKET_DAMAGE_TAG, stack.getOrDefault(TFDataComponents.CASKET_DAMAGE, 0));
 				}
 				stack.shrink(1);
 				return true;
@@ -74,8 +74,8 @@ public class TFItemStackUtils {
 		if (blockItemStateProperties != null && blockItemStateProperties.properties().containsKey(KeepsakeCasketBlock.BREAKAGE.getName())) {
 			String propertyValueString = blockItemStateProperties.properties().get(KeepsakeCasketBlock.BREAKAGE.getName());
 			persistentTag.putInt(CharmEvents.CASKET_DAMAGE_TAG, isNumeric(propertyValueString) ? Integer.parseInt(propertyValueString) : 0);
-		} else if (stack.has(TFDataComponents.CASKET_DAMAGE.get())) {
-			persistentTag.putInt(CharmEvents.CASKET_DAMAGE_TAG, stack.getOrDefault(TFDataComponents.CASKET_DAMAGE.get(), 0));
+		} else if (stack.has(TFDataComponents.CASKET_DAMAGE)) {
+			persistentTag.putInt(CharmEvents.CASKET_DAMAGE_TAG, stack.getOrDefault(TFDataComponents.CASKET_DAMAGE, 0));
 		}
 		stack.shrink(1);
 		player.setItemSlot(slot, stack);

@@ -20,7 +20,7 @@ public record KeepsakeCasketSpecialRenderer(KeepsakeCasketModel model, float ope
 
 	@Override
 	public Integer extractArgument(ItemStack stack) {
-		return stack.getOrDefault(TFDataComponents.CASKET_DAMAGE.get(), 0);
+		return stack.getOrDefault(TFDataComponents.CASKET_DAMAGE, 0);
 	}
 
 	@Override

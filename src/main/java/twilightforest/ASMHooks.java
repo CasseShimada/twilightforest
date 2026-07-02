@@ -77,14 +77,14 @@ public class ASMHooks {
 	 * {@link net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer#renderArmorPiece(PoseStack, MultiBufferSource, ItemStack, EquipmentSlot, int, HumanoidModel)}
 	 */
 	public static boolean cancelArmorRendering(boolean o, ItemStack stack) {
-		if (o && stack.get(TFDataComponents.EMPERORS_CLOTH.get()) != null) {
+		if (o && stack.get(TFDataComponents.EMPERORS_CLOTH) != null) {
 			return false;
 		}
 		return o;
 	}
 
 	public static boolean fixCapeRendering(boolean o, ItemStack stack) {
-		return o && stack.get(TFDataComponents.EMPERORS_CLOTH.get()) == null;
+		return o && stack.get(TFDataComponents.EMPERORS_CLOTH) == null;
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

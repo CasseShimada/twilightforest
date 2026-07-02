@@ -15,7 +15,7 @@ public class ArmorUtil {
 		for (EquipmentSlot slot : EquipmentSlotGroup.ARMOR) {
 			ItemStack stack = entity.getItemBySlot(slot);
 
-			if (!stack.isEmpty() && stack.get(TFDataComponents.EMPERORS_CLOTH.get()) != null) {
+			if (!stack.isEmpty() && stack.get(TFDataComponents.EMPERORS_CLOTH) != null) {
 				shroudedArmor++;
 			}
 

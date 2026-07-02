@@ -216,7 +216,7 @@ public class ClientEvents {
 	}
 
 	private static void addCustomTooltips(ItemStack item, Item.TooltipContext context, TooltipFlag flag, List<Component> lines) {
-		if (item.has(TFDataComponents.EMPERORS_CLOTH.get())) {
+		if (item.has(TFDataComponents.EMPERORS_CLOTH)) {
 			lines.add(1, EMPERORS_CLOTH_TOOLTIP);
 		}
 
@@ -227,7 +227,7 @@ public class ClientEvents {
 
 	private static void translateBookAuthor(ItemStack stack, Item.TooltipContext context, TooltipFlag flag, List<Component> lines) {
 		if (stack.getItem() instanceof WrittenBookItem && stack.has(DataComponents.WRITTEN_BOOK_CONTENT)) {
-			if (stack.has(TFDataComponents.TRANSLATABLE_BOOK.get())) {
+			if (stack.has(TFDataComponents.TRANSLATABLE_BOOK)) {
 				for (int i = 0; i < lines.size(); i++) {
 					Component component = lines.get(i);
 					if (component.toString().contains("book.byAuthor")) {

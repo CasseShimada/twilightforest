@@ -186,13 +186,13 @@ public class OverlayHandler {
 				graphics.fill(0, 0, 56, 16, 0x9b000000);
 				graphics.text(Minecraft.getInstance().font, component, 4, 4, 16777215, false);
 			} else {
-				OreScannerData oreScannerData = selectedMeter.get(TFDataComponents.ORE_DATA.get());
+				OreScannerData oreScannerData = selectedMeter.get(TFDataComponents.ORE_DATA);
 
 				if (oreScannerData == null) return;
 
 				long identifier = oreScannerData.universalId();
 				if (identifier != 0L && !ORE_METER_STAT_CACHE.containsKey(identifier)) {
-					initTooltips(identifier, selectedMeter.getOrDefault(TFDataComponents.ORE_RANGE.get(), 1), oreScannerData);
+					initTooltips(identifier, selectedMeter.getOrDefault(TFDataComponents.ORE_RANGE, 1), oreScannerData);
 				}
 
 				if (ORE_METER_STAT_CACHE.containsKey(identifier)) {

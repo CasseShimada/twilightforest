@@ -27,8 +27,8 @@ public class CubeOfAnnihilationItem extends Item {
 
 	@Override
 	public void inventoryTick(ItemStack stack, ServerLevel level, Entity holder, EquipmentSlot slot) {
-		if (stack.get(TFDataComponents.THROWN_PROJECTILE.get()) != null && getThrownEntity(level, stack) == null) {
-			stack.remove(TFDataComponents.THROWN_PROJECTILE.get());
+		if (stack.get(TFDataComponents.THROWN_PROJECTILE) != null && getThrownEntity(level, stack) == null) {
+			stack.remove(TFDataComponents.THROWN_PROJECTILE);
 		}
 	}
 
@@ -36,12 +36,12 @@ public class CubeOfAnnihilationItem extends Item {
 	public InteractionResult use(Level level, Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
 
-		if (stack.get(TFDataComponents.THROWN_PROJECTILE.get()) != null)
+		if (stack.get(TFDataComponents.THROWN_PROJECTILE) != null)
 			return InteractionResult.PASS;
 
 		if (level instanceof ServerLevel serverLevel) {
 			Projectile.spawnProjectile(new CubeOfAnnihilation(TFEntities.CUBE_OF_ANNIHILATION.get(), serverLevel, player, stack), serverLevel, stack, cube ->
-				stack.set(TFDataComponents.THROWN_PROJECTILE.get(), cube.getUUID()));
+				stack.set(TFDataComponents.THROWN_PROJECTILE, cube.getUUID()));
 		}
 
 		player.startUsingItem(hand);
@@ -51,7 +51,7 @@ public class CubeOfAnnihilationItem extends Item {
 	@Nullable
 	private static CubeOfAnnihilation getThrownEntity(Level level, ItemStack stack) {
 		if (level instanceof ServerLevel server) {
-			UUID id = stack.get(TFDataComponents.THROWN_PROJECTILE.get());
+			UUID id = stack.get(TFDataComponents.THROWN_PROJECTILE);
 			if (id != null) {
 				Entity e = server.getEntity(id);
 				if (e instanceof CubeOfAnnihilation) {

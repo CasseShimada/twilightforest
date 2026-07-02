@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import tamaized.beanification.junit.MockitoFixer;
 import twilightforest.init.TFDataComponents;
-import twilightforest.util.registry.DeferredHolder;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -27,12 +26,6 @@ public class ArmorUtilTests {
 
 	@BeforeAll
 	public static void ensureDataComponents() {
-		try {
-			TFDataComponents.COMPONENTS.register();
-		} catch (RuntimeException ignored) {
-			// Registry may already be frozen in tests; fall back to manual binding.
-		}
-		ensureBound(TFDataComponents.EMPERORS_CLOTH);
 		bindItemComponents(Items.LEATHER_BOOTS, Items.STICK);
 	}
 
@@ -49,7 +42,7 @@ public class ArmorUtilTests {
 		}
 
 		ItemStack shroudedBoots = new ItemStack(Items.LEATHER_BOOTS);
-		shroudedBoots.set(TFDataComponents.EMPERORS_CLOTH.get(), Unit.INSTANCE);
+		shroudedBoots.set(TFDataComponents.EMPERORS_CLOTH, Unit.INSTANCE);
 		when(entity.getItemBySlot(EquipmentSlot.FEET)).thenReturn(shroudedBoots);
 		when(entity.getItemBySlot(EquipmentSlot.HEAD)).thenReturn(new ItemStack(Items.STICK));
 
@@ -57,26 +50,6 @@ public class ArmorUtilTests {
 
 		long armorSlots = EquipmentSlotGroup.ARMOR.slots().size();
 		assertEquals(1F / (float) armorSlots, result);
-	}
-
-	private static void ensureBound(DeferredHolder<?, ?> holder) {
-		try {
-			holder.get();
-			return;
-		} catch (IllegalStateException ignored) {
-			// Will bind below.
-		}
-		try {
-			var factoryField = DeferredHolder.class.getDeclaredField("factory");
-			factoryField.setAccessible(true);
-			var factory = (java.util.function.Supplier<?>) factoryField.get(holder);
-			var value = factory.get();
-			var bind = DeferredHolder.class.getDeclaredMethod("bind", Object.class);
-			bind.setAccessible(true);
-			bind.invoke(holder, value);
-		} catch (ReflectiveOperationException e) {
-			throw new IllegalStateException("Failed to bind deferred value for tests.", e);
-		}
 	}
 
 	private static void bindItemComponents(ItemLike... itemLikes) {

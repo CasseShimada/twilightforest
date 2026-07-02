@@ -24,7 +24,7 @@ public record PotionFlaskTintSource(int defaultColor) implements ItemTintSource 
 
 	@Override
 	public int calculate(ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity entity) {
-		PotionFlaskComponent flask = stack.get(TFDataComponents.POTION_FLASK_CONTENTS.get());
+		PotionFlaskComponent flask = stack.get(TFDataComponents.POTION_FLASK_CONTENTS);
 		return flask != null ? ARGB.opaque(flask.potion().getColorOr(this.defaultColor)) : ARGB.opaque(this.defaultColor);
 	}
 

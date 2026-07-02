@@ -43,27 +43,27 @@ public class OreMeterItem extends Item {
 
 	@Override
 	public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, EquipmentSlot slot) {
-		if (!stack.has(TFDataComponents.ORE_SCANNING.get()))
+		if (!stack.has(TFDataComponents.ORE_SCANNING))
 			return;
 
-		OreScannerComponent newScan = stack.get(TFDataComponents.ORE_SCANNING.get()).tickScan(level);
+		OreScannerComponent newScan = stack.get(TFDataComponents.ORE_SCANNING).tickScan(level);
 
 		if (newScan.isEmpty()) {
-			stack.remove(TFDataComponents.ORE_SCANNING.get());
+			stack.remove(TFDataComponents.ORE_SCANNING);
 			return;
 		}
 
 		if (!newScan.isFinished()) {
-			stack.set(TFDataComponents.ORE_LOADING.get(), newScan.getTickProgress());
-			stack.set(TFDataComponents.ORE_SCANNING.get(), newScan);
+			stack.set(TFDataComponents.ORE_LOADING, newScan.getTickProgress());
+			stack.set(TFDataComponents.ORE_SCANNING, newScan);
 			return;
 		}
 
 		// Scanning completed, save results to item
-		stack.set(TFDataComponents.ORE_DATA.get(), OreScannerData.create(newScan.getResults(stack.get(TFDataComponents.ORE_FILTER.get())), newScan.centerChunkPos(), newScan.getVolume(level), getRange(stack)));
+		stack.set(TFDataComponents.ORE_DATA, OreScannerData.create(newScan.getResults(stack.get(TFDataComponents.ORE_FILTER)), newScan.centerChunkPos(), newScan.getVolume(level), getRange(stack)));
 
-		stack.remove(TFDataComponents.ORE_LOADING.get());
-		stack.remove(TFDataComponents.ORE_SCANNING.get());
+		stack.remove(TFDataComponents.ORE_LOADING);
+		stack.remove(TFDataComponents.ORE_SCANNING);
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public class OreMeterItem extends Item {
 			int scanTime = LOAD_TIME + range * 25;
 
 			OreScannerComponent data = OreScannerComponent.scanFromCenter(player.blockPosition(), range, scanTime);
-			stack.set(TFDataComponents.ORE_SCANNING.get(), data);
+			stack.set(TFDataComponents.ORE_SCANNING, data);
 		}
 
 		level.playSound(player, player.blockPosition(), TFSounds.ORE_METER_CRACKLE, SoundSource.PLAYERS, 0.5F, level.getRandom().nextFloat() * 0.1F + 0.9F);
@@ -113,7 +113,7 @@ public class OreMeterItem extends Item {
 			if (!level.isClientSide()) {
 				int newRange = Mth.positiveModulo(getRange(stack) + 1, MAX_CHUNK_SEARCH_RANGE + 1);
 
-				stack.set(TFDataComponents.ORE_RANGE.get(), newRange);
+				stack.set(TFDataComponents.ORE_RANGE, newRange);
 				PlayerMessaging.displayClientMessage(player, Component.translatable("misc.twilightforest.ore_meter_new_range", newRange), true);
 				level.playSound(null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.PLAYERS, 0.25F, 0.75F + (newRange * 0.1F));
 			}
@@ -130,7 +130,7 @@ public class OreMeterItem extends Item {
 		if (context.isSecondaryUseActive()) {
 			BlockState state = context.getLevel().getBlockState(context.getClickedPos());
 			if (state.is(TFBlockTags.ORE_METER_TARGETABLE)) {
-				stack.set(TFDataComponents.ORE_FILTER.get(), state.getBlock());
+				stack.set(TFDataComponents.ORE_FILTER, state.getBlock());
 				PlayerMessaging.displayClientMessage(context.getPlayer(), Component.translatable("misc.twilightforest.ore_meter_set_block", Component.translatable(state.getBlock().getDescriptionId())), true);
 				context.getLevel().playSound(context.getPlayer(), context.getPlayer().blockPosition(), TFSounds.ORE_METER_TARGET_BLOCK, SoundSource.PLAYERS, 0.5F, context.getLevel().getRandom().nextFloat() * 0.1F + 0.9F);
 				return InteractionResult.SUCCESS;
@@ -141,7 +141,7 @@ public class OreMeterItem extends Item {
 
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
-		Block block = stack.get(TFDataComponents.ORE_FILTER.get());
+		Block block = stack.get(TFDataComponents.ORE_FILTER);
 
 		if (block != null)
 			tooltip.accept(Component.translatable("misc.twilightforest.ore_meter_targeted_block", block.getDescriptionId()).withStyle(ChatFormatting.GRAY));
@@ -150,15 +150,15 @@ public class OreMeterItem extends Item {
 	}
 
 	public static boolean isLoading(ItemStack stack) {
-		return stack.has(TFDataComponents.ORE_LOADING.get());
+		return stack.has(TFDataComponents.ORE_LOADING);
 	}
 
 	public static int getLoadProgress(ItemStack stack) {
-		return stack.getOrDefault(TFDataComponents.ORE_LOADING.get(), 0);
+		return stack.getOrDefault(TFDataComponents.ORE_LOADING, 0);
 	}
 
 	public static @NotNull Integer getRange(ItemStack stack) {
-		return stack.getOrDefault(TFDataComponents.ORE_RANGE.get(), 1);
+		return stack.getOrDefault(TFDataComponents.ORE_RANGE, 1);
 	}
 
 }

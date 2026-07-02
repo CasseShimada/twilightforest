@@ -103,9 +103,9 @@ public class MiscEvents {
 			return InteractionResult.PASS;
 		}
 		ItemStack stack = player.getItemInHand(hand);
-		if (stack.has(TFDataComponents.EMPERORS_CLOTH.get())) {
+		if (stack.has(TFDataComponents.EMPERORS_CLOTH)) {
 			LayeredCauldronBlock.lowerFillLevel(state, level, pos);
-			stack.remove(TFDataComponents.EMPERORS_CLOTH.get());
+			stack.remove(TFDataComponents.EMPERORS_CLOTH);
 			player.awardStat(Stats.CLEAN_ARMOR);
 			return InteractionResult.SUCCESS;
 		}

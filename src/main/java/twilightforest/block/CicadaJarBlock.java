@@ -37,7 +37,7 @@ public class CicadaJarBlock extends JarBlock {
 				ItemEntity cicada = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(TFBlocks.CICADA.get()));
 				level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 				cicada.spawnAtLocation(sl, cicada.getItem());
-				cicada.spawnAtLocation(sl, Util.make(new ItemStack(TFBlocks.MASON_JAR.get()), jar -> jar.set(TFDataComponents.JAR_LID.get(), new JarLid(jarBE.lid))));
+				cicada.spawnAtLocation(sl, Util.make(new ItemStack(TFBlocks.MASON_JAR.get()), jar -> jar.set(TFDataComponents.JAR_LID, new JarLid(jarBE.lid))));
 			}
 
 			level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);

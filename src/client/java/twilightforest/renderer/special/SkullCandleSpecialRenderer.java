@@ -37,7 +37,7 @@ public record SkullCandleSpecialRenderer(
 
 	@Override
 	public @Nullable Pair<ResolvableProfile, SkullCandles> extractArgument(ItemStack stack) {
-		return Pair.of(stack.get(DataComponents.PROFILE), stack.get(TFDataComponents.SKULL_CANDLES.get()));
+		return Pair.of(stack.get(DataComponents.PROFILE), stack.get(TFDataComponents.SKULL_CANDLES));
 	}
 
 	@Override
