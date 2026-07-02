@@ -244,15 +244,15 @@ public class TFItems {
 	public static final DeferredItem<Item> SORTING_BOAT = register("sorting_boat", properties -> new BoatItem(TFEntities.SORTING_BOAT, properties), () -> new Item.Properties().stacksTo(1));
 	public static final DeferredItem<Item> SORTING_CHEST_BOAT = register("sorting_chest_boat", properties -> new BoatItem(TFEntities.SORTING_CHEST_BOAT, properties), () -> new Item.Properties().stacksTo(1));
 
-	public static final DeferredItem<Item> MUSIC_DISC_RADIANCE = register("music_disc_radiance", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.RADIANCE));
-	public static final DeferredItem<Item> MUSIC_DISC_STEPS = register("music_disc_steps", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.STEPS));
-	public static final DeferredItem<Item> MUSIC_DISC_SUPERSTITIOUS = register("music_disc_superstitious", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.SUPERSTITIOUS));
-	public static final DeferredItem<Item> MUSIC_DISC_HOME = register("music_disc_home", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.HOME));
-	public static final DeferredItem<Item> MUSIC_DISC_WAYFARER = register("music_disc_wayfarer", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.WAYFARER));
-	public static final DeferredItem<Item> MUSIC_DISC_FINDINGS = register("music_disc_findings", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.FINDINGS));
-	public static final DeferredItem<Item> MUSIC_DISC_MAKER = register("music_disc_maker", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.MAKER));
-	public static final DeferredItem<Item> MUSIC_DISC_THREAD = register("music_disc_thread", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.THREAD));
-	public static final DeferredItem<Item> MUSIC_DISC_MOTION = register("music_disc_motion", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.MOTION));
+	public static final Item MUSIC_DISC_RADIANCE = registerDirect("music_disc_radiance", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.RADIANCE));
+	public static final Item MUSIC_DISC_STEPS = registerDirect("music_disc_steps", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.STEPS));
+	public static final Item MUSIC_DISC_SUPERSTITIOUS = registerDirect("music_disc_superstitious", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.SUPERSTITIOUS));
+	public static final Item MUSIC_DISC_HOME = registerDirect("music_disc_home", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.HOME));
+	public static final Item MUSIC_DISC_WAYFARER = registerDirect("music_disc_wayfarer", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.WAYFARER));
+	public static final Item MUSIC_DISC_FINDINGS = registerDirect("music_disc_findings", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.FINDINGS));
+	public static final Item MUSIC_DISC_MAKER = registerDirect("music_disc_maker", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.MAKER));
+	public static final Item MUSIC_DISC_THREAD = registerDirect("music_disc_thread", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.THREAD));
+	public static final Item MUSIC_DISC_MOTION = registerDirect("music_disc_motion", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(TFJukeboxSongs.MOTION));
 
 	public static final Item NAGA_BANNER_PATTERN = registerDirect("naga_banner_pattern", properties -> new Item(properties.component(DataComponents.PROVIDES_BANNER_PATTERNS, bannerPatterns(TFBannerPatternTags.NAGA_BANNER_PATTERN))), () -> new Item.Properties().stacksTo(1).rarity(TWILIGHT_RARITY));
 	public static final Item LICH_BANNER_PATTERN = registerDirect("lich_banner_pattern", properties -> new Item(properties.component(DataComponents.PROVIDES_BANNER_PATTERNS, bannerPatterns(TFBannerPatternTags.LICH_BANNER_PATTERN))), () -> new Item.Properties().stacksTo(1).rarity(TWILIGHT_RARITY));
