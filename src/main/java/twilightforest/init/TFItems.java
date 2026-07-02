@@ -90,11 +90,11 @@ public class TFItems {
 	public static final Item STEELEAF_CHESTPLATE = registerDirect("steeleaf_chestplate", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.STEELEAF, ArmorType.CHESTPLATE)), Item.Properties::new);
 	public static final Item STEELEAF_LEGGINGS = registerDirect("steeleaf_leggings", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.STEELEAF, ArmorType.LEGGINGS)), Item.Properties::new);
 	public static final Item STEELEAF_BOOTS = registerDirect("steeleaf_boots", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.STEELEAF, ArmorType.BOOTS)), Item.Properties::new);
-	public static final DeferredItem<Item> STEELEAF_SWORD = register("steeleaf_sword", properties -> new Item(properties.sword(TFToolMaterials.STEELEAF, 3.0F, -2.4F)), Item.Properties::new);
-	public static final DeferredItem<Item> STEELEAF_SHOVEL = register("steeleaf_shovel", properties -> new ShovelItem(TFToolMaterials.STEELEAF, 1.5F, -3.0F, properties), Item.Properties::new);
-	public static final DeferredItem<Item> STEELEAF_PICKAXE = register("steeleaf_pickaxe", properties -> new Item(properties.pickaxe(TFToolMaterials.STEELEAF, 1.0F, -2.8F)), Item.Properties::new);
-	public static final DeferredItem<Item> STEELEAF_AXE = register("steeleaf_axe", properties -> new AxeItem(TFToolMaterials.STEELEAF, 6.0F, -3.0F, properties), Item.Properties::new);
-	public static final DeferredItem<Item> STEELEAF_HOE = register("steeleaf_hoe", properties -> new HoeItem(TFToolMaterials.STEELEAF, -3.0F, -0.5F, properties), Item.Properties::new);
+	public static final Item STEELEAF_SWORD = registerDirect("steeleaf_sword", properties -> new Item(properties.sword(TFToolMaterials.STEELEAF, 3.0F, -2.4F)), Item.Properties::new);
+	public static final Item STEELEAF_SHOVEL = registerDirect("steeleaf_shovel", properties -> new ShovelItem(TFToolMaterials.STEELEAF, 1.5F, -3.0F, properties), Item.Properties::new);
+	public static final Item STEELEAF_PICKAXE = registerDirect("steeleaf_pickaxe", properties -> new Item(properties.pickaxe(TFToolMaterials.STEELEAF, 1.0F, -2.8F)), Item.Properties::new);
+	public static final Item STEELEAF_AXE = registerDirect("steeleaf_axe", properties -> new AxeItem(TFToolMaterials.STEELEAF, 6.0F, -3.0F, properties), Item.Properties::new);
+	public static final Item STEELEAF_HOE = registerDirect("steeleaf_hoe", properties -> new HoeItem(TFToolMaterials.STEELEAF, -3.0F, -0.5F, properties), Item.Properties::new);
 	public static final DeferredItem<Item> GOLDEN_MINOTAUR_AXE = register("gold_minotaur_axe", properties -> new MinotaurAxeItem(ToolMaterial.GOLD, properties), Item.Properties::new);
 	public static final DeferredItem<Item> DIAMOND_MINOTAUR_AXE = register("diamond_minotaur_axe", properties -> new MinotaurAxeItem(ToolMaterial.DIAMOND, properties), () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> MAZEBREAKER_PICKAXE = register("mazebreaker_pickaxe", properties -> new MazebreakerPickItem(ToolMaterial.DIAMOND, properties), () -> new Item.Properties().rarity(Rarity.RARE));

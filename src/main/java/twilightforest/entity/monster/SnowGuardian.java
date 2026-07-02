@@ -80,7 +80,7 @@ public class SnowGuardian extends BaseIceMob {
 		return switch (slot) {
 			default -> switch (type) {
 				default -> TFItems.IRONWOOD_SWORD;
-				case 1 -> TFItems.STEELEAF_SWORD.get();
+				case 1 -> TFItems.STEELEAF_SWORD;
 				case 2, 3 -> TFItems.KNIGHTMETAL_SWORD.get();
 			};
 			case FEET -> switch (type) {
