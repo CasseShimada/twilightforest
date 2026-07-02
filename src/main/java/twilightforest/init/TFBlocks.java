@@ -173,12 +173,12 @@ public class TFBlocks {
 	public static final DeferredBlock<Block> MAZE_SLIME_BLOCK = registerWithItem("maze_slime_block", MazeSlimeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SLIME_BLOCK).mapColor(MapColor.STONE));
 
 	//stronghold
-	public static final DeferredBlock<Block> STRONGHOLD_SHIELD = registerWithItem("stronghold_shield", StrongholdShieldBlock::new, () -> BlockBehaviour.Properties.of().noLootTable().mapColor(MapColor.STONE).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().sound(SoundType.METAL).strength(-1.0F, 6000000.0F));
+	public static final StrongholdShieldBlock STRONGHOLD_SHIELD = registerDirectWithItem("stronghold_shield", StrongholdShieldBlock::new, () -> BlockBehaviour.Properties.of().noLootTable().mapColor(MapColor.STONE).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().sound(SoundType.METAL).strength(-1.0F, 6000000.0F));
 	public static final TrophyPedestalBlock TROPHY_PEDESTAL = registerDirectWithItem("trophy_pedestal", TrophyPedestalBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.STONE).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().sound(SoundType.STONE).strength(2.0F, 2000.0F));
-	public static final DeferredBlock<Block> UNDERBRICK = registerWithItem("underbrick", Block::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE_BRICKS).strength(1.5F, 6.0F));
-	public static final DeferredBlock<Block> MOSSY_UNDERBRICK = registerWithItem("mossy_underbrick", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(UNDERBRICK.get()));
-	public static final DeferredBlock<Block> CRACKED_UNDERBRICK = registerWithItem("cracked_underbrick", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(UNDERBRICK.get()));
-	public static final DeferredBlock<Block> UNDERBRICK_FLOOR = registerWithItem("underbrick_floor", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(UNDERBRICK.get()));
+	public static final Block UNDERBRICK = registerDirectWithItem("underbrick", Block::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE_BRICKS).strength(1.5F, 6.0F));
+	public static final Block MOSSY_UNDERBRICK = registerDirectWithItem("mossy_underbrick", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(UNDERBRICK));
+	public static final Block CRACKED_UNDERBRICK = registerDirectWithItem("cracked_underbrick", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(UNDERBRICK));
+	public static final Block UNDERBRICK_FLOOR = registerDirectWithItem("underbrick_floor", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(UNDERBRICK));
 
 	//dark tower
 	public static final DeferredBlock<Block> TOWERWOOD = registerWithItem("towerwood", Block::new, () -> BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).mapColor(MapColor.COLOR_ORANGE).strength(40.0F, 6.0F).sound(SoundType.WOOD));

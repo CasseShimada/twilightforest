@@ -10,9 +10,9 @@ public class KnightStonesRandomBlockSelectorFactory {
 	public SimpleRandomBlockSelector make() {
 		return new SimpleRandomBlockSelector(
 			List.of(
-				Pair.of(TFBlocks.CRACKED_UNDERBRICK.get().defaultBlockState(), 0.2F),
-				Pair.of(TFBlocks.MOSSY_UNDERBRICK.get().defaultBlockState(), 0.3F),
-				Pair.of(TFBlocks.UNDERBRICK.get().defaultBlockState(), 0.5F)
+				Pair.of(TFBlocks.CRACKED_UNDERBRICK.defaultBlockState(), 0.2F),
+				Pair.of(TFBlocks.MOSSY_UNDERBRICK.defaultBlockState(), 0.3F),
+				Pair.of(TFBlocks.UNDERBRICK.defaultBlockState(), 0.5F)
 			)
 		);
 	}

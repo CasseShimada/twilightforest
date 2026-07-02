@@ -79,7 +79,7 @@ public class StrongholdAccessChamberComponent extends KnightStrongholdComponent 
 		this.placeBlock(world, TFBlocks.TROPHY_PEDESTAL.defaultBlockState(), 2, 1, 2, sbb);
 
 		// block point
-		this.generateBox(world, sbb, 2, -1, 2, 6, -1, 6, TFBlocks.STRONGHOLD_SHIELD.get().defaultBlockState(), AIR, false);
+		this.generateBox(world, sbb, 2, -1, 2, 6, -1, 6, TFBlocks.STRONGHOLD_SHIELD.defaultBlockState(), AIR, false);
 	}
 
 	@Override

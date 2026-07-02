@@ -11,8 +11,8 @@ public class StrongholdDecorator extends TFStructureDecorator {
 	private static final KnightStonesRandomBlockSelectorFactory knightStones = new KnightStonesRandomBlockSelectorFactory();
 
 	public StrongholdDecorator() {
-		this.blockState = TFBlocks.UNDERBRICK.get().defaultBlockState();
-		this.accentState = TFBlocks.CRACKED_UNDERBRICK.get().defaultBlockState();
+		this.blockState = TFBlocks.UNDERBRICK.defaultBlockState();
+		this.accentState = TFBlocks.CRACKED_UNDERBRICK.defaultBlockState();
 		this.fenceState = Blocks.COBBLESTONE_WALL.defaultBlockState();
 		this.stairState = Blocks.STONE_BRICK_STAIRS.defaultBlockState();
 		this.pillarState = Blocks.MOSSY_STONE_BRICKS.defaultBlockState();
