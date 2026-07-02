@@ -89,7 +89,7 @@ public final class LootEvents {
 
 	private static void applyFierySmelting(LootContext context, List<ItemStack> drops) {
 		ItemStack tool = context.getOptionalParameter(LootContextParams.TOOL) != null ? (ItemStack) context.getOptionalParameter(LootContextParams.TOOL) : null;
-		if (tool == null || !tool.is(TFItems.FIERY_PICKAXE.get())) {
+		if (tool == null || !tool.is(TFItems.FIERY_PICKAXE)) {
 			return;
 		}
 

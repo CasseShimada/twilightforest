@@ -41,7 +41,7 @@ public class FieryBlock extends Block {
 	public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
 		if (level instanceof ServerLevel serverLevel && !entity.fireImmune()
 			&& entity instanceof LivingEntity living
-			&& !living.getItemBySlot(EquipmentSlot.FEET).is(TFItems.FIERY_BOOTS.get())) {
+			&& !living.getItemBySlot(EquipmentSlot.FEET).is(TFItems.FIERY_BOOTS)) {
 			living.hurtServer(serverLevel, serverLevel.damageSources().source(TFDamageTypes.FIERY), 1.0F);
 		}
 

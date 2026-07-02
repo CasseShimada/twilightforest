@@ -73,7 +73,7 @@ public class ToolEvents {
 		if (!(sourceEntity instanceof LivingEntity living)) {
 			return;
 		}
-		if ((living.getMainHandItem().is(TFItems.FIERY_SWORD.get()) || living.getMainHandItem().is(TFItems.FIERY_PICKAXE.get())) && !target.fireImmune()) {
+		if ((living.getMainHandItem().is(TFItems.FIERY_SWORD) || living.getMainHandItem().is(TFItems.FIERY_PICKAXE)) && !target.fireImmune()) {
 			target.igniteForSeconds(1);
 		}
 	}

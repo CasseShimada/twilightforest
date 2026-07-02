@@ -485,7 +485,7 @@ public class RegistrationEvents {
 		ArmorRenderer.register(new TFSimpleArmorRenderer(HumanoidModel::new, TFModelLayers.ARCTIC_ARMOR_INNER, TFModelLayers.ARCTIC_ARMOR_OUTER),
 			TFItems.ARCTIC_HELMET, TFItems.ARCTIC_CHESTPLATE, TFItems.ARCTIC_LEGGINGS, TFItems.ARCTIC_BOOTS);
 		ArmorRenderer.register(new TFSimpleArmorRenderer(FieryArmorModel::new, TFModelLayers.FIERY_ARMOR_INNER, TFModelLayers.FIERY_ARMOR_OUTER, true),
-			TFItems.FIERY_HELMET.get(), TFItems.FIERY_CHESTPLATE.get(), TFItems.FIERY_LEGGINGS.get(), TFItems.FIERY_BOOTS.get());
+			TFItems.FIERY_HELMET, TFItems.FIERY_CHESTPLATE, TFItems.FIERY_LEGGINGS, TFItems.FIERY_BOOTS);
 		ArmorRenderer.register(new TFSimpleArmorRenderer(HumanoidModel::new, TFModelLayers.KNIGHTMETAL_ARMOR_INNER, TFModelLayers.KNIGHTMETAL_ARMOR_OUTER),
 			TFItems.KNIGHTMETAL_HELMET, TFItems.KNIGHTMETAL_CHESTPLATE, TFItems.KNIGHTMETAL_LEGGINGS, TFItems.KNIGHTMETAL_BOOTS);
 		ArmorRenderer.register(new TFSimpleArmorRenderer(HumanoidModel::new, TFModelLayers.PHANTOM_ARMOR_INNER, TFModelLayers.PHANTOM_ARMOR_OUTER),
