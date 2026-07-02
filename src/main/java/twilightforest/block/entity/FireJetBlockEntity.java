@@ -25,7 +25,7 @@ public class FireJetBlockEntity extends BlockEntity {
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, FireJetBlockEntity te) {
-		if (state.getBlock() == TFBlocks.FIRE_JET.get() || state.getBlock() == TFBlocks.ENCASED_FIRE_JET.get()) {
+		if (state.getBlock() == TFBlocks.FIRE_JET || state.getBlock() == TFBlocks.ENCASED_FIRE_JET) {
 			switch (state.getValue(FireJetBlock.STATE)) {
 				case POPPING -> te.tickPopping(level, pos, state, te);
 				case FLAME -> te.tickFlame(level, pos, state, te);
@@ -38,7 +38,7 @@ public class FireJetBlockEntity extends BlockEntity {
 			te.counter = 0;
 			// turn to flame
 			if (!level.isClientSide()) {
-				if (state.getBlock() == TFBlocks.FIRE_JET.get() || state.getBlock() == TFBlocks.ENCASED_FIRE_JET.get()) {
+				if (state.getBlock() == TFBlocks.FIRE_JET || state.getBlock() == TFBlocks.ENCASED_FIRE_JET) {
 					level.setBlockAndUpdate(pos, state.setValue(FireJetBlock.STATE, FireJetVariant.FLAME));
 				} else {
 					level.removeBlock(pos, false);
@@ -63,8 +63,8 @@ public class FireJetBlockEntity extends BlockEntity {
 			te.counter = 0;
 			// idle again
 			if (!level.isClientSide()) {
-				if (state.getBlock() == TFBlocks.FIRE_JET.get() || state.getBlock() == TFBlocks.ENCASED_FIRE_JET.get()) {
-					level.setBlockAndUpdate(pos, state.setValue(FireJetBlock.STATE, state.getBlock() == TFBlocks.FIRE_JET.get() ? FireJetVariant.IDLE : FireJetVariant.TIMEOUT));
+				if (state.getBlock() == TFBlocks.FIRE_JET || state.getBlock() == TFBlocks.ENCASED_FIRE_JET) {
+					level.setBlockAndUpdate(pos, state.setValue(FireJetBlock.STATE, state.getBlock() == TFBlocks.FIRE_JET ? FireJetVariant.IDLE : FireJetVariant.TIMEOUT));
 				} else {
 					level.removeBlock(pos, false);
 				}

@@ -19,9 +19,9 @@ public class TFSmokerBlockEntity extends BlockEntity {
 
 	public static void tick(Level level, BlockPos pos, BlockState state, TFSmokerBlockEntity te) {
 		if (level.isClientSide() && ++te.counter % 4 == 0) {
-			if (state.getBlock() == TFBlocks.ENCASED_SMOKER.get() && state.getValue(EncasedSmokerBlock.ACTIVE)) {
+			if (state.getBlock() == TFBlocks.ENCASED_SMOKER && state.getValue(EncasedSmokerBlock.ACTIVE)) {
 				te.particles(level, pos, te);
-			} else if (state.getBlock() == TFBlocks.SMOKER.get()) {
+			} else if (state.getBlock() == TFBlocks.SMOKER) {
 				te.particles(level, pos, te);
 			}
 		}

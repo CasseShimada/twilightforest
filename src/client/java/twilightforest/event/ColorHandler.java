@@ -46,7 +46,7 @@ public class ColorHandler {
 		register(tint(
 			state -> GrassColor.getDefaultColor(),
 			(state, getter, pos) -> BiomeColors.getAverageGrassColor(getter, pos)
-		), TFBlocks.SMOKER.get(), TFBlocks.FIRE_JET.get());
+		), TFBlocks.SMOKER, TFBlocks.FIRE_JET);
 
 		register(tint(
 			state -> 0xFF000000 | 7455580,

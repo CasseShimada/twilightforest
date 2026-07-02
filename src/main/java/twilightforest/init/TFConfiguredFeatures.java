@@ -255,7 +255,7 @@ public final class TFConfiguredFeatures {
 		context.register(FALLEN_LEAVES, new ConfiguredFeature<>(TFFeatures.FALLEN_LEAVES, FeatureConfiguration.NONE));
 		context.register(MAYAPPLE, new ConfiguredFeature<>(TFFeatures.RANDOM_PATCH, simplePatchConfiguration(new SimpleBlockConfiguration(BlockStateProvider.simple(TFBlocks.MAYAPPLE)))));
 		context.register(FIDDLEHEAD, new ConfiguredFeature<>(TFFeatures.RANDOM_PATCH, simplePatchConfiguration(new SimpleBlockConfiguration(BlockStateProvider.simple(TFBlocks.FIDDLEHEAD)))));
-		context.register(FIRE_JET, new ConfiguredFeature<>(TFFeatures.FIRE_JET, new BlockStateConfiguration(TFBlocks.FIRE_JET.get().defaultBlockState())));
+		context.register(FIRE_JET, new ConfiguredFeature<>(TFFeatures.FIRE_JET, new BlockStateConfiguration(TFBlocks.FIRE_JET.defaultBlockState())));
 		context.register(FOUNDATION, new ConfiguredFeature<>(TFFeatures.FOUNDATION, RuinedFoundationConfig.withDefaultBlocks(false)));
 		context.register(GROVE_RUINS, new ConfiguredFeature<>(TFFeatures.GROVE_RUINS, NoneFeatureConfiguration.NONE));
 		context.register(HOLLOW_LOG, new ConfiguredFeature<>(TFFeatures.FALLEN_HOLLOW_LOG, NoneFeatureConfiguration.NONE));
@@ -270,7 +270,7 @@ public final class TFConfiguredFeatures {
 		context.register(OUTSIDE_STALAGMITE, new ConfiguredFeature<>(TFFeatures.CAVE_STALACTITE, NoneFeatureConfiguration.NONE));
 		context.register(PLANT_ROOTS, new ConfiguredFeature<>(TFFeatures.UNDERGROUND_PLANTS, new BlockStateConfiguration(TFBlocks.ROOT_STRAND.defaultBlockState())));
 		context.register(PUMPKIN_LAMPPOST, new ConfiguredFeature<>(TFFeatures.LAMPPOSTS, new BlockStateConfiguration(Blocks.JACK_O_LANTERN.defaultBlockState())));
-		context.register(SMOKER, new ConfiguredFeature<>(TFFeatures.FIRE_JET, new BlockStateConfiguration(TFBlocks.SMOKER.get().defaultBlockState())));
+		context.register(SMOKER, new ConfiguredFeature<>(TFFeatures.FIRE_JET, new BlockStateConfiguration(TFBlocks.SMOKER.defaultBlockState())));
 		context.register(STONE_CIRCLE, new ConfiguredFeature<>(TFFeatures.STONE_CIRCLE, NoneFeatureConfiguration.NONE));
 		context.register(THORNS, new ConfiguredFeature<>(TFFeatures.THORNS, new ThornsConfig(7, 3, 3, 50)));
 		context.register(TORCH_BERRIES, new ConfiguredFeature<>(TFFeatures.UNDERGROUND_PLANTS, new BlockStateConfiguration(TFBlocks.TORCHBERRY_PLANT.defaultBlockState().setValue(TorchberryPlantBlock.HAS_BERRIES, true))));
