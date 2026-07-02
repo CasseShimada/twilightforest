@@ -12,6 +12,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 import twilightforest.TwilightForestMod;
 import twilightforest.compat.RecipeViewerConstants;
 import twilightforest.init.TFBlocks;
@@ -25,7 +26,7 @@ public class DryingRackCategory implements IRecipeCategory<DryingRecipe> {
 
 	public DryingRackCategory(IGuiHelper guiHelper) {
 		this.background = guiHelper.createBlankDrawable(RecipeViewerConstants.GENERIC_RECIPE_WIDTH, RecipeViewerConstants.GENERIC_RECIPE_HEIGHT);
-		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, TFBlocks.OAK_DRYING_RACK.toStack());
+		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(TFBlocks.OAK_DRYING_RACK));
 		this.localizedName = Component.translatable("gui.twilightforest.drying_jei");
 	}
 

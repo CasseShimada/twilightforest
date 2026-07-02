@@ -639,25 +639,25 @@ public class TFCreativeTabs {
 			entries.insertAfter(new ItemStack(Items.PALE_OAK_WOOD), new ItemStack(TFItems.HOLLOW_PALE_OAK_LOG));
 
 			entries.insertAfter(new ItemStack(Items.OAK_FENCE_GATE), TFBlocks.OAK_BANISTER.toStack());
-			entries.insertAfter(TFBlocks.OAK_BANISTER.toStack(), TFBlocks.OAK_DRYING_RACK.toStack());
+			entries.insertAfter(TFBlocks.OAK_BANISTER.toStack(), new ItemStack(TFBlocks.OAK_DRYING_RACK));
 			entries.insertAfter(new ItemStack(Items.SPRUCE_FENCE_GATE), TFBlocks.SPRUCE_BANISTER.toStack());
-			entries.insertAfter(TFBlocks.SPRUCE_BANISTER.toStack(), TFBlocks.SPRUCE_DRYING_RACK.toStack());
+			entries.insertAfter(TFBlocks.SPRUCE_BANISTER.toStack(), new ItemStack(TFBlocks.SPRUCE_DRYING_RACK));
 			entries.insertAfter(new ItemStack(Items.BIRCH_FENCE_GATE), TFBlocks.BIRCH_BANISTER.toStack());
-			entries.insertAfter(TFBlocks.BIRCH_BANISTER.toStack(), TFBlocks.BIRCH_DRYING_RACK.toStack());
+			entries.insertAfter(TFBlocks.BIRCH_BANISTER.toStack(), new ItemStack(TFBlocks.BIRCH_DRYING_RACK));
 			entries.insertAfter(new ItemStack(Items.JUNGLE_FENCE_GATE), TFBlocks.JUNGLE_BANISTER.toStack());
-			entries.insertAfter(TFBlocks.JUNGLE_BANISTER.toStack(), TFBlocks.JUNGLE_DRYING_RACK.toStack());
+			entries.insertAfter(TFBlocks.JUNGLE_BANISTER.toStack(), new ItemStack(TFBlocks.JUNGLE_DRYING_RACK));
 			entries.insertAfter(new ItemStack(Items.ACACIA_FENCE_GATE), TFBlocks.ACACIA_BANISTER.toStack());
-			entries.insertAfter(TFBlocks.ACACIA_BANISTER.toStack(), TFBlocks.ACACIA_DRYING_RACK.toStack());
+			entries.insertAfter(TFBlocks.ACACIA_BANISTER.toStack(), new ItemStack(TFBlocks.ACACIA_DRYING_RACK));
 			entries.insertAfter(new ItemStack(Items.DARK_OAK_FENCE_GATE), TFBlocks.DARK_OAK_BANISTER.toStack());
-			entries.insertAfter(TFBlocks.DARK_OAK_BANISTER.toStack(), TFBlocks.DARK_OAK_DRYING_RACK.toStack());
+			entries.insertAfter(TFBlocks.DARK_OAK_BANISTER.toStack(), new ItemStack(TFBlocks.DARK_OAK_DRYING_RACK));
 			entries.insertAfter(new ItemStack(Items.CRIMSON_FENCE_GATE), TFBlocks.CRIMSON_BANISTER.toStack());
-			entries.insertAfter(TFBlocks.CRIMSON_BANISTER.toStack(), TFBlocks.CRIMSON_DRYING_RACK.toStack());
+			entries.insertAfter(TFBlocks.CRIMSON_BANISTER.toStack(), new ItemStack(TFBlocks.CRIMSON_DRYING_RACK));
 			entries.insertAfter(new ItemStack(Items.WARPED_FENCE_GATE), TFBlocks.WARPED_BANISTER.toStack());
-			entries.insertAfter(TFBlocks.WARPED_BANISTER.toStack(), TFBlocks.WARPED_DRYING_RACK.toStack());
+			entries.insertAfter(TFBlocks.WARPED_BANISTER.toStack(), new ItemStack(TFBlocks.WARPED_DRYING_RACK));
 			entries.insertAfter(new ItemStack(Items.MANGROVE_FENCE_GATE), TFBlocks.VANGROVE_BANISTER.toStack());
-			entries.insertAfter(TFBlocks.VANGROVE_BANISTER.toStack(), TFBlocks.VANGROVE_DRYING_RACK.toStack());
+			entries.insertAfter(TFBlocks.VANGROVE_BANISTER.toStack(), new ItemStack(TFBlocks.VANGROVE_DRYING_RACK));
 			entries.insertAfter(new ItemStack(Items.CHERRY_FENCE_GATE), TFBlocks.CHERRY_BANISTER.toStack());
-			entries.insertAfter(TFBlocks.CHERRY_BANISTER.toStack(), TFBlocks.CHERRY_DRYING_RACK.toStack());
+			entries.insertAfter(TFBlocks.CHERRY_BANISTER.toStack(), new ItemStack(TFBlocks.CHERRY_DRYING_RACK));
 			entries.insertAfter(new ItemStack(Items.PALE_OAK_FENCE_GATE), TFBlocks.PALE_OAK_BANISTER.toStack());
 		});
 

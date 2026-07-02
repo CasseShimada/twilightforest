@@ -48,12 +48,12 @@ public class TFBlockEntities {
 	public static final BlockEntityType<MasonJarBlockEntity> MASON_JAR = register("mason_jar", FabricBlockEntityTypeBuilder.create(MasonJarBlockEntity::new, TFBlocks.MASON_JAR).build());
 	public static final BlockEntityType<SinisterSpawnerBlockEntity> SINISTER_SPAWNER = register("sinister_spawner", FabricBlockEntityTypeBuilder.create(SinisterSpawnerBlockEntity::new, TFBlocks.SINISTER_SPAWNER.get()).build());
 	public static final BlockEntityType<DryingRackBlockEntity> DRYING_RACK = register("drying_rack", FabricBlockEntityTypeBuilder.create(DryingRackBlockEntity::new,
-		TFBlocks.OAK_DRYING_RACK.get(), TFBlocks.SPRUCE_DRYING_RACK.get(),
-		TFBlocks.BIRCH_DRYING_RACK.get(), TFBlocks.JUNGLE_DRYING_RACK.get(),
-		TFBlocks.ACACIA_DRYING_RACK.get(), TFBlocks.DARK_OAK_DRYING_RACK.get(),
-		TFBlocks.CRIMSON_DRYING_RACK.get(), TFBlocks.WARPED_DRYING_RACK.get(),
-		TFBlocks.VANGROVE_DRYING_RACK.get(), TFBlocks.BAMBOO_DRYING_RACK.get(),
-		TFBlocks.CHERRY_DRYING_RACK.get(), TFBlocks.TWILIGHT_OAK_DRYING_RACK.get(),
+		TFBlocks.OAK_DRYING_RACK, TFBlocks.SPRUCE_DRYING_RACK,
+		TFBlocks.BIRCH_DRYING_RACK, TFBlocks.JUNGLE_DRYING_RACK,
+		TFBlocks.ACACIA_DRYING_RACK, TFBlocks.DARK_OAK_DRYING_RACK,
+		TFBlocks.CRIMSON_DRYING_RACK, TFBlocks.WARPED_DRYING_RACK,
+		TFBlocks.VANGROVE_DRYING_RACK, TFBlocks.BAMBOO_DRYING_RACK,
+		TFBlocks.CHERRY_DRYING_RACK, TFBlocks.TWILIGHT_OAK_DRYING_RACK.get(),
 		TFBlocks.CANOPY_DRYING_RACK.get(), TFBlocks.MANGROVE_DRYING_RACK.get(),
 		TFBlocks.DARK_DRYING_RACK.get(), TFBlocks.TIME_DRYING_RACK.get(),
 		TFBlocks.TRANSFORMATION_DRYING_RACK.get(), TFBlocks.MINING_DRYING_RACK.get(),
