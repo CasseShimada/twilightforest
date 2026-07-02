@@ -45,7 +45,7 @@ public class RedThreadRenderer implements BlockEntityRenderer<RedThreadBlockEnti
 		renderState.state = blockEntity.getBlockState();
 		renderState.level = blockEntity.getLevel();
 		renderState.pos = blockEntity.getBlockPos();
-		renderState.glow = Minecraft.getInstance().player != null && Minecraft.getInstance().player.isHolding(TFBlocks.RED_THREAD.get().asItem());
+		renderState.glow = Minecraft.getInstance().player != null && Minecraft.getInstance().player.isHolding(TFBlocks.RED_THREAD.asItem());
 	}
 
 	@Override
@@ -86,12 +86,12 @@ public class RedThreadRenderer implements BlockEntityRenderer<RedThreadBlockEnti
 			boolean connected = blockState.getValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction));
 			if (!connected && level != null && pos != null) {
 				BlockState sideState = level.getBlockState(pos.relative(direction));
-				connected = sideState.getBlock().equals(TFBlocks.RED_THREAD.get()) && sideState.getValue(PipeBlock.PROPERTY_BY_DIRECTION.get(face));
+				connected = sideState.getBlock().equals(TFBlocks.RED_THREAD) && sideState.getValue(PipeBlock.PROPERTY_BY_DIRECTION.get(face));
 
 				if (!connected) {
 					sideState = level.getBlockState(pos.relative(direction).relative(face));
 					boolean threadBlocked = level.getBlockState(pos.relative(direction)).isFaceSturdy(level, pos, direction.getOpposite());
-					connected = sideState.is(TFBlocks.RED_THREAD.get()) && !threadBlocked && sideState.getValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction.getOpposite()));
+					connected = sideState.is(TFBlocks.RED_THREAD) && !threadBlocked && sideState.getValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction.getOpposite()));
 				}
 			}
 

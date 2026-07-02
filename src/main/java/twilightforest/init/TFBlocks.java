@@ -169,7 +169,7 @@ public class TFBlocks {
 	public static final DeferredBlock<Block> MOSSY_MAZESTONE = registerWithItem("mossy_mazestone", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(MAZESTONE.get()));
 	public static final DeferredBlock<Block> MAZESTONE_MOSAIC = registerWithItem("mazestone_mosaic", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(MAZESTONE.get()));
 	public static final DeferredBlock<Block> MAZESTONE_BORDER = registerWithItem("mazestone_border", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(MAZESTONE.get()));
-	public static final DeferredBlock<Block> RED_THREAD = registerWithItem("red_thread", RedThreadBlock::new, () -> BlockBehaviour.Properties.of().instabreak().mapColor(MapColor.FIRE).isValidSpawn(TFBlocks::noSpawning).noCollision().noOcclusion().noTerrainParticles().pushReaction(PushReaction.DESTROY));
+	public static final RedThreadBlock RED_THREAD = registerDirectWithItem("red_thread", RedThreadBlock::new, () -> BlockBehaviour.Properties.of().instabreak().mapColor(MapColor.FIRE).isValidSpawn(TFBlocks::noSpawning).noCollision().noOcclusion().noTerrainParticles().pushReaction(PushReaction.DESTROY));
 	public static final MazeSlimeBlock MAZE_SLIME_BLOCK = registerDirectWithItem("maze_slime_block", MazeSlimeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SLIME_BLOCK).mapColor(MapColor.STONE));
 
 	//stronghold
