@@ -39,7 +39,7 @@ public class TransformationPowderCategory implements IRecipeCategory<Transformat
 		this.background = helper.createDrawable(location, 0, 0, RecipeViewerConstants.GENERIC_RECIPE_WIDTH, RecipeViewerConstants.GENERIC_RECIPE_HEIGHT);
 		this.arrow = helper.createDrawable(location, 116, 0, 23, 15);
 		this.doubleArrow = helper.createDrawable(location, 116, 16, 23, 15);
-		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, TFItems.TRANSFORMATION_POWDER.get().getDefaultInstance());
+		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, TFItems.TRANSFORMATION_POWDER.getDefaultInstance());
 		this.localizedName = Component.translatable("gui.twilightforest.transformation_jei");
 	}
 

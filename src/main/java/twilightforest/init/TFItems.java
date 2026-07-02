@@ -98,7 +98,7 @@ public class TFItems {
 	public static final DeferredItem<Item> GOLDEN_MINOTAUR_AXE = register("gold_minotaur_axe", properties -> new MinotaurAxeItem(ToolMaterial.GOLD, properties), Item.Properties::new);
 	public static final DeferredItem<Item> DIAMOND_MINOTAUR_AXE = register("diamond_minotaur_axe", properties -> new MinotaurAxeItem(ToolMaterial.DIAMOND, properties), () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> MAZEBREAKER_PICKAXE = register("mazebreaker_pickaxe", properties -> new MazebreakerPickItem(ToolMaterial.DIAMOND, properties), () -> new Item.Properties().rarity(Rarity.RARE));
-	public static final DeferredItem<Item> TRANSFORMATION_POWDER = register("transformation_powder", TransformPowderItem::new, Item.Properties::new);
+	public static final Item TRANSFORMATION_POWDER = registerDirect("transformation_powder", TransformPowderItem::new, Item.Properties::new);
 	public static final Item RAW_MEEF = registerDirect("raw_meef", Item::new, () -> new Item.Properties().food(TFFoods.RAW_MEEF));
 	public static final Item COOKED_MEEF = registerDirect("cooked_meef", Item::new, () -> new Item.Properties().food(TFFoods.MEEF_STEAK));
 	public static final Item MEEF_STROGANOFF = registerDirect("meef_stroganoff", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).fireResistant().food(TFFoods.MEEF_STROGANOFF).usingConvertsTo(Items.BOWL));
