@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.EntityType;
@@ -38,7 +39,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class TFBlocks {
-	public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(TwilightForestMod.ID);
+	private static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(TwilightForestMod.ID);
 	private static final float LEAF_PARTICLE_CHANCE = 0.01F;
 
 	public static final DeferredBlock<TFPortalBlock> TWILIGHT_PORTAL = register("twilight_portal", TFPortalBlock::new, () -> BlockBehaviour.Properties.of().pushReaction(PushReaction.BLOCK).strength(-1.0F).sound(SoundType.GLASS).lightLevel((state) -> 11).noCollision().noOcclusion().noLootTable());
@@ -667,6 +668,14 @@ public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CL
 
 	public static <T extends Block> DeferredBlock<T> register(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
 		return BLOCKS.register(name, () -> block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, TwilightForestMod.prefix(name)))));
+	}
+
+	public static void addAlias(Identifier from, Identifier to) {
+		BLOCKS.addAlias(from, to);
+	}
+
+	public static void register() {
+		BLOCKS.register();
 	}
 
 	public static <T extends Block> DeferredBlock<T> registerCustomID(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties, String id) {
