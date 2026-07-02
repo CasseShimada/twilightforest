@@ -22,7 +22,7 @@ public class RedcapSapper extends Redcap {
 	@Override
 	protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
 		super.populateDefaultEquipmentSlots(random, difficulty);
-		this.setItemSlot(EquipmentSlot.FEET, new ItemStack(TFItems.IRONWOOD_BOOTS.get()));
+		this.setItemSlot(EquipmentSlot.FEET, new ItemStack(TFItems.IRONWOOD_BOOTS));
 	}
 
 	@Override

@@ -40,8 +40,8 @@ public class TFItems {
 	private static boolean registered;
 
 	public static final Item NAGA_SCALE = registerDirect("naga_scale", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> NAGA_CHESTPLATE = register("naga_chestplate", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.NAGA, ArmorType.CHESTPLATE)), () -> new Item.Properties().durability(ArmorType.CHESTPLATE.getDurability(21)).rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> NAGA_LEGGINGS = register("naga_leggings", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.NAGA, ArmorType.LEGGINGS)), () -> new Item.Properties().durability(ArmorType.LEGGINGS.getDurability(21)).rarity(Rarity.UNCOMMON));
+	public static final Item NAGA_CHESTPLATE = registerDirect("naga_chestplate", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.NAGA, ArmorType.CHESTPLATE)), () -> new Item.Properties().durability(ArmorType.CHESTPLATE.getDurability(21)).rarity(Rarity.UNCOMMON));
+	public static final Item NAGA_LEGGINGS = registerDirect("naga_leggings", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.NAGA, ArmorType.LEGGINGS)), () -> new Item.Properties().durability(ArmorType.LEGGINGS.getDurability(21)).rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> TWILIGHT_SCEPTER = register("twilight_scepter", TwilightWandItem::new, () -> new Item.Properties().durability(99).rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> LIFEDRAIN_SCEPTER = register("lifedrain_scepter", LifedrainScepterItem::new, () -> new Item.Properties().durability(99).rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> ZOMBIE_SCEPTER = register("zombie_scepter", ZombieWandItem::new, () -> new Item.Properties().durability(9).rarity(Rarity.UNCOMMON));
@@ -63,10 +63,10 @@ public class TFItems {
 	public static final Item LIVEROOT = registerDirect("liveroot", Item::new, Item.Properties::new);
 	public static final Item RAW_IRONWOOD = registerDirect("raw_ironwood", Item::new, Item.Properties::new);
 	public static final Item IRONWOOD_INGOT = registerDirect("ironwood_ingot", Item::new, Item.Properties::new);
-	public static final DeferredItem<Item> IRONWOOD_HELMET = register("ironwood_helmet", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.IRONWOOD, ArmorType.HELMET)), () -> new Item.Properties().durability(ArmorType.HELMET.getDurability(20)));
-	public static final DeferredItem<Item> IRONWOOD_CHESTPLATE = register("ironwood_chestplate", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.IRONWOOD, ArmorType.CHESTPLATE)), () -> new Item.Properties().durability(ArmorType.CHESTPLATE.getDurability(20)));
-	public static final DeferredItem<Item> IRONWOOD_LEGGINGS = register("ironwood_leggings", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.IRONWOOD, ArmorType.LEGGINGS)), () -> new Item.Properties().durability(ArmorType.LEGGINGS.getDurability(20)));
-	public static final DeferredItem<Item> IRONWOOD_BOOTS = register("ironwood_boots", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.IRONWOOD, ArmorType.BOOTS)), () -> new Item.Properties().durability(ArmorType.BOOTS.getDurability(20)));
+	public static final Item IRONWOOD_HELMET = registerDirect("ironwood_helmet", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.IRONWOOD, ArmorType.HELMET)), () -> new Item.Properties().durability(ArmorType.HELMET.getDurability(20)));
+	public static final Item IRONWOOD_CHESTPLATE = registerDirect("ironwood_chestplate", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.IRONWOOD, ArmorType.CHESTPLATE)), () -> new Item.Properties().durability(ArmorType.CHESTPLATE.getDurability(20)));
+	public static final Item IRONWOOD_LEGGINGS = registerDirect("ironwood_leggings", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.IRONWOOD, ArmorType.LEGGINGS)), () -> new Item.Properties().durability(ArmorType.LEGGINGS.getDurability(20)));
+	public static final Item IRONWOOD_BOOTS = registerDirect("ironwood_boots", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.IRONWOOD, ArmorType.BOOTS)), () -> new Item.Properties().durability(ArmorType.BOOTS.getDurability(20)));
 	public static final DeferredItem<Item> IRONWOOD_SWORD = register("ironwood_sword", properties -> new Item(properties.sword(TFToolMaterials.IRONWOOD, 3.0F, -2.4F)), Item.Properties::new);
 	public static final DeferredItem<Item> IRONWOOD_SHOVEL = register("ironwood_shovel", properties -> new ShovelItem(TFToolMaterials.IRONWOOD, 1.5F, -3.0F, properties), Item.Properties::new);
 	public static final DeferredItem<Item> IRONWOOD_PICKAXE = register("ironwood_pickaxe", properties -> new Item(properties.pickaxe(TFToolMaterials.IRONWOOD, 1.0F, -2.8F)), Item.Properties::new);
@@ -86,10 +86,10 @@ public class TFItems {
 	public static final DeferredItem<Item> FIERY_SWORD = register("fiery_sword", properties -> new FierySwordItem(TFToolMaterials.FIERY, properties), () -> new Item.Properties().fireResistant().rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> FIERY_PICKAXE = register("fiery_pickaxe", properties -> new FieryPickItem(TFToolMaterials.FIERY, properties), () -> new Item.Properties().fireResistant().rarity(Rarity.UNCOMMON));
 	public static final Item STEELEAF_INGOT = registerDirect("steeleaf_ingot", Item::new, Item.Properties::new);
-	public static final DeferredItem<Item> STEELEAF_HELMET = register("steeleaf_helmet", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.STEELEAF, ArmorType.HELMET)), Item.Properties::new);
-	public static final DeferredItem<Item> STEELEAF_CHESTPLATE = register("steeleaf_chestplate", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.STEELEAF, ArmorType.CHESTPLATE)), Item.Properties::new);
-	public static final DeferredItem<Item> STEELEAF_LEGGINGS = register("steeleaf_leggings", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.STEELEAF, ArmorType.LEGGINGS)), Item.Properties::new);
-	public static final DeferredItem<Item> STEELEAF_BOOTS = register("steeleaf_boots", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.STEELEAF, ArmorType.BOOTS)), Item.Properties::new);
+	public static final Item STEELEAF_HELMET = registerDirect("steeleaf_helmet", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.STEELEAF, ArmorType.HELMET)), Item.Properties::new);
+	public static final Item STEELEAF_CHESTPLATE = registerDirect("steeleaf_chestplate", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.STEELEAF, ArmorType.CHESTPLATE)), Item.Properties::new);
+	public static final Item STEELEAF_LEGGINGS = registerDirect("steeleaf_leggings", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.STEELEAF, ArmorType.LEGGINGS)), Item.Properties::new);
+	public static final Item STEELEAF_BOOTS = registerDirect("steeleaf_boots", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.STEELEAF, ArmorType.BOOTS)), Item.Properties::new);
 	public static final DeferredItem<Item> STEELEAF_SWORD = register("steeleaf_sword", properties -> new Item(properties.sword(TFToolMaterials.STEELEAF, 3.0F, -2.4F)), Item.Properties::new);
 	public static final DeferredItem<Item> STEELEAF_SHOVEL = register("steeleaf_shovel", properties -> new ShovelItem(TFToolMaterials.STEELEAF, 1.5F, -3.0F, properties), Item.Properties::new);
 	public static final DeferredItem<Item> STEELEAF_PICKAXE = register("steeleaf_pickaxe", properties -> new Item(properties.pickaxe(TFToolMaterials.STEELEAF, 1.0F, -2.8F)), Item.Properties::new);
@@ -125,10 +125,10 @@ public class TFItems {
 	public static final Item ARMOR_SHARD = registerDirect("armor_shard", Item::new, Item.Properties::new);
 	public static final Item ARMOR_SHARD_CLUSTER = registerDirect("armor_shard_cluster", Item::new, Item.Properties::new);
 	public static final Item KNIGHTMETAL_INGOT = registerDirect("knightmetal_ingot", Item::new, Item.Properties::new);
-	public static final DeferredItem<Item> KNIGHTMETAL_HELMET = register("knightmetal_helmet", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.KNIGHTMETAL, ArmorType.HELMET)), Item.Properties::new);
-	public static final DeferredItem<Item> KNIGHTMETAL_CHESTPLATE = register("knightmetal_chestplate", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.KNIGHTMETAL, ArmorType.CHESTPLATE)), Item.Properties::new);
-	public static final DeferredItem<Item> KNIGHTMETAL_LEGGINGS = register("knightmetal_leggings", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.KNIGHTMETAL, ArmorType.LEGGINGS)), Item.Properties::new);
-	public static final DeferredItem<Item> KNIGHTMETAL_BOOTS = register("knightmetal_boots", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.KNIGHTMETAL, ArmorType.BOOTS)), Item.Properties::new);
+	public static final Item KNIGHTMETAL_HELMET = registerDirect("knightmetal_helmet", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.KNIGHTMETAL, ArmorType.HELMET)), Item.Properties::new);
+	public static final Item KNIGHTMETAL_CHESTPLATE = registerDirect("knightmetal_chestplate", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.KNIGHTMETAL, ArmorType.CHESTPLATE)), Item.Properties::new);
+	public static final Item KNIGHTMETAL_LEGGINGS = registerDirect("knightmetal_leggings", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.KNIGHTMETAL, ArmorType.LEGGINGS)), Item.Properties::new);
+	public static final Item KNIGHTMETAL_BOOTS = registerDirect("knightmetal_boots", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.KNIGHTMETAL, ArmorType.BOOTS)), Item.Properties::new);
 	public static final DeferredItem<Item> KNIGHTMETAL_SWORD = register("knightmetal_sword", properties -> new KnightmetalSwordItem(TFToolMaterials.KNIGHTMETAL, properties), Item.Properties::new);
 	public static final DeferredItem<Item> KNIGHTMETAL_PICKAXE = register("knightmetal_pickaxe", properties -> new KnightmetalPickItem(TFToolMaterials.KNIGHTMETAL, properties), Item.Properties::new);
 	public static final DeferredItem<Item> KNIGHTMETAL_AXE = register("knightmetal_axe", properties -> new KnightmetalAxeItem(TFToolMaterials.KNIGHTMETAL, properties), Item.Properties::new);
