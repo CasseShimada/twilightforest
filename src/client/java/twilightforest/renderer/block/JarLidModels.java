@@ -59,7 +59,7 @@ public final class JarLidModels {
 		lid(Items.STRIPPED_SPRUCE_LOG, "stripped_spruce_log"),
 		lid(Items.STRIPPED_CRIMSON_STEM, "stripped_crimson_stem"),
 		lid(Items.STRIPPED_WARPED_STEM, "stripped_warped_stem"),
-		lid(TFBlocks.CINDER_LOG.get().asItem(), "cinder_log"),
+		lid(TFBlocks.CINDER_LOG.asItem(), "cinder_log"),
 		lid(Items.PUMPKIN, "pumpkin"),
 		lid(Items.BAMBOO_BLOCK, "bamboo_block"),
 		lid(Items.STRIPPED_BAMBOO_BLOCK, "stripped_bamboo_block")
