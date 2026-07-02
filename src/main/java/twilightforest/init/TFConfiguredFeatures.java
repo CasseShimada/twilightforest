@@ -243,55 +243,55 @@ public final class TFConfiguredFeatures {
 
 	public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
 		HolderGetter<ConfiguredFeature<?, ?>> features = context.lookup(Registries.CONFIGURED_FEATURE);
-		context.register(LAKE_LAVA, new ConfiguredFeature<>(TFFeatures.SMALL_LAKE.get(), new TFSmallLakeFeature.Configuration(BlockStateProvider.simple(Blocks.LAVA), BlockStateProvider.simple(Blocks.STONE), null)));
-		context.register(LAKE_WATER, new ConfiguredFeature<>(TFFeatures.SMALL_LAKE.get(), new TFSmallLakeFeature.Configuration(BlockStateProvider.simple(Blocks.WATER), null, null)));
-		context.register(LAKE_FROZEN, new ConfiguredFeature<>(TFFeatures.SMALL_LAKE.get(), new TFSmallLakeFeature.Configuration(BlockStateProvider.simple(Blocks.WATER), null, BlockStateProvider.simple(Blocks.ICE))));
+		context.register(LAKE_LAVA, new ConfiguredFeature<>(TFFeatures.SMALL_LAKE, new TFSmallLakeFeature.Configuration(BlockStateProvider.simple(Blocks.LAVA), BlockStateProvider.simple(Blocks.STONE), null)));
+		context.register(LAKE_WATER, new ConfiguredFeature<>(TFFeatures.SMALL_LAKE, new TFSmallLakeFeature.Configuration(BlockStateProvider.simple(Blocks.WATER), null, null)));
+		context.register(LAKE_FROZEN, new ConfiguredFeature<>(TFFeatures.SMALL_LAKE, new TFSmallLakeFeature.Configuration(BlockStateProvider.simple(Blocks.WATER), null, BlockStateProvider.simple(Blocks.ICE))));
 
 		registerTemplateFeatures(context);
 
-		context.register(BIG_MUSHGLOOM, new ConfiguredFeature<>(TFFeatures.BIG_MUSHGLOOM.get(), new HugeMushroomFeatureConfiguration(BlockStateProvider.simple(TFBlocks.HUGE_MUSHGLOOM.get().defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.TRUE).setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), BlockStateProvider.simple(TFBlocks.HUGE_MUSHGLOOM_STEM.get().defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.FALSE).setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), 1, BlockPredicate.alwaysTrue())));
-		context.register(DENSE_FERNS, new ConfiguredFeature<>(TFFeatures.RANDOM_PATCH.get(), new RandomPatchConfiguration(64, 7, 3, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.FERN)), BlockPredicate.allOf(BlockPredicate.ONLY_IN_AIR_PREDICATE, BlockPredicate.matchesTag(Direction.DOWN.getUnitVec3i(), BlockTags.DIRT))))));
-		context.register(DENSE_LARGE_FERNS, new ConfiguredFeature<>(TFFeatures.RANDOM_PATCH.get(), new RandomPatchConfiguration(64, 7, 3, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.LARGE_FERN)), BlockPredicate.allOf(BlockPredicate.ONLY_IN_AIR_PREDICATE, BlockPredicate.matchesTag(Direction.DOWN.getUnitVec3i(), BlockTags.DIRT))))));
-		context.register(FALLEN_LEAVES, new ConfiguredFeature<>(TFFeatures.FALLEN_LEAVES.get(), FeatureConfiguration.NONE));
-		context.register(MAYAPPLE, new ConfiguredFeature<>(TFFeatures.RANDOM_PATCH.get(), simplePatchConfiguration(new SimpleBlockConfiguration(BlockStateProvider.simple(TFBlocks.MAYAPPLE.get())))));
-		context.register(FIDDLEHEAD, new ConfiguredFeature<>(TFFeatures.RANDOM_PATCH.get(), simplePatchConfiguration(new SimpleBlockConfiguration(BlockStateProvider.simple(TFBlocks.FIDDLEHEAD.get())))));
-		context.register(FIRE_JET, new ConfiguredFeature<>(TFFeatures.FIRE_JET.get(), new BlockStateConfiguration(TFBlocks.FIRE_JET.get().defaultBlockState())));
-		context.register(FOUNDATION, new ConfiguredFeature<>(TFFeatures.FOUNDATION.get(), RuinedFoundationConfig.withDefaultBlocks(false)));
-		context.register(GROVE_RUINS, new ConfiguredFeature<>(TFFeatures.GROVE_RUINS.get(), NoneFeatureConfiguration.NONE));
-		context.register(HOLLOW_LOG, new ConfiguredFeature<>(TFFeatures.FALLEN_HOLLOW_LOG.get(), NoneFeatureConfiguration.NONE));
-		context.register(HOLLOW_STUMP, new ConfiguredFeature<>(TFFeatures.HOLLOW_STUMP.get(), TreeConfigurations.HOLLOW_TREE));
-		context.register(HUGE_LILY_PAD, new ConfiguredFeature<>(TFFeatures.HUGE_LILY_PAD.get(), NoneFeatureConfiguration.NONE));
-		context.register(HUGE_WATER_LILY, new ConfiguredFeature<>(TFFeatures.HUGE_WATER_LILY.get(), NoneFeatureConfiguration.NONE));
-		context.register(CICADA_LAMPPOST, new ConfiguredFeature<>(TFFeatures.LAMPPOSTS.get(), new BlockStateConfiguration(TFBlocks.CICADA_JAR.get().defaultBlockState())));
-		context.register(FIREFLY_LAMPPOST, new ConfiguredFeature<>(TFFeatures.LAMPPOSTS.get(), new BlockStateConfiguration(TFBlocks.FIREFLY_JAR.get().defaultBlockState())));
-		context.register(MONOLITH, new ConfiguredFeature<>(TFFeatures.MONOLITH.get(), NoneFeatureConfiguration.NONE));
-		context.register(MUSHGLOOM_CLUSTER, new ConfiguredFeature<>(TFFeatures.RANDOM_PATCH.get(), simplePatchConfiguration(new SimpleBlockConfiguration(BlockStateProvider.simple(TFBlocks.MUSHGLOOM.get())))));
-		context.register(MYCELIUM_BLOB, new ConfiguredFeature<>(TFFeatures.MYCELIUM_BLOB.get(), new DiskConfiguration(BlockStateProvider.simple(Blocks.MYCELIUM), BlockPredicate.matchesBlocks(Blocks.GRASS_BLOCK), UniformInt.of(4, 6), 3)));
-		context.register(OUTSIDE_STALAGMITE, new ConfiguredFeature<>(TFFeatures.CAVE_STALACTITE.get(), NoneFeatureConfiguration.NONE));
-		context.register(PLANT_ROOTS, new ConfiguredFeature<>(TFFeatures.UNDERGROUND_PLANTS.get(), new BlockStateConfiguration(TFBlocks.ROOT_STRAND.get().defaultBlockState())));
-		context.register(PUMPKIN_LAMPPOST, new ConfiguredFeature<>(TFFeatures.LAMPPOSTS.get(), new BlockStateConfiguration(Blocks.JACK_O_LANTERN.defaultBlockState())));
-		context.register(SMOKER, new ConfiguredFeature<>(TFFeatures.FIRE_JET.get(), new BlockStateConfiguration(TFBlocks.SMOKER.get().defaultBlockState())));
-		context.register(STONE_CIRCLE, new ConfiguredFeature<>(TFFeatures.STONE_CIRCLE.get(), NoneFeatureConfiguration.NONE));
-		context.register(THORNS, new ConfiguredFeature<>(TFFeatures.THORNS.get(), new ThornsConfig(7, 3, 3, 50)));
-		context.register(TORCH_BERRIES, new ConfiguredFeature<>(TFFeatures.UNDERGROUND_PLANTS.get(), new BlockStateConfiguration(TFBlocks.TORCHBERRY_PLANT.get().defaultBlockState().setValue(TorchberryPlantBlock.HAS_BERRIES, true))));
-		context.register(TROLL_ROOTS, new ConfiguredFeature<>(TFFeatures.TROLL_VINES.get(), new BlockStateConfiguration(TFBlocks.TROLLVIDR.get().defaultBlockState())));
-		context.register(TROLL_BIG_MUSHGLOOMS, new ConfiguredFeature<>(TFFeatures.TROLL_BIG_MUSHGLOOM.get(), new HugeMushroomFeatureConfiguration(BlockStateProvider.simple(TFBlocks.HUGE_MUSHGLOOM.get().defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.TRUE).setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), BlockStateProvider.simple(TFBlocks.HUGE_MUSHGLOOM_STEM.get().defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.FALSE).setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), 1, BlockPredicate.alwaysTrue())));
-		context.register(TROLL_HUGE_RED_MUSHROOMS, new ConfiguredFeature<>(TFFeatures.TROLL_HUGE_RED_MUSHROOM.get(), new HugeMushroomFeatureConfiguration(BlockStateProvider.simple(Blocks.RED_MUSHROOM_BLOCK.defaultBlockState().setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), BlockStateProvider.simple(Blocks.MUSHROOM_STEM.defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.FALSE).setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), 2, BlockPredicate.alwaysTrue())));
-		context.register(TROLL_HUGE_BROWN_MUSHROOMS, new ConfiguredFeature<>(TFFeatures.TROLL_HUGE_BROWN_MUSHROOM.get(), new HugeMushroomFeatureConfiguration(BlockStateProvider.simple(Blocks.BROWN_MUSHROOM_BLOCK.defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.TRUE).setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), BlockStateProvider.simple(Blocks.MUSHROOM_STEM.defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.FALSE).setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), 3, BlockPredicate.alwaysTrue())));
-		context.register(TROLL_MUSHGLOOMS, new ConfiguredFeature<>(TFFeatures.UNDERGROUND_PLANTS.get(), new BlockStateConfiguration(TFBlocks.MUSHGLOOM.get().defaultBlockState())));
-		context.register(VANILLA_ROOTS, new ConfiguredFeature<>(TFFeatures.UNDERGROUND_PLANTS.get(), new BlockStateConfiguration(Blocks.HANGING_ROOTS.defaultBlockState())));
-		context.register(WEBS, new ConfiguredFeature<>(TFFeatures.WEBS.get(), NoneFeatureConfiguration.NONE));
-		context.register(WOOD_ROOTS_SPREAD, new ConfiguredFeature<>(TFFeatures.WOOD_ROOTS.get(), new RootConfig(TreeDecorators.ROOT_BLEND_PROVIDER, BlockStateProvider.simple(TFBlocks.LIVEROOT_BLOCK.get()))));
-		context.register(SNOW_UNDER_TREES, new ConfiguredFeature<>(TFFeatures.SNOW_UNDER_TREES.get(), NoneFeatureConfiguration.NONE));
-		context.register(ENCHANTED_FOREST_VINES, new ConfiguredFeature<>(TFFeatures.ENCHANTED_FOREST_VINES.get(), NoneFeatureConfiguration.NONE));
+		context.register(BIG_MUSHGLOOM, new ConfiguredFeature<>(TFFeatures.BIG_MUSHGLOOM, new HugeMushroomFeatureConfiguration(BlockStateProvider.simple(TFBlocks.HUGE_MUSHGLOOM.get().defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.TRUE).setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), BlockStateProvider.simple(TFBlocks.HUGE_MUSHGLOOM_STEM.get().defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.FALSE).setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), 1, BlockPredicate.alwaysTrue())));
+		context.register(DENSE_FERNS, new ConfiguredFeature<>(TFFeatures.RANDOM_PATCH, new RandomPatchConfiguration(64, 7, 3, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.FERN)), BlockPredicate.allOf(BlockPredicate.ONLY_IN_AIR_PREDICATE, BlockPredicate.matchesTag(Direction.DOWN.getUnitVec3i(), BlockTags.DIRT))))));
+		context.register(DENSE_LARGE_FERNS, new ConfiguredFeature<>(TFFeatures.RANDOM_PATCH, new RandomPatchConfiguration(64, 7, 3, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.LARGE_FERN)), BlockPredicate.allOf(BlockPredicate.ONLY_IN_AIR_PREDICATE, BlockPredicate.matchesTag(Direction.DOWN.getUnitVec3i(), BlockTags.DIRT))))));
+		context.register(FALLEN_LEAVES, new ConfiguredFeature<>(TFFeatures.FALLEN_LEAVES, FeatureConfiguration.NONE));
+		context.register(MAYAPPLE, new ConfiguredFeature<>(TFFeatures.RANDOM_PATCH, simplePatchConfiguration(new SimpleBlockConfiguration(BlockStateProvider.simple(TFBlocks.MAYAPPLE.get())))));
+		context.register(FIDDLEHEAD, new ConfiguredFeature<>(TFFeatures.RANDOM_PATCH, simplePatchConfiguration(new SimpleBlockConfiguration(BlockStateProvider.simple(TFBlocks.FIDDLEHEAD.get())))));
+		context.register(FIRE_JET, new ConfiguredFeature<>(TFFeatures.FIRE_JET, new BlockStateConfiguration(TFBlocks.FIRE_JET.get().defaultBlockState())));
+		context.register(FOUNDATION, new ConfiguredFeature<>(TFFeatures.FOUNDATION, RuinedFoundationConfig.withDefaultBlocks(false)));
+		context.register(GROVE_RUINS, new ConfiguredFeature<>(TFFeatures.GROVE_RUINS, NoneFeatureConfiguration.NONE));
+		context.register(HOLLOW_LOG, new ConfiguredFeature<>(TFFeatures.FALLEN_HOLLOW_LOG, NoneFeatureConfiguration.NONE));
+		context.register(HOLLOW_STUMP, new ConfiguredFeature<>(TFFeatures.HOLLOW_STUMP, TreeConfigurations.HOLLOW_TREE));
+		context.register(HUGE_LILY_PAD, new ConfiguredFeature<>(TFFeatures.HUGE_LILY_PAD, NoneFeatureConfiguration.NONE));
+		context.register(HUGE_WATER_LILY, new ConfiguredFeature<>(TFFeatures.HUGE_WATER_LILY, NoneFeatureConfiguration.NONE));
+		context.register(CICADA_LAMPPOST, new ConfiguredFeature<>(TFFeatures.LAMPPOSTS, new BlockStateConfiguration(TFBlocks.CICADA_JAR.get().defaultBlockState())));
+		context.register(FIREFLY_LAMPPOST, new ConfiguredFeature<>(TFFeatures.LAMPPOSTS, new BlockStateConfiguration(TFBlocks.FIREFLY_JAR.get().defaultBlockState())));
+		context.register(MONOLITH, new ConfiguredFeature<>(TFFeatures.MONOLITH, NoneFeatureConfiguration.NONE));
+		context.register(MUSHGLOOM_CLUSTER, new ConfiguredFeature<>(TFFeatures.RANDOM_PATCH, simplePatchConfiguration(new SimpleBlockConfiguration(BlockStateProvider.simple(TFBlocks.MUSHGLOOM.get())))));
+		context.register(MYCELIUM_BLOB, new ConfiguredFeature<>(TFFeatures.MYCELIUM_BLOB, new DiskConfiguration(BlockStateProvider.simple(Blocks.MYCELIUM), BlockPredicate.matchesBlocks(Blocks.GRASS_BLOCK), UniformInt.of(4, 6), 3)));
+		context.register(OUTSIDE_STALAGMITE, new ConfiguredFeature<>(TFFeatures.CAVE_STALACTITE, NoneFeatureConfiguration.NONE));
+		context.register(PLANT_ROOTS, new ConfiguredFeature<>(TFFeatures.UNDERGROUND_PLANTS, new BlockStateConfiguration(TFBlocks.ROOT_STRAND.get().defaultBlockState())));
+		context.register(PUMPKIN_LAMPPOST, new ConfiguredFeature<>(TFFeatures.LAMPPOSTS, new BlockStateConfiguration(Blocks.JACK_O_LANTERN.defaultBlockState())));
+		context.register(SMOKER, new ConfiguredFeature<>(TFFeatures.FIRE_JET, new BlockStateConfiguration(TFBlocks.SMOKER.get().defaultBlockState())));
+		context.register(STONE_CIRCLE, new ConfiguredFeature<>(TFFeatures.STONE_CIRCLE, NoneFeatureConfiguration.NONE));
+		context.register(THORNS, new ConfiguredFeature<>(TFFeatures.THORNS, new ThornsConfig(7, 3, 3, 50)));
+		context.register(TORCH_BERRIES, new ConfiguredFeature<>(TFFeatures.UNDERGROUND_PLANTS, new BlockStateConfiguration(TFBlocks.TORCHBERRY_PLANT.get().defaultBlockState().setValue(TorchberryPlantBlock.HAS_BERRIES, true))));
+		context.register(TROLL_ROOTS, new ConfiguredFeature<>(TFFeatures.TROLL_VINES, new BlockStateConfiguration(TFBlocks.TROLLVIDR.get().defaultBlockState())));
+		context.register(TROLL_BIG_MUSHGLOOMS, new ConfiguredFeature<>(TFFeatures.TROLL_BIG_MUSHGLOOM, new HugeMushroomFeatureConfiguration(BlockStateProvider.simple(TFBlocks.HUGE_MUSHGLOOM.get().defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.TRUE).setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), BlockStateProvider.simple(TFBlocks.HUGE_MUSHGLOOM_STEM.get().defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.FALSE).setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), 1, BlockPredicate.alwaysTrue())));
+		context.register(TROLL_HUGE_RED_MUSHROOMS, new ConfiguredFeature<>(TFFeatures.TROLL_HUGE_RED_MUSHROOM, new HugeMushroomFeatureConfiguration(BlockStateProvider.simple(Blocks.RED_MUSHROOM_BLOCK.defaultBlockState().setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), BlockStateProvider.simple(Blocks.MUSHROOM_STEM.defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.FALSE).setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), 2, BlockPredicate.alwaysTrue())));
+		context.register(TROLL_HUGE_BROWN_MUSHROOMS, new ConfiguredFeature<>(TFFeatures.TROLL_HUGE_BROWN_MUSHROOM, new HugeMushroomFeatureConfiguration(BlockStateProvider.simple(Blocks.BROWN_MUSHROOM_BLOCK.defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.TRUE).setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), BlockStateProvider.simple(Blocks.MUSHROOM_STEM.defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.FALSE).setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), 3, BlockPredicate.alwaysTrue())));
+		context.register(TROLL_MUSHGLOOMS, new ConfiguredFeature<>(TFFeatures.UNDERGROUND_PLANTS, new BlockStateConfiguration(TFBlocks.MUSHGLOOM.get().defaultBlockState())));
+		context.register(VANILLA_ROOTS, new ConfiguredFeature<>(TFFeatures.UNDERGROUND_PLANTS, new BlockStateConfiguration(Blocks.HANGING_ROOTS.defaultBlockState())));
+		context.register(WEBS, new ConfiguredFeature<>(TFFeatures.WEBS, NoneFeatureConfiguration.NONE));
+		context.register(WOOD_ROOTS_SPREAD, new ConfiguredFeature<>(TFFeatures.WOOD_ROOTS, new RootConfig(TreeDecorators.ROOT_BLEND_PROVIDER, BlockStateProvider.simple(TFBlocks.LIVEROOT_BLOCK.get()))));
+		context.register(SNOW_UNDER_TREES, new ConfiguredFeature<>(TFFeatures.SNOW_UNDER_TREES, NoneFeatureConfiguration.NONE));
+		context.register(ENCHANTED_FOREST_VINES, new ConfiguredFeature<>(TFFeatures.ENCHANTED_FOREST_VINES, NoneFeatureConfiguration.NONE));
 		context.register(OAK_BUSH, new ConfiguredFeature<>(Feature.TREE, TreeConfigurations.OAK_BUSH));
 
-		context.register(TF_OAK_FALLEN_LOG, new ConfiguredFeature<>(TFFeatures.FALLEN_SMALL_LOG.get(), new HollowLogConfig(TFBlocks.TWILIGHT_OAK_LOG.get().defaultBlockState(), TFBlocks.HOLLOW_TWILIGHT_OAK_LOG_HORIZONTAL.get().defaultBlockState())));
-		context.register(CANOPY_FALLEN_LOG, new ConfiguredFeature<>(TFFeatures.FALLEN_SMALL_LOG.get(), new HollowLogConfig(TFBlocks.CANOPY_LOG.get().defaultBlockState(), TFBlocks.HOLLOW_CANOPY_LOG_HORIZONTAL.get().defaultBlockState())));
-		context.register(MANGROVE_FALLEN_LOG, new ConfiguredFeature<>(TFFeatures.FALLEN_SMALL_LOG.get(), new HollowLogConfig(TFBlocks.MANGROVE_LOG.get().defaultBlockState(), TFBlocks.HOLLOW_MANGROVE_LOG_HORIZONTAL.get().defaultBlockState())));
-		context.register(OAK_FALLEN_LOG, new ConfiguredFeature<>(TFFeatures.FALLEN_SMALL_LOG.get(), new HollowLogConfig(Blocks.OAK_LOG.defaultBlockState(), TFBlocks.HOLLOW_OAK_LOG_HORIZONTAL.get().defaultBlockState())));
-		context.register(SPRUCE_FALLEN_LOG, new ConfiguredFeature<>(TFFeatures.FALLEN_SMALL_LOG.get(), new HollowLogConfig(Blocks.SPRUCE_LOG.defaultBlockState(), TFBlocks.HOLLOW_SPRUCE_LOG_HORIZONTAL.get().defaultBlockState())));
-		context.register(BIRCH_FALLEN_LOG, new ConfiguredFeature<>(TFFeatures.FALLEN_SMALL_LOG.get(), new HollowLogConfig(Blocks.BIRCH_LOG.defaultBlockState(), TFBlocks.HOLLOW_BIRCH_LOG_HORIZONTAL.get().defaultBlockState())));
+		context.register(TF_OAK_FALLEN_LOG, new ConfiguredFeature<>(TFFeatures.FALLEN_SMALL_LOG, new HollowLogConfig(TFBlocks.TWILIGHT_OAK_LOG.get().defaultBlockState(), TFBlocks.HOLLOW_TWILIGHT_OAK_LOG_HORIZONTAL.get().defaultBlockState())));
+		context.register(CANOPY_FALLEN_LOG, new ConfiguredFeature<>(TFFeatures.FALLEN_SMALL_LOG, new HollowLogConfig(TFBlocks.CANOPY_LOG.get().defaultBlockState(), TFBlocks.HOLLOW_CANOPY_LOG_HORIZONTAL.get().defaultBlockState())));
+		context.register(MANGROVE_FALLEN_LOG, new ConfiguredFeature<>(TFFeatures.FALLEN_SMALL_LOG, new HollowLogConfig(TFBlocks.MANGROVE_LOG.get().defaultBlockState(), TFBlocks.HOLLOW_MANGROVE_LOG_HORIZONTAL.get().defaultBlockState())));
+		context.register(OAK_FALLEN_LOG, new ConfiguredFeature<>(TFFeatures.FALLEN_SMALL_LOG, new HollowLogConfig(Blocks.OAK_LOG.defaultBlockState(), TFBlocks.HOLLOW_OAK_LOG_HORIZONTAL.get().defaultBlockState())));
+		context.register(SPRUCE_FALLEN_LOG, new ConfiguredFeature<>(TFFeatures.FALLEN_SMALL_LOG, new HollowLogConfig(Blocks.SPRUCE_LOG.defaultBlockState(), TFBlocks.HOLLOW_SPRUCE_LOG_HORIZONTAL.get().defaultBlockState())));
+		context.register(BIRCH_FALLEN_LOG, new ConfiguredFeature<>(TFFeatures.FALLEN_SMALL_LOG, new HollowLogConfig(Blocks.BIRCH_LOG.defaultBlockState(), TFBlocks.HOLLOW_BIRCH_LOG_HORIZONTAL.get().defaultBlockState())));
 
 		context.register(SMALL_GRANITE, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES), Blocks.GRANITE.defaultBlockState(), 16)));
 		context.register(SMALL_DIORITE, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES), Blocks.DIORITE.defaultBlockState(), 16)));
@@ -305,47 +305,47 @@ public final class TFConfiguredFeatures {
 		context.register(LEGACY_LAPIS_ORE, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES), Blocks.LAPIS_ORE.defaultBlockState(), 7)));
 		context.register(LEGACY_COPPER_ORE, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES), Blocks.COPPER_ORE.defaultBlockState(), 10)));
 
-		context.register(DARK_PUMPKINS, new ConfiguredFeature<>(TFFeatures.DARK_FOREST_PLACER.get(),  new RandomPatchConfiguration(50, 7, 3, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.PUMPKIN)), BlockPredicate.allOf(BlockPredicate.replaceable(), BlockPredicate.matchesTag(Direction.DOWN.getUnitVec3i(), BlockTags.DIRT))))));
-		context.register(DARK_GRASS, new ConfiguredFeature<>(TFFeatures.DARK_FOREST_PLACER.get(), new RandomPatchConfiguration(64, 7, 3, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.SHORT_GRASS)), BlockPredicate.allOf(BlockPredicate.ONLY_IN_AIR_PREDICATE, BlockPredicate.matchesTag(Direction.DOWN.getUnitVec3i(), BlockTags.DIRT)))))); // [VanillaCopy] Registration of PATCH_GRASS_JUNGLE in VegetationFeatures
-		context.register(DARK_FERNS, new ConfiguredFeature<>(TFFeatures.DARK_FOREST_PLACER.get(),  new RandomPatchConfiguration(64, 7, 3, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.FERN)), BlockPredicate.allOf(BlockPredicate.ONLY_IN_AIR_PREDICATE, BlockPredicate.matchesTag(Direction.DOWN.getUnitVec3i(), BlockTags.DIRT))))));
-		context.register(DARK_MUSHGLOOMS, new ConfiguredFeature<>(TFFeatures.DARK_FOREST_PLACER.get(),  new RandomPatchConfiguration(50, 7, 3, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(TFBlocks.MUSHGLOOM.get())), BlockPredicate.allOf(BlockPredicate.replaceable(), BlockPredicate.matchesTag(Direction.DOWN.getUnitVec3i(), BlockTags.DIRT))))));
-		context.register(DARK_BROWN_MUSHROOMS, new ConfiguredFeature<>(TFFeatures.DARK_FOREST_PLACER.get(),  new RandomPatchConfiguration(50, 7, 3, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.BROWN_MUSHROOM)), BlockPredicate.allOf(BlockPredicate.replaceable(), BlockPredicate.matchesTag(Direction.DOWN.getUnitVec3i(), BlockTags.DIRT))))));
-		context.register(DARK_RED_MUSHROOMS, new ConfiguredFeature<>(TFFeatures.DARK_FOREST_PLACER.get(),  new RandomPatchConfiguration(50, 7, 3, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.RED_MUSHROOM)), BlockPredicate.allOf(BlockPredicate.replaceable(), BlockPredicate.matchesTag(Direction.DOWN.getUnitVec3i(), BlockTags.DIRT))))));
-		context.register(DARK_DEAD_BUSHES, new ConfiguredFeature<>(TFFeatures.DARK_FOREST_PLACER.get(),  new RandomPatchConfiguration(50, 7, 3, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.DEAD_BUSH)), BlockPredicate.allOf(BlockPredicate.replaceable(), BlockPredicate.matchesTag(Direction.DOWN.getUnitVec3i(), BlockTags.DIRT))))));
+		context.register(DARK_PUMPKINS, new ConfiguredFeature<>(TFFeatures.DARK_FOREST_PLACER,  new RandomPatchConfiguration(50, 7, 3, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.PUMPKIN)), BlockPredicate.allOf(BlockPredicate.replaceable(), BlockPredicate.matchesTag(Direction.DOWN.getUnitVec3i(), BlockTags.DIRT))))));
+		context.register(DARK_GRASS, new ConfiguredFeature<>(TFFeatures.DARK_FOREST_PLACER, new RandomPatchConfiguration(64, 7, 3, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.SHORT_GRASS)), BlockPredicate.allOf(BlockPredicate.ONLY_IN_AIR_PREDICATE, BlockPredicate.matchesTag(Direction.DOWN.getUnitVec3i(), BlockTags.DIRT)))))); // [VanillaCopy] Registration of PATCH_GRASS_JUNGLE in VegetationFeatures
+		context.register(DARK_FERNS, new ConfiguredFeature<>(TFFeatures.DARK_FOREST_PLACER,  new RandomPatchConfiguration(64, 7, 3, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.FERN)), BlockPredicate.allOf(BlockPredicate.ONLY_IN_AIR_PREDICATE, BlockPredicate.matchesTag(Direction.DOWN.getUnitVec3i(), BlockTags.DIRT))))));
+		context.register(DARK_MUSHGLOOMS, new ConfiguredFeature<>(TFFeatures.DARK_FOREST_PLACER,  new RandomPatchConfiguration(50, 7, 3, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(TFBlocks.MUSHGLOOM.get())), BlockPredicate.allOf(BlockPredicate.replaceable(), BlockPredicate.matchesTag(Direction.DOWN.getUnitVec3i(), BlockTags.DIRT))))));
+		context.register(DARK_BROWN_MUSHROOMS, new ConfiguredFeature<>(TFFeatures.DARK_FOREST_PLACER,  new RandomPatchConfiguration(50, 7, 3, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.BROWN_MUSHROOM)), BlockPredicate.allOf(BlockPredicate.replaceable(), BlockPredicate.matchesTag(Direction.DOWN.getUnitVec3i(), BlockTags.DIRT))))));
+		context.register(DARK_RED_MUSHROOMS, new ConfiguredFeature<>(TFFeatures.DARK_FOREST_PLACER,  new RandomPatchConfiguration(50, 7, 3, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.RED_MUSHROOM)), BlockPredicate.allOf(BlockPredicate.replaceable(), BlockPredicate.matchesTag(Direction.DOWN.getUnitVec3i(), BlockTags.DIRT))))));
+		context.register(DARK_DEAD_BUSHES, new ConfiguredFeature<>(TFFeatures.DARK_FOREST_PLACER,  new RandomPatchConfiguration(50, 7, 3, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.DEAD_BUSH)), BlockPredicate.allOf(BlockPredicate.replaceable(), BlockPredicate.matchesTag(Direction.DOWN.getUnitVec3i(), BlockTags.DIRT))))));
 
-		context.register(UBEROUS_SOIL_PATCH_BIG, new ConfiguredFeature<>(TFFeatures.MYCELIUM_BLOB.get(), new DiskConfiguration(BlockStateProvider.simple(TFBlocks.UBEROUS_SOIL.get()), BlockPredicate.matchesBlocks(Blocks.PODZOL, Blocks.COARSE_DIRT, Blocks.DIRT), UniformInt.of(4, 8), 1)));
-		context.register(UBEROUS_SOIL_PATCH_SMALL, new ConfiguredFeature<>(TFFeatures.MYCELIUM_BLOB.get(), new DiskConfiguration(BlockStateProvider.simple(TFBlocks.UBEROUS_SOIL.get()), BlockPredicate.matchesBlocks(Blocks.PODZOL, Blocks.COARSE_DIRT, Blocks.DIRT), UniformInt.of(2, 3), 0)));
-		context.register(TROLL_CAVE_MYCELIUM, new ConfiguredFeature<>(TFFeatures.MYCELIUM_BLOB.get(), new DiskConfiguration(BlockStateProvider.simple(Blocks.MYCELIUM), BlockPredicate.matchesBlocks(Blocks.STONE, TFBlocks.DEADROCK.get()), UniformInt.of(3, 5), 0)));
-		context.register(TROLL_CAVE_DIRT, new ConfiguredFeature<>(TFFeatures.MYCELIUM_BLOB.get(), new DiskConfiguration(BlockStateProvider.simple(Blocks.DIRT), BlockPredicate.matchesBlocks(Blocks.STONE, TFBlocks.DEADROCK.get()), UniformInt.of(2, 5), 0)));
+		context.register(UBEROUS_SOIL_PATCH_BIG, new ConfiguredFeature<>(TFFeatures.MYCELIUM_BLOB, new DiskConfiguration(BlockStateProvider.simple(TFBlocks.UBEROUS_SOIL.get()), BlockPredicate.matchesBlocks(Blocks.PODZOL, Blocks.COARSE_DIRT, Blocks.DIRT), UniformInt.of(4, 8), 1)));
+		context.register(UBEROUS_SOIL_PATCH_SMALL, new ConfiguredFeature<>(TFFeatures.MYCELIUM_BLOB, new DiskConfiguration(BlockStateProvider.simple(TFBlocks.UBEROUS_SOIL.get()), BlockPredicate.matchesBlocks(Blocks.PODZOL, Blocks.COARSE_DIRT, Blocks.DIRT), UniformInt.of(2, 3), 0)));
+		context.register(TROLL_CAVE_MYCELIUM, new ConfiguredFeature<>(TFFeatures.MYCELIUM_BLOB, new DiskConfiguration(BlockStateProvider.simple(Blocks.MYCELIUM), BlockPredicate.matchesBlocks(Blocks.STONE, TFBlocks.DEADROCK.get()), UniformInt.of(3, 5), 0)));
+		context.register(TROLL_CAVE_DIRT, new ConfiguredFeature<>(TFFeatures.MYCELIUM_BLOB, new DiskConfiguration(BlockStateProvider.simple(Blocks.DIRT), BlockPredicate.matchesBlocks(Blocks.STONE, TFBlocks.DEADROCK.get()), UniformInt.of(2, 5), 0)));
 
 		context.register(TWILIGHT_OAK_TREE, new ConfiguredFeature<>(Feature.TREE, TreeConfigurations.TWILIGHT_OAK));
 		context.register(LARGE_TWILIGHT_OAK_TREE, new ConfiguredFeature<>(Feature.TREE, TreeConfigurations.LARGE_TWILIGHT_OAK));
 		context.register(SWAMPY_OAK_TREE, new ConfiguredFeature<>(Feature.TREE, TreeConfigurations.SWAMPY_OAK));
 		context.register(CANOPY_TREE, new ConfiguredFeature<>(Feature.TREE, TreeConfigurations.CANOPY_TREE));
-		context.register(MEGA_CANOPY_TREE, new ConfiguredFeature<>(TFFeatures.MEGA_CANOPY.get(), TreeConfigurations.MEGA_CANOPY));
+		context.register(MEGA_CANOPY_TREE, new ConfiguredFeature<>(TFFeatures.MEGA_CANOPY, TreeConfigurations.MEGA_CANOPY));
 		context.register(FIREFLY_CANOPY_TREE, new ConfiguredFeature<>(Feature.TREE, TreeConfigurations.CANOPY_TREE_FIREFLY));
 		context.register(DEAD_CANOPY_TREE, new ConfiguredFeature<>(Feature.TREE, TreeConfigurations.CANOPY_TREE_DEAD));
 		context.register(MANGROVE_TREE, new ConfiguredFeature<>(Feature.TREE, TreeConfigurations.MANGROVE_TREE));
-		context.register(DARKWOOD_TREE, new ConfiguredFeature<>(TFFeatures.DARK_CANOPY_TREE.get(), TreeConfigurations.DARKWOOD_TREE));
-		context.register(HOMEGROWN_DARKWOOD_TREE, new ConfiguredFeature<>(TFFeatures.DARK_CANOPY_TREE.get(), TreeConfigurations.HOMEGROWN_DARKWOOD_TREE));
-		context.register(DARKWOOD_LANTERN_TREE, new ConfiguredFeature<>(TFFeatures.DARK_CANOPY_TREE.get(), TreeConfigurations.DARKWOOD_LANTERN_TREE));
-		context.register(TIME_TREE, new ConfiguredFeature<>(TFFeatures.TREE_OF_TIME.get(), TreeConfigurations.TIME_TREE));
+		context.register(DARKWOOD_TREE, new ConfiguredFeature<>(TFFeatures.DARK_CANOPY_TREE, TreeConfigurations.DARKWOOD_TREE));
+		context.register(HOMEGROWN_DARKWOOD_TREE, new ConfiguredFeature<>(TFFeatures.DARK_CANOPY_TREE, TreeConfigurations.HOMEGROWN_DARKWOOD_TREE));
+		context.register(DARKWOOD_LANTERN_TREE, new ConfiguredFeature<>(TFFeatures.DARK_CANOPY_TREE, TreeConfigurations.DARKWOOD_LANTERN_TREE));
+		context.register(TIME_TREE, new ConfiguredFeature<>(TFFeatures.TREE_OF_TIME, TreeConfigurations.TIME_TREE));
 		context.register(TRANSFORMATION_TREE, new ConfiguredFeature<>(Feature.TREE, TreeConfigurations.TRANSFORM_TREE));
-		context.register(MINING_TREE, new ConfiguredFeature<>(TFFeatures.MINERS_TREE.get(), TreeConfigurations.MINING_TREE));
+		context.register(MINING_TREE, new ConfiguredFeature<>(TFFeatures.MINERS_TREE, TreeConfigurations.MINING_TREE));
 		context.register(SORTING_TREE, new ConfiguredFeature<>(Feature.TREE, TreeConfigurations.SORT_TREE));
-		context.register(FOREST_MEGA_OAK_TREE, new ConfiguredFeature<>(TFFeatures.MEGA_OAK.get(), TreeConfigurations.FOREST_MEGA_OAK));
-		context.register(SAVANNAH_MEGA_OAK_TREE, new ConfiguredFeature<>(TFFeatures.MEGA_OAK.get(), TreeConfigurations.SAVANNAH_MEGA_OAK));
+		context.register(FOREST_MEGA_OAK_TREE, new ConfiguredFeature<>(TFFeatures.MEGA_OAK, TreeConfigurations.FOREST_MEGA_OAK));
+		context.register(SAVANNAH_MEGA_OAK_TREE, new ConfiguredFeature<>(TFFeatures.MEGA_OAK, TreeConfigurations.SAVANNAH_MEGA_OAK));
 		context.register(RAINBOW_OAK_TREE, new ConfiguredFeature<>(Feature.TREE, TreeConfigurations.RAINBOAK_TREE));
 		context.register(LARGE_RAINBOW_OAK_TREE, new ConfiguredFeature<>(Feature.TREE, TreeConfigurations.LARGE_RAINBOAK_TREE));
-		context.register(BROWN_CANOPY_MUSHROOM_TREE, new ConfiguredFeature<>(TFFeatures.CANOPY_BROWN_MUSHROOM.get(), new HugeMushroomFeatureConfiguration(BlockStateProvider.simple(Blocks.BROWN_MUSHROOM_BLOCK.defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.TRUE).setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), BlockStateProvider.simple(Blocks.MUSHROOM_STEM.defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.FALSE).setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), 3, BlockPredicate.alwaysTrue())));
+		context.register(BROWN_CANOPY_MUSHROOM_TREE, new ConfiguredFeature<>(TFFeatures.CANOPY_BROWN_MUSHROOM, new HugeMushroomFeatureConfiguration(BlockStateProvider.simple(Blocks.BROWN_MUSHROOM_BLOCK.defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.TRUE).setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), BlockStateProvider.simple(Blocks.MUSHROOM_STEM.defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.FALSE).setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), 3, BlockPredicate.alwaysTrue())));
 
 		HugeMushroomFeatureConfiguration redCanopyMushroom = new HugeMushroomFeatureConfiguration(BlockStateProvider.simple(Blocks.RED_MUSHROOM_BLOCK.defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.TRUE).setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), BlockStateProvider.simple(Blocks.MUSHROOM_STEM.defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.FALSE).setValue(HugeMushroomBlock.DOWN, Boolean.FALSE)), 3, BlockPredicate.alwaysTrue());
-		context.register(CANOPY_RED_VANILLA_MUSHROOM, new ConfiguredFeature<>(TFFeatures.CANOPY_RED_VANILLA_MUSHROOM.get(), redCanopyMushroom));
-		context.register(CANOPY_RED_SMOOTH_MUSHROOM, new ConfiguredFeature<>(TFFeatures.CANOPY_RED_SMOOTH_MUSHROOM.get(), redCanopyMushroom));
-		context.register(CANOPY_RED_SPHEROID_MUSHROOM, new ConfiguredFeature<>(TFFeatures.CANOPY_RED_SPHEROID_MUSHROOM.get(), redCanopyMushroom));
-		context.register(CANOPY_RED_FLAT_MUSHROOM, new ConfiguredFeature<>(TFFeatures.CANOPY_RED_FLAT_MUSHROOM.get(), redCanopyMushroom));
+		context.register(CANOPY_RED_VANILLA_MUSHROOM, new ConfiguredFeature<>(TFFeatures.CANOPY_RED_VANILLA_MUSHROOM, redCanopyMushroom));
+		context.register(CANOPY_RED_SMOOTH_MUSHROOM, new ConfiguredFeature<>(TFFeatures.CANOPY_RED_SMOOTH_MUSHROOM, redCanopyMushroom));
+		context.register(CANOPY_RED_SPHEROID_MUSHROOM, new ConfiguredFeature<>(TFFeatures.CANOPY_RED_SPHEROID_MUSHROOM, redCanopyMushroom));
+		context.register(CANOPY_RED_FLAT_MUSHROOM, new ConfiguredFeature<>(TFFeatures.CANOPY_RED_FLAT_MUSHROOM, redCanopyMushroom));
 
-		context.register(RED_CANOPY_MUSHROOM_TREE, new ConfiguredFeature<>(TFFeatures.WEIGHTED_LIST_SELECTOR.value(), new WeightedListFeatureConfig(WeightedList.<Holder<PlacedFeature>>builder()
+		context.register(RED_CANOPY_MUSHROOM_TREE, new ConfiguredFeature<>(TFFeatures.WEIGHTED_LIST_SELECTOR, new WeightedListFeatureConfig(WeightedList.<Holder<PlacedFeature>>builder()
 			.add(PlacementUtils.inlinePlaced(features.getOrThrow(CANOPY_RED_VANILLA_MUSHROOM)), 33)
 			.add(PlacementUtils.inlinePlaced(features.getOrThrow(CANOPY_RED_SMOOTH_MUSHROOM)), 33)
 			.add(PlacementUtils.inlinePlaced(features.getOrThrow(CANOPY_RED_SPHEROID_MUSHROOM)), 33)
@@ -353,11 +353,11 @@ public final class TFConfiguredFeatures {
 			.build())));
 
 		context.register(MEGA_SPRUCE_TREE, new ConfiguredFeature<>(Feature.TREE, TreeConfigurations.BIG_SPRUCE));
-		context.register(LARGE_WINTER_TREE, new ConfiguredFeature<>(TFFeatures.LARGE_WINTER_TREE.get(), TreeConfigurations.LARGE_WINTER));
-		context.register(SNOWY_SPRUCE_TREE, new ConfiguredFeature<>(TFFeatures.SNOW_TREE.get(), new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(Blocks.SPRUCE_LOG), new StraightTrunkPlacer(5, 2, 1), BlockStateProvider.simple(Blocks.SPRUCE_LEAVES), new SpruceFoliagePlacer(UniformInt.of(2, 3), UniformInt.of(0, 2), UniformInt.of(1, 2)), Optional.empty(), new TwoLayersFeatureSize(2, 0, 2), BlockStateProvider.simple(Blocks.DIRT)).ignoreVines().build()));
-		context.register(DARK_FOREST_OAK_TREE, new ConfiguredFeature<>(TFFeatures.DARK_CANOPY_TREE.get(), new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(Blocks.OAK_LOG), new StraightTrunkPlacer(4, 2, 0), BlockStateProvider.simple(Blocks.OAK_LEAVES), new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3), Optional.empty(), new TwoLayersFeatureSize(1, 0, 1), BlockStateProvider.simple(Blocks.DIRT)).ignoreVines().build()));
-		context.register(DARK_FOREST_BIRCH_TREE, new ConfiguredFeature<>(TFFeatures.DARK_CANOPY_TREE.get(), new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(Blocks.BIRCH_LOG), new StraightTrunkPlacer(5, 2, 0), BlockStateProvider.simple(Blocks.BIRCH_LEAVES), new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3), Optional.empty(), new TwoLayersFeatureSize(1, 0, 1), BlockStateProvider.simple(Blocks.DIRT)).ignoreVines().build()));
-		context.register(DARK_OAK_BUSH, new ConfiguredFeature<>(TFFeatures.DARK_CANOPY_TREE.get(), TreeConfigurations.OAK_BUSH));
+		context.register(LARGE_WINTER_TREE, new ConfiguredFeature<>(TFFeatures.LARGE_WINTER_TREE, TreeConfigurations.LARGE_WINTER));
+		context.register(SNOWY_SPRUCE_TREE, new ConfiguredFeature<>(TFFeatures.SNOW_TREE, new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(Blocks.SPRUCE_LOG), new StraightTrunkPlacer(5, 2, 1), BlockStateProvider.simple(Blocks.SPRUCE_LEAVES), new SpruceFoliagePlacer(UniformInt.of(2, 3), UniformInt.of(0, 2), UniformInt.of(1, 2)), Optional.empty(), new TwoLayersFeatureSize(2, 0, 2), BlockStateProvider.simple(Blocks.DIRT)).ignoreVines().build()));
+		context.register(DARK_FOREST_OAK_TREE, new ConfiguredFeature<>(TFFeatures.DARK_CANOPY_TREE, new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(Blocks.OAK_LOG), new StraightTrunkPlacer(4, 2, 0), BlockStateProvider.simple(Blocks.OAK_LEAVES), new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3), Optional.empty(), new TwoLayersFeatureSize(1, 0, 1), BlockStateProvider.simple(Blocks.DIRT)).ignoreVines().build()));
+		context.register(DARK_FOREST_BIRCH_TREE, new ConfiguredFeature<>(TFFeatures.DARK_CANOPY_TREE, new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(Blocks.BIRCH_LOG), new StraightTrunkPlacer(5, 2, 0), BlockStateProvider.simple(Blocks.BIRCH_LEAVES), new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3), Optional.empty(), new TwoLayersFeatureSize(1, 0, 1), BlockStateProvider.simple(Blocks.DIRT)).ignoreVines().build()));
+		context.register(DARK_OAK_BUSH, new ConfiguredFeature<>(TFFeatures.DARK_CANOPY_TREE, TreeConfigurations.OAK_BUSH));
 		context.register(VANILLA_OAK_TREE, new ConfiguredFeature<>(Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(Blocks.OAK_LOG), new StraightTrunkPlacer(4, 2, 0), BlockStateProvider.simple(Blocks.OAK_LEAVES), new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3), Optional.empty(), new TwoLayersFeatureSize(1, 0, 1), BlockStateProvider.simple(Blocks.DIRT)).ignoreVines().build()));
 		context.register(VANILLA_BIRCH_TREE, new ConfiguredFeature<>(Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(Blocks.BIRCH_LOG), new StraightTrunkPlacer(5, 2, 0), BlockStateProvider.simple(Blocks.BIRCH_LEAVES), new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3), Optional.empty(), new TwoLayersFeatureSize(1, 0, 1), BlockStateProvider.simple(Blocks.DIRT)).ignoreVines().build()));
 		context.register(SMALLER_JUNGLE_TREE, new ConfiguredFeature<>(Feature.TREE, TreeConfigurations.SMALL_JUNGLE));
@@ -379,8 +379,8 @@ public final class TFConfiguredFeatures {
 
 		context.register(CANOPY_MUSHROOMS_SPARSE, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(List.of(new WeightedPlacedFeature(PlacementUtils.inlinePlaced(features.getOrThrow(BROWN_CANOPY_MUSHROOM_TREE)), 0.15f), new WeightedPlacedFeature(PlacementUtils.inlinePlaced(features.getOrThrow(RED_CANOPY_MUSHROOM_TREE)), 0.05f)), PlacementUtils.inlinePlaced(features.getOrThrow(DUMMY_TREE)))));
 		context.register(CANOPY_MUSHROOMS_DENSE, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(List.of(new WeightedPlacedFeature(PlacementUtils.inlinePlaced(features.getOrThrow(BROWN_CANOPY_MUSHROOM_TREE)), 0.675f), new WeightedPlacedFeature(PlacementUtils.inlinePlaced(features.getOrThrow(RED_CANOPY_MUSHROOM_TREE)), 0.225f)), PlacementUtils.inlinePlaced(features.getOrThrow(DUMMY_TREE)))));
-		context.register(FLOWER_PLACER, new ConfiguredFeature<>(TFFeatures.RANDOM_PATCH.get(), SMALL_FLOWER_CONFIG));
-		context.register(FLOWER_PLACER_ALT, new ConfiguredFeature<>(TFFeatures.RANDOM_PATCH.get(), SMALL_FLOWER_CONFIG_ALT));
+		context.register(FLOWER_PLACER, new ConfiguredFeature<>(TFFeatures.RANDOM_PATCH, SMALL_FLOWER_CONFIG));
+		context.register(FLOWER_PLACER_ALT, new ConfiguredFeature<>(TFFeatures.RANDOM_PATCH, SMALL_FLOWER_CONFIG_ALT));
 	}
 
 	private static void registerTemplateFeatures(BootstrapContext<ConfiguredFeature<?, ?>> context) {
@@ -398,14 +398,14 @@ public final class TFConfiguredFeatures {
 		ProcessorRule processorStoneBrickWall = new ProcessorRule(new RandomBlockMatchTest(Blocks.STONE_BRICK_WALL, 0.5f), AlwaysTrueTest.INSTANCE, Blocks.MOSSY_STONE_BRICK_WALL.defaultBlockState());
 
 		SwizzleConfig simpleWellConfig = SwizzleConfig.generate(paletteHolders, TFWoodPaletteTags.WELL_SWIZZLE_MASK, paletteChoices, processorCobbleBlock, processorCobbleStair, processorCobbleSlab, processorCobbleWall);
-		context.register(SIMPLE_WELL, new ConfiguredFeature<>(TFFeatures.SIMPLE_WELL.get(), simpleWellConfig));
+		context.register(SIMPLE_WELL, new ConfiguredFeature<>(TFFeatures.SIMPLE_WELL, simpleWellConfig));
 
 		SwizzleConfig fancyWellConfig = SwizzleConfig.generate(paletteHolders, TFWoodPaletteTags.WELL_SWIZZLE_MASK, paletteChoices, processorCobbleBlock, processorCobbleStair, processorCobbleSlab, processorCobbleWall, processorStoneBrickBlock, processorStoneBrickStair, processorStoneBrickSlab, processorStoneBrickWall);
-		context.register(FANCY_WELL, new ConfiguredFeature<>(TFFeatures.FANCY_WELL.get(), fancyWellConfig));
+		context.register(FANCY_WELL, new ConfiguredFeature<>(TFFeatures.FANCY_WELL, fancyWellConfig));
 
 		SwizzleConfig hutConfig = SwizzleConfig.generate(paletteHolders, TFWoodPaletteTags.DRUID_HUT_SWIZZLE_MASK, paletteChoices, processorCobbleBlock, processorCobbleStair, processorCobbleSlab, processorCobbleWall, processorStoneBrickBlock, processorStoneBrickStair, processorStoneBrickSlab, processorStoneBrickWall);
-		context.register(DRUID_HUT, new ConfiguredFeature<>(TFFeatures.DRUID_HUT.get(), hutConfig));
+		context.register(DRUID_HUT, new ConfiguredFeature<>(TFFeatures.DRUID_HUT, hutConfig));
 
-		context.register(GRAVEYARD, new ConfiguredFeature<>(TFFeatures.GRAVEYARD.get(), FeatureConfiguration.NONE));
+		context.register(GRAVEYARD, new ConfiguredFeature<>(TFFeatures.GRAVEYARD, FeatureConfiguration.NONE));
 	}
 }

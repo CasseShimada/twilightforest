@@ -115,7 +115,7 @@ public final class TwilightForestMod implements ModInitializer {
 		TFStats.register();
 		TFLoot.register();
 		TFPOITypes.register();
-		TFFeatures.FEATURES.register();
+		TFFeatures.register();
 		TFCreativeTabs.register();
 		TFEntities.SPAWN_EGGS.register();
 		TFMenuTypes.register();
