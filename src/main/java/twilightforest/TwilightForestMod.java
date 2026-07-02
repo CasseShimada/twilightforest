@@ -206,25 +206,25 @@ public final class TwilightForestMod implements ModInitializer {
 
 		FuelValueEvents.BUILD.register((builder, context) -> {
 			int burnTime = 300;
-			builder.add(TFItems.HOLLOW_TWILIGHT_OAK_LOG.get(), burnTime);
-			builder.add(TFItems.HOLLOW_CANOPY_LOG.get(), burnTime);
-			builder.add(TFItems.HOLLOW_MANGROVE_LOG.get(), burnTime);
-			builder.add(TFItems.HOLLOW_DARK_LOG.get(), burnTime);
-			builder.add(TFItems.HOLLOW_TIME_LOG.get(), burnTime);
-			builder.add(TFItems.HOLLOW_TRANSFORMATION_LOG.get(), burnTime);
-			builder.add(TFItems.HOLLOW_MINING_LOG.get(), burnTime);
-			builder.add(TFItems.HOLLOW_SORTING_LOG.get(), burnTime);
-			builder.add(TFItems.HOLLOW_OAK_LOG.get(), burnTime);
-			builder.add(TFItems.HOLLOW_SPRUCE_LOG.get(), burnTime);
-			builder.add(TFItems.HOLLOW_BIRCH_LOG.get(), burnTime);
-			builder.add(TFItems.HOLLOW_JUNGLE_LOG.get(), burnTime);
-			builder.add(TFItems.HOLLOW_ACACIA_LOG.get(), burnTime);
-			builder.add(TFItems.HOLLOW_DARK_OAK_LOG.get(), burnTime);
-			builder.add(TFItems.HOLLOW_CRIMSON_STEM.get(), burnTime);
-			builder.add(TFItems.HOLLOW_WARPED_STEM.get(), burnTime);
-			builder.add(TFItems.HOLLOW_VANGROVE_LOG.get(), burnTime);
-			builder.add(TFItems.HOLLOW_CHERRY_LOG.get(), burnTime);
-			builder.add(TFItems.HOLLOW_PALE_OAK_LOG.get(), burnTime);
+			builder.add(TFItems.HOLLOW_TWILIGHT_OAK_LOG, burnTime);
+			builder.add(TFItems.HOLLOW_CANOPY_LOG, burnTime);
+			builder.add(TFItems.HOLLOW_MANGROVE_LOG, burnTime);
+			builder.add(TFItems.HOLLOW_DARK_LOG, burnTime);
+			builder.add(TFItems.HOLLOW_TIME_LOG, burnTime);
+			builder.add(TFItems.HOLLOW_TRANSFORMATION_LOG, burnTime);
+			builder.add(TFItems.HOLLOW_MINING_LOG, burnTime);
+			builder.add(TFItems.HOLLOW_SORTING_LOG, burnTime);
+			builder.add(TFItems.HOLLOW_OAK_LOG, burnTime);
+			builder.add(TFItems.HOLLOW_SPRUCE_LOG, burnTime);
+			builder.add(TFItems.HOLLOW_BIRCH_LOG, burnTime);
+			builder.add(TFItems.HOLLOW_JUNGLE_LOG, burnTime);
+			builder.add(TFItems.HOLLOW_ACACIA_LOG, burnTime);
+			builder.add(TFItems.HOLLOW_DARK_OAK_LOG, burnTime);
+			builder.add(TFItems.HOLLOW_CRIMSON_STEM, burnTime);
+			builder.add(TFItems.HOLLOW_WARPED_STEM, burnTime);
+			builder.add(TFItems.HOLLOW_VANGROVE_LOG, burnTime);
+			builder.add(TFItems.HOLLOW_CHERRY_LOG, burnTime);
+			builder.add(TFItems.HOLLOW_PALE_OAK_LOG, burnTime);
 		});
 
 		FlammableBlockRegistry flammables = FlammableBlockRegistry.getDefaultInstance();

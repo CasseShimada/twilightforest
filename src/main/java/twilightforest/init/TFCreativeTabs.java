@@ -626,17 +626,17 @@ public class TFCreativeTabs {
 
 	public static void registerVanillaTabs() {
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS).register(entries -> {
-			entries.insertAfter(new ItemStack(Items.OAK_WOOD), TFItems.HOLLOW_OAK_LOG.toStack());
-			entries.insertAfter(new ItemStack(Items.SPRUCE_WOOD), TFItems.HOLLOW_SPRUCE_LOG.toStack());
-			entries.insertAfter(new ItemStack(Items.BIRCH_WOOD), TFItems.HOLLOW_BIRCH_LOG.toStack());
-			entries.insertAfter(new ItemStack(Items.JUNGLE_WOOD), TFItems.HOLLOW_JUNGLE_LOG.toStack());
-			entries.insertAfter(new ItemStack(Items.ACACIA_WOOD), TFItems.HOLLOW_ACACIA_LOG.toStack());
-			entries.insertAfter(new ItemStack(Items.DARK_OAK_WOOD), TFItems.HOLLOW_DARK_OAK_LOG.toStack());
-			entries.insertAfter(new ItemStack(Items.CRIMSON_HYPHAE), TFItems.HOLLOW_CRIMSON_STEM.toStack());
-			entries.insertAfter(new ItemStack(Items.WARPED_HYPHAE), TFItems.HOLLOW_WARPED_STEM.toStack());
-			entries.insertAfter(new ItemStack(Items.MANGROVE_WOOD), TFItems.HOLLOW_VANGROVE_LOG.toStack());
-			entries.insertAfter(new ItemStack(Items.CHERRY_WOOD), TFItems.HOLLOW_CHERRY_LOG.toStack());
-			entries.insertAfter(new ItemStack(Items.PALE_OAK_WOOD), TFItems.HOLLOW_PALE_OAK_LOG.toStack());
+			entries.insertAfter(new ItemStack(Items.OAK_WOOD), new ItemStack(TFItems.HOLLOW_OAK_LOG));
+			entries.insertAfter(new ItemStack(Items.SPRUCE_WOOD), new ItemStack(TFItems.HOLLOW_SPRUCE_LOG));
+			entries.insertAfter(new ItemStack(Items.BIRCH_WOOD), new ItemStack(TFItems.HOLLOW_BIRCH_LOG));
+			entries.insertAfter(new ItemStack(Items.JUNGLE_WOOD), new ItemStack(TFItems.HOLLOW_JUNGLE_LOG));
+			entries.insertAfter(new ItemStack(Items.ACACIA_WOOD), new ItemStack(TFItems.HOLLOW_ACACIA_LOG));
+			entries.insertAfter(new ItemStack(Items.DARK_OAK_WOOD), new ItemStack(TFItems.HOLLOW_DARK_OAK_LOG));
+			entries.insertAfter(new ItemStack(Items.CRIMSON_HYPHAE), new ItemStack(TFItems.HOLLOW_CRIMSON_STEM));
+			entries.insertAfter(new ItemStack(Items.WARPED_HYPHAE), new ItemStack(TFItems.HOLLOW_WARPED_STEM));
+			entries.insertAfter(new ItemStack(Items.MANGROVE_WOOD), new ItemStack(TFItems.HOLLOW_VANGROVE_LOG));
+			entries.insertAfter(new ItemStack(Items.CHERRY_WOOD), new ItemStack(TFItems.HOLLOW_CHERRY_LOG));
+			entries.insertAfter(new ItemStack(Items.PALE_OAK_WOOD), new ItemStack(TFItems.HOLLOW_PALE_OAK_LOG));
 
 			entries.insertAfter(new ItemStack(Items.OAK_FENCE_GATE), TFBlocks.OAK_BANISTER.toStack());
 			entries.insertAfter(TFBlocks.OAK_BANISTER.toStack(), TFBlocks.OAK_DRYING_RACK.toStack());
