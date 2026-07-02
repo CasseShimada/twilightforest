@@ -19,7 +19,7 @@ import twilightforest.init.TFStructurePieceTypes;
 public class MazeDeadEndFountainComponent extends MazeDeadEndComponent {
 
 	public MazeDeadEndFountainComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		this(TFStructurePieceTypes.TFMMDEF.get(), nbt);
+		this(TFStructurePieceTypes.TFMMDEF, nbt);
 	}
 
 	public MazeDeadEndFountainComponent(StructurePieceType piece, CompoundTag nbt) {

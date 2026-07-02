@@ -54,7 +54,7 @@ public class FallenTrunkPiece extends StructurePiece {
 	protected final Hole hole;
 
 	public FallenTrunkPiece(int length, int radius, BlockStateProvider log, ResourceKey<LootTable> chestLootTable, Direction orientation, BoundingBox boundingBox, long seed) {
-		super(TFStructurePieceTypes.TFFallenTrunk.value(), 0, boundingBox);
+		super(TFStructurePieceTypes.TFFallenTrunk, 0, boundingBox);
 		this.length = length;
 		this.radius = radius;
 		this.log = log;
@@ -65,7 +65,7 @@ public class FallenTrunkPiece extends StructurePiece {
 	}
 
 	public FallenTrunkPiece(StructurePieceSerializationContext context, CompoundTag tag) {
-		super(TFStructurePieceTypes.TFFallenTrunk.value(), tag);
+		super(TFStructurePieceTypes.TFFallenTrunk, tag);
 		this.length = tag.getIntOr("length", 0);
 		this.radius = tag.getIntOr("radius", 0);
 

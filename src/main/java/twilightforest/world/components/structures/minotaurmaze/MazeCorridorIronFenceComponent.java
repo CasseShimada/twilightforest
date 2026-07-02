@@ -18,11 +18,11 @@ import twilightforest.init.TFStructurePieceTypes;
 public class MazeCorridorIronFenceComponent extends MazeCorridorComponent {
 
 	public MazeCorridorIronFenceComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFMMCIF.get(), nbt);
+		super(TFStructurePieceTypes.TFMMCIF, nbt);
 	}
 
 	public MazeCorridorIronFenceComponent(int i, int x, int y, int z, Direction rotation) {
-		super(TFStructurePieceTypes.TFMMCIF.get(), i, x, y, z, rotation);
+		super(TFStructurePieceTypes.TFMMCIF, i, x, y, z, rotation);
 	}
 
 	@Override

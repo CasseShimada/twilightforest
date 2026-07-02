@@ -21,11 +21,11 @@ import twilightforest.world.components.structures.TFStructureComponentOld;
 public class MazeEntranceShaftComponent extends TFStructureComponentOld {
 
 	public MazeEntranceShaftComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFMMES.get(), nbt);
+		super(TFStructurePieceTypes.TFMMES, nbt);
 	}
 
 	public MazeEntranceShaftComponent(int i, RandomSource rand, int x, int y, int z) {
-		super(TFStructurePieceTypes.TFMMES.get(), i, new BoundingBox(x, y, z, x + 6 - 1, y, z + 6 - 1).encapsulate(new BlockPos(x, TFDimensionData.SEALEVEL, z)));
+		super(TFStructurePieceTypes.TFMMES, i, new BoundingBox(x, y, z, x + 6 - 1, y, z + 6 - 1).encapsulate(new BlockPos(x, TFDimensionData.SEALEVEL, z)));
 		this.setOrientation(Direction.Plane.HORIZONTAL.getRandomDirection(rand));
 	}
 

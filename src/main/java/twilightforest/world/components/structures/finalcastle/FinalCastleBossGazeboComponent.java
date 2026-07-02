@@ -38,11 +38,11 @@ public class FinalCastleBossGazeboComponent extends TFStructureComponentOld {
 
 	@SuppressWarnings("unused")
 	public FinalCastleBossGazeboComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFFCBoGaz.get(), nbt);
+		super(TFStructurePieceTypes.TFFCBoGaz, nbt);
 	}
 
 	public FinalCastleBossGazeboComponent(int i, TFStructureComponentOld keep, int x, int y, int z) {
-		super(TFStructurePieceTypes.TFFCBoGaz.get(), i, x, y, z);
+		super(TFStructurePieceTypes.TFFCBoGaz, i, x, y, z);
 		this.spawnListIndex = -1; // no monsters
 
 		this.setOrientation(keep.getOrientation());

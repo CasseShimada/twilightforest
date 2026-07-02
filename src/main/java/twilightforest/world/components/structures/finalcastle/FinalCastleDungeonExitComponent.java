@@ -24,11 +24,11 @@ import twilightforest.world.components.structures.TFStructureComponentOld;
 public class FinalCastleDungeonExitComponent extends FinalCastleDungeonRoom31Component {
 
 	public FinalCastleDungeonExitComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFFCDunEx.get(), nbt);
+		super(TFStructurePieceTypes.TFFCDunEx, nbt);
 	}
 
 	public FinalCastleDungeonExitComponent(int i, int x, int y, int z, Direction direction, int level) {
-		super(TFStructurePieceTypes.TFFCDunEx.get(), i, x, y, z, direction, level);
+		super(TFStructurePieceTypes.TFFCDunEx, i, x, y, z, direction, level);
 	}
 
 	@Override

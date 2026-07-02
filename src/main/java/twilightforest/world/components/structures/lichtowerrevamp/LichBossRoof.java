@@ -18,13 +18,13 @@ import twilightforest.world.components.structures.TwilightJigsawPiece;
 
 public final class LichBossRoof extends TwilightJigsawPiece implements PieceBeardifierModifier, SpawnIndexProvider.Deny {
 	public LichBossRoof(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
-		super(TFStructurePieceTypes.LICH_BOSS_ROOF.get(), compoundTag, ctx, readSettings(compoundTag));
+		super(TFStructurePieceTypes.LICH_BOSS_ROOF, compoundTag, ctx, readSettings(compoundTag));
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings);
 	}
 
 	public LichBossRoof(StructureTemplateManager structureManager, JigsawPlaceContext jigsawContext) {
-		super(TFStructurePieceTypes.LICH_BOSS_ROOF.get(), 1, structureManager, TwilightForestMod.prefix("lich_tower/tower_boss_roof"), jigsawContext);
+		super(TFStructurePieceTypes.LICH_BOSS_ROOF, 1, structureManager, TwilightForestMod.prefix("lich_tower/tower_boss_roof"), jigsawContext);
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings);
 	}

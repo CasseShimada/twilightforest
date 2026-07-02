@@ -21,13 +21,13 @@ public class DarkTowerBeardComponent extends TFStructureComponentOld {
 	protected final int height;
 
 	public DarkTowerBeardComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFDTBea.get(), nbt);
+		super(TFStructurePieceTypes.TFDTBea, nbt);
 		this.size = nbt.getIntOr("beardSize", 0);
 		this.height = nbt.getIntOr("beardHeight", 0);
 	}
 
 	public DarkTowerBeardComponent(int i, TowerWingComponent wing, int x, int y, int z) {
-		super(TFStructurePieceTypes.TFDTBea.get(), i, x, y, z);
+		super(TFStructurePieceTypes.TFDTBea, i, x, y, z);
 
 		this.setOrientation(wing.getOrientation());
 		this.size = wing.size;

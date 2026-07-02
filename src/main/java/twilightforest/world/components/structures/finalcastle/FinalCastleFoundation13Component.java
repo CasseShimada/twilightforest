@@ -26,7 +26,7 @@ public class FinalCastleFoundation13Component extends TFStructureComponentOld {
 	protected int groundLevel = -1;
 
 	public FinalCastleFoundation13Component(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		this(TFStructurePieceTypes.TFFCToF13.get(), nbt);
+		this(TFStructurePieceTypes.TFFCToF13, nbt);
 	}
 
 	public FinalCastleFoundation13Component(StructurePieceType piece, CompoundTag nbt) {

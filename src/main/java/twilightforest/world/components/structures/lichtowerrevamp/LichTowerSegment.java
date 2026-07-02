@@ -36,7 +36,7 @@ public final class LichTowerSegment extends TwilightJigsawPiece implements Piece
 	private final boolean putGallery;
 
 	public LichTowerSegment(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
-		super(TFStructurePieceTypes.LICH_TOWER_SEGMENT.get(), compoundTag, ctx, readSettings(compoundTag));
+		super(TFStructurePieceTypes.LICH_TOWER_SEGMENT, compoundTag, ctx, readSettings(compoundTag));
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings);
 		stairDecay(this.genDepth, this.placeSettings);
@@ -47,7 +47,7 @@ public final class LichTowerSegment extends TwilightJigsawPiece implements Piece
 	}
 
 	public LichTowerSegment(StructureTemplateManager structureManager, int genDepth, JigsawPlaceContext jigsawContext, boolean putMobBridge, boolean putWings, boolean putGallery, Identifier template) {
-		super(TFStructurePieceTypes.LICH_TOWER_SEGMENT.get(), genDepth, structureManager, template, jigsawContext);
+		super(TFStructurePieceTypes.LICH_TOWER_SEGMENT, genDepth, structureManager, template, jigsawContext);
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings);
 		stairDecay(this.genDepth, this.placeSettings);

@@ -47,7 +47,7 @@ public class HollowHillComponent extends TFStructureComponentOld {
 	protected final Identifier speleothemConfigId;
 
 	public HollowHillComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		this(ctx, TFStructurePieceTypes.TFHill.get(), nbt);
+		this(ctx, TFStructurePieceTypes.TFHill, nbt);
 	}
 
 	public HollowHillComponent(StructurePieceSerializationContext ctx, StructurePieceType piece, CompoundTag nbt) {

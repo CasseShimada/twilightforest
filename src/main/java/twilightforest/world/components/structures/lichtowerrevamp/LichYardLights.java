@@ -23,13 +23,13 @@ public class LichYardLights extends StructurePiece implements PieceBeardifierMod
 	private final Direction.Axis placeAxis;
 
 	public LichYardLights(BoundingBox boundingBox, Direction.Axis placeAxis) {
-		super(TFStructurePieceTypes.LICH_YARD_LIGHTS.value(), 0, boundingBox);
+		super(TFStructurePieceTypes.LICH_YARD_LIGHTS, 0, boundingBox);
 
 		this.placeAxis = placeAxis;
 	}
 
 	public LichYardLights(StructurePieceSerializationContext ctx, CompoundTag tag) {
-		super(TFStructurePieceTypes.LICH_YARD_LIGHTS.value(), tag);
+		super(TFStructurePieceTypes.LICH_YARD_LIGHTS, tag);
 		this.placeAxis = tag.contains("axis") ? Direction.Axis.values()[tag.getIntOr("axis", Direction.Axis.Y.ordinal())] : Direction.Axis.Y;
 	}
 

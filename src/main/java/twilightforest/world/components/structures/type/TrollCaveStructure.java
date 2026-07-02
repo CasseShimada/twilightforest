@@ -59,7 +59,7 @@ public class TrollCaveStructure extends ProgressionStructure implements Configur
 
 	@Override
 	protected @Nullable StructurePiece getFirstPiece(GenerationContext context, RandomSource random, ChunkPos chunkPos, int x, int y, int z) {
-		return new TrollCaveMainComponent(TFStructurePieceTypes.TFTCMai.get(), 0, x, y + 11, z, this.speleothemConfig);
+		return new TrollCaveMainComponent(TFStructurePieceTypes.TFTCMai, 0, x, y + 11, z, this.speleothemConfig);
 	}
 
 	@Override

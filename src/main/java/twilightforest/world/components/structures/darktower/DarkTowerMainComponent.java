@@ -48,7 +48,7 @@ public class DarkTowerMainComponent extends DarkTowerWingComponent {
 	private boolean placedKeys = false;
 
 	public DarkTowerMainComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFDTMai.get(), nbt);
+		super(TFStructurePieceTypes.TFDTMai, nbt);
 	}
 
 	public DarkTowerMainComponent(RandomSource rand, int index, int x, int y, int z) {
@@ -56,7 +56,7 @@ public class DarkTowerMainComponent extends DarkTowerWingComponent {
 	}
 
 	public DarkTowerMainComponent(RandomSource rand, int index, int x, int y, int z, Direction rotation) {
-		super(TFStructurePieceTypes.TFDTMai.get(), index, x, y, z, 19, 56 + ((rand.nextInt(32) / 5) * 5), rotation);
+		super(TFStructurePieceTypes.TFDTMai, index, x, y, z, 19, 56 + ((rand.nextInt(32) / 5) * 5), rotation);
 
 		// check to make sure we can build the whole tower
 		if (this.boundingBox.maxY() > 245) {

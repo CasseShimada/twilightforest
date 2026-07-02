@@ -19,11 +19,11 @@ import twilightforest.init.TFStructurePieceTypes;
 public class TowerRoofGableForwardsComponent extends TowerRoofComponent {
 
 	public TowerRoofGableForwardsComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFLTRGF.get(), nbt);
+		super(TFStructurePieceTypes.TFLTRGF, nbt);
 	}
 
 	public TowerRoofGableForwardsComponent(int i, TowerWingComponent wing, int x, int y, int z) {
-		super(TFStructurePieceTypes.TFLTRGF.get(), i, x, y, z);
+		super(TFStructurePieceTypes.TFLTRGF, i, x, y, z);
 
 		// same facing
 		this.setOrientation(wing.getOrientation());

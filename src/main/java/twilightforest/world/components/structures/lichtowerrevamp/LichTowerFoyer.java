@@ -36,7 +36,7 @@ public final class LichTowerFoyer extends TwilightJigsawPiece implements PieceBe
 	private final boolean chestSide;
 
 	public LichTowerFoyer(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
-		super(TFStructurePieceTypes.LICH_TOWER_FOYER.get(), compoundTag, ctx, readSettings(compoundTag));
+		super(TFStructurePieceTypes.LICH_TOWER_FOYER, compoundTag, ctx, readSettings(compoundTag));
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings);
 
@@ -45,7 +45,7 @@ public final class LichTowerFoyer extends TwilightJigsawPiece implements PieceBe
 	}
 
 	public LichTowerFoyer(StructureTemplateManager structureManager, JigsawPlaceContext placeContext, boolean putChest, boolean chestSide) {
-		super(TFStructurePieceTypes.LICH_TOWER_FOYER.get(), 0, structureManager, TwilightForestMod.prefix("lich_tower/tower_foyer"), placeContext);
+		super(TFStructurePieceTypes.LICH_TOWER_FOYER, 0, structureManager, TwilightForestMod.prefix("lich_tower/tower_foyer"), placeContext);
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings);
 

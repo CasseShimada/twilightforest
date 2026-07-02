@@ -19,7 +19,7 @@ import twilightforest.init.TFStructurePieceTypes;
 public class StrongholdShieldStructure extends KnightStrongholdComponent {
 
 	public StrongholdShieldStructure(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFSShield.get(), nbt);
+		super(TFStructurePieceTypes.TFSShield, nbt);
 		this.spawnListIndex = -1;
 	}
 

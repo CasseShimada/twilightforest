@@ -36,13 +36,13 @@ import java.util.List;
 
 public class LichTowerFoyerDecor extends TwilightJigsawPiece implements PieceBeardifierModifier {
 	public LichTowerFoyerDecor(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
-		super(TFStructurePieceTypes.LICH_FOYER_DECORATION.get(), compoundTag, ctx, readSettings(compoundTag));
+		super(TFStructurePieceTypes.LICH_FOYER_DECORATION, compoundTag, ctx, readSettings(compoundTag));
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings);
 	}
 
 	public LichTowerFoyerDecor(int genDepth, StructureTemplateManager structureManager, JigsawPlaceContext jigsawContext) {
-		super(TFStructurePieceTypes.LICH_FOYER_DECORATION.get(), genDepth, structureManager, TwilightForestMod.prefix("lich_tower/foyer_decor"), jigsawContext);
+		super(TFStructurePieceTypes.LICH_FOYER_DECORATION, genDepth, structureManager, TwilightForestMod.prefix("lich_tower/foyer_decor"), jigsawContext);
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings);
 	}

@@ -23,7 +23,7 @@ public class FinalCastleMuralComponent extends TFStructureComponentOld {
 	private final FinalCastleMural mural;
 
 	public FinalCastleMuralComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFFCMur.get(), nbt);
+		super(TFStructurePieceTypes.TFFCMur, nbt);
 
 		if (nbt.contains("muralBytes")) {
 			this.mural = new FinalCastleMural(nbt);
@@ -33,7 +33,7 @@ public class FinalCastleMuralComponent extends TFStructureComponentOld {
 	}
 
 	public FinalCastleMuralComponent(int i, int x, int y, int z, int width, int height, Direction direction) {
-		super(TFStructurePieceTypes.TFFCMur.get(), i, x, y, z);
+		super(TFStructurePieceTypes.TFFCMur, i, x, y, z);
 		this.setOrientation(direction);
 		this.boundingBox = TFStructureComponentOld.getComponentToAddBoundingBox2(x, y, z, 0, -height / 2, -width / 2, 1, height - 1, width - 1, direction);
 

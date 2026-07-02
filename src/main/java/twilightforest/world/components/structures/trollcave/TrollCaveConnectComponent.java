@@ -31,7 +31,7 @@ public class TrollCaveConnectComponent extends TrollCaveMainComponent {
 	protected final boolean[] openingTowards = {false, false, true, false};
 
 	public TrollCaveConnectComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFTCCon.get(), ctx, nbt);
+		super(TFStructurePieceTypes.TFTCCon, ctx, nbt);
 		this.openingTowards[0] = nbt.getBooleanOr("openingTowards0", false);
 		this.openingTowards[1] = nbt.getBooleanOr("openingTowards1", false);
 		this.openingTowards[2] = nbt.getBooleanOr("openingTowards2", false);
@@ -39,7 +39,7 @@ public class TrollCaveConnectComponent extends TrollCaveMainComponent {
 	}
 
 	public TrollCaveConnectComponent(int index, int x, int y, int z, int caveSize, int caveHeight, Direction direction, Holder.Reference<StructureSpeleothemConfig> speleothemConfig) {
-		super(TFStructurePieceTypes.TFTCCon.get(), index, x, y, z, speleothemConfig);
+		super(TFStructurePieceTypes.TFTCCon, index, x, y, z, speleothemConfig);
 		this.size = caveSize;
 		this.height = caveHeight;
 		this.setOrientation(direction);

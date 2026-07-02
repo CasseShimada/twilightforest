@@ -29,11 +29,11 @@ public class CourtyardMain extends StructureMazeGenerator {
 	static final BlockRotProcessor WALL_DECAY_PROCESSOR = new BlockRotProcessor(CourtyardMain.WALL_DECAY);
 
 	public CourtyardMain(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(ctx.structureTemplateManager(), TFStructurePieceTypes.TFNCMn.get(), nbt);
+		super(ctx.structureTemplateManager(), TFStructurePieceTypes.TFNCMn, nbt);
 	}
 
 	public CourtyardMain(RandomSource rand, int i, int x, int y, int z, StructureTemplateManager structureManager) {
-		super(TFStructurePieceTypes.TFNCMn.get(), rand, i, ROW_OF_CELLS, ROW_OF_CELLS, x, y, z, structureManager);
+		super(TFStructurePieceTypes.TFNCMn, rand, i, ROW_OF_CELLS, ROW_OF_CELLS, x, y, z, structureManager);
 
 		this.setOrientation(Direction.NORTH);
 

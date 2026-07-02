@@ -20,11 +20,11 @@ import twilightforest.loot.TFLootTables;
 public class MazeRoomBossComponent extends MazeRoomComponent {
 
 	public MazeRoomBossComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFMMRB.get(), nbt);
+		super(TFStructurePieceTypes.TFMMRB, nbt);
 	}
 
 	public MazeRoomBossComponent(int i, RandomSource rand, int x, int y, int z) {
-		super(TFStructurePieceTypes.TFMMRB.get(), i, rand, x, y, z);
+		super(TFStructurePieceTypes.TFMMRB, i, rand, x, y, z);
 
 		//get the fuck outta here
 		this.spawnListIndex = Integer.MAX_VALUE;

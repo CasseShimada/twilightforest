@@ -21,11 +21,11 @@ import twilightforest.world.components.structures.TFStructureComponentOld;
 public class TrollVaultComponent extends TFStructureComponentOld {
 
 	public TrollVaultComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFTCVa.get(), nbt);
+		super(TFStructurePieceTypes.TFTCVa, nbt);
 	}
 
 	public TrollVaultComponent(int index, int x, int y, int z) {
-		super(TFStructurePieceTypes.TFTCVa.get(), index, x, y, z);
+		super(TFStructurePieceTypes.TFTCVa, index, x, y, z);
 		this.setOrientation(Direction.SOUTH);
 
 		// adjust x, y, z

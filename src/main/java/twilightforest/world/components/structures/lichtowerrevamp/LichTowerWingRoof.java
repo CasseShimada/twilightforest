@@ -20,13 +20,13 @@ import twilightforest.world.components.structures.TwilightJigsawPiece;
 
 public class LichTowerWingRoof extends TwilightJigsawPiece implements PieceBeardifierModifier {
 	public LichTowerWingRoof(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
-		super(TFStructurePieceTypes.LICH_WING_ROOF.get(), compoundTag, ctx, readSettings(compoundTag));
+		super(TFStructurePieceTypes.LICH_WING_ROOF, compoundTag, ctx, readSettings(compoundTag));
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(SoftReplaceProcessor.INSTANCE));
 	}
 
 	public LichTowerWingRoof(int genDepth, StructureTemplateManager structureManager, Identifier templateLocation, JigsawPlaceContext jigsawContext) {
-		super(TFStructurePieceTypes.LICH_WING_ROOF.get(), genDepth, structureManager, templateLocation, jigsawContext);
+		super(TFStructurePieceTypes.LICH_WING_ROOF, genDepth, structureManager, templateLocation, jigsawContext);
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(SoftReplaceProcessor.INSTANCE));
 	}

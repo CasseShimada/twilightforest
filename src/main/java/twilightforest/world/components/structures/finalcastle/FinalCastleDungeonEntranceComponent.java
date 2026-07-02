@@ -23,11 +23,11 @@ public class FinalCastleDungeonEntranceComponent extends FinalCastleDungeonRoom3
 	public boolean hasExit = false;
 
 	public FinalCastleDungeonEntranceComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFFCDunEn.get(), nbt);
+		super(TFStructurePieceTypes.TFFCDunEn, nbt);
 	}
 
 	public FinalCastleDungeonEntranceComponent(int i, int x, int y, int z, Direction direction, int level) {
-		super(TFStructurePieceTypes.TFFCDunEn.get(), i, x, y, z, direction, level);
+		super(TFStructurePieceTypes.TFFCDunEn, i, x, y, z, direction, level);
 	}
 
 	@Override

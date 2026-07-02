@@ -37,7 +37,7 @@ public final class LichTowerBase extends TwilightJigsawPiece implements PieceBea
 	private final int casketWingIndex;
 
 	public LichTowerBase(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
-		super(TFStructurePieceTypes.LICH_TOWER_BASE.get(), compoundTag, ctx, readSettings(compoundTag));
+		super(TFStructurePieceTypes.LICH_TOWER_BASE, compoundTag, ctx, readSettings(compoundTag));
 
 		this.casketWingIndex = compoundTag.getIntOr("CasketWingIdx", -1);
 
@@ -45,7 +45,7 @@ public final class LichTowerBase extends TwilightJigsawPiece implements PieceBea
 	}
 
 	public LichTowerBase(StructureTemplateManager structureManager, JigsawPlaceContext jigsawContext) {
-		super(TFStructurePieceTypes.LICH_TOWER_BASE.get(), 1, structureManager, TwilightForestMod.prefix("lich_tower/tower_base"), jigsawContext);
+		super(TFStructurePieceTypes.LICH_TOWER_BASE, 1, structureManager, TwilightForestMod.prefix("lich_tower/tower_base"), jigsawContext);
 
 		this.boundingBox = BoundingBoxUtils.cloneWithAdjustments(this.boundingBox, 0, 0, 0, 0, 30,0);
 		this.casketWingIndex = this.firstMatchIndex(r -> "twilightforest:lich_tower/bridge".equals(r.target()));

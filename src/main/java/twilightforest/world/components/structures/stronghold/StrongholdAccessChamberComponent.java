@@ -23,11 +23,11 @@ import twilightforest.init.TFStructurePieceTypes;
 public class StrongholdAccessChamberComponent extends KnightStrongholdComponent {
 
 	public StrongholdAccessChamberComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFSAC.get(), nbt);
+		super(TFStructurePieceTypes.TFSAC, nbt);
 	}
 
 	public StrongholdAccessChamberComponent(int i, Direction facing, int x, int y, int z) {
-		super(TFStructurePieceTypes.TFSAC.get(), i, facing, x, y, z);
+		super(TFStructurePieceTypes.TFSAC, i, facing, x, y, z);
 	}
 
 	@Override

@@ -21,7 +21,7 @@ import twilightforest.world.components.structures.TFStructureComponentOld;
 public class MazeRoomComponent extends TFStructureComponentOld {
 
 	public MazeRoomComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		this(TFStructurePieceTypes.TFMMR.get(), nbt);
+		this(TFStructurePieceTypes.TFMMR, nbt);
 	}
 
 	public MazeRoomComponent(StructurePieceType piece, CompoundTag nbt) {

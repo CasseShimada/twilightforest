@@ -25,11 +25,11 @@ import twilightforest.world.components.structures.TFStructureComponentOld;
 public class CloudCastleComponent extends TFStructureComponentOld {
 
 	public CloudCastleComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFClCa.get(), nbt);
+		super(TFStructurePieceTypes.TFClCa, nbt);
 	}
 
 	public CloudCastleComponent(int index, int x, int y, int z) {
-		super(TFStructurePieceTypes.TFClCa.get(), index, x, y, z);
+		super(TFStructurePieceTypes.TFClCa, index, x, y, z);
 		this.setOrientation(Direction.SOUTH);
 
 		// round to nearest mult of 4

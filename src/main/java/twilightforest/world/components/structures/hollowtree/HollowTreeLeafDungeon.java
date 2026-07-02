@@ -47,7 +47,7 @@ public class HollowTreeLeafDungeon extends HollowTreePiece {
 	 * Make a blob of leaves
 	 */
 	protected HollowTreeLeafDungeon(int index, int x, int y, int z, int radius, BlockStateProvider wood, BlockStateProvider leaves, BlockStateProvider inside, BlockStateProvider lootContainer, ResourceKey<LootTable> lootTable, Holder<EntityType<?>> monster, RandomSource random) {
-		super(TFStructurePieceTypes.TFHTLD.value(), index, new BoundingBox(x - radius, y - radius, z - radius, x + radius, y + radius, z + radius));
+		super(TFStructurePieceTypes.TFHTLD, index, new BoundingBox(x - radius, y - radius, z - radius, x + radius, y + radius, z + radius));
 
 		this.setOrientation(StructurePiece.getRandomHorizontalDirection(random));
 
@@ -65,7 +65,7 @@ public class HollowTreeLeafDungeon extends HollowTreePiece {
 	 * Load from NBT
 	 */
 	public HollowTreeLeafDungeon(StructurePieceSerializationContext context, CompoundTag tag) {
-		super(TFStructurePieceTypes.TFHTLD.value(), tag);
+		super(TFStructurePieceTypes.TFHTLD, tag);
 
 		this.radius = tag.getIntOr("leafRadius", 0);
 

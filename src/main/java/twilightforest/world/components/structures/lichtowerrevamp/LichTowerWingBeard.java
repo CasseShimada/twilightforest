@@ -23,7 +23,7 @@ public class LichTowerWingBeard extends TwilightJigsawPiece implements PieceBear
 	private final boolean generateGround;
 
 	public LichTowerWingBeard(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
-		super(TFStructurePieceTypes.LICH_WING_BEARD.get(), compoundTag, ctx, readSettings(compoundTag));
+		super(TFStructurePieceTypes.LICH_WING_BEARD, compoundTag, ctx, readSettings(compoundTag));
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(SoftReplaceProcessor.INSTANCE));
 
@@ -31,7 +31,7 @@ public class LichTowerWingBeard extends TwilightJigsawPiece implements PieceBear
 	}
 
 	public LichTowerWingBeard(int genDepth, StructureTemplateManager structureManager, Identifier templateLocation, JigsawPlaceContext jigsawContext, boolean generateGround) {
-		super(TFStructurePieceTypes.LICH_WING_BEARD.get(), genDepth, structureManager, templateLocation, jigsawContext);
+		super(TFStructurePieceTypes.LICH_WING_BEARD, genDepth, structureManager, templateLocation, jigsawContext);
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(SoftReplaceProcessor.INSTANCE));
 

@@ -29,12 +29,12 @@ import twilightforest.world.components.structures.TFStructureComponentOld;
 public class TowerMainComponent extends TowerWingComponent {
 
 	public TowerMainComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFLTMai.get(), nbt);
+		super(TFStructurePieceTypes.TFLTMai, nbt);
 	}
 
 	public TowerMainComponent(RandomSource rand, int index, int x, int y, int z) {
 		// some of these are subject to change if the ground level is > 30.
-		super(TFStructurePieceTypes.TFLTMai.get(), index, x, y + 1, z, 15, 55 + rand.nextInt(32), Direction.SOUTH);
+		super(TFStructurePieceTypes.TFLTMai, index, x, y + 1, z, 15, 55 + rand.nextInt(32), Direction.SOUTH);
 	}
 
 	@Override

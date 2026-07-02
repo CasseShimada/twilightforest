@@ -17,11 +17,11 @@ import twilightforest.init.TFStructurePieceTypes;
 public class MazeRoomExitComponent extends MazeRoomComponent {
 
 	public MazeRoomExitComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFMMRE.get(), nbt);
+		super(TFStructurePieceTypes.TFMMRE, nbt);
 	}
 
 	public MazeRoomExitComponent(int i, RandomSource rand, int x, int y, int z) {
-		super(TFStructurePieceTypes.TFMMRE.get(), i, rand, x, y, z);
+		super(TFStructurePieceTypes.TFMMRE, i, rand, x, y, z);
 	}
 
 	@Override

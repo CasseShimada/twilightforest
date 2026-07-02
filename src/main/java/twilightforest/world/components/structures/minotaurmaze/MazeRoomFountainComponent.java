@@ -17,11 +17,11 @@ import twilightforest.init.TFStructurePieceTypes;
 public class MazeRoomFountainComponent extends MazeRoomComponent {
 
 	public MazeRoomFountainComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFMMRF.get(), nbt);
+		super(TFStructurePieceTypes.TFMMRF, nbt);
 	}
 
 	public MazeRoomFountainComponent(int i, RandomSource rand, int x, int y, int z) {
-		super(TFStructurePieceTypes.TFMMRF.get(), i, rand, x, y, z);
+		super(TFStructurePieceTypes.TFMMRF, i, rand, x, y, z);
 	}
 
 	@Override

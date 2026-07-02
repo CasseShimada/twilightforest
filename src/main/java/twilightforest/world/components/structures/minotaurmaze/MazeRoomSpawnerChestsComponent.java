@@ -21,11 +21,11 @@ import twilightforest.loot.TFLootTables;
 public class MazeRoomSpawnerChestsComponent extends MazeRoomComponent {
 
 	public MazeRoomSpawnerChestsComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFMMRSC.get(), nbt);
+		super(TFStructurePieceTypes.TFMMRSC, nbt);
 	}
 
 	public MazeRoomSpawnerChestsComponent(int i, RandomSource rand, int x, int y, int z) {
-		super(TFStructurePieceTypes.TFMMRSC.get(), i, rand, x, y, z);
+		super(TFStructurePieceTypes.TFMMRSC, i, rand, x, y, z);
 	}
 
 	@Override

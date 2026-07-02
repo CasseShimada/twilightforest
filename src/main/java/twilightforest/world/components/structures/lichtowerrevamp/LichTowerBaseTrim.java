@@ -18,13 +18,13 @@ import twilightforest.world.components.structures.util.SortablePiece;
 
 public final class LichTowerBaseTrim extends TwilightJigsawPiece implements PieceBeardifierModifier, SortablePiece {
 	public LichTowerBaseTrim(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
-		super(TFStructurePieceTypes.LICH_TOWER_BASE_TRIM.get(), compoundTag, ctx, readSettings(compoundTag));
+		super(TFStructurePieceTypes.LICH_TOWER_BASE_TRIM, compoundTag, ctx, readSettings(compoundTag));
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings);
 	}
 
 	public LichTowerBaseTrim(StructureTemplateManager structureManager, JigsawPlaceContext jigsawContext) {
-		super(TFStructurePieceTypes.LICH_TOWER_BASE_TRIM.get(), 1, structureManager, TwilightForestMod.prefix("lich_tower/central_trim"), jigsawContext);
+		super(TFStructurePieceTypes.LICH_TOWER_BASE_TRIM, 1, structureManager, TwilightForestMod.prefix("lich_tower/central_trim"), jigsawContext);
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings);
 	}

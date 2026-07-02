@@ -55,7 +55,7 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 	private final @Nullable BlockPos leashPos;
 
 	public LichPerimeterFence(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
-		super(TFStructurePieceTypes.LICH_PERIMETER_FENCE.value(), compoundTag, ctx, readSettings(compoundTag));
+		super(TFStructurePieceTypes.LICH_PERIMETER_FENCE, compoundTag, ctx, readSettings(compoundTag));
 
 		this.placeSettings.addProcessor(JigsawReplacementProcessor.INSTANCE);
 		this.placeSettings.addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK);
@@ -63,7 +63,7 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 	}
 
 	public LichPerimeterFence(StructureTemplateManager structureManager, JigsawPlaceContext jigsawContext, Identifier templateId, RandomSource random) {
-		super(TFStructurePieceTypes.LICH_PERIMETER_FENCE.value(), 0, structureManager, templateId, jigsawContext);
+		super(TFStructurePieceTypes.LICH_PERIMETER_FENCE, 0, structureManager, templateId, jigsawContext);
 
 		this.placeSettings.addProcessor(JigsawReplacementProcessor.INSTANCE);
 		this.placeSettings.addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK);

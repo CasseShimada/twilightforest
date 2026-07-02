@@ -31,7 +31,7 @@ public class LichYardGrave extends TwilightJigsawPiece implements PieceBeardifie
 	private final BoundingBox fillUnder;
 
 	public LichYardGrave(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
-		super(TFStructurePieceTypes.LICH_YARD_GRAVE.value(), compoundTag, ctx, readSettings(compoundTag));
+		super(TFStructurePieceTypes.LICH_YARD_GRAVE, compoundTag, ctx, readSettings(compoundTag));
 
 		this.placeSettings().addProcessor(JigsawReplacementProcessor.INSTANCE);
 		this.placeSettings().addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK);
@@ -40,7 +40,7 @@ public class LichYardGrave extends TwilightJigsawPiece implements PieceBeardifie
 	}
 
 	public LichYardGrave(StructureTemplateManager structureManager, JigsawPlaceContext jigsawContext, Identifier templateId) {
-		super(TFStructurePieceTypes.LICH_YARD_GRAVE.value(), 0, structureManager, templateId, jigsawContext);
+		super(TFStructurePieceTypes.LICH_YARD_GRAVE, 0, structureManager, templateId, jigsawContext);
 
 		this.placeSettings().addProcessor(JigsawReplacementProcessor.INSTANCE);
 		this.placeSettings().addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK);

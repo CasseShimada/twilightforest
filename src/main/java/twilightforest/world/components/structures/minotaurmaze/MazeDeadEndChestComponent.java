@@ -20,7 +20,7 @@ import twilightforest.loot.TFLootTables;
 public class MazeDeadEndChestComponent extends MazeDeadEndComponent {
 
 	public MazeDeadEndChestComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		this(TFStructurePieceTypes.TFMMDEC.get(), nbt);
+		this(TFStructurePieceTypes.TFMMDEC, nbt);
 	}
 
 	public MazeDeadEndChestComponent(StructurePieceType piece, CompoundTag nbt) {

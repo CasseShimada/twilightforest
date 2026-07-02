@@ -19,11 +19,11 @@ import twilightforest.world.components.structures.TFStructureComponentOld;
 public class CloudTreeComponent extends TFStructureComponentOld {
 
 	public CloudTreeComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFClTr.get(), nbt);
+		super(TFStructurePieceTypes.TFClTr, nbt);
 	}
 
 	public CloudTreeComponent(int index, int x, int y, int z) {
-		super(TFStructurePieceTypes.TFClTr.get(), index, x, y, z);
+		super(TFStructurePieceTypes.TFClTr, index, x, y, z);
 
 		this.setOrientation(Direction.SOUTH);
 

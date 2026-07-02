@@ -22,11 +22,11 @@ import twilightforest.world.components.structures.TFStructureComponentOld;
 public class FinalCastleRoof48CrenellatedComponent extends TFStructureComponentOld {
 
 	public FinalCastleRoof48CrenellatedComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFFCRo48Cr.get(), nbt);
+		super(TFStructurePieceTypes.TFFCRo48Cr, nbt);
 	}
 
 	public FinalCastleRoof48CrenellatedComponent(int i, TFStructureComponentOld keep, int x, int y, int z) {
-		super(TFStructurePieceTypes.TFFCRo48Cr.get(), i, x, y, z);
+		super(TFStructurePieceTypes.TFFCRo48Cr, i, x, y, z);
 
 		int height = 5;
 

@@ -21,11 +21,11 @@ import twilightforest.world.components.structures.TFStructureComponentOld;
 public class MazeUpperEntranceComponent extends TFStructureComponentOld {
 
 	public MazeUpperEntranceComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFMMUE.get(), nbt);
+		super(TFStructurePieceTypes.TFMMUE, nbt);
 	}
 
 	public MazeUpperEntranceComponent(int i, RandomSource rand, int x, int y, int z) {
-		super(TFStructurePieceTypes.TFMMUE.get(), i, x, y, z);
+		super(TFStructurePieceTypes.TFMMUE, i, x, y, z);
 		this.setOrientation(Direction.Plane.HORIZONTAL.getRandomDirection(rand));
 
 		this.boundingBox = new BoundingBox(x, y, z, x + 15, y + 4, z + 15);

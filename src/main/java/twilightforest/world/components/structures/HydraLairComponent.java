@@ -23,11 +23,11 @@ import twilightforest.world.components.spelothem.StructureSpeleothemConfig;
 
 public class HydraLairComponent extends HollowHillComponent {
 	public HydraLairComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(ctx, TFStructurePieceTypes.TFHydra.get(), nbt);
+		super(ctx, TFStructurePieceTypes.TFHydra, nbt);
 	}
 
 	public HydraLairComponent(int i, int x, int y, int z, Holder.Reference<StructureSpeleothemConfig> speleothemConfig) {
-		super(TFStructurePieceTypes.TFHydra.get(), i, 2, x, y + 2, z, speleothemConfig);
+		super(TFStructurePieceTypes.TFHydra, i, 2, x, y + 2, z, speleothemConfig);
 	}
 
 	@Override

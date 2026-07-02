@@ -17,11 +17,11 @@ import twilightforest.init.TFStructurePieceTypes;
 public class MazeRoomCollapseComponent extends MazeRoomComponent {
 
 	public MazeRoomCollapseComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFMMRC.get(), nbt);
+		super(TFStructurePieceTypes.TFMMRC, nbt);
 	}
 
 	public MazeRoomCollapseComponent(int i, RandomSource rand, int x, int y, int z) {
-		super(TFStructurePieceTypes.TFMMRC.get(), i, rand, x, y, z);
+		super(TFStructurePieceTypes.TFMMRC, i, rand, x, y, z);
 	}
 
 	@Override

@@ -35,7 +35,7 @@ public class DarkTowerWingComponent extends TowerWingComponent {
 	protected final ArrayList<EnumDarkTowerDoor> openingTypes = new ArrayList<>();
 
 	public DarkTowerWingComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		this(TFStructurePieceTypes.TFDTWin.get(), nbt);
+		this(TFStructurePieceTypes.TFDTWin, nbt);
 	}
 
 	public DarkTowerWingComponent(StructurePieceType piece, CompoundTag nbt) {
@@ -199,7 +199,7 @@ public class DarkTowerWingComponent extends TowerWingComponent {
 			return false;
 		}
 
-		DarkTowerBridgeComponent bridge = new DarkTowerBridgeComponent(TFStructurePieceTypes.TFDTBri.get(), index, dx[0], dx[1], dx[2], wingSize, wingHeight, direction);
+		DarkTowerBridgeComponent bridge = new DarkTowerBridgeComponent(TFStructurePieceTypes.TFDTBri, index, dx[0], dx[1], dx[2], wingSize, wingHeight, direction);
 		// check to see if it intersects something already there
 		StructurePiece intersect = list.findCollisionPiece(bridge.getBoundingBox());
 		if (intersect == null || intersect == this) {

@@ -77,9 +77,9 @@ public class HollowHillStructure extends LandmarkStructure implements Configurab
 	@Override
 	protected StructurePiece getFirstPiece(GenerationContext context, RandomSource random, ChunkPos chunkPos, int x, int y, int z) {
 		return switch (this.size) { // TODO Clean up once TFLandmark params are no longer necessary
-			case 1 -> new HollowHillComponent(TFStructurePieceTypes.TFHill.get(), 0, this.size, x - 3, y - 2, z - 3, this.speleothemConfig);
-			case 2 -> new HollowHillComponent(TFStructurePieceTypes.TFHill.get(), 0, this.size, x - 7, y - 5, z - 7, this.speleothemConfig);
-			default -> new HollowHillComponent(TFStructurePieceTypes.TFHill.get(), 0, this.size, x - 11, y - 5, z - 11, this.speleothemConfig);
+			case 1 -> new HollowHillComponent(TFStructurePieceTypes.TFHill, 0, this.size, x - 3, y - 2, z - 3, this.speleothemConfig);
+			case 2 -> new HollowHillComponent(TFStructurePieceTypes.TFHill, 0, this.size, x - 7, y - 5, z - 7, this.speleothemConfig);
+			default -> new HollowHillComponent(TFStructurePieceTypes.TFHill, 0, this.size, x - 11, y - 5, z - 11, this.speleothemConfig);
 		};
 	}
 

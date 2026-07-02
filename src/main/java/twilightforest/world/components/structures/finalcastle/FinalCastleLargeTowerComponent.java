@@ -31,11 +31,11 @@ public class FinalCastleLargeTowerComponent extends TowerWingComponent {
 	public static final Identifier LARGE_TOWER_TEMP_POOL = TwilightForestMod.prefix("final_castle/temp/large_tower");
 
 	public FinalCastleLargeTowerComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFFCLaTo.get(), nbt);
+		super(TFStructurePieceTypes.TFFCLaTo, nbt);
 	}
 
 	public FinalCastleLargeTowerComponent(int i, int x, int y, int z, Direction rotation) {
-		super(TFStructurePieceTypes.TFFCLaTo.get(), i, x, y, z);
+		super(TFStructurePieceTypes.TFFCLaTo, i, x, y, z);
 		this.setOrientation(rotation);
 		this.size = 13;
 		this.height = 61;

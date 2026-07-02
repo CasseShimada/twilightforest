@@ -22,11 +22,11 @@ import twilightforest.world.components.structures.TFStructureComponentOld;
 public class DarkTowerBossTrapComponent extends DarkTowerWingComponent {
 
 	public DarkTowerBossTrapComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFDTBT.get(), nbt);
+		super(TFStructurePieceTypes.TFDTBT, nbt);
 	}
 
 	protected DarkTowerBossTrapComponent(int i, int x, int y, int z, int pSize, int pHeight, Direction direction) {
-		super(TFStructurePieceTypes.TFDTBT.get(), i, x, y, z, pSize, pHeight, direction);
+		super(TFStructurePieceTypes.TFDTBT, i, x, y, z, pSize, pHeight, direction);
 
 		// no spawns
 		this.spawnListIndex = -1;

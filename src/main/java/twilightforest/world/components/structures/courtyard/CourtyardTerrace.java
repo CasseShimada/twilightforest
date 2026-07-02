@@ -22,11 +22,11 @@ import twilightforest.world.components.structures.TwilightTemplateStructurePiece
 
 public class CourtyardTerrace extends TwilightTemplateStructurePiece implements PieceBeardifierModifier {
 	public CourtyardTerrace(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFNCTe.value(), nbt, ctx, readSettings(nbt).addProcessor(CourtyardTerraceTemplateProcessor.INSTANCE).addProcessor(NagastoneVariants.INSTANCE).addProcessor(StoneBricksVariants.INSTANCE));
+		super(TFStructurePieceTypes.TFNCTe, nbt, ctx, readSettings(nbt).addProcessor(CourtyardTerraceTemplateProcessor.INSTANCE).addProcessor(NagastoneVariants.INSTANCE).addProcessor(StoneBricksVariants.INSTANCE));
 	}
 
 	public CourtyardTerrace(int i, int x, int y, int z, Rotation rotation, StructureTemplateManager structureManager, Identifier templateLocation) {
-		super(TFStructurePieceTypes.TFNCTe.value(), i, structureManager, templateLocation, makeSettings(rotation).addProcessor(CourtyardTerraceTemplateProcessor.INSTANCE).addProcessor(NagastoneVariants.INSTANCE).addProcessor(StoneBricksVariants.INSTANCE), new BlockPos(x, y, z));
+		super(TFStructurePieceTypes.TFNCTe, i, structureManager, templateLocation, makeSettings(rotation).addProcessor(CourtyardTerraceTemplateProcessor.INSTANCE).addProcessor(NagastoneVariants.INSTANCE).addProcessor(StoneBricksVariants.INSTANCE), new BlockPos(x, y, z));
 	}
 
 	protected CourtyardTerrace(StructurePieceType structurePieceType, StructurePieceSerializationContext ctx, CompoundTag nbt) {

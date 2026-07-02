@@ -23,11 +23,11 @@ import twilightforest.world.components.structures.TFStructureComponentOld;
 public class FinalCastleBridgeComponent extends TFStructureComponentOld {
 
 	public FinalCastleBridgeComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFFCBri.get(), nbt);
+		super(TFStructurePieceTypes.TFFCBri, nbt);
 	}
 
 	public FinalCastleBridgeComponent(int i, int x, int y, int z, int length, Direction direction) {
-		super(TFStructurePieceTypes.TFFCBri.get(), i, x, y, z);
+		super(TFStructurePieceTypes.TFFCBri, i, x, y, z);
 		this.setOrientation(direction);
 		this.boundingBox = TFStructureComponentOld.getComponentToAddBoundingBox2(x, y, z, 0, -1, -3, length - 1, 5, 6, direction);
 	}

@@ -24,11 +24,11 @@ import twilightforest.world.components.structures.lichtower.TowerWingComponent;
 public class FinalCastleStairTowerComponent extends TowerWingComponent {
 
 	public FinalCastleStairTowerComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFFCStTo.get(), nbt);
+		super(TFStructurePieceTypes.TFFCStTo, nbt);
 	}
 
 	public FinalCastleStairTowerComponent(int i, int x, int y, int z, Direction rotation) {
-		super(TFStructurePieceTypes.TFFCStTo.get(), i, x, y, z);
+		super(TFStructurePieceTypes.TFFCStTo, i, x, y, z);
 		this.setOrientation(rotation);
 		this.size = 9;
 		this.height = 51;

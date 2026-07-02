@@ -23,7 +23,7 @@ public class CloudComponent extends StructurePiece {
 	private static final int DEPTH = 8;
 
 	public CloudComponent(int genDepth, int centerChunkX, int yHeight, int centerChunkZ) {
-		super(TFStructurePieceTypes.TFCloud.value(), genDepth, makeBoundingBox((centerChunkX + OFFSET) & ~0b1111, yHeight, (centerChunkZ + OFFSET) & ~0b1111));
+		super(TFStructurePieceTypes.TFCloud, genDepth, makeBoundingBox((centerChunkX + OFFSET) & ~0b1111, yHeight, (centerChunkZ + OFFSET) & ~0b1111));
 	}
 
 	@NotNull
@@ -32,7 +32,7 @@ public class CloudComponent extends StructurePiece {
 	}
 
 	public CloudComponent(StructurePieceSerializationContext ctx, CompoundTag tag) {
-		super(TFStructurePieceTypes.TFCloud.value(), tag);
+		super(TFStructurePieceTypes.TFCloud, tag);
 	}
 
 	@Override

@@ -43,7 +43,7 @@ public class TrollCaveMainComponent extends TFStructureComponentOld {
 	protected final Holder.Reference<StructureSpeleothemConfig> speleothemConfigHolder;
 
 	public TrollCaveMainComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		this(TFStructurePieceTypes.TFTCMai.get(), ctx, nbt);
+		this(TFStructurePieceTypes.TFTCMai, ctx, nbt);
 	}
 
 	public TrollCaveMainComponent(StructurePieceType piece, StructurePieceSerializationContext ctx, CompoundTag nbt) {

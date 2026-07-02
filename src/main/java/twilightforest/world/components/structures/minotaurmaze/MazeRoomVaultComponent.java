@@ -19,11 +19,11 @@ import twilightforest.loot.TFLootTables;
 public class MazeRoomVaultComponent extends MazeRoomComponent {
 
 	public MazeRoomVaultComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFMMRV.get(), nbt);
+		super(TFStructurePieceTypes.TFMMRV, nbt);
 	}
 
 	public MazeRoomVaultComponent(int i, RandomSource rand, int x, int y, int z) {
-		super(TFStructurePieceTypes.TFMMRV.get(), i, rand, x, y, z);
+		super(TFStructurePieceTypes.TFMMRV, i, rand, x, y, z);
 
 		// specify a non-existant high spawn list value to stop actual monster spawns
 		this.spawnListIndex = Integer.MAX_VALUE;

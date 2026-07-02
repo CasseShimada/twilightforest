@@ -35,14 +35,14 @@ public final class LichTowerWingBridge extends TwilightJigsawPiece implements Pi
 	private final boolean fromCentral;
 
 	public LichTowerWingBridge(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
-		super(TFStructurePieceTypes.LICH_WING_BRIDGE.get(), compoundTag, ctx, readSettings(compoundTag));
+		super(TFStructurePieceTypes.LICH_WING_BRIDGE, compoundTag, ctx, readSettings(compoundTag));
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings);
 		this.fromCentral = compoundTag.getBooleanOr("from_central", false);
 	}
 
 	public LichTowerWingBridge(StructureTemplateManager structureManager, int genDepth, JigsawPlaceContext jigsawContext, Identifier templateLocation, boolean fromCentral) {
-		super(TFStructurePieceTypes.LICH_WING_BRIDGE.get(), genDepth, structureManager, templateLocation, jigsawContext);
+		super(TFStructurePieceTypes.LICH_WING_BRIDGE, genDepth, structureManager, templateLocation, jigsawContext);
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings);
 		this.fromCentral = fromCentral;

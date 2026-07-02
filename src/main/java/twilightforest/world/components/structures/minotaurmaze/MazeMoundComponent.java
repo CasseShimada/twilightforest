@@ -19,7 +19,7 @@ import twilightforest.world.components.structures.TFStructureComponentOld;
 public class MazeMoundComponent extends TFStructureComponentOld {
 
 	public MazeMoundComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFMMMound.get(), nbt);
+		super(TFStructurePieceTypes.TFMMMound, nbt);
 	}
 
 	public static final int DIAMETER = 35;
@@ -27,7 +27,7 @@ public class MazeMoundComponent extends TFStructureComponentOld {
 	private MazeUpperEntranceComponent mazeAbove;
 
 	public MazeMoundComponent(int i, RandomSource rand, int x, int y, int z) {
-		super(TFStructurePieceTypes.TFMMMound.get(), i, new BoundingBox(x, y, z, x + DIAMETER, y + 12, z + DIAMETER));
+		super(TFStructurePieceTypes.TFMMMound, i, new BoundingBox(x, y, z, x + DIAMETER, y + 12, z + DIAMETER));
 		this.setOrientation(Direction.Plane.HORIZONTAL.getRandomDirection(rand));
 	}
 

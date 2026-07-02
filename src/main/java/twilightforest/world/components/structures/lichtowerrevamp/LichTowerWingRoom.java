@@ -92,7 +92,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 	private final int[] allowedCeilingPlacements;
 
 	public LichTowerWingRoom(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
-		super(TFStructurePieceTypes.LICH_WING_ROOM.get(), compoundTag, ctx, readSettings(compoundTag));
+		super(TFStructurePieceTypes.LICH_WING_ROOM, compoundTag, ctx, readSettings(compoundTag));
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(lichTowerUtil.getRoomSpawnerProcessor()));
 		this.placeSettings().setLiquidSettings(LiquidSettings.IGNORE_WATERLOGGING);
@@ -106,7 +106,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 	}
 
 	public LichTowerWingRoom(StructureTemplateManager structureManager, int genDepth, JigsawPlaceContext jigsawContext, Identifier roomId, int roomSize, boolean generateGround, boolean canGenerateLadder, RandomSource random) {
-		super(TFStructurePieceTypes.LICH_WING_ROOM.get(), genDepth, structureManager, roomId, jigsawContext);
+		super(TFStructurePieceTypes.LICH_WING_ROOM, genDepth, structureManager, roomId, jigsawContext);
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(lichTowerUtil.getRoomSpawnerProcessor()));
 		this.placeSettings().setLiquidSettings(LiquidSettings.IGNORE_WATERLOGGING);

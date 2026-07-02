@@ -49,7 +49,7 @@ public class LichYardBox extends StructurePiece implements PieceBeardifierModifi
 	private final float offset;
 
 	public LichYardBox(BoundingBox boundingBox, float edgeFeatheringRange, Direction direction, boolean doDirtMotley, float scale, float offset) {
-		super(TFStructurePieceTypes.LICH_YARD_PATH.value(), 0, boundingBox);
+		super(TFStructurePieceTypes.LICH_YARD_PATH, 0, boundingBox);
 
 		this.edgeFeatheringRange = edgeFeatheringRange;
 		this.direction = direction;
@@ -59,7 +59,7 @@ public class LichYardBox extends StructurePiece implements PieceBeardifierModifi
 	}
 
 	public LichYardBox(StructurePieceSerializationContext ctx, CompoundTag tag) {
-		super(TFStructurePieceTypes.LICH_YARD_PATH.value(), tag);
+		super(TFStructurePieceTypes.LICH_YARD_PATH, tag);
 
 		this.edgeFeatheringRange = tag.getFloatOr("feather", 0.0f);
 		this.direction = tag.contains("direction") ? Direction.values()[tag.getIntOr("direction", Direction.UP.ordinal())] : Direction.UP;

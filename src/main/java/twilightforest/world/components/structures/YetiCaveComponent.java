@@ -26,11 +26,11 @@ import twilightforest.world.components.spelothem.StructureSpeleothemConfig;
 public class YetiCaveComponent extends HollowHillComponent {
 
 	public YetiCaveComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(ctx, TFStructurePieceTypes.TFYeti.get(), nbt);
+		super(ctx, TFStructurePieceTypes.TFYeti, nbt);
 	}
 
 	public YetiCaveComponent(int i, int x, int y, int z, Holder.Reference<StructureSpeleothemConfig> speleothemConfig) {
-		super(TFStructurePieceTypes.TFYeti.get(), i, 2, x, y, z, speleothemConfig);
+		super(TFStructurePieceTypes.TFYeti, i, 2, x, y, z, speleothemConfig);
 
 		// FIXME Get rid of HollowHillComponent so this ugly hack can be sanitized
 		this.boundingBox = new BoundingBox(

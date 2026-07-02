@@ -43,7 +43,7 @@ public class FinalCastleMazeTower13Component extends TowerWingComponent {
 	}
 
 	public FinalCastleMazeTower13Component(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		this(TFStructurePieceTypes.TFFCSiTo.get(), nbt);
+		this(TFStructurePieceTypes.TFFCSiTo, nbt);
 	}
 
 	public FinalCastleMazeTower13Component(StructurePieceType piece, RandomSource rand, int i, int x, int y, int z, BlockState color, Direction direction) {
@@ -99,7 +99,7 @@ public class FinalCastleMazeTower13Component extends TowerWingComponent {
 		}
 
 		// add foundation
-		FinalCastleFoundation13Component foundation = new FinalCastleFoundation13Component(TFStructurePieceTypes.TFFCToF13.get(), 4, this, getLocatorPosition().getX(), getLocatorPosition().getY(), getLocatorPosition().getZ());
+		FinalCastleFoundation13Component foundation = new FinalCastleFoundation13Component(TFStructurePieceTypes.TFFCToF13, 4, this, getLocatorPosition().getX(), getLocatorPosition().getY(), getLocatorPosition().getZ());
 		list.addPiece(foundation);
 		foundation.addChildren(this, list, rand);
 
@@ -259,7 +259,7 @@ public class FinalCastleMazeTower13Component extends TowerWingComponent {
 
 			if (isWithinRange(centerX, centerZ, tc.getX(), tc.getZ(), 128)) {
 
-				FinalCastleMazeTower13Component sTower = new FinalCastleMazeTower13Component(TFStructurePieceTypes.TFFCSiTo.get(), rand, this.getGenDepth() + 1, tc.getX(), tc.getY(), tc.getZ(), this.color, facing);
+				FinalCastleMazeTower13Component sTower = new FinalCastleMazeTower13Component(TFStructurePieceTypes.TFFCSiTo, rand, this.getGenDepth() + 1, tc.getX(), tc.getY(), tc.getZ(), this.color, facing);
 
 				BoundingBox largerBB = new BoundingBox(
 					sTower.getBoundingBox().minX() - 6, 0, sTower.getBoundingBox().minZ() - 6,
@@ -330,7 +330,7 @@ public class FinalCastleMazeTower13Component extends TowerWingComponent {
 	}
 
 	protected FinalCastleMazeTower13Component makeNewDamagedTower(RandomSource rand, Direction facing, BlockPos tc) {
-		return new FinalCastleDamagedTowerComponent(TFStructurePieceTypes.TFFCDamT.get(), rand, this.getGenDepth() + 1, tc.getX(), tc.getY(), tc.getZ(), facing);
+		return new FinalCastleDamagedTowerComponent(TFStructurePieceTypes.TFFCDamT, rand, this.getGenDepth() + 1, tc.getX(), tc.getY(), tc.getZ(), facing);
 	}
 
 	private int adjustOpening(int posY, BlockPos dest) {

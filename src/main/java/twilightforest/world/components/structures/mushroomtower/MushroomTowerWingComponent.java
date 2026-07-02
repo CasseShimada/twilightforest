@@ -35,7 +35,7 @@ public class MushroomTowerWingComponent extends TowerWingComponent {
 	public boolean isAscender = false;
 
 	public MushroomTowerWingComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		this(TFStructurePieceTypes.TFMTWin.get(), nbt);
+		this(TFStructurePieceTypes.TFMTWin, nbt);
 	}
 
 	public MushroomTowerWingComponent(StructurePieceType piece, CompoundTag nbt) {
@@ -137,7 +137,7 @@ public class MushroomTowerWingComponent extends TowerWingComponent {
 			dx = adjustCoordinates(dx[0], dx[1], dx[2], wingSize, direction, list);
 		}
 
-		MushroomTowerWingComponent wing = new MushroomTowerWingComponent(TFStructurePieceTypes.TFMTWin.get(), index, dx[0], dx[1], dx[2], wingSize, wingHeight, direction);
+		MushroomTowerWingComponent wing = new MushroomTowerWingComponent(TFStructurePieceTypes.TFMTWin, index, dx[0], dx[1], dx[2], wingSize, wingHeight, direction);
 		// check to see if it intersects something already there
 		StructurePiece intersect = list.findCollisionPiece(wing.getBoundingBox());
 		if (intersect == null || intersect == this || intersect instanceof TowerRoofMushroomComponent) {
@@ -239,7 +239,7 @@ public class MushroomTowerWingComponent extends TowerWingComponent {
 			wingHeight = 4;
 		}
 
-		MushroomTowerBridgeComponent bridge = new MushroomTowerBridgeComponent(TFStructurePieceTypes.TFMTBri.get(), index, dx[0], dx[1], dx[2], wingSize, wingHeight, direction);
+		MushroomTowerBridgeComponent bridge = new MushroomTowerBridgeComponent(TFStructurePieceTypes.TFMTBri, index, dx[0], dx[1], dx[2], wingSize, wingHeight, direction);
 		bridge.isAscender = ascender;
 		// check to see if it intersects something already there
 		StructurePiece intersect = list.findCollisionPiece(bridge.getBoundingBox());

@@ -30,11 +30,11 @@ import java.util.List;
 public class FinalCastleMainComponent extends TFStructureComponentOld {
 
 	public FinalCastleMainComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFFCMain.get(), nbt);
+		super(TFStructurePieceTypes.TFFCMain, nbt);
 	}
 
 	public FinalCastleMainComponent(int i, int x, int y, int z) {
-		super(TFStructurePieceTypes.TFFCMain.get(), i, x, y, z);
+		super(TFStructurePieceTypes.TFFCMain, i, x, y, z);
 		this.setOrientation(Direction.SOUTH);
 		this.spawnListIndex = 1; // main monsters
 
@@ -130,7 +130,7 @@ public class FinalCastleMainComponent extends TFStructureComponentOld {
 
 				// build
 				BlockPos tc = this.offsetTowerCCoords(x, y, z, howFar, direction);
-				FinalCastleMazeTower13Component sTower = new FinalCastleMazeTower13Component(TFStructurePieceTypes.TFFCSiTo.get(), rand, 3, tc.getX(), tc.getY(), tc.getZ(), type, direction);
+				FinalCastleMazeTower13Component sTower = new FinalCastleMazeTower13Component(TFStructurePieceTypes.TFFCSiTo, rand, 3, tc.getX(), tc.getY(), tc.getZ(), type, direction);
 
 				// add bridge
 				BlockPos bc = this.offsetTowerCCoords(x, y, z, 1, direction);

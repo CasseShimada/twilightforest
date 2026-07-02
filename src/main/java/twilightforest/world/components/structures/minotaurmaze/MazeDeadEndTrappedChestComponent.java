@@ -20,11 +20,11 @@ import twilightforest.loot.TFLootTables;
 public class MazeDeadEndTrappedChestComponent extends MazeDeadEndComponent {
 
 	public MazeDeadEndTrappedChestComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
-		super(TFStructurePieceTypes.TFMMDETrC.get(), nbt);
+		super(TFStructurePieceTypes.TFMMDETrC, nbt);
 	}
 
 	public MazeDeadEndTrappedChestComponent(int i, int x, int y, int z, Direction rotation) {
-		super(TFStructurePieceTypes.TFMMDETrC.get(), i, x, y, z, rotation);
+		super(TFStructurePieceTypes.TFMMDETrC, i, x, y, z, rotation);
 		this.setOrientation(rotation);
 
 		// specify a non-existant high spawn list value to stop actual monster spawns
