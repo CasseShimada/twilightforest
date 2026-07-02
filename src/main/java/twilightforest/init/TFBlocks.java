@@ -161,14 +161,14 @@ public class TFBlocks {
 	public static final OminousCandleBlock OMINOUS_BLACK_CANDLE = ominousCandle("ominous_black_candle", MapColor.COLOR_BLACK, Blocks.DYED_CANDLE.black());
 
 	//labyrinth
-	public static final DeferredBlock<Block> MAZESTONE = registerWithItem("mazestone", Block::new, () -> BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).mapColor(MapColor.STONE).requiresCorrectToolForDrops().sound(SoundType.STONE).strength(100.0F, 5.0F));
-	public static final DeferredBlock<Block> MAZESTONE_BRICK = registerWithItem("mazestone_brick", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(MAZESTONE.get()));
-	public static final DeferredBlock<Block> CUT_MAZESTONE = registerWithItem("cut_mazestone", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(MAZESTONE.get()));
-	public static final DeferredBlock<Block> DECORATIVE_MAZESTONE = registerWithItem("decorative_mazestone", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(MAZESTONE.get()));
-	public static final DeferredBlock<Block> CRACKED_MAZESTONE = registerWithItem("cracked_mazestone", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(MAZESTONE.get()));
-	public static final DeferredBlock<Block> MOSSY_MAZESTONE = registerWithItem("mossy_mazestone", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(MAZESTONE.get()));
-	public static final DeferredBlock<Block> MAZESTONE_MOSAIC = registerWithItem("mazestone_mosaic", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(MAZESTONE.get()));
-	public static final DeferredBlock<Block> MAZESTONE_BORDER = registerWithItem("mazestone_border", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(MAZESTONE.get()));
+	public static final Block MAZESTONE = registerDirectWithItem("mazestone", Block::new, () -> BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).mapColor(MapColor.STONE).requiresCorrectToolForDrops().sound(SoundType.STONE).strength(100.0F, 5.0F));
+	public static final Block MAZESTONE_BRICK = registerDirectWithItem("mazestone_brick", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(MAZESTONE));
+	public static final Block CUT_MAZESTONE = registerDirectWithItem("cut_mazestone", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(MAZESTONE));
+	public static final Block DECORATIVE_MAZESTONE = registerDirectWithItem("decorative_mazestone", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(MAZESTONE));
+	public static final Block CRACKED_MAZESTONE = registerDirectWithItem("cracked_mazestone", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(MAZESTONE));
+	public static final Block MOSSY_MAZESTONE = registerDirectWithItem("mossy_mazestone", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(MAZESTONE));
+	public static final Block MAZESTONE_MOSAIC = registerDirectWithItem("mazestone_mosaic", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(MAZESTONE));
+	public static final Block MAZESTONE_BORDER = registerDirectWithItem("mazestone_border", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(MAZESTONE));
 	public static final RedThreadBlock RED_THREAD = registerDirectWithItem("red_thread", RedThreadBlock::new, () -> BlockBehaviour.Properties.of().instabreak().mapColor(MapColor.FIRE).isValidSpawn(TFBlocks::noSpawning).noCollision().noOcclusion().noTerrainParticles().pushReaction(PushReaction.DESTROY));
 	public static final MazeSlimeBlock MAZE_SLIME_BLOCK = registerDirectWithItem("maze_slime_block", MazeSlimeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SLIME_BLOCK).mapColor(MapColor.STONE));
 

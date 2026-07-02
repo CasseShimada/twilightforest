@@ -85,7 +85,7 @@ public class MazeSlime extends Slime {
 
 	@Override
 	protected ParticleOptions getParticleType() {
-		BlockState state = TFBlocks.MAZESTONE_BRICK.get().defaultBlockState();
+		BlockState state = TFBlocks.MAZESTONE_BRICK.defaultBlockState();
 		return new BlockParticleOption(ParticleTypes.BLOCK, state);
 	}
 

@@ -10,9 +10,9 @@ public class MazestoneRandomBlockSelectoryFactory {
 	public SimpleRandomBlockSelector make() {
 		return new SimpleRandomBlockSelector(
 			List.of(
-				Pair.of(TFBlocks.MOSSY_MAZESTONE.get().defaultBlockState(), 0.2F),
-				Pair.of(TFBlocks.CRACKED_MAZESTONE.get().defaultBlockState(), 0.3F),
-				Pair.of(TFBlocks.MAZESTONE_BRICK.get().defaultBlockState(), 0.5F)
+				Pair.of(TFBlocks.MOSSY_MAZESTONE.defaultBlockState(), 0.2F),
+				Pair.of(TFBlocks.CRACKED_MAZESTONE.defaultBlockState(), 0.3F),
+				Pair.of(TFBlocks.MAZESTONE_BRICK.defaultBlockState(), 0.5F)
 			)
 		);
 	}

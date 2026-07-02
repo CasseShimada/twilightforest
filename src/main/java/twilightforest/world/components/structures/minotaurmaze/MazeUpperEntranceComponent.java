@@ -44,12 +44,12 @@ public class MazeUpperEntranceComponent extends TFStructureComponentOld {
 		FeaturePlacers.replaceBlocksDome(world, this.boundingBox.getCenter().atY(this.getWorldY(-1)), 16, 0.8f, sbb, this.boundingBox.inflatedBy(8), Blocks.STONE, Blocks.DIRT.defaultBlockState());
 
 		// ceiling
-		this.generateMaybeBox(world, sbb, rand, 0.7F, 0, 5, 0, 15, 5, 15, TFBlocks.MAZESTONE.get().defaultBlockState(), AIR, true, false);
+		this.generateMaybeBox(world, sbb, rand, 0.7F, 0, 5, 0, 15, 5, 15, TFBlocks.MAZESTONE.defaultBlockState(), AIR, true, false);
 
-		this.generateBox(world, sbb, 0, 0, 0, 15, 0, 15, TFBlocks.MAZESTONE_MOSAIC.get().defaultBlockState(), AIR, false);
-		this.generateBox(world, sbb, 0, 1, 0, 15, 1, 15, TFBlocks.DECORATIVE_MAZESTONE.get().defaultBlockState(), AIR, true);
-		this.generateBox(world, sbb, 0, 2, 0, 15, 3, 15, TFBlocks.MAZESTONE_BRICK.get().defaultBlockState(), AIR, true);
-		this.generateBox(world, sbb, 0, 4, 0, 15, 4, 15, TFBlocks.DECORATIVE_MAZESTONE.get().defaultBlockState(), AIR, true);
+		this.generateBox(world, sbb, 0, 0, 0, 15, 0, 15, TFBlocks.MAZESTONE_MOSAIC.defaultBlockState(), AIR, false);
+		this.generateBox(world, sbb, 0, 1, 0, 15, 1, 15, TFBlocks.DECORATIVE_MAZESTONE.defaultBlockState(), AIR, true);
+		this.generateBox(world, sbb, 0, 2, 0, 15, 3, 15, TFBlocks.MAZESTONE_BRICK.defaultBlockState(), AIR, true);
+		this.generateBox(world, sbb, 0, 4, 0, 15, 4, 15, TFBlocks.DECORATIVE_MAZESTONE.defaultBlockState(), AIR, true);
 		this.generateMaybeBox(world, sbb, rand, 0.2F, 0, 0, 0, 15, 5, 15, Blocks.GRAVEL.defaultBlockState(), AIR, true, false);
 
 		// doorways
@@ -66,8 +66,8 @@ public class MazeUpperEntranceComponent extends TFStructureComponentOld {
 		this.generateAirBox(world, sbb, 1, 1, 1, 14, 4, 14);
 
 		// entrance pit
-		this.generateBox(world, sbb, 5, 1, 5, 10, 1, 10, TFBlocks.DECORATIVE_MAZESTONE.get().defaultBlockState(), AIR, false);
-		this.generateBox(world, sbb, 5, 4, 5, 10, 4, 10, TFBlocks.DECORATIVE_MAZESTONE.get().defaultBlockState(), AIR, false);
+		this.generateBox(world, sbb, 5, 1, 5, 10, 1, 10, TFBlocks.DECORATIVE_MAZESTONE.defaultBlockState(), AIR, false);
+		this.generateBox(world, sbb, 5, 4, 5, 10, 4, 10, TFBlocks.DECORATIVE_MAZESTONE.defaultBlockState(), AIR, false);
 		this.generateMaybeBox(world, sbb, rand, 0.7F, 5, 2, 5, 10, 3, 10, Blocks.IRON_BARS.defaultBlockState(), AIR, false, false);
 //		this.fillWithBlocks(world, sbb, 5, 2, 5, 10, 3, 10, Blocks.IRON_BARS, 0, AIR, false);
 

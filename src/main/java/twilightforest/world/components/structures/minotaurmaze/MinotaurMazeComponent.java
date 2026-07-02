@@ -279,17 +279,17 @@ public class MinotaurMazeComponent extends TFStructureComponentOld {
 		// clear the area
 		generateAirBox(world, sbb, 1, 1, 1, getDiameter(), 4, getDiameter());
 		boolean onlyReplaceCeiling = this.level == 1;
-		generateBox(world, sbb, 1, 5, 1, getDiameter() + 1, 5, getDiameter() + 1, TFBlocks.MAZESTONE.get().defaultBlockState(), stone, onlyReplaceCeiling);
-		generateBox(world, sbb, 1, 0, 1, getDiameter() + 1, 0, getDiameter() + 1, TFBlocks.MAZESTONE_MOSAIC.get().defaultBlockState(), stone, false);
+		generateBox(world, sbb, 1, 5, 1, getDiameter() + 1, 5, getDiameter() + 1, TFBlocks.MAZESTONE.defaultBlockState(), stone, onlyReplaceCeiling);
+		generateBox(world, sbb, 1, 0, 1, getDiameter() + 1, 0, getDiameter() + 1, TFBlocks.MAZESTONE_MOSAIC.defaultBlockState(), stone, false);
 
 		maze.copyToStructure(world, manager, generator, 1, 2, 1, this, sbb, rand);
 	}
 
 	private void configureMaze() {
-		maze.headBlockState = TFBlocks.DECORATIVE_MAZESTONE.get().defaultBlockState();
-		maze.wallBlockState = TFBlocks.MAZESTONE_BRICK.get().defaultBlockState();
-		maze.rootBlockState = TFBlocks.DECORATIVE_MAZESTONE.get().defaultBlockState();
-		maze.pillarBlockState = TFBlocks.CUT_MAZESTONE.get().defaultBlockState();
+		maze.headBlockState = TFBlocks.DECORATIVE_MAZESTONE.defaultBlockState();
+		maze.wallBlockState = TFBlocks.MAZESTONE_BRICK.defaultBlockState();
+		maze.rootBlockState = TFBlocks.DECORATIVE_MAZESTONE.defaultBlockState();
+		maze.pillarBlockState = TFBlocks.CUT_MAZESTONE.defaultBlockState();
 		maze.wallBlocks = mazestone.make();
 		maze.torchRarity = 0.05F;
 		maze.tall = 2;
