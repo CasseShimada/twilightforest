@@ -294,28 +294,28 @@ public class EntityEvents {
 			boolean wall = state.getBlock() instanceof WallSkullBlock;
 			switch (type) {
 				case SKELETON -> {
-					if (wall) makeWallSkull(level, pos, stack, TFBlocks.SKELETON_WALL_SKULL_CANDLE.get());
-					else makeFloorSkull(level, pos, stack, TFBlocks.SKELETON_SKULL_CANDLE.get());
+					if (wall) makeWallSkull(level, pos, stack, TFBlocks.SKELETON_WALL_SKULL_CANDLE);
+					else makeFloorSkull(level, pos, stack, TFBlocks.SKELETON_SKULL_CANDLE);
 				}
 				case WITHER_SKELETON -> {
-					if (wall) makeWallSkull(level, pos, stack, TFBlocks.WITHER_SKELE_WALL_SKULL_CANDLE.get());
-					else makeFloorSkull(level, pos, stack, TFBlocks.WITHER_SKELE_SKULL_CANDLE.get());
+					if (wall) makeWallSkull(level, pos, stack, TFBlocks.WITHER_SKELE_WALL_SKULL_CANDLE);
+					else makeFloorSkull(level, pos, stack, TFBlocks.WITHER_SKELE_SKULL_CANDLE);
 				}
 				case PLAYER -> {
-					if (wall) makeWallSkull(level, pos, stack, TFBlocks.PLAYER_WALL_SKULL_CANDLE.get());
-					else makeFloorSkull(level, pos, stack, TFBlocks.PLAYER_SKULL_CANDLE.get());
+					if (wall) makeWallSkull(level, pos, stack, TFBlocks.PLAYER_WALL_SKULL_CANDLE);
+					else makeFloorSkull(level, pos, stack, TFBlocks.PLAYER_SKULL_CANDLE);
 				}
 				case ZOMBIE -> {
-					if (wall) makeWallSkull(level, pos, stack, TFBlocks.ZOMBIE_WALL_SKULL_CANDLE.get());
-					else makeFloorSkull(level, pos, stack, TFBlocks.ZOMBIE_SKULL_CANDLE.get());
+					if (wall) makeWallSkull(level, pos, stack, TFBlocks.ZOMBIE_WALL_SKULL_CANDLE);
+					else makeFloorSkull(level, pos, stack, TFBlocks.ZOMBIE_SKULL_CANDLE);
 				}
 				case CREEPER -> {
-					if (wall) makeWallSkull(level, pos, stack, TFBlocks.CREEPER_WALL_SKULL_CANDLE.get());
-					else makeFloorSkull(level, pos, stack, TFBlocks.CREEPER_SKULL_CANDLE.get());
+					if (wall) makeWallSkull(level, pos, stack, TFBlocks.CREEPER_WALL_SKULL_CANDLE);
+					else makeFloorSkull(level, pos, stack, TFBlocks.CREEPER_SKULL_CANDLE);
 				}
 				case PIGLIN -> {
-					if (wall) makeWallSkull(level, pos, stack, TFBlocks.PIGLIN_WALL_SKULL_CANDLE.get());
-					else makeFloorSkull(level, pos, stack, TFBlocks.PIGLIN_SKULL_CANDLE.get());
+					if (wall) makeWallSkull(level, pos, stack, TFBlocks.PIGLIN_WALL_SKULL_CANDLE);
+					else makeFloorSkull(level, pos, stack, TFBlocks.PIGLIN_SKULL_CANDLE);
 				}
 				default -> {
 					return InteractionResult.PASS;

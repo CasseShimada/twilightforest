@@ -507,10 +507,10 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			case "skeleton_skull" -> this.putHead(pos, level, random, parameters, Blocks.SKELETON_SKULL, dataRotation);
 			case "wither_skull" -> this.putHead(pos, level, random, parameters, Blocks.WITHER_SKELETON_SKULL, dataRotation);
 			case "zombie_head" -> this.putHead(pos, level, random, parameters, Blocks.ZOMBIE_HEAD, dataRotation);
-			case "creeper_candle" -> this.putHeadCandles(pos, level, random, parameters, TFBlocks.CREEPER_SKULL_CANDLE.value(), dataRotation);
-			case "skeleton_candle" -> this.putHeadCandles(pos, level, random, parameters, TFBlocks.SKELETON_SKULL_CANDLE.value(), dataRotation);
-			case "wither_candle" -> this.putHeadCandles(pos, level, random, parameters, TFBlocks.WITHER_SKELE_SKULL_CANDLE.value(), dataRotation);
-			case "zombie_candle" -> this.putHeadCandles(pos, level, random, parameters, TFBlocks.ZOMBIE_SKULL_CANDLE.value(), dataRotation);
+			case "creeper_candle" -> this.putHeadCandles(pos, level, random, parameters, TFBlocks.CREEPER_SKULL_CANDLE, dataRotation);
+			case "skeleton_candle" -> this.putHeadCandles(pos, level, random, parameters, TFBlocks.SKELETON_SKULL_CANDLE, dataRotation);
+			case "wither_candle" -> this.putHeadCandles(pos, level, random, parameters, TFBlocks.WITHER_SKELE_SKULL_CANDLE, dataRotation);
+			case "zombie_candle" -> this.putHeadCandles(pos, level, random, parameters, TFBlocks.ZOMBIE_SKULL_CANDLE, dataRotation);
 			case "spawner" -> this.putSpawner(pos, level, random, parameters);
 			case "sinister_spawner" -> this.putSinisterSpawner(pos, level, random, parameters);
 			case "brewing_stand" -> this.putBrewingStand(pos, level, random);
@@ -549,7 +549,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 				if (random.nextInt(4) != 0) {
 					this.putCandles(parameters, random, level, pos.above(), Blocks.CANDLE.defaultBlockState());
 				} else {
-					this.putHeadCandles(pos.above(), level, random, parameters, TFBlocks.SKELETON_SKULL_CANDLE.value(), dataRotation);
+					this.putHeadCandles(pos.above(), level, random, parameters, TFBlocks.SKELETON_SKULL_CANDLE, dataRotation);
 				}
 
 				Rotation stateRotation = this.placeSettings.getRotation().getRotated(dataRotation);

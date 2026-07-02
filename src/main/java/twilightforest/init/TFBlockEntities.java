@@ -77,12 +77,12 @@ public class TFBlockEntities {
 		TFBlocks.MINING_TRAPPED_CHEST.get(), TFBlocks.SORTING_TRAPPED_CHEST.get()).build());
 
 	public static final BlockEntityType<SkullCandleBlockEntity> SKULL_CANDLE = register("skull_candle", FabricBlockEntityTypeBuilder.create(SkullCandleBlockEntity::new,
-		TFBlocks.ZOMBIE_SKULL_CANDLE.get(), TFBlocks.ZOMBIE_WALL_SKULL_CANDLE.get(),
-		TFBlocks.SKELETON_SKULL_CANDLE.get(), TFBlocks.SKELETON_WALL_SKULL_CANDLE.get(),
-		TFBlocks.WITHER_SKELE_SKULL_CANDLE.get(), TFBlocks.WITHER_SKELE_WALL_SKULL_CANDLE.get(),
-		TFBlocks.CREEPER_SKULL_CANDLE.get(), TFBlocks.CREEPER_WALL_SKULL_CANDLE.get(),
-		TFBlocks.PLAYER_SKULL_CANDLE.get(), TFBlocks.PLAYER_WALL_SKULL_CANDLE.get(),
-		TFBlocks.PIGLIN_SKULL_CANDLE.get(), TFBlocks.PIGLIN_WALL_SKULL_CANDLE.get()).build());
+		TFBlocks.ZOMBIE_SKULL_CANDLE, TFBlocks.ZOMBIE_WALL_SKULL_CANDLE,
+		TFBlocks.SKELETON_SKULL_CANDLE, TFBlocks.SKELETON_WALL_SKULL_CANDLE,
+		TFBlocks.WITHER_SKELE_SKULL_CANDLE, TFBlocks.WITHER_SKELE_WALL_SKULL_CANDLE,
+		TFBlocks.CREEPER_SKULL_CANDLE, TFBlocks.CREEPER_WALL_SKULL_CANDLE,
+		TFBlocks.PLAYER_SKULL_CANDLE, TFBlocks.PLAYER_WALL_SKULL_CANDLE,
+		TFBlocks.PIGLIN_SKULL_CANDLE, TFBlocks.PIGLIN_WALL_SKULL_CANDLE).build());
 
 	public static final BlockEntityType<OminousCandleBlockEntity> OMINOUS_CANDLE = register("ominous_candle", FabricBlockEntityTypeBuilder.create(OminousCandleBlockEntity::new,
 		TFBlocks.OMINOUS_CANDLE, TFBlocks.OMINOUS_WHITE_CANDLE,
