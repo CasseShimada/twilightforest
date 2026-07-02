@@ -16,18 +16,17 @@ public class RegistrationEvents {
 		registerPlacements();
 	}
 
-	@SuppressWarnings("unchecked") // entities added this way will always extend LivingEntity
 	private static void registerAttributes() {
-		TFEntities.ATTRIBUTES.forEach((type, builder) ->
-			FabricDefaultAttributeRegistry.register((EntityType<? extends LivingEntity>) type.get(), builder.get().build())
+		TFEntities.forEachAttribute((type, builder) ->
+			FabricDefaultAttributeRegistry.register(type, builder.get().build())
 		);
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"}) // predicates are keyed by their entity types
 	private static void registerPlacements() {
-		TFEntities.SPAWN_PREDICATES.forEach((type, predicate) ->
+		TFEntities.forEachSpawnPredicate((type, predicate) ->
 			SpawnPlacementsInvoker.twilightforest$register(
-				(EntityType) type.get(),
+				(EntityType) type,
 				SpawnPlacementTypes.ON_GROUND,
 				Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
 				(SpawnPlacements.SpawnPredicate) predicate

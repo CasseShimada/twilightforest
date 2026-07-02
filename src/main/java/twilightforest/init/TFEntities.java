@@ -25,14 +25,15 @@ import twilightforest.entity.projectile.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 public class TFEntities {
 
 	private static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, TwilightForestMod.ID);
 	private static final DeferredRegister<Item> SPAWN_EGGS = DeferredRegister.create(Registries.ITEM, TwilightForestMod.ID);
-	public static final Map<DeferredHolder<EntityType<?>, ? extends EntityType<?>>, Supplier<AttributeSupplier.Builder>> ATTRIBUTES = new HashMap<>();
-	public static final Map<DeferredHolder<EntityType<?>, ? extends EntityType<?>>, SpawnPlacements.SpawnPredicate<?>> SPAWN_PREDICATES = new HashMap<>();
+	private static final Map<DeferredHolder<EntityType<?>, ? extends EntityType<?>>, Supplier<AttributeSupplier.Builder>> ATTRIBUTES = new HashMap<>();
+	private static final Map<DeferredHolder<EntityType<?>, ? extends EntityType<?>>, SpawnPlacements.SpawnPredicate<?>> SPAWN_PREDICATES = new HashMap<>();
 
 	public static final DeferredHolder<EntityType<?>, EntityType<Adherent>> ADHERENT = registerWithAttributes("adherent", EntityType.Builder.of(Adherent::new, MobCategory.MONSTER).sized(0.8F, 2.2F).clientTrackingRange(8), Adherent::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<AlphaYeti>> ALPHA_YETI = registerWithEgg("alpha_yeti", EntityType.Builder.of(AlphaYeti::new, MobCategory.MONSTER).sized(3.8F, 5.0F).clientTrackingRange(16), AlphaYeti::registerAttributes, Monster::checkAnyLightMonsterSpawnRules);
@@ -176,6 +177,15 @@ public class TFEntities {
 
 	public static Collection<? extends Item> registeredSpawnEggs() {
 		return SPAWN_EGGS.getEntries().stream().map(Supplier::get).toList();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static void forEachAttribute(BiConsumer<EntityType<? extends LivingEntity>, Supplier<AttributeSupplier.Builder>> consumer) {
+		ATTRIBUTES.forEach((type, builder) -> consumer.accept((EntityType<? extends LivingEntity>) type.get(), builder));
+	}
+
+	public static void forEachSpawnPredicate(BiConsumer<EntityType<?>, SpawnPlacements.SpawnPredicate<?>> consumer) {
+		SPAWN_PREDICATES.forEach((type, predicate) -> consumer.accept(type.get(), predicate));
 	}
 
 	public static void register() {
