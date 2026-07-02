@@ -87,25 +87,25 @@ public class SnowGuardian extends BaseIceMob {
 				default -> TFItems.IRONWOOD_BOOTS;
 				case 1 -> TFItems.STEELEAF_BOOTS;
 				case 2 -> TFItems.KNIGHTMETAL_BOOTS;
-				case 3 -> TFItems.ARCTIC_BOOTS.get();
+				case 3 -> TFItems.ARCTIC_BOOTS;
 			};
 			case LEGS -> switch (type) {
 				default -> TFItems.IRONWOOD_LEGGINGS;
 				case 1 -> TFItems.STEELEAF_LEGGINGS;
 				case 2 -> TFItems.KNIGHTMETAL_LEGGINGS;
-				case 3 -> TFItems.ARCTIC_LEGGINGS.get();
+				case 3 -> TFItems.ARCTIC_LEGGINGS;
 			};
 			case CHEST -> switch (type) {
 				default -> TFItems.IRONWOOD_CHESTPLATE;
 				case 1 -> TFItems.STEELEAF_CHESTPLATE;
 				case 2 -> TFItems.KNIGHTMETAL_CHESTPLATE;
-				case 3 -> TFItems.ARCTIC_CHESTPLATE.get();
+				case 3 -> TFItems.ARCTIC_CHESTPLATE;
 			};
 			case HEAD -> switch (type) {
 				default -> TFItems.IRONWOOD_HELMET;
 				case 1 -> TFItems.STEELEAF_HELMET;
 				case 2 -> TFItems.KNIGHTMETAL_HELMET;
-				case 3 -> TFItems.ARCTIC_HELMET.get();
+				case 3 -> TFItems.ARCTIC_HELMET;
 			};
 		};
 	}

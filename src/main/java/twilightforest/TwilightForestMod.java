@@ -181,10 +181,10 @@ public final class TwilightForestMod implements ModInitializer {
 		TFCreativeTabs.registerVanillaTabs();
 
 		CauldronInteractionDispatcherAccessor twilightforest$waterCauldron = (CauldronInteractionDispatcherAccessor) (Object) CauldronInteractions.WATER;
-		twilightforest$waterCauldron.twilightforest$put(TFItems.ARCTIC_HELMET.get(), TwilightForestMod::cleanDyedItem);
-		twilightforest$waterCauldron.twilightforest$put(TFItems.ARCTIC_CHESTPLATE.get(), TwilightForestMod::cleanDyedItem);
-		twilightforest$waterCauldron.twilightforest$put(TFItems.ARCTIC_LEGGINGS.get(), TwilightForestMod::cleanDyedItem);
-		twilightforest$waterCauldron.twilightforest$put(TFItems.ARCTIC_BOOTS.get(), TwilightForestMod::cleanDyedItem);
+		twilightforest$waterCauldron.twilightforest$put(TFItems.ARCTIC_HELMET, TwilightForestMod::cleanDyedItem);
+		twilightforest$waterCauldron.twilightforest$put(TFItems.ARCTIC_CHESTPLATE, TwilightForestMod::cleanDyedItem);
+		twilightforest$waterCauldron.twilightforest$put(TFItems.ARCTIC_LEGGINGS, TwilightForestMod::cleanDyedItem);
+		twilightforest$waterCauldron.twilightforest$put(TFItems.ARCTIC_BOOTS, TwilightForestMod::cleanDyedItem);
 
 		StrippableBlockRegistry.register(TFBlocks.TWILIGHT_OAK_LOG.get(), TFBlocks.STRIPPED_TWILIGHT_OAK_LOG.get());
 		StrippableBlockRegistry.register(TFBlocks.CANOPY_LOG.get(), TFBlocks.STRIPPED_CANOPY_LOG.get());
