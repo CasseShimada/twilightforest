@@ -22,7 +22,7 @@ public class TFPOITypes {
 		}
 
 		registered = true;
-		GHAST_TRAP = new PoiType(ImmutableSet.copyOf(TFBlocks.GHAST_TRAP.get().getStateDefinition().getPossibleStates()), 0, 1);
+		GHAST_TRAP = new PoiType(ImmutableSet.copyOf(TFBlocks.GHAST_TRAP.getStateDefinition().getPossibleStates()), 0, 1);
 		Holder.Reference<PoiType> holder = Registry.registerForHolder(BuiltInRegistries.POINT_OF_INTEREST_TYPE, GHAST_TRAP_KEY, GHAST_TRAP);
 		PoiTypesInvoker.twilightforest$registerBlockStates(holder, GHAST_TRAP.matchingStates());
 	}

@@ -671,7 +671,7 @@ public class DarkTowerMainComponent extends DarkTowerWingComponent {
 			}
 		}
 
-		final BlockState antiBuilderBlockState = TFBlocks.ANTIBUILDER.get().defaultBlockState();
+		final BlockState antiBuilderBlockState = TFBlocks.ANTIBUILDER.defaultBlockState();
 
 		// place unbuilders
 		setBlockStateRotated(world, antiBuilderBlockState, 15, y + 2, 7, rotation, sbb);
@@ -748,7 +748,7 @@ public class DarkTowerMainComponent extends DarkTowerWingComponent {
 		final BlockState obsidian = Blocks.OBSIDIAN.defaultBlockState();
 		final BlockState netherrack = Blocks.NETHERRACK.defaultBlockState();
 		final BlockState redstone = Blocks.REDSTONE_BLOCK.defaultBlockState();
-		final BlockState inactiveReactor = TFBlocks.CARMINITE_REACTOR.get().defaultBlockState();
+		final BlockState inactiveReactor = TFBlocks.CARMINITE_REACTOR.defaultBlockState();
 
 		//  crafting area in corner - walls
 		this.fillBlocksRotated(world, sbb, 17, y + 1, 1, 17, y + 4, 6, deco.pillarState, rotation);
@@ -1286,7 +1286,7 @@ public class DarkTowerMainComponent extends DarkTowerWingComponent {
 			int sx = pickFrom(rand, 5, 9, 13);
 			int sz = (sx == 9) ? (rand.nextBoolean() ? 5 : 13) : 9;
 
-			final BlockState antibuilder = TFBlocks.ANTIBUILDER.get().defaultBlockState();
+			final BlockState antibuilder = TFBlocks.ANTIBUILDER.defaultBlockState();
 			setBlockStateRotated(world, antibuilder, sx, y + 2, sz, rotation, sbb);
 		} else {
 			// lamp cluster

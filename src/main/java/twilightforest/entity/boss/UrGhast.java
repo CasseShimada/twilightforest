@@ -300,7 +300,7 @@ public class UrGhast extends BaseTFBoss {
 
 		if (this.tickCount % 60 == 0 && !this.getTrapLocations().isEmpty()) {
 			//validate traps positions are still actually usable traps. If not, remove them
-			this.getTrapLocations().removeIf(pos -> !this.level().getBlockState(pos).is(TFBlocks.GHAST_TRAP.get()) || !this.level().canSeeSky(pos.above()));
+			this.getTrapLocations().removeIf(pos -> !this.level().getBlockState(pos).is(TFBlocks.GHAST_TRAP) || !this.level().canSeeSky(pos.above()));
 		}
 
 		if (this.firstTick || this.tickCount % 100 == 0) {
