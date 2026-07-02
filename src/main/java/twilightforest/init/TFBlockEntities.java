@@ -24,7 +24,7 @@ public class TFBlockEntities {
 	public static final BlockEntityType<FireJetBlockEntity> FLAME_JET = register("flame_jet", FabricBlockEntityTypeBuilder.create(FireJetBlockEntity::new, TFBlocks.FIRE_JET, TFBlocks.ENCASED_FIRE_JET).build());
 	public static final BlockEntityType<GhastTrapBlockEntity> GHAST_TRAP = register("ghast_trap", FabricBlockEntityTypeBuilder.create(GhastTrapBlockEntity::new, TFBlocks.GHAST_TRAP.get()).build());
 	public static final BlockEntityType<TFSmokerBlockEntity> SMOKER = register("smoker", FabricBlockEntityTypeBuilder.create(TFSmokerBlockEntity::new, TFBlocks.SMOKER, TFBlocks.ENCASED_SMOKER).build());
-	public static final BlockEntityType<CarminiteBuilderBlockEntity> TOWER_BUILDER = register("tower_builder", FabricBlockEntityTypeBuilder.create(CarminiteBuilderBlockEntity::new, TFBlocks.CARMINITE_BUILDER.get()).build());
+	public static final BlockEntityType<CarminiteBuilderBlockEntity> TOWER_BUILDER = register("tower_builder", FabricBlockEntityTypeBuilder.create(CarminiteBuilderBlockEntity::new, TFBlocks.CARMINITE_BUILDER).build());
 	public static final BlockEntityType<AlphaYetiSpawnerBlockEntity> ALPHA_YETI_SPAWNER = register("alpha_yeti_spawner", FabricBlockEntityTypeBuilder.create(AlphaYetiSpawnerBlockEntity::new, TFBlocks.ALPHA_YETI_BOSS_SPAWNER.get()).build());
 	public static final BlockEntityType<FinalBossSpawnerBlockEntity> FINAL_BOSS_SPAWNER = register("final_boss_spawner", FabricBlockEntityTypeBuilder.create(FinalBossSpawnerBlockEntity::new, TFBlocks.FINAL_BOSS_BOSS_SPAWNER.get()).build());
 	public static final BlockEntityType<HydraSpawnerBlockEntity> HYDRA_SPAWNER = register("hydra_boss_spawner", FabricBlockEntityTypeBuilder.create(HydraSpawnerBlockEntity::new, TFBlocks.HYDRA_BOSS_SPAWNER.get()).build());

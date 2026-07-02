@@ -60,7 +60,7 @@ public class VanishingBlock extends Block implements EntityDestroyable {
 		for (int iter = 0; !queue.isEmpty() && iter < limit; iter++) {
 			BlockPos cur = queue.pop();
 			BlockState state = getter.getBlockState(cur);
-			if (state.getBlock() == TFBlocks.LOCKED_VANISHING_BLOCK.get() && state.getValue(LockedVanishingBlock.LOCKED)) {
+			if (state.getBlock() == TFBlocks.LOCKED_VANISHING_BLOCK && state.getValue(LockedVanishingBlock.LOCKED)) {
 				return true;
 			}
 
@@ -156,7 +156,7 @@ public class VanishingBlock extends Block implements EntityDestroyable {
 					level.removeBlock(pos, false);
 				}
 
-				level.playSound(null, pos, state.getBlock() == TFBlocks.REAPPEARING_BLOCK.get() ? TFSounds.REAPPEAR_POOF : TFSounds.VANISHING_BLOCK, SoundSource.BLOCKS, 0.3F, 0.5F);
+				level.playSound(null, pos, state.getBlock() == TFBlocks.REAPPEARING_BLOCK ? TFSounds.REAPPEAR_POOF : TFSounds.VANISHING_BLOCK, SoundSource.BLOCKS, 0.3F, 0.5F);
 
 				for (Direction e : Direction.values()) {
 					this.activate(level, pos.relative(e));

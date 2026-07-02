@@ -520,7 +520,7 @@ public class DarkTowerWingComponent extends TowerWingComponent {
 	 * Decorate with a pressure plate triggered reappearing floor.  Only suitable for small towers
 	 */
 	private void decorateReappearingFloor(WorldGenLevel world, BoundingBox sbb, Rotation rotation, int y) {
-		final BlockState inactiveReappearing = TFBlocks.REAPPEARING_BLOCK.get().defaultBlockState();
+		final BlockState inactiveReappearing = TFBlocks.REAPPEARING_BLOCK.defaultBlockState();
 		final BlockState woodenPressurePlate = Blocks.OAK_PRESSURE_PLATE.defaultBlockState();
 		// floor
 		this.fillBlocksRotated(world, sbb, 4, y, 3, 7, y, 5, inactiveReappearing, rotation);
@@ -978,7 +978,7 @@ public class DarkTowerWingComponent extends TowerWingComponent {
 		// nullify sky light
 //		nullifySkyLightAtCurrentPosition(world, dx - 3, dy - 1, dz - 3, dx + 3, dy + 3, dz + 3);
 
-		final BlockState inactiveVanish = TFBlocks.UNBREAKABLE_VANISHING_BLOCK.get().defaultBlockState();
+		final BlockState inactiveVanish = TFBlocks.UNBREAKABLE_VANISHING_BLOCK.defaultBlockState();
 
 		// clear the door
 		if (dx == 0 || dx == size - 1) {
@@ -998,7 +998,7 @@ public class DarkTowerWingComponent extends TowerWingComponent {
 		// nullify sky light
 //		nullifySkyLightAtCurrentPosition(world, dx - 3, dy - 1, dz - 3, dx + 3, dy + 3, dz + 3);
 
-		final BlockState inactiveReappearing = TFBlocks.REAPPEARING_BLOCK.get().defaultBlockState();
+		final BlockState inactiveReappearing = TFBlocks.REAPPEARING_BLOCK.defaultBlockState();
 
 		// clear the door
 		if (dx == 0 || dx == size - 1) {
@@ -1019,8 +1019,8 @@ public class DarkTowerWingComponent extends TowerWingComponent {
 //		nullifySkyLightAtCurrentPosition(world, dx - 3, dy - 1, dz - 3, dx + 3, dy + 3, dz + 3);
 
 		// clear the door
-		final BlockState lockedVanish = TFBlocks.LOCKED_VANISHING_BLOCK.get().defaultBlockState();
-		final BlockState inactiveVanish = TFBlocks.UNBREAKABLE_VANISHING_BLOCK.get().defaultBlockState();
+		final BlockState lockedVanish = TFBlocks.LOCKED_VANISHING_BLOCK.defaultBlockState();
+		final BlockState inactiveVanish = TFBlocks.UNBREAKABLE_VANISHING_BLOCK.defaultBlockState();
 
 		if (dx == 0 || dx == size - 1) {
 			this.generateBox(world, sbb, dx, dy - 1, dz - 2, dx, dy + 3, dz + 2, deco.accentState, AIR, false);

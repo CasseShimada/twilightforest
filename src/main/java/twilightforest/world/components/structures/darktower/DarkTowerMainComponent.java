@@ -578,7 +578,7 @@ public class DarkTowerMainComponent extends DarkTowerWingComponent {
 		maze.wallBlockState = deco.blockState;
 		maze.headBlockState = deco.accentState;
 		maze.pillarBlockState = deco.accentState;
-		maze.doorBlockState = TFBlocks.REAPPEARING_BLOCK.get().defaultBlockState();
+		maze.doorBlockState = TFBlocks.REAPPEARING_BLOCK.defaultBlockState();
 
 		maze.torchRarity = 0;
 		maze.tall = 3;
@@ -1314,7 +1314,7 @@ public class DarkTowerMainComponent extends DarkTowerWingComponent {
 		setBlockStateRotated(world, deco.fenceState, 5, top + 1, 10, rotation, sbb);
 		setBlockStateRotated(world, deco.fenceState, 7, top + 1, 10, rotation, sbb);
 		// builder & lever
-		final BlockState inactiveBuilder = TFBlocks.CARMINITE_BUILDER.get().defaultBlockState();
+		final BlockState inactiveBuilder = TFBlocks.CARMINITE_BUILDER.defaultBlockState();
 		setBlockStateRotated(world, inactiveBuilder, 7, top - spacing, 10, rotation, sbb);
 		setBlockStateRotated(world, getLeverState(Blocks.LEVER.defaultBlockState(), AttachFace.FLOOR, rand.nextBoolean() ? Direction.EAST : Direction.NORTH, false), 7, top - spacing + 1, 11, rotation, sbb);
 	}
@@ -1331,7 +1331,7 @@ public class DarkTowerMainComponent extends DarkTowerWingComponent {
 		setBlockStateRotated(world, deco.accentState, 2, y, z + 1, rotation, sbb);
 
 		// builder & lever
-		final BlockState inactiveBuilder = TFBlocks.CARMINITE_BUILDER.get().defaultBlockState();
+		final BlockState inactiveBuilder = TFBlocks.CARMINITE_BUILDER.defaultBlockState();
 		setBlockStateRotated(world, inactiveBuilder, 2, y, hole ? z + 1 : z - 1, rotation, sbb);
 		setBlockStateRotated(world, getLeverState(Blocks.LEVER.defaultBlockState(), AttachFace.FLOOR, rand.nextBoolean() ? Direction.EAST : Direction.NORTH, false), 2, y + 1, z, rotation, sbb);
 	}
