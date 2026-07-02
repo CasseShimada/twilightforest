@@ -439,7 +439,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 				if (pos == null) return;
 			} else if (modifiedLabel[0].equals("pedestal")) {
 
-				level.setBlock(pos, TFBlocks.TWISTED_STONE_PILLAR.value().defaultBlockState(), Block.UPDATE_CLIENTS);
+				level.setBlock(pos, TFBlocks.TWISTED_STONE_PILLAR.defaultBlockState(), Block.UPDATE_CLIENTS);
 
 				pos = pos.above();
 			} else if (modifiedLabel[0].equals("below")) {

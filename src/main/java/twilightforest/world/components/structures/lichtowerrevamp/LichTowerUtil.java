@@ -71,7 +71,7 @@ public class LichTowerUtil {
 		Blocks.MOSSY_COBBLESTONE_WALL,
 		TFBlocks.WROUGHT_IRON_FENCE.value(),
 		TFBlocks.CANOPY_FENCE.value(),
-		TFBlocks.TWISTED_STONE_PILLAR.value()
+		TFBlocks.TWISTED_STONE_PILLAR
 	));
 
 	public StructureProcessor getRoomSpawnerProcessor() {
