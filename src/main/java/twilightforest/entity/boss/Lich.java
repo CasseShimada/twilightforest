@@ -42,7 +42,6 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.AbstractCandleBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CandleBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -730,8 +729,9 @@ public class Lich extends BaseTFBoss {
 		for (BlockPos pos : BlockPos.betweenClosed(this.homeOrElseCurrent().offset(-range, -3, -range), this.homeOrElseCurrent().offset(range, yRange, range))) {
 			if (this.random.nextInt(Math.max(40 - tick, 2)) == 1 || done) {
 				BlockState state = this.level().getBlockState(pos);
-				if (state.getBlock() instanceof AbstractCandleBlock candleBlock && OminousCandleBlock.CANDLE_MAP.containsKey(candleBlock) && state.getValue(CandleBlock.LIT)) {
-					this.level().setBlockAndUpdate(pos, OminousCandleBlock.CANDLE_MAP.get(candleBlock).get().defaultBlockState().setValue(OminousCandleBlock.CANDLES, state.getValue(CandleBlock.CANDLES)));
+				OminousCandleBlock ominousCandle = OminousCandleBlock.getOminousCandle(state.getBlock());
+				if (ominousCandle != null && state.getValue(CandleBlock.LIT)) {
+					this.level().setBlockAndUpdate(pos, ominousCandle.defaultBlockState().setValue(OminousCandleBlock.CANDLES, state.getValue(CandleBlock.CANDLES)));
 					this.level().playSound(null, pos, TFSounds.OMINOUS_FIRE, SoundSource.BLOCKS, 0.5F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 0.75F);
 				} else if (state.getBlock() instanceof LightableBlock && state.getValue(LightableBlock.LIGHTING) == LightableBlock.Lighting.NORMAL) {
 					this.level().setBlockAndUpdate(pos, state.setValue(LightableBlock.LIGHTING, LightableBlock.Lighting.OMINOUS));

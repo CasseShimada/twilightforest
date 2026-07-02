@@ -37,13 +37,13 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import twilightforest.util.registry.DeferredBlock;
 import twilightforest.block.entity.OminousCandleBlockEntity;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFParticleType;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class OminousCandleBlock extends BaseEntityBlock {
 	public static final MapCodec<OminousCandleBlock> CODEC = RecordCodecBuilder.mapCodec(
@@ -57,7 +57,7 @@ public class OminousCandleBlock extends BaseEntityBlock {
 	private static final VoxelShape FOUR_AABB = Block.box(5.0, 0.0, 5.0, 11.0, 6.0, 10.0);
 	public static final IntegerProperty CANDLES = BlockStateProperties.CANDLES;
 
-	public static final HashMap<Block, DeferredBlock<OminousCandleBlock>> CANDLE_MAP = Util.make(new HashMap<>(), map -> {
+	private static final HashMap<Block, Supplier<? extends OminousCandleBlock>> CANDLE_MAP = Util.make(new HashMap<>(), map -> {
 		map.put(Blocks.CANDLE, TFBlocks.OMINOUS_CANDLE);
 		map.put(Blocks.DYED_CANDLE.white(), TFBlocks.OMINOUS_WHITE_CANDLE);
 		map.put(Blocks.DYED_CANDLE.orange(), TFBlocks.OMINOUS_ORANGE_CANDLE);
@@ -95,6 +95,11 @@ public class OminousCandleBlock extends BaseEntityBlock {
 		super(properties);
 		this.registerDefaultState(this.getStateDefinition().any().setValue(CANDLES, 1));
 		this.candle = candle;
+	}
+
+	public static OminousCandleBlock getOminousCandle(Block candle) {
+		Supplier<? extends OminousCandleBlock> supplier = CANDLE_MAP.get(candle);
+		return supplier == null ? null : supplier.get();
 	}
 
 	@Override
