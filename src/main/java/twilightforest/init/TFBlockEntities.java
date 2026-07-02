@@ -20,7 +20,7 @@ public class TFBlockEntities {
 	public static final BlockEntityType<AntibuilderBlockEntity> ANTIBUILDER = register("antibuilder", FabricBlockEntityTypeBuilder.create(AntibuilderBlockEntity::new, TFBlocks.ANTIBUILDER.get()).build());
 	public static final BlockEntityType<CinderFurnaceBlockEntity> CINDER_FURNACE = register("cinder_furnace", FabricBlockEntityTypeBuilder.create(CinderFurnaceBlockEntity::new, TFBlocks.CINDER_FURNACE.get()).build());
 	public static final BlockEntityType<CarminiteReactorBlockEntity> CARMINITE_REACTOR = register("carminite_reactor", FabricBlockEntityTypeBuilder.create(CarminiteReactorBlockEntity::new, TFBlocks.CARMINITE_REACTOR.get()).build());
-	public static final BlockEntityType<ReactorDebrisBlockEntity> REACTOR_DEBRIS = register("reactor_debris", FabricBlockEntityTypeBuilder.create(ReactorDebrisBlockEntity::new, TFBlocks.REACTOR_DEBRIS.get()).build());
+	public static final BlockEntityType<ReactorDebrisBlockEntity> REACTOR_DEBRIS = register("reactor_debris", FabricBlockEntityTypeBuilder.create(ReactorDebrisBlockEntity::new, TFBlocks.REACTOR_DEBRIS).build());
 	public static final BlockEntityType<FireJetBlockEntity> FLAME_JET = register("flame_jet", FabricBlockEntityTypeBuilder.create(FireJetBlockEntity::new, TFBlocks.FIRE_JET.get(), TFBlocks.ENCASED_FIRE_JET.get()).build());
 	public static final BlockEntityType<GhastTrapBlockEntity> GHAST_TRAP = register("ghast_trap", FabricBlockEntityTypeBuilder.create(GhastTrapBlockEntity::new, TFBlocks.GHAST_TRAP.get()).build());
 	public static final BlockEntityType<TFSmokerBlockEntity> SMOKER = register("smoker", FabricBlockEntityTypeBuilder.create(TFSmokerBlockEntity::new, TFBlocks.SMOKER.get(), TFBlocks.ENCASED_SMOKER.get()).build());

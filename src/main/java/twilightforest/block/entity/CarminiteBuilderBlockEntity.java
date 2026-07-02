@@ -19,7 +19,7 @@ import twilightforest.init.TFSounds;
 
 public class CarminiteBuilderBlockEntity extends BlockEntity {
 	private static final int RANGE = 16;
-	private final BlockState blockBuiltState = TFBlocks.BUILT_BLOCK.get().defaultBlockState().setValue(TranslucentBuiltBlock.ACTIVE, false);
+	private final BlockState blockBuiltState = TFBlocks.BUILT_BLOCK.defaultBlockState().setValue(TranslucentBuiltBlock.ACTIVE, false);
 	public boolean makingBlocks = false;
 	private int ticksRunning = 0;
 	private int blockedCounter = 0;

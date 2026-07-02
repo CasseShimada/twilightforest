@@ -72,7 +72,7 @@ public class CarminiteReactorBlock extends BaseEntityBlock {
 		if (level instanceof Level levelRef) {
 			for (BlockPos offset : BlockPos.betweenClosed(pos.offset(-1, -1, -1), pos.offset(1, 1, 1))) {
 				BlockState checkState = levelRef.getBlockState(offset);
-				if (checkState.is(TFBlocks.FAKE_GOLD.get()) || checkState.is(TFBlocks.FAKE_DIAMOND.get())) {
+				if (checkState.is(TFBlocks.FAKE_GOLD) || checkState.is(TFBlocks.FAKE_DIAMOND)) {
 					levelRef.destroyBlock(offset, false);
 				}
 			}

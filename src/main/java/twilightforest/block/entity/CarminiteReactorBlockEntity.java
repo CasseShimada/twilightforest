@@ -60,8 +60,8 @@ public class CarminiteReactorBlockEntity extends BlockEntity {
 
 				if (te.counter % 5 == 0) {
 					if (te.counter == 5) {
-						BlockState fakeGold = TFBlocks.FAKE_GOLD.get().defaultBlockState();
-						BlockState fakeDiamond = TFBlocks.FAKE_DIAMOND.get().defaultBlockState();
+						BlockState fakeGold = TFBlocks.FAKE_GOLD.defaultBlockState();
+						BlockState fakeDiamond = TFBlocks.FAKE_DIAMOND.defaultBlockState();
 
 						// transformation!
 						te.createFakeBlock(pos.offset(1, 1, 1), fakeDiamond);
@@ -106,7 +106,7 @@ public class CarminiteReactorBlockEntity extends BlockEntity {
 						te.drawBlob(pos, (primary - offset) / 40, Blocks.AIR.defaultBlockState(), primary - offset, false);
 					}
 					if (primary <= 200) {
-						te.drawBlob(pos, primary / 40, TFBlocks.REACTOR_DEBRIS.get().defaultBlockState(), te.counter, false);
+						te.drawBlob(pos, primary / 40, TFBlocks.REACTOR_DEBRIS.defaultBlockState(), te.counter, false);
 					}
 
 					// secondary burst

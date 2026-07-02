@@ -44,7 +44,7 @@ public class BuilderBlock extends BaseEntityBlock {
 	public static void activateBuiltBlocks(Level level, BlockPos pos) {
 		BlockState state = level.getBlockState(pos);
 
-		if (state.getBlock() == TFBlocks.BUILT_BLOCK.get() && !state.getValue(TranslucentBuiltBlock.ACTIVE)) {
+		if (state.getBlock() == TFBlocks.BUILT_BLOCK && !state.getValue(TranslucentBuiltBlock.ACTIVE)) {
 			level.setBlockAndUpdate(pos, state.setValue(TranslucentBuiltBlock.ACTIVE, true));
 			level.playSound(null, pos, TFSounds.BUILDER_REPLACE, SoundSource.BLOCKS, 0.3F, 0.6F);
 			level.scheduleTick(pos, state.getBlock(), 10);
