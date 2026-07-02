@@ -106,7 +106,7 @@ public class TFItems {
 	public static final Item ORE_MAGNET = registerDirect("ore_magnet", OreMagnetItem::new, () -> new Item.Properties().durability(64));
 	public static final Item CRUMBLE_HORN = registerDirect("crumble_horn", CrumbleHornItem::new, () -> new Item.Properties().durability(1024).rarity(Rarity.RARE));
 	public static final Item PEACOCK_FEATHER_FAN = registerDirect("peacock_feather_fan", PeacockFanItem::new, () -> new Item.Properties().durability(1024).rarity(Rarity.RARE));
-	public static final DeferredItem<Item> MOONWORM_QUEEN = register("moonworm_queen", MoonwormQueenItem::new, () -> new Item.Properties().durability(256).rarity(Rarity.RARE));
+	public static final Item MOONWORM_QUEEN = registerDirect("moonworm_queen", MoonwormQueenItem::new, () -> new Item.Properties().durability(256).rarity(Rarity.RARE));
 	public static final Item BRITTLE_FLASK = registerDirect("brittle_potion_flask", BrittleFlaskItem::new, () -> new Item.Properties().component(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY));
 	public static final Item GREATER_FLASK = registerDirect("greater_potion_flask", GreaterFlaskItem::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).fireResistant().component(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY_UNBREAKABLE));
 	public static final DeferredItem<Item> CHARM_OF_LIFE_1 = register("charm_of_life_1", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));

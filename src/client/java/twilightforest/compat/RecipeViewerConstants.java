@@ -31,16 +31,16 @@ public class RecipeViewerConstants {
 	public static final int GENERIC_RECIPE_HEIGHT = 54;
 	public static final Component MOONWORM_QUEEN_TOOLTIP = Component.translatable("item.twilightforest.moonworm_queen.jei_info_message").withStyle(ChatFormatting.GREEN);
 
-	public static final ItemStack DAMAGED_MOONWORM_QUEEN = Util.make(new ItemStack(TFItems.MOONWORM_QUEEN.get()), stack -> stack.setDamageValue(256));
+	public static final ItemStack DAMAGED_MOONWORM_QUEEN = Util.make(new ItemStack(TFItems.MOONWORM_QUEEN), stack -> stack.setDamageValue(256));
 	//trickery is afoot
 	public static final List<ItemStack> BERRY_2_LIST = List.of(ItemStack.EMPTY, new ItemStack(TFItems.TORCHBERRIES), new ItemStack(TFItems.TORCHBERRIES), new ItemStack(TFItems.TORCHBERRIES));
 	public static final List<ItemStack> BERRY_3_LIST = List.of(ItemStack.EMPTY, ItemStack.EMPTY, new ItemStack(TFItems.TORCHBERRIES), new ItemStack(TFItems.TORCHBERRIES));
 	public static final List<ItemStack> BERRY_4_LIST = List.of(ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, new ItemStack(TFItems.TORCHBERRIES));
 	public static final List<ItemStack> MOONWORM_QUEEN_LIST = List.of(
-		Util.make(new ItemStack(TFItems.MOONWORM_QUEEN.get()), stack -> stack.setDamageValue(192)),
-		Util.make(new ItemStack(TFItems.MOONWORM_QUEEN.get()), stack -> stack.setDamageValue(128)),
-		Util.make(new ItemStack(TFItems.MOONWORM_QUEEN.get()), stack -> stack.setDamageValue(64)),
-		new ItemStack(TFItems.MOONWORM_QUEEN.get()));
+		Util.make(new ItemStack(TFItems.MOONWORM_QUEEN), stack -> stack.setDamageValue(192)),
+		Util.make(new ItemStack(TFItems.MOONWORM_QUEEN), stack -> stack.setDamageValue(128)),
+		Util.make(new ItemStack(TFItems.MOONWORM_QUEEN), stack -> stack.setDamageValue(64)),
+		new ItemStack(TFItems.MOONWORM_QUEEN));
 
 	public static List<RecipeHolder<? extends CraftingRecipe>> getAllUncraftingRecipes(RecipeMap manager) {
 		List<RecipeHolder<? extends CraftingRecipe>> recipes = new ArrayList<>();

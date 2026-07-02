@@ -19,7 +19,7 @@ import twilightforest.init.TFSounds;
 public class TFDispenserBehaviors {
 
 	public static void init() {
-		DispenserBlock.registerBehavior(TFItems.MOONWORM_QUEEN.get(), new DamageableStackDispenseBehavior() {
+		DispenserBlock.registerBehavior(TFItems.MOONWORM_QUEEN, new DamageableStackDispenseBehavior() {
 			@Override
 			protected Projectile getProjectileEntity(Level level, Position position, ItemStack stack) {
 				return new MoonwormShot(level, position.x(), position.y(), position.z());
