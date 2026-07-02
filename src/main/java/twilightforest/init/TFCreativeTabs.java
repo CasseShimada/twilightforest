@@ -19,7 +19,6 @@ import net.minecraft.world.level.ItemLike;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.fabricmc.loader.api.FabricLoader;
-import twilightforest.util.registry.DeferredHolder;
 import twilightforest.TFRegistries;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.AbstractSkullCandleBlock;
@@ -31,6 +30,7 @@ import twilightforest.tags.TFItemTags;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class TFCreativeTabs {
 	private static boolean registered;
@@ -591,7 +591,7 @@ public class TFCreativeTabs {
 	}
 
 	private static void createSpawnEggsAlphabetical(CreativeModeTab.Output output) {
-		Collection<? extends Item> eggs = TFEntities.SPAWN_EGGS.getEntries().stream().map(DeferredHolder::value).toList();
+		Collection<? extends Item> eggs = TFEntities.SPAWN_EGGS.getEntries().stream().map(Supplier::get).toList();
 		eggs.forEach(output::accept);
 	}
 
@@ -673,8 +673,8 @@ public class TFCreativeTabs {
 			});
 
 			if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-				TFItems.ITEMS.getEntries().forEach(itemDeferredHolder -> {
-					ItemStack wipStack = itemDeferredHolder.get().getDefaultInstance();
+				TFItems.ITEMS.getEntries().forEach(itemSupplier -> {
+					ItemStack wipStack = itemSupplier.get().getDefaultInstance();
 					if (wipStack.is(TFItemTags.WIP)) entries.accept(wipStack);
 				});
 			}
