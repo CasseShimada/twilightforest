@@ -106,7 +106,7 @@ public class ColorHandler {
 		register(tint(
 			state -> GrassColor.getDefaultColor(),
 			(state, getter, pos) -> BiomeColors.getAverageGrassColor(getter, pos)
-		), TFBlocks.FIDDLEHEAD, TFBlocks.POTTED_FIDDLEHEAD.get());
+		), TFBlocks.FIDDLEHEAD, TFBlocks.POTTED_FIDDLEHEAD);
 
 		register(List.of(
 			tint(
