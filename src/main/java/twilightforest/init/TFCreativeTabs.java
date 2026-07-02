@@ -611,7 +611,7 @@ public class TFCreativeTabs {
 	private static void createGlassSwordAndLoreVer(CreativeModeTab.Output output) {
 		output.accept(TFItems.GLASS_SWORD);
 
-		ItemStack loreSword = new ItemStack(TFItems.GLASS_SWORD.get());
+		ItemStack loreSword = new ItemStack(TFItems.GLASS_SWORD);
 
 		List<Component> GLASS_SWORD_COMPONENTS = List.of(Component.translatable("item.twilightforest.glass_sword.desc").setStyle(Style.EMPTY.withColor(ChatFormatting.GRAY)));
 		loreSword.set(DataComponents.LORE, new ItemLore(GLASS_SWORD_COMPONENTS, GLASS_SWORD_COMPONENTS));

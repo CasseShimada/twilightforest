@@ -152,11 +152,11 @@ public class TFItems {
 	public static final Item SEEKER_BOW = registerDirect("seeker_bow", SeekerBowItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).durability(384));
 	public static final Item ICE_BOW = registerDirect("ice_bow", IceBowItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).durability(384));
 	public static final Item ENDER_BOW = registerDirect("ender_bow", EnderBowItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).durability(384));
-	public static final DeferredItem<Item> ICE_SWORD = register("ice_sword", properties -> new IceSwordItem(TFToolMaterials.ICE, properties), Item.Properties::new);
-	public static final DeferredItem<Item> GLASS_SWORD = register("glass_sword", properties -> new GlassSwordItem(TFToolMaterials.GLASS, 3, -2.4F, properties), () -> new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final Item ICE_SWORD = registerDirect("ice_sword", properties -> new IceSwordItem(TFToolMaterials.ICE, properties), Item.Properties::new);
+	public static final Item GLASS_SWORD = registerDirect("glass_sword", properties -> new GlassSwordItem(TFToolMaterials.GLASS, 3, -2.4F, properties), () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final Item MAGIC_BEANS = registerDirect("magic_beans", MagicBeansItem::new, Item.Properties::new);
-	public static final DeferredItem<Item> GIANT_PICKAXE = register("giant_pickaxe", properties -> new GiantPickItem(TFToolMaterials.GIANT, properties), () -> new Item.Properties().pickaxe(TFToolMaterials.GIANT, 8.0F, -3.5F).attributes(GiantPickItem.createGiantAttributes(TFToolMaterials.GIANT, 8, -3.5F)));
-	public static final DeferredItem<Item> GIANT_SWORD = register("giant_sword", properties -> new Item(properties.sword(TFToolMaterials.GIANT, 10.0F, -3.5F).attributes(GiantPickItem.createGiantAttributes(TFToolMaterials.GIANT, 10, -3.5F))), Item.Properties::new);
+	public static final Item GIANT_PICKAXE = registerDirect("giant_pickaxe", properties -> new GiantPickItem(TFToolMaterials.GIANT, properties), () -> new Item.Properties().pickaxe(TFToolMaterials.GIANT, 8.0F, -3.5F).attributes(GiantPickItem.createGiantAttributes(TFToolMaterials.GIANT, 8, -3.5F)));
+	public static final Item GIANT_SWORD = registerDirect("giant_sword", properties -> new Item(properties.sword(TFToolMaterials.GIANT, 10.0F, -3.5F).attributes(GiantPickItem.createGiantAttributes(TFToolMaterials.GIANT, 10, -3.5F))), Item.Properties::new);
 	public static final DeferredItem<Item> LAMP_OF_CINDERS = register("lamp_of_cinders", LampOfCindersItem::new, () -> new Item.Properties().fireResistant().durability(1024).rarity(Rarity.UNCOMMON));
 	public static final Item CUBE_TALISMAN = registerDirect("cube_talisman", Item::new, () -> new Item.Properties().fireResistant().rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> CUBE_OF_ANNIHILATION = register("cube_of_annihilation", CubeOfAnnihilationItem::new, () -> new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
