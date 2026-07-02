@@ -113,7 +113,7 @@ public class TreeConfigurations {
 				5,
 				15,
 				new WeightedStateProvider(createBlockList()
-					.add(TFBlocks.ROPE.get().defaultBlockState(), 3)
+					.add(TFBlocks.ROPE.defaultBlockState(), 3)
 					.add(Blocks.IRON_CHAIN.defaultBlockState(), 1)),
 				new WeightedStateProvider(createBlockList()
 					.add(TFBlocks.FIREFLY_JAR.get().defaultBlockState(), 10)

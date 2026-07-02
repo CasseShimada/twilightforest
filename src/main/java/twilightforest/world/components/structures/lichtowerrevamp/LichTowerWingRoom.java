@@ -432,7 +432,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		String variety = modifiedLabel.length == 2 ? modifiedLabel[1] : label;
 		if (modifiedLabel.length == 2) {
 			if (modifiedLabel[0].startsWith("rope")) {
-				pos = this.danglingBlock(pos, level, random, TFBlocks.ROPE.value().defaultBlockState(), modifiedLabel[0].substring("rope".length()));
+				pos = this.danglingBlock(pos, level, random, TFBlocks.ROPE.defaultBlockState(), modifiedLabel[0].substring("rope".length()));
 				if (pos == null) return;
 			} if (modifiedLabel[0].startsWith("chain")) {
 				pos = this.danglingBlock(pos, level, random, Blocks.IRON_CHAIN.defaultBlockState(), modifiedLabel[0].substring("chain".length()));
