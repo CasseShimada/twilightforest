@@ -72,7 +72,7 @@ public class DwarfRabbit extends Animal {
 	@Nullable
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob mob) {
-		DwarfRabbit dwarf = TFEntities.DWARF_RABBIT.get().create(level, EntitySpawnReason.BREEDING);
+		DwarfRabbit dwarf = TFEntities.DWARF_RABBIT.create(level, EntitySpawnReason.BREEDING);
 		Holder<DwarfRabbitVariant> variant = DwarfRabbitVariant.getRandomCommonVariant(level.registryAccess(), level.getRandom());
 		if (dwarf != null && mob instanceof DwarfRabbit parent) {
 			if (this.getRandom().nextInt(20) != 0) {

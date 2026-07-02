@@ -174,7 +174,7 @@ public class GraveyardFeature extends Feature<NoneFeatureConfiguration> {
 							TFLootTables.generateChestContents(world, placement.offset(chestloc), TFLootTables.GRAVEYARD);
 							world.setBlock(placement.offset(chestloc).below(), Blocks.MOSSY_COBBLESTONE.defaultBlockState(), Block.UPDATE_ALL);
 						}
-						Wraith wraith = new Wraith(TFEntities.WRAITH.get(), world.getLevel());
+						Wraith wraith = new Wraith(TFEntities.WRAITH, world.getLevel());
 						wraith.setPos(placement.getX(), placement.getY(), placement.getZ());
 						wraith.finalizeSpawn(world, world.getCurrentDifficultyAt(placement), EntitySpawnReason.STRUCTURE, null);
 						world.addFreshEntity(wraith);
@@ -195,7 +195,7 @@ public class GraveyardFeature extends Feature<NoneFeatureConfiguration> {
 							if (world.setBlock(p, Blocks.SPAWNER.defaultBlockState(), Block.UPDATE_ALL)) {
 								SpawnerBlockEntity ms = (SpawnerBlockEntity) world.getBlockEntity(p);
 								if (ms != null)
-									ms.setEntityId(TFEntities.RISING_ZOMBIE.get(), rand);
+									ms.setEntityId(TFEntities.RISING_ZOMBIE, rand);
 							}
 						}
 					}

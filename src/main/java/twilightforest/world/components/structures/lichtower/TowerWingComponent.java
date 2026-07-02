@@ -711,8 +711,8 @@ public class TowerWingComponent extends TFStructureComponentOld {
 		if (rand.nextInt(5) == 0) {
 			EntityType<?> spiderName = switch (rand.nextInt(4)) {
 				case 3 -> EntityTypes.CAVE_SPIDER;
-				case 2 -> TFEntities.SWARM_SPIDER.get();
-				case 1 -> TFEntities.HEDGE_SPIDER.get();
+				case 2 -> TFEntities.SWARM_SPIDER;
+				case 1 -> TFEntities.HEDGE_SPIDER;
 				default -> EntityTypes.SPIDER;
 			};
 

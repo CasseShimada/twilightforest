@@ -52,7 +52,7 @@ public class ChainBlockItem extends Item {
 
 		if (level instanceof ServerLevel serverLevel) {
 			Projectile.spawnProjectileFromRotation((lev, entity, stacc) -> {
-				ChainBlock launchedBlock = new ChainBlock(TFEntities.CHAIN_BLOCK.get(), lev, entity, hand, stacc);
+				ChainBlock launchedBlock = new ChainBlock(TFEntities.CHAIN_BLOCK, lev, entity, hand, stacc);
 				stack.set(TFDataComponents.THROWN_PROJECTILE, launchedBlock.getUUID());
 				return launchedBlock;
 			}, serverLevel, stack, player, 0.0F, 1.5F, 1.0F);

@@ -53,7 +53,7 @@ public class ZombieWandItem extends Item {
 			BlockHitResult result = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
 
 			if (result.getType() != HitResult.Type.MISS) {
-				LoyalZombie zombie = TFEntities.LOYAL_ZOMBIE.get().create(level, EntitySpawnReason.MOB_SUMMONED);
+				LoyalZombie zombie = TFEntities.LOYAL_ZOMBIE.create(level, EntitySpawnReason.MOB_SUMMONED);
 				zombie.setPos(result.getLocation());
 				if (!level.noCollision(zombie, zombie.getBoundingBox())) {
 					return InteractionResult.PASS;

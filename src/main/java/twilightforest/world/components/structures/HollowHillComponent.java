@@ -273,8 +273,8 @@ public class HollowHillComponent extends TFStructureComponentOld {
 			case 3, 4, 5 -> EntityTypes.SPIDER;
 			case 6, 7 -> EntityTypes.ZOMBIE;
 			case 8 -> EntityTypes.SILVERFISH;
-			case 9 -> TFEntities.REDCAP.get();
-			default -> TFEntities.SWARM_SPIDER.get();
+			case 9 -> TFEntities.REDCAP;
+			default -> TFEntities.SWARM_SPIDER;
 		};
 	}
 
@@ -285,9 +285,9 @@ public class HollowHillComponent extends TFStructureComponentOld {
 		return switch (rand.nextInt(10)) {
 			case 3, 4, 5 -> EntityTypes.ZOMBIE;
 			case 6, 7 -> EntityTypes.SKELETON;
-			case 8 -> TFEntities.SWARM_SPIDER.get();
+			case 8 -> TFEntities.SWARM_SPIDER;
 			case 9 -> EntityTypes.CAVE_SPIDER;
-			default -> TFEntities.REDCAP.get();
+			default -> TFEntities.REDCAP;
 		};
 	}
 
@@ -296,13 +296,13 @@ public class HollowHillComponent extends TFStructureComponentOld {
 	 */
 	public EntityType<?> getLevel3Mob(RandomSource rand) {
 		return switch (rand.nextInt(11)) {
-			case 0 -> TFEntities.SLIME_BEETLE.get();
-			case 1 -> TFEntities.FIRE_BEETLE.get();
-			case 2 -> TFEntities.PINCH_BEETLE.get();
+			case 0 -> TFEntities.SLIME_BEETLE;
+			case 1 -> TFEntities.FIRE_BEETLE;
+			case 2 -> TFEntities.PINCH_BEETLE;
 			case 3, 4, 5 -> EntityTypes.SKELETON;
 			case 6, 7, 8 -> EntityTypes.CAVE_SPIDER;
 			case 9 -> EntityTypes.CREEPER;
-			default -> TFEntities.WRAITH.get();
+			default -> TFEntities.WRAITH;
 		};
 	}
 

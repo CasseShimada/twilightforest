@@ -113,7 +113,7 @@ public class SwarmSpider extends Spider {
 
 	public void summonJockey(ServerLevelAccessor accessor, DifficultyInstance difficulty) {
 		if (this.getFirstPassenger() != null || accessor.getRandom().nextInt(200) == 0) {
-			SkeletonDruid druid = TFEntities.SKELETON_DRUID.get().create(this.level(), EntitySpawnReason.JOCKEY);
+			SkeletonDruid druid = TFEntities.SKELETON_DRUID.create(this.level(), EntitySpawnReason.JOCKEY);
 			if (druid != null) {
 				druid.setPos(this.getX(), this.getY(), this.getZ());
 				druid.setYRot(this.getYRot());

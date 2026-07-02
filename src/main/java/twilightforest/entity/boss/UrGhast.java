@@ -252,7 +252,7 @@ public class UrGhast extends BaseTFBoss {
 		level.addFreshEntity(bolt);
 
 		for (int i = 0; i < tries; i++) {
-			CarminiteGhastling minion = TFEntities.CARMINITE_GHASTLING.get().create(level, EntitySpawnReason.MOB_SUMMONED);
+			CarminiteGhastling minion = TFEntities.CARMINITE_GHASTLING.create(level, EntitySpawnReason.MOB_SUMMONED);
 			if (minion == null) continue;
 
 			double sx = x + ((this.getRandom().nextDouble() - this.getRandom().nextDouble()) * rangeXZ);
@@ -371,7 +371,7 @@ public class UrGhast extends BaseTFBoss {
 
 		for (Player player : this.level().getEntitiesOfClass(Player.class, below)) {
 			if (this.level().canSeeSkyFromBelowWater(player.blockPosition())) {
-				player.hurtServer(level, TFDamageTypes.getEntityDamageSource(this.level(), TFDamageTypes.GHAST_TEAR, this, TFEntities.UR_GHAST.get()), 3);
+				player.hurtServer(level, TFDamageTypes.getEntityDamageSource(this.level(), TFDamageTypes.GHAST_TEAR, this, TFEntities.UR_GHAST), 3);
 			}
 		}
 

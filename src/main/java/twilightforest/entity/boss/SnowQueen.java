@@ -253,7 +253,7 @@ public class SnowQueen extends BaseTFBoss implements IBreathAttacker, TFMultipar
 
 	@Override
 	public boolean doHurtTarget(ServerLevel level, Entity entity) {
-		DamageSource source = this.getCurrentPhase() == Phase.DROP ? TFDamageTypes.getEntityDamageSource(this.level(), TFDamageTypes.SQUISH, this, TFEntities.SNOW_QUEEN.get()) : this.level().damageSources().mobAttack(this);
+		DamageSource source = this.getCurrentPhase() == Phase.DROP ? TFDamageTypes.getEntityDamageSource(this.level(), TFDamageTypes.SQUISH, this, TFEntities.SNOW_QUEEN) : this.level().damageSources().mobAttack(this);
 		return EntityUtil.properlyApplyCustomDamageSource(level, this, entity, source, null);
 	}
 
@@ -353,7 +353,7 @@ public class SnowQueen extends BaseTFBoss implements IBreathAttacker, TFMultipar
 	}
 
 	public void summonMinionAt(LivingEntity targetedEntity) {
-		IceCrystal minion = TFEntities.ICE_CRYSTAL.get().create(this.level(), EntitySpawnReason.MOB_SUMMONED);
+		IceCrystal minion = TFEntities.ICE_CRYSTAL.create(this.level(), EntitySpawnReason.MOB_SUMMONED);
 		if (minion == null) {
 			this.summonsRemaining--;
 			return;
@@ -401,7 +401,7 @@ public class SnowQueen extends BaseTFBoss implements IBreathAttacker, TFMultipar
 
 	@Override
 	public void doBreathAttack(ServerLevel level, Entity target) {
-		target.hurtServer(level, TFDamageTypes.getEntityDamageSource(this.level(), TFDamageTypes.CHILLING_BREATH, this, TFEntities.SNOW_QUEEN.get()), BREATH_DAMAGE);
+		target.hurtServer(level, TFDamageTypes.getEntityDamageSource(this.level(), TFDamageTypes.CHILLING_BREATH, this, TFEntities.SNOW_QUEEN), BREATH_DAMAGE);
 		// TODO: slow target?
 	}
 

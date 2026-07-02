@@ -41,7 +41,7 @@ public class LichMinion extends Zombie {
 	}
 
 	public LichMinion(Level world, Lich entityTFLich) {
-		super(TFEntities.LICH_MINION.get(), world);
+		super(TFEntities.LICH_MINION, world);
 		this.master = entityTFLich;
 	}
 

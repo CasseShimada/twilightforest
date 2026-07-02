@@ -61,7 +61,7 @@ public class FallingIce extends Entity {
 	}
 
 	public FallingIce(Level level, double x, double y, double z, BlockState state, int hangTime) {
-		this(TFEntities.FALLING_ICE.get(), level);
+		this(TFEntities.FALLING_ICE, level);
 		this.hangTime = hangTime;
 		this.blockState = state;
 		this.blocksBuilding = true;

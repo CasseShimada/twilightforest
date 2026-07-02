@@ -160,7 +160,7 @@ public final class TFClientNetworking {
 				context.client().gameRenderer.displayItemActivation(packet.charm());
 				context.client().particleEngine.createTrackingEmitter(camera != null ? camera : player, new ItemParticleOption(ParticleTypes.ITEM, ItemStackTemplate.fromNonEmptyStack(packet.charm())), 20);
 			} else {
-				CharmEffect effect = new CharmEffect(TFEntities.CHARM_EFFECT.get(), player.level(), player, packet.charm());
+				CharmEffect effect = new CharmEffect(TFEntities.CHARM_EFFECT, player.level(), player, packet.charm());
 				effect.offset = (float) Math.PI;
 				level.addEntity(effect);
 			}

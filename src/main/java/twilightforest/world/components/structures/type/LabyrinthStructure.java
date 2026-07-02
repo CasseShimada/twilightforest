@@ -66,17 +66,17 @@ public class LabyrinthStructure extends ControlledSpawningStructure implements C
 	public static LabyrinthStructure buildLabyrinthConfig(BootstrapContext<Structure> context) {
 		return new LabyrinthStructure(
 			ControlledSpawningConfig.justMonsters(List.of(List.of(
-				weightedSpawn(TFEntities.MINOTAUR.get(), 20, 2, 3),
+				weightedSpawn(TFEntities.MINOTAUR, 20, 2, 3),
 				weightedSpawn(EntityTypes.CAVE_SPIDER, 10, 1, 2),
 				weightedSpawn(EntityTypes.CREEPER, 10, 1, 2),
-				weightedSpawn(TFEntities.MAZE_SLIME.get(), 10, 2, 4),
+				weightedSpawn(TFEntities.MAZE_SLIME, 10, 2, 4),
 				weightedSpawn(EntityTypes.ENDERMAN, 1, 1, 2),
-				weightedSpawn(TFEntities.FIRE_BEETLE.get(), 10, 1, 2),
-				weightedSpawn(TFEntities.SLIME_BEETLE.get(), 10, 1, 2),
-				weightedSpawn(TFEntities.PINCH_BEETLE.get(), 10, 1, 1)
+				weightedSpawn(TFEntities.FIRE_BEETLE, 10, 1, 2),
+				weightedSpawn(TFEntities.SLIME_BEETLE, 10, 1, 2),
+				weightedSpawn(TFEntities.PINCH_BEETLE, 10, 1, 1)
 			))),
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_lich"))),
-			new HintConfig(HintConfig.book("labyrinth", 5), TFEntities.KOBOLD.get()),
+			new HintConfig(HintConfig.book("labyrinth", 5), TFEntities.KOBOLD),
 			new DecorationConfig(3, true, false, false),
 			true, Optional.of(Holder.direct(TFMapDecorations.LABYRINTH)),
 			new StructureSettings(

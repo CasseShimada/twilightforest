@@ -40,7 +40,7 @@ public class CubeOfAnnihilationItem extends Item {
 			return InteractionResult.PASS;
 
 		if (level instanceof ServerLevel serverLevel) {
-			Projectile.spawnProjectile(new CubeOfAnnihilation(TFEntities.CUBE_OF_ANNIHILATION.get(), serverLevel, player, stack), serverLevel, stack, cube ->
+			Projectile.spawnProjectile(new CubeOfAnnihilation(TFEntities.CUBE_OF_ANNIHILATION, serverLevel, player, stack), serverLevel, stack, cube ->
 				stack.set(TFDataComponents.THROWN_PROJECTILE, cube.getUUID()));
 		}
 

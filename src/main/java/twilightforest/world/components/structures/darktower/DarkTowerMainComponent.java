@@ -1224,7 +1224,7 @@ public class DarkTowerMainComponent extends DarkTowerWingComponent {
 	 * Make a mini ghast spawner and then set the spawn range and max entities for that spawner
 	 */
 	private void makeMiniGhastSpawner(WorldGenLevel world, int y, int sx, int sz, BoundingBox sbb) {
-		setSpawner(world, sx, y + 2, sz, sbb, TFEntities.CARMINITE_GHASTLING.get(), spawner -> {
+		setSpawner(world, sx, y + 2, sz, sbb, TFEntities.CARMINITE_GHASTLING, spawner -> {
 			BaseSpawnerAccessor base = (BaseSpawnerAccessor) spawner.getSpawner();
 
 			base.twilightforest$setSpawnRange(16);

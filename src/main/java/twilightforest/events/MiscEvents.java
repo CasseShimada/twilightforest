@@ -68,7 +68,7 @@ public class MiscEvents {
 	public static InteractionResult handleDeathTomeUse(Player player, Level level, InteractionHand hand, BlockHitResult hit) {
 		ItemStack stack = player.getItemInHand(hand);
 
-		if (!(stack.getItem() instanceof SpawnEggItem spawnEggItem) || SpawnEggItem.getType(stack) != TFEntities.DEATH_TOME.get())
+		if (!(stack.getItem() instanceof SpawnEggItem spawnEggItem) || SpawnEggItem.getType(stack) != TFEntities.DEATH_TOME)
 			return InteractionResult.PASS;
 
 		BlockPos pos = hit.getBlockPos();
@@ -78,7 +78,7 @@ public class MiscEvents {
 			level.playSound(null, pos, SoundEvents.BOOK_PUT, SoundSource.BLOCKS, 1.0F, 1.0F);
 
 			if (level instanceof ServerLevel serverLevel) {
-				DeathTome tome = TFEntities.DEATH_TOME.get().spawn(serverLevel, stack, player, pos.below(), EntitySpawnReason.SPAWN_ITEM_USE, true, false);
+				DeathTome tome = TFEntities.DEATH_TOME.spawn(serverLevel, stack, player, pos.below(), EntitySpawnReason.SPAWN_ITEM_USE, true, false);
 				if (tome != null) {
 					stack.consume(1, player);
 					serverLevel.gameEvent(player, GameEvent.ENTITY_PLACE, pos);

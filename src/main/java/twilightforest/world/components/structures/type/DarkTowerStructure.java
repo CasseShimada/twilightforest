@@ -53,23 +53,23 @@ public class DarkTowerStructure extends ControlledSpawningStructure {
 	public static DarkTowerStructure buildDarkTowerConfig(BootstrapContext<Structure> context) {
 		return new DarkTowerStructure(
 			ControlledSpawningConfig.create(List.of(List.of(
-				weightedSpawn(TFEntities.CARMINITE_GOLEM.get(), 10, 1, 2),
+				weightedSpawn(TFEntities.CARMINITE_GOLEM, 10, 1, 2),
 				weightedSpawn(EntityTypes.SKELETON, 10, 1, 2),
 				weightedSpawn(EntityTypes.CREEPER, 5, 1, 1),
 				weightedSpawn(EntityTypes.ENDERMAN, 2, 1, 2),
 				weightedSpawn(EntityTypes.WITCH, 1, 1, 1),
-				weightedSpawn(TFEntities.CARMINITE_GHASTLING.get(), 10, 1, 2),
-				weightedSpawn(TFEntities.CARMINITE_BROODLING.get(), 10, 4, 4),
-				weightedSpawn(TFEntities.PINCH_BEETLE.get(), 10, 1, 1)
+				weightedSpawn(TFEntities.CARMINITE_GHASTLING, 10, 1, 2),
+				weightedSpawn(TFEntities.CARMINITE_BROODLING, 10, 4, 4),
+				weightedSpawn(TFEntities.PINCH_BEETLE, 10, 1, 1)
 			), List.of(
 				// roof ghasts
-				weightedSpawn(TFEntities.CARMINITE_GHASTGUARD.get(), 10, 1, 2)
+				weightedSpawn(TFEntities.CARMINITE_GHASTGUARD, 10, 1, 2)
 			)), List.of(), List.of(
 				// aquarium squids (only in aquariums between y = 35 and y = 64. :/
 				weightedSpawn(EntityTypes.SQUID, 10, 4, 4)
 			)),
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_knights"))),
-			new HintConfig(HintConfig.book("darktower", 3), TFEntities.KOBOLD.get()),
+			new HintConfig(HintConfig.book("darktower", 3), TFEntities.KOBOLD),
 			new DecorationConfig(1, false, true, true),
 			true, Optional.of(Holder.direct(TFMapDecorations.DARK_TOWER)),
 			new StructureSettings(

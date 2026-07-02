@@ -22,7 +22,7 @@ public class InfestedTowerwoodBlock extends Block {
 	public void spawnAfterBreak(BlockState state, ServerLevel level, BlockPos pos, ItemStack stack, boolean sourceIsPlayer) {
 		super.spawnAfterBreak(state, level, pos, stack, sourceIsPlayer);
 		if (!level.isClientSide() && level.getGameRules().get(GameRules.BLOCK_DROPS) && !EnchantmentHelper.hasTag(stack, EnchantmentTags.PREVENTS_INFESTED_SPAWNS)) {
-			TowerwoodBorer termite = TFEntities.TOWERWOOD_BORER.get().create(level, EntitySpawnReason.TRIGGERED);
+			TowerwoodBorer termite = TFEntities.TOWERWOOD_BORER.create(level, EntitySpawnReason.TRIGGERED);
 			termite.setPos(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
 			termite.setYRot(0.0F);
 			termite.setXRot(0.0F);

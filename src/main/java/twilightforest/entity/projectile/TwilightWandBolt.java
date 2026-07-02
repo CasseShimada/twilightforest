@@ -27,12 +27,12 @@ public class TwilightWandBolt extends TFThrowable {
 	}
 
 	public TwilightWandBolt(Level world, LivingEntity thrower) {
-		super(TFEntities.WAND_BOLT.get(), world, thrower);
+		super(TFEntities.WAND_BOLT, world, thrower);
 		this.setPos(thrower.getEyePosition());
 	}
 
 	public TwilightWandBolt(Level worldIn, double x, double y, double z) {
-		super(TFEntities.WAND_BOLT.get(), worldIn, x, y, z);
+		super(TFEntities.WAND_BOLT, worldIn, x, y, z);
 	}
 
 	@Override

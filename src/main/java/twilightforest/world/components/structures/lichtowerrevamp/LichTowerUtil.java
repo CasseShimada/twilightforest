@@ -33,15 +33,15 @@ public class LichTowerUtil {
 		// 1/3 chance for any spider variant, 1/3 chance for skeleton, 1/3 chance for zombie
 		map.put(EntityTypes.SPIDER, 1);
 		map.put(EntityTypes.CAVE_SPIDER, 1);
-		map.put(TFEntities.SWARM_SPIDER.get(), 1);
-		map.put(TFEntities.HEDGE_SPIDER.get(), 1);
+		map.put(TFEntities.SWARM_SPIDER, 1);
+		map.put(TFEntities.HEDGE_SPIDER, 1);
 		map.put(EntityTypes.SKELETON, 4);
 		map.put(EntityTypes.ZOMBIE, 4);
 	}))));
 	private final Supplier<StructureProcessor> centralSpawners = Suppliers.memoize(() -> SpawnerProcessor.compile(4, Object2IntMaps.unmodifiable(Util.make(new Object2IntArrayMap<>(), map -> {
 		map.put(EntityTypes.SKELETON, 2);
 		map.put(EntityTypes.ZOMBIE, 1);
-		map.put(TFEntities.SWARM_SPIDER.get(), 1);
+		map.put(TFEntities.SWARM_SPIDER, 1);
 	}))));
 	private final Supplier<List<Block>> STAIR_DECAY_BLOCKS = Suppliers.memoize(() -> List.of(
 		TFBlocks.TWILIGHT_OAK_SLAB.value(),

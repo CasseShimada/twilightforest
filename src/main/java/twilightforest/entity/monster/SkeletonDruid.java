@@ -144,7 +144,7 @@ public class SkeletonDruid extends Skeleton {
 
 	private static final AttributeModifier SPEED_MODIFIER_BABY = new AttributeModifier(TwilightForestMod.prefix("baby_speed_boost"), 0.5D, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
 	private static final EntityDataAccessor<Boolean> DATA_BABY_ID = SynchedEntityData.defineId(SkeletonDruid.class, EntityDataSerializers.BOOLEAN);
-	private static final EntityDimensions BABY_DIMENSIONS = TFEntities.SKELETON_DRUID.get().getDimensions().scale(0.5F).withEyeHeight(0.93F);
+	private static final EntityDimensions BABY_DIMENSIONS = TFEntities.SKELETON_DRUID.getDimensions().scale(0.5F).withEyeHeight(0.93F);
 
 	@Override
 	public boolean isBaby() {

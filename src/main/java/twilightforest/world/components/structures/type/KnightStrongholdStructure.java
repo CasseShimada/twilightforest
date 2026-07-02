@@ -56,17 +56,17 @@ public class KnightStrongholdStructure extends ControlledSpawningStructure {
 	public static KnightStrongholdStructure buildKnightStrongholdConfig(BootstrapContext<Structure> context) {
 		return new KnightStrongholdStructure(
 			ControlledSpawningConfig.justMonsters(List.of(List.of(
-				weightedSpawn(TFEntities.BLOCKCHAIN_GOBLIN.get(), 10, 1, 2),
-				weightedSpawn(TFEntities.LOWER_GOBLIN_KNIGHT.get(), 5, 1, 2),
-				weightedSpawn(TFEntities.HELMET_CRAB.get(), 10, 2, 4),
-				weightedSpawn(TFEntities.SLIME_BEETLE.get(), 10, 2, 3),
-				weightedSpawn(TFEntities.REDCAP_SAPPER.get(), 2, 1, 2),
-				weightedSpawn(TFEntities.KOBOLD.get(), 10, 2, 4),
+				weightedSpawn(TFEntities.BLOCKCHAIN_GOBLIN, 10, 1, 2),
+				weightedSpawn(TFEntities.LOWER_GOBLIN_KNIGHT, 5, 1, 2),
+				weightedSpawn(TFEntities.HELMET_CRAB, 10, 2, 4),
+				weightedSpawn(TFEntities.SLIME_BEETLE, 10, 2, 3),
+				weightedSpawn(TFEntities.REDCAP_SAPPER, 2, 1, 2),
+				weightedSpawn(TFEntities.KOBOLD, 10, 2, 4),
 				weightedSpawn(EntityTypes.CREEPER, 5, 1, 2),
 				weightedSpawn(EntityTypes.SLIME, 5, 4, 4)
 			))),
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_trophy_pedestal"))),
-			new HintConfig(HintConfig.book("tfstronghold", 4), TFEntities.KOBOLD.get()),
+			new HintConfig(HintConfig.book("tfstronghold", 4), TFEntities.KOBOLD),
 			new DecorationConfig(3, true, false, false),
 			true, Optional.of(Holder.direct(TFMapDecorations.KNIGHT_STRONGHOLD)),
 			new StructureSettings(

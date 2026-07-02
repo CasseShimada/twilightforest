@@ -83,14 +83,14 @@ public class LichTowerStructure extends ControlledSpawningStructure implements C
 	public static LichTowerStructure buildLichTowerConfig(BootstrapContext<Structure> context) {
 		final ControlledSpawningConfig monsters;
 		List<Weighted<MobSpawnSettings.SpawnerData>> yardSpawns = List.of(
-			weightedSpawn(TFEntities.RISING_ZOMBIE.value(), 2, 1, 2)
+			weightedSpawn(TFEntities.RISING_ZOMBIE, 2, 1, 2)
 		);
 		List<Weighted<MobSpawnSettings.SpawnerData>> interiorSpawns = List.of(
 			weightedSpawn(EntityTypes.ZOMBIE, 10, 1, 2),
 			weightedSpawn(EntityTypes.SKELETON, 10, 1, 2),
 			weightedSpawn(EntityTypes.CREEPER, 1, 1, 1),
 			weightedSpawn(EntityTypes.ENDERMAN, 1, 1, 2),
-			weightedSpawn(TFEntities.DEATH_TOME.value(), 10, 2, 3),
+			weightedSpawn(TFEntities.DEATH_TOME, 10, 2, 3),
 			weightedSpawn(EntityTypes.WITCH, 1, 1, 1)
 		);
 		monsters = ControlledSpawningConfig.justMonsters(List.of(
@@ -100,7 +100,7 @@ public class LichTowerStructure extends ControlledSpawningStructure implements C
 		return new LichTowerStructure(
 			monsters,
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_naga"))),
-			new HintConfig(HintConfig.book("lichtower", 4), TFEntities.KOBOLD.get()),
+			new HintConfig(HintConfig.book("lichtower", 4), TFEntities.KOBOLD),
 			new DecorationConfig(0, false, true, false, true),
 			true, Optional.of(Holder.direct(TFMapDecorations.LICH_TOWER)),
 			new StructureSettings(

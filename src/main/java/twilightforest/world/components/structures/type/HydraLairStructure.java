@@ -64,7 +64,7 @@ public class HydraLairStructure extends ProgressionStructure implements CustomDe
 	public static HydraLairStructure buildHydraLairConfig(BootstrapContext<Structure> context) {
 		return new HydraLairStructure(
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_labyrinth"))),
-			new HintConfig(HintConfig.book("hydralair", 4), TFEntities.KOBOLD.get()),
+			new HintConfig(HintConfig.book("hydralair", 4), TFEntities.KOBOLD),
 			new DecorationConfig(2, false, false, false),
 			true, Optional.of(Holder.direct(TFMapDecorations.HYDRA_LAIR)),
 			new StructureSettings(

@@ -363,7 +363,7 @@ public abstract class HollowTreeFeature extends TFTreeFeature<TFTreeFeatureConfi
 		world.setBlock(pos.above(), Blocks.SPAWNER.defaultBlockState(), Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS);
 		SpawnerBlockEntity ms = (SpawnerBlockEntity) world.getBlockEntity(pos.above());
 		if (ms != null) {
-			ms.setEntityId(TFEntities.SWARM_SPIDER.get(), random);
+			ms.setEntityId(TFEntities.SWARM_SPIDER, random);
 		}
 
 		// treasure chests?

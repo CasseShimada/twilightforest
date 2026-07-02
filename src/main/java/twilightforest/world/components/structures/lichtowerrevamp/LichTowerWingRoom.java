@@ -670,8 +670,8 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			case 7, 8, 9 -> EntityTypes.SKELETON;
 			case 6 -> EntityTypes.SPIDER;
 			case 5 -> EntityTypes.CAVE_SPIDER;
-			case 4 -> TFEntities.HEDGE_SPIDER.value();
-			case 3 -> TFEntities.SWARM_SPIDER.value();
+			case 4 -> TFEntities.HEDGE_SPIDER;
+			case 3 -> TFEntities.SWARM_SPIDER;
 			default -> EntityTypes.ZOMBIE;
 		};
 	}
@@ -679,8 +679,8 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 	private static EntityType<?> randomMobFromParams(RandomSource random, String[] monsters) {
 		String label = Util.getRandom(monsters, random);
 		return switch (label) {
-			case "hedge_spider" -> TFEntities.HEDGE_SPIDER.value();
-			case "swarm_spider" -> TFEntities.SWARM_SPIDER.value();
+			case "hedge_spider" -> TFEntities.HEDGE_SPIDER;
+			case "swarm_spider" -> TFEntities.SWARM_SPIDER;
 			default -> Optional.ofNullable(Identifier.tryParse(label))
 				.flatMap(BuiltInRegistries.ENTITY_TYPE::getOptional)
 				.orElse(EntityTypes.ZOMBIE);
@@ -800,7 +800,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			shelfBlockEntity.setChanged();
 
 			if (isHostile) {
-				shelfBlockEntity.getSpawner().setEntityId(TFEntities.DEATH_TOME.value(), null, random, pos);
+				shelfBlockEntity.getSpawner().setEntityId(TFEntities.DEATH_TOME, null, random, pos);
 			}
 		}
 	}
@@ -867,7 +867,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		level.setBlock(pos, lectern, Block.UPDATE_CLIENTS);
 
 		if (putMimic) {
-			DeathTome tomeMimic = TFEntities.DEATH_TOME.get().create(level.getLevel(), EntitySpawnReason.STRUCTURE);
+			DeathTome tomeMimic = TFEntities.DEATH_TOME.create(level.getLevel(), EntitySpawnReason.STRUCTURE);
 			if (tomeMimic != null) {
 				tomeMimic.setPersistenceRequired();
 				float yaw = lectern.getValue(HorizontalDirectionalBlock.FACING).toYRot();

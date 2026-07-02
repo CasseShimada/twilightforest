@@ -29,7 +29,7 @@ public class LichBolt extends TFThrowable {
 	}
 
 	public LichBolt(Level level, LivingEntity owner) {
-		super(TFEntities.LICH_BOLT.get(), level, owner);
+		super(TFEntities.LICH_BOLT, level, owner);
 	}
 
 	@Override
@@ -107,7 +107,7 @@ public class LichBolt extends TFThrowable {
 		Entity hit = result.getEntity();
 
 		if (this.level() instanceof ServerLevel level) {
-			if (hit instanceof LivingEntity && hit.hurtServer(level, TFDamageTypes.getIndirectEntityDamageSource(level, TFDamageTypes.LICH_BOLT, this, this.getOwner(), TFEntities.LICH.get()), 6)) {
+			if (hit instanceof LivingEntity && hit.hurtServer(level, TFDamageTypes.getIndirectEntityDamageSource(level, TFDamageTypes.LICH_BOLT, this, this.getOwner(), TFEntities.LICH), 6)) {
 				this.level().broadcastEntityEvent(this, (byte) 3);
 				this.discard();
 			}

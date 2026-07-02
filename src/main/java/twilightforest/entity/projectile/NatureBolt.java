@@ -35,7 +35,7 @@ public class NatureBolt extends TFThrowable implements ITFProjectile, ItemSuppli
 	}
 
 	public NatureBolt(Level level, LivingEntity owner) {
-		super(TFEntities.NATURE_BOLT.get(), level, owner);
+		super(TFEntities.NATURE_BOLT, level, owner);
 	}
 
 	@Override

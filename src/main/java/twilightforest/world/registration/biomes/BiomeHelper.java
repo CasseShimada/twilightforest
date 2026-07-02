@@ -474,7 +474,7 @@ public abstract class BiomeHelper {
 		MobSpawnSettings.Builder spawnInfo = new MobSpawnSettings.Builder();
 
 		spawnInfo.creatureGenerationProbability(0.15f);
-		spawnInfo.addSpawn(MobCategory.CREATURE, 10, new MobSpawnSettings.SpawnerData(TFEntities.PENGUIN.get(), 2, 4));
+		spawnInfo.addSpawn(MobCategory.CREATURE, 10, new MobSpawnSettings.SpawnerData(TFEntities.PENGUIN, 2, 4));
 
 		return spawnInfo;
 	}
@@ -486,10 +486,10 @@ public abstract class BiomeHelper {
 		spawnInfo.addSpawn(MobCategory.MONSTER, 2, new MobSpawnSettings.SpawnerData(EntityTypes.ENDERMAN, 1, 2)).addMobCharge(EntityTypes.ENDERMAN, 0.75D, 0.15D);
 		spawnInfo.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(EntityTypes.ZOMBIE, 1, 2)).addMobCharge(EntityTypes.ZOMBIE, 0.7D, 0.15D);
 		spawnInfo.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(EntityTypes.SKELETON, 1, 2)).addMobCharge(EntityTypes.SKELETON, 0.8D, 0.15D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(TFEntities.MIST_WOLF.get(), 1, 1)).addMobCharge(TFEntities.MIST_WOLF.get(), 0.75D, 0.2D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(TFEntities.SKELETON_DRUID.get(), 1, 1)).addMobCharge(TFEntities.SKELETON_DRUID.get(), 0.8D, 0.2D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, 1, new MobSpawnSettings.SpawnerData(TFEntities.KING_SPIDER.get(), 1, 1)).addMobCharge(TFEntities.KING_SPIDER.get(), 0.85D, 0.25D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, 10, new MobSpawnSettings.SpawnerData(TFEntities.KOBOLD.get(), 1, 3)).addMobCharge(TFEntities.KOBOLD.get(), 0.7D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(TFEntities.MIST_WOLF, 1, 1)).addMobCharge(TFEntities.MIST_WOLF, 0.75D, 0.2D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(TFEntities.SKELETON_DRUID, 1, 1)).addMobCharge(TFEntities.SKELETON_DRUID, 0.8D, 0.2D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 1, new MobSpawnSettings.SpawnerData(TFEntities.KING_SPIDER, 1, 1)).addMobCharge(TFEntities.KING_SPIDER, 0.85D, 0.25D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 10, new MobSpawnSettings.SpawnerData(TFEntities.KOBOLD, 1, 3)).addMobCharge(TFEntities.KOBOLD, 0.7D, 0.15D);
 		spawnInfo.addSpawn(MobCategory.MONSTER, 2, new MobSpawnSettings.SpawnerData(EntityTypes.WITCH, 1, 1)).addMobCharge(EntityTypes.WITCH, 0.75D, 0.15D);
 
 		return spawnInfo;
@@ -499,8 +499,8 @@ public abstract class BiomeHelper {
 		MobSpawnSettings.Builder spawnInfo = new MobSpawnSettings.Builder();
 
 		spawnInfo.creatureGenerationProbability(0.05f);
-		spawnInfo.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(TFEntities.WINTER_WOLF.get(), 1, 1)).addMobCharge(TFEntities.WINTER_WOLF.get(), 0.6D, 0.15D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(TFEntities.YETI.get(), 1, 1)).addMobCharge(TFEntities.YETI.get(), 0.6D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(TFEntities.WINTER_WOLF, 1, 1)).addMobCharge(TFEntities.WINTER_WOLF, 0.6D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(TFEntities.YETI, 1, 1)).addMobCharge(TFEntities.YETI, 0.6D, 0.15D);
 
 		return spawnInfo;
 	}
@@ -509,7 +509,7 @@ public abstract class BiomeHelper {
 		MobSpawnSettings.Builder spawnInfo = new MobSpawnSettings.Builder();
 
 		spawnInfo.creatureGenerationProbability(0.3f);
-		spawnInfo.addSpawn(MobCategory.CREATURE, 10, new MobSpawnSettings.SpawnerData(TFEntities.RAVEN.get(), 4, 4));
+		spawnInfo.addSpawn(MobCategory.CREATURE, 10, new MobSpawnSettings.SpawnerData(TFEntities.RAVEN, 4, 4));
 
 		return spawnInfo;
 	}
@@ -518,7 +518,7 @@ public abstract class BiomeHelper {
 		MobSpawnSettings.Builder spawnInfo = new MobSpawnSettings.Builder();
 
 		spawnInfo.addSpawn(MobCategory.MONSTER, 10, new MobSpawnSettings.SpawnerData(EntityTypes.ZOMBIE, 1, 2)).addMobCharge(EntityTypes.ZOMBIE, 0.7D, 0.15D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, 10, new MobSpawnSettings.SpawnerData(TFEntities.MOSQUITO_SWARM.get(), 1, 1)).addMobCharge(TFEntities.MOSQUITO_SWARM.get(), 0.7D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 10, new MobSpawnSettings.SpawnerData(TFEntities.MOSQUITO_SWARM, 1, 1)).addMobCharge(TFEntities.MOSQUITO_SWARM, 0.7D, 0.15D);
 
 		return spawnInfo;
 	}
@@ -528,7 +528,7 @@ public abstract class BiomeHelper {
 
 		spawnInfo.addSpawn(MobCategory.MONSTER, 50, new MobSpawnSettings.SpawnerData(EntityTypes.SPIDER, 1, 2)).addMobCharge(EntityTypes.SPIDER, 0.75D, 0.25D);
 		spawnInfo.addSpawn(MobCategory.MONSTER, 20, new MobSpawnSettings.SpawnerData(EntityTypes.SKELETON, 1, 2)).addMobCharge(EntityTypes.SKELETON, 0.85D, 0.25D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(TFEntities.SKELETON_DRUID.get(), 1, 1)).addMobCharge(TFEntities.SKELETON_DRUID.get(), 0.95D, 0.25D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(TFEntities.SKELETON_DRUID, 1, 1)).addMobCharge(TFEntities.SKELETON_DRUID, 0.95D, 0.25D);
 		spawnInfo.addSpawn(MobCategory.AMBIENT, 20, new MobSpawnSettings.SpawnerData(EntityTypes.BAT, 2, 4));
 
 		return spawnInfo;
@@ -566,15 +566,15 @@ public abstract class BiomeHelper {
 
 		spawnInfo.creatureGenerationProbability(0.15f);
 
-		spawnInfo.addSpawn(MobCategory.CREATURE, 12, new MobSpawnSettings.SpawnerData(TFEntities.BIGHORN_SHEEP.get(), 4, 4));
-		spawnInfo.addSpawn(MobCategory.CREATURE, 10, new MobSpawnSettings.SpawnerData(TFEntities.BOAR.get(), 4, 4));
+		spawnInfo.addSpawn(MobCategory.CREATURE, 12, new MobSpawnSettings.SpawnerData(TFEntities.BIGHORN_SHEEP, 4, 4));
+		spawnInfo.addSpawn(MobCategory.CREATURE, 10, new MobSpawnSettings.SpawnerData(TFEntities.BOAR, 4, 4));
 		spawnInfo.addSpawn(MobCategory.CREATURE, 10, new MobSpawnSettings.SpawnerData(EntityTypes.CHICKEN, 4, 4));
-		spawnInfo.addSpawn(MobCategory.CREATURE, 15, new MobSpawnSettings.SpawnerData(TFEntities.DEER.get(), 4, 5));
+		spawnInfo.addSpawn(MobCategory.CREATURE, 15, new MobSpawnSettings.SpawnerData(TFEntities.DEER, 4, 5));
 		spawnInfo.addSpawn(MobCategory.CREATURE, 5, new MobSpawnSettings.SpawnerData(EntityTypes.WOLF, 4, 4));
-		spawnInfo.addSpawn(MobCategory.CREATURE, 15, new MobSpawnSettings.SpawnerData(TFEntities.TINY_BIRD.get(), 4, 8));
-		spawnInfo.addSpawn(MobCategory.CREATURE, 10, new MobSpawnSettings.SpawnerData(TFEntities.SQUIRREL.get(), 2, 4));
-		spawnInfo.addSpawn(MobCategory.CREATURE, 10, new MobSpawnSettings.SpawnerData(TFEntities.DWARF_RABBIT.get(), 4, 5));
-		spawnInfo.addSpawn(MobCategory.CREATURE, 10, new MobSpawnSettings.SpawnerData(TFEntities.RAVEN.get(), 1, 2));
+		spawnInfo.addSpawn(MobCategory.CREATURE, 15, new MobSpawnSettings.SpawnerData(TFEntities.TINY_BIRD, 4, 8));
+		spawnInfo.addSpawn(MobCategory.CREATURE, 10, new MobSpawnSettings.SpawnerData(TFEntities.SQUIRREL, 2, 4));
+		spawnInfo.addSpawn(MobCategory.CREATURE, 10, new MobSpawnSettings.SpawnerData(TFEntities.DWARF_RABBIT, 4, 5));
+		spawnInfo.addSpawn(MobCategory.CREATURE, 10, new MobSpawnSettings.SpawnerData(TFEntities.RAVEN, 1, 2));
 
 		return spawnInfo;
 	}
@@ -588,7 +588,7 @@ public abstract class BiomeHelper {
 		spawnInfo.addSpawn(MobCategory.MONSTER, 1, new MobSpawnSettings.SpawnerData(EntityTypes.CREEPER, 1, 1)).addMobCharge(EntityTypes.CREEPER, 0.35D, 0.15D);
 		spawnInfo.addSpawn(MobCategory.MONSTER, 10, new MobSpawnSettings.SpawnerData(EntityTypes.SLIME, 2, 4)).addMobCharge(EntityTypes.SLIME, 0.2D, 0.15D);
 		spawnInfo.addSpawn(MobCategory.MONSTER, 1, new MobSpawnSettings.SpawnerData(EntityTypes.ENDERMAN, 1, 2)).addMobCharge(EntityTypes.ENDERMAN, 0.4D, 0.15D);
-		spawnInfo.addSpawn(MobCategory.MONSTER, 10, new MobSpawnSettings.SpawnerData(TFEntities.KOBOLD.get(), 1, 3)).addMobCharge(TFEntities.KOBOLD.get(), 0.2D, 0.15D);
+		spawnInfo.addSpawn(MobCategory.MONSTER, 10, new MobSpawnSettings.SpawnerData(TFEntities.KOBOLD, 1, 3)).addMobCharge(TFEntities.KOBOLD, 0.2D, 0.15D);
 		spawnInfo.addSpawn(MobCategory.AMBIENT, 10, new MobSpawnSettings.SpawnerData(EntityTypes.BAT, 1, 1));
 
 		return spawnInfo;

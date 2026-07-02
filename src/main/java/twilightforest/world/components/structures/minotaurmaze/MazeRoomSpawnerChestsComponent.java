@@ -39,7 +39,7 @@ public class MazeRoomSpawnerChestsComponent extends MazeRoomComponent {
 		placePillarEnclosure(world, sbb, 10, 10);
 
 		// spawner
-		setSpawner(world, 4, 2, 4, sbb, TFEntities.MINOTAUR.get());
+		setSpawner(world, 4, 2, 4, sbb, TFEntities.MINOTAUR);
 
 		// treasure
 		this.placeTreasureAtCurrentPosition(world, 4, 2, 11, TFLootTables.LABYRINTH_ROOM, sbb);

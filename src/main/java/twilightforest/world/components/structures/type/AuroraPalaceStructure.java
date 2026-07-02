@@ -51,12 +51,12 @@ public class AuroraPalaceStructure extends ControlledSpawningStructure {
 	public static AuroraPalaceStructure buildAuroraPalaceConfig(BootstrapContext<Structure> context) {
 		return new AuroraPalaceStructure(
 			ControlledSpawningConfig.justMonsters(List.of(List.of(
-				weightedSpawn(TFEntities.SNOW_GUARDIAN.get(), 10, 1, 2),
-				weightedSpawn(TFEntities.STABLE_ICE_CORE.get(), 10, 1, 2),
-				weightedSpawn(TFEntities.UNSTABLE_ICE_CORE.get(), 5, 1, 2)
+				weightedSpawn(TFEntities.SNOW_GUARDIAN, 10, 1, 2),
+				weightedSpawn(TFEntities.STABLE_ICE_CORE, 10, 1, 2),
+				weightedSpawn(TFEntities.UNSTABLE_ICE_CORE, 5, 1, 2)
 			))),
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_yeti"))),
-			new HintConfig(HintConfig.book("icetower", 3), TFEntities.KOBOLD.get()),
+			new HintConfig(HintConfig.book("icetower", 3), TFEntities.KOBOLD),
 			new DecorationConfig(2, false, true, false),
 			true, Optional.of(Holder.direct(TFMapDecorations.AURORA_PALACE)),
 			new StructureSettings(

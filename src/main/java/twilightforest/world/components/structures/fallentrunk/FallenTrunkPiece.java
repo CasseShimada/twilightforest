@@ -43,7 +43,7 @@ public class FallenTrunkPiece extends StructurePiece {
 
 	public static final int ERODED_LENGTH = 2;
 	protected static final float MOSS_CHANCE = 0.44F;
-	protected static final List<EntityType<?>> SPAWNER_MONSTERS = List.of(TFEntities.SWARM_SPIDER.get(), TFEntities.HOSTILE_WOLF.get(), EntityTypes.CAVE_SPIDER);
+	protected static final List<EntityType<?>> SPAWNER_MONSTERS = List.of(TFEntities.SWARM_SPIDER, TFEntities.HOSTILE_WOLF, EntityTypes.CAVE_SPIDER);
 	public static final int TERRAFORM_PIECE_SIZE = 10;
 	public static final int FEATURE_PIECE_SIZE = 3;
 	protected final BlockStateProvider log;

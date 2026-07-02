@@ -48,7 +48,7 @@ public class Boar extends Animal {
 
 	@Override
 	public Boar getBreedOffspring(ServerLevel world, AgeableMob ageableMob) {
-		return TFEntities.BOAR.get().create(world, EntitySpawnReason.BREEDING);
+		return TFEntities.BOAR.create(world, EntitySpawnReason.BREEDING);
 	}
 
 	@Override

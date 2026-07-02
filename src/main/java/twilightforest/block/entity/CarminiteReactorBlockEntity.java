@@ -152,7 +152,7 @@ public class CarminiteReactorBlockEntity extends BlockEntity {
 	}
 
 	private void spawnGhastNear(Level level, int x, int y, int z) {
-		CarminiteGhastling ghast = TFEntities.CARMINITE_GHASTLING.get().create(level, EntitySpawnReason.TRIGGERED);
+		CarminiteGhastling ghast = TFEntities.CARMINITE_GHASTLING.create(level, EntitySpawnReason.TRIGGERED);
 		if (ghast != null) {
 			float yaw = level.getRandom().nextFloat() * 360F;
 			ghast.setPos(x - 1.5 + level.getRandom().nextFloat() * 3.0, y - 1.5 + level.getRandom().nextFloat() * 3.0, z - 1.5 + level.getRandom().nextFloat() * 3.0);

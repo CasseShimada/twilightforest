@@ -488,9 +488,9 @@ public class DarkTowerWingComponent extends TowerWingComponent {
 		EntityType<?> mobID;
 
 		if (this.size > 9) {
-			mobID = rand.nextBoolean() ? TFEntities.CARMINITE_GOLEM.get() : TFEntities.CARMINITE_BROODLING.get();
+			mobID = rand.nextBoolean() ? TFEntities.CARMINITE_GOLEM : TFEntities.CARMINITE_BROODLING;
 		} else {
-			mobID = TFEntities.CARMINITE_BROODLING.get();
+			mobID = TFEntities.CARMINITE_BROODLING;
 		}
 
 		// pillar frame

@@ -99,9 +99,9 @@ public class HollowHillStructure extends LandmarkStructure implements Configurab
 			ControlledSpawningConfig.create(List.of(List.of(
 				weightedSpawn(EntityTypes.SPIDER, 10, 4, 4),
 				weightedSpawn(EntityTypes.ZOMBIE, 10, 4, 4),
-				weightedSpawn(TFEntities.REDCAP.get(), 10, 4, 4),
-				weightedSpawn(TFEntities.SWARM_SPIDER.get(), 10, 4, 4),
-				weightedSpawn(TFEntities.KOBOLD.get(), 10, 4, 8)
+				weightedSpawn(TFEntities.REDCAP, 10, 4, 4),
+				weightedSpawn(TFEntities.SWARM_SPIDER, 10, 4, 4),
+				weightedSpawn(TFEntities.KOBOLD, 10, 4, 8)
 			)), List.of(), List.of()),
 			context.lookup(TFRegistries.Keys.STRUCTURE_SPELEOTHEM_SETTINGS).getOrThrow(StructureSpeleothemConfigs.SMALL_HILL),
 			new DecorationConfig(1, true, false, false),
@@ -119,15 +119,15 @@ public class HollowHillStructure extends LandmarkStructure implements Configurab
 		return new HollowHillStructure(
 			2,
 			ControlledSpawningConfig.create(List.of(List.of(
-				weightedSpawn(TFEntities.REDCAP.get(), 10, 1, 2),
-				weightedSpawn(TFEntities.REDCAP_SAPPER.get(), 1, 1, 2),
-				weightedSpawn(TFEntities.KOBOLD.get(), 10, 2, 4),
+				weightedSpawn(TFEntities.REDCAP, 10, 1, 2),
+				weightedSpawn(TFEntities.REDCAP_SAPPER, 1, 1, 2),
+				weightedSpawn(TFEntities.KOBOLD, 10, 2, 4),
 				weightedSpawn(EntityTypes.SKELETON, 10, 2, 3),
-				weightedSpawn(TFEntities.SWARM_SPIDER.get(), 10, 2, 4),
+				weightedSpawn(TFEntities.SWARM_SPIDER, 10, 2, 4),
 				weightedSpawn(EntityTypes.SPIDER, 10, 1, 3),
 				weightedSpawn(EntityTypes.CREEPER, 10, 1, 2),
-				weightedSpawn(TFEntities.FIRE_BEETLE.get(), 5, 1, 1),
-				weightedSpawn(TFEntities.SLIME_BEETLE.get(), 5, 1, 1),
+				weightedSpawn(TFEntities.FIRE_BEETLE, 5, 1, 1),
+				weightedSpawn(TFEntities.SLIME_BEETLE, 5, 1, 1),
 				weightedSpawn(EntityTypes.WITCH, 1, 1, 1)
 			)), List.of(), List.of()),
 			context.lookup(TFRegistries.Keys.STRUCTURE_SPELEOTHEM_SETTINGS).getOrThrow(StructureSpeleothemConfigs.MEDIUM_HILL),
@@ -146,16 +146,16 @@ public class HollowHillStructure extends LandmarkStructure implements Configurab
 		return new HollowHillStructure(
 			3,
 			ControlledSpawningConfig.justMonsters(List.of(List.of(
-				weightedSpawn(TFEntities.REDCAP.get(), 10, 2, 4),
-				weightedSpawn(TFEntities.REDCAP_SAPPER.get(), 2, 1, 2),
+				weightedSpawn(TFEntities.REDCAP, 10, 2, 4),
+				weightedSpawn(TFEntities.REDCAP_SAPPER, 2, 1, 2),
 				weightedSpawn(EntityTypes.SKELETON, 10, 2, 3),
 				weightedSpawn(EntityTypes.CAVE_SPIDER, 10, 1, 2),
 				weightedSpawn(EntityTypes.CREEPER, 10, 1, 1),
 				weightedSpawn(EntityTypes.ENDERMAN, 1, 1, 1),
-				weightedSpawn(TFEntities.WRAITH.get(), 2, 1, 2),
-				weightedSpawn(TFEntities.FIRE_BEETLE.get(), 10, 1, 2),
-				weightedSpawn(TFEntities.SLIME_BEETLE.get(), 10, 1, 2),
-				weightedSpawn(TFEntities.PINCH_BEETLE.get(), 10, 1, 2),
+				weightedSpawn(TFEntities.WRAITH, 2, 1, 2),
+				weightedSpawn(TFEntities.FIRE_BEETLE, 10, 1, 2),
+				weightedSpawn(TFEntities.SLIME_BEETLE, 10, 1, 2),
+				weightedSpawn(TFEntities.PINCH_BEETLE, 10, 1, 2),
 				weightedSpawn(EntityTypes.WITCH, 1, 1, 1)
 			))),
 			context.lookup(TFRegistries.Keys.STRUCTURE_SPELEOTHEM_SETTINGS).getOrThrow(StructureSpeleothemConfigs.LARGE_HILL),

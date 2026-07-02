@@ -77,16 +77,16 @@ public class TrollCaveStructure extends ProgressionStructure implements Configur
 			ControlledSpawningConfig.create(List.of(List.of(
 				weightedSpawn(EntityTypes.CREEPER, 5, 1, 2),
 				weightedSpawn(EntityTypes.SKELETON, 10, 1, 2),
-				weightedSpawn(TFEntities.TROLL.get(), 20, 1, 2),
+				weightedSpawn(TFEntities.TROLL, 20, 1, 2),
 				weightedSpawn(EntityTypes.WITCH, 5, 1, 1)
 			), List.of(
 				// cloud monsters
-				weightedSpawn(TFEntities.GIANT_MINER.get(), 10, 1, 1),
-				weightedSpawn(TFEntities.ARMORED_GIANT.get(), 10, 1, 1)
+				weightedSpawn(TFEntities.GIANT_MINER, 10, 1, 1),
+				weightedSpawn(TFEntities.ARMORED_GIANT, 10, 1, 1)
 			)), List.of(), List.of()),
 			context.lookup(TFRegistries.Keys.STRUCTURE_SPELEOTHEM_SETTINGS).getOrThrow(StructureSpeleothemConfigs.TROLL_CAVE),
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_merge"))),
-			new HintConfig(HintConfig.book("trollcave", 3), TFEntities.KOBOLD.get()),
+			new HintConfig(HintConfig.book("trollcave", 3), TFEntities.KOBOLD),
 			new DecorationConfig(4, true, true, false),
 			false, Optional.of(Holder.direct(TFMapDecorations.TROLL_CAVES)),
 			new StructureSettings(

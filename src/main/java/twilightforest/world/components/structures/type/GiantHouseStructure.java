@@ -62,7 +62,7 @@ public class GiantHouseStructure extends ProgressionStructure implements Configu
 	public static GiantHouseStructure buildGiantHouseConfig(BootstrapContext<Structure> context) {
 		return new GiantHouseStructure(
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_merge"))),
-			new HintConfig(HintConfig.book("trollcave", 3), TFEntities.KOBOLD.get()),
+			new HintConfig(HintConfig.book("trollcave", 3), TFEntities.KOBOLD),
 			new DecorationConfig(1, true, true, false),
 			false, Optional.empty(),
 			new StructureSettings(
@@ -72,8 +72,8 @@ public class GiantHouseStructure extends ProgressionStructure implements Configu
 				TerrainAdjustment.NONE
 			),
 			ControlledSpawningConfig.create(List.of(List.of( // cloud monsters
-				weightedSpawn(TFEntities.GIANT_MINER.get(), 10, 1, 1),
-				weightedSpawn(TFEntities.ARMORED_GIANT.get(), 10, 1, 1)
+				weightedSpawn(TFEntities.GIANT_MINER, 10, 1, 1),
+				weightedSpawn(TFEntities.ARMORED_GIANT, 10, 1, 1)
 			)), List.of(), List.of())
 		);
 	}

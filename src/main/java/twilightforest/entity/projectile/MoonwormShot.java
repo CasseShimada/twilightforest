@@ -40,12 +40,12 @@ public class MoonwormShot extends TFThrowable {
 	}
 
 	public MoonwormShot(Level level, LivingEntity thrower) {
-		super(TFEntities.MOONWORM_SHOT.get(), level, thrower);
+		super(TFEntities.MOONWORM_SHOT, level, thrower);
 		this.setPos(thrower.getEyePosition());
 	}
 
 	public MoonwormShot(Level level, double x, double y, double z) {
-		super(TFEntities.MOONWORM_SHOT.get(), level, x, y, z);
+		super(TFEntities.MOONWORM_SHOT, level, x, y, z);
 	}
 
 	@Override

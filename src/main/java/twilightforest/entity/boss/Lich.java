@@ -107,7 +107,7 @@ public class Lich extends BaseTFBoss {
 	}
 
 	public Lich(Level level, Lich otherLich) {
-		this(TFEntities.LICH.get(), level);
+		this(TFEntities.LICH, level);
 		this.setMasterUUID(otherLich.getUUID());
 		this.getBossBar().setVisible(false);
 		this.setRestrictionPoint(otherLich.getRestrictionPoint());

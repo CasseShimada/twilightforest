@@ -38,12 +38,12 @@ public class IceBomb extends TFThrowable {
 	}
 
 	public IceBomb(Level level, LivingEntity thrower) {
-		super(TFEntities.THROWN_ICE.get(), level, thrower);
+		super(TFEntities.THROWN_ICE, level, thrower);
 		this.setPos(thrower.getEyePosition());
 	}
 
 	public IceBomb(Level level, Position pos) {
-		super(TFEntities.THROWN_ICE.get(), level, pos.x(), pos.y(), pos.z());
+		super(TFEntities.THROWN_ICE, level, pos.x(), pos.y(), pos.z());
 	}
 
 	@Override

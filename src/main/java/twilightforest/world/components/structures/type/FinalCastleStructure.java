@@ -50,26 +50,26 @@ public class FinalCastleStructure extends ControlledSpawningStructure {
 		return new FinalCastleStructure( // TODO Re-enable mob spawns when proper castle mobs are created
 			ControlledSpawningConfig.create(List.of(List.of(
 				// plain parts of the castle, like the tower maze
-				//new MobSpawnSettings.SpawnerData(TFEntities.KOBOLD.get(), 10, 1, 2),
-				//new MobSpawnSettings.SpawnerData(TFEntities.ADHERENT.get(), 10, 1, 1),
-				//new MobSpawnSettings.SpawnerData(TFEntities.HARBINGER_CUBE.get(), 10, 1, 1),
+				//new MobSpawnSettings.SpawnerData(TFEntities.KOBOLD, 10, 1, 2),
+				//new MobSpawnSettings.SpawnerData(TFEntities.ADHERENT, 10, 1, 1),
+				//new MobSpawnSettings.SpawnerData(TFEntities.HARBINGER_CUBE, 10, 1, 1),
 				//new MobSpawnSettings.SpawnerData(EntityTypes.ENDERMAN, 10, 1, 1)
 			), List.of(
 				// internal castle
-				//new MobSpawnSettings.SpawnerData(TFEntities.KOBOLD.get(), 10, 1, 2),
-				//new MobSpawnSettings.SpawnerData(TFEntities.ADHERENT.get(), 10, 1, 1),
-				//new MobSpawnSettings.SpawnerData(TFEntities.HARBINGER_CUBE.get(), 10, 1, 1),
-				//new MobSpawnSettings.SpawnerData(TFEntities.ARMORED_GIANT.get(), 10, 1, 1)
+				//new MobSpawnSettings.SpawnerData(TFEntities.KOBOLD, 10, 1, 2),
+				//new MobSpawnSettings.SpawnerData(TFEntities.ADHERENT, 10, 1, 1),
+				//new MobSpawnSettings.SpawnerData(TFEntities.HARBINGER_CUBE, 10, 1, 1),
+				//new MobSpawnSettings.SpawnerData(TFEntities.ARMORED_GIANT, 10, 1, 1)
 			), List.of(
 				// dungeons
-				//new MobSpawnSettings.SpawnerData(TFEntities.ADHERENT.get(), 10, 1, 1)
+				//new MobSpawnSettings.SpawnerData(TFEntities.ADHERENT, 10, 1, 1)
 			), List.of(
 				// forge
 				//new MobSpawnSettings.SpawnerData(EntityTypes.BLAZE, 10, 1, 1)
 			)), List.of(), List.of()),
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_troll"))),
 			// TODO: change this when we make a book for the castle
-			new HintConfig(HintConfig.defaultBook(), TFEntities.KOBOLD.get()),
+			new HintConfig(HintConfig.defaultBook(), TFEntities.KOBOLD),
 			new DecorationConfig(4, false, true, false),
 			true, Optional.of(Holder.direct(TFMapDecorations.FINAL_CASTLE)),
 			new StructureSettings(

@@ -65,10 +65,10 @@ public class YetiCaveStructure extends ControlledSpawningStructure implements Cu
 	public static YetiCaveStructure buildYetiCaveConfig(BootstrapContext<Structure> context) {
 		return new YetiCaveStructure(
 			ControlledSpawningConfig.justMonsters(List.of(List.of(
-				weightedSpawn(TFEntities.YETI.get(), 5, 1, 2)
+				weightedSpawn(TFEntities.YETI, 5, 1, 2)
 			))),
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_lich"))),
-			new HintConfig(HintConfig.book("yeticave", 3), TFEntities.KOBOLD.get()),
+			new HintConfig(HintConfig.book("yeticave", 3), TFEntities.KOBOLD),
 			new DecorationConfig(2, true, false, false),
 			false, Optional.of(Holder.direct(TFMapDecorations.YETI_LAIR)),
 			new StructureSettings(

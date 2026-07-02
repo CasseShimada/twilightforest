@@ -122,7 +122,7 @@ public class LichTowerMagicGallery extends TwilightJigsawPiece implements PieceB
 			Direction direction = this.placeSettings.getRotation().rotate(Direction.SOUTH);
 
 			Optional<Holder.Reference<MagicPaintingVariant>> variantHolderOpt = variantForGallery(level, this.templateName);
-			MagicPainting galleryPainting = TFEntities.MAGIC_PAINTING.value().create(level.getLevel(), EntitySpawnReason.STRUCTURE);
+			MagicPainting galleryPainting = TFEntities.MAGIC_PAINTING.create(level.getLevel(), EntitySpawnReason.STRUCTURE);
 			if (variantHolderOpt.isPresent() && galleryPainting != null) {
 				galleryPainting.setDirection(direction);
 				galleryPainting.setVariant(variantHolderOpt.get());

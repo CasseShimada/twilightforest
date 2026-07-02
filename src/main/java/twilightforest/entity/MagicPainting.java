@@ -47,7 +47,7 @@ private static final EntityDataAccessor<Holder<MagicPaintingVariant>> MAGIC_PAIN
 	}
 
 	private MagicPainting(Level level, BlockPos pos) {
-		super(TFEntities.MAGIC_PAINTING.get(), level, pos);
+		super(TFEntities.MAGIC_PAINTING, level, pos);
 	}
 
 	@Override
