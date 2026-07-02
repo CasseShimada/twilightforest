@@ -491,7 +491,7 @@ public class RegistrationEvents {
 		ArmorRenderer.register(new TFSimpleArmorRenderer(HumanoidModel::new, TFModelLayers.PHANTOM_ARMOR_INNER, TFModelLayers.PHANTOM_ARMOR_OUTER),
 			TFItems.PHANTOM_HELMET.get(), TFItems.PHANTOM_CHESTPLATE.get());
 		ArmorRenderer.register(new TFSimpleArmorRenderer(HumanoidModel::new, TFModelLayers.YETI_ARMOR_INNER, TFModelLayers.YETI_ARMOR_OUTER),
-			TFItems.YETI_HELMET.get(), TFItems.YETI_CHESTPLATE.get(), TFItems.YETI_LEGGINGS.get(), TFItems.YETI_BOOTS.get());
+			TFItems.YETI_HELMET, TFItems.YETI_CHESTPLATE, TFItems.YETI_LEGGINGS, TFItems.YETI_BOOTS);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
