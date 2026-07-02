@@ -52,11 +52,6 @@ public class DeferredRegister<R> {
 		return new Items(modId);
 	}
 
-	// Kept for compatibility with existing call-sites.
-	public static <R> DeferredRegister<R> createDataComponents(ResourceKey<? extends Registry<R>> registryKey, String modId) {
-		return create(registryKey, modId);
-	}
-
 	public <T extends R> DeferredHolder<R, T> register(String name, Supplier<? extends T> factory) {
 		if (registered) throw new IllegalStateException("Cannot register new entries after registry has been frozen: " + registryKey.identifier());
 		var id = Identifier.fromNamespaceAndPath(modId, name);
