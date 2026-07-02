@@ -364,7 +364,7 @@ public class FinalCastleMazeTower13Component extends TowerWingComponent {
 
 		// what color of tower?
 		FinalCastleMazeTower13Component eTower;
-		if (this.color == TFBlocks.YELLOW_CASTLE_RUNE_BRICK.get().defaultBlockState()) {
+		if (this.color == TFBlocks.YELLOW_CASTLE_RUNE_BRICK.defaultBlockState()) {
 			eTower = new FinalCastleEntranceTowerComponent(this.getGenDepth() + 1, tc.getX(), tc.getY(), tc.getZ(), facing);
 		} else {
 			eTower = new FinalCastleBellTower21Component(this.getGenDepth() + 1, tc.getX(), tc.getY(), tc.getZ(), facing);
@@ -479,7 +479,7 @@ public class FinalCastleMazeTower13Component extends TowerWingComponent {
 	public BlockState getGlyphMeta() {
 		if (color == null) {
 			TwilightForestMod.LOGGER.warn("Final Castle tower has null for glyph color, this is a bug.");
-			return TFBlocks.BLUE_CASTLE_RUNE_BRICK.get().defaultBlockState();
+			return TFBlocks.BLUE_CASTLE_RUNE_BRICK.defaultBlockState();
 		} else {
 			return color;
 		}
@@ -561,16 +561,16 @@ public class FinalCastleMazeTower13Component extends TowerWingComponent {
 	}
 
 	public BlockState doorColor() {
-		if (color == TFBlocks.PINK_CASTLE_RUNE_BRICK.get().defaultBlockState()) {
+		if (color == TFBlocks.PINK_CASTLE_RUNE_BRICK.defaultBlockState()) {
 			return TFBlocks.PINK_CASTLE_DOOR.get().defaultBlockState();
 		}
-		if (color == TFBlocks.BLUE_CASTLE_RUNE_BRICK.get().defaultBlockState()) {
+		if (color == TFBlocks.BLUE_CASTLE_RUNE_BRICK.defaultBlockState()) {
 			return TFBlocks.BLUE_CASTLE_DOOR.get().defaultBlockState();
 		}
-		if (color == TFBlocks.YELLOW_CASTLE_RUNE_BRICK.get().defaultBlockState()) {
+		if (color == TFBlocks.YELLOW_CASTLE_RUNE_BRICK.defaultBlockState()) {
 			return TFBlocks.YELLOW_CASTLE_DOOR.get().defaultBlockState();
 		}
-		if (color == TFBlocks.VIOLET_CASTLE_RUNE_BRICK.get().defaultBlockState()) {
+		if (color == TFBlocks.VIOLET_CASTLE_RUNE_BRICK.defaultBlockState()) {
 			return TFBlocks.VIOLET_CASTLE_DOOR.get().defaultBlockState();
 		}
 		TwilightForestMod.LOGGER.warn("Couldn't add door to tower, rune color couldn't be read");

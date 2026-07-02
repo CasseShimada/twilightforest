@@ -50,7 +50,7 @@ public class FinalCastleMuralComponent extends TFStructureComponentOld {
 	@Override
 	public void postProcess(WorldGenLevel world, StructureManager manager, ChunkGenerator generator, RandomSource rand, BoundingBox sbb, ChunkPos chunkPosIn, BlockPos blockPos) {
 
-		final BlockState castleMagic = TFBlocks.YELLOW_CASTLE_RUNE_BRICK.get().defaultBlockState();
+		final BlockState castleMagic = TFBlocks.YELLOW_CASTLE_RUNE_BRICK.defaultBlockState();
 
 		// copy mural to world
 		for (int x = 0; x < this.mural.width; x++) {

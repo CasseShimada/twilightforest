@@ -53,7 +53,7 @@ public class FinalCastleBossGazeboComponent extends TFStructureComponentOld {
 	@Override
 	public void addChildren(StructurePiece parent, StructurePieceAccessor list, RandomSource rand) {
 		this.deco = new StructureTFDecoratorCastle();
-		this.deco.blockState = TFBlocks.VIOLET_CASTLE_RUNE_BRICK.get().defaultBlockState();
+		this.deco.blockState = TFBlocks.VIOLET_CASTLE_RUNE_BRICK.defaultBlockState();
 
 		this.deco.fenceState = TFBlocks.VIOLET_FORCE_FIELD.defaultBlockState();
 

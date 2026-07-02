@@ -22,7 +22,7 @@ public class FinalCastleEntranceTowerComponent extends FinalCastleMazeTower13Com
 	}
 
 	public FinalCastleEntranceTowerComponent(int i, int x, int y, int z, Direction direction) {
-		super(TFStructurePieceTypes.TFFCEnTo, i, x, y, z, 3, 2, TFBlocks.YELLOW_CASTLE_RUNE_BRICK.get().defaultBlockState(), direction);
+		super(TFStructurePieceTypes.TFFCEnTo, i, x, y, z, 3, 2, TFBlocks.YELLOW_CASTLE_RUNE_BRICK.defaultBlockState(), direction);
 	}
 
 	@Override

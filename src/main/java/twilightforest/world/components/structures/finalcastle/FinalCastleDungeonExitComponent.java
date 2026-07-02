@@ -89,6 +89,6 @@ public class FinalCastleDungeonExitComponent extends FinalCastleDungeonRoom31Com
 
 	@Override
 	protected BlockState getRuneColor(BlockState fieldColor) {
-		return TFBlocks.PINK_CASTLE_RUNE_BRICK.get().defaultBlockState();
+		return TFBlocks.PINK_CASTLE_RUNE_BRICK.defaultBlockState();
 	}
 }

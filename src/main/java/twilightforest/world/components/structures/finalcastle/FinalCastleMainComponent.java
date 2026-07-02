@@ -81,12 +81,12 @@ public class FinalCastleMainComponent extends TFStructureComponentOld {
 
 		// tower maze towards entrance
 		BlockPos dest = new BlockPos(boundingBox.minX() - 4, boundingBox.maxY(), boundingBox.minZ() - 24);
-		buildTowerMaze(list, rand, 48, 0, 24, 60, Direction.SOUTH, TFBlocks.YELLOW_CASTLE_RUNE_BRICK.get().defaultBlockState(), dest);
+		buildTowerMaze(list, rand, 48, 0, 24, 60, Direction.SOUTH, TFBlocks.YELLOW_CASTLE_RUNE_BRICK.defaultBlockState(), dest);
 
 
 		// another tower/bridge maze towards the clock tower
 		dest = new BlockPos(boundingBox.maxX() + 4, boundingBox.minY(), boundingBox.maxZ() + 24);
-		buildTowerMaze(list, rand, 0, 30, 24, 60, Direction.NORTH, TFBlocks.BLUE_CASTLE_RUNE_BRICK.get().defaultBlockState(), dest);
+		buildTowerMaze(list, rand, 0, 30, 24, 60, Direction.NORTH, TFBlocks.BLUE_CASTLE_RUNE_BRICK.defaultBlockState(), dest);
 
 
 		// initial stairs down towards dungeon
@@ -168,10 +168,10 @@ public class FinalCastleMainComponent extends TFStructureComponentOld {
 				int y = (boundingBox.maxY() - boundingBox.minY() / 2) + boundingBox.minY();
 				int z = (boundingBox.maxZ() - boundingBox.minZ() / 2) + boundingBox.minZ();
 				//TwilightForestMod.LOGGER.debug("Component {} at {},{},{}", structurecomponent.getClass().getSimpleName(), x, y, z);
-				if (type == TFBlocks.YELLOW_CASTLE_RUNE_BRICK.get().defaultBlockState() && structurecomponent instanceof FinalCastleEntranceTowerComponent) {
+				if (type == TFBlocks.YELLOW_CASTLE_RUNE_BRICK.defaultBlockState() && structurecomponent instanceof FinalCastleEntranceTowerComponent) {
 					return true;
 				}
-				if (type == TFBlocks.BLUE_CASTLE_RUNE_BRICK.get().defaultBlockState() && structurecomponent instanceof FinalCastleBellTower21Component) {
+				if (type == TFBlocks.BLUE_CASTLE_RUNE_BRICK.defaultBlockState() && structurecomponent instanceof FinalCastleBellTower21Component) {
 					return true;
 				}
 			}

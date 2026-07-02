@@ -39,7 +39,7 @@ public class FinalCastleBellTower21Component extends FinalCastleMazeTower13Compo
 	}
 
 	public FinalCastleBellTower21Component(int i, int x, int y, int z, Direction direction) {
-		super(TFStructurePieceTypes.TFFCBelTo, i, x, y, z, FLOORS, 1, TFBlocks.BLUE_CASTLE_RUNE_BRICK.get().defaultBlockState(), direction);
+		super(TFStructurePieceTypes.TFFCBelTo, i, x, y, z, FLOORS, 1, TFBlocks.BLUE_CASTLE_RUNE_BRICK.defaultBlockState(), direction);
 		this.size = 21;
 		this.height = FLOORS * 8 + 1;
 		this.boundingBox = TFStructureComponentOld.getComponentToAddBoundingBox2(x, y, z, -6, -8, -this.size / 2, this.size - 1, this.height, this.size - 1, direction);

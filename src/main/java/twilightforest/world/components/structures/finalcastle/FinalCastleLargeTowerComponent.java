@@ -89,6 +89,6 @@ public class FinalCastleLargeTowerComponent extends TowerWingComponent {
 	}
 
 	public BlockState getGlyphMeta() {
-		return TFBlocks.BLUE_CASTLE_RUNE_BRICK.get().defaultBlockState();
+		return TFBlocks.BLUE_CASTLE_RUNE_BRICK.defaultBlockState();
 	}
 }

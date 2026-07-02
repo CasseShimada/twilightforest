@@ -19,7 +19,7 @@ public class FinalCastleEntranceSideTowerComponent extends FinalCastleMazeTower1
 	}
 
 	public FinalCastleEntranceSideTowerComponent(int i, int x, int y, int z, int floors, int entranceFloor, Direction direction) {
-		super(TFStructurePieceTypes.TFFCEnSiTo, i, x, y, z, floors, entranceFloor, TFBlocks.YELLOW_CASTLE_RUNE_BRICK.get().defaultBlockState(), direction);
+		super(TFStructurePieceTypes.TFFCEnSiTo, i, x, y, z, floors, entranceFloor, TFBlocks.YELLOW_CASTLE_RUNE_BRICK.defaultBlockState(), direction);
 
 		addOpening(0, 1, size / 2, Rotation.CLOCKWISE_180);
 	}
