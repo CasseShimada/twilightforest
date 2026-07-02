@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-// For Datagen only! Avoid referencing this class too early, or the DeferredHolders will return null!
+// For datagen only. Load this after TFBlocks has registered its values.
 public class TFBlockFamilies {
 
 	private static final Map<Block, BlockFamily> MAP = Maps.newHashMap();
