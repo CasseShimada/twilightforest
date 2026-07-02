@@ -36,12 +36,12 @@ public class ColorHandler {
 		register(tint(
 			state -> auroraBaseColor(BlockPos.ZERO),
 			(state, getter, pos) -> auroraBaseColor(pos.above(128))
-		), TFBlocks.AURORA_BLOCK.get());
+		), TFBlocks.AURORA_BLOCK);
 
 		register(tint(
 			state -> desaturateAuroraColor(auroraBaseColor(BlockPos.ZERO)),
 			(state, getter, pos) -> desaturateAuroraColor(auroraBaseColor(pos.above(128)))
-		), TFBlocks.AURORA_PILLAR.get(), TFBlocks.AURORA_SLAB.get(), TFBlocks.AURORALIZED_GLASS.get());
+		), TFBlocks.AURORA_PILLAR, TFBlocks.AURORA_SLAB, TFBlocks.AURORALIZED_GLASS);
 
 		register(tint(
 			state -> GrassColor.getDefaultColor(),

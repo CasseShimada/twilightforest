@@ -10,7 +10,7 @@ public class IceTowerRandomBlockSelectorFactory {
 	public SimpleRandomBlockSelector make() {
 		return new SimpleRandomBlockSelector(
 			List.of(
-				Pair.of(TFBlocks.AURORA_BLOCK.get().defaultBlockState(), 1F)
+				Pair.of(TFBlocks.AURORA_BLOCK.defaultBlockState(), 1F)
 			)
 		);
 	}

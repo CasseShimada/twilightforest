@@ -202,10 +202,10 @@ public class TFBlocks {
 	public static final Block EXPERIMENT_115 = registerDirect("experiment_115", Experiment115Block::new, () -> BlockBehaviour.Properties.of().noLootTable().pushReaction(PushReaction.DESTROY).randomTicks().sound(SoundType.WOOL).strength(0.5F));
 
 	//aurora palace
-	public static final DeferredBlock<Block> AURORA_BLOCK = registerWithItem("aurora_block", AuroraBrickBlock::new, () -> BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.CHIME).mapColor(MapColor.ICE).strength(10.0F, 6.0F));
-	public static final DeferredBlock<RotatedPillarBlock> AURORA_PILLAR = registerWithItem("aurora_pillar", RotatedPillarBlock::new, () -> BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.CHIME).mapColor(MapColor.ICE).requiresCorrectToolForDrops().strength(2.0F, 6.0F));
-	public static final DeferredBlock<Block> AURORA_SLAB = registerWithItem("aurora_slab", SlabBlock::new, () -> BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.CHIME).mapColor(MapColor.ICE).requiresCorrectToolForDrops().strength(2.0F, 6.0F));
-	public static final DeferredBlock<Block> AURORALIZED_GLASS = registerWithItem("auroralized_glass", AuroralizedGlassBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS));
+	public static final AuroraBrickBlock AURORA_BLOCK = registerDirectWithItem("aurora_block", AuroraBrickBlock::new, () -> BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.CHIME).mapColor(MapColor.ICE).strength(10.0F, 6.0F));
+	public static final RotatedPillarBlock AURORA_PILLAR = registerDirectWithItem("aurora_pillar", RotatedPillarBlock::new, () -> BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.CHIME).mapColor(MapColor.ICE).requiresCorrectToolForDrops().strength(2.0F, 6.0F));
+	public static final SlabBlock AURORA_SLAB = registerDirectWithItem("aurora_slab", SlabBlock::new, () -> BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.CHIME).mapColor(MapColor.ICE).requiresCorrectToolForDrops().strength(2.0F, 6.0F));
+	public static final AuroralizedGlassBlock AURORALIZED_GLASS = registerDirectWithItem("auroralized_glass", AuroralizedGlassBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS));
 
 	//highlands/thornlands
 	public static final DeferredBlock<Block> BROWN_THORNS = registerWithItem("brown_thorns", ThornsBlock::new, () -> BlockBehaviour.Properties.of().noLootTable().mapColor(MapColor.PODZOL).pushReaction(PushReaction.BLOCK).sound(SoundType.WOOD).strength(50.0F, 2000.0F));
