@@ -499,7 +499,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			case "lava" -> level.setBlock(pos, Blocks.LAVA.defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "water" -> level.setBlock(pos, Blocks.WATER.defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "firefly_jar" -> level.setBlock(pos, TFBlocks.FIREFLY_JAR.defaultBlockState(), Block.UPDATE_CLIENTS);
-			case "terrorcotta_arcs" -> level.setBlock(pos, TFBlocks.TERRORCOTTA_ARCS.value().defaultBlockState(), Block.UPDATE_CLIENTS);
+			case "terrorcotta_arcs" -> level.setBlock(pos, TFBlocks.TERRORCOTTA_ARCS.defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "mason_jar" -> this.putMasonJar(pos, level, random, parameters);
 			case "canopy_slab" -> level.setBlock(pos, TFBlocks.CANOPY_SLAB.value().defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "canopy_stairs" -> level.setBlock(pos, TFBlocks.CANOPY_STAIRS.value().defaultBlockState(), Block.UPDATE_CLIENTS);
