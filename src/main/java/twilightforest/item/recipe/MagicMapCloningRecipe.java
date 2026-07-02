@@ -20,14 +20,14 @@ public class MagicMapCloningRecipe extends CustomRecipe {
 		for (int j = 0; j < input.size(); j++) {
 			ItemStack itemstack1 = input.getItem(j);
 			if (!itemstack1.isEmpty()) {
-				if (itemstack1.is(TFItems.FILLED_MAGIC_MAP.get())) {
+				if (itemstack1.is(TFItems.FILLED_MAGIC_MAP)) {
 					if (!itemstack.isEmpty()) {
 						return false;
 					}
 
 					itemstack = itemstack1;
 				} else {
-					if (!itemstack1.is(TFItems.MAGIC_MAP.get())) {
+					if (!itemstack1.is(TFItems.MAGIC_MAP)) {
 						return false;
 					}
 
@@ -47,14 +47,14 @@ public class MagicMapCloningRecipe extends CustomRecipe {
 		for (int j = 0; j < input.size(); j++) {
 			ItemStack itemstack1 = input.getItem(j);
 			if (!itemstack1.isEmpty()) {
-				if (itemstack1.is(TFItems.FILLED_MAGIC_MAP.get())) {
+				if (itemstack1.is(TFItems.FILLED_MAGIC_MAP)) {
 					if (!itemstack.isEmpty()) {
 						return ItemStack.EMPTY;
 					}
 
 					itemstack = itemstack1;
 				} else {
-					if (!itemstack1.is(TFItems.MAGIC_MAP.get())) {
+					if (!itemstack1.is(TFItems.MAGIC_MAP)) {
 						return ItemStack.EMPTY;
 					}
 

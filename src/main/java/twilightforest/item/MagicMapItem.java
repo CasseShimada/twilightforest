@@ -51,7 +51,7 @@ public class MagicMapItem extends MapItem {
 	}
 
 	public static ItemStack setupNewMap(Level level, int worldX, int worldZ, byte scale, boolean trackingPosition, boolean unlimitedTracking) {
-		ItemStack itemstack = new ItemStack(TFItems.FILLED_MAGIC_MAP.get());
+		ItemStack itemstack = new ItemStack(TFItems.FILLED_MAGIC_MAP);
 		createMapData(itemstack, level, worldX, worldZ, scale, trackingPosition, unlimitedTracking, level.dimension());
 		return itemstack;
 	}
