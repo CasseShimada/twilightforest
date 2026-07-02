@@ -15,7 +15,7 @@ public class RedcapSapper extends Redcap {
 
 	public RedcapSapper(EntityType<? extends RedcapSapper> type, Level world) {
 		super(type, world);
-		this.heldPick = new ItemStack(TFItems.IRONWOOD_PICKAXE.get());
+		this.heldPick = new ItemStack(TFItems.IRONWOOD_PICKAXE);
 		this.heldTNT.setCount(3);
 	}
 

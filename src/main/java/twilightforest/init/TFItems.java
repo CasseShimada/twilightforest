@@ -67,11 +67,11 @@ public class TFItems {
 	public static final Item IRONWOOD_CHESTPLATE = registerDirect("ironwood_chestplate", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.IRONWOOD, ArmorType.CHESTPLATE)), () -> new Item.Properties().durability(ArmorType.CHESTPLATE.getDurability(20)));
 	public static final Item IRONWOOD_LEGGINGS = registerDirect("ironwood_leggings", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.IRONWOOD, ArmorType.LEGGINGS)), () -> new Item.Properties().durability(ArmorType.LEGGINGS.getDurability(20)));
 	public static final Item IRONWOOD_BOOTS = registerDirect("ironwood_boots", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.IRONWOOD, ArmorType.BOOTS)), () -> new Item.Properties().durability(ArmorType.BOOTS.getDurability(20)));
-	public static final DeferredItem<Item> IRONWOOD_SWORD = register("ironwood_sword", properties -> new Item(properties.sword(TFToolMaterials.IRONWOOD, 3.0F, -2.4F)), Item.Properties::new);
-	public static final DeferredItem<Item> IRONWOOD_SHOVEL = register("ironwood_shovel", properties -> new ShovelItem(TFToolMaterials.IRONWOOD, 1.5F, -3.0F, properties), Item.Properties::new);
-	public static final DeferredItem<Item> IRONWOOD_PICKAXE = register("ironwood_pickaxe", properties -> new Item(properties.pickaxe(TFToolMaterials.IRONWOOD, 1.0F, -2.8F)), Item.Properties::new);
-	public static final DeferredItem<Item> IRONWOOD_AXE = register("ironwood_axe", properties -> new AxeItem(TFToolMaterials.IRONWOOD, 6.0F, -3.1F, properties), Item.Properties::new);
-	public static final DeferredItem<Item> IRONWOOD_HOE = register("ironwood_hoe", properties -> new HoeItem(TFToolMaterials.IRONWOOD, -2, -1.0F, properties), Item.Properties::new);
+	public static final Item IRONWOOD_SWORD = registerDirect("ironwood_sword", properties -> new Item(properties.sword(TFToolMaterials.IRONWOOD, 3.0F, -2.4F)), Item.Properties::new);
+	public static final Item IRONWOOD_SHOVEL = registerDirect("ironwood_shovel", properties -> new ShovelItem(TFToolMaterials.IRONWOOD, 1.5F, -3.0F, properties), Item.Properties::new);
+	public static final Item IRONWOOD_PICKAXE = registerDirect("ironwood_pickaxe", properties -> new Item(properties.pickaxe(TFToolMaterials.IRONWOOD, 1.0F, -2.8F)), Item.Properties::new);
+	public static final Item IRONWOOD_AXE = registerDirect("ironwood_axe", properties -> new AxeItem(TFToolMaterials.IRONWOOD, 6.0F, -3.1F, properties), Item.Properties::new);
+	public static final Item IRONWOOD_HOE = registerDirect("ironwood_hoe", properties -> new HoeItem(TFToolMaterials.IRONWOOD, -2, -1.0F, properties), Item.Properties::new);
 	public static final Item TORCHBERRIES = registerDirect("torchberries", Item::new, () -> new Item.Properties().food(TFFoods.TORCHBERRIES, TFConsumables.TORCHBERRIES));
 	public static final Item RAW_VENISON = registerDirect("raw_venison", Item::new, () -> new Item.Properties().food(TFFoods.RAW_VENISON));
 	public static final Item COOKED_VENISON = registerDirect("cooked_venison", Item::new, () -> new Item.Properties().food(TFFoods.VENISON_STEAK));
