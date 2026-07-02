@@ -44,6 +44,6 @@ public class CourtyardMain extends StructureMazeGenerator {
 	@Override
 	public void postProcess(WorldGenLevel world, StructureManager manager, ChunkGenerator generator, RandomSource rand, BoundingBox sbb, ChunkPos chunkPosIn, BlockPos blockPos) {
 		// naga spawner seems important
-		placeBlock(world, TFBlocks.NAGA_BOSS_SPAWNER.get().defaultBlockState(), RADIUS / 2, 3, RADIUS / 2, sbb);
+		placeBlock(world, TFBlocks.NAGA_BOSS_SPAWNER.defaultBlockState(), RADIUS / 2, 3, RADIUS / 2, sbb);
 	}
 }

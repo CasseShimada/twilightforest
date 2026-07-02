@@ -528,7 +528,7 @@ public class UrGhast extends BaseTFBoss {
 
 	@Override
 	public Block getBossSpawner() {
-		return TFBlocks.UR_GHAST_BOSS_SPAWNER.get();
+		return TFBlocks.UR_GHAST_BOSS_SPAWNER;
 	}
 
 	@Override

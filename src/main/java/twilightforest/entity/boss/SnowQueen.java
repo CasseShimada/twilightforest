@@ -437,7 +437,7 @@ public class SnowQueen extends BaseTFBoss implements IBreathAttacker, TFMultipar
 
 	@Override
 	public Block getBossSpawner() {
-		return TFBlocks.SNOW_QUEEN_BOSS_SPAWNER.get();
+		return TFBlocks.SNOW_QUEEN_BOSS_SPAWNER;
 	}
 
 	@Override

@@ -43,7 +43,7 @@ public class HydraLairComponent extends HollowHillComponent {
 		this.generateSpeleothems(world, rand, writeableBounds);
 
 		// boss spawner seems important
-		placeBlock(world, TFBlocks.HYDRA_BOSS_SPAWNER.get().defaultBlockState(), 27, 3, 27, writeableBounds);
+		placeBlock(world, TFBlocks.HYDRA_BOSS_SPAWNER.defaultBlockState(), 27, 3, 27, writeableBounds);
 	}
 
 	private void generateSpeleothems(WorldGenLevel world, RandomSource rand, BoundingBox writeableBounds) {

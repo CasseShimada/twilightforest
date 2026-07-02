@@ -592,7 +592,7 @@ public class KnightPhantom extends BaseTFBoss {
 
 	@Override
 	public Block getBossSpawner() {
-		return TFBlocks.KNIGHT_PHANTOM_BOSS_SPAWNER.get();
+		return TFBlocks.KNIGHT_PHANTOM_BOSS_SPAWNER;
 	}
 
 	public boolean hasYetToDisappear() {

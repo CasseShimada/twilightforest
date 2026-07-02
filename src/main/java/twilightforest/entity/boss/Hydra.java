@@ -735,7 +735,7 @@ public class Hydra extends BaseTFBoss implements TFMultipartEntity {
 
 	@Override
 	public Block getBossSpawner() {
-		return TFBlocks.HYDRA_BOSS_SPAWNER.get();
+		return TFBlocks.HYDRA_BOSS_SPAWNER;
 	}
 
 	@Override

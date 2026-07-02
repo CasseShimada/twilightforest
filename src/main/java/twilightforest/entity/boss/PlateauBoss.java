@@ -39,7 +39,7 @@ public class PlateauBoss extends BaseTFBoss {
 
 	@Override
 	public Block getBossSpawner() {
-		return TFBlocks.FINAL_BOSS_BOSS_SPAWNER.get();
+		return TFBlocks.FINAL_BOSS_BOSS_SPAWNER;
 	}
 
 	@Override

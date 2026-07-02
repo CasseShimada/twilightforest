@@ -198,7 +198,7 @@ public class Minoshroom extends BaseTFBoss implements ITFCharger {
 
 	@Override
 	public Block getBossSpawner() {
-		return TFBlocks.MINOSHROOM_BOSS_SPAWNER.get();
+		return TFBlocks.MINOSHROOM_BOSS_SPAWNER;
 	}
 
 	@Override

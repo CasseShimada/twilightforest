@@ -910,7 +910,7 @@ public class Lich extends BaseTFBoss {
 
 	@Override
 	public Block getBossSpawner() {
-		return TFBlocks.LICH_BOSS_SPAWNER.get();
+		return TFBlocks.LICH_BOSS_SPAWNER;
 	}
 
 	@Override

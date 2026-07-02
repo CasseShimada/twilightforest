@@ -542,7 +542,7 @@ public class Naga extends BaseTFBoss implements TFMultipartEntity {
 
 	@Override
 	public Block getBossSpawner() {
-		return TFBlocks.NAGA_BOSS_SPAWNER.get();
+		return TFBlocks.NAGA_BOSS_SPAWNER;
 	}
 
 	@Override

@@ -325,7 +325,7 @@ public class AlphaYeti extends BaseTFBoss implements RangedAttackMob, IHostileMo
 
 	@Override
 	public Block getBossSpawner() {
-		return TFBlocks.ALPHA_YETI_BOSS_SPAWNER.get();
+		return TFBlocks.ALPHA_YETI_BOSS_SPAWNER;
 	}
 
 	@Override

@@ -741,7 +741,7 @@ public class DarkTowerMainComponent extends DarkTowerWingComponent {
 	}
 
 	private void decorateBossSpawner(WorldGenLevel world, BoundingBox sbb, Rotation rotation, int y) {
-		this.setBlockStateRotated(world, TFBlocks.UR_GHAST_BOSS_SPAWNER.get().defaultBlockState(), 9, y + 4, 9, rotation, sbb);
+		this.setBlockStateRotated(world, TFBlocks.UR_GHAST_BOSS_SPAWNER.defaultBlockState(), 9, y + 4, 9, rotation, sbb);
 	}
 
 	private void decorateExperiment(WorldGenLevel world, BoundingBox sbb, Rotation rotation, int y) {
