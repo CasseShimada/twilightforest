@@ -141,19 +141,19 @@ public class UberousSoilBlock extends Block implements BonemealableBlock {
 				if (
 					!getter.getBlockState(pos.relative(dir).above()).isSolid() &&
 						(blockAt.is(BlockTags.DIRT) || blockAt.is(Blocks.FARMLAND)) &&
-						!blockAt.is(TFBlocks.UBEROUS_SOIL.get())) {
+						!blockAt.is(TFBlocks.UBEROUS_SOIL)) {
 					return true;
 
 				} else if (
 					!getter.getBlockState(pos.relative(dir).above().above()).isSolid() &&
 						(getter.getBlockState(pos.relative(dir).above()).is(BlockTags.DIRT) || getter.getBlockState(pos.relative(dir).above()).is(Blocks.FARMLAND)) &&
-						!getter.getBlockState(pos.relative(dir).above()).is(TFBlocks.UBEROUS_SOIL.get())) {
+						!getter.getBlockState(pos.relative(dir).above()).is(TFBlocks.UBEROUS_SOIL)) {
 					return true;
 
 				} else if (
 					!getter.getBlockState(pos.relative(dir)).isSolid() &&
 						(getter.getBlockState(pos.relative(dir).below()).is(BlockTags.DIRT) || getter.getBlockState(pos.relative(dir).below()).is(Blocks.FARMLAND)) &&
-						!getter.getBlockState(pos.relative(dir).below()).is(TFBlocks.UBEROUS_SOIL.get())) {
+						!getter.getBlockState(pos.relative(dir).below()).is(TFBlocks.UBEROUS_SOIL)) {
 					return true;
 				}
 			}
@@ -179,21 +179,21 @@ public class UberousSoilBlock extends Block implements BonemealableBlock {
 				if (
 					!level.getBlockState(pos.relative(dir).above()).isSolid() &&
 						(blockAt.is(BlockTags.DIRT) || blockAt.is(Blocks.FARMLAND)) &&
-						!blockAt.is(TFBlocks.UBEROUS_SOIL.get())) {
+						!blockAt.is(TFBlocks.UBEROUS_SOIL)) {
 
 					this.spreadTo(level, pos.relative(dir));
 					break;
 				} else if (
 					!level.getBlockState(pos.relative(dir).above().above()).isSolid() &&
 						(level.getBlockState(pos.relative(dir).above()).is(BlockTags.DIRT) || level.getBlockState(pos.relative(dir).above()).is(Blocks.FARMLAND)) &&
-						!level.getBlockState(pos.relative(dir).above()).is(TFBlocks.UBEROUS_SOIL.get())) {
+						!level.getBlockState(pos.relative(dir).above()).is(TFBlocks.UBEROUS_SOIL)) {
 
 					this.spreadTo(level, pos.relative(dir).above());
 					break;
 				} else if (
 					!level.getBlockState(pos.relative(dir)).isSolid() &&
 						(level.getBlockState(pos.relative(dir).below()).is(BlockTags.DIRT) || level.getBlockState(pos.relative(dir).below()).is(Blocks.FARMLAND)) &&
-						!level.getBlockState(pos.relative(dir).below()).is(TFBlocks.UBEROUS_SOIL.get())) {
+						!level.getBlockState(pos.relative(dir).below()).is(TFBlocks.UBEROUS_SOIL)) {
 
 					this.spreadTo(level, pos.relative(dir).below());
 					break;

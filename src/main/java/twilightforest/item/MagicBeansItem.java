@@ -35,7 +35,7 @@ public class MagicBeansItem extends Item {
 		ItemStack stack = context.getItemInHand();
 
 		int maxY = Math.max(pos.getY() + 100, 175);
-		if (pos.getY() < maxY && level.getBlockState(pos).is(TFBlocks.UBEROUS_SOIL.get()) && level.getBlockState(pos.above()).isAir()) {
+		if (pos.getY() < maxY && level.getBlockState(pos).is(TFBlocks.UBEROUS_SOIL) && level.getBlockState(pos.above()).isAir()) {
 			if (!level.isClientSide()) {
 				stack.shrink(1);
 				level.setBlockAndUpdate(pos.above(), TFBlocks.BEANSTALK_GROWER.defaultBlockState());

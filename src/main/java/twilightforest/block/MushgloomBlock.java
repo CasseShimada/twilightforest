@@ -21,7 +21,7 @@ public class MushgloomBlock extends MushroomBlock {
 
 	@Override
 	public boolean canSurvive(BlockState state, LevelReader reader, BlockPos pos) {
-		return reader.getBlockState(pos.below()).isFaceSturdy(reader, pos, Direction.UP) || reader.getBlockState(pos.below()).is(TFBlocks.UBEROUS_SOIL.get());
+		return reader.getBlockState(pos.below()).isFaceSturdy(reader, pos, Direction.UP) || reader.getBlockState(pos.below()).is(TFBlocks.UBEROUS_SOIL);
 	}
 
 	@Override

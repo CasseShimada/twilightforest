@@ -39,7 +39,7 @@ public class SmartGrassProcessor implements StructureProcessor {
 			if (stateAt.getBlock() == Blocks.MYCELIUM) return new StructureTemplate.StructureBlockInfo(modifiedBlockInfo.pos(), Blocks.MYCELIUM.defaultBlockState(), null);
 			if (stateAt.getBlock() == Blocks.DIRT_PATH) return new StructureTemplate.StructureBlockInfo(modifiedBlockInfo.pos(), Blocks.DIRT_PATH.defaultBlockState(), null);
 			if (stateAt.getBlock() == Blocks.COARSE_DIRT) return new StructureTemplate.StructureBlockInfo(modifiedBlockInfo.pos(), Blocks.COARSE_DIRT.defaultBlockState(), null);
-			if (stateAt.getBlock() == TFBlocks.UBEROUS_SOIL.get()) return new StructureTemplate.StructureBlockInfo(modifiedBlockInfo.pos(), TFBlocks.UBEROUS_SOIL.get().defaultBlockState(), null);
+			if (stateAt.getBlock() == TFBlocks.UBEROUS_SOIL) return new StructureTemplate.StructureBlockInfo(modifiedBlockInfo.pos(), TFBlocks.UBEROUS_SOIL.defaultBlockState(), null);
 		}
 
 		return modifiedBlockInfo;
