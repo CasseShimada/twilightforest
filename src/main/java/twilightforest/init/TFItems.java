@@ -17,7 +17,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.equipment.ArmorType;
 import twilightforest.TwilightForestMod;
-import twilightforest.util.registry.DeferredItem;
 import twilightforest.components.item.PotionFlaskComponent;
 import twilightforest.item.*;
 import twilightforest.item.food.TFConsumables;
@@ -270,22 +269,8 @@ public class TFItems {
 		return HolderSet.emptyNamed(registry, tag);
 	}
 
-	public static <T extends Item> DeferredItem<T> register(String name, Function<Item.Properties, T> item, Supplier<Item.Properties> properties) {
-		if (registered) throw new IllegalStateException("Cannot register new items after item registry has been frozen.");
-		Identifier id = TwilightForestMod.prefix(name);
-		DeferredItem<T> holder = DeferredItem.create(id, () -> item.apply(properties.get().setId(ResourceKey.create(Registries.ITEM, id))));
-		ITEMS.put(id, new ItemEntry() {
-			@Override
-			public Item value() {
-				return holder.get();
-			}
-
-			@Override
-			public void register() {
-				holder.register(BuiltInRegistries.ITEM);
-			}
-		});
-		return holder;
+	public static <T extends Item> T register(String name, Function<Item.Properties, T> item, Supplier<Item.Properties> properties) {
+		return registerDirect(name, item, properties);
 	}
 
 	private static <T extends Item> T registerDirect(String name, Function<Item.Properties, T> item, Supplier<Item.Properties> properties) {
