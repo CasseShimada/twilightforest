@@ -62,7 +62,7 @@ public class TFDispenserBehaviors {
 			}
 		});
 
-		DispenserBlock.registerProjectileBehavior(TFItems.ICE_BOMB.get());
+		DispenserBlock.registerProjectileBehavior(TFItems.ICE_BOMB);
 
 		//handling tags should be a thing smh
 		DispenserBlock.registerBehavior(Items.CANDLE, new CandleDispenseBehavior());

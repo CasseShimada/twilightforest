@@ -137,7 +137,7 @@ public class TFItems {
 	public static final DeferredItem<Item> BLOCK_AND_CHAIN = register("block_and_chain", ChainBlockItem::new, () -> new Item.Properties().durability(99));
 	public static final DeferredItem<Item> PHANTOM_HELMET = register("phantom_helmet", properties -> new PhantomArmorItem(TFArmorMaterials.PHANTOM, ArmorType.HELMET, properties), () -> new Item.Properties().durability(ArmorType.HELMET.getDurability(30)).rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> PHANTOM_CHESTPLATE = register("phantom_chestplate", properties -> new PhantomArmorItem(TFArmorMaterials.PHANTOM, ArmorType.CHESTPLATE, properties), () -> new Item.Properties().durability(ArmorType.CHESTPLATE.getDurability(30)).rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> ICE_BOMB = register("ice_bomb", IceBombItem::new, () -> new Item.Properties().stacksTo(16));
+	public static final Item ICE_BOMB = registerDirect("ice_bomb", IceBombItem::new, () -> new Item.Properties().stacksTo(16));
 	public static final Item ARCTIC_FUR = registerDirect("arctic_fur", Item::new, Item.Properties::new);
 	public static final DeferredItem<Item> ARCTIC_HELMET = register("arctic_helmet", properties -> new ArcticArmorItem(TFArmorMaterials.ARCTIC, ArmorType.HELMET, properties), Item.Properties::new);
 	public static final DeferredItem<Item> ARCTIC_CHESTPLATE = register("arctic_chestplate", properties -> new ArcticArmorItem(TFArmorMaterials.ARCTIC, ArmorType.CHESTPLATE, properties), Item.Properties::new);
