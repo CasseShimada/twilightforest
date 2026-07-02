@@ -480,12 +480,12 @@ public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CL
 	public static final DeferredBlock<RotatedPillarBlock> STRIPPED_MINING_WOOD = registerWithItem("stripped_mining_wood", RotatedPillarBlock::new, () -> MINING_STRIPPED_PROPS);
 	public static final DeferredBlock<RotatedPillarBlock> STRIPPED_SORTING_WOOD = registerWithItem("stripped_sorting_wood", RotatedPillarBlock::new, () -> SORTING_STRIPPED_PROPS);
 
-	public static final DeferredBlock<Block> TIME_LOG_CORE = registerWithItem("time_log_core", TimeLogCoreBlock::new, () -> TIME_LOG_PROPS);
-	public static final DeferredBlock<Block> TRANSFORMATION_LOG_CORE = registerWithItem("transformation_log_core", TransLogCoreBlock::new, () -> TRANSFORMATION_LOG_PROPS);
-	public static final DeferredBlock<Block> MINING_LOG_CORE = registerWithItem("mining_log_core", MineLogCoreBlock::new, () -> MINING_LOG_PROPS);
-	public static final DeferredBlock<Block> SORTING_LOG_CORE = registerWithItem("sorting_log_core", SortLogCoreBlock::new, () -> SORTING_LOG_PROPS);
+	public static final TimeLogCoreBlock TIME_LOG_CORE = registerDirectWithItem("time_log_core", TimeLogCoreBlock::new, () -> TIME_LOG_PROPS);
+	public static final TransLogCoreBlock TRANSFORMATION_LOG_CORE = registerDirectWithItem("transformation_log_core", TransLogCoreBlock::new, () -> TRANSFORMATION_LOG_PROPS);
+	public static final MineLogCoreBlock MINING_LOG_CORE = registerDirectWithItem("mining_log_core", MineLogCoreBlock::new, () -> MINING_LOG_PROPS);
+	public static final SortLogCoreBlock SORTING_LOG_CORE = registerDirectWithItem("sorting_log_core", SortLogCoreBlock::new, () -> SORTING_LOG_PROPS);
 
-	public static final DeferredBlock<Block> MANGROVE_ROOT = registerWithItem("mangrove_root", Block::new, () -> BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).mapColor(MapColor.STONE).sound(SoundType.WOOD).strength(2.0F));
+	public static final Block MANGROVE_ROOT = registerDirectWithItem("mangrove_root", Block::new, () -> BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).mapColor(MapColor.STONE).sound(SoundType.WOOD).strength(2.0F));
 
 	public static final DeferredBlock<Block> TWILIGHT_OAK_LEAVES = registerWithItem("twilight_oak_leaves", TFBlocks::tintedLeaves, () -> BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().noOcclusion().sound(SoundType.AZALEA_LEAVES).isSuffocating((state, getter, pos) -> false).isViewBlocking((state, getter, pos) -> false).isRedstoneConductor((state, level, pos) -> false));
 	public static final DeferredBlock<Block> CANOPY_LEAVES = registerWithItem("canopy_leaves", TFBlocks::tintedLeaves, () -> BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().noOcclusion().sound(SoundType.AZALEA_LEAVES).isSuffocating((state, getter, pos) -> false).isViewBlocking((state, getter, pos) -> false).isRedstoneConductor((state, level, pos) -> false));

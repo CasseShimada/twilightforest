@@ -60,8 +60,8 @@ public class TimeTreeFeature extends HollowTreeFeature {
 		BlockPos corePos = pos.offset(-1, 2, 0);
 		BlockState stateAtCorePos = world.getBlockState(pos.above());
 		if (stateAtCorePos.is(BlockTags.LOGS) || stateAtCorePos.canBeReplaced()) {
-			world.setBlock(corePos, TFBlocks.TIME_LOG_CORE.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y), Block.UPDATE_ALL);
-			world.scheduleTick(corePos, TFBlocks.TIME_LOG_CORE.get(), 20);
+			world.setBlock(corePos, TFBlocks.TIME_LOG_CORE.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y), Block.UPDATE_ALL);
+			world.scheduleTick(corePos, TFBlocks.TIME_LOG_CORE, 20);
 		}
 
 		return true;

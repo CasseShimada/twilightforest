@@ -158,7 +158,7 @@ public class TreeConfigurations {
 	)
 		.decorators(ImmutableList.of(
 				TreeDecorators.FIREFLY,
-				new TreeRootsDecorator(3, 1, 12, 0, BlockStateProvider.simple(TFBlocks.MANGROVE_ROOT.get().defaultBlockState()), (new WeightedStateProvider(WeightedList.<BlockState>builder()
+				new TreeRootsDecorator(3, 1, 12, 0, BlockStateProvider.simple(TFBlocks.MANGROVE_ROOT.defaultBlockState()), (new WeightedStateProvider(WeightedList.<BlockState>builder()
 					.add(TFBlocks.ROOT_BLOCK.defaultBlockState(), 4)
 					.add(TFBlocks.LIVEROOT_BLOCK.defaultBlockState(), 1).build())), 1),
 				new LeaveVineDecorator(0.125F)
@@ -276,7 +276,7 @@ public class TreeConfigurations {
 		BELOW_TRUNK
 	)
 		.ignoreVines()
-		.decorators(ImmutableList.of(new TreeCorePlacer(3, BlockStateProvider.simple(TFBlocks.TRANSFORMATION_LOG_CORE.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y)))))
+		.decorators(ImmutableList.of(new TreeCorePlacer(3, BlockStateProvider.simple(TFBlocks.TRANSFORMATION_LOG_CORE.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y)))))
 		.build();
 
 	public static final TFTreeFeatureConfig MINING_TREE = new TFTreeFeatureConfig.Builder(
@@ -297,7 +297,7 @@ public class TreeConfigurations {
 		BELOW_TRUNK
 	)
 		.ignoreVines()
-		.decorators(ImmutableList.of(new TreeCorePlacer(2, BlockStateProvider.simple(TFBlocks.SORTING_LOG_CORE.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y)))))
+		.decorators(ImmutableList.of(new TreeCorePlacer(2, BlockStateProvider.simple(TFBlocks.SORTING_LOG_CORE.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y)))))
 		.build();
 
 	public static final TFTreeFeatureConfig LARGE_WINTER = new TFTreeFeatureConfig.Builder(
