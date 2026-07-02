@@ -223,8 +223,8 @@ public class FallenTrunkPiece extends StructurePiece {
 		if (blockState.is(BlockTags.REPLACEABLE_BY_TREES) || blockState.is(BlockTags.FLOWERS) || blockState.isAir() || randomChild.nextBoolean()) {
 			placeBlock(level, blockstate, x, y, z, boundingbox);
 			if (randomChild.nextFloat() <= MOSS_CHANCE && boundingbox.isInside(getWorldPos(x, y + 1, z)) && this.getBlock(level, x, y + 1, z, boundingbox).is(BlockTags.REPLACEABLE)) {
-				placeBlock(level, TFBlocks.MOSS_PATCH.get().defaultBlockState(), x, y + 1, z, boundingbox);
-				level.updateNeighborsAt(getWorldPos(x, y + 1, z), TFBlocks.MOSS_PATCH.get());  // to connect moss patches
+				placeBlock(level, TFBlocks.MOSS_PATCH.defaultBlockState(), x, y + 1, z, boundingbox);
+				level.updateNeighborsAt(getWorldPos(x, y + 1, z), TFBlocks.MOSS_PATCH);  // to connect moss patches
 				level.getChunk(getWorldPos(x, y + 1, z)).markPosForPostProcessing(getWorldPos(x, y + 1, z));
 			}
 		}
