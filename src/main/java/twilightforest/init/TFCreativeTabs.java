@@ -666,7 +666,7 @@ public class TFCreativeTabs {
 				return;
 			}
 			entries.getContext().holders().lookupOrThrow(TFRegistries.Keys.MAGIC_PAINTINGS).listElements().sorted(MAGIC_COMPARATOR).forEach(holder -> {
-				ItemStack itemstack = new ItemStack(TFItems.MAGIC_PAINTING.get());
+				ItemStack itemstack = new ItemStack(TFItems.MAGIC_PAINTING);
 				itemstack.set(TFDataComponents.MAGIC_PAINTING_VARIANT, holder);
 				entries.accept(itemstack);
 			});
