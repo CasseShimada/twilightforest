@@ -1,8 +1,6 @@
 package twilightforest.util;
 
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import twilightforest.util.registry.DeferredRegister;
 import twilightforest.TwilightForestMod;
@@ -12,8 +10,6 @@ public class TFRemapper {
 
 	public static void addRegistryAliases() {
 		DeferredRegister<Block> blockReg = TFBlocks.BLOCKS;
-		DeferredRegister<EntityType<?>> entityReg = TFEntities.ENTITY_TYPES;
-		DeferredRegister<Item> spawnEggReg = TFEntities.SPAWN_EGGS;
 
 		remapBlockAndItem(blockReg, "yeti_trophy", "alpha_yeti_trophy");
 		remapBlockAndItem(blockReg, "yeti_wall_trophy", "alpha_yeti_wall_trophy");
@@ -161,26 +157,26 @@ public class TFRemapper {
 		remapItem("alpha_fur", "alpha_yeti_fur");
 		remapItem("questing_ram_banner_pattern", "quest_ram_banner_pattern");
 
-		remapEntry(spawnEggReg, "bunny_spawn_egg", "dwarf_rabbit_spawn_egg");
-		remapEntry(spawnEggReg, "goblin_knight_lower_spawn_egg", "lower_goblin_knight_spawn_egg");
-		remapEntry(spawnEggReg, "mini_ghast_spawn_egg", "carminite_ghastling_spawn_egg");
-		remapEntry(spawnEggReg, "tower_ghast_spawn_egg", "carminite_ghastguard_spawn_egg");
-		remapEntry(spawnEggReg, "tower_golem_spawn_egg", "carminite_golem_spawn_egg");
-		remapEntry(spawnEggReg, "tower_broodling_spawn_egg", "carminite_broodling_spawn_egg");
-		remapEntry(spawnEggReg, "tower_termite_spawn_egg", "towerwood_borer_spawn_egg");
-		remapEntry(spawnEggReg, "wild_boar_spawn_egg", "boar_spawn_egg");
-		remapEntry(spawnEggReg, "yeti_alpha_spawn_egg", "alpha_yeti_spawn_egg");
+		remapSpawnEgg("bunny_spawn_egg", "dwarf_rabbit_spawn_egg");
+		remapSpawnEgg("goblin_knight_lower_spawn_egg", "lower_goblin_knight_spawn_egg");
+		remapSpawnEgg("mini_ghast_spawn_egg", "carminite_ghastling_spawn_egg");
+		remapSpawnEgg("tower_ghast_spawn_egg", "carminite_ghastguard_spawn_egg");
+		remapSpawnEgg("tower_golem_spawn_egg", "carminite_golem_spawn_egg");
+		remapSpawnEgg("tower_broodling_spawn_egg", "carminite_broodling_spawn_egg");
+		remapSpawnEgg("tower_termite_spawn_egg", "towerwood_borer_spawn_egg");
+		remapSpawnEgg("wild_boar_spawn_egg", "boar_spawn_egg");
+		remapSpawnEgg("yeti_alpha_spawn_egg", "alpha_yeti_spawn_egg");
 
-		remapEntry(entityReg, "wild_boar", "boar");
-		remapEntry(entityReg, "bunny", "dwarf_rabbit");
-		remapEntry(entityReg, "mini_ghast", "carminite_ghastling");
-		remapEntry(entityReg, "tower_ghast", "carminite_ghastguard");
-		remapEntry(entityReg, "tower_golem", "carminite_golem");
-		remapEntry(entityReg, "tower_broodling", "carminite_broodling");
-		remapEntry(entityReg, "tower_termite", "towerwood_borer");
-		remapEntry(entityReg, "goblin_knight_upper", "upper_goblin_knight");
-		remapEntry(entityReg, "goblin_knight_lower", "lower_goblin_knight");
-		remapEntry(entityReg, "yeti_alpha", "alpha_yeti");
+		remapEntity("wild_boar", "boar");
+		remapEntity("bunny", "dwarf_rabbit");
+		remapEntity("mini_ghast", "carminite_ghastling");
+		remapEntity("tower_ghast", "carminite_ghastguard");
+		remapEntity("tower_golem", "carminite_golem");
+		remapEntity("tower_broodling", "carminite_broodling");
+		remapEntity("tower_termite", "towerwood_borer");
+		remapEntity("goblin_knight_upper", "upper_goblin_knight");
+		remapEntity("goblin_knight_lower", "lower_goblin_knight");
+		remapEntity("yeti_alpha", "alpha_yeti");
 
 		remapStructurePiece("TFNCTr", "TFNCTe"); // Terrace Brazier
 		remapStructurePiece("TFNCDu", "TFNCTe"); // Terrace Duct
@@ -200,6 +196,14 @@ public class TFRemapper {
 
 	private static void remapItem(String oldId, String newId) {
 		TFItems.addAlias(TwilightForestMod.prefix(oldId), TwilightForestMod.prefix(newId));
+	}
+
+	private static void remapEntity(String oldId, String newId) {
+		TFEntities.addEntityAlias(TwilightForestMod.prefix(oldId), TwilightForestMod.prefix(newId));
+	}
+
+	private static void remapSpawnEgg(String oldId, String newId) {
+		TFEntities.addSpawnEggAlias(TwilightForestMod.prefix(oldId), TwilightForestMod.prefix(newId));
 	}
 
 	private static void remapStructurePiece(String oldId, String newId) {

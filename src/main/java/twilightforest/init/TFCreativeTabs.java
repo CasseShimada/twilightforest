@@ -30,7 +30,6 @@ import twilightforest.tags.TFItemTags;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class TFCreativeTabs {
 	private static boolean registered;
@@ -591,7 +590,7 @@ public class TFCreativeTabs {
 	}
 
 	private static void createSpawnEggsAlphabetical(CreativeModeTab.Output output) {
-		Collection<? extends Item> eggs = TFEntities.SPAWN_EGGS.getEntries().stream().map(Supplier::get).toList();
+		Collection<? extends Item> eggs = TFEntities.registeredSpawnEggs();
 		eggs.forEach(output::accept);
 	}
 

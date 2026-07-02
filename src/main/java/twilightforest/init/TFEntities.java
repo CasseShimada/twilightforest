@@ -1,6 +1,7 @@
 package twilightforest.init;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -21,14 +22,15 @@ import twilightforest.entity.monster.*;
 import twilightforest.entity.passive.*;
 import twilightforest.entity.projectile.*;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
 public class TFEntities {
 
-	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, TwilightForestMod.ID);
-	public static final DeferredRegister<Item> SPAWN_EGGS = DeferredRegister.create(Registries.ITEM, TwilightForestMod.ID);
+	private static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, TwilightForestMod.ID);
+	private static final DeferredRegister<Item> SPAWN_EGGS = DeferredRegister.create(Registries.ITEM, TwilightForestMod.ID);
 	public static final Map<DeferredHolder<EntityType<?>, ? extends EntityType<?>>, Supplier<AttributeSupplier.Builder>> ATTRIBUTES = new HashMap<>();
 	public static final Map<DeferredHolder<EntityType<?>, ? extends EntityType<?>>, SpawnPlacements.SpawnPredicate<?>> SPAWN_PREDICATES = new HashMap<>();
 
@@ -162,5 +164,25 @@ public class TFEntities {
 
 	private static ResourceKey<EntityType<?>> createIDFor(String name) {
 		return ResourceKey.create(Registries.ENTITY_TYPE, TwilightForestMod.prefix(name));
+	}
+
+	public static void addEntityAlias(Identifier from, Identifier to) {
+		ENTITY_TYPES.addAlias(from, to);
+	}
+
+	public static void addSpawnEggAlias(Identifier from, Identifier to) {
+		SPAWN_EGGS.addAlias(from, to);
+	}
+
+	public static Collection<? extends Item> registeredSpawnEggs() {
+		return SPAWN_EGGS.getEntries().stream().map(Supplier::get).toList();
+	}
+
+	public static void register() {
+		ENTITY_TYPES.register();
+	}
+
+	public static void registerSpawnEggs() {
+		SPAWN_EGGS.register();
 	}
 }
