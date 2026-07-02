@@ -51,7 +51,7 @@ public class DarkCanopyTreeFeature extends Feature<TreeConfiguration> {
 		BlockPos pos = origin;
 		RandomSource rand = ctx.random();
 		BlockPos adjustedBase = origin;
-		BlockState saplingState = TFBlocks.DARKWOOD_SAPLING.get().defaultBlockState();
+		BlockState saplingState = TFBlocks.DARKWOOD_SAPLING.defaultBlockState();
 		BlockState searchStopState = reader.getBlockState(origin.below());
 
 		// if we are given leaves as a starting position, seek dirt or grass underneath
