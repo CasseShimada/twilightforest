@@ -130,17 +130,17 @@ public abstract class CritterBlock extends BaseEntityBlock implements SimpleWate
 
 	@Override
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
-		if (stack.getItem() == TFItems.MASON_JAR.asItem()) {
+		if (stack.is(TFItems.MASON_JAR)) {
 			ItemContainerContents contents = stack.getComponents().get(DataComponents.CONTAINER);
 			if (contents == null || contents.copyOne().isEmpty()) {
 				if (this == TFBlocks.FIREFLY.get()) {
-					ItemStack newStack = Util.make(new ItemStack(TFBlocks.FIREFLY_JAR.get()), jar -> jar.set(TFDataComponents.JAR_LID, stack.get(TFDataComponents.JAR_LID)));
+					ItemStack newStack = Util.make(new ItemStack(TFItems.FIREFLY_JAR), jar -> jar.set(TFDataComponents.JAR_LID, stack.get(TFDataComponents.JAR_LID)));
 					stack.consume(1, player);
 					InventoryUtil.giveItemToPlayer(player, newStack);
 					level.setBlockAndUpdate(pos, state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState());
 					return InteractionResult.SUCCESS;
 				} else if (this == TFBlocks.CICADA.get()) {
-					ItemStack newStack = Util.make(new ItemStack(TFBlocks.CICADA_JAR.get()), jar -> jar.set(TFDataComponents.JAR_LID, stack.get(TFDataComponents.JAR_LID)));
+					ItemStack newStack = Util.make(new ItemStack(TFItems.CICADA_JAR), jar -> jar.set(TFDataComponents.JAR_LID, stack.get(TFDataComponents.JAR_LID)));
 					stack.consume(1, player);
 					InventoryUtil.giveItemToPlayer(player, newStack);
 					if (level.isClientSide())

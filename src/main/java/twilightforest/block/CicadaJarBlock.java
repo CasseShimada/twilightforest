@@ -22,6 +22,7 @@ import twilightforest.components.item.JarLid;
 import twilightforest.config.TFConfig;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFDataComponents;
+import twilightforest.init.TFItems;
 import twilightforest.init.TFSounds;
 import twilightforest.util.ClientSoundHelper;
 
@@ -37,7 +38,7 @@ public class CicadaJarBlock extends JarBlock {
 				ItemEntity cicada = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(TFBlocks.CICADA.get()));
 				level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 				cicada.spawnAtLocation(sl, cicada.getItem());
-				cicada.spawnAtLocation(sl, Util.make(new ItemStack(TFBlocks.MASON_JAR.get()), jar -> jar.set(TFDataComponents.JAR_LID, new JarLid(jarBE.lid))));
+				cicada.spawnAtLocation(sl, Util.make(new ItemStack(TFItems.MASON_JAR), jar -> jar.set(TFDataComponents.JAR_LID, new JarLid(jarBE.lid))));
 			}
 
 			level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);

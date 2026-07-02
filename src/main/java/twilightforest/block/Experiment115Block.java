@@ -61,7 +61,7 @@ public class Experiment115Block extends Block {
 		int bitesTaken = state.getValue(BITES_TAKEN);
 
 		if (!player.isSecondaryUseActive()) {
-			if (stack.is(TFItems.EXPERIMENT_115.get())) {
+			if (stack.is(TFItems.EXPERIMENT_115)) {
 				if (bitesTaken == 0) return InteractionResult.FAIL;
 				level.setBlockAndUpdate(pos, state.setValue(BITES_TAKEN, bitesTaken - 1));
 				level.playSound(null, pos, state.getSoundType().getPlaceSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -87,7 +87,7 @@ public class Experiment115Block extends Block {
 				}
 				player.playSound(SoundEvents.ITEM_PICKUP, 0.5F, 1.0F);
 				if (!player.isCreative()) {
-					InventoryUtil.giveItemToPlayer(player, new ItemStack(TFItems.EXPERIMENT_115.get()));
+					InventoryUtil.giveItemToPlayer(player, new ItemStack(TFItems.EXPERIMENT_115));
 				}
 				return InteractionResult.SUCCESS;
 			}
@@ -111,8 +111,8 @@ public class Experiment115Block extends Block {
 			}
 
 			if (player instanceof ServerPlayer) {
-				CriteriaTriggers.CONSUME_ITEM.trigger((ServerPlayer) player, new ItemStack(TFItems.EXPERIMENT_115.get(), 8 - i));
-				player.awardStat(Stats.ITEM_USED.get(TFItems.EXPERIMENT_115.get()));
+				CriteriaTriggers.CONSUME_ITEM.trigger((ServerPlayer) player, new ItemStack(TFItems.EXPERIMENT_115, 8 - i));
+				player.awardStat(Stats.ITEM_USED.get(TFItems.EXPERIMENT_115));
 			}
 
 			return InteractionResult.SUCCESS;

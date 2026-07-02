@@ -117,11 +117,11 @@ public class TFItems {
 	public static final Item TOWER_KEY = registerDirect("tower_key", Item::new, () -> new Item.Properties().fireResistant().rarity(Rarity.UNCOMMON));
 	public static final Item BORER_ESSENCE = registerDirect("borer_essence", Item::new, Item.Properties::new);
 	public static final Item CARMINITE = registerDirect("carminite", Item::new, Item.Properties::new);
-	public static final DeferredItem<Item> EXPERIMENT_115 = register("experiment_115", properties -> new Experiment115Item(TFBlocks.EXPERIMENT_115.get(), properties), () -> new Item.Properties().useBlockDescriptionPrefix().food(TFFoods.EXPERIMENT_115));
-	public static final DeferredItem<Item> ROPE = register("rope", properties -> new RopeItem(TFBlocks.ROPE.get(), properties), () -> new Item.Properties().useBlockDescriptionPrefix());
-	public static final DeferredItem<Item> MASON_JAR = register("mason_jar", properties -> new JarItem.MasonJarItem(TFBlocks.MASON_JAR.get(), properties), () -> new Item.Properties().useBlockDescriptionPrefix());
-	public static final DeferredItem<Item> FIREFLY_JAR = register("firefly_jar", properties -> new JarItem(TFBlocks.FIREFLY_JAR.get(), properties), () -> new Item.Properties().useBlockDescriptionPrefix());
-	public static final DeferredItem<Item> CICADA_JAR = register("cicada_jar", properties -> new JarItem(TFBlocks.CICADA_JAR.get(), properties), () -> new Item.Properties().useBlockDescriptionPrefix());
+	public static final Item EXPERIMENT_115 = registerDirect("experiment_115", properties -> new Experiment115Item(TFBlocks.EXPERIMENT_115.get(), properties), () -> new Item.Properties().useBlockDescriptionPrefix().food(TFFoods.EXPERIMENT_115));
+	public static final Item ROPE = registerDirect("rope", properties -> new RopeItem(TFBlocks.ROPE.get(), properties), () -> new Item.Properties().useBlockDescriptionPrefix());
+	public static final Item MASON_JAR = registerDirect("mason_jar", properties -> new JarItem.MasonJarItem(TFBlocks.MASON_JAR.get(), properties), () -> new Item.Properties().useBlockDescriptionPrefix());
+	public static final Item FIREFLY_JAR = registerDirect("firefly_jar", properties -> new JarItem(TFBlocks.FIREFLY_JAR.get(), properties), () -> new Item.Properties().useBlockDescriptionPrefix());
+	public static final Item CICADA_JAR = registerDirect("cicada_jar", properties -> new JarItem(TFBlocks.CICADA_JAR.get(), properties), () -> new Item.Properties().useBlockDescriptionPrefix());
 	public static final Item ARMOR_SHARD = registerDirect("armor_shard", Item::new, Item.Properties::new);
 	public static final Item ARMOR_SHARD_CLUSTER = registerDirect("armor_shard_cluster", Item::new, Item.Properties::new);
 	public static final Item KNIGHTMETAL_INGOT = registerDirect("knightmetal_ingot", Item::new, Item.Properties::new);

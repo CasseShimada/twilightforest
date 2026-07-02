@@ -246,9 +246,9 @@ public class TFCreativeTabs {
 			output.accept(TFItems.FALLEN_LEAVES);
 			output.accept(TFBlocks.ROOT_STRAND);
 			output.accept(TFBlocks.HEDGE);
-			output.accept(TFItems.MASON_JAR.get().getDefaultInstance());
-			output.accept(TFItems.FIREFLY_JAR.get().getDefaultInstance());
-			output.accept(TFItems.CICADA_JAR.get().getDefaultInstance());
+			output.accept(TFItems.MASON_JAR.getDefaultInstance());
+			output.accept(TFItems.FIREFLY_JAR.getDefaultInstance());
+			output.accept(TFItems.CICADA_JAR.getDefaultInstance());
 			output.accept(TFBlocks.FIREFLY_SPAWNER);
 			output.accept(TFBlocks.FIREFLY);
 			output.accept(TFBlocks.CICADA);
