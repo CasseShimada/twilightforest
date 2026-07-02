@@ -29,7 +29,7 @@ public class LiverootBlock extends Block {
 	@Override
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
 		if (ToolActionUtil.isAxe(stack)) {
-			level.setBlockAndUpdate(pos, TFBlocks.ROOT_BLOCK.get().defaultBlockState());
+			level.setBlockAndUpdate(pos, TFBlocks.ROOT_BLOCK.defaultBlockState());
 			int amountOfRoots = 1;
 			//fortune formula copied from ApplyBonusCount.OreDrops.calculateNewCount so it acts exactly like the loot table
 			int fortuneLevel = EnchantmentHelper.getItemEnchantmentLevel(level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE), stack);

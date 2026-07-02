@@ -40,7 +40,7 @@ public abstract class HollowTreePiece extends StructurePiece {
 
 	public static final BlockStateProvider DEFAULT_LOG = BlockStateProvider.simple(TFBlocks.TWILIGHT_OAK_LOG.value());
 	public static final BlockStateProvider DEFAULT_WOOD = BlockStateProvider.simple(TFBlocks.TWILIGHT_OAK_WOOD.value());
-	public static final BlockStateProvider DEFAULT_ROOT = BlockStateProvider.simple(TFBlocks.ROOT_BLOCK.value());
+	public static final BlockStateProvider DEFAULT_ROOT = BlockStateProvider.simple(TFBlocks.ROOT_BLOCK);
 	public static final BlockStateProvider DEFAULT_LEAVES = BlockStateProvider.simple(TFBlocks.TWILIGHT_OAK_LEAVES.value());
 	public static final BlockStateProvider DEFAULT_VINE = BlockStateProvider.simple(Blocks.VINE.defaultBlockState());
 	public static final BlockStateProvider DEFAULT_BUG = new WeightedStateProvider(

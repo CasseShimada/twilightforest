@@ -281,7 +281,7 @@ public final class TFConfiguredFeatures {
 		context.register(TROLL_MUSHGLOOMS, new ConfiguredFeature<>(TFFeatures.UNDERGROUND_PLANTS, new BlockStateConfiguration(TFBlocks.MUSHGLOOM.defaultBlockState())));
 		context.register(VANILLA_ROOTS, new ConfiguredFeature<>(TFFeatures.UNDERGROUND_PLANTS, new BlockStateConfiguration(Blocks.HANGING_ROOTS.defaultBlockState())));
 		context.register(WEBS, new ConfiguredFeature<>(TFFeatures.WEBS, NoneFeatureConfiguration.NONE));
-		context.register(WOOD_ROOTS_SPREAD, new ConfiguredFeature<>(TFFeatures.WOOD_ROOTS, new RootConfig(TreeDecorators.ROOT_BLEND_PROVIDER, BlockStateProvider.simple(TFBlocks.LIVEROOT_BLOCK.get()))));
+		context.register(WOOD_ROOTS_SPREAD, new ConfiguredFeature<>(TFFeatures.WOOD_ROOTS, new RootConfig(TreeDecorators.ROOT_BLEND_PROVIDER, BlockStateProvider.simple(TFBlocks.LIVEROOT_BLOCK))));
 		context.register(SNOW_UNDER_TREES, new ConfiguredFeature<>(TFFeatures.SNOW_UNDER_TREES, NoneFeatureConfiguration.NONE));
 		context.register(ENCHANTED_FOREST_VINES, new ConfiguredFeature<>(TFFeatures.ENCHANTED_FOREST_VINES, NoneFeatureConfiguration.NONE));
 		context.register(OAK_BUSH, new ConfiguredFeature<>(Feature.TREE, TreeConfigurations.OAK_BUSH));

@@ -140,7 +140,7 @@ public class TreeConfigurations {
 		BlockStateProvider.simple(TFBlocks.CANOPY_LOG.get()),
 		BlockStateProvider.simple(TFBlocks.CANOPY_LEAVES.get()),
 		BlockStateProvider.simple(TFBlocks.CANOPY_WOOD.get()),
-		BlockStateProvider.simple(TFBlocks.ROOT_BLOCK.get())
+		BlockStateProvider.simple(TFBlocks.ROOT_BLOCK)
 	)
 		.minHeight(30)
 		.chanceFirstFive(2)
@@ -159,8 +159,8 @@ public class TreeConfigurations {
 		.decorators(ImmutableList.of(
 				TreeDecorators.FIREFLY,
 				new TreeRootsDecorator(3, 1, 12, 0, BlockStateProvider.simple(TFBlocks.MANGROVE_ROOT.get().defaultBlockState()), (new WeightedStateProvider(WeightedList.<BlockState>builder()
-					.add(TFBlocks.ROOT_BLOCK.get().defaultBlockState(), 4)
-					.add(TFBlocks.LIVEROOT_BLOCK.get().defaultBlockState(), 1).build())), 1),
+					.add(TFBlocks.ROOT_BLOCK.defaultBlockState(), 4)
+					.add(TFBlocks.LIVEROOT_BLOCK.defaultBlockState(), 1).build())), 1),
 				new LeaveVineDecorator(0.125F)
 			)
 		)
@@ -262,7 +262,7 @@ public class TreeConfigurations {
 		BlockStateProvider.simple(TFBlocks.TIME_LOG.get()),
 		BlockStateProvider.simple(TFBlocks.TIME_LEAVES.get()),
 		BlockStateProvider.simple(TFBlocks.TIME_WOOD.get()),
-		BlockStateProvider.simple(TFBlocks.ROOT_BLOCK.get())
+		BlockStateProvider.simple(TFBlocks.ROOT_BLOCK)
 	)
 		.build();
 
@@ -283,7 +283,7 @@ public class TreeConfigurations {
 		BlockStateProvider.simple(TFBlocks.MINING_LOG.get()),
 		BlockStateProvider.simple(TFBlocks.MINING_LEAVES.get()),
 		BlockStateProvider.simple(TFBlocks.MINING_WOOD.get()),
-		BlockStateProvider.simple(TFBlocks.ROOT_BLOCK.get())
+		BlockStateProvider.simple(TFBlocks.ROOT_BLOCK)
 	)
 		.build();
 
@@ -304,7 +304,7 @@ public class TreeConfigurations {
 		BlockStateProvider.simple(Blocks.SPRUCE_LOG),
 		BlockStateProvider.simple(Blocks.SPRUCE_LEAVES),
 		BlockStateProvider.simple(Blocks.SPRUCE_LOG),
-		BlockStateProvider.simple(TFBlocks.ROOT_BLOCK.get())
+		BlockStateProvider.simple(TFBlocks.ROOT_BLOCK)
 	)
 		.build();
 
@@ -312,7 +312,7 @@ public class TreeConfigurations {
 		BlockStateProvider.simple(TFBlocks.TWILIGHT_OAK_LOG.get()),
 		BlockStateProvider.simple(TFBlocks.TWILIGHT_OAK_LEAVES.get()),
 		BlockStateProvider.simple(TFBlocks.TWILIGHT_OAK_WOOD.get()),
-		BlockStateProvider.simple(TFBlocks.ROOT_BLOCK.get())
+		BlockStateProvider.simple(TFBlocks.ROOT_BLOCK)
 	)
 		.minHeight(24)
 		.build();
@@ -321,7 +321,7 @@ public class TreeConfigurations {
 		BlockStateProvider.simple(TFBlocks.TWILIGHT_OAK_LOG.get()),
 		BlockStateProvider.simple(TFBlocks.TWILIGHT_OAK_LEAVES.get()),
 		BlockStateProvider.simple(TFBlocks.TWILIGHT_OAK_WOOD.get()),
-		BlockStateProvider.simple(TFBlocks.ROOT_BLOCK.get())
+		BlockStateProvider.simple(TFBlocks.ROOT_BLOCK)
 	)
 		.minHeight(16)
 		.build();
@@ -330,7 +330,7 @@ public class TreeConfigurations {
 		BlockStateProvider.simple(TFBlocks.TWILIGHT_OAK_LOG.get()),
 		BlockStateProvider.simple(TFBlocks.TWILIGHT_OAK_LEAVES.get()),
 		BlockStateProvider.simple(TFBlocks.TWILIGHT_OAK_WOOD.get()),
-		BlockStateProvider.simple(TFBlocks.ROOT_BLOCK.get())
+		BlockStateProvider.simple(TFBlocks.ROOT_BLOCK)
 	)
 		.build();
 
