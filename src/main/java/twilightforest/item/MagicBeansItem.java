@@ -38,7 +38,7 @@ public class MagicBeansItem extends Item {
 		if (pos.getY() < maxY && level.getBlockState(pos).is(TFBlocks.UBEROUS_SOIL.get()) && level.getBlockState(pos.above()).isAir()) {
 			if (!level.isClientSide()) {
 				stack.shrink(1);
-				level.setBlockAndUpdate(pos.above(), TFBlocks.BEANSTALK_GROWER.get().defaultBlockState());
+				level.setBlockAndUpdate(pos.above(), TFBlocks.BEANSTALK_GROWER.defaultBlockState());
 				level.playSound(null, pos, TFSounds.BEANSTALK_GROWTH, SoundSource.BLOCKS, 4.0F, 1.0F);
 				if (player instanceof ServerPlayer serverPlayer) {
 					serverPlayer.awardStat(Stats.ITEM_USED.get(this));

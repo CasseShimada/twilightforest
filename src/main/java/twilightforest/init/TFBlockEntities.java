@@ -41,7 +41,7 @@ public class TFBlockEntities {
 	public static final BlockEntityType<KeepsakeCasketBlockEntity> KEEPSAKE_CASKET = register("keepsake_casket", FabricBlockEntityTypeBuilder.create(KeepsakeCasketBlockEntity::new, TFBlocks.KEEPSAKE_CASKET).build());
 	public static final BlockEntityType<BrazierBlockEntity> BRAZIER = register("brazier", FabricBlockEntityTypeBuilder.create(BrazierBlockEntity::new, TFBlocks.BRAZIER.get()).build());
 	public static final BlockEntityType<ChiseledCanopyShelfBlockEntity> CHISELED_CANOPY_BOOKSHELF = register("chiseled_canopy_bookshelf", FabricBlockEntityTypeBuilder.create(ChiseledCanopyShelfBlockEntity::new, TFBlocks.CHISELED_CANOPY_BOOKSHELF.get()).build());
-	public static final BlockEntityType<GrowingBeanstalkBlockEntity> BEANSTALK_GROWER = register("beanstalk_grower", FabricBlockEntityTypeBuilder.create(GrowingBeanstalkBlockEntity::new, TFBlocks.BEANSTALK_GROWER.get()).build());
+	public static final BlockEntityType<GrowingBeanstalkBlockEntity> BEANSTALK_GROWER = register("beanstalk_grower", FabricBlockEntityTypeBuilder.create(GrowingBeanstalkBlockEntity::new, TFBlocks.BEANSTALK_GROWER).build());
 	public static final BlockEntityType<RedThreadBlockEntity> RED_THREAD = register("red_thread", FabricBlockEntityTypeBuilder.create(RedThreadBlockEntity::new, TFBlocks.RED_THREAD.get()).build());
 	public static final BlockEntityType<CandelabraBlockEntity> CANDELABRA = register("candelabra", FabricBlockEntityTypeBuilder.create(CandelabraBlockEntity::new, TFBlocks.CANDELABRA.get()).build());
 	public static final BlockEntityType<JarBlockEntity> JAR = register("jar", FabricBlockEntityTypeBuilder.create(JarBlockEntity::new, TFBlocks.FIREFLY_JAR, TFBlocks.CICADA_JAR).build());
