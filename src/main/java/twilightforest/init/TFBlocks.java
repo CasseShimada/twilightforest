@@ -142,23 +142,23 @@ public class TFBlocks {
 
 	//ominous
 	public static final OminousFireBlock OMINOUS_FIRE = registerDirect("ominous_fire", OminousFireBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).replaceable().noCollision().instabreak().lightLevel((state) -> 15).sound(SoundType.WOOL).pushReaction(PushReaction.DESTROY));
-	public static final DeferredBlock<OminousCandleBlock> OMINOUS_CANDLE = ominousCandle("ominous_candle", MapColor.SAND, Blocks.CANDLE);
-	public static final DeferredBlock<OminousCandleBlock> OMINOUS_WHITE_CANDLE = ominousCandle("ominous_white_candle", MapColor.WOOL, Blocks.DYED_CANDLE.white());
-	public static final DeferredBlock<OminousCandleBlock> OMINOUS_ORANGE_CANDLE = ominousCandle("ominous_orange_candle", MapColor.COLOR_ORANGE, Blocks.DYED_CANDLE.orange());
-	public static final DeferredBlock<OminousCandleBlock> OMINOUS_MAGENTA_CANDLE = ominousCandle("ominous_magenta_candle", MapColor.COLOR_MAGENTA, Blocks.DYED_CANDLE.magenta());
-	public static final DeferredBlock<OminousCandleBlock> OMINOUS_LIGHT_BLUE_CANDLE = ominousCandle("ominous_light_blue_candle", MapColor.COLOR_LIGHT_BLUE, Blocks.DYED_CANDLE.lightBlue());
-	public static final DeferredBlock<OminousCandleBlock> OMINOUS_YELLOW_CANDLE = ominousCandle("ominous_yellow_candle", MapColor.COLOR_YELLOW, Blocks.DYED_CANDLE.yellow());
-	public static final DeferredBlock<OminousCandleBlock> OMINOUS_LIME_CANDLE = ominousCandle("ominous_lime_candle", MapColor.COLOR_LIGHT_GREEN, Blocks.DYED_CANDLE.lime());
-	public static final DeferredBlock<OminousCandleBlock> OMINOUS_PINK_CANDLE = ominousCandle("ominous_pink_candle", MapColor.COLOR_PINK, Blocks.DYED_CANDLE.pink());
-	public static final DeferredBlock<OminousCandleBlock> OMINOUS_GRAY_CANDLE = ominousCandle("ominous_gray_candle", MapColor.COLOR_GRAY, Blocks.DYED_CANDLE.gray());
-	public static final DeferredBlock<OminousCandleBlock> OMINOUS_LIGHT_GRAY_CANDLE = ominousCandle("ominous_light_gray_candle", MapColor.COLOR_LIGHT_GRAY, Blocks.DYED_CANDLE.lightGray());
-	public static final DeferredBlock<OminousCandleBlock> OMINOUS_CYAN_CANDLE = ominousCandle("ominous_cyan_candle", MapColor.COLOR_CYAN, Blocks.DYED_CANDLE.cyan());
-	public static final DeferredBlock<OminousCandleBlock> OMINOUS_PURPLE_CANDLE = ominousCandle("ominous_purple_candle", MapColor.COLOR_PURPLE, Blocks.DYED_CANDLE.purple());
-	public static final DeferredBlock<OminousCandleBlock> OMINOUS_BLUE_CANDLE = ominousCandle("ominous_blue_candle", MapColor.COLOR_BLUE, Blocks.DYED_CANDLE.blue());
-	public static final DeferredBlock<OminousCandleBlock> OMINOUS_BROWN_CANDLE = ominousCandle("ominous_brown_candle", MapColor.COLOR_BROWN, Blocks.DYED_CANDLE.brown());
-	public static final DeferredBlock<OminousCandleBlock> OMINOUS_GREEN_CANDLE = ominousCandle("ominous_green_candle", MapColor.COLOR_GREEN, Blocks.DYED_CANDLE.green());
-	public static final DeferredBlock<OminousCandleBlock> OMINOUS_RED_CANDLE = ominousCandle("ominous_red_candle", MapColor.COLOR_RED, Blocks.DYED_CANDLE.red());
-	public static final DeferredBlock<OminousCandleBlock> OMINOUS_BLACK_CANDLE = ominousCandle("ominous_black_candle", MapColor.COLOR_BLACK, Blocks.DYED_CANDLE.black());
+	public static final OminousCandleBlock OMINOUS_CANDLE = ominousCandle("ominous_candle", MapColor.SAND, Blocks.CANDLE);
+	public static final OminousCandleBlock OMINOUS_WHITE_CANDLE = ominousCandle("ominous_white_candle", MapColor.WOOL, Blocks.DYED_CANDLE.white());
+	public static final OminousCandleBlock OMINOUS_ORANGE_CANDLE = ominousCandle("ominous_orange_candle", MapColor.COLOR_ORANGE, Blocks.DYED_CANDLE.orange());
+	public static final OminousCandleBlock OMINOUS_MAGENTA_CANDLE = ominousCandle("ominous_magenta_candle", MapColor.COLOR_MAGENTA, Blocks.DYED_CANDLE.magenta());
+	public static final OminousCandleBlock OMINOUS_LIGHT_BLUE_CANDLE = ominousCandle("ominous_light_blue_candle", MapColor.COLOR_LIGHT_BLUE, Blocks.DYED_CANDLE.lightBlue());
+	public static final OminousCandleBlock OMINOUS_YELLOW_CANDLE = ominousCandle("ominous_yellow_candle", MapColor.COLOR_YELLOW, Blocks.DYED_CANDLE.yellow());
+	public static final OminousCandleBlock OMINOUS_LIME_CANDLE = ominousCandle("ominous_lime_candle", MapColor.COLOR_LIGHT_GREEN, Blocks.DYED_CANDLE.lime());
+	public static final OminousCandleBlock OMINOUS_PINK_CANDLE = ominousCandle("ominous_pink_candle", MapColor.COLOR_PINK, Blocks.DYED_CANDLE.pink());
+	public static final OminousCandleBlock OMINOUS_GRAY_CANDLE = ominousCandle("ominous_gray_candle", MapColor.COLOR_GRAY, Blocks.DYED_CANDLE.gray());
+	public static final OminousCandleBlock OMINOUS_LIGHT_GRAY_CANDLE = ominousCandle("ominous_light_gray_candle", MapColor.COLOR_LIGHT_GRAY, Blocks.DYED_CANDLE.lightGray());
+	public static final OminousCandleBlock OMINOUS_CYAN_CANDLE = ominousCandle("ominous_cyan_candle", MapColor.COLOR_CYAN, Blocks.DYED_CANDLE.cyan());
+	public static final OminousCandleBlock OMINOUS_PURPLE_CANDLE = ominousCandle("ominous_purple_candle", MapColor.COLOR_PURPLE, Blocks.DYED_CANDLE.purple());
+	public static final OminousCandleBlock OMINOUS_BLUE_CANDLE = ominousCandle("ominous_blue_candle", MapColor.COLOR_BLUE, Blocks.DYED_CANDLE.blue());
+	public static final OminousCandleBlock OMINOUS_BROWN_CANDLE = ominousCandle("ominous_brown_candle", MapColor.COLOR_BROWN, Blocks.DYED_CANDLE.brown());
+	public static final OminousCandleBlock OMINOUS_GREEN_CANDLE = ominousCandle("ominous_green_candle", MapColor.COLOR_GREEN, Blocks.DYED_CANDLE.green());
+	public static final OminousCandleBlock OMINOUS_RED_CANDLE = ominousCandle("ominous_red_candle", MapColor.COLOR_RED, Blocks.DYED_CANDLE.red());
+	public static final OminousCandleBlock OMINOUS_BLACK_CANDLE = ominousCandle("ominous_black_candle", MapColor.COLOR_BLACK, Blocks.DYED_CANDLE.black());
 
 	//labyrinth
 	public static final DeferredBlock<Block> MAZESTONE = registerWithItem("mazestone", Block::new, () -> BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).mapColor(MapColor.STONE).requiresCorrectToolForDrops().sound(SoundType.STONE).strength(100.0F, 5.0F));
@@ -776,8 +776,8 @@ public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CL
 		void register();
 	}
 
-	public static DeferredBlock<OminousCandleBlock> ominousCandle(String name, MapColor mapColor, Block candle) {
-		return register(name, properties -> new OminousCandleBlock(candle, properties), () -> BlockBehaviour.Properties.of()
+	public static OminousCandleBlock ominousCandle(String name, MapColor mapColor, Block candle) {
+		return registerDirect(name, properties -> new OminousCandleBlock(candle, properties), () -> BlockBehaviour.Properties.of()
 				.mapColor(mapColor)
 				.noOcclusion()
 				.strength(0.1F)

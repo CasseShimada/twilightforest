@@ -85,15 +85,15 @@ public class TFBlockEntities {
 		TFBlocks.PIGLIN_SKULL_CANDLE.get(), TFBlocks.PIGLIN_WALL_SKULL_CANDLE.get()).build());
 
 	public static final BlockEntityType<OminousCandleBlockEntity> OMINOUS_CANDLE = register("ominous_candle", FabricBlockEntityTypeBuilder.create(OminousCandleBlockEntity::new,
-		TFBlocks.OMINOUS_CANDLE.get(), TFBlocks.OMINOUS_WHITE_CANDLE.get(),
-		TFBlocks.OMINOUS_ORANGE_CANDLE.get(), TFBlocks.OMINOUS_MAGENTA_CANDLE.get(),
-		TFBlocks.OMINOUS_LIGHT_BLUE_CANDLE.get(), TFBlocks.OMINOUS_YELLOW_CANDLE.get(),
-		TFBlocks.OMINOUS_LIME_CANDLE.get(), TFBlocks.OMINOUS_PINK_CANDLE.get(),
-		TFBlocks.OMINOUS_GRAY_CANDLE.get(), TFBlocks.OMINOUS_LIGHT_GRAY_CANDLE.get(),
-		TFBlocks.OMINOUS_CYAN_CANDLE.get(), TFBlocks.OMINOUS_PURPLE_CANDLE.get(),
-		TFBlocks.OMINOUS_BLUE_CANDLE.get(), TFBlocks.OMINOUS_BROWN_CANDLE.get(),
-		TFBlocks.OMINOUS_GREEN_CANDLE.get(), TFBlocks.OMINOUS_RED_CANDLE.get(),
-		TFBlocks.OMINOUS_BLACK_CANDLE.get()).build());
+		TFBlocks.OMINOUS_CANDLE, TFBlocks.OMINOUS_WHITE_CANDLE,
+		TFBlocks.OMINOUS_ORANGE_CANDLE, TFBlocks.OMINOUS_MAGENTA_CANDLE,
+		TFBlocks.OMINOUS_LIGHT_BLUE_CANDLE, TFBlocks.OMINOUS_YELLOW_CANDLE,
+		TFBlocks.OMINOUS_LIME_CANDLE, TFBlocks.OMINOUS_PINK_CANDLE,
+		TFBlocks.OMINOUS_GRAY_CANDLE, TFBlocks.OMINOUS_LIGHT_GRAY_CANDLE,
+		TFBlocks.OMINOUS_CYAN_CANDLE, TFBlocks.OMINOUS_PURPLE_CANDLE,
+		TFBlocks.OMINOUS_BLUE_CANDLE, TFBlocks.OMINOUS_BROWN_CANDLE,
+		TFBlocks.OMINOUS_GREEN_CANDLE, TFBlocks.OMINOUS_RED_CANDLE,
+		TFBlocks.OMINOUS_BLACK_CANDLE).build());
 
 	public static void register() {
 		if (registered) {

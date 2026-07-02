@@ -58,23 +58,23 @@ public class OminousCandleBlock extends BaseEntityBlock {
 	public static final IntegerProperty CANDLES = BlockStateProperties.CANDLES;
 
 	private static final HashMap<Block, Supplier<? extends OminousCandleBlock>> CANDLE_MAP = Util.make(new HashMap<>(), map -> {
-		map.put(Blocks.CANDLE, TFBlocks.OMINOUS_CANDLE);
-		map.put(Blocks.DYED_CANDLE.white(), TFBlocks.OMINOUS_WHITE_CANDLE);
-		map.put(Blocks.DYED_CANDLE.orange(), TFBlocks.OMINOUS_ORANGE_CANDLE);
-		map.put(Blocks.DYED_CANDLE.magenta(), TFBlocks.OMINOUS_MAGENTA_CANDLE);
-		map.put(Blocks.DYED_CANDLE.lightBlue(), TFBlocks.OMINOUS_LIGHT_BLUE_CANDLE);
-		map.put(Blocks.DYED_CANDLE.yellow(), TFBlocks.OMINOUS_YELLOW_CANDLE);
-		map.put(Blocks.DYED_CANDLE.lime(), TFBlocks.OMINOUS_LIME_CANDLE);
-		map.put(Blocks.DYED_CANDLE.pink(), TFBlocks.OMINOUS_PINK_CANDLE);
-		map.put(Blocks.DYED_CANDLE.gray(), TFBlocks.OMINOUS_GRAY_CANDLE);
-		map.put(Blocks.DYED_CANDLE.lightGray(), TFBlocks.OMINOUS_LIGHT_GRAY_CANDLE);
-		map.put(Blocks.DYED_CANDLE.cyan(), TFBlocks.OMINOUS_CYAN_CANDLE);
-		map.put(Blocks.DYED_CANDLE.purple(), TFBlocks.OMINOUS_PURPLE_CANDLE);
-		map.put(Blocks.DYED_CANDLE.blue(), TFBlocks.OMINOUS_BLUE_CANDLE);
-		map.put(Blocks.DYED_CANDLE.brown(), TFBlocks.OMINOUS_BROWN_CANDLE);
-		map.put(Blocks.DYED_CANDLE.green(), TFBlocks.OMINOUS_GREEN_CANDLE);
-		map.put(Blocks.DYED_CANDLE.red(), TFBlocks.OMINOUS_RED_CANDLE);
-		map.put(Blocks.DYED_CANDLE.black(), TFBlocks.OMINOUS_BLACK_CANDLE);
+		map.put(Blocks.CANDLE, () -> TFBlocks.OMINOUS_CANDLE);
+		map.put(Blocks.DYED_CANDLE.white(), () -> TFBlocks.OMINOUS_WHITE_CANDLE);
+		map.put(Blocks.DYED_CANDLE.orange(), () -> TFBlocks.OMINOUS_ORANGE_CANDLE);
+		map.put(Blocks.DYED_CANDLE.magenta(), () -> TFBlocks.OMINOUS_MAGENTA_CANDLE);
+		map.put(Blocks.DYED_CANDLE.lightBlue(), () -> TFBlocks.OMINOUS_LIGHT_BLUE_CANDLE);
+		map.put(Blocks.DYED_CANDLE.yellow(), () -> TFBlocks.OMINOUS_YELLOW_CANDLE);
+		map.put(Blocks.DYED_CANDLE.lime(), () -> TFBlocks.OMINOUS_LIME_CANDLE);
+		map.put(Blocks.DYED_CANDLE.pink(), () -> TFBlocks.OMINOUS_PINK_CANDLE);
+		map.put(Blocks.DYED_CANDLE.gray(), () -> TFBlocks.OMINOUS_GRAY_CANDLE);
+		map.put(Blocks.DYED_CANDLE.lightGray(), () -> TFBlocks.OMINOUS_LIGHT_GRAY_CANDLE);
+		map.put(Blocks.DYED_CANDLE.cyan(), () -> TFBlocks.OMINOUS_CYAN_CANDLE);
+		map.put(Blocks.DYED_CANDLE.purple(), () -> TFBlocks.OMINOUS_PURPLE_CANDLE);
+		map.put(Blocks.DYED_CANDLE.blue(), () -> TFBlocks.OMINOUS_BLUE_CANDLE);
+		map.put(Blocks.DYED_CANDLE.brown(), () -> TFBlocks.OMINOUS_BROWN_CANDLE);
+		map.put(Blocks.DYED_CANDLE.green(), () -> TFBlocks.OMINOUS_GREEN_CANDLE);
+		map.put(Blocks.DYED_CANDLE.red(), () -> TFBlocks.OMINOUS_RED_CANDLE);
+		map.put(Blocks.DYED_CANDLE.black(), () -> TFBlocks.OMINOUS_BLACK_CANDLE);
 	});
 
 	public static final Int2ObjectMap<List<Vec2>> CANDLE_OFFSETS = Util.make(
