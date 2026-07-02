@@ -219,8 +219,8 @@ public class Troll extends Monster implements RangedAttackMob {
 	}
 
 	private void ripenBer(int offset, BlockPos pos) {
-		if (this.level().getBlockState(pos).getBlock() == TFBlocks.UNRIPE_TROLLBER.get() && this.getRandom().nextBoolean() && (Math.abs(pos.getX() + pos.getY() + pos.getZ()) % 5 == offset)) {
-			this.level().setBlockAndUpdate(pos, TFBlocks.TROLLBER.get().defaultBlockState());
+		if (this.level().getBlockState(pos).getBlock() == TFBlocks.UNRIPE_TROLLBER && this.getRandom().nextBoolean() && (Math.abs(pos.getX() + pos.getY() + pos.getZ()) % 5 == offset)) {
+			this.level().setBlockAndUpdate(pos, TFBlocks.TROLLBER.defaultBlockState());
 			this.level().levelEvent(LevelEvent.PARTICLES_MOBBLOCK_SPAWN, pos, 0);
 		}
 	}
