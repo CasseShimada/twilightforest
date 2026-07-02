@@ -9,7 +9,7 @@ import twilightforest.init.TFDataComponents;
 
 public class KeepsakeCasketItem extends BlockItem {
 	public KeepsakeCasketItem(Properties properties) {
-		super(TFBlocks.KEEPSAKE_CASKET.get(), properties);
+		super(TFBlocks.KEEPSAKE_CASKET, properties);
 	}
 
 	@Override

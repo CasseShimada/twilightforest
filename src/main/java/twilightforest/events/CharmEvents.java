@@ -203,7 +203,7 @@ public class CharmEvents {
 			FluidState fluidState = level.getFluidState(immutablePos);
 
 			int damage = getPlayerData(player).getIntOr(CASKET_DAMAGE_TAG, 0);
-			BlockState setState = TFBlocks.KEEPSAKE_CASKET.get().defaultBlockState()
+			BlockState setState = TFBlocks.KEEPSAKE_CASKET.defaultBlockState()
 				.setValue(BlockLoggingEnum.MULTILOGGED, BlockLoggingEnum.getFromFluid(fluidState.getType()))
 				.setValue(KeepsakeCasketBlock.BREAKAGE, damage)
 				.setValue(KeepsakeCasketBlock.FACING, Direction.from2DDataValue(level.getRandom().nextInt(3)));
@@ -214,7 +214,7 @@ public class CharmEvents {
 					TwilightForestMod.LOGGER.debug("{}'s Casket damage value was too high, placing Skull Chest instead", player.getName().getString());
 				} else {
 					damage = damage + 1;
-					setState = TFBlocks.KEEPSAKE_CASKET.get().withPropertiesOf(setState).setValue(KeepsakeCasketBlock.BREAKAGE, damage);
+					setState = TFBlocks.KEEPSAKE_CASKET.withPropertiesOf(setState).setValue(KeepsakeCasketBlock.BREAKAGE, damage);
 					TwilightForestMod.LOGGER.debug("{}'s Casket was randomly damaged, applying new damage", player.getName().getString());
 				}
 			}

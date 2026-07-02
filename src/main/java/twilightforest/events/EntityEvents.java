@@ -209,7 +209,7 @@ public class EntityEvents {
 
 	public static boolean shouldCancelCasketBreak(Player player, BlockState state, BlockEntity blockEntity) {
 		Block block = state.getBlock();
-		if (block != TFBlocks.SKULL_CHEST.get() && block != TFBlocks.KEEPSAKE_CASKET.get()) {
+		if (block != TFBlocks.SKULL_CHEST.get() && block != TFBlocks.KEEPSAKE_CASKET) {
 			return false;
 		}
 		if (!(blockEntity instanceof SkullChestBlockEntity casket)) {
