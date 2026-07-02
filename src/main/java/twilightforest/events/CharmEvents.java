@@ -28,7 +28,6 @@ import net.minecraft.world.level.material.FluidState;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import twilightforest.network.PacketDistributor;
-import twilightforest.util.registry.DeferredItem;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.KeepsakeCasketBlock;
 import twilightforest.block.entity.SkullChestBlockEntity;
@@ -117,11 +116,11 @@ public class CharmEvents {
 		List<Integer> allSlots = slotRange(0, playerInventory.getNonEquipmentItems().size());
 		List<Integer> hotbarSlots = slotRange(0, Inventory.getSelectionSize());
 
-		if (!applyCharm(TFItems.CHARM_OF_KEEPING_3, keepInventory, player, allSlots)) {
-			if (!applyCharm(TFItems.CHARM_OF_KEEPING_2, keepInventory, player, hotbarSlots)) {
+		if (!applyCharm(TFItems.CHARM_OF_KEEPING_3.get(), keepInventory, player, allSlots)) {
+			if (!applyCharm(TFItems.CHARM_OF_KEEPING_2.get(), keepInventory, player, hotbarSlots)) {
 				int selected = playerInventory.getSelectedSlot();
 				if (Inventory.isHotbarSlot(selected)) {
-					applyCharm(TFItems.CHARM_OF_KEEPING_1, keepInventory, player, List.of(selected));
+					applyCharm(TFItems.CHARM_OF_KEEPING_1.get(), keepInventory, player, List.of(selected));
 				}
 			}
 		}
@@ -142,7 +141,7 @@ public class CharmEvents {
 		}
 	}
 
-	private static boolean applyCharm(DeferredItem<Item> charm, Inventory keptInventory, Player player, List<Integer> inventorySlots) {
+	private static boolean applyCharm(Item charm, Inventory keptInventory, Player player, List<Integer> inventorySlots) {
 		Inventory playerInventory = player.getInventory();
 		List<Integer> checkSlots = new ArrayList<>(inventorySlots);
 		checkSlots.addAll(equipmentSlotIndices());
@@ -150,7 +149,7 @@ public class CharmEvents {
 		boolean hasItems = false;
 		for (int slot : checkSlots) {
 			ItemStack stack = playerInventory.getItem(slot);
-			if (!stack.isEmpty() && !stack.is(charm.get())) {
+			if (!stack.isEmpty() && !stack.is(charm)) {
 				hasItems = true;
 				break;
 			}
@@ -163,11 +162,11 @@ public class CharmEvents {
 		}
 
 		//do we even have a charm? No? Then stop operation
-		if (!TFItemStackUtils.consumeInventoryItem(player, charm.get(), getPlayerData(player), true) && !hasCharmCurio(charm.get(), player)) {
+		if (!TFItemStackUtils.consumeInventoryItem(player, charm, getPlayerData(player), true) && !hasCharmCurio(charm, player)) {
 			return false;
 		}
 
-		boolean keptACasket = keepSlotsAndCheckCasket(keptInventory, playerInventory, inventorySlots, charm == TFItems.CHARM_OF_KEEPING_3);
+		boolean keptACasket = keepSlotsAndCheckCasket(keptInventory, playerInventory, inventorySlots, charm == TFItems.CHARM_OF_KEEPING_3.get());
 		keepSlotsAndCheckCasket(keptInventory, playerInventory, equipmentSlotIndices(), keptACasket);
 
 		return true;
