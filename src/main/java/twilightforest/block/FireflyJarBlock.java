@@ -29,7 +29,7 @@ public class FireflyJarBlock extends JarBlock {
 	/*@Override
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
 		if (!player.isShiftKeyDown() && stack.is(Items.POPPY)) {
-			level.setBlockAndUpdate(pos, TFBlocks.FIREFLY_SPAWNER.get().defaultBlockState().setValue(AbstractParticleSpawnerBlock.RADIUS, 1));
+			level.setBlockAndUpdate(pos, TFBlocks.FIREFLY_SPAWNER.defaultBlockState().setValue(AbstractParticleSpawnerBlock.RADIUS, 1));
 			level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
 			return InteractionResult.SUCCESS;
 		}
