@@ -46,6 +46,6 @@ public final class StoneBricksVariants implements StructureProcessor {
 
 	@Override
 	public MapCodec<StoneBricksVariants> codec() {
-		return TFStructureProcessors.STONE_BRICK_VARIANTS.get();
+		return TFStructureProcessors.STONE_BRICK_VARIANTS;
 	}
 }

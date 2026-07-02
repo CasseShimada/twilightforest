@@ -46,6 +46,6 @@ public class StateTransfiguringProcessor implements StructureProcessor {
 
 	@Override
 	public MapCodec<StateTransfiguringProcessor> codec() {
-		return TFStructureProcessors.STATE_TRANSFIGURING.get();
+		return TFStructureProcessors.STATE_TRANSFIGURING;
 	}
 }

@@ -38,6 +38,6 @@ public class UpdateMarkingProcessor implements StructureProcessor {
 
 	@Override
 	public MapCodec<UpdateMarkingProcessor> codec() {
-		return TFStructureProcessors.UPDATE_MARKING_PROCESSOR.value();
+		return TFStructureProcessors.UPDATE_MARKING_PROCESSOR;
 	}
 }

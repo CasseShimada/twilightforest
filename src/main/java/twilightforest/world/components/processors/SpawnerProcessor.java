@@ -128,7 +128,7 @@ public class SpawnerProcessor implements StructureProcessor {
 
 	@Override
 	public MapCodec<SpawnerProcessor> codec() {
-		return TFStructureProcessors.SPAWNER_PROCESSOR.value();
+		return TFStructureProcessors.SPAWNER_PROCESSOR;
 	}
 
 	private Optional<Short> serializeRange() {

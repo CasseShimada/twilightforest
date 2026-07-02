@@ -43,7 +43,7 @@ public final class BoxCuttingProcessor implements StructureProcessor {
 
 	@Override
 	public MapCodec<BoxCuttingProcessor> codec() {
-		return TFStructureProcessors.BOX_CUTTING_PROCESSOR.get();
+		return TFStructureProcessors.BOX_CUTTING_PROCESSOR;
 	}
 
 	public static BoxCuttingProcessor fromNBT(ListTag tag) {

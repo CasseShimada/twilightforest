@@ -53,6 +53,6 @@ public class VerticalDecayProcessor implements StructureProcessor {
 
 	@Override
 	public MapCodec<VerticalDecayProcessor> codec() {
-		return TFStructureProcessors.VERTICAL_DECAY.value();
+		return TFStructureProcessors.VERTICAL_DECAY;
 	}
 }

@@ -38,6 +38,6 @@ public final class TargetedRotProcessor implements net.minecraft.world.level.lev
 
 	@Override
 	public MapCodec<TargetedRotProcessor> codec() {
-		return TFStructureProcessors.TARGETED_ROT.get();
+		return TFStructureProcessors.TARGETED_ROT;
 	}
 }

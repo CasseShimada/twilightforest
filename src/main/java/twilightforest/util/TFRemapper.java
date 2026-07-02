@@ -189,7 +189,7 @@ public class TFRemapper {
 		remapEntry(pieceTypeReg, "TFNCDu", "TFNCTe"); // Terrace Duct
 		remapEntry(pieceTypeReg, "TFNCSt", "TFNCTe"); // Terrace Statue
 
-		TFStructureProcessors.STRUCTURE_PROCESSORS.addAlias(TwilightForestMod.prefix("meta_block_processor"), Identifier.withDefaultNamespace("jigsaw_replacement"));
+		TFStructureProcessors.addAlias(TwilightForestMod.prefix("meta_block_processor"), Identifier.withDefaultNamespace("jigsaw_replacement"));
 	}
 
 	private static void remapEntry(DeferredRegister<?> registry, String oldId, String newId) {

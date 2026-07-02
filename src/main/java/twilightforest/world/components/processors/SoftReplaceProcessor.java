@@ -46,6 +46,6 @@ public final class SoftReplaceProcessor implements StructureProcessor {
 
 	@Override
 	public MapCodec<SoftReplaceProcessor> codec() {
-		return TFStructureProcessors.SOFT_REPLACE.value();
+		return TFStructureProcessors.SOFT_REPLACE;
 	}
 }

@@ -37,6 +37,6 @@ public class SmoothStoneVariants implements StructureProcessor {
 
 	@Override
 	public MapCodec<SmoothStoneVariants> codec() {
-		return TFStructureProcessors.SMOOTH_STONE_VARIANTS.get();
+		return TFStructureProcessors.SMOOTH_STONE_VARIANTS;
 	}
 }

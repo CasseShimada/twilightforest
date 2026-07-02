@@ -54,6 +54,6 @@ public final class InfestBlocksProcessor implements StructureProcessor {
 
 	@Override
 	public MapCodec<InfestBlocksProcessor> codec() {
-		return TFStructureProcessors.INFEST_BLOCKS.get();
+		return TFStructureProcessors.INFEST_BLOCKS;
 	}
 }

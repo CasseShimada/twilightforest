@@ -47,6 +47,6 @@ public class SmartGrassProcessor implements StructureProcessor {
 
 	@Override
 	public MapCodec<SmartGrassProcessor> codec() {
-		return TFStructureProcessors.SMART_GRASS.get();
+		return TFStructureProcessors.SMART_GRASS;
 	}
 }

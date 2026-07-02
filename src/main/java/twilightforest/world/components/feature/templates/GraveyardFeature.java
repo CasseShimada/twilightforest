@@ -231,7 +231,7 @@ public class GraveyardFeature extends Feature<NoneFeatureConfiguration> {
 
 		@Override
 		public MapCodec<WebTemplateProcessor> codec() {
-			return TFStructureProcessors.WEB.get();
+			return TFStructureProcessors.WEB;
 		}
 
 		@Override

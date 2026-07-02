@@ -43,6 +43,6 @@ public final class WoodMultiPaletteSwizzle implements StructureProcessor {
 
 	@Override
 	public MapCodec<WoodMultiPaletteSwizzle> codec() {
-		return TFStructureProcessors.PLANK_MULTISWIZZLE.get();
+		return TFStructureProcessors.PLANK_MULTISWIZZLE;
 	}
 }

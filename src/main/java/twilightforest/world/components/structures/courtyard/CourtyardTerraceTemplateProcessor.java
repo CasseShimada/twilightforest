@@ -58,6 +58,6 @@ public final class CourtyardTerraceTemplateProcessor implements StructureProcess
 
 	@Override
 	public MapCodec<CourtyardTerraceTemplateProcessor> codec() {
-		return TFStructureProcessors.COURTYARD_TERRACE.get();
+		return TFStructureProcessors.COURTYARD_TERRACE;
 	}
 }

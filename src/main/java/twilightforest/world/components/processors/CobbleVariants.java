@@ -48,6 +48,6 @@ public final class CobbleVariants implements StructureProcessor {
 
 	@Override
 	public MapCodec<CobbleVariants> codec() {
-		return TFStructureProcessors.COBBLE_VARIANTS.get();
+		return TFStructureProcessors.COBBLE_VARIANTS;
 	}
 }

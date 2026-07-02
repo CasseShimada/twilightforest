@@ -48,6 +48,6 @@ public final class NagastoneVariants implements StructureProcessor {
 
 	@Override
 	public MapCodec<NagastoneVariants> codec() {
-		return TFStructureProcessors.NAGASTONE_VARIANTS.get();
+		return TFStructureProcessors.NAGASTONE_VARIANTS;
 	}
 }
