@@ -167,7 +167,7 @@ public class FinalCastleDungeonRoom31Component extends TowerWingComponent {
 		this.fillWithAir(world, sbb, 0, 0, 0, this.size - 1, this.height - 1, this.size - 1, replacing);
 
 		BlockState floor = TFBlocks.CASTLE_BRICK.defaultBlockState();
-		BlockState border = TFBlocks.THICK_CASTLE_BRICK.get().defaultBlockState();
+		BlockState border = TFBlocks.THICK_CASTLE_BRICK.defaultBlockState();
 
 		final int cs = 7;
 
