@@ -81,7 +81,7 @@ public class ThrownWep extends TFThrowable {
 		super.onHitEntity(result);
 
 		if (this.level() instanceof ServerLevel level) {
-			result.getEntity().hurtServer(level, level.damageSources().source(this.getItem().getItem() == TFItems.KNIGHTMETAL_PICKAXE.get() ? TFDamageTypes.THROWN_PICKAXE : TFDamageTypes.THROWN_AXE), this.projectileDamage);
+			result.getEntity().hurtServer(level, level.damageSources().source(this.getItem().getItem() == TFItems.KNIGHTMETAL_PICKAXE ? TFDamageTypes.THROWN_PICKAXE : TFDamageTypes.THROWN_AXE), this.projectileDamage);
 		}
 	}
 

@@ -90,13 +90,13 @@ public class ToolEvents {
 			return amount;
 		}
 
-		if (target.getArmorValue() > 0 && (weapon.is(TFItems.KNIGHTMETAL_PICKAXE.get()) || weapon.is(TFItems.KNIGHTMETAL_SWORD.get()))) {
+		if (target.getArmorValue() > 0 && (weapon.is(TFItems.KNIGHTMETAL_PICKAXE) || weapon.is(TFItems.KNIGHTMETAL_SWORD))) {
 			int moreBonus = target.getArmorCoverPercentage() > 0 ? (int) (KNIGHTMETAL_BONUS_DAMAGE * target.getArmorCoverPercentage()) : KNIGHTMETAL_BONUS_DAMAGE;
 			((ServerLevel) target.level()).getChunkSource().sendToTrackingPlayersAndSelf(target, new ClientboundAnimatePacket(target, 5));
 			return amount + moreBonus;
 		}
 
-		if (target.getArmorValue() == 0 && weapon.is(TFItems.KNIGHTMETAL_AXE.get())) {
+		if (target.getArmorValue() == 0 && weapon.is(TFItems.KNIGHTMETAL_AXE)) {
 			((ServerLevel) target.level()).getChunkSource().sendToTrackingPlayersAndSelf(target, new ClientboundAnimatePacket(target, 5));
 			return amount + KNIGHTMETAL_BONUS_DAMAGE;
 		}

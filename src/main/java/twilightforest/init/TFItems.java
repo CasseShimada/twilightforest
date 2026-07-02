@@ -129,9 +129,9 @@ public class TFItems {
 	public static final Item KNIGHTMETAL_CHESTPLATE = registerDirect("knightmetal_chestplate", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.KNIGHTMETAL, ArmorType.CHESTPLATE)), Item.Properties::new);
 	public static final Item KNIGHTMETAL_LEGGINGS = registerDirect("knightmetal_leggings", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.KNIGHTMETAL, ArmorType.LEGGINGS)), Item.Properties::new);
 	public static final Item KNIGHTMETAL_BOOTS = registerDirect("knightmetal_boots", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.KNIGHTMETAL, ArmorType.BOOTS)), Item.Properties::new);
-	public static final DeferredItem<Item> KNIGHTMETAL_SWORD = register("knightmetal_sword", properties -> new KnightmetalSwordItem(TFToolMaterials.KNIGHTMETAL, properties), Item.Properties::new);
-	public static final DeferredItem<Item> KNIGHTMETAL_PICKAXE = register("knightmetal_pickaxe", properties -> new KnightmetalPickItem(TFToolMaterials.KNIGHTMETAL, properties), Item.Properties::new);
-	public static final DeferredItem<Item> KNIGHTMETAL_AXE = register("knightmetal_axe", properties -> new KnightmetalAxeItem(TFToolMaterials.KNIGHTMETAL, properties), Item.Properties::new);
+	public static final Item KNIGHTMETAL_SWORD = registerDirect("knightmetal_sword", properties -> new KnightmetalSwordItem(TFToolMaterials.KNIGHTMETAL, properties), Item.Properties::new);
+	public static final Item KNIGHTMETAL_PICKAXE = registerDirect("knightmetal_pickaxe", properties -> new KnightmetalPickItem(TFToolMaterials.KNIGHTMETAL, properties), Item.Properties::new);
+	public static final Item KNIGHTMETAL_AXE = registerDirect("knightmetal_axe", properties -> new KnightmetalAxeItem(TFToolMaterials.KNIGHTMETAL, properties), Item.Properties::new);
 	public static final Item KNIGHTMETAL_RING = registerDirect("knightmetal_ring", Item::new, Item.Properties::new);
 	public static final DeferredItem<Item> KNIGHTMETAL_SHIELD = register("knightmetal_shield", KnightmetalShieldItem::new, () -> new Item.Properties().durability(1024));
 	public static final DeferredItem<Item> BLOCK_AND_CHAIN = register("block_and_chain", ChainBlockItem::new, () -> new Item.Properties().durability(99));

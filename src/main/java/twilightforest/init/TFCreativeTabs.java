@@ -492,7 +492,7 @@ public class TFCreativeTabs {
 
 	public static final CreativeModeTab EQUIPMENT = FabricCreativeModeTab.builder()
 		.title(Component.translatable("itemGroup.twilightforest.equipment"))
-		.icon(() -> new ItemStack(TFItems.KNIGHTMETAL_PICKAXE.get()))
+		.icon(() -> new ItemStack(TFItems.KNIGHTMETAL_PICKAXE))
 		.displayItems((parameters, output) -> {
 			HolderLookup.RegistryLookup<Enchantment> lookup = parameters.holders().lookupOrThrow(Registries.ENCHANTMENT);
 			generateGearWithEnchants(output, TFItems.IRONWOOD_HELMET, new EnchantmentInstance(lookup.getOrThrow(Enchantments.AQUA_AFFINITY), 1));

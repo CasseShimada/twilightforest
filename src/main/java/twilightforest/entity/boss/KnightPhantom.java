@@ -143,7 +143,7 @@ public class KnightPhantom extends BaseTFBoss {
 
 	@Override
 	protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
-		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFItems.KNIGHTMETAL_SWORD.get()));
+		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFItems.KNIGHTMETAL_SWORD));
 		this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(TFItems.PHANTOM_CHESTPLATE));
 		this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(TFItems.PHANTOM_HELMET));
 	}
@@ -171,7 +171,7 @@ public class KnightPhantom extends BaseTFBoss {
 		if (this.level().isClientSide() && this.isChargingAtPlayer() && this.hasYetToDisappear()) {
 			// make particles
 			for (int i = 0; i < 4; ++i) {
-				Item particleID = this.getRandom().nextBoolean() ? TFItems.PHANTOM_HELMET : TFItems.KNIGHTMETAL_SWORD.get();
+				Item particleID = this.getRandom().nextBoolean() ? TFItems.PHANTOM_HELMET : TFItems.KNIGHTMETAL_SWORD;
 
 				this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, particleID), this.getX() + (this.getRandom().nextFloat() - 0.5D) * this.getBbWidth(), this.getY() + this.getRandom().nextFloat() * (this.getBbHeight() - 0.75D) + 0.5D, this.getZ() + (this.getRandom().nextFloat() - 0.5D) * this.getBbWidth(), 0.0D, -0.1D, 0.0D);
 				this.level().addParticle(ParticleTypes.SMOKE, this.getX() + (this.getRandom().nextFloat() - 0.5D) * this.getBbWidth(), this.getY() + this.getRandom().nextFloat() * (this.getBbHeight() - 0.75D) + 0.5D, this.getZ() + (this.getRandom().nextFloat() - 0.5D) * this.getBbWidth(), 0.0D, 0.1D, 0.0D);
@@ -519,15 +519,15 @@ public class KnightPhantom extends BaseTFBoss {
 	}
 
 	public boolean isSwordKnight() {
-		return this.getMainHandItem().is(TFItems.KNIGHTMETAL_SWORD.get());
+		return this.getMainHandItem().is(TFItems.KNIGHTMETAL_SWORD);
 	}
 
 	public boolean isAxeKnight() {
-		return this.getMainHandItem().is(TFItems.KNIGHTMETAL_AXE.get());
+		return this.getMainHandItem().is(TFItems.KNIGHTMETAL_AXE);
 	}
 
 	public boolean isPickKnight() {
-		return this.getMainHandItem().is(TFItems.KNIGHTMETAL_PICKAXE.get());
+		return this.getMainHandItem().is(TFItems.KNIGHTMETAL_PICKAXE);
 	}
 
 	public int getNumber() {
@@ -540,9 +540,9 @@ public class KnightPhantom extends BaseTFBoss {
 
 		// set weapon per number
 		switch (number % 3) {
-			case 0 -> this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFItems.KNIGHTMETAL_SWORD.get()));
-			case 1 -> this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFItems.KNIGHTMETAL_AXE.get()));
-			case 2 -> this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFItems.KNIGHTMETAL_PICKAXE.get()));
+			case 0 -> this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFItems.KNIGHTMETAL_SWORD));
+			case 1 -> this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFItems.KNIGHTMETAL_AXE));
+			case 2 -> this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFItems.KNIGHTMETAL_PICKAXE));
 		}
 	}
 
@@ -668,7 +668,7 @@ public class KnightPhantom extends BaseTFBoss {
 					}
 
 					if (this.random.nextInt(5) == 0) {
-						Item particleID = this.getRandom().nextBoolean() ? TFItems.PHANTOM_HELMET : TFItems.KNIGHTMETAL_SWORD.get();
+						Item particleID = this.getRandom().nextBoolean() ? TFItems.PHANTOM_HELMET : TFItems.KNIGHTMETAL_SWORD;
 						this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, particleID), this.getX() + (this.getRandom().nextFloat() - 0.5D) * this.getBbWidth(), this.getY() + this.getRandom().nextFloat() * (this.getBbHeight() - 0.75D) + 0.5D, this.getZ() + (this.getRandom().nextFloat() - 0.5D) * this.getBbWidth(), 0.0D, -0.1D, 0.0D);
 					}
 				}
