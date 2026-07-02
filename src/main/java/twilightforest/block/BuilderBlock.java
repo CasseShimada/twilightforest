@@ -46,7 +46,7 @@ public class BuilderBlock extends BaseEntityBlock {
 
 		if (state.getBlock() == TFBlocks.BUILT_BLOCK.get() && !state.getValue(TranslucentBuiltBlock.ACTIVE)) {
 			level.setBlockAndUpdate(pos, state.setValue(TranslucentBuiltBlock.ACTIVE, true));
-			level.playSound(null, pos, TFSounds.BUILDER_REPLACE.get(), SoundSource.BLOCKS, 0.3F, 0.6F);
+			level.playSound(null, pos, TFSounds.BUILDER_REPLACE, SoundSource.BLOCKS, 0.3F, 0.6F);
 			level.scheduleTick(pos, state.getBlock(), 10);
 		}
 	}
@@ -71,7 +71,7 @@ public class BuilderBlock extends BaseEntityBlock {
 	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
 		if (!level.isClientSide() && state.getValue(STATE) == TowerDeviceVariant.BUILDER_INACTIVE && level.hasNeighborSignal(pos)) {
 			level.setBlockAndUpdate(pos, state.setValue(STATE, TowerDeviceVariant.BUILDER_ACTIVE));
-			level.playSound(null, pos, TFSounds.BUILDER_ON.get(), SoundSource.BLOCKS, 0.3F, 0.6F);
+			level.playSound(null, pos, TFSounds.BUILDER_ON, SoundSource.BLOCKS, 0.3F, 0.6F);
 		}
 	}
 
@@ -85,13 +85,13 @@ public class BuilderBlock extends BaseEntityBlock {
 
 		if (variant == TowerDeviceVariant.BUILDER_INACTIVE && level.hasNeighborSignal(pos)) {
 			level.setBlockAndUpdate(pos, state.setValue(STATE, TowerDeviceVariant.BUILDER_ACTIVE));
-			level.playSound(null, pos, TFSounds.BUILDER_ON.get(), SoundSource.BLOCKS, 0.3F, 0.6F);
+			level.playSound(null, pos, TFSounds.BUILDER_ON, SoundSource.BLOCKS, 0.3F, 0.6F);
 			level.scheduleTick(pos, this, 4);
 		}
 
 		if (variant == TowerDeviceVariant.BUILDER_ACTIVE && !level.hasNeighborSignal(pos)) {
 			level.setBlockAndUpdate(pos, state.setValue(STATE, TowerDeviceVariant.BUILDER_INACTIVE));
-			level.playSound(null, pos, TFSounds.BUILDER_OFF.get(), SoundSource.BLOCKS, 0.3F, 0.6F);
+			level.playSound(null, pos, TFSounds.BUILDER_OFF, SoundSource.BLOCKS, 0.3F, 0.6F);
 			level.scheduleTick(pos, this, 4);
 		}
 

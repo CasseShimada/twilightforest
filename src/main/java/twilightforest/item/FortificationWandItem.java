@@ -44,7 +44,7 @@ public class FortificationWandItem extends Item {
 				TFItemStackUtils.hurtWithoutBreaking(stack, 1, player);
 			}
 		}
-		player.playSound(TFSounds.SHIELD_ADD.get(), 1.0F, (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.2F + 1.0F);
+		player.playSound(TFSounds.SHIELD_ADD, 1.0F, (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.2F + 1.0F);
 
 		if (!player.hasInfiniteMaterials())
 			player.getCooldowns().addCooldown(stack, 1200);

@@ -476,17 +476,17 @@ public class KnightPhantom extends BaseTFBoss {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return TFSounds.KNIGHT_PHANTOM_AMBIENT.get();
+		return TFSounds.KNIGHT_PHANTOM_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return TFSounds.KNIGHT_PHANTOM_HURT.get();
+		return TFSounds.KNIGHT_PHANTOM_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return TFSounds.KNIGHT_PHANTOM_DEATH.get();
+		return TFSounds.KNIGHT_PHANTOM_DEATH;
 	}
 
 	private void switchToFormationByNumber(int formationNumber) {

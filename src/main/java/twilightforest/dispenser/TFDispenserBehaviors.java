@@ -32,7 +32,7 @@ public class TFDispenserBehaviors {
 
 			@Override
 			protected SoundEvent getFiredSound() {
-				return TFSounds.MOONWORM_SQUISH.get();
+				return TFSounds.MOONWORM_SQUISH;
 			}
 		});
 
@@ -53,7 +53,7 @@ public class TFDispenserBehaviors {
 
 			@Override
 			protected SoundEvent getFiredSound() {
-				return TFSounds.TWILIGHT_SCEPTER_USE.get();
+				return TFSounds.TWILIGHT_SCEPTER_USE;
 			}
 
 			@Override

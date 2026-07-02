@@ -10,7 +10,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Util;
 import net.minecraft.world.item.JukeboxSong;
 import twilightforest.TwilightForestMod;
-import twilightforest.util.registry.DeferredHolder;
 
 public class TFJukeboxSongs {
 
@@ -40,8 +39,8 @@ public class TFJukeboxSongs {
 		register(context, MOTION, sound(TFSounds.MUSIC_DISC_MOTION), 169, 15);
 	}
 
-	private static Holder<SoundEvent> sound(DeferredHolder<SoundEvent, SoundEvent> sound) {
-		return BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound.get());
+	private static Holder<SoundEvent> sound(SoundEvent sound) {
+		return BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound);
 	}
 
 	private static void register(BootstrapContext<JukeboxSong> context, ResourceKey<JukeboxSong> key, Holder<SoundEvent> sound, float length, int output) {

@@ -85,7 +85,7 @@ public class MoonwormShot extends TFThrowable {
 				.setValue(BlockStateProperties.WATERLOGGED, currentState.getFluidState().is(Fluids.WATER)));
 
 			this.gameEvent(GameEvent.PROJECTILE_LAND, this.getOwner());
-			this.level().playSound(null, result.getBlockPos(), TFSounds.MOONWORM_SQUISH.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+			this.level().playSound(null, result.getBlockPos(), TFSounds.MOONWORM_SQUISH, SoundSource.BLOCKS, 1.0F, 1.0F);
 		} else {
 			if (this.level() instanceof ServerLevel serverLevel) {
 				LootParams ctx = new LootParams.Builder(serverLevel).withParameter(LootContextParams.THIS_ENTITY, this).withParameter(LootContextParams.ORIGIN, this.position()).withParameter(LootContextParams.DAMAGE_SOURCE, this.damageSources().fall()).create(LootContextParamSets.ENTITY);
@@ -94,7 +94,7 @@ public class MoonwormShot extends TFThrowable {
 					squish.spawnAtLocation(serverLevel, squish.getItem());
 				});
 			}
-			this.level().playSound(null, pos, TFSounds.BUG_SQUISH.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+			this.level().playSound(null, pos, TFSounds.BUG_SQUISH, SoundSource.NEUTRAL, 1.0F, 1.0F);
 			this.gameEvent(GameEvent.ENTITY_DIE);
 		}
 	}
@@ -113,7 +113,7 @@ public class MoonwormShot extends TFThrowable {
 					squish.spawnAtLocation(serverLevel, squish.getItem());
 				});
 			}
-			this.level().playSound(null, this.blockPosition(), TFSounds.BUG_SQUISH.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+			this.level().playSound(null, this.blockPosition(), TFSounds.BUG_SQUISH, SoundSource.NEUTRAL, 1.0F, 1.0F);
 			this.gameEvent(GameEvent.ENTITY_DIE);
 		}
 	}

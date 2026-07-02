@@ -79,7 +79,7 @@ public class BrittleFlaskItem extends Item {
 					flask.update(TFDataComponents.POTION_FLASK_CONTENTS.get(), flaskContents, component -> component.tryAddDose(potionContents));
 					updateMaxStackSize(flask);
 				});
-				player.playSound(TFSounds.FLASK_FILL.get(), (flaskContents.doses() + 1) * 0.25F, player.level().getRandom().nextFloat() * 0.1F + 0.9F);
+				player.playSound(TFSounds.FLASK_FILL, (flaskContents.doses() + 1) * 0.25F, player.level().getRandom().nextFloat() * 0.1F + 0.9F);
 				return true;
 			}
 		}
@@ -141,9 +141,9 @@ public class BrittleFlaskItem extends Item {
 							if (component.breakable()) {
 								if (component.breakage() >= DOSES) {
 									flask.shrink(1);
-									level.playSound(null, player, TFSounds.BRITTLE_FLASK_BREAK.get(), player.getSoundSource(), 1.5F, 0.7F);
+									level.playSound(null, player, TFSounds.BRITTLE_FLASK_BREAK, player.getSoundSource(), 1.5F, 0.7F);
 								} else {
-									level.playSound(null, player, TFSounds.BRITTLE_FLASK_CRACK.get(), player.getSoundSource(), 1.5F, 2.0F);
+									level.playSound(null, player, TFSounds.BRITTLE_FLASK_CRACK, player.getSoundSource(), 1.5F, 2.0F);
 								}
 							}
 							return component;

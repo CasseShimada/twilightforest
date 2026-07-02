@@ -103,7 +103,7 @@ public interface IBossLootBuffer {
 	}
 
 	static <T extends LivingEntity & IBossLootBuffer> void celebrateAt(T boss, Vec3 vec3, ServerLevel serverLevel) {
-		serverLevel.playSound(null, vec3.x, vec3.y, vec3.z, TFSounds.BOSS_CHEST_APPEAR.get(), boss.getSoundSource(), 128.0F, (boss.getRandom().nextFloat() - boss.getRandom().nextFloat()) * 0.175F + 0.5F);
+		serverLevel.playSound(null, vec3.x, vec3.y, vec3.z, TFSounds.BOSS_CHEST_APPEAR, boss.getSoundSource(), 128.0F, (boss.getRandom().nextFloat() - boss.getRandom().nextFloat()) * 0.175F + 0.5F);
 
 		ParticlePacket particlePacket = new ParticlePacket();
 		for (int i = 0; i < 40; i++) {

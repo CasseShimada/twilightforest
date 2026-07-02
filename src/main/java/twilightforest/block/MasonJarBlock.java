@@ -60,16 +60,16 @@ public class MasonJarBlock extends JarBlock implements SimpleWaterloggedBlock {
 						if (!test.isEmpty()) {
 							if (player.isSecondaryUseActive()) {
 								PlayerMessaging.displayClientMessage(player, Component.literal(test.getItemName().getString() + " x" + test.getCount()), true);
-								serverLevel.playSound(null, pos, TFSounds.JAR_WIGGLE.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+								serverLevel.playSound(null, pos, TFSounds.JAR_WIGGLE, SoundSource.BLOCKS, 1.0F, 1.0F);
 								blockEntity.wobble(DecoratedPotBlockEntity.WobbleStyle.NEGATIVE);
 							} else {
 								ItemStack attainedStack = handler.extractItem(0, Integer.MAX_VALUE, false);
 								player.setItemInHand(hand, attainedStack);
-								serverLevel.playSound(null, pos, TFSounds.JAR_REMOVE.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+								serverLevel.playSound(null, pos, TFSounds.JAR_REMOVE, SoundSource.BLOCKS, 1.0F, 1.0F);
 								serverLevel.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
 							}
 						} else {
-							serverLevel.playSound(null, pos, TFSounds.JAR_WIGGLE.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+							serverLevel.playSound(null, pos, TFSounds.JAR_WIGGLE, SoundSource.BLOCKS, 1.0F, 1.0F);
 							blockEntity.wobble(DecoratedPotBlockEntity.WobbleStyle.NEGATIVE);
 						}
 					} else if (handler.insertItem(0, stack, true).getCount() < stack.getCount()) {
@@ -80,11 +80,11 @@ public class MasonJarBlock extends JarBlock implements SimpleWaterloggedBlock {
 
 						player.setItemInHand(hand, returned);
 						float pitch = (float) (inserted.getCount() - returned.getCount()) / (float) inserted.getMaxStackSize();
-						serverLevel.playSound(null, pos, TFSounds.JAR_INSERT.get(), SoundSource.BLOCKS, 1.0F, 0.7F + 0.5F * pitch);
+						serverLevel.playSound(null, pos, TFSounds.JAR_INSERT, SoundSource.BLOCKS, 1.0F, 0.7F + 0.5F * pitch);
 
 						serverLevel.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
 					} else {
-						serverLevel.playSound(null, pos, TFSounds.JAR_WIGGLE.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+						serverLevel.playSound(null, pos, TFSounds.JAR_WIGGLE, SoundSource.BLOCKS, 1.0F, 1.0F);
 						blockEntity.wobble(DecoratedPotBlockEntity.WobbleStyle.NEGATIVE);
 					}
 				}

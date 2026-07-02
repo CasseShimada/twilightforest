@@ -50,17 +50,17 @@ public class SnowGuardian extends BaseIceMob {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return TFSounds.SNOW_GUARDIAN_AMBIENT.get();
+		return TFSounds.SNOW_GUARDIAN_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return TFSounds.SNOW_GUARDIAN_HURT.get();
+		return TFSounds.SNOW_GUARDIAN_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return TFSounds.SNOW_GUARDIAN_DEATH.get();
+		return TFSounds.SNOW_GUARDIAN_DEATH;
 	}
 
 	@Override

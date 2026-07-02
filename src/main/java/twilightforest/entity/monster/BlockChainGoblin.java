@@ -95,17 +95,17 @@ public class BlockChainGoblin extends Monster implements TFMultipartEntity {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return TFSounds.BLOCKCHAIN_GOBLIN_AMBIENT.get();
+		return TFSounds.BLOCKCHAIN_GOBLIN_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return TFSounds.BLOCKCHAIN_GOBLIN_HURT.get();
+		return TFSounds.BLOCKCHAIN_GOBLIN_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return TFSounds.BLOCKCHAIN_GOBLIN_DEATH.get();
+		return TFSounds.BLOCKCHAIN_GOBLIN_DEATH;
 	}
 
 	/**
@@ -230,7 +230,7 @@ public class BlockChainGoblin extends Monster implements TFMultipartEntity {
 
 		if (this.isThrowing() && collider.isInWall()) {
 			this.setThrowing(false);
-			collider.playSound(TFSounds.BLOCK_AND_CHAIN_COLLIDE.get(), 0.65F, 0.75F);
+			collider.playSound(TFSounds.BLOCK_AND_CHAIN_COLLIDE, 0.65F, 0.75F);
 			this.gameEvent(GameEvent.HIT_GROUND);
 		}
 	}
@@ -244,7 +244,7 @@ public class BlockChainGoblin extends Monster implements TFMultipartEntity {
 			if (collided instanceof LivingEntity) {
 				if (super.doHurtTarget(level, collided)) {
 					collided.push(0, 0.4, 0);
-					this.playSound(TFSounds.BLOCK_AND_CHAIN_HIT.get(), 1.0F, 1.0F);
+					this.playSound(TFSounds.BLOCK_AND_CHAIN_HIT, 1.0F, 1.0F);
 					this.gameEvent(GameEvent.PROJECTILE_LAND);
 					this.recoilCounter = 40;
 					if (this.isThrowing()) {

@@ -65,17 +65,17 @@ public class TowerwoodBorer extends Monster {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return TFSounds.TOWERWOOD_BORER_AMBIENT.get();
+		return TFSounds.TOWERWOOD_BORER_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return TFSounds.TOWERWOOD_BORER_HURT.get();
+		return TFSounds.TOWERWOOD_BORER_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return TFSounds.TOWERWOOD_BORER_DEATH.get();
+		return TFSounds.TOWERWOOD_BORER_DEATH;
 	}
 
 	// [VanillaCopy] Silverfish.hurt
@@ -94,7 +94,7 @@ public class TowerwoodBorer extends Monster {
 
 	@Override
 	protected void playStepSound(BlockPos pos, BlockState block) {
-		this.playSound(TFSounds.TOWERWOOD_BORER_STEP.get(), 0.15F, 1.0F);
+		this.playSound(TFSounds.TOWERWOOD_BORER_STEP, 0.15F, 1.0F);
 	}
 
 	@Override

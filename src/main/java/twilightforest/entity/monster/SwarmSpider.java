@@ -59,22 +59,22 @@ public class SwarmSpider extends Spider {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return TFSounds.SWARM_SPIDER_AMBIENT.get();
+		return TFSounds.SWARM_SPIDER_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return TFSounds.SWARM_SPIDER_HURT.get();
+		return TFSounds.SWARM_SPIDER_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return TFSounds.SWARM_SPIDER_DEATH.get();
+		return TFSounds.SWARM_SPIDER_DEATH;
 	}
 
 	@Override
 	protected void playStepSound(BlockPos pos, BlockState state) {
-		this.playSound(TFSounds.SWARM_SPIDER_STEP.get(), 0.15F, 1.0F);
+		this.playSound(TFSounds.SWARM_SPIDER_STEP, 0.15F, 1.0F);
 	}
 
 	@Override

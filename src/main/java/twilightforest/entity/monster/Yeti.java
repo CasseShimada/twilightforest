@@ -56,13 +56,13 @@ public class Yeti extends Monster implements IHostileMount {
 			protected void checkAndPerformAttack(LivingEntity victim) {
 				super.checkAndPerformAttack(victim);
 				if (!getPassengers().isEmpty())
-					playSound(TFSounds.YETI_GRAB.get(), 1F, 1.25F + getRandom().nextFloat() * 0.5F);
+					playSound(TFSounds.YETI_GRAB, 1F, 1.25F + getRandom().nextFloat() * 0.5F);
 			}
 
 			@Override
 			public void stop() {
 				if (!getPassengers().isEmpty())
-					playSound(TFSounds.YETI_THROW.get(), 1F, 1.25F + getRandom().nextFloat() * 0.5F);
+					playSound(TFSounds.YETI_THROW, 1F, 1.25F + getRandom().nextFloat() * 0.5F);
 				super.stop();
 			}
 		});
@@ -172,16 +172,16 @@ public class Yeti extends Monster implements IHostileMount {
 	@Nullable
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return TFSounds.YETI_GROWL.get();
+		return TFSounds.YETI_GROWL;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return TFSounds.YETI_HURT.get();
+		return TFSounds.YETI_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return TFSounds.YETI_DEATH.get();
+		return TFSounds.YETI_DEATH;
 	}
 }

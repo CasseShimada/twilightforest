@@ -54,7 +54,7 @@ public class ExanimateEssenceItem extends Item {
 	private void playSound(Level level, BlockPos pos) {
 		RandomSource randomsource = level.getRandom();
 		level.playSound(
-			null, pos, TFSounds.OMINOUS_FIRE.get(), SoundSource.BLOCKS, 1.5F, (randomsource.nextFloat() - randomsource.nextFloat()) * 0.2F + 0.75F
+			null, pos, TFSounds.OMINOUS_FIRE, SoundSource.BLOCKS, 1.5F, (randomsource.nextFloat() - randomsource.nextFloat()) * 0.2F + 0.75F
 		);
 	}
 }

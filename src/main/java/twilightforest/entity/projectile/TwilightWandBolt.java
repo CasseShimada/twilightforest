@@ -80,7 +80,7 @@ public class TwilightWandBolt extends TFThrowable {
 	protected void onHitEntity(EntityHitResult result) {
 		super.onHitEntity(result);
 		if (this.level() instanceof ServerLevel level && result.getEntity().hurtServer(level, level.damageSources().source(TFDamageTypes.TWILIGHT_SCEPTER, this, this.getOwner()), 6)) {
-			this.level().playSound(null, result.getEntity().blockPosition(), TFSounds.TWILIGHT_SCEPTER_HIT.get(), this.getOwner() != null ? this.getOwner().getSoundSource() : SoundSource.PLAYERS);
+			this.level().playSound(null, result.getEntity().blockPosition(), TFSounds.TWILIGHT_SCEPTER_HIT, this.getOwner() != null ? this.getOwner().getSoundSource() : SoundSource.PLAYERS);
 			this.level().broadcastEntityEvent(this, (byte) 3);
 			this.discard();
 		}

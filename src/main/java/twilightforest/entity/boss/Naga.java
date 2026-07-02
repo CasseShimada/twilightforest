@@ -324,17 +324,17 @@ public class Naga extends BaseTFBoss implements TFMultipartEntity {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return TFSounds.NAGA_HISS.get();
+		return TFSounds.NAGA_HISS;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return TFSounds.NAGA_HURT.get();
+		return TFSounds.NAGA_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return TFSounds.NAGA_HURT.get();
+		return TFSounds.NAGA_HURT;
 	}
 
 	@Override

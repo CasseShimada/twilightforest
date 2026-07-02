@@ -47,17 +47,17 @@ public class Deer extends Animal {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return TFSounds.DEER_AMBIENT.get();
+		return TFSounds.DEER_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return TFSounds.DEER_HURT.get();
+		return TFSounds.DEER_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return TFSounds.DEER_DEATH.get();
+		return TFSounds.DEER_DEATH;
 	}
 
 	@Override

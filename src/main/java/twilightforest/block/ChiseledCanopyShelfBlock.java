@@ -59,7 +59,7 @@ public class ChiseledCanopyShelfBlock extends ChiseledBookShelfBlock {
 			if (shelf.isEmpty()) {
 				return InteractionResult.CONSUME;
 			}
-			level.playSound(null, pos, TFSounds.BOOKSHELF_CONVERTS.get(), SoundSource.BLOCKS, 0.35F, 0.6F + level.getRandom().nextFloat() * 0.4F);
+			level.playSound(null, pos, TFSounds.BOOKSHELF_CONVERTS, SoundSource.BLOCKS, 0.35F, 0.6F + level.getRandom().nextFloat() * 0.4F);
 			return InteractionResult.SUCCESS;
 		}
 		if (state.getValue(SPAWNER)) return InteractionResult.FAIL;
@@ -75,7 +75,7 @@ public class ChiseledCanopyShelfBlock extends ChiseledBookShelfBlock {
 	@Override
 	public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity entity, ItemStack stack) {
 		if (level instanceof ServerLevel serverLevel && state.getValue(SPAWNER)) {
-			level.playSound(null, pos, TFSounds.DEATH_TOME_DEATH.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+			level.playSound(null, pos, TFSounds.DEATH_TOME_DEATH, SoundSource.BLOCKS, 1.0F, 1.0F);
 			ParticlePacket particlePacket = new ParticlePacket();
 			for (int i = 0; i < 20; ++i) {
 				particlePacket.queueParticle(ParticleTypes.POOF,

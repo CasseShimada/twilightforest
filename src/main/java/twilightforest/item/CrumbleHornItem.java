@@ -35,7 +35,7 @@ public class CrumbleHornItem extends Item {
 	@Override
 	public InteractionResult use(Level level, Player player, InteractionHand hand) {
 		player.startUsingItem(hand);
-		player.playSound(TFSounds.QUEST_RAM_AMBIENT.get(), 1.0F, 0.8F);
+		player.playSound(TFSounds.QUEST_RAM_AMBIENT, 1.0F, 0.8F);
 		return InteractionResult.SUCCESS;
 	}
 
@@ -43,7 +43,7 @@ public class CrumbleHornItem extends Item {
 	public void onUseTick(Level level, LivingEntity living, ItemStack stack, int count) {
 		if (count > 10 && count % 5 == 0 && level instanceof ServerLevel serverLevel) {
 			this.doCrumble(serverLevel, living, stack);
-			serverLevel.playSound(null, living.getX(), living.getY(), living.getZ(), TFSounds.QUEST_RAM_AMBIENT.get(), living.getSoundSource(), 1.0F, 0.8F);
+			serverLevel.playSound(null, living.getX(), living.getY(), living.getZ(), TFSounds.QUEST_RAM_AMBIENT, living.getSoundSource(), 1.0F, 0.8F);
 		}
 	}
 

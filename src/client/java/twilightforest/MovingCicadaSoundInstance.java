@@ -14,7 +14,7 @@ public class MovingCicadaSoundInstance extends AbstractTickableSoundInstance {
 	protected final LivingEntity wearer;
 
 	public MovingCicadaSoundInstance(LivingEntity entity) {
-		super(TFSounds.CICADA.get(), SoundSource.NEUTRAL, SoundInstance.createUnseededRandom());
+		super(TFSounds.CICADA, SoundSource.NEUTRAL, SoundInstance.createUnseededRandom());
 		this.wearer = entity;
 		this.x = entity.getX();
 		this.y = entity.getY();

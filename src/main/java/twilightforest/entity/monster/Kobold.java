@@ -83,17 +83,17 @@ public class Kobold extends Monster {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return TFSounds.KOBOLD_AMBIENT.get();
+		return TFSounds.KOBOLD_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return TFSounds.KOBOLD_HURT.get();
+		return TFSounds.KOBOLD_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return TFSounds.KOBOLD_DEATH.get();
+		return TFSounds.KOBOLD_DEATH;
 	}
 
 	public boolean isPanicked() {
@@ -128,7 +128,7 @@ public class Kobold extends Monster {
 				}
 				//every 3 seconds chew some bread
 				if (this.lastEatenBreadTicks > 60 && this.getRandom().nextFloat() < 0.1F) {
-					this.playSound(TFSounds.KOBOLD_MUNCH.get(), 0.75F, 0.9F);
+					this.playSound(TFSounds.KOBOLD_MUNCH, 0.75F, 0.9F);
 					this.gameEvent(GameEvent.EAT);
 					this.level().broadcastEntityEvent(this, (byte) 45);
 					this.lastEatenBreadTicks = 0;

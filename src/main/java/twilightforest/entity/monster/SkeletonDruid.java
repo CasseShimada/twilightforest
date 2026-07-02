@@ -55,22 +55,22 @@ public class SkeletonDruid extends Skeleton {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return TFSounds.SKELETON_DRUID_AMBIENT.get();
+		return TFSounds.SKELETON_DRUID_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return TFSounds.SKELETON_DRUID_HURT.get();
+		return TFSounds.SKELETON_DRUID_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return TFSounds.SKELETON_DRUID_DEATH.get();
+		return TFSounds.SKELETON_DRUID_DEATH;
 	}
 
 	@Override
 	protected void playStepSound(BlockPos pos, net.minecraft.world.level.block.state.BlockState blockState) {
-		this.playSound(TFSounds.SKELETON_DRUID_STEP.get(), 0.15F, 1.0F);
+		this.playSound(TFSounds.SKELETON_DRUID_STEP, 0.15F, 1.0F);
 	}
 
 
@@ -102,7 +102,7 @@ public class SkeletonDruid extends Skeleton {
 	public void performRangedAttack(LivingEntity attackTarget, float extraDamage) {
 		if (this.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof HoeItem) {
 			NatureBolt natureBolt = new NatureBolt(this.level(), this);
-			playSound(TFSounds.SKELETON_DRUID_SHOOT.get(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+			playSound(TFSounds.SKELETON_DRUID_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
 
 			double tx = attackTarget.getX() - this.getX();
 			double ty = attackTarget.getY() + attackTarget.getEyeHeight() - 2.7D - this.getY();

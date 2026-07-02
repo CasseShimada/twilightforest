@@ -144,7 +144,7 @@ public abstract class CritterBlock extends BaseEntityBlock implements SimpleWate
 					stack.consume(1, player);
 					InventoryUtil.giveItemToPlayer(player, newStack);
 					if (level.isClientSide())
-						ClientSoundHelper.stopSound(TFSounds.CICADA.get().location(), SoundSource.NEUTRAL);
+						ClientSoundHelper.stopSound(TFSounds.CICADA.location(), SoundSource.NEUTRAL);
 					level.setBlockAndUpdate(pos, state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState());
 					return InteractionResult.SUCCESS;
 				}
@@ -158,9 +158,9 @@ public abstract class CritterBlock extends BaseEntityBlock implements SimpleWate
 		if ((entity instanceof Projectile && !entity.getType().builtInRegistryHolder().is(TFEntityTypeTags.DONT_KILL_BUGS)) || entity instanceof FallingBlockEntity) {
 			level.setBlockAndUpdate(pos, state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState());
 			if (level.isClientSide())
-				ClientSoundHelper.stopSound(TFSounds.CICADA.get().location(), SoundSource.NEUTRAL);
+				ClientSoundHelper.stopSound(TFSounds.CICADA.location(), SoundSource.NEUTRAL);
 
-			level.playSound(null, pos, TFSounds.BUG_SQUISH.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+			level.playSound(null, pos, TFSounds.BUG_SQUISH, SoundSource.BLOCKS, 1.0F, 1.0F);
 
 			if (level instanceof ServerLevel serverLevel && this.getSquishLootTable() != null) {
 				LootParams ctx = new LootParams.Builder(serverLevel).withParameter(LootContextParams.BLOCK_STATE, state).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, ItemStack.EMPTY).create(LootContextParamSets.BLOCK);

@@ -48,7 +48,7 @@ public class ChainBlockItem extends Item {
 		if (stack.get(TFDataComponents.THROWN_PROJECTILE.get()) != null || !level.getWorldBorder().isWithinBounds(player.blockPosition()))
 			return InteractionResult.PASS;
 
-		player.playSound(TFSounds.BLOCK_AND_CHAIN_FIRED.get(), 0.5F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F));
+		player.playSound(TFSounds.BLOCK_AND_CHAIN_FIRED, 0.5F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F));
 
 		if (level instanceof ServerLevel serverLevel) {
 			Projectile.spawnProjectileFromRotation((lev, entity, stacc) -> {

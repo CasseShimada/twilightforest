@@ -107,7 +107,7 @@ public final class TwilightForestMod implements ModInitializer {
 	}
 
 	private static void registerDeferredRegistries() {
-		TFSounds.SOUNDS.register();
+		TFSounds.register();
 		TFDataComponents.COMPONENTS.register();
 		TFBlocks.BLOCKS.register();
 		TFEntities.ENTITY_TYPES.register();

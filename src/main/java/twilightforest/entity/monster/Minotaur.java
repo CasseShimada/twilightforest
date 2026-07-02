@@ -94,7 +94,7 @@ public class Minotaur extends Monster implements ITFCharger {
 
 	@Override
 	public boolean doHurtTarget(ServerLevel level, Entity entity) {
-		return EntityUtil.properlyApplyCustomDamageSource(level, this, entity, TFDamageTypes.getEntityDamageSource(this.level(), TFDamageTypes.AXING, this), TFSounds.MINOTAUR_ATTACK.get());
+		return EntityUtil.properlyApplyCustomDamageSource(level, this, entity, TFDamageTypes.getEntityDamageSource(this.level(), TFDamageTypes.AXING, this), TFSounds.MINOTAUR_ATTACK);
 	}
 
 	@Override
@@ -108,22 +108,22 @@ public class Minotaur extends Monster implements ITFCharger {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return TFSounds.MINOTAUR_AMBIENT.get();
+		return TFSounds.MINOTAUR_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return TFSounds.MINOTAUR_HURT.get();
+		return TFSounds.MINOTAUR_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return TFSounds.MINOTAUR_DEATH.get();
+		return TFSounds.MINOTAUR_DEATH;
 	}
 
 	@Override
 	protected void playStepSound(BlockPos pos, BlockState state) {
-		playSound(TFSounds.MINOTAUR_STEP.get(), 0.15F, 0.8F);
+		playSound(TFSounds.MINOTAUR_STEP, 0.15F, 0.8F);
 	}
 
 	@Override

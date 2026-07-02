@@ -103,40 +103,40 @@ public abstract class AbstractTrophyBlock extends BaseEntityBlock {
 			float pitch = 0.9F;
 			switch (this.variant) {
 				case NAGA -> {
-					sound = TFSounds.NAGA_RATTLE.get();
+					sound = TFSounds.NAGA_RATTLE;
 					volume = 1.25F;
 					pitch = 1.2F;
 				}
 				case LICH -> {
-					sound = TFSounds.LICH_AMBIENT.get();
+					sound = TFSounds.LICH_AMBIENT;
 					volume = 0.35F;
 					pitch = 1.1F;
 				}
 				case HYDRA -> {
-					sound = TFSounds.HYDRA_GROWL.get();
+					sound = TFSounds.HYDRA_GROWL;
 					pitch = 1.2F;
 				}
 				case UR_GHAST -> {
-					sound = TFSounds.UR_GHAST_AMBIENT.get();
+					sound = TFSounds.UR_GHAST_AMBIENT;
 					pitch = 0.6F;
 				}
-				case SNOW_QUEEN -> sound = TFSounds.SNOW_QUEEN_AMBIENT.get();
+				case SNOW_QUEEN -> sound = TFSounds.SNOW_QUEEN_AMBIENT;
 				case KNIGHT_PHANTOM -> {
-					sound = TFSounds.KNIGHT_PHANTOM_AMBIENT.get();
+					sound = TFSounds.KNIGHT_PHANTOM_AMBIENT;
 					pitch = 1.1F;
 				}
 				case MINOSHROOM -> {
-					sound = TFSounds.MINOSHROOM_AMBIENT.get();
+					sound = TFSounds.MINOSHROOM_AMBIENT;
 					volume = 0.75F;
 					pitch = 0.7F;
 				}
 				case ALPHA_YETI -> {
-					sound = level.getRandom().nextInt(50) == 0 ? TFSounds.ALPHA_YETI_ROAR.get() : TFSounds.ALPHA_YETI_GROWL.get();
+					sound = level.getRandom().nextInt(50) == 0 ? TFSounds.ALPHA_YETI_ROAR : TFSounds.ALPHA_YETI_GROWL;
 					volume = 0.75F;
 					pitch = 0.75F;
 				}
 				case QUEST_RAM -> {
-					sound = TFSounds.QUEST_RAM_AMBIENT.get();
+					sound = TFSounds.QUEST_RAM_AMBIENT;
 					pitch = 0.7F;
 				}
 				default -> {

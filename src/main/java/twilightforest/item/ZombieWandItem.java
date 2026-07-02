@@ -71,7 +71,7 @@ public class ZombieWandItem extends Item {
 				if (!player.hasInfiniteMaterials()) {
 					TFItemStackUtils.hurtWithoutBreaking(stack, 1, player);
 				}
-				zombie.playSound(TFSounds.ZOMBIE_SCEPTER_USE.get(), 1.0F, 1.0F);
+				zombie.playSound(TFSounds.ZOMBIE_SCEPTER_USE, 1.0F, 1.0F);
 			}
 		}
 

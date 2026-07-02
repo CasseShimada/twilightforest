@@ -20,12 +20,12 @@ public class KeepsakeCasketBlockEntity extends SkullChestBlockEntity {
 	private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
 		@Override
 		protected void onOpen(Level level, BlockPos pos, BlockState state) {
-			level.playSound(null, pos, TFSounds.CASKET_OPEN.get(), SoundSource.BLOCKS, 0.5F, level.getRandom().nextFloat() * 0.1F + 0.9F);
+			level.playSound(null, pos, TFSounds.CASKET_OPEN, SoundSource.BLOCKS, 0.5F, level.getRandom().nextFloat() * 0.1F + 0.9F);
 		}
 
 		@Override
 		protected void onClose(Level level, BlockPos pos, BlockState state) {
-			level.playSound(null, pos, TFSounds.CASKET_CLOSE.get(), SoundSource.BLOCKS, 0.5F, level.getRandom().nextFloat() * 0.1F + 0.9F);
+			level.playSound(null, pos, TFSounds.CASKET_CLOSE, SoundSource.BLOCKS, 0.5F, level.getRandom().nextFloat() * 0.1F + 0.9F);
 		}
 
 		@Override
@@ -56,7 +56,7 @@ public class KeepsakeCasketBlockEntity extends SkullChestBlockEntity {
 
 	@Override
 	public void displayLockedInfo(Player player) {
-		player.playSound(TFSounds.CASKET_LOCKED.get(), 0.5F, 0.5F);
+		player.playSound(TFSounds.CASKET_LOCKED, 0.5F, 0.5F);
 		String ownerName = this.owner != null ? this.owner.name().orElse("unknown") : "unknown";
 		PlayerMessaging.displayClientMessage(player, Component.translatable("block.twilightforest.casket.locked", ownerName).withStyle(ChatFormatting.RED), true);
 	}

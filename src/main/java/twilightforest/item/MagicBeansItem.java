@@ -39,7 +39,7 @@ public class MagicBeansItem extends Item {
 			if (!level.isClientSide()) {
 				stack.shrink(1);
 				level.setBlockAndUpdate(pos.above(), TFBlocks.BEANSTALK_GROWER.get().defaultBlockState());
-				level.playSound(null, pos, TFSounds.BEANSTALK_GROWTH.get(), SoundSource.BLOCKS, 4.0F, 1.0F);
+				level.playSound(null, pos, TFSounds.BEANSTALK_GROWTH, SoundSource.BLOCKS, 4.0F, 1.0F);
 				if (player instanceof ServerPlayer serverPlayer) {
 					serverPlayer.awardStat(Stats.ITEM_USED.get(this));
 

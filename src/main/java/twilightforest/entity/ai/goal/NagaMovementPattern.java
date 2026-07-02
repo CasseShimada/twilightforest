@@ -173,7 +173,7 @@ public class NagaMovementPattern extends Goal {
 
 	private void doIntimidate() {
 		this.state = MovementState.INTIMIDATE;
-		this.naga.playSound(TFSounds.NAGA_RATTLE.get(), 4.0F, this.naga.getVoicePitch());
+		this.naga.playSound(TFSounds.NAGA_RATTLE, 4.0F, this.naga.getVoicePitch());
 		this.naga.gameEvent(GameEvent.ENTITY_ACTION);
 
 		this.stateCounter += 15 + this.naga.getRandom().nextInt(10);

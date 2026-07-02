@@ -143,7 +143,7 @@ public class ChainBlock extends ThrowableProjectile {
 
 			if (damage > 0.0F) {
 				if (result.getEntity().hurtServer(level, source, damage)) {
-					this.playSound(TFSounds.BLOCK_AND_CHAIN_HIT.get(), 1.0f, this.random.nextFloat());
+					this.playSound(TFSounds.BLOCK_AND_CHAIN_HIT, 1.0f, this.random.nextFloat());
 					// age when we hit a monster so that we go back to the player faster
 					this.hitEntity = true;
 					this.setIsReturning(true);
@@ -186,7 +186,7 @@ public class ChainBlock extends ThrowableProjectile {
 
 	public void bounce(Direction direction) {
 		if (!this.isReturning() && !this.hitEntity) {
-			this.playSound(TFSounds.BLOCK_AND_CHAIN_COLLIDE.get(), 0.125F, this.random.nextFloat());
+			this.playSound(TFSounds.BLOCK_AND_CHAIN_COLLIDE, 0.125F, this.random.nextFloat());
 			this.gameEvent(GameEvent.HIT_GROUND);
 		}
 

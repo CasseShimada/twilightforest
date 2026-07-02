@@ -112,7 +112,7 @@ public class Troll extends Monster implements RangedAttackMob {
 
 					if (this.rock != null) {
 						this.setHasRock(true);
-						this.playSound(TFSounds.TROLL_GRABS_ROCK.get());
+						this.playSound(TFSounds.TROLL_GRABS_ROCK);
 						ThrownBlock block = new ThrownBlock(level, this, this.rock);
 						block.startRiding(this);
 						level.addFreshEntity(block);
@@ -189,17 +189,17 @@ public class Troll extends Monster implements RangedAttackMob {
 	@Nullable
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return TFSounds.TROLL_AMBIENT.get();
+		return TFSounds.TROLL_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return TFSounds.TROLL_HURT.get();
+		return TFSounds.TROLL_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return TFSounds.TROLL_DEATH.get();
+		return TFSounds.TROLL_DEATH;
 	}
 
 	@Override
@@ -236,7 +236,7 @@ public class Troll extends Monster implements RangedAttackMob {
 			double d3 = Mth.sqrt((float) (d0 * d0 + d2 * d2));
 			blocc.shoot(d0, d1 + d3 * 0.2D, d2, 1.6F, 4 - this.level().getDifficulty().getId());
 
-			this.playSound(TFSounds.TROLL_THROWS_ROCK.get(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+			this.playSound(TFSounds.TROLL_THROWS_ROCK, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
 			this.gameEvent(GameEvent.PROJECTILE_SHOOT);
 			this.level().addFreshEntity(blocc);
 			this.setHasRock(false);

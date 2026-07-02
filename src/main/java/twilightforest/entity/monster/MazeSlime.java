@@ -60,22 +60,22 @@ public class MazeSlime extends Slime {
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return this.isTiny() ? TFSounds.MAZE_SLIME_HURT_SMALL.get() : TFSounds.MAZE_SLIME_HURT.get();
+		return this.isTiny() ? TFSounds.MAZE_SLIME_HURT_SMALL : TFSounds.MAZE_SLIME_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return this.isTiny() ? TFSounds.MAZE_SLIME_DEATH_SMALL.get() : TFSounds.MAZE_SLIME_DEATH.get();
+		return this.isTiny() ? TFSounds.MAZE_SLIME_DEATH_SMALL : TFSounds.MAZE_SLIME_DEATH;
 	}
 
 	@Override
 	protected SoundEvent getSquishSound() {
-		return this.isTiny() ? TFSounds.MAZE_SLIME_SQUISH_SMALL.get() : TFSounds.MAZE_SLIME_SQUISH.get();
+		return this.isTiny() ? TFSounds.MAZE_SLIME_SQUISH_SMALL : TFSounds.MAZE_SLIME_SQUISH;
 	}
 
 	@Override
 	protected SoundEvent getJumpSound() {
-		return this.isTiny() ? TFSounds.MAZE_SLIME_SQUISH_SMALL.get() : TFSounds.MAZE_SLIME_SQUISH.get();
+		return this.isTiny() ? TFSounds.MAZE_SLIME_SQUISH_SMALL : TFSounds.MAZE_SLIME_SQUISH;
 	}
 
 	@Override

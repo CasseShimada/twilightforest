@@ -57,7 +57,7 @@ public class Enforcements {
 	public static final Enforcement ACID_RAIN = register(ACID_RAIN_KEY, new Enforcement((player, level, restriction) -> {
 		if (player.tickCount % 5 == 0 && level.tickRateManager().runsNormally()) {
 			if (player.hurtServer(level, level.damageSources().source(TFDamageTypes.ACID_RAIN), restriction.multiplier())) {
-				level.playSound(null, player.getX(), player.getY(), player.getZ(), TFSounds.ACID_RAIN_BURNS.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+				level.playSound(null, player.getX(), player.getY(), player.getZ(), TFSounds.ACID_RAIN_BURNS, SoundSource.PLAYERS, 1.0F, 1.0F);
 			}
 		}
 	}));

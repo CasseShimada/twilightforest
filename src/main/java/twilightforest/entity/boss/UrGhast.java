@@ -112,17 +112,17 @@ public class UrGhast extends BaseTFBoss {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return TFSounds.UR_GHAST_AMBIENT.get();
+		return TFSounds.UR_GHAST_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return TFSounds.UR_GHAST_HURT.get();
+		return TFSounds.UR_GHAST_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return TFSounds.UR_GHAST_DEATH.get();
+		return TFSounds.UR_GHAST_DEATH;
 	}
 
 	@Override
@@ -316,7 +316,7 @@ public class UrGhast extends BaseTFBoss {
 
 			// cry?
 			if (--this.nextTantrumCry <= 0) {
-				this.playSound(TFSounds.UR_GHAST_TANTRUM.get(), this.getSoundVolume(), this.getVoicePitch());
+				this.playSound(TFSounds.UR_GHAST_TANTRUM, this.getSoundVolume(), this.getVoicePitch());
 				this.ambientSoundTime = -this.getAmbientSoundInterval();
 				this.nextTantrumCry = 20 + this.getRandom().nextInt(30);
 			}

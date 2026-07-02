@@ -246,22 +246,22 @@ public class QuestRam extends Animal implements EnforcedHomePoint {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return TFSounds.QUEST_RAM_AMBIENT.get();
+		return TFSounds.QUEST_RAM_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return TFSounds.QUEST_RAM_HURT.get();
+		return TFSounds.QUEST_RAM_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return TFSounds.QUEST_RAM_DEATH.get();
+		return TFSounds.QUEST_RAM_DEATH;
 	}
 
 	@Override
 	protected void playStepSound(BlockPos pos, BlockState state) {
-		this.playSound(TFSounds.QUEST_RAM_STEP.get(), 0.15F, 1.0F);
+		this.playSound(TFSounds.QUEST_RAM_STEP, 0.15F, 1.0F);
 	}
 
 	@Override

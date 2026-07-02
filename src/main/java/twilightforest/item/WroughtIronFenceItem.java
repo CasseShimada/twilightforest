@@ -39,7 +39,7 @@ public class WroughtIronFenceItem extends BlockItem {
 			BlockState state = level.getBlockState(pos);
 			if (state.getValue(WroughtIronFenceBlock.POST) == WroughtIronFenceBlock.PostState.CAPPED || level.getBlockState(pos.above()).isSolid()) return InteractionResult.FAIL;
 			level.setBlockAndUpdate(pos, state.setValue(WroughtIronFenceBlock.POST, WroughtIronFenceBlock.PostState.CAPPED));
-			level.playSound(null, pos, TFSounds.WROUGHT_IRON_FENCE_EXTENDED.get(), SoundSource.BLOCKS, 0.35F, level.getRandom().nextFloat() * 0.1F + 0.75F);
+			level.playSound(null, pos, TFSounds.WROUGHT_IRON_FENCE_EXTENDED, SoundSource.BLOCKS, 0.35F, level.getRandom().nextFloat() * 0.1F + 0.75F);
 			return InteractionResult.SUCCESS;
 		}
 		return super.useOn(context);

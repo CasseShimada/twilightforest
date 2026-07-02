@@ -99,7 +99,7 @@ public class DryingRackBlock extends BaseEntityBlock implements SimpleWaterlogge
 		if (rack.getTheItem().isEmpty() && !playerStack.isEmpty()) {
 			rack.setTheItem(player.hasInfiniteMaterials() ? playerStack.copyWithCount(1) : playerStack.split(1));
 			if (!level.isClientSide()) {
-				level.playSound(null, pos, TFSounds.DRYING_RACK_ADD_ITEM.get(), SoundSource.BLOCKS, 1.0F, 0.75F + level.getRandom().nextFloat() * 0.5F);
+				level.playSound(null, pos, TFSounds.DRYING_RACK_ADD_ITEM, SoundSource.BLOCKS, 1.0F, 0.75F + level.getRandom().nextFloat() * 0.5F);
 				level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
 			}
 		} else {
@@ -109,7 +109,7 @@ public class DryingRackBlock extends BaseEntityBlock implements SimpleWaterlogge
 					return InteractionResult.CONSUME;
 				}
 				InventoryUtil.giveItemToPlayer(player, item);
-				level.playSound(null, pos, TFSounds.DRYING_RACK_REMOVE_ITEM.get(), SoundSource.BLOCKS, 0.75F, 0.75F + level.getRandom().nextFloat() * 0.5F);
+				level.playSound(null, pos, TFSounds.DRYING_RACK_REMOVE_ITEM, SoundSource.BLOCKS, 0.75F, 0.75F + level.getRandom().nextFloat() * 0.5F);
 				level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
 			} else if (rack.getTheItem().isEmpty()) {
 				return InteractionResult.CONSUME;

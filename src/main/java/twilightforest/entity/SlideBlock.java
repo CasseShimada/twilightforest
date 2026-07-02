@@ -121,7 +121,7 @@ public class SlideBlock extends Entity {
 
 			if (this.level() instanceof ServerLevel level) {
 				if (this.slideTime % 5 == 0) {
-					this.playSound(TFSounds.SLIDER.get(), 1.0F, 0.9F + (this.random.nextFloat() * 0.4F));
+					this.playSound(TFSounds.SLIDER, 1.0F, 0.9F + (this.random.nextFloat() * 0.4F));
 				}
 
 				BlockPos pos = new BlockPos(this.blockPosition());

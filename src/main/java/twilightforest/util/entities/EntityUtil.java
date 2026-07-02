@@ -315,7 +315,7 @@ public class EntityUtil {
 				}
 			}
 
-			level.playSound(null, newEntity.blockPosition(), TFSounds.POWDER_USE.get(), newEntity.getSoundSource());
+			level.playSound(null, newEntity.blockPosition(), TFSounds.POWDER_USE, newEntity.getSoundSource());
 			return true;
 		}
 	}

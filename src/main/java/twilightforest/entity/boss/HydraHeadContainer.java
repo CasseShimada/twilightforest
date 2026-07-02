@@ -585,15 +585,15 @@ public class HydraHeadContainer {
 	private void playSounds() {
 		if (this.headEntity.getState() == State.FLAMING && this.headEntity.tickCount % 5 == 0) {
 			// fire breathing!
-			this.headEntity.playSound(TFSounds.HYDRA_SHOOT_FIRE.get(), 0.5F + this.headEntity.level().getRandom().nextFloat(), this.headEntity.level().getRandom().nextFloat() * 0.7F + 0.3F);
+			this.headEntity.playSound(TFSounds.HYDRA_SHOOT_FIRE, 0.5F + this.headEntity.level().getRandom().nextFloat(), this.headEntity.level().getRandom().nextFloat() * 0.7F + 0.3F);
 			this.headEntity.gameEvent(GameEvent.PROJECTILE_SHOOT);
 		}
 		if (this.headEntity.getState() == State.ROAR_RAWR) {
-			this.headEntity.playSound(TFSounds.HYDRA_ROAR.get(), 1.25F, this.headEntity.level().getRandom().nextFloat() * 0.3F + 0.7F);
+			this.headEntity.playSound(TFSounds.HYDRA_ROAR, 1.25F, this.headEntity.level().getRandom().nextFloat() * 0.3F + 0.7F);
 			this.headEntity.gameEvent(GameEvent.ENTITY_ACTION);
 		}
 		if (this.headEntity.getState() == State.BITE_READY && this.ticksProgress == 60) {
-			this.headEntity.playSound(TFSounds.HYDRA_WARN.get(), 2.0F, this.headEntity.level().getRandom().nextFloat() * 0.3F + 0.7F);
+			this.headEntity.playSound(TFSounds.HYDRA_WARN, 2.0F, this.headEntity.level().getRandom().nextFloat() * 0.3F + 0.7F);
 		}
 	}
 
@@ -683,7 +683,7 @@ public class HydraHeadContainer {
 				mortar.setToBlasting();
 			}
 
-			this.headEntity.playSound(TFSounds.HYDRA_SHOOT.get(), 10.0F, (this.headEntity.level().getRandom().nextFloat() - this.headEntity.level().getRandom().nextFloat()) * 0.2F + 1.0F);
+			this.headEntity.playSound(TFSounds.HYDRA_SHOOT, 10.0F, (this.headEntity.level().getRandom().nextFloat() - this.headEntity.level().getRandom().nextFloat()) * 0.2F + 1.0F);
 			this.headEntity.level().addFreshEntity(mortar);
 
 		}
@@ -697,7 +697,7 @@ public class HydraHeadContainer {
 					if (nearby instanceof Player player && player.isBlocking()) {
 						if (!player.getCooldowns().isOnCooldown(player.getUseItem())) {
 							//cause severe damage and play a shatter sound
-							this.headEntity.level().playSound(null, player.blockPosition(), player.getUseItem().is(Items.SHIELD) ? TFSounds.WOOD_SHIELD_SHATTERS.get() : TFSounds.METAL_SHIELD_SHATTERS.get(), SoundSource.PLAYERS, 1.0F, player.getVoicePitch());
+							this.headEntity.level().playSound(null, player.blockPosition(), player.getUseItem().is(Items.SHIELD) ? TFSounds.WOOD_SHIELD_SHATTERS : TFSounds.METAL_SHIELD_SHATTERS, SoundSource.PLAYERS, 1.0F, player.getVoicePitch());
 							EquipmentSlot slot = player.getUsedItemHand() == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
 							player.getUseItem().hurtAndBreak(112, player, slot);
 						}

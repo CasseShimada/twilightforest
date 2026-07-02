@@ -72,13 +72,13 @@ public class AlphaYeti extends BaseTFBoss implements RangedAttackMob, IHostileMo
 			protected void checkAndPerformAttack(LivingEntity victim) {
 				super.checkAndPerformAttack(victim);
 				if (!AlphaYeti.this.getPassengers().isEmpty())
-					AlphaYeti.this.playSound(TFSounds.ALPHA_YETI_GRAB.get(), 4.0F, 0.75F + AlphaYeti.this.getRandom().nextFloat() * 0.25F);
+					AlphaYeti.this.playSound(TFSounds.ALPHA_YETI_GRAB, 4.0F, 0.75F + AlphaYeti.this.getRandom().nextFloat() * 0.25F);
 			}
 
 			@Override
 			public void stop() {
 				if (!AlphaYeti.this.getPassengers().isEmpty())
-					AlphaYeti.this.playSound(TFSounds.ALPHA_YETI_THROW.get(), 4.0F, 0.75F + AlphaYeti.this.getRandom().nextFloat() * 0.25F);
+					AlphaYeti.this.playSound(TFSounds.ALPHA_YETI_THROW, 4.0F, 0.75F + AlphaYeti.this.getRandom().nextFloat() * 0.25F);
 				super.stop();
 			}
 		});
@@ -158,7 +158,7 @@ public class AlphaYeti extends BaseTFBoss implements RangedAttackMob, IHostileMo
 	@Override
 	public void setTarget(@Nullable LivingEntity entity) {
 		if (entity != null && entity != this.getTarget())
-			this.playSound(TFSounds.ALPHA_YETI_ALERT.get(), 4.0F, 0.5F + this.getRandom().nextFloat() * 0.5F);
+			this.playSound(TFSounds.ALPHA_YETI_ALERT, 4.0F, 0.5F + this.getRandom().nextFloat() * 0.5F);
 		super.setTarget(entity);
 	}
 
@@ -180,17 +180,17 @@ public class AlphaYeti extends BaseTFBoss implements RangedAttackMob, IHostileMo
 	@Nullable
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return TFSounds.ALPHA_YETI_GROWL.get();
+		return TFSounds.ALPHA_YETI_GROWL;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return TFSounds.ALPHA_YETI_HURT.get();
+		return TFSounds.ALPHA_YETI_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return TFSounds.ALPHA_YETI_DEATH.get();
+		return TFSounds.ALPHA_YETI_DEATH;
 	}
 
 	@Override
@@ -263,7 +263,7 @@ public class AlphaYeti extends BaseTFBoss implements RangedAttackMob, IHostileMo
 			double d3 = Mth.sqrt((float) (d0 * d0 + d2 * d2));
 			ice.shoot(d0, d1 + d3 * 0.2D, d2, 1.6F, 14 - this.level().getDifficulty().getId() * 4);
 
-			this.playSound(TFSounds.ALPHA_YETI_ICE.get(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+			this.playSound(TFSounds.ALPHA_YETI_ICE, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
 			this.gameEvent(GameEvent.PROJECTILE_SHOOT);
 			this.level().addFreshEntity(ice);
 		}
@@ -293,7 +293,7 @@ public class AlphaYeti extends BaseTFBoss implements RangedAttackMob, IHostileMo
 	@Override
 	public boolean causeFallDamage(double distance, float multiplier, DamageSource source) {
 		if (this.level() instanceof ServerLevel level && this.isRampaging()) {
-			this.playSound(TFSounds.ALPHA_YETI_ICE.get(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+			this.playSound(TFSounds.ALPHA_YETI_ICE, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
 			this.hitNearbyEntities(level);
 		}
 

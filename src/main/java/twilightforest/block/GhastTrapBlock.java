@@ -65,7 +65,7 @@ public class GhastTrapBlock extends BaseEntityBlock {
 			}
 
 			level.setBlockAndUpdate(pos, state.setValue(ACTIVE, true));
-			level.playSound(null, pos, TFSounds.JET_START.get(), SoundSource.BLOCKS, 0.3F, 0.6F);
+			level.playSound(null, pos, TFSounds.JET_START, SoundSource.BLOCKS, 0.3F, 0.6F);
 			level.blockEvent(pos, this, ACTIVATE_EVENT, 0);
 		}
 	}

@@ -87,7 +87,7 @@ public class OreMagnetItem extends Item {
 			if (moved > 0) {
 				EquipmentSlot slot = living.getUsedItemHand() == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
 				stack.hurtAndBreak(moved, living, slot);
-				level.playSound(null, living.getX(), living.getY(), living.getZ(), TFSounds.MAGNET_GRAB.get(), living.getSoundSource(), 1.0F, 1.0F);
+				level.playSound(null, living.getX(), living.getY(), living.getZ(), TFSounds.MAGNET_GRAB, living.getSoundSource(), 1.0F, 1.0F);
 				return true;
 			}
 		}

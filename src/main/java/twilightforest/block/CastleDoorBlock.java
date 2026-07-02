@@ -84,7 +84,7 @@ public class CastleDoorBlock extends Block {
 		if (state.getValue(VANISHED) || state.getValue(ACTIVE)) return InteractionResult.FAIL;
 
 		if (isBlockLocked(level, pos)) {
-			level.playSound(null, pos, TFSounds.DOOR_ACTIVATED.get(), SoundSource.BLOCKS, 1.0F, 0.3F);
+			level.playSound(null, pos, TFSounds.DOOR_ACTIVATED, SoundSource.BLOCKS, 1.0F, 0.3F);
 			return InteractionResult.PASS;
 		} else {
 			changeToActiveBlock(level, pos, state);
@@ -126,11 +126,11 @@ public class CastleDoorBlock extends Block {
 	}
 
 	private void playVanishSound(Level level, BlockPos pos) {
-		level.playSound(null, pos, TFSounds.DOOR_VANISH.get(), SoundSource.BLOCKS, 0.125f, level.getRandom().nextFloat() * 0.25F + 1.75F);
+		level.playSound(null, pos, TFSounds.DOOR_VANISH, SoundSource.BLOCKS, 0.125f, level.getRandom().nextFloat() * 0.25F + 1.75F);
 	}
 
 	private void playReappearSound(Level level, BlockPos pos) {
-		level.playSound(null, pos, TFSounds.DOOR_REAPPEAR.get(), SoundSource.BLOCKS, 0.125f, level.getRandom().nextFloat() * 0.25F + 1.25F);
+		level.playSound(null, pos, TFSounds.DOOR_REAPPEAR, SoundSource.BLOCKS, 0.125f, level.getRandom().nextFloat() * 0.25F + 1.25F);
 	}
 
 	/**

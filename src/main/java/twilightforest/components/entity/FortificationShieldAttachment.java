@@ -82,7 +82,7 @@ public class FortificationShieldAttachment {
 		}
 
 		this.sendUpdatePacket(entity);
-		entity.level().playSound(null, entity.blockPosition(), expired ? TFSounds.SHIELD_EXPIRE.get() : TFSounds.SHIELD_BREAK.get(), SoundSource.PLAYERS, 1.0F, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.3F + 1.0F);
+		entity.level().playSound(null, entity.blockPosition(), expired ? TFSounds.SHIELD_EXPIRE : TFSounds.SHIELD_BREAK, SoundSource.PLAYERS, 1.0F, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.3F + 1.0F);
 	}
 
 	public static void addShieldBreakParticles(DamageSource src, LivingEntity entity) {

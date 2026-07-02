@@ -42,7 +42,7 @@ public class TwilightWandItem extends Item {
 			return InteractionResult.FAIL;
 		} else {
 			if (level instanceof ServerLevel serverLevel) {
-				level.playSound(null, player.blockPosition(), TFSounds.TWILIGHT_SCEPTER_USE.get(), SoundSource.PLAYERS, 1.0F, (level.getRandom().nextFloat() - level.getRandom().nextFloat()) * 0.2F + 1.0F);
+				level.playSound(null, player.blockPosition(), TFSounds.TWILIGHT_SCEPTER_USE, SoundSource.PLAYERS, 1.0F, (level.getRandom().nextFloat() - level.getRandom().nextFloat()) * 0.2F + 1.0F);
 				Projectile.spawnProjectileFromRotation((lev, owner, stacc) -> new TwilightWandBolt(lev, owner), serverLevel, stack, player, 0.0F, 1.5F, 1.0F);
 
 				if (!player.getAbilities().instabuild && (!player.getItemBySlot(EquipmentSlot.HEAD).is(TFItems.MYSTIC_CROWN.get()) || level.getRandom().nextFloat() > 0.05f)) {

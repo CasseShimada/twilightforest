@@ -128,7 +128,7 @@ public class TrophyPedestalBlock extends Block implements SimpleWaterloggedBlock
 	private void doPedestalEffect(Level level, BlockPos pos, BlockState state) {
 		level.setBlockAndUpdate(pos, state.setValue(ACTIVE, true));
 		removeNearbyShields(level, pos);
-		level.playSound(null, pos, TFSounds.PEDESTAL_ACTIVATE.get(), SoundSource.BLOCKS, 4.0F, 0.1F);
+		level.playSound(null, pos, TFSounds.PEDESTAL_ACTIVATE, SoundSource.BLOCKS, 4.0F, 0.1F);
 	}
 
 	private void rewardNearbyPlayers(Level level, BlockPos pos) {

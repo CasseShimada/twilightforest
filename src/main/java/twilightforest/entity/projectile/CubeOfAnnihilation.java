@@ -106,7 +106,7 @@ public class CubeOfAnnihilation extends ThrowableProjectile {
 					if (PlayerBlockBreakEvents.BEFORE.invoker().beforeBlockBreak(this.level(), player, pos, state, this.level().getBlockEntity(pos))) {
 						if (this.canAnnihilate(pos, state, player.gameMode.getGameModeForPlayer().isBlockPlacingRestricted())) {
 							this.level().removeBlock(pos, false);
-							this.playSound(TFSounds.BLOCK_ANNIHILATED.get(), 0.125f, this.random.nextFloat() * 0.25F + 0.75F);
+							this.playSound(TFSounds.BLOCK_ANNIHILATED, 0.125f, this.random.nextFloat() * 0.25F + 0.75F);
 							this.annihilateParticles(this.level(), pos);
 							this.gameEvent(GameEvent.BLOCK_DESTROY);
 						} else {

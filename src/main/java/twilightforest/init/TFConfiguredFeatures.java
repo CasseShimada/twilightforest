@@ -235,7 +235,7 @@ public final class TFConfiguredFeatures {
 	}
 
 	//music!
-	public static final Music TFMUSICTYPE = new Music(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(TFSounds.MUSIC.get()), 1200, 12000, true);
+	public static final Music TFMUSICTYPE = new Music(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(TFSounds.MUSIC), 1200, 12000, true);
 
 	public static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {
 		return ResourceKey.create(Registries.CONFIGURED_FEATURE, TwilightForestMod.prefix(name));

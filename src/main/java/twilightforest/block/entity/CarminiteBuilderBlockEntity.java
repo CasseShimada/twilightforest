@@ -54,7 +54,7 @@ public class CarminiteBuilderBlockEntity extends BlockEntity {
 				if (te.blocksMade <= RANGE && level.isEmptyBlock(nextPos)) {
 					level.setBlock(nextPos, te.blockBuiltState, Block.UPDATE_ALL);
 
-					level.playSound(null, pos, TFSounds.BUILDER_CREATE.get(), SoundSource.BLOCKS, 0.75F, 1.2F);
+					level.playSound(null, pos, TFSounds.BUILDER_CREATE, SoundSource.BLOCKS, 0.75F, 1.2F);
 
 					te.lastBlockCoords = nextPos;
 

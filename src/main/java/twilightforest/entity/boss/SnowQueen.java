@@ -117,17 +117,17 @@ public class SnowQueen extends BaseTFBoss implements IBreathAttacker, TFMultipar
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return TFSounds.SNOW_QUEEN_AMBIENT.get();
+		return TFSounds.SNOW_QUEEN_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return TFSounds.SNOW_QUEEN_HURT.get();
+		return TFSounds.SNOW_QUEEN_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return TFSounds.SNOW_QUEEN_DEATH.get();
+		return TFSounds.SNOW_QUEEN_DEATH;
 	}
 
 	@Override
@@ -246,7 +246,7 @@ public class SnowQueen extends BaseTFBoss implements IBreathAttacker, TFMultipar
 			if (collided instanceof LivingEntity && this.doHurtTarget(level, collided)) {
 				Vec3 motion = collided.getDeltaMovement();
 				collided.setDeltaMovement(motion.x(), motion.y() + 0.4, motion.z());
-				this.playSound(TFSounds.SNOW_QUEEN_ATTACK.get(), 1.0F, 1.0F);
+				this.playSound(TFSounds.SNOW_QUEEN_ATTACK, 1.0F, 1.0F);
 			}
 		}
 	}

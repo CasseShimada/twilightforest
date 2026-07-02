@@ -8,7 +8,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
 import twilightforest.tags.TFItemTags;
-import twilightforest.util.registry.DeferredHolder;
 
 import java.util.EnumMap;
 
@@ -78,7 +77,7 @@ public class TFArmorMaterials {
 		map.put(ArmorType.BODY, 7);
 	}), 8, SoundEvents.ARMOR_EQUIP_GENERIC, 2.0F, 0.0F, TFItemTags.REPAIRS_ARCTIC_ARMOR, TFEquipmentAssets.ARCTIC);
 
-	private static Holder<SoundEvent> sound(DeferredHolder<SoundEvent, SoundEvent> sound) {
-		return BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound.get());
+	private static Holder<SoundEvent> sound(SoundEvent sound) {
+		return BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound);
 	}
 }

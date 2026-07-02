@@ -89,7 +89,7 @@ public class MoonwormQueenItem extends Item {
 		if (level instanceof ServerLevel serverLevel && useTime > FIRING_TIME && stack.getDamageValue() < stack.getMaxDamage() - 2) {
 			Projectile.spawnProjectileFromRotation((lev, owner, stacc) -> new MoonwormShot(lev, owner), serverLevel, stack, living, 0.0F, 1.5F, 1.0F);
 			if (living instanceof Player player) TFItemStackUtils.hurtWithoutBreaking(stack, 2, player);
-			level.playSound(null, living.blockPosition(), TFSounds.MOONWORM_SQUISH.get(), living instanceof Player ? SoundSource.PLAYERS : SoundSource.NEUTRAL, 1.0F, 1.0F);
+			level.playSound(null, living.blockPosition(), TFSounds.MOONWORM_SQUISH, living instanceof Player ? SoundSource.PLAYERS : SoundSource.NEUTRAL, 1.0F, 1.0F);
 			return true;
 		}
 

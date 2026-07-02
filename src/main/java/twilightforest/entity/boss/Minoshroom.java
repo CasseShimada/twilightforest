@@ -143,27 +143,27 @@ public class Minoshroom extends BaseTFBoss implements ITFCharger {
 
 	@Override
 	public boolean doHurtTarget(ServerLevel level, Entity entity) {
-		return EntityUtil.properlyApplyCustomDamageSource(level, this, entity, TFDamageTypes.getEntityDamageSource(this.level(), TFDamageTypes.AXING, this), TFSounds.MINOSHROOM_ATTACK.get());
+		return EntityUtil.properlyApplyCustomDamageSource(level, this, entity, TFDamageTypes.getEntityDamageSource(this.level(), TFDamageTypes.AXING, this), TFSounds.MINOSHROOM_ATTACK);
 	}
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return TFSounds.MINOSHROOM_AMBIENT.get();
+		return TFSounds.MINOSHROOM_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return TFSounds.MINOSHROOM_HURT.get();
+		return TFSounds.MINOSHROOM_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return TFSounds.MINOSHROOM_DEATH.get();
+		return TFSounds.MINOSHROOM_DEATH;
 	}
 
 	@Override
 	protected void playStepSound(BlockPos pos, BlockState state) {
-		this.playSound(TFSounds.MINOSHROOM_STEP.get(), 0.15F, 0.8F);
+		this.playSound(TFSounds.MINOSHROOM_STEP, 0.15F, 0.8F);
 	}
 
 	@Override

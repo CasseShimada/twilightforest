@@ -684,17 +684,17 @@ public class Hydra extends BaseTFBoss implements TFMultipartEntity {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return TFSounds.HYDRA_GROWL.get();
+		return TFSounds.HYDRA_GROWL;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return TFSounds.HYDRA_HURT.get();
+		return TFSounds.HYDRA_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return TFSounds.HYDRA_DEATH.get();
+		return TFSounds.HYDRA_DEATH;
 	}
 
 	@Override

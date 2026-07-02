@@ -72,7 +72,7 @@ public class PeacockFanItem extends Item {
 					}
 				}
 			}
-			level.playSound(null, player.blockPosition(), TFSounds.FAN_WHOOSH.get(), SoundSource.PLAYERS, 1.0F + level.getRandom().nextFloat(), level.getRandom().nextFloat() * 0.7F + 0.3F);
+			level.playSound(null, player.blockPosition(), TFSounds.FAN_WHOOSH, SoundSource.PLAYERS, 1.0F + level.getRandom().nextFloat(), level.getRandom().nextFloat() * 0.7F + 0.3F);
 		} else {
 			if (player.isFallFlying()) {
 				Vec3 look = player.getLookAngle();

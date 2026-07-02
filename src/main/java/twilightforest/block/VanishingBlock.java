@@ -102,7 +102,7 @@ public class VanishingBlock extends Block implements EntityDestroyable {
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
 		if (!this.isVanished(state) && !state.getValue(ACTIVE)) {
 			if (areBlocksLocked(level, pos)) {
-				level.playSound(null, pos, TFSounds.LOCKED_VANISHING_BLOCK.get(), SoundSource.BLOCKS, 1.0F, 0.3F);
+				level.playSound(null, pos, TFSounds.LOCKED_VANISHING_BLOCK, SoundSource.BLOCKS, 1.0F, 0.3F);
 			} else {
 				this.activate(level, pos);
 			}
@@ -146,7 +146,7 @@ public class VanishingBlock extends Block implements EntityDestroyable {
 				level.setBlockAndUpdate(pos, state.setValue(ACTIVE, true));
 				level.scheduleTick(pos, this, 15);
 			}
-			level.playSound(null, pos, TFSounds.REAPPEAR_BLOCK.get(), SoundSource.BLOCKS, 0.3F, 0.6F);
+			level.playSound(null, pos, TFSounds.REAPPEAR_BLOCK, SoundSource.BLOCKS, 0.3F, 0.6F);
 		} else {
 			if (state.getValue(ACTIVE)) {
 				if (state.hasProperty(VANISHED)) {
@@ -156,7 +156,7 @@ public class VanishingBlock extends Block implements EntityDestroyable {
 					level.removeBlock(pos, false);
 				}
 
-				level.playSound(null, pos, state.getBlock() == TFBlocks.REAPPEARING_BLOCK.get() ? TFSounds.REAPPEAR_POOF.get() : TFSounds.VANISHING_BLOCK.get(), SoundSource.BLOCKS, 0.3F, 0.5F);
+				level.playSound(null, pos, state.getBlock() == TFBlocks.REAPPEARING_BLOCK.get() ? TFSounds.REAPPEAR_POOF : TFSounds.VANISHING_BLOCK, SoundSource.BLOCKS, 0.3F, 0.5F);
 
 				for (Direction e : Direction.values()) {
 					this.activate(level, pos.relative(e));
