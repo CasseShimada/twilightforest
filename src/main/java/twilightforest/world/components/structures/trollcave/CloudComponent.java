@@ -54,8 +54,8 @@ public class CloudComponent extends StructurePiece {
 		ChunkPos center = chunkAccess.getPos();
 		BlockPos chunkBlockPos = center.getWorldPosition();
 
-		BlockState wispyCloud = TFBlocks.WISPY_CLOUD.get().defaultBlockState();
-		BlockState fluffyCloud = TFBlocks.FLUFFY_CLOUD.get().defaultBlockState();
+		BlockState wispyCloud = TFBlocks.WISPY_CLOUD.defaultBlockState();
+		BlockState fluffyCloud = TFBlocks.FLUFFY_CLOUD.defaultBlockState();
 
 		int regionX = center.x() + 8 >> 4;
 		int regionZ = center.z() + 8 >> 4;

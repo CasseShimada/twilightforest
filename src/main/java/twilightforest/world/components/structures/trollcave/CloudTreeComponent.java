@@ -48,6 +48,6 @@ public class CloudTreeComponent extends TFStructureComponentOld {
 		this.generateBox(world, sbb, 8, 0, 8, 11, 23, 11, TFBlocks.GIANT_LOG.get().defaultBlockState(), TFBlocks.GIANT_LOG.get().defaultBlockState(), false);
 
 		// cloud base
-		this.generateBox(world, sbb, 8, -4, 8, 11, -1, 11, TFBlocks.FLUFFY_CLOUD.get().defaultBlockState(), TFBlocks.FLUFFY_CLOUD.get().defaultBlockState(), false);
+		this.generateBox(world, sbb, 8, -4, 8, 11, -1, 11, TFBlocks.FLUFFY_CLOUD.defaultBlockState(), TFBlocks.FLUFFY_CLOUD.defaultBlockState(), false);
 	}
 }
