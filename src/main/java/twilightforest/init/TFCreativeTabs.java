@@ -673,8 +673,8 @@ public class TFCreativeTabs {
 			});
 
 			if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-				TFItems.ITEMS.getEntries().forEach(itemSupplier -> {
-					ItemStack wipStack = itemSupplier.get().getDefaultInstance();
+				TFItems.registeredItems().forEach(item -> {
+					ItemStack wipStack = item.getDefaultInstance();
 					if (wipStack.is(TFItemTags.WIP)) entries.accept(wipStack);
 				});
 			}

@@ -26,6 +26,7 @@ import twilightforest.item.food.TFFoods;
 import twilightforest.tags.TFBannerPatternTags;
 import twilightforest.util.TFToolMaterials;
 
+import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -33,7 +34,7 @@ public class TFItems {
 
 	private static final Rarity TWILIGHT_RARITY = Rarity.RARE;
 
-	public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(TwilightForestMod.ID);
+	private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(TwilightForestMod.ID);
 
 	public static final DeferredItem<Item> NAGA_SCALE = register("naga_scale", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> NAGA_CHESTPLATE = register("naga_chestplate", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.NAGA, ArmorType.CHESTPLATE)), () -> new Item.Properties().durability(ArmorType.CHESTPLATE.getDurability(21)).rarity(Rarity.UNCOMMON));
@@ -268,5 +269,17 @@ public class TFItems {
 
 	public static <T extends Item> DeferredItem<T> register(String name, Function<Item.Properties, T> item, Supplier<Item.Properties> properties) {
 		return ITEMS.register(name, () -> item.apply(properties.get().setId(ResourceKey.create(Registries.ITEM, TwilightForestMod.prefix(name)))));
+	}
+
+	public static void addAlias(Identifier from, Identifier to) {
+		ITEMS.addAlias(from, to);
+	}
+
+	public static Collection<? extends Item> registeredItems() {
+		return ITEMS.getEntries().stream().map(Supplier::get).toList();
+	}
+
+	public static void register() {
+		ITEMS.register();
 	}
 }
