@@ -51,7 +51,7 @@ public class ColorHandler {
 		register(tint(
 			state -> 0xFF000000 | 7455580,
 			(state, getter, pos) -> 0xFF000000 | 2129968
-		), TFBlocks.HUGE_LILY_PAD.get());
+		), TFBlocks.HUGE_LILY_PAD);
 
 		register(tint(
 			state -> 0xFF000000 | 106 << 16 | 156 << 8 | 23,
@@ -84,7 +84,7 @@ public class ColorHandler {
 		register(tint(
 			state -> FoliageColor.FOLIAGE_DEFAULT,
 			(state, getter, pos) -> BiomeColors.getAverageFoliageColor(getter, pos)
-		), TFBlocks.TWILIGHT_OAK_LEAVES.get(), TFBlocks.DARK_LEAVES.get(), TFBlocks.HARDENED_DARK_LEAVES.get(), TFBlocks.GIANT_LEAVES.get(), TFBlocks.FALLEN_LEAVES.get());
+		), TFBlocks.TWILIGHT_OAK_LEAVES.get(), TFBlocks.DARK_LEAVES.get(), TFBlocks.HARDENED_DARK_LEAVES.get(), TFBlocks.GIANT_LEAVES.get(), TFBlocks.FALLEN_LEAVES);
 
 		register(tint(
 			state -> FoliageColor.FOLIAGE_EVERGREEN,
