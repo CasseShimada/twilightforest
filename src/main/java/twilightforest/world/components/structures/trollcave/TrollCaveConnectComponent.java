@@ -190,7 +190,7 @@ public class TrollCaveConnectComponent extends TrollCaveMainComponent {
 
 			int width = 1 + decoRNG.nextInt(2) + decoRNG.nextInt(2);
 			int depth = 1 + decoRNG.nextInt(2) + decoRNG.nextInt(2);
-			Block mushBlock = ((decoRNG.nextInt(3) == 0) ? TFBlocks.HUGE_MUSHGLOOM.get() : (decoRNG.nextBoolean() ? Blocks.BROWN_MUSHROOM_BLOCK : Blocks.RED_MUSHROOM_BLOCK));
+			Block mushBlock = ((decoRNG.nextInt(3) == 0) ? TFBlocks.HUGE_MUSHGLOOM : (decoRNG.nextBoolean() ? Blocks.BROWN_MUSHROOM_BLOCK : Blocks.RED_MUSHROOM_BLOCK));
 			makeSingleBracketMushroom(world, sbb, rotation, z, y, width, depth, mushBlock.defaultBlockState());
 
 			// wiggle a little
