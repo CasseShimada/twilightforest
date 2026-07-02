@@ -37,11 +37,11 @@ public final class NagastoneVariants implements StructureProcessor {
 		if (block == TFBlocks.NAGASTONE_PILLAR && random.nextBoolean())
 			return new StructureTemplate.StructureBlockInfo(modifiedBlockInfo.pos(), FeaturePlacers.transferAllStateKeys(state, random.nextBoolean() ? TFBlocks.MOSSY_NAGASTONE_PILLAR : TFBlocks.CRACKED_NAGASTONE_PILLAR), null);
 
-		if (block == TFBlocks.NAGASTONE_STAIRS_LEFT.get() && random.nextBoolean())
-			return new StructureTemplate.StructureBlockInfo(modifiedBlockInfo.pos(), FeaturePlacers.transferAllStateKeys(state, random.nextBoolean() ? TFBlocks.MOSSY_NAGASTONE_STAIRS_LEFT.get() : TFBlocks.CRACKED_NAGASTONE_STAIRS_LEFT.get()), null);
+		if (block == TFBlocks.NAGASTONE_STAIRS_LEFT && random.nextBoolean())
+			return new StructureTemplate.StructureBlockInfo(modifiedBlockInfo.pos(), FeaturePlacers.transferAllStateKeys(state, random.nextBoolean() ? TFBlocks.MOSSY_NAGASTONE_STAIRS_LEFT : TFBlocks.CRACKED_NAGASTONE_STAIRS_LEFT), null);
 
-		if (block == TFBlocks.NAGASTONE_STAIRS_RIGHT.get() && random.nextBoolean())
-			return new StructureTemplate.StructureBlockInfo(modifiedBlockInfo.pos(), FeaturePlacers.transferAllStateKeys(state, random.nextBoolean() ? TFBlocks.MOSSY_NAGASTONE_STAIRS_RIGHT.get() : TFBlocks.CRACKED_NAGASTONE_STAIRS_RIGHT.get()), null);
+		if (block == TFBlocks.NAGASTONE_STAIRS_RIGHT && random.nextBoolean())
+			return new StructureTemplate.StructureBlockInfo(modifiedBlockInfo.pos(), FeaturePlacers.transferAllStateKeys(state, random.nextBoolean() ? TFBlocks.MOSSY_NAGASTONE_STAIRS_RIGHT : TFBlocks.CRACKED_NAGASTONE_STAIRS_RIGHT), null);
 
 		return modifiedBlockInfo;
 	}
