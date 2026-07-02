@@ -46,7 +46,7 @@ public class FinalCastleDungeonEntranceComponent extends FinalCastleDungeonRoom3
 		super.postProcess(world, manager, generator, rand, sbb, chunkPosIn, blockPos);
 
 		final BlockState stairs = deco.stairState.setValue(StairBlock.FACING, Direction.SOUTH);
-		final BlockState deadRock = TFBlocks.DEADROCK.get().defaultBlockState();
+		final BlockState deadRock = TFBlocks.DEADROCK.defaultBlockState();
 		// stairs
 		for (int y = 0; y <= this.height; y++) {
 			int x = (this.size / 2) - 2;

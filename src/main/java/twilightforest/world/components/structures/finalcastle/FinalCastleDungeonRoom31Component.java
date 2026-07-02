@@ -161,7 +161,7 @@ public class FinalCastleDungeonRoom31Component extends TowerWingComponent {
 		RandomSource decoRNG = RandomSource.create(world.getSeed() + (this.boundingBox.minX() * 321534781L) ^ (this.boundingBox.minZ() * 756839L));
 
 		//TODO add a deadrock tag, or a tag for castle replaceables
-		Predicate<BlockState> replacing = state -> state.isAir() || state.is(TFBlocks.DEADROCK.get()) || state.is(TFBlocks.CRACKED_DEADROCK.get()) || state.is(TFBlocks.WEATHERED_DEADROCK.get());
+		Predicate<BlockState> replacing = state -> state.isAir() || state.is(TFBlocks.DEADROCK) || state.is(TFBlocks.CRACKED_DEADROCK) || state.is(TFBlocks.WEATHERED_DEADROCK);
 
 
 		this.fillWithAir(world, sbb, 0, 0, 0, this.size - 1, this.height - 1, this.size - 1, replacing);

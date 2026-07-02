@@ -58,7 +58,7 @@ public class ThornsBlock extends ConnectableRotatedPillarBlock implements Simple
 		return (facingState.getBlock() instanceof ThornsBlock
 			|| facingState.getBlock().equals(TFBlocks.THORN_ROSE.get())
 			|| facingState.getBlock().equals(TFBlocks.THORN_LEAVES.get())
-			|| facingState.getBlock().equals(TFBlocks.WEATHERED_DEADROCK.get()));
+			|| facingState.getBlock().equals(TFBlocks.WEATHERED_DEADROCK));
 	}
 
 	@Override

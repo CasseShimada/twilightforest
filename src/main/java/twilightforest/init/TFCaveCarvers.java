@@ -61,7 +61,7 @@ public class TFCaveCarvers {
 			true,
 			new WeightedStateProvider(
 				WeightedList.<BlockState>builder()
-					.add(TFBlocks.TROLLSTEINN.value().defaultBlockState(), 1)
+					.add(TFBlocks.TROLLSTEINN.defaultBlockState(), 1)
 					.add(Blocks.STONE.defaultBlockState(), 3)
 			)
 		);

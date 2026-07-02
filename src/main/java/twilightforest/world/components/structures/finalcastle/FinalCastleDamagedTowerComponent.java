@@ -88,7 +88,7 @@ public class FinalCastleDamagedTowerComponent extends FinalCastleMazeTower13Comp
 				for (int z = this.boundingBox.minZ() - 2; z <= this.boundingBox.maxZ() + 2; z++) {
 					pos.set(x, y, z);
 					if (sbb.isInside(pos)) {
-						if (world.getBlockState(pos).getBlock() == TFBlocks.DEADROCK.get()) {
+						if (world.getBlockState(pos).getBlock() == TFBlocks.DEADROCK) {
 							hitDeadRock = true;
 						}
 						determineBlockDestroyed(world, areas, y, x, z);
