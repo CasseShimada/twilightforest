@@ -24,7 +24,7 @@ public record CandelabraSpecialRenderer() implements SpecialModelRenderer<Candel
 	@Override
 	public void submit(@Nullable CandelabraData data, PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, boolean hasFoil, int outlineColor) {
 		if (data != null) {
-			CandelabraRenderer.renderCandles(TFBlocks.CANDELABRA.get().defaultBlockState(), data, poseStack, nodeCollector, packedLight, packedOverlay, outlineColor);
+			CandelabraRenderer.renderCandles(TFBlocks.CANDELABRA.defaultBlockState(), data, poseStack, nodeCollector, packedLight, packedOverlay, outlineColor);
 		}
 	}
 

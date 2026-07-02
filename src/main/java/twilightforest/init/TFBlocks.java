@@ -95,7 +95,7 @@ public class TFBlocks {
 				Spawner.appendHoverText(data, tooltip, "SpawnData");
 			}
 		});
-	public static final DeferredBlock<Block> BRAZIER = registerWithItem("brazier", BrazierBlock::new, () -> BlockBehaviour.Properties.of().sound(SoundType.WOOD).lightLevel(state -> state.getValue(BrazierBlock.HALF) == DoubleBlockHalf.UPPER ? state.getValue(BrazierBlock.LIGHT).getLight() : 0).pushReaction(PushReaction.DESTROY));
+	public static final BrazierBlock BRAZIER = registerDirectWithItem("brazier", BrazierBlock::new, () -> BlockBehaviour.Properties.of().sound(SoundType.WOOD).lightLevel(state -> state.getValue(BrazierBlock.HALF) == DoubleBlockHalf.UPPER ? state.getValue(BrazierBlock.LIGHT).getLight() : 0).pushReaction(PushReaction.DESTROY));
 
 	//naga courtyard
 	public static final DeferredBlock<Block> NAGASTONE_HEAD = registerWithItem("nagastone_head", TFHorizontalBlock::new, () -> BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).mapColor(MapColor.STONE).requiresCorrectToolForDrops().sound(SoundType.STONE).strength(1.5F, 6.0F));
@@ -121,7 +121,7 @@ public class TFBlocks {
 	public static final Block KEEPSAKE_CASKET = registerDirect("keepsake_casket", KeepsakeCasketBlock::new, () -> BlockBehaviour.Properties.of().lightLevel(state -> state.getValue(BlockLoggingEnum.MULTILOGGED) == BlockLoggingEnum.LAVA ? 15 : 0).mapColor(MapColor.COLOR_BLACK).noOcclusion().pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().sound(SoundType.NETHERITE_BLOCK).strength(5.0F, 1200.0F));
 	public static final DeferredBlock<RotatedPillarBlock> BOLD_STONE_PILLAR = registerWithItem("bold_stone_pillar", RotatedPillarBlock::new, () -> BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).mapColor(MapColor.STONE).requiresCorrectToolForDrops().sound(SoundType.STONE).strength(1.5F, 6.0F));
 	public static final DeferredBlock<Block> CHISELED_CANOPY_BOOKSHELF = registerWithItem("chiseled_canopy_bookshelf", ChiseledCanopyShelfBlock::new, () -> BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).mapColor(MapColor.COLOR_BROWN).sound(SoundType.CHISELED_BOOKSHELF).strength(2.5F));
-	public static final DeferredBlock<Block> CANDELABRA = registerWithItem("candelabra", CandelabraBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(1.5F).lightLevel(CandelabraBlock::getLightLevel));
+	public static final CandelabraBlock CANDELABRA = registerDirectWithItem("candelabra", CandelabraBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(1.5F).lightLevel(CandelabraBlock::getLightLevel));
 	public static final AbstractSkullCandleBlock ZOMBIE_SKULL_CANDLE = registerDirect("zombie_skull_candle", properties -> new SkullCandleBlock(SkullBlock.Types.ZOMBIE, properties), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.ZOMBIE_HEAD));
 	public static final AbstractSkullCandleBlock ZOMBIE_WALL_SKULL_CANDLE = registerDirect("zombie_wall_skull_candle", properties -> new WallSkullCandleBlock(SkullBlock.Types.ZOMBIE, properties), () -> BlockBehaviour.Properties.of().strength(1.0F).pushReaction(PushReaction.DESTROY).overrideLootTable(ZOMBIE_SKULL_CANDLE.getLootTable()).overrideDescription(ZOMBIE_SKULL_CANDLE.getDescriptionId()));
 	public static final AbstractSkullCandleBlock SKELETON_SKULL_CANDLE = registerDirect("skeleton_skull_candle", properties -> new SkullCandleBlock(SkullBlock.Types.SKELETON, properties), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SKELETON_SKULL));

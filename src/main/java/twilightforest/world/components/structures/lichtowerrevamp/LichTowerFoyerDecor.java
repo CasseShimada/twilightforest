@@ -92,7 +92,7 @@ public class LichTowerFoyerDecor extends TwilightJigsawPiece implements PieceBea
 					level.setBlock(placePos.above(), chestGap, Block.UPDATE_ALL);
 				}
 				case 3 -> {
-					BlockState candelabra = TFBlocks.CANDELABRA.value().defaultBlockState().rotate(rotation).setValue(CandelabraBlock.LIGHTING, LightableBlock.Lighting.DIM);
+					BlockState candelabra = TFBlocks.CANDELABRA.defaultBlockState().rotate(rotation).setValue(CandelabraBlock.LIGHTING, LightableBlock.Lighting.DIM);
 
 					for (BooleanProperty prop : CandelabraBlock.CANDLES) {
 						candelabra = candelabra.setValue(prop, true);
