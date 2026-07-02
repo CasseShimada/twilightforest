@@ -303,7 +303,7 @@ public class ChainBlock extends ThrowableProjectile {
 	public void remove(RemovalReason reason) {
 		super.remove(reason);
 		LivingEntity thrower = (LivingEntity) this.getOwner();
-		if (thrower != null && thrower.getUseItem().is(TFItems.BLOCK_AND_CHAIN.get())) {
+		if (thrower != null && thrower.getUseItem().is(TFItems.BLOCK_AND_CHAIN)) {
 			thrower.stopUsingItem();
 		}
 	}

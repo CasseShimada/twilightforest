@@ -133,8 +133,8 @@ public class TFItems {
 	public static final Item KNIGHTMETAL_PICKAXE = registerDirect("knightmetal_pickaxe", properties -> new KnightmetalPickItem(TFToolMaterials.KNIGHTMETAL, properties), Item.Properties::new);
 	public static final Item KNIGHTMETAL_AXE = registerDirect("knightmetal_axe", properties -> new KnightmetalAxeItem(TFToolMaterials.KNIGHTMETAL, properties), Item.Properties::new);
 	public static final Item KNIGHTMETAL_RING = registerDirect("knightmetal_ring", Item::new, Item.Properties::new);
-	public static final DeferredItem<Item> KNIGHTMETAL_SHIELD = register("knightmetal_shield", KnightmetalShieldItem::new, () -> new Item.Properties().durability(1024));
-	public static final DeferredItem<Item> BLOCK_AND_CHAIN = register("block_and_chain", ChainBlockItem::new, () -> new Item.Properties().durability(99));
+	public static final Item KNIGHTMETAL_SHIELD = registerDirect("knightmetal_shield", KnightmetalShieldItem::new, () -> new Item.Properties().durability(1024));
+	public static final Item BLOCK_AND_CHAIN = registerDirect("block_and_chain", ChainBlockItem::new, () -> new Item.Properties().durability(99));
 	public static final Item PHANTOM_HELMET = registerDirect("phantom_helmet", properties -> new PhantomArmorItem(TFArmorMaterials.PHANTOM, ArmorType.HELMET, properties), () -> new Item.Properties().durability(ArmorType.HELMET.getDurability(30)).rarity(Rarity.UNCOMMON));
 	public static final Item PHANTOM_CHESTPLATE = registerDirect("phantom_chestplate", properties -> new PhantomArmorItem(TFArmorMaterials.PHANTOM, ArmorType.CHESTPLATE, properties), () -> new Item.Properties().durability(ArmorType.CHESTPLATE.getDurability(30)).rarity(Rarity.UNCOMMON));
 	public static final Item ICE_BOMB = registerDirect("ice_bomb", IceBombItem::new, () -> new Item.Properties().stacksTo(16));
@@ -157,9 +157,9 @@ public class TFItems {
 	public static final Item MAGIC_BEANS = registerDirect("magic_beans", MagicBeansItem::new, Item.Properties::new);
 	public static final Item GIANT_PICKAXE = registerDirect("giant_pickaxe", properties -> new GiantPickItem(TFToolMaterials.GIANT, properties), () -> new Item.Properties().pickaxe(TFToolMaterials.GIANT, 8.0F, -3.5F).attributes(GiantPickItem.createGiantAttributes(TFToolMaterials.GIANT, 8, -3.5F)));
 	public static final Item GIANT_SWORD = registerDirect("giant_sword", properties -> new Item(properties.sword(TFToolMaterials.GIANT, 10.0F, -3.5F).attributes(GiantPickItem.createGiantAttributes(TFToolMaterials.GIANT, 10, -3.5F))), Item.Properties::new);
-	public static final DeferredItem<Item> LAMP_OF_CINDERS = register("lamp_of_cinders", LampOfCindersItem::new, () -> new Item.Properties().fireResistant().durability(1024).rarity(Rarity.UNCOMMON));
+	public static final Item LAMP_OF_CINDERS = registerDirect("lamp_of_cinders", LampOfCindersItem::new, () -> new Item.Properties().fireResistant().durability(1024).rarity(Rarity.UNCOMMON));
 	public static final Item CUBE_TALISMAN = registerDirect("cube_talisman", Item::new, () -> new Item.Properties().fireResistant().rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> CUBE_OF_ANNIHILATION = register("cube_of_annihilation", CubeOfAnnihilationItem::new, () -> new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
+	public static final Item CUBE_OF_ANNIHILATION = registerDirect("cube_of_annihilation", CubeOfAnnihilationItem::new, () -> new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
 	public static final Item MOON_DIAL = registerDirect("moon_dial", MoonDialItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final Item POCKET_WATCH = registerDirect("pocket_watch", PocketWatchItem::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 	public static final Item EMPERORS_CLOTH = registerDirect("emperors_cloth", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
