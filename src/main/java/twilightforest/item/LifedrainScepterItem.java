@@ -205,7 +205,7 @@ public class LifedrainScepterItem extends Item {
 						}
 					}
 
-					if (living instanceof Player player && !player.getAbilities().instabuild && (!player.getItemBySlot(EquipmentSlot.HEAD).is(TFItems.MYSTIC_CROWN.get()) || level.getRandom().nextFloat() > 0.05f)) {
+					if (living instanceof Player player && !player.getAbilities().instabuild && (!player.getItemBySlot(EquipmentSlot.HEAD).is(TFItems.MYSTIC_CROWN) || level.getRandom().nextFloat() > 0.05f)) {
 						TFItemStackUtils.hurtWithoutBreaking(stack, 1, player);
 					}
 				}

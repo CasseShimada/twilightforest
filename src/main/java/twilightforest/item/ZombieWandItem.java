@@ -62,7 +62,7 @@ public class ZombieWandItem extends Item {
 				zombie.setTame(true, false);
 				zombie.setOwner(player);
 				zombie.addEffect(new MobEffectInstance(MobEffects.STRENGTH, 1200, 1));
-				if (player.getItemBySlot(EquipmentSlot.HEAD).is(TFItems.MYSTIC_CROWN.get()) && level.getRandom().nextFloat() <= 0.1F) {
+				if (player.getItemBySlot(EquipmentSlot.HEAD).is(TFItems.MYSTIC_CROWN) && level.getRandom().nextFloat() <= 0.1F) {
 					zombie.setBaby(true);
 				}
 				level.addFreshEntity(zombie);

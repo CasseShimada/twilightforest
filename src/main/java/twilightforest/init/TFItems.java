@@ -165,7 +165,7 @@ public class TFItems {
 	public static final Item EMPERORS_CLOTH = registerDirect("emperors_cloth", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final Item FOUR_LEAF_CLOVER = registerDirect("four_leaf_clover", Item::new, Item.Properties::new);
 	public static final Item CROWN_SPLINTER = registerDirect("crown_splinter", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> MYSTIC_CROWN = register("mystic_crown", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1).attributes(ItemAttributeModifiers.builder().add(Attributes.ARMOR, new AttributeModifier(Identifier.withDefaultNamespace("armor." + EquipmentSlot.HEAD.getName()), 2.0F, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.HEAD).build()).equippable(EquipmentSlot.HEAD));
+	public static final Item MYSTIC_CROWN = registerDirect("mystic_crown", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1).attributes(ItemAttributeModifiers.builder().add(Attributes.ARMOR, new AttributeModifier(Identifier.withDefaultNamespace("armor." + EquipmentSlot.HEAD.getName()), 2.0F, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.HEAD).build()).equippable(EquipmentSlot.HEAD));
 
 	public static final DeferredItem<Item> KEEPSAKE_CASKET = register("keepsake_casket", KeepsakeCasketItem::new, () -> new Item.Properties().useBlockDescriptionPrefix().rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> HUGE_LILY_PAD = register("huge_lily_pad", properties -> new HugeLilyPadItem(TFBlocks.HUGE_LILY_PAD.get(), properties), () -> new Item.Properties().useBlockDescriptionPrefix());

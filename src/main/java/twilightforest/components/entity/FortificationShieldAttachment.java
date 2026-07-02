@@ -53,7 +53,7 @@ public class FortificationShieldAttachment {
 	private boolean checkLichCrownBonus(LivingEntity entity) {
 		//return entity.getItemBySlot(EquipmentSlot.HEAD).is(TFItems.LICH_CROWN) ? (entity.tickCount % 3) != 0 : true;
 		// Simplified but same logic as the line above
-		return !entity.getItemBySlot(EquipmentSlot.HEAD).is(TFItems.MYSTIC_CROWN.get()) || (entity.tickCount % 3) != 0;
+		return !entity.getItemBySlot(EquipmentSlot.HEAD).is(TFItems.MYSTIC_CROWN) || (entity.tickCount % 3) != 0;
 	}
 
 	public int shieldsLeft() {
