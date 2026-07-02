@@ -695,31 +695,31 @@ public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CL
 
 	public static <T extends Block> DeferredBlock<T> registerWithItem(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
 		DeferredBlock<T> ret = registerBlock(name, () -> block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, TwilightForestMod.prefix(name)))));
-		TFItems.register(name, itemProps -> new BlockItem(ret.get(), itemProps), () -> new Item.Properties().useBlockDescriptionPrefix());
+		TFItems.registerBlockItem(name, itemProps -> new BlockItem(ret.get(), itemProps), () -> new Item.Properties().useBlockDescriptionPrefix());
 		return ret;
 	}
 
 	public static <T extends Block> DeferredBlock<T> registerWithTooltipItem(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties, TooltipBlockItem.TooltipAppender tooltipAppender) {
 		DeferredBlock<T> ret = registerBlock(name, () -> block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, TwilightForestMod.prefix(name)))));
-		TFItems.register(name, itemProps -> new TooltipBlockItem(ret.get(), itemProps, tooltipAppender), () -> new Item.Properties().useBlockDescriptionPrefix());
+		TFItems.registerBlockItem(name, itemProps -> new TooltipBlockItem(ret.get(), itemProps, tooltipAppender), () -> new Item.Properties().useBlockDescriptionPrefix());
 		return ret;
 	}
 
 	public static <T extends Block> DeferredBlock<T> registerFireResistantItem(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
 		DeferredBlock<T> ret = registerBlock(name, () -> block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, TwilightForestMod.prefix(name)))));
-		TFItems.register(name, itemProps -> new BlockItem(ret.get(), itemProps), () -> new Item.Properties().useBlockDescriptionPrefix().fireResistant().rarity(Rarity.UNCOMMON));
+		TFItems.registerBlockItem(name, itemProps -> new BlockItem(ret.get(), itemProps), () -> new Item.Properties().useBlockDescriptionPrefix().fireResistant().rarity(Rarity.UNCOMMON));
 		return ret;
 	}
 
 	public static <T extends Block> DeferredBlock<T> registerDoubleBlockItem(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
 		DeferredBlock<T> ret = registerBlock(name, () -> block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, TwilightForestMod.prefix(name)))));
-		TFItems.register(name, itemProps -> new DoubleHighBlockItem(ret.get(), itemProps), () -> new Item.Properties().useBlockDescriptionPrefix());
+		TFItems.registerBlockItem(name, itemProps -> new DoubleHighBlockItem(ret.get(), itemProps), () -> new Item.Properties().useBlockDescriptionPrefix());
 		return ret;
 	}
 
 	public static <T extends Block> DeferredBlock<T> registerWroughtFence(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
 		DeferredBlock<T> ret = registerBlock(name, () -> block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, TwilightForestMod.prefix(name)))));
-		TFItems.register(name, itemProps -> new WroughtIronFenceItem(ret.get(), itemProps), () -> new Item.Properties().useBlockDescriptionPrefix());
+		TFItems.registerBlockItem(name, itemProps -> new WroughtIronFenceItem(ret.get(), itemProps), () -> new Item.Properties().useBlockDescriptionPrefix());
 		return ret;
 	}
 

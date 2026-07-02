@@ -287,6 +287,25 @@ public class TFItems {
 		return value;
 	}
 
+	public static <T extends Item> void registerBlockItem(String name, Function<Item.Properties, T> item, Supplier<Item.Properties> properties) {
+		if (registered) throw new IllegalStateException("Cannot register new items after item registry has been frozen.");
+		Identifier id = TwilightForestMod.prefix(name);
+		ITEMS.put(id, new ItemEntry() {
+			private T value;
+
+			@Override
+			public Item value() {
+				if (this.value == null) throw new IllegalStateException("Block item not registered yet: " + id);
+				return this.value;
+			}
+
+			@Override
+			public void register() {
+				this.value = Registry.register(BuiltInRegistries.ITEM, id, item.apply(properties.get().setId(ResourceKey.create(Registries.ITEM, id))));
+			}
+		});
+	}
+
 	public static void addAlias(Identifier from, Identifier to) {
 		if (registered) throw new IllegalStateException("Cannot add aliases after items have been registered.");
 		ITEM_ALIASES.put(from, to);
