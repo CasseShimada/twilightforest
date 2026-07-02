@@ -201,7 +201,7 @@ public class EntityEvents {
 
 		// triple bow strips invulnerableTime
 		if ("arrow".equals(source.getMsgId()) && trueSource instanceof Player player) {
-			if (player.getItemInHand(player.getUsedItemHand()).is(TFItems.TRIPLE_BOW.get())) {
+			if (player.getItemInHand(player.getUsedItemHand()).is(TFItems.TRIPLE_BOW)) {
 				living.invulnerableTime = 0;
 			}
 		}

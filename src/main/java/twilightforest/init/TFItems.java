@@ -148,10 +148,10 @@ public class TFItems {
 	public static final Item YETI_CHESTPLATE = registerDirect("yeti_chestplate", properties -> new YetiArmorItem(TFArmorMaterials.YETI, ArmorType.CHESTPLATE, properties), () -> new Item.Properties().durability(ArmorType.CHESTPLATE.getDurability(20)).rarity(Rarity.UNCOMMON));
 	public static final Item YETI_LEGGINGS = registerDirect("yeti_leggings", properties -> new YetiArmorItem(TFArmorMaterials.YETI, ArmorType.LEGGINGS, properties), () -> new Item.Properties().durability(ArmorType.LEGGINGS.getDurability(20)).rarity(Rarity.UNCOMMON));
 	public static final Item YETI_BOOTS = registerDirect("yeti_boots", properties -> new YetiArmorItem(TFArmorMaterials.YETI, ArmorType.BOOTS, properties), () -> new Item.Properties().durability(ArmorType.BOOTS.getDurability(20)).rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> TRIPLE_BOW = register("triple_bow", TripleBowItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).durability(384));
-	public static final DeferredItem<Item> SEEKER_BOW = register("seeker_bow", SeekerBowItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).durability(384));
-	public static final DeferredItem<Item> ICE_BOW = register("ice_bow", IceBowItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).durability(384));
-	public static final DeferredItem<Item> ENDER_BOW = register("ender_bow", EnderBowItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).durability(384));
+	public static final Item TRIPLE_BOW = registerDirect("triple_bow", TripleBowItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).durability(384));
+	public static final Item SEEKER_BOW = registerDirect("seeker_bow", SeekerBowItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).durability(384));
+	public static final Item ICE_BOW = registerDirect("ice_bow", IceBowItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).durability(384));
+	public static final Item ENDER_BOW = registerDirect("ender_bow", EnderBowItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).durability(384));
 	public static final DeferredItem<Item> ICE_SWORD = register("ice_sword", properties -> new IceSwordItem(TFToolMaterials.ICE, properties), Item.Properties::new);
 	public static final DeferredItem<Item> GLASS_SWORD = register("glass_sword", properties -> new GlassSwordItem(TFToolMaterials.GLASS, 3, -2.4F, properties), () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final Item MAGIC_BEANS = registerDirect("magic_beans", MagicBeansItem::new, Item.Properties::new);
