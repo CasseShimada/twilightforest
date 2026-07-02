@@ -154,14 +154,14 @@ public class TFItems {
 	public static final DeferredItem<Item> ENDER_BOW = register("ender_bow", EnderBowItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).durability(384));
 	public static final DeferredItem<Item> ICE_SWORD = register("ice_sword", properties -> new IceSwordItem(TFToolMaterials.ICE, properties), Item.Properties::new);
 	public static final DeferredItem<Item> GLASS_SWORD = register("glass_sword", properties -> new GlassSwordItem(TFToolMaterials.GLASS, 3, -2.4F, properties), () -> new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> MAGIC_BEANS = register("magic_beans", MagicBeansItem::new, Item.Properties::new);
+	public static final Item MAGIC_BEANS = registerDirect("magic_beans", MagicBeansItem::new, Item.Properties::new);
 	public static final DeferredItem<Item> GIANT_PICKAXE = register("giant_pickaxe", properties -> new GiantPickItem(TFToolMaterials.GIANT, properties), () -> new Item.Properties().pickaxe(TFToolMaterials.GIANT, 8.0F, -3.5F).attributes(GiantPickItem.createGiantAttributes(TFToolMaterials.GIANT, 8, -3.5F)));
 	public static final DeferredItem<Item> GIANT_SWORD = register("giant_sword", properties -> new Item(properties.sword(TFToolMaterials.GIANT, 10.0F, -3.5F).attributes(GiantPickItem.createGiantAttributes(TFToolMaterials.GIANT, 10, -3.5F))), Item.Properties::new);
 	public static final DeferredItem<Item> LAMP_OF_CINDERS = register("lamp_of_cinders", LampOfCindersItem::new, () -> new Item.Properties().fireResistant().durability(1024).rarity(Rarity.UNCOMMON));
 	public static final Item CUBE_TALISMAN = registerDirect("cube_talisman", Item::new, () -> new Item.Properties().fireResistant().rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> CUBE_OF_ANNIHILATION = register("cube_of_annihilation", CubeOfAnnihilationItem::new, () -> new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> MOON_DIAL = register("moon_dial", MoonDialItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> POCKET_WATCH = register("pocket_watch", PocketWatchItem::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+	public static final Item MOON_DIAL = registerDirect("moon_dial", MoonDialItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final Item POCKET_WATCH = registerDirect("pocket_watch", PocketWatchItem::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 	public static final Item EMPERORS_CLOTH = registerDirect("emperors_cloth", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final Item FOUR_LEAF_CLOVER = registerDirect("four_leaf_clover", Item::new, Item.Properties::new);
 	public static final Item CROWN_SPLINTER = registerDirect("crown_splinter", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));

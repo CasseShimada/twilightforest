@@ -135,6 +135,6 @@ public class ToolEvents {
 	}
 
 	public static boolean shouldBlockDigSlowdown(LivingEntity entity, MobEffectInstance effect) {
-		return effect.is(MobEffects.MINING_FATIGUE) && entity.isHolding(TFItems.POCKET_WATCH.get());
+		return effect.is(MobEffects.MINING_FATIGUE) && entity.isHolding(TFItems.POCKET_WATCH);
 	}
 }
