@@ -103,7 +103,7 @@ public class OverlayHandler {
 			if (player != null) {
 				TFPortalAttachment portal = TFDataAttachments.get(player, TFDataAttachments.TF_PORTAL_COOLDOWN);
 				if (portal.getPortalTimer() > 0) {
-					TextureAtlasSprite textureatlassprite = minecraft.getModelManager().getBlockStateModelSet().getParticleMaterial(TFBlocks.TWILIGHT_PORTAL.get().defaultBlockState()).sprite();
+					TextureAtlasSprite textureatlassprite = minecraft.getModelManager().getBlockStateModelSet().getParticleMaterial(TFBlocks.TWILIGHT_PORTAL.defaultBlockState()).sprite();
 					graphics.blitSprite(RenderPipelines.BLOCK_SCREEN_EFFECT, textureatlassprite, 0, 0, window.getGuiScaledWidth(), window.getGuiScaledHeight(), ARGB.white((float) portal.getPortalTimer() / (float) TFPortalAttachment.MAX_TICKS));
 				}
 			}

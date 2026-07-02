@@ -193,7 +193,7 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 
 				for (Map.Entry<BlockPos, Boolean> checkedPos : blocksChecked.entrySet()) {
 					if (checkedPos.getValue()) {
-						level.setBlock(checkedPos.getKey(), TFBlocks.TWILIGHT_PORTAL.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+						level.setBlock(checkedPos.getKey(), TFBlocks.TWILIGHT_PORTAL.defaultBlockState(), Block.UPDATE_CLIENTS);
 					}
 				}
 

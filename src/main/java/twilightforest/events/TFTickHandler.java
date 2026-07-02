@@ -129,7 +129,7 @@ public class TFTickHandler {
 				}
 
 				boolean ownerMatches = Objects.equals(entityItem.getOwner(), player);
-				boolean canFormPortal = TFBlocks.TWILIGHT_PORTAL.get().canFormPortal(level.getBlockState(entityItem.blockPosition()));
+				boolean canFormPortal = TFBlocks.TWILIGHT_PORTAL.canFormPortal(level.getBlockState(entityItem.blockPosition()));
 
 				if (canFormPortal && ownerMatches) {
 
@@ -167,7 +167,7 @@ public class TFTickHandler {
 				level.addParticle(SpellParticleOption.create(ParticleTypes.EFFECT, 0.0F, 0.0F, 0.0F, 1.0F), qualified.getX(), qualified.getY() + 0.2, qualified.getZ(), vx, vy, vz);
 			}
 
-			boolean created = TFBlocks.TWILIGHT_PORTAL.get().tryToCreatePortal(level, qualified.blockPosition(), qualified, player);
+			boolean created = TFBlocks.TWILIGHT_PORTAL.tryToCreatePortal(level, qualified.blockPosition(), qualified, player);
 			if (created)
 				TFAdvancements.MADE_TF_PORTAL.trigger(player);
 

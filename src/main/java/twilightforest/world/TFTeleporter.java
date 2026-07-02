@@ -78,7 +78,7 @@ public class TFTeleporter {
 			flag = false;
 			// Validate that the Portal still exists
 			TwilightForestMod.LOGGER.debug("Using cache, validating. {}", blockpos);
-			if (blockpos == null || !destDim.getBlockState(blockpos).is(TFBlocks.TWILIGHT_PORTAL.get())) {
+			if (blockpos == null || !destDim.getBlockState(blockpos).is(TFBlocks.TWILIGHT_PORTAL)) {
 				// Portal was broken, we need to recreate it.
 				TwilightForestMod.LOGGER.debug("Portal Invalid, recreating.");
 				blockpos = null;
@@ -190,7 +190,7 @@ public class TFTeleporter {
 	}
 
 	private static boolean isPortal(BlockState state) {
-		return state.is(TFBlocks.TWILIGHT_PORTAL.get());
+		return state.is(TFBlocks.TWILIGHT_PORTAL);
 	}
 
 	// from the start point, builds a set of all directly adjacent non-portal blocks
@@ -531,7 +531,7 @@ public class TFTeleporter {
 		}
 
 		// portal in it
-		BlockState portal = TFBlocks.TWILIGHT_PORTAL.get().defaultBlockState().setValue(TFPortalBlock.DISALLOW_RETURN, (locked || !TFConfig.shouldReturnPortalBeUsable));
+		BlockState portal = TFBlocks.TWILIGHT_PORTAL.defaultBlockState().setValue(TFPortalBlock.DISALLOW_RETURN, (locked || !TFConfig.shouldReturnPortalBeUsable));
 
 		world.setBlock(pos, portal, Block.UPDATE_CLIENTS);
 		world.setBlock(pos.east(), portal, Block.UPDATE_CLIENTS);

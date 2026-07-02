@@ -2,6 +2,7 @@ package twilightforest.init;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -41,12 +42,12 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class TFBlocks {
-	private static final Map<Identifier, DeferredBlock<? extends Block>> BLOCKS = new LinkedHashMap<>();
+	private static final Map<Identifier, BlockEntry> BLOCKS = new LinkedHashMap<>();
 	private static final Map<Identifier, Identifier> BLOCK_ALIASES = new LinkedHashMap<>();
 	private static boolean registered;
 	private static final float LEAF_PARTICLE_CHANCE = 0.01F;
 
-	public static final DeferredBlock<TFPortalBlock> TWILIGHT_PORTAL = register("twilight_portal", TFPortalBlock::new, () -> BlockBehaviour.Properties.of().pushReaction(PushReaction.BLOCK).strength(-1.0F).sound(SoundType.GLASS).lightLevel((state) -> 11).noCollision().noOcclusion().noLootTable());
+	public static final TFPortalBlock TWILIGHT_PORTAL = registerDirect("twilight_portal", TFPortalBlock::new, () -> BlockBehaviour.Properties.of().pushReaction(PushReaction.BLOCK).strength(-1.0F).sound(SoundType.GLASS).lightLevel((state) -> 11).noCollision().noOcclusion().noLootTable());
 
 	//misc.
 	public static final DeferredBlock<Block> HEDGE = registerWithItem("hedge", HedgeBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).sound(SoundType.GRASS).strength(2.0F, 6.0F));
@@ -685,7 +686,7 @@ public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CL
 		}
 
 		registered = true;
-		BLOCKS.values().forEach(block -> block.register(BuiltInRegistries.BLOCK));
+		BLOCKS.values().forEach(BlockEntry::register);
 		applyBlockAliases();
 	}
 
@@ -727,14 +728,48 @@ public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CL
 		if (registered) throw new IllegalStateException("Cannot register new blocks after block registry has been frozen.");
 		Identifier id = TwilightForestMod.prefix(name);
 		DeferredBlock<T> holder = DeferredBlock.create(id, factory);
-		BLOCKS.put(id, holder);
+		BLOCKS.put(id, new BlockEntry() {
+			@Override
+			public Block value() {
+				return holder.get();
+			}
+
+			@Override
+			public void register() {
+				holder.register(BuiltInRegistries.BLOCK);
+			}
+		});
 		return holder;
+	}
+
+	private static <T extends Block> T registerDirect(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
+		if (registered) throw new IllegalStateException("Cannot register new blocks after block registry has been frozen.");
+		Identifier id = TwilightForestMod.prefix(name);
+		T value = block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, id)));
+		BLOCKS.put(id, new BlockEntry() {
+			@Override
+			public Block value() {
+				return value;
+			}
+
+			@Override
+			public void register() {
+				Registry.register(BuiltInRegistries.BLOCK, id, value);
+			}
+		});
+		return value;
 	}
 
 	private static void applyBlockAliases() {
 		if (!BLOCK_ALIASES.isEmpty()) {
 			TwilightForestMod.LOGGER.warn("Skipping block registry aliases on Fabric to avoid duplicate block state ids.");
 		}
+	}
+
+	private interface BlockEntry {
+		Block value();
+
+		void register();
 	}
 
 	public static DeferredBlock<OminousCandleBlock> ominousCandle(String name, MapColor mapColor, Block candle) {
