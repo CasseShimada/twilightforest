@@ -9,7 +9,7 @@ public class StructureTFDecoratorCastle extends TFStructureDecorator {
 	private static final CastleRandomBlockSelectorFactory castle = new CastleRandomBlockSelectorFactory();
 
 	public StructureTFDecoratorCastle() {
-		this.blockState = TFBlocks.CASTLE_BRICK.get().defaultBlockState();
+		this.blockState = TFBlocks.CASTLE_BRICK.defaultBlockState();
 		this.accentState = Blocks.CHISELED_QUARTZ_BLOCK.defaultBlockState();
 		this.roofState = TFBlocks.CASTLE_ROOF_TILE.get().defaultBlockState();
 		this.pillarState = TFBlocks.BOLD_CASTLE_BRICK_PILLAR.get().defaultBlockState();

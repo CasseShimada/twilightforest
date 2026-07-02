@@ -12,7 +12,7 @@ public class CastleRandomBlockSelectorFactory {
 			List.of(
 				Pair.of(TFBlocks.WORN_CASTLE_BRICK.get().defaultBlockState(), 0.1F),
 				Pair.of(TFBlocks.CRACKED_CASTLE_BRICK.get().defaultBlockState(), 0.1F),
-				Pair.of(TFBlocks.CASTLE_BRICK.get().defaultBlockState(), 0.8F)
+				Pair.of(TFBlocks.CASTLE_BRICK.defaultBlockState(), 0.8F)
 			)
 		);
 	}
