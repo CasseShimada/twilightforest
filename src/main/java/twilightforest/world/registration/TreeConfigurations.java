@@ -116,8 +116,8 @@ public class TreeConfigurations {
 					.add(TFBlocks.ROPE.defaultBlockState(), 3)
 					.add(Blocks.IRON_CHAIN.defaultBlockState(), 1)),
 				new WeightedStateProvider(createBlockList()
-					.add(TFBlocks.FIREFLY_JAR.get().defaultBlockState(), 10)
-					.add(TFBlocks.CICADA_JAR.get().defaultBlockState(), 1))
+					.add(TFBlocks.FIREFLY_JAR.defaultBlockState(), 10)
+					.add(TFBlocks.CICADA_JAR.defaultBlockState(), 1))
 			)
 		))
 		.ignoreVines()

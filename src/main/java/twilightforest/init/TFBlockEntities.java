@@ -44,8 +44,8 @@ public class TFBlockEntities {
 	public static final BlockEntityType<GrowingBeanstalkBlockEntity> BEANSTALK_GROWER = register("beanstalk_grower", FabricBlockEntityTypeBuilder.create(GrowingBeanstalkBlockEntity::new, TFBlocks.BEANSTALK_GROWER.get()).build());
 	public static final BlockEntityType<RedThreadBlockEntity> RED_THREAD = register("red_thread", FabricBlockEntityTypeBuilder.create(RedThreadBlockEntity::new, TFBlocks.RED_THREAD.get()).build());
 	public static final BlockEntityType<CandelabraBlockEntity> CANDELABRA = register("candelabra", FabricBlockEntityTypeBuilder.create(CandelabraBlockEntity::new, TFBlocks.CANDELABRA.get()).build());
-	public static final BlockEntityType<JarBlockEntity> JAR = register("jar", FabricBlockEntityTypeBuilder.create(JarBlockEntity::new, TFBlocks.FIREFLY_JAR.get(), TFBlocks.CICADA_JAR.get()).build());
-	public static final BlockEntityType<MasonJarBlockEntity> MASON_JAR = register("mason_jar", FabricBlockEntityTypeBuilder.create(MasonJarBlockEntity::new, TFBlocks.MASON_JAR.get()).build());
+	public static final BlockEntityType<JarBlockEntity> JAR = register("jar", FabricBlockEntityTypeBuilder.create(JarBlockEntity::new, TFBlocks.FIREFLY_JAR, TFBlocks.CICADA_JAR).build());
+	public static final BlockEntityType<MasonJarBlockEntity> MASON_JAR = register("mason_jar", FabricBlockEntityTypeBuilder.create(MasonJarBlockEntity::new, TFBlocks.MASON_JAR).build());
 	public static final BlockEntityType<SinisterSpawnerBlockEntity> SINISTER_SPAWNER = register("sinister_spawner", FabricBlockEntityTypeBuilder.create(SinisterSpawnerBlockEntity::new, TFBlocks.SINISTER_SPAWNER.get()).build());
 	public static final BlockEntityType<DryingRackBlockEntity> DRYING_RACK = register("drying_rack", FabricBlockEntityTypeBuilder.create(DryingRackBlockEntity::new,
 		TFBlocks.OAK_DRYING_RACK.get(), TFBlocks.SPRUCE_DRYING_RACK.get(),

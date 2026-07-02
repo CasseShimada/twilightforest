@@ -498,7 +498,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			case "stone_brick_slab" -> level.setBlock(pos, Blocks.STONE_BRICK_SLAB.defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "lava" -> level.setBlock(pos, Blocks.LAVA.defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "water" -> level.setBlock(pos, Blocks.WATER.defaultBlockState(), Block.UPDATE_CLIENTS);
-			case "firefly_jar" -> level.setBlock(pos, TFBlocks.FIREFLY_JAR.value().defaultBlockState(), Block.UPDATE_CLIENTS);
+			case "firefly_jar" -> level.setBlock(pos, TFBlocks.FIREFLY_JAR.defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "terrorcotta_arcs" -> level.setBlock(pos, TFBlocks.TERRORCOTTA_ARCS.value().defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "mason_jar" -> this.putMasonJar(pos, level, random, parameters);
 			case "canopy_slab" -> level.setBlock(pos, TFBlocks.CANOPY_SLAB.value().defaultBlockState(), Block.UPDATE_CLIENTS);
@@ -568,7 +568,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 	}
 
 	private void putMasonJar(BlockPos pos, WorldGenLevel level, RandomSource random, String[] parameters) {
-		BlockState jar = TFBlocks.MASON_JAR.value().defaultBlockState();
+		BlockState jar = TFBlocks.MASON_JAR.defaultBlockState();
 		level.setBlock(pos, jar, Block.UPDATE_CLIENTS);
 
 		if (parameters.length >= 2) {

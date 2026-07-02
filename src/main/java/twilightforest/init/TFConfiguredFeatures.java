@@ -262,8 +262,8 @@ public final class TFConfiguredFeatures {
 		context.register(HOLLOW_STUMP, new ConfiguredFeature<>(TFFeatures.HOLLOW_STUMP, TreeConfigurations.HOLLOW_TREE));
 		context.register(HUGE_LILY_PAD, new ConfiguredFeature<>(TFFeatures.HUGE_LILY_PAD, NoneFeatureConfiguration.NONE));
 		context.register(HUGE_WATER_LILY, new ConfiguredFeature<>(TFFeatures.HUGE_WATER_LILY, NoneFeatureConfiguration.NONE));
-		context.register(CICADA_LAMPPOST, new ConfiguredFeature<>(TFFeatures.LAMPPOSTS, new BlockStateConfiguration(TFBlocks.CICADA_JAR.get().defaultBlockState())));
-		context.register(FIREFLY_LAMPPOST, new ConfiguredFeature<>(TFFeatures.LAMPPOSTS, new BlockStateConfiguration(TFBlocks.FIREFLY_JAR.get().defaultBlockState())));
+		context.register(CICADA_LAMPPOST, new ConfiguredFeature<>(TFFeatures.LAMPPOSTS, new BlockStateConfiguration(TFBlocks.CICADA_JAR.defaultBlockState())));
+		context.register(FIREFLY_LAMPPOST, new ConfiguredFeature<>(TFFeatures.LAMPPOSTS, new BlockStateConfiguration(TFBlocks.FIREFLY_JAR.defaultBlockState())));
 		context.register(MONOLITH, new ConfiguredFeature<>(TFFeatures.MONOLITH, NoneFeatureConfiguration.NONE));
 		context.register(MUSHGLOOM_CLUSTER, new ConfiguredFeature<>(TFFeatures.RANDOM_PATCH, simplePatchConfiguration(new SimpleBlockConfiguration(BlockStateProvider.simple(TFBlocks.MUSHGLOOM.get())))));
 		context.register(MYCELIUM_BLOB, new ConfiguredFeature<>(TFFeatures.MYCELIUM_BLOB, new DiskConfiguration(BlockStateProvider.simple(Blocks.MYCELIUM), BlockPredicate.matchesBlocks(Blocks.GRASS_BLOCK), UniformInt.of(4, 6), 3)));
