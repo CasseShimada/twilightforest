@@ -40,7 +40,7 @@ public class TFDispenserBehaviors {
 		DispenserBlock.registerBehavior(TFItems.CRUMBLE_HORN, new CrumbleDispenseBehavior());
 		DispenserBlock.registerBehavior(TFItems.TRANSFORMATION_POWDER, new TransformationDispenseBehavior());
 
-		DispenserBlock.registerBehavior(TFItems.TWILIGHT_SCEPTER.get(), new DamageableStackDispenseBehavior() {
+		DispenserBlock.registerBehavior(TFItems.TWILIGHT_SCEPTER, new DamageableStackDispenseBehavior() {
 			@Override
 			protected Projectile getProjectileEntity(Level level, Position position, ItemStack stack) {
 				return new TwilightWandBolt(level, position.x(), position.y(), position.z());

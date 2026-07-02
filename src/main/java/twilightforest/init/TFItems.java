@@ -42,10 +42,10 @@ public class TFItems {
 	public static final Item NAGA_SCALE = registerDirect("naga_scale", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final Item NAGA_CHESTPLATE = registerDirect("naga_chestplate", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.NAGA, ArmorType.CHESTPLATE)), () -> new Item.Properties().durability(ArmorType.CHESTPLATE.getDurability(21)).rarity(Rarity.UNCOMMON));
 	public static final Item NAGA_LEGGINGS = registerDirect("naga_leggings", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.NAGA, ArmorType.LEGGINGS)), () -> new Item.Properties().durability(ArmorType.LEGGINGS.getDurability(21)).rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> TWILIGHT_SCEPTER = register("twilight_scepter", TwilightWandItem::new, () -> new Item.Properties().durability(99).rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> LIFEDRAIN_SCEPTER = register("lifedrain_scepter", LifedrainScepterItem::new, () -> new Item.Properties().durability(99).rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> ZOMBIE_SCEPTER = register("zombie_scepter", ZombieWandItem::new, () -> new Item.Properties().durability(9).rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> FORTIFICATION_SCEPTER = register("fortification_scepter", FortificationWandItem::new, () -> new Item.Properties().durability(9).rarity(Rarity.UNCOMMON));
+	public static final Item TWILIGHT_SCEPTER = registerDirect("twilight_scepter", TwilightWandItem::new, () -> new Item.Properties().durability(99).rarity(Rarity.UNCOMMON));
+	public static final Item LIFEDRAIN_SCEPTER = registerDirect("lifedrain_scepter", LifedrainScepterItem::new, () -> new Item.Properties().durability(99).rarity(Rarity.UNCOMMON));
+	public static final Item ZOMBIE_SCEPTER = registerDirect("zombie_scepter", ZombieWandItem::new, () -> new Item.Properties().durability(9).rarity(Rarity.UNCOMMON));
+	public static final Item FORTIFICATION_SCEPTER = registerDirect("fortification_scepter", FortificationWandItem::new, () -> new Item.Properties().durability(9).rarity(Rarity.UNCOMMON));
 	public static final Item EXANIMATE_ESSENCE = registerDirect("exanimate_essence", ExanimateEssenceItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(16));
 	public static final Item WROUGHT_IRON_BAR = registerDirect("wrought_iron_bar", Item::new, Item.Properties::new);
 	//items.register("Wand of Pacification [NYI]", new Item().setIconIndex(6).setTranslationKey("wandPacification").setMaxStackSize(1));

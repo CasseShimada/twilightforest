@@ -42,7 +42,7 @@ public class LichMinionsGoal extends Goal {
 
 	@Override
 	public void start() {
-		this.lich.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFItems.ZOMBIE_SCEPTER.get()));
+		this.lich.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFItems.ZOMBIE_SCEPTER));
 	}
 
 	@Override

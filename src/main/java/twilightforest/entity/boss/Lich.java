@@ -119,7 +119,7 @@ public class Lich extends BaseTFBoss {
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason reason, @Nullable SpawnGroupData spawnGroupData) {
 		SpawnGroupData data = super.finalizeSpawn(level, difficulty, reason, spawnGroupData);
 		if (!this.isShadowClone()) {
-			this.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(TFItems.FORTIFICATION_SCEPTER.get()));
+			this.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(TFItems.FORTIFICATION_SCEPTER));
 			this.playSound(TFSounds.SHIELD_ADD, 1.5F, this.getVoicePitch());
 			this.swing(InteractionHand.MAIN_HAND);
 		}
@@ -328,8 +328,8 @@ public class Lich extends BaseTFBoss {
 			this.popCooldown--;
 		}
 
-		if (this.getScepterTimeLeft() == 0 && this.getPopCooldown() < 30 && this.getItemInHand(InteractionHand.MAIN_HAND).is(TFItems.LIFEDRAIN_SCEPTER.get())) {
-			this.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(this.getPhase() == 2 ? TFItems.ZOMBIE_SCEPTER.get() : Items.GOLDEN_SWORD));
+		if (this.getScepterTimeLeft() == 0 && this.getPopCooldown() < 30 && this.getItemInHand(InteractionHand.MAIN_HAND).is(TFItems.LIFEDRAIN_SCEPTER)) {
+			this.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(this.getPhase() == 2 ? TFItems.ZOMBIE_SCEPTER : Items.GOLDEN_SWORD));
 		}
 
 		if (this.getScepterTimeLeft() > 0) {
@@ -810,7 +810,7 @@ public class Lich extends BaseTFBoss {
 
 	public void setScepterTime() {
 		this.heldScepterTime = 20 + this.getRandom().nextInt(20);
-		this.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(TFItems.LIFEDRAIN_SCEPTER.get()));
+		this.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(TFItems.LIFEDRAIN_SCEPTER));
 	}
 
 	public void resetScepterTime() {
