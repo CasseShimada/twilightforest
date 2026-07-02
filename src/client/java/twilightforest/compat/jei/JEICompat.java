@@ -60,7 +60,7 @@ public class JEICompat implements IModPlugin {
 
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistration registration) {
-		registration.registerSubtypeInterpreter(TFItems.KEEPSAKE_CASKET.asItem(), CasketSubtypeInterpreter.INSTANCE);
+		registration.registerSubtypeInterpreter(TFItems.KEEPSAKE_CASKET, CasketSubtypeInterpreter.INSTANCE);
 	}
 
 	@Override

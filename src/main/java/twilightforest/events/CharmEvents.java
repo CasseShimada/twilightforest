@@ -174,8 +174,8 @@ public class CharmEvents {
 
 	private static void keepsakeCasket(Player player) {
 		//make sure we are still actually holding onto items before trying to place a casket
-		if (player.getInventory().contains(stack -> !stack.isEmpty() && !stack.is(TFItems.KEEPSAKE_CASKET.get()))) {
-			boolean casketConsumed = TFItemStackUtils.consumeInventoryItem(player, TFItems.KEEPSAKE_CASKET.get(), getPlayerData(player), false);
+		if (player.getInventory().contains(stack -> !stack.isEmpty() && !stack.is(TFItems.KEEPSAKE_CASKET))) {
+			boolean casketConsumed = TFItemStackUtils.consumeInventoryItem(player, TFItems.KEEPSAKE_CASKET, getPlayerData(player), false);
 
 			if (!casketConsumed)
 				return;
@@ -264,7 +264,7 @@ public class CharmEvents {
 		} else {
 			//inventory is empty minus the casket: put the casket into the kept inventory
 			for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
-				if (player.getInventory().getItem(i).is(TFItems.KEEPSAKE_CASKET.get())) {
+				if (player.getInventory().getItem(i).is(TFItems.KEEPSAKE_CASKET)) {
 					Inventory tmp = new Inventory(player, new EntityEquipment());
 					TFItemStackUtils.loadNoClear(player.registryAccess(), getPlayerData(player).getListOrEmpty(CHARM_INV_TAG), tmp);
 					tmp.add(player.getInventory().getItem(i).copy());
@@ -315,7 +315,7 @@ public class CharmEvents {
 				continue;
 			}
 			var copy = item.copy();
-			if (skipCasketCheck || (!copy.is(TFItems.KEEPSAKE_CASKET.get()) || keptCasket)) {
+			if (skipCasketCheck || (!copy.is(TFItems.KEEPSAKE_CASKET) || keptCasket)) {
 				transferTo.setItem(slot, copy);
 				transferFrom.setItem(slot, ItemStack.EMPTY);
 			} else {

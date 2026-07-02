@@ -602,7 +602,7 @@ public class TFCreativeTabs {
 
 	private static void createCaskets(CreativeModeTab.Output output) {
 		for (int i = 0; i< 3; i++) {
-			ItemStack stack = new ItemStack(TFItems.KEEPSAKE_CASKET.get());
+			ItemStack stack = new ItemStack(TFItems.KEEPSAKE_CASKET);
 			stack.set(TFDataComponents.CASKET_DAMAGE, i);
 			output.accept(stack);
 		}
