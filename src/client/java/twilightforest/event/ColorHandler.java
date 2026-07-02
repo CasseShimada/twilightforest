@@ -84,7 +84,7 @@ public class ColorHandler {
 		register(tint(
 			state -> FoliageColor.FOLIAGE_DEFAULT,
 			(state, getter, pos) -> BiomeColors.getAverageFoliageColor(getter, pos)
-		), TFBlocks.TWILIGHT_OAK_LEAVES.get(), TFBlocks.DARK_LEAVES.get(), TFBlocks.HARDENED_DARK_LEAVES, TFBlocks.GIANT_LEAVES.get(), TFBlocks.FALLEN_LEAVES);
+		), TFBlocks.TWILIGHT_OAK_LEAVES.get(), TFBlocks.DARK_LEAVES.get(), TFBlocks.HARDENED_DARK_LEAVES, TFBlocks.GIANT_LEAVES, TFBlocks.FALLEN_LEAVES);
 
 		register(tint(
 			state -> FoliageColor.FOLIAGE_EVERGREEN,

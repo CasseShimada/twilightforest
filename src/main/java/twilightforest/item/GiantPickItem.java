@@ -49,7 +49,7 @@ public class GiantPickItem extends Item {
 	public float getDestroySpeed(ItemStack stack, BlockState state) {
 		float destroySpeed = super.getDestroySpeed(stack, state);
 		// extra 64X strength vs giant obsidian
-		destroySpeed *= (state.is(TFBlocks.GIANT_OBSIDIAN.get())) ? 64 : 1;
+		destroySpeed *= (state.is(TFBlocks.GIANT_OBSIDIAN)) ? 64 : 1;
 		// 64x strength vs giant blocks
 		return state.getBlock() instanceof GiantBlock ? destroySpeed * 64 : destroySpeed;
 	}

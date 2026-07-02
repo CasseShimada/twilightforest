@@ -257,10 +257,10 @@ public final class TwilightForestMod implements ModInitializer {
 		flammables.add(TFBlocks.CANOPY_GATE.get(), 5, 20);
 		flammables.add(TFBlocks.CANOPY_BOOKSHELF.get(), 5, 20);
 
-		LootEvents.GIANT_PICK_CONVERSIONS.put(Blocks.COBBLESTONE, TFBlocks.GIANT_COBBLESTONE.get().asItem());
-		LootEvents.GIANT_PICK_CONVERSIONS.put(Blocks.OAK_LOG, TFBlocks.GIANT_LOG.get().asItem());
-		LootEvents.GIANT_PICK_CONVERSIONS.put(Blocks.OAK_LEAVES, TFBlocks.GIANT_LEAVES.get().asItem());
-		LootEvents.GIANT_PICK_CONVERSIONS.put(Blocks.OBSIDIAN, TFBlocks.GIANT_OBSIDIAN.get().asItem());
+		LootEvents.GIANT_PICK_CONVERSIONS.put(Blocks.COBBLESTONE, TFBlocks.GIANT_COBBLESTONE.asItem());
+		LootEvents.GIANT_PICK_CONVERSIONS.put(Blocks.OAK_LOG, TFBlocks.GIANT_LOG.asItem());
+		LootEvents.GIANT_PICK_CONVERSIONS.put(Blocks.OAK_LEAVES, TFBlocks.GIANT_LEAVES.asItem());
+		LootEvents.GIANT_PICK_CONVERSIONS.put(Blocks.OBSIDIAN, TFBlocks.GIANT_OBSIDIAN.asItem());
 
 		// Jar lids
 		HolidayEvent holidayEvent = new HolidayEvent();

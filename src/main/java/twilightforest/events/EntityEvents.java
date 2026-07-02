@@ -225,7 +225,7 @@ public class EntityEvents {
 
 	public static void handleCrafting(Player player, ItemStack crafted, net.minecraft.world.inventory.CraftingContainer craftingInventory) {
 		// if we've crafted 64 planks from a giant log, sneak 192 more planks into the player's inventory or drop them nearby
-		if (crafted.is(Items.OAK_PLANKS) && crafted.getCount() == 64 && craftingInventory.countItem(TFBlocks.GIANT_LOG.get().asItem()) > 0) {
+		if (crafted.is(Items.OAK_PLANKS) && crafted.getCount() == 64 && craftingInventory.countItem(TFBlocks.GIANT_LOG.asItem()) > 0) {
 			InventoryUtil.giveItemToPlayer(player, new ItemStack(Items.OAK_PLANKS, 64));
 			InventoryUtil.giveItemToPlayer(player, new ItemStack(Items.OAK_PLANKS, 64));
 			InventoryUtil.giveItemToPlayer(player, new ItemStack(Items.OAK_PLANKS, 64));

@@ -73,8 +73,8 @@ public class CloudCastleComponent extends TFStructureComponentOld {
 
 		// make haus
 		this.generateBox(world, sbb, 8, 0, 8, 23, 3, 23, TFBlocks.FLUFFY_CLOUD.defaultBlockState(), TFBlocks.FLUFFY_CLOUD.defaultBlockState(), false);
-		this.generateBox(world, sbb, 8, 4, 8, 23, 15, 23, TFBlocks.GIANT_COBBLESTONE.get().defaultBlockState(), TFBlocks.GIANT_COBBLESTONE.get().defaultBlockState(), false);
-		this.generateBox(world, sbb, 8, 16, 8, 23, 19, 23, TFBlocks.GIANT_LOG.get().defaultBlockState(), TFBlocks.GIANT_LOG.get().defaultBlockState(), false);
+		this.generateBox(world, sbb, 8, 4, 8, 23, 15, 23, TFBlocks.GIANT_COBBLESTONE.defaultBlockState(), TFBlocks.GIANT_COBBLESTONE.defaultBlockState(), false);
+		this.generateBox(world, sbb, 8, 16, 8, 23, 19, 23, TFBlocks.GIANT_LOG.defaultBlockState(), TFBlocks.GIANT_LOG.defaultBlockState(), false);
 
 		// clear inside
 		this.generateAirBox(world, sbb, 12, 4, 12, 19, 15, 19);
