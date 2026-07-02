@@ -178,7 +178,7 @@ public class Minoshroom extends BaseTFBoss implements ITFCharger {
 	@Override
 	protected void populateDefaultEquipmentSlots(RandomSource source, DifficultyInstance difficulty) {
 		super.populateDefaultEquipmentSlots(source, difficulty);
-		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFItems.DIAMOND_MINOTAUR_AXE.get()));
+		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(TFItems.DIAMOND_MINOTAUR_AXE));
 	}
 
 	@Override

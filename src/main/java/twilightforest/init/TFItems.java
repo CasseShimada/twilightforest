@@ -95,9 +95,9 @@ public class TFItems {
 	public static final Item STEELEAF_PICKAXE = registerDirect("steeleaf_pickaxe", properties -> new Item(properties.pickaxe(TFToolMaterials.STEELEAF, 1.0F, -2.8F)), Item.Properties::new);
 	public static final Item STEELEAF_AXE = registerDirect("steeleaf_axe", properties -> new AxeItem(TFToolMaterials.STEELEAF, 6.0F, -3.0F, properties), Item.Properties::new);
 	public static final Item STEELEAF_HOE = registerDirect("steeleaf_hoe", properties -> new HoeItem(TFToolMaterials.STEELEAF, -3.0F, -0.5F, properties), Item.Properties::new);
-	public static final DeferredItem<Item> GOLDEN_MINOTAUR_AXE = register("gold_minotaur_axe", properties -> new MinotaurAxeItem(ToolMaterial.GOLD, properties), Item.Properties::new);
-	public static final DeferredItem<Item> DIAMOND_MINOTAUR_AXE = register("diamond_minotaur_axe", properties -> new MinotaurAxeItem(ToolMaterial.DIAMOND, properties), () -> new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> MAZEBREAKER_PICKAXE = register("mazebreaker_pickaxe", properties -> new MazebreakerPickItem(ToolMaterial.DIAMOND, properties), () -> new Item.Properties().rarity(Rarity.RARE));
+	public static final Item GOLDEN_MINOTAUR_AXE = registerDirect("gold_minotaur_axe", properties -> new MinotaurAxeItem(ToolMaterial.GOLD, properties), Item.Properties::new);
+	public static final Item DIAMOND_MINOTAUR_AXE = registerDirect("diamond_minotaur_axe", properties -> new MinotaurAxeItem(ToolMaterial.DIAMOND, properties), () -> new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final Item MAZEBREAKER_PICKAXE = registerDirect("mazebreaker_pickaxe", properties -> new MazebreakerPickItem(ToolMaterial.DIAMOND, properties), () -> new Item.Properties().rarity(Rarity.RARE));
 	public static final Item TRANSFORMATION_POWDER = registerDirect("transformation_powder", TransformPowderItem::new, Item.Properties::new);
 	public static final Item RAW_MEEF = registerDirect("raw_meef", Item::new, () -> new Item.Properties().food(TFFoods.RAW_MEEF));
 	public static final Item COOKED_MEEF = registerDirect("cooked_meef", Item::new, () -> new Item.Properties().food(TFFoods.MEEF_STEAK));
