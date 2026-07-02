@@ -36,7 +36,7 @@ public class SlideBlock extends Entity {
 	public SlideBlock(EntityType<? extends SlideBlock> type, Level level) {
 		super(type, level);
 		this.blocksBuilding = true;
-		this.myState = TFBlocks.SLIDER.get().defaultBlockState();
+		this.myState = TFBlocks.SLIDER.defaultBlockState();
 	}
 
 	public SlideBlock(EntityType<? extends SlideBlock> type, Level world, double x, double y, double z, BlockState state) {
@@ -182,7 +182,7 @@ public class SlideBlock extends Entity {
 		this.slideTime = input.getIntOr("Time", 0);
 		int dir = input.getByteOr("Direction", (byte) Direction.DOWN.get3DDataValue());
 		this.getEntityData().set(MOVE_DIRECTION, Direction.from3DDataValue(dir));
-		this.myState = input.read("BlockState", BlockState.CODEC).orElse(TFBlocks.SLIDER.get().defaultBlockState());
+		this.myState = input.read("BlockState", BlockState.CODEC).orElse(TFBlocks.SLIDER.defaultBlockState());
 	}
 
 	@Override
