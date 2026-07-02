@@ -46,7 +46,7 @@ public class TFItems {
 	public static final DeferredItem<Item> LIFEDRAIN_SCEPTER = register("lifedrain_scepter", LifedrainScepterItem::new, () -> new Item.Properties().durability(99).rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> ZOMBIE_SCEPTER = register("zombie_scepter", ZombieWandItem::new, () -> new Item.Properties().durability(9).rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> FORTIFICATION_SCEPTER = register("fortification_scepter", FortificationWandItem::new, () -> new Item.Properties().durability(9).rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> EXANIMATE_ESSENCE = register("exanimate_essence", ExanimateEssenceItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(16));
+	public static final Item EXANIMATE_ESSENCE = registerDirect("exanimate_essence", ExanimateEssenceItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(16));
 	public static final Item WROUGHT_IRON_BAR = registerDirect("wrought_iron_bar", Item::new, Item.Properties::new);
 	//items.register("Wand of Pacification [NYI]", new Item().setIconIndex(6).setTranslationKey("wandPacification").setMaxStackSize(1));
 	public static final Item MAGIC_PAINTING = registerDirect("magic_painting", MagicPaintingItem::new, Item.Properties::new);

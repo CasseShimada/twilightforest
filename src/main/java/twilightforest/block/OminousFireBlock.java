@@ -46,7 +46,7 @@ public class OminousFireBlock extends BaseFireBlock {
 
 	@Override
 	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
-		return new ItemStack(TFItems.EXANIMATE_ESSENCE.get());
+		return new ItemStack(TFItems.EXANIMATE_ESSENCE);
 	}
 
 	@Override

@@ -182,7 +182,7 @@ public class CandelabraBlock extends BaseEntityBlock implements LightableBlock, 
 				this.eruptFlameParticles(TFParticleType.DIM_FLAME, level, pos, state);
 			}
 			return InteractionResult.SUCCESS;
-		} else if ((stack.is(TFItemTags.SCEPTERS) || stack.is(TFItems.EXANIMATE_ESSENCE.get())) && state.getValue(LIGHTING) == Lighting.NORMAL) {
+		} else if ((stack.is(TFItemTags.SCEPTERS) || stack.is(TFItems.EXANIMATE_ESSENCE)) && state.getValue(LIGHTING) == Lighting.NORMAL) {
 			level.setBlockAndUpdate(pos, state.setValue(LIGHTING, Lighting.OMINOUS));
 			level.playSound(null, pos, TFSounds.CANDELABRA_OMINOUS, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
 			if (level.isClientSide()) {

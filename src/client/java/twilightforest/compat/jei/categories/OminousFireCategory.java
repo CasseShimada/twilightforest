@@ -37,7 +37,7 @@ public class OminousFireCategory implements IRecipeCategory<OminousFireRecipe> {
 		Identifier location = TwilightForestMod.getGuiTexture("ominous_fire_jei.png");
 		this.background = helper.createDrawable(location, 0, 0, RecipeViewerConstants.GENERIC_RECIPE_WIDTH, RecipeViewerConstants.GENERIC_RECIPE_HEIGHT);
 		this.arrow = helper.createDrawable(location, 116, 0, 23, 15);
-		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(TFItems.EXANIMATE_ESSENCE.get()));
+		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(TFItems.EXANIMATE_ESSENCE));
 		this.localizedName = Component.translatable("gui.twilightforest.ominous_fire_jei");
 	}
 

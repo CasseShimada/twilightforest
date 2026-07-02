@@ -38,7 +38,7 @@ public record RechargeScepterEffect() implements EnchantmentEntityEffect {
 					for (int i = 0; i < inventory.size(); i++) {
 						var stack = inventory.get(i);
 						if (stack.isEmpty()) continue;
-						if (stack.is(TFItems.EXANIMATE_ESSENCE.get())) {
+						if (stack.is(TFItems.EXANIMATE_ESSENCE)) {
 							stack.shrink(1);
 							item.setDamageValue(0);
 							return;
