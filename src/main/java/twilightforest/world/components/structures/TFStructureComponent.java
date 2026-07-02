@@ -67,7 +67,7 @@ public abstract class TFStructureComponent extends StructurePiece implements Spa
 		.add(Blocks.LAVA)
 		.add(Blocks.WATER)
 		.add(Blocks.QUARTZ_STAIRS)
-		.add(TFBlocks.CASTLE_BRICK_STAIRS.get())
+		.add(TFBlocks.CASTLE_BRICK_STAIRS)
 		.add(TFBlocks.BLUE_FORCE_FIELD)
 		.add(TFBlocks.GREEN_FORCE_FIELD)
 		.add(TFBlocks.PINK_FORCE_FIELD)
