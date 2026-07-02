@@ -174,7 +174,7 @@ public class TFBlocks {
 
 	//stronghold
 	public static final DeferredBlock<Block> STRONGHOLD_SHIELD = registerWithItem("stronghold_shield", StrongholdShieldBlock::new, () -> BlockBehaviour.Properties.of().noLootTable().mapColor(MapColor.STONE).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().sound(SoundType.METAL).strength(-1.0F, 6000000.0F));
-	public static final DeferredBlock<Block> TROPHY_PEDESTAL = registerWithItem("trophy_pedestal", TrophyPedestalBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.STONE).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().sound(SoundType.STONE).strength(2.0F, 2000.0F));
+	public static final TrophyPedestalBlock TROPHY_PEDESTAL = registerDirectWithItem("trophy_pedestal", TrophyPedestalBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.STONE).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().sound(SoundType.STONE).strength(2.0F, 2000.0F));
 	public static final DeferredBlock<Block> UNDERBRICK = registerWithItem("underbrick", Block::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE_BRICKS).strength(1.5F, 6.0F));
 	public static final DeferredBlock<Block> MOSSY_UNDERBRICK = registerWithItem("mossy_underbrick", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(UNDERBRICK.get()));
 	public static final DeferredBlock<Block> CRACKED_UNDERBRICK = registerWithItem("cracked_underbrick", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(UNDERBRICK.get()));
@@ -702,6 +702,12 @@ public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CL
 		DeferredBlock<T> ret = registerBlock(name, () -> block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, TwilightForestMod.prefix(name)))));
 		BLOCK_ITEM_REGISTRATIONS.add(() -> TFItems.registerBlockItem(name, itemProps -> new BlockItem(ret.get(), itemProps), () -> new Item.Properties().useBlockDescriptionPrefix()));
 		return ret;
+	}
+
+	private static <T extends Block> T registerDirectWithItem(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
+		T value = registerDirect(name, block, properties);
+		BLOCK_ITEM_REGISTRATIONS.add(() -> TFItems.registerBlockItem(name, itemProps -> new BlockItem(value, itemProps), () -> new Item.Properties().useBlockDescriptionPrefix()));
+		return value;
 	}
 
 	public static <T extends Block> DeferredBlock<T> registerWithTooltipItem(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties, TooltipBlockItem.TooltipAppender tooltipAppender) {
