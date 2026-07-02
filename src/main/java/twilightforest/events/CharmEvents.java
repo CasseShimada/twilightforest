@@ -81,8 +81,8 @@ public class CharmEvents {
 	}
 
 	private static boolean charmOfLife(Player player) {
-		boolean charm2 = TFItemStackUtils.consumeInventoryItem(player, TFItems.CHARM_OF_LIFE_2.get(), getPlayerData(player), false);
-		boolean charm1 = !charm2 && TFItemStackUtils.consumeInventoryItem(player, TFItems.CHARM_OF_LIFE_1.get(), getPlayerData(player), false);
+		boolean charm2 = TFItemStackUtils.consumeInventoryItem(player, TFItems.CHARM_OF_LIFE_2, getPlayerData(player), false);
+		boolean charm1 = !charm2 && TFItemStackUtils.consumeInventoryItem(player, TFItems.CHARM_OF_LIFE_1, getPlayerData(player), false);
 
 		if (charm2 || charm1) {
 			if (charm1) {
@@ -99,7 +99,7 @@ public class CharmEvents {
 			}
 
 			if (player instanceof ServerPlayer serverPlayer) {
-				PacketDistributor.sendToPlayer(serverPlayer, new SpawnCharmPacket(new ItemStack(charm1 ? TFItems.CHARM_OF_LIFE_1.get() : TFItems.CHARM_OF_LIFE_2.get()), ResourceKey.create(Registries.SOUND_EVENT, TFSounds.CHARM_LIFE.location())));
+				PacketDistributor.sendToPlayer(serverPlayer, new SpawnCharmPacket(new ItemStack(charm1 ? TFItems.CHARM_OF_LIFE_1 : TFItems.CHARM_OF_LIFE_2), ResourceKey.create(Registries.SOUND_EVENT, TFSounds.CHARM_LIFE.location())));
 				serverPlayer.awardStat(TFStats.LIFE_CHARMS_ACTIVATED);
 			}
 
@@ -116,11 +116,11 @@ public class CharmEvents {
 		List<Integer> allSlots = slotRange(0, playerInventory.getNonEquipmentItems().size());
 		List<Integer> hotbarSlots = slotRange(0, Inventory.getSelectionSize());
 
-		if (!applyCharm(TFItems.CHARM_OF_KEEPING_3.get(), keepInventory, player, allSlots)) {
-			if (!applyCharm(TFItems.CHARM_OF_KEEPING_2.get(), keepInventory, player, hotbarSlots)) {
+		if (!applyCharm(TFItems.CHARM_OF_KEEPING_3, keepInventory, player, allSlots)) {
+			if (!applyCharm(TFItems.CHARM_OF_KEEPING_2, keepInventory, player, hotbarSlots)) {
 				int selected = playerInventory.getSelectedSlot();
 				if (Inventory.isHotbarSlot(selected)) {
-					applyCharm(TFItems.CHARM_OF_KEEPING_1.get(), keepInventory, player, List.of(selected));
+					applyCharm(TFItems.CHARM_OF_KEEPING_1, keepInventory, player, List.of(selected));
 				}
 			}
 		}
@@ -166,7 +166,7 @@ public class CharmEvents {
 			return false;
 		}
 
-		boolean keptACasket = keepSlotsAndCheckCasket(keptInventory, playerInventory, inventorySlots, charm == TFItems.CHARM_OF_KEEPING_3.get());
+		boolean keptACasket = keepSlotsAndCheckCasket(keptInventory, playerInventory, inventorySlots, charm == TFItems.CHARM_OF_KEEPING_3);
 		keepSlotsAndCheckCasket(keptInventory, playerInventory, equipmentSlotIndices(), keptACasket);
 
 		return true;

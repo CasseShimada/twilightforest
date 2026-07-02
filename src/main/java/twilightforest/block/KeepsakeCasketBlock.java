@@ -68,7 +68,7 @@ public class KeepsakeCasketBlock extends SkullChestBlock {
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
 		boolean flag = false;
 		if (state.getValue(BlockLoggingEnum.MULTILOGGED).getBlock() == Blocks.AIR || state.getValue(BlockLoggingEnum.MULTILOGGED).getFluid() != Fluids.EMPTY) {
-			if (stack.is(TFItems.CHARM_OF_KEEPING_3.get()) && state.getValue(BREAKAGE) > 0) {
+			if (stack.is(TFItems.CHARM_OF_KEEPING_3) && state.getValue(BREAKAGE) > 0) {
 				stack.consume(1, player);
 				level.setBlockAndUpdate(pos, state.setValue(BREAKAGE, state.getValue(BREAKAGE) - 1));
 				level.playSound(null, pos, TFSounds.CASKET_REPAIR, SoundSource.BLOCKS, 0.5F, level.getRandom().nextFloat() * 0.1F + 0.9F);

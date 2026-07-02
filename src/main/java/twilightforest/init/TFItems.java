@@ -109,11 +109,11 @@ public class TFItems {
 	public static final Item MOONWORM_QUEEN = registerDirect("moonworm_queen", MoonwormQueenItem::new, () -> new Item.Properties().durability(256).rarity(Rarity.RARE));
 	public static final Item BRITTLE_FLASK = registerDirect("brittle_potion_flask", BrittleFlaskItem::new, () -> new Item.Properties().component(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY));
 	public static final Item GREATER_FLASK = registerDirect("greater_potion_flask", GreaterFlaskItem::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).fireResistant().component(TFDataComponents.POTION_FLASK_CONTENTS, PotionFlaskComponent.EMPTY_UNBREAKABLE));
-	public static final DeferredItem<Item> CHARM_OF_LIFE_1 = register("charm_of_life_1", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> CHARM_OF_LIFE_2 = register("charm_of_life_2", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> CHARM_OF_KEEPING_1 = register("charm_of_keeping_1", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> CHARM_OF_KEEPING_2 = register("charm_of_keeping_2", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> CHARM_OF_KEEPING_3 = register("charm_of_keeping_3", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final Item CHARM_OF_LIFE_1 = registerDirect("charm_of_life_1", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final Item CHARM_OF_LIFE_2 = registerDirect("charm_of_life_2", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final Item CHARM_OF_KEEPING_1 = registerDirect("charm_of_keeping_1", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final Item CHARM_OF_KEEPING_2 = registerDirect("charm_of_keeping_2", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final Item CHARM_OF_KEEPING_3 = registerDirect("charm_of_keeping_3", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final Item TOWER_KEY = registerDirect("tower_key", Item::new, () -> new Item.Properties().fireResistant().rarity(Rarity.UNCOMMON));
 	public static final Item BORER_ESSENCE = registerDirect("borer_essence", Item::new, Item.Properties::new);
 	public static final Item CARMINITE = registerDirect("carminite", Item::new, Item.Properties::new);
