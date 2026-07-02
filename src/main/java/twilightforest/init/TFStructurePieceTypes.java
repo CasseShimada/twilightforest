@@ -1,6 +1,7 @@
 package twilightforest.init;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import twilightforest.util.registry.DeferredHolder;
 import twilightforest.util.registry.DeferredRegister;
@@ -22,7 +23,7 @@ import twilightforest.world.components.structures.trollcave.*;
 import java.util.Locale;
 
 public class TFStructurePieceTypes {
-	public static final DeferredRegister<StructurePieceType> STRUCTURE_PIECE_TYPES = DeferredRegister.create(Registries.STRUCTURE_PIECE, TwilightForestMod.ID);
+	private static final DeferredRegister<StructurePieceType> STRUCTURE_PIECE_TYPES = DeferredRegister.create(Registries.STRUCTURE_PIECE, TwilightForestMod.ID);
 
 	// Single-Piece Structures
 	//IStructurePieceTypes that can be referred to
@@ -235,5 +236,13 @@ public class TFStructurePieceTypes {
 
 	private static DeferredHolder<StructurePieceType, StructurePieceType> registerPieceType(String name, StructurePieceType structurePieceType) {
 		return TFStructurePieceTypes.STRUCTURE_PIECE_TYPES.register(name.toLowerCase(Locale.ROOT), () -> structurePieceType);
+	}
+
+	public static void addAlias(Identifier from, Identifier to) {
+		STRUCTURE_PIECE_TYPES.addAlias(from, to);
+	}
+
+	public static void register() {
+		STRUCTURE_PIECE_TYPES.register();
 	}
 }

@@ -138,7 +138,7 @@ public final class TwilightForestMod implements ModInitializer {
 		TFEnchantmentEffects.register();
 		TFDensityFunctions.register();
 		TFStructureProcessors.register();
-		TFStructurePieceTypes.STRUCTURE_PIECE_TYPES.register();
+		TFStructurePieceTypes.register();
 		ChunkBlanketProcessors.register();
 		TFStructurePlacementTypes.register();
 	}
