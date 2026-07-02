@@ -84,7 +84,7 @@ public class FinalCastleDungeonExitComponent extends FinalCastleDungeonRoom31Com
 
 	@Override
 	protected BlockState getForceFieldColor(RandomSource decoRNG) {
-		return TFBlocks.PINK_FORCE_FIELD.get().defaultBlockState();
+		return TFBlocks.PINK_FORCE_FIELD.defaultBlockState();
 	}
 
 	@Override

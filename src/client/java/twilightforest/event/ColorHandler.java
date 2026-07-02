@@ -137,11 +137,11 @@ public class ColorHandler {
 		register(tint(state -> 0xFF00FFFF), TFBlocks.BLUE_CASTLE_RUNE_BRICK.get(), TFBlocks.BLUE_CASTLE_DOOR.get());
 		register(tint(state -> 0xFFFFFF00), TFBlocks.YELLOW_CASTLE_RUNE_BRICK.get(), TFBlocks.YELLOW_CASTLE_DOOR.get());
 		register(tint(state -> 0xFF4B0082), TFBlocks.VIOLET_CASTLE_RUNE_BRICK.get(), TFBlocks.VIOLET_CASTLE_DOOR.get());
-		register(tint(state -> 0xFF5C1074), TFBlocks.VIOLET_FORCE_FIELD.get());
-		register(tint(state -> 0xFFFA057E), TFBlocks.PINK_FORCE_FIELD.get());
-		register(tint(state -> 0xFFFF5B02), TFBlocks.ORANGE_FORCE_FIELD.get());
-		register(tint(state -> 0xFF89E701), TFBlocks.GREEN_FORCE_FIELD.get());
-		register(tint(state -> 0xFF0DDEFF), TFBlocks.BLUE_FORCE_FIELD.get());
+		register(tint(state -> 0xFF5C1074), TFBlocks.VIOLET_FORCE_FIELD);
+		register(tint(state -> 0xFFFA057E), TFBlocks.PINK_FORCE_FIELD);
+		register(tint(state -> 0xFFFF5B02), TFBlocks.ORANGE_FORCE_FIELD);
+		register(tint(state -> 0xFF89E701), TFBlocks.GREEN_FORCE_FIELD);
+		register(tint(state -> 0xFF0DDEFF), TFBlocks.BLUE_FORCE_FIELD);
 	}
 
 	private static void registerTintSources() {

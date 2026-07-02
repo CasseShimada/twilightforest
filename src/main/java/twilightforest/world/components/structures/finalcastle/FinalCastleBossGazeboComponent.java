@@ -55,7 +55,7 @@ public class FinalCastleBossGazeboComponent extends TFStructureComponentOld {
 		this.deco = new StructureTFDecoratorCastle();
 		this.deco.blockState = TFBlocks.VIOLET_CASTLE_RUNE_BRICK.get().defaultBlockState();
 
-		this.deco.fenceState = TFBlocks.VIOLET_FORCE_FIELD.get().defaultBlockState();
+		this.deco.fenceState = TFBlocks.VIOLET_FORCE_FIELD.defaultBlockState();
 
 		TwilightJigsawPiece templatePiece = TwilightJigsawPiece.initializeTemplateFromPool(GAZEBO_TEMP_POOL, this.getWorldPos(10, -1, 10), ((twilightforest.mixin.accessor.StructurePieceFieldsAccessor) this).twilightforest$getRotation().rotation().rotate(FrontAndTop.UP_SOUTH), "twilightforest:final_castle/final_boss", rand, this.genDepth + 1, PacketDistributor.getServer().getStructureManager());
 		if (templatePiece != null) {
@@ -67,7 +67,7 @@ public class FinalCastleBossGazeboComponent extends TFStructureComponentOld {
 	@Override
 	public void postProcess(WorldGenLevel world, StructureManager manager, ChunkGenerator generator, RandomSource randomIn, BoundingBox sbb, ChunkPos chunkPosIn, BlockPos blockPos) {
 		/* Placed by Template
-		BlockState state = TFBlocks.VIOLET_FORCE_FIELD.get().defaultBlockState();
+		BlockState state = TFBlocks.VIOLET_FORCE_FIELD.defaultBlockState();
 
 		// walls
 		for (Rotation rotation : RotationUtil.ROTATIONS) {

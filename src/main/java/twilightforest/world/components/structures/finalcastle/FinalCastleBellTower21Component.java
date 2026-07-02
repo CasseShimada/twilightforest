@@ -75,7 +75,7 @@ public class FinalCastleBellTower21Component extends FinalCastleMazeTower13Compo
 		super.postProcess(world, manager, generator, rand, sbb, chunkPosIn, blockPos);
 
 		// openings!
-		BlockState fieldBlock = TFBlocks.BLUE_FORCE_FIELD.get().defaultBlockState();
+		BlockState fieldBlock = TFBlocks.BLUE_FORCE_FIELD.defaultBlockState();
 		for (Rotation rotation : RotationUtil.ROTATIONS) {
 			int y = 48;
 			for (int x = 5; x < this.size - 4; x += 2) {

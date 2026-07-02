@@ -266,7 +266,7 @@ public class FinalCastleMainComponent extends TFStructureComponentOld {
 		generateBox(world, sbb, 1, 20, 1, 47, 20, 47, false, rand, deco.randomBlocks);
 
 		// force field around dungeon stairs
-		BlockState fieldBlock = TFBlocks.PINK_FORCE_FIELD.get().defaultBlockState();
+		BlockState fieldBlock = TFBlocks.PINK_FORCE_FIELD.defaultBlockState();
 		this.generateBox(world, sbb, 12, 1, 12, 24, 10, 12, fieldBlock, fieldBlock, false);
 		this.generateBox(world, sbb, 12, 1, 12, 12, 10, 24, fieldBlock, fieldBlock, false);
 		this.generateBox(world, sbb, 24, 1, 12, 24, 10, 24, fieldBlock, fieldBlock, false);
