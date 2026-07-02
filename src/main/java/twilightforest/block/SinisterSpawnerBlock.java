@@ -69,7 +69,7 @@ public class SinisterSpawnerBlock extends BaseEntityBlock {
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-		return createTickerHelper(blockEntityType, TFBlockEntities.SINISTER_SPAWNER.value(), level.isClientSide() ? SinisterSpawnerBlockEntity::clientTick : SinisterSpawnerBlockEntity::serverTick);
+		return createTickerHelper(blockEntityType, TFBlockEntities.SINISTER_SPAWNER, level.isClientSide() ? SinisterSpawnerBlockEntity::clientTick : SinisterSpawnerBlockEntity::serverTick);
 	}
 
 	@Override

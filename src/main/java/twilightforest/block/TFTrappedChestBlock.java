@@ -17,7 +17,7 @@ import twilightforest.init.TFBlockEntities;
 
 public class TFTrappedChestBlock extends ChestBlock {
 	public TFTrappedChestBlock(Properties properties) {
-		super(TFBlockEntities.TF_TRAPPED_CHEST::get, SoundEvents.CHEST_OPEN, SoundEvents.CHEST_CLOSE, properties);
+		super(() -> TFBlockEntities.TF_TRAPPED_CHEST, SoundEvents.CHEST_OPEN, SoundEvents.CHEST_CLOSE, properties);
 	}
 
 	@Override

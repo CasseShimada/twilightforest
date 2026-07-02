@@ -46,7 +46,7 @@ public class KeepsakeCasketBlockEntity extends SkullChestBlockEntity {
 	};
 
 	public KeepsakeCasketBlockEntity(BlockPos pos, BlockState state) {
-		super(TFBlockEntities.KEEPSAKE_CASKET.get(), pos, state);
+		super(TFBlockEntities.KEEPSAKE_CASKET, pos, state);
 	}
 
 	@Override

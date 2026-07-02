@@ -164,6 +164,6 @@ public class BuilderBlock extends BaseEntityBlock {
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-		return state.getValue(STATE) == TowerDeviceVariant.BUILDER_ACTIVE ? createTickerHelper(type, TFBlockEntities.TOWER_BUILDER.get(), CarminiteBuilderBlockEntity::tick) : null;
+		return state.getValue(STATE) == TowerDeviceVariant.BUILDER_ACTIVE ? createTickerHelper(type, TFBlockEntities.TOWER_BUILDER, CarminiteBuilderBlockEntity::tick) : null;
 	}
 }

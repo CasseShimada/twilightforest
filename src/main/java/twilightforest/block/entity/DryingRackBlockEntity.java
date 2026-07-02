@@ -41,7 +41,7 @@ public class DryingRackBlockEntity extends BlockEntity {
 	protected int totalDryTime = DEFAULT_DRYING_TIME;
 
 	public DryingRackBlockEntity(BlockPos pos, BlockState blockState) {
-		super(TFBlockEntities.DRYING_RACK.get(), pos, blockState);
+		super(TFBlockEntities.DRYING_RACK, pos, blockState);
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, DryingRackBlockEntity entity) {

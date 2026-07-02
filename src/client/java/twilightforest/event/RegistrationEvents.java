@@ -305,24 +305,24 @@ public class RegistrationEvents {
 	}
 
 	private static void registerBlockEntityRenderers() {
-		BlockEntityRenderers.register(TFBlockEntities.FIREFLY.get(), FireflyRenderer::new);
-		BlockEntityRenderers.register(TFBlockEntities.CICADA.get(), CicadaRenderer::new);
-		BlockEntityRenderers.register(TFBlockEntities.MOONWORM.get(), MoonwormRenderer::new);
-		BlockEntityRenderers.register(TFBlockEntities.TROPHY.get(), TrophyRenderer::new);
-		BlockEntityRenderers.register(TFBlockEntities.TF_CHEST.get(), TFChestRenderer::new);
-		BlockEntityRenderers.register(TFBlockEntities.TF_TRAPPED_CHEST.get(), TFChestRenderer::new);
-		BlockEntityRenderers.register(TFBlockEntities.SKULL_CHEST.get(), SkullChestRenderer::new);
-		BlockEntityRenderers.register(TFBlockEntities.KEEPSAKE_CASKET.get(), KeepsakeCasketRenderer::new);
-		BlockEntityRenderers.register(TFBlockEntities.SKULL_CANDLE.get(), SkullCandleRenderer::new);
-		BlockEntityRenderers.register(TFBlockEntities.REACTOR_DEBRIS.get(), ReactorDebrisRenderer::new);
-		BlockEntityRenderers.register(TFBlockEntities.RED_THREAD.get(), RedThreadRenderer::new);
-		BlockEntityRenderers.register(TFBlockEntities.CANDELABRA.get(), CandelabraRenderer::new);
-		BlockEntityRenderers.register(TFBlockEntities.JAR.get(), JarRenderer::new);
-		BlockEntityRenderers.register(TFBlockEntities.MASON_JAR.get(), JarRenderer.MasonJarRenderer::new);
-		BlockEntityRenderers.register(TFBlockEntities.OMINOUS_CANDLE.get(), OminousCandleRenderer::new);
-		BlockEntityRenderers.register(TFBlockEntities.SINISTER_SPAWNER.get(), SinisterSpawnerRenderer::new);
-		BlockEntityRenderers.register(TFBlockEntities.BRAZIER.get(), BrazierRenderer::new);
-		BlockEntityRenderers.register(TFBlockEntities.DRYING_RACK.get(), DryingRackRenderer::new);
+		BlockEntityRenderers.register(TFBlockEntities.FIREFLY, FireflyRenderer::new);
+		BlockEntityRenderers.register(TFBlockEntities.CICADA, CicadaRenderer::new);
+		BlockEntityRenderers.register(TFBlockEntities.MOONWORM, MoonwormRenderer::new);
+		BlockEntityRenderers.register(TFBlockEntities.TROPHY, TrophyRenderer::new);
+		BlockEntityRenderers.register(TFBlockEntities.TF_CHEST, TFChestRenderer::new);
+		BlockEntityRenderers.register(TFBlockEntities.TF_TRAPPED_CHEST, TFChestRenderer::new);
+		BlockEntityRenderers.register(TFBlockEntities.SKULL_CHEST, SkullChestRenderer::new);
+		BlockEntityRenderers.register(TFBlockEntities.KEEPSAKE_CASKET, KeepsakeCasketRenderer::new);
+		BlockEntityRenderers.register(TFBlockEntities.SKULL_CANDLE, SkullCandleRenderer::new);
+		BlockEntityRenderers.register(TFBlockEntities.REACTOR_DEBRIS, ReactorDebrisRenderer::new);
+		BlockEntityRenderers.register(TFBlockEntities.RED_THREAD, RedThreadRenderer::new);
+		BlockEntityRenderers.register(TFBlockEntities.CANDELABRA, CandelabraRenderer::new);
+		BlockEntityRenderers.register(TFBlockEntities.JAR, JarRenderer::new);
+		BlockEntityRenderers.register(TFBlockEntities.MASON_JAR, JarRenderer.MasonJarRenderer::new);
+		BlockEntityRenderers.register(TFBlockEntities.OMINOUS_CANDLE, OminousCandleRenderer::new);
+		BlockEntityRenderers.register(TFBlockEntities.SINISTER_SPAWNER, SinisterSpawnerRenderer::new);
+		BlockEntityRenderers.register(TFBlockEntities.BRAZIER, BrazierRenderer::new);
+		BlockEntityRenderers.register(TFBlockEntities.DRYING_RACK, DryingRackRenderer::new);
 	}
 
 	private static void registerLayerDefinitions() {

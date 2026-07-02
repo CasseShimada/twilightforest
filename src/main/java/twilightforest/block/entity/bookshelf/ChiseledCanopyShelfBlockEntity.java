@@ -48,7 +48,7 @@ public class ChiseledCanopyShelfBlockEntity extends ChiseledBookShelfBlockEntity
 
 	@Override
 	public boolean isValidBlockState(BlockState state) {
-		return TFBlockEntities.CHISELED_CANOPY_BOOKSHELF.get().isValid(state);
+		return TFBlockEntities.CHISELED_CANOPY_BOOKSHELF.isValid(state);
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, ChiseledCanopyShelfBlockEntity te) {
@@ -59,7 +59,7 @@ public class ChiseledCanopyShelfBlockEntity extends ChiseledBookShelfBlockEntity
 
 	@Override
 	public BlockEntityType<?> getType() {
-		return TFBlockEntities.CHISELED_CANOPY_BOOKSHELF.get();
+		return TFBlockEntities.CHISELED_CANOPY_BOOKSHELF;
 	}
 
 	@Override

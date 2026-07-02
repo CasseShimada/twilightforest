@@ -21,7 +21,7 @@ public class CicadaBlockEntity extends BlockEntity {
 	private int singDelay;
 
 	public CicadaBlockEntity(BlockPos pos, BlockState state) {
-		super(TFBlockEntities.CICADA.get(), pos, state);
+		super(TFBlockEntities.CICADA, pos, state);
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, CicadaBlockEntity te) {

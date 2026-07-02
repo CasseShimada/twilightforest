@@ -61,7 +61,7 @@ public class KeepsakeCasketBlock extends SkullChestBlock {
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-		return createTickerHelper(type, TFBlockEntities.KEEPSAKE_CASKET.get(), SkullChestBlockEntity::tick);
+		return createTickerHelper(type, TFBlockEntities.KEEPSAKE_CASKET, SkullChestBlockEntity::tick);
 	}
 
 	@Override

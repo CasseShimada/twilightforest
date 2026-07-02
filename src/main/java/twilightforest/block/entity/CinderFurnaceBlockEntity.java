@@ -37,7 +37,7 @@ public class CinderFurnaceBlockEntity extends FurnaceBlockEntity {
 
 	@Override
 	public BlockEntityType<?> getType() {
-		return TFBlockEntities.CINDER_FURNACE.get();
+		return TFBlockEntities.CINDER_FURNACE;
 	}
 
 //	// [VanillaCopy] of superclass, edits noted

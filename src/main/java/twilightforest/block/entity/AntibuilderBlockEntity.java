@@ -28,7 +28,7 @@ public class AntibuilderBlockEntity extends BlockEntity {
 	private BlockState @Nullable[] blockData;
 
 	public AntibuilderBlockEntity(BlockPos pos, BlockState state) {
-		super(TFBlockEntities.ANTIBUILDER.get(), pos, state);
+		super(TFBlockEntities.ANTIBUILDER, pos, state);
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, AntibuilderBlockEntity te) {

@@ -266,7 +266,7 @@ public abstract class AbstractSkullCandleBlock extends BaseEntityBlock implement
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-		return createTickerHelper(type, TFBlockEntities.SKULL_CANDLE.get(), SkullCandleBlockEntity::tick);
+		return createTickerHelper(type, TFBlockEntities.SKULL_CANDLE, SkullCandleBlockEntity::tick);
 	}
 
 	public enum CandleColors implements StringRepresentable {

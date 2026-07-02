@@ -86,7 +86,7 @@ public class SkullChestBlock extends BaseEntityBlock implements BlockLoggingEnum
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-		return createTickerHelper(type, TFBlockEntities.SKULL_CHEST.get(), SkullChestBlockEntity::tick);
+		return createTickerHelper(type, TFBlockEntities.SKULL_CHEST, SkullChestBlockEntity::tick);
 	}
 
 	@Override

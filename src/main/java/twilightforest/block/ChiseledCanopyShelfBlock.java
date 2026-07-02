@@ -102,6 +102,6 @@ public class ChiseledCanopyShelfBlock extends ChiseledBookShelfBlock {
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-		return createTickerHelper(type, TFBlockEntities.CHISELED_CANOPY_BOOKSHELF.get(), ChiseledCanopyShelfBlockEntity::tick);
+		return createTickerHelper(type, TFBlockEntities.CHISELED_CANOPY_BOOKSHELF, ChiseledCanopyShelfBlockEntity::tick);
 	}
 }

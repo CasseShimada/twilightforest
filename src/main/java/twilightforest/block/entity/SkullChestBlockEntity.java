@@ -65,7 +65,7 @@ public class SkullChestBlockEntity extends RandomizableContainerBlockEntity impl
 	public ResolvableProfile owner;
 
 	public SkullChestBlockEntity(BlockPos pos, BlockState state) {
-		super(TFBlockEntities.SKULL_CHEST.get(), pos, state);
+		super(TFBlockEntities.SKULL_CHEST, pos, state);
 	}
 
 	public SkullChestBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {

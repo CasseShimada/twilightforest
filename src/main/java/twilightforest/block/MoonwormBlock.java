@@ -35,7 +35,7 @@ public class MoonwormBlock extends CritterBlock {
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-		return createTickerHelper(type, TFBlockEntities.MOONWORM.get(), MoonwormBlockEntity::tick);
+		return createTickerHelper(type, TFBlockEntities.MOONWORM, MoonwormBlockEntity::tick);
 	}
 
 	@Override

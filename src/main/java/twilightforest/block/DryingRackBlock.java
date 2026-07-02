@@ -156,7 +156,7 @@ public class DryingRackBlock extends BaseEntityBlock implements SimpleWaterlogge
 	@Nullable
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-		return createTickerHelper(blockEntityType, TFBlockEntities.DRYING_RACK.get(), DryingRackBlockEntity::tick);
+		return createTickerHelper(blockEntityType, TFBlockEntities.DRYING_RACK, DryingRackBlockEntity::tick);
 	}
 
 	@Override

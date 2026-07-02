@@ -23,7 +23,7 @@ public class KnightPhantomSpawnerBlockEntity extends BossSpawnerBlockEntity<Knig
 	private int spawned = 0;
 
 	public KnightPhantomSpawnerBlockEntity(BlockPos pos, BlockState state) {
-		super(TFBlockEntities.KNIGHT_PHANTOM_SPAWNER.get(), TFEntities.KNIGHT_PHANTOM.get(), pos, state);
+		super(TFBlockEntities.KNIGHT_PHANTOM_SPAWNER, TFEntities.KNIGHT_PHANTOM.get(), pos, state);
 	}
 
 	@Override

@@ -36,7 +36,7 @@ public class SinisterSpawnerBlockEntity extends BlockEntity implements Spawner {
 	@Nullable private ResourceKey<LootTable> lootTable = null;
 
 	public SinisterSpawnerBlockEntity(BlockPos pos, BlockState blockState) {
-		super(TFBlockEntities.SINISTER_SPAWNER.get(), pos, blockState);
+		super(TFBlockEntities.SINISTER_SPAWNER, pos, blockState);
 	}
 
 	@Override

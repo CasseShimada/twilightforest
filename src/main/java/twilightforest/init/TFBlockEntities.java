@@ -1,50 +1,53 @@
 package twilightforest.init;
 
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import twilightforest.util.registry.DeferredHolder;
-import twilightforest.util.registry.DeferredRegister;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.entity.*;
 import twilightforest.block.entity.bookshelf.ChiseledCanopyShelfBlockEntity;
 import twilightforest.block.entity.spawner.*;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class TFBlockEntities {
+	private static final Map<Identifier, BlockEntityType<?>> BLOCK_ENTITIES = new LinkedHashMap<>();
+	private static boolean registered;
 
-	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, TwilightForestMod.ID);
-
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AntibuilderBlockEntity>> ANTIBUILDER = BLOCK_ENTITIES.register("antibuilder", () -> FabricBlockEntityTypeBuilder.create(AntibuilderBlockEntity::new, TFBlocks.ANTIBUILDER.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CinderFurnaceBlockEntity>> CINDER_FURNACE = BLOCK_ENTITIES.register("cinder_furnace", () -> FabricBlockEntityTypeBuilder.create(CinderFurnaceBlockEntity::new, TFBlocks.CINDER_FURNACE.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CarminiteReactorBlockEntity>> CARMINITE_REACTOR = BLOCK_ENTITIES.register("carminite_reactor", () -> FabricBlockEntityTypeBuilder.create(CarminiteReactorBlockEntity::new, TFBlocks.CARMINITE_REACTOR.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ReactorDebrisBlockEntity>> REACTOR_DEBRIS = BLOCK_ENTITIES.register("reactor_debris", () -> FabricBlockEntityTypeBuilder.create(ReactorDebrisBlockEntity::new, TFBlocks.REACTOR_DEBRIS.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FireJetBlockEntity>> FLAME_JET = BLOCK_ENTITIES.register("flame_jet", () -> FabricBlockEntityTypeBuilder.create(FireJetBlockEntity::new, TFBlocks.FIRE_JET.get(), TFBlocks.ENCASED_FIRE_JET.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GhastTrapBlockEntity>> GHAST_TRAP = BLOCK_ENTITIES.register("ghast_trap", () -> FabricBlockEntityTypeBuilder.create(GhastTrapBlockEntity::new, TFBlocks.GHAST_TRAP.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TFSmokerBlockEntity>> SMOKER = BLOCK_ENTITIES.register("smoker", () -> FabricBlockEntityTypeBuilder.create(TFSmokerBlockEntity::new, TFBlocks.SMOKER.get(), TFBlocks.ENCASED_SMOKER.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CarminiteBuilderBlockEntity>> TOWER_BUILDER = BLOCK_ENTITIES.register("tower_builder", () -> FabricBlockEntityTypeBuilder.create(CarminiteBuilderBlockEntity::new, TFBlocks.CARMINITE_BUILDER.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlphaYetiSpawnerBlockEntity>> ALPHA_YETI_SPAWNER = BLOCK_ENTITIES.register("alpha_yeti_spawner", () -> FabricBlockEntityTypeBuilder.create(AlphaYetiSpawnerBlockEntity::new, TFBlocks.ALPHA_YETI_BOSS_SPAWNER.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FinalBossSpawnerBlockEntity>> FINAL_BOSS_SPAWNER = BLOCK_ENTITIES.register("final_boss_spawner", () -> FabricBlockEntityTypeBuilder.create(FinalBossSpawnerBlockEntity::new, TFBlocks.FINAL_BOSS_BOSS_SPAWNER.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HydraSpawnerBlockEntity>> HYDRA_SPAWNER = BLOCK_ENTITIES.register("hydra_boss_spawner", () -> FabricBlockEntityTypeBuilder.create(HydraSpawnerBlockEntity::new, TFBlocks.HYDRA_BOSS_SPAWNER.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<KnightPhantomSpawnerBlockEntity>> KNIGHT_PHANTOM_SPAWNER = BLOCK_ENTITIES.register("knight_phantom_spawner", () -> FabricBlockEntityTypeBuilder.create(KnightPhantomSpawnerBlockEntity::new, TFBlocks.KNIGHT_PHANTOM_BOSS_SPAWNER.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LichSpawnerBlockEntity>> LICH_SPAWNER = BLOCK_ENTITIES.register("lich_spawner", () -> FabricBlockEntityTypeBuilder.create(LichSpawnerBlockEntity::new, TFBlocks.LICH_BOSS_SPAWNER.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MinoshroomSpawnerBlockEntity>> MINOSHROOM_SPAWNER = BLOCK_ENTITIES.register("minoshroom_spawner", () -> FabricBlockEntityTypeBuilder.create(MinoshroomSpawnerBlockEntity::new, TFBlocks.MINOSHROOM_BOSS_SPAWNER.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<NagaSpawnerBlockEntity>> NAGA_SPAWNER = BLOCK_ENTITIES.register("naga_spawner", () -> FabricBlockEntityTypeBuilder.create(NagaSpawnerBlockEntity::new, TFBlocks.NAGA_BOSS_SPAWNER.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SnowQueenSpawnerBlockEntity>> SNOW_QUEEN_SPAWNER = BLOCK_ENTITIES.register("snow_queen_spawner", () -> FabricBlockEntityTypeBuilder.create(SnowQueenSpawnerBlockEntity::new, TFBlocks.SNOW_QUEEN_BOSS_SPAWNER.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<UrGhastSpawnerBlockEntity>> UR_GHAST_SPAWNER = BLOCK_ENTITIES.register("tower_boss_spawner", () -> FabricBlockEntityTypeBuilder.create(UrGhastSpawnerBlockEntity::new, TFBlocks.UR_GHAST_BOSS_SPAWNER.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CicadaBlockEntity>> CICADA = BLOCK_ENTITIES.register("cicada", () -> FabricBlockEntityTypeBuilder.create(CicadaBlockEntity::new, TFBlocks.CICADA.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FireflyBlockEntity>> FIREFLY = BLOCK_ENTITIES.register("firefly", () -> FabricBlockEntityTypeBuilder.create(FireflyBlockEntity::new, TFBlocks.FIREFLY.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MoonwormBlockEntity>> MOONWORM = BLOCK_ENTITIES.register("moonworm", () -> FabricBlockEntityTypeBuilder.create(MoonwormBlockEntity::new, TFBlocks.MOONWORM.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SkullChestBlockEntity>> SKULL_CHEST = BLOCK_ENTITIES.register("skull_chest", () -> FabricBlockEntityTypeBuilder.create(SkullChestBlockEntity::new, TFBlocks.SKULL_CHEST.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<KeepsakeCasketBlockEntity>> KEEPSAKE_CASKET = BLOCK_ENTITIES.register("keepsake_casket", () -> FabricBlockEntityTypeBuilder.create(KeepsakeCasketBlockEntity::new, TFBlocks.KEEPSAKE_CASKET.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BrazierBlockEntity>> BRAZIER = BLOCK_ENTITIES.register("brazier", () -> FabricBlockEntityTypeBuilder.create(BrazierBlockEntity::new, TFBlocks.BRAZIER.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ChiseledCanopyShelfBlockEntity>> CHISELED_CANOPY_BOOKSHELF = BLOCK_ENTITIES.register("chiseled_canopy_bookshelf", () -> FabricBlockEntityTypeBuilder.create(ChiseledCanopyShelfBlockEntity::new, TFBlocks.CHISELED_CANOPY_BOOKSHELF.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GrowingBeanstalkBlockEntity>> BEANSTALK_GROWER = BLOCK_ENTITIES.register("beanstalk_grower", () -> FabricBlockEntityTypeBuilder.create(GrowingBeanstalkBlockEntity::new, TFBlocks.BEANSTALK_GROWER.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<RedThreadBlockEntity>> RED_THREAD = BLOCK_ENTITIES.register("red_thread", () -> FabricBlockEntityTypeBuilder.create(RedThreadBlockEntity::new, TFBlocks.RED_THREAD.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CandelabraBlockEntity>> CANDELABRA = BLOCK_ENTITIES.register("candelabra", () -> FabricBlockEntityTypeBuilder.create(CandelabraBlockEntity::new, TFBlocks.CANDELABRA.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<JarBlockEntity>> JAR = BLOCK_ENTITIES.register("jar", () -> FabricBlockEntityTypeBuilder.create(JarBlockEntity::new, TFBlocks.FIREFLY_JAR.get(), TFBlocks.CICADA_JAR.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MasonJarBlockEntity>> MASON_JAR = BLOCK_ENTITIES.register("mason_jar", () -> FabricBlockEntityTypeBuilder.create(MasonJarBlockEntity::new, TFBlocks.MASON_JAR.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SinisterSpawnerBlockEntity>> SINISTER_SPAWNER = BLOCK_ENTITIES.register("sinister_spawner", () -> FabricBlockEntityTypeBuilder.create(SinisterSpawnerBlockEntity::new, TFBlocks.SINISTER_SPAWNER.get()).build());
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<DryingRackBlockEntity>> DRYING_RACK = BLOCK_ENTITIES.register("drying_rack", () -> FabricBlockEntityTypeBuilder.create(DryingRackBlockEntity::new,
+	public static final BlockEntityType<AntibuilderBlockEntity> ANTIBUILDER = register("antibuilder", FabricBlockEntityTypeBuilder.create(AntibuilderBlockEntity::new, TFBlocks.ANTIBUILDER.get()).build());
+	public static final BlockEntityType<CinderFurnaceBlockEntity> CINDER_FURNACE = register("cinder_furnace", FabricBlockEntityTypeBuilder.create(CinderFurnaceBlockEntity::new, TFBlocks.CINDER_FURNACE.get()).build());
+	public static final BlockEntityType<CarminiteReactorBlockEntity> CARMINITE_REACTOR = register("carminite_reactor", FabricBlockEntityTypeBuilder.create(CarminiteReactorBlockEntity::new, TFBlocks.CARMINITE_REACTOR.get()).build());
+	public static final BlockEntityType<ReactorDebrisBlockEntity> REACTOR_DEBRIS = register("reactor_debris", FabricBlockEntityTypeBuilder.create(ReactorDebrisBlockEntity::new, TFBlocks.REACTOR_DEBRIS.get()).build());
+	public static final BlockEntityType<FireJetBlockEntity> FLAME_JET = register("flame_jet", FabricBlockEntityTypeBuilder.create(FireJetBlockEntity::new, TFBlocks.FIRE_JET.get(), TFBlocks.ENCASED_FIRE_JET.get()).build());
+	public static final BlockEntityType<GhastTrapBlockEntity> GHAST_TRAP = register("ghast_trap", FabricBlockEntityTypeBuilder.create(GhastTrapBlockEntity::new, TFBlocks.GHAST_TRAP.get()).build());
+	public static final BlockEntityType<TFSmokerBlockEntity> SMOKER = register("smoker", FabricBlockEntityTypeBuilder.create(TFSmokerBlockEntity::new, TFBlocks.SMOKER.get(), TFBlocks.ENCASED_SMOKER.get()).build());
+	public static final BlockEntityType<CarminiteBuilderBlockEntity> TOWER_BUILDER = register("tower_builder", FabricBlockEntityTypeBuilder.create(CarminiteBuilderBlockEntity::new, TFBlocks.CARMINITE_BUILDER.get()).build());
+	public static final BlockEntityType<AlphaYetiSpawnerBlockEntity> ALPHA_YETI_SPAWNER = register("alpha_yeti_spawner", FabricBlockEntityTypeBuilder.create(AlphaYetiSpawnerBlockEntity::new, TFBlocks.ALPHA_YETI_BOSS_SPAWNER.get()).build());
+	public static final BlockEntityType<FinalBossSpawnerBlockEntity> FINAL_BOSS_SPAWNER = register("final_boss_spawner", FabricBlockEntityTypeBuilder.create(FinalBossSpawnerBlockEntity::new, TFBlocks.FINAL_BOSS_BOSS_SPAWNER.get()).build());
+	public static final BlockEntityType<HydraSpawnerBlockEntity> HYDRA_SPAWNER = register("hydra_boss_spawner", FabricBlockEntityTypeBuilder.create(HydraSpawnerBlockEntity::new, TFBlocks.HYDRA_BOSS_SPAWNER.get()).build());
+	public static final BlockEntityType<KnightPhantomSpawnerBlockEntity> KNIGHT_PHANTOM_SPAWNER = register("knight_phantom_spawner", FabricBlockEntityTypeBuilder.create(KnightPhantomSpawnerBlockEntity::new, TFBlocks.KNIGHT_PHANTOM_BOSS_SPAWNER.get()).build());
+	public static final BlockEntityType<LichSpawnerBlockEntity> LICH_SPAWNER = register("lich_spawner", FabricBlockEntityTypeBuilder.create(LichSpawnerBlockEntity::new, TFBlocks.LICH_BOSS_SPAWNER.get()).build());
+	public static final BlockEntityType<MinoshroomSpawnerBlockEntity> MINOSHROOM_SPAWNER = register("minoshroom_spawner", FabricBlockEntityTypeBuilder.create(MinoshroomSpawnerBlockEntity::new, TFBlocks.MINOSHROOM_BOSS_SPAWNER.get()).build());
+	public static final BlockEntityType<NagaSpawnerBlockEntity> NAGA_SPAWNER = register("naga_spawner", FabricBlockEntityTypeBuilder.create(NagaSpawnerBlockEntity::new, TFBlocks.NAGA_BOSS_SPAWNER.get()).build());
+	public static final BlockEntityType<SnowQueenSpawnerBlockEntity> SNOW_QUEEN_SPAWNER = register("snow_queen_spawner", FabricBlockEntityTypeBuilder.create(SnowQueenSpawnerBlockEntity::new, TFBlocks.SNOW_QUEEN_BOSS_SPAWNER.get()).build());
+	public static final BlockEntityType<UrGhastSpawnerBlockEntity> UR_GHAST_SPAWNER = register("tower_boss_spawner", FabricBlockEntityTypeBuilder.create(UrGhastSpawnerBlockEntity::new, TFBlocks.UR_GHAST_BOSS_SPAWNER.get()).build());
+	public static final BlockEntityType<CicadaBlockEntity> CICADA = register("cicada", FabricBlockEntityTypeBuilder.create(CicadaBlockEntity::new, TFBlocks.CICADA.get()).build());
+	public static final BlockEntityType<FireflyBlockEntity> FIREFLY = register("firefly", FabricBlockEntityTypeBuilder.create(FireflyBlockEntity::new, TFBlocks.FIREFLY.get()).build());
+	public static final BlockEntityType<MoonwormBlockEntity> MOONWORM = register("moonworm", FabricBlockEntityTypeBuilder.create(MoonwormBlockEntity::new, TFBlocks.MOONWORM.get()).build());
+	public static final BlockEntityType<SkullChestBlockEntity> SKULL_CHEST = register("skull_chest", FabricBlockEntityTypeBuilder.create(SkullChestBlockEntity::new, TFBlocks.SKULL_CHEST.get()).build());
+	public static final BlockEntityType<KeepsakeCasketBlockEntity> KEEPSAKE_CASKET = register("keepsake_casket", FabricBlockEntityTypeBuilder.create(KeepsakeCasketBlockEntity::new, TFBlocks.KEEPSAKE_CASKET.get()).build());
+	public static final BlockEntityType<BrazierBlockEntity> BRAZIER = register("brazier", FabricBlockEntityTypeBuilder.create(BrazierBlockEntity::new, TFBlocks.BRAZIER.get()).build());
+	public static final BlockEntityType<ChiseledCanopyShelfBlockEntity> CHISELED_CANOPY_BOOKSHELF = register("chiseled_canopy_bookshelf", FabricBlockEntityTypeBuilder.create(ChiseledCanopyShelfBlockEntity::new, TFBlocks.CHISELED_CANOPY_BOOKSHELF.get()).build());
+	public static final BlockEntityType<GrowingBeanstalkBlockEntity> BEANSTALK_GROWER = register("beanstalk_grower", FabricBlockEntityTypeBuilder.create(GrowingBeanstalkBlockEntity::new, TFBlocks.BEANSTALK_GROWER.get()).build());
+	public static final BlockEntityType<RedThreadBlockEntity> RED_THREAD = register("red_thread", FabricBlockEntityTypeBuilder.create(RedThreadBlockEntity::new, TFBlocks.RED_THREAD.get()).build());
+	public static final BlockEntityType<CandelabraBlockEntity> CANDELABRA = register("candelabra", FabricBlockEntityTypeBuilder.create(CandelabraBlockEntity::new, TFBlocks.CANDELABRA.get()).build());
+	public static final BlockEntityType<JarBlockEntity> JAR = register("jar", FabricBlockEntityTypeBuilder.create(JarBlockEntity::new, TFBlocks.FIREFLY_JAR.get(), TFBlocks.CICADA_JAR.get()).build());
+	public static final BlockEntityType<MasonJarBlockEntity> MASON_JAR = register("mason_jar", FabricBlockEntityTypeBuilder.create(MasonJarBlockEntity::new, TFBlocks.MASON_JAR.get()).build());
+	public static final BlockEntityType<SinisterSpawnerBlockEntity> SINISTER_SPAWNER = register("sinister_spawner", FabricBlockEntityTypeBuilder.create(SinisterSpawnerBlockEntity::new, TFBlocks.SINISTER_SPAWNER.get()).build());
+	public static final BlockEntityType<DryingRackBlockEntity> DRYING_RACK = register("drying_rack", FabricBlockEntityTypeBuilder.create(DryingRackBlockEntity::new,
 		TFBlocks.OAK_DRYING_RACK.get(), TFBlocks.SPRUCE_DRYING_RACK.get(),
 		TFBlocks.BIRCH_DRYING_RACK.get(), TFBlocks.JUNGLE_DRYING_RACK.get(),
 		TFBlocks.ACACIA_DRYING_RACK.get(), TFBlocks.DARK_OAK_DRYING_RACK.get(),
@@ -56,24 +59,24 @@ public class TFBlockEntities {
 		TFBlocks.TRANSFORMATION_DRYING_RACK.get(), TFBlocks.MINING_DRYING_RACK.get(),
 		TFBlocks.SORTING_DRYING_RACK.get()).build());
 
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TrophyBlockEntity>> TROPHY = BLOCK_ENTITIES.register("trophy", () -> FabricBlockEntityTypeBuilder.create(TrophyBlockEntity::new,
+	public static final BlockEntityType<TrophyBlockEntity> TROPHY = register("trophy", FabricBlockEntityTypeBuilder.create(TrophyBlockEntity::new,
 		TFBlocks.NAGA_TROPHY.get(), TFBlocks.LICH_TROPHY.get(), TFBlocks.MINOSHROOM_TROPHY.get(),
 		TFBlocks.HYDRA_TROPHY.get(), TFBlocks.KNIGHT_PHANTOM_TROPHY.get(), TFBlocks.UR_GHAST_TROPHY.get(), TFBlocks.ALPHA_YETI_TROPHY.get(),
 		TFBlocks.SNOW_QUEEN_TROPHY.get(), TFBlocks.QUEST_RAM_TROPHY.get(), TFBlocks.NAGA_WALL_TROPHY.get(), TFBlocks.LICH_WALL_TROPHY.get(),
 		TFBlocks.MINOSHROOM_WALL_TROPHY.get(), TFBlocks.HYDRA_WALL_TROPHY.get(), TFBlocks.KNIGHT_PHANTOM_WALL_TROPHY.get(), TFBlocks.UR_GHAST_WALL_TROPHY.get(),
 		TFBlocks.ALPHA_YETI_WALL_TROPHY.get(), TFBlocks.SNOW_QUEEN_WALL_TROPHY.get(), TFBlocks.QUEST_RAM_WALL_TROPHY.get()).build());
 
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TFChestBlockEntity>> TF_CHEST = BLOCK_ENTITIES.register("tf_chest", () -> FabricBlockEntityTypeBuilder.create(TFChestBlockEntity::new,
+	public static final BlockEntityType<TFChestBlockEntity> TF_CHEST = register("tf_chest", FabricBlockEntityTypeBuilder.create(TFChestBlockEntity::new,
 		TFBlocks.TWILIGHT_OAK_CHEST.get(), TFBlocks.CANOPY_CHEST.get(), TFBlocks.MANGROVE_CHEST.get(),
 		TFBlocks.DARK_CHEST.get(), TFBlocks.TIME_CHEST.get(), TFBlocks.TRANSFORMATION_CHEST.get(),
 		TFBlocks.MINING_CHEST.get(), TFBlocks.SORTING_CHEST.get()).build());
 
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TFTrappedChestBlockEntity>> TF_TRAPPED_CHEST = BLOCK_ENTITIES.register("tf_trapped_chest", () -> FabricBlockEntityTypeBuilder.create(TFTrappedChestBlockEntity::new,
+	public static final BlockEntityType<TFTrappedChestBlockEntity> TF_TRAPPED_CHEST = register("tf_trapped_chest", FabricBlockEntityTypeBuilder.create(TFTrappedChestBlockEntity::new,
 		TFBlocks.TWILIGHT_OAK_TRAPPED_CHEST.get(), TFBlocks.CANOPY_TRAPPED_CHEST.get(), TFBlocks.MANGROVE_TRAPPED_CHEST.get(),
 		TFBlocks.DARK_TRAPPED_CHEST.get(), TFBlocks.TIME_TRAPPED_CHEST.get(), TFBlocks.TRANSFORMATION_TRAPPED_CHEST.get(),
 		TFBlocks.MINING_TRAPPED_CHEST.get(), TFBlocks.SORTING_TRAPPED_CHEST.get()).build());
 
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SkullCandleBlockEntity>> SKULL_CANDLE = BLOCK_ENTITIES.register("skull_candle", () -> FabricBlockEntityTypeBuilder.create(SkullCandleBlockEntity::new,
+	public static final BlockEntityType<SkullCandleBlockEntity> SKULL_CANDLE = register("skull_candle", FabricBlockEntityTypeBuilder.create(SkullCandleBlockEntity::new,
 		TFBlocks.ZOMBIE_SKULL_CANDLE.get(), TFBlocks.ZOMBIE_WALL_SKULL_CANDLE.get(),
 		TFBlocks.SKELETON_SKULL_CANDLE.get(), TFBlocks.SKELETON_WALL_SKULL_CANDLE.get(),
 		TFBlocks.WITHER_SKELE_SKULL_CANDLE.get(), TFBlocks.WITHER_SKELE_WALL_SKULL_CANDLE.get(),
@@ -81,7 +84,7 @@ public class TFBlockEntities {
 		TFBlocks.PLAYER_SKULL_CANDLE.get(), TFBlocks.PLAYER_WALL_SKULL_CANDLE.get(),
 		TFBlocks.PIGLIN_SKULL_CANDLE.get(), TFBlocks.PIGLIN_WALL_SKULL_CANDLE.get()).build());
 
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<OminousCandleBlockEntity>> OMINOUS_CANDLE = BLOCK_ENTITIES.register("ominous_candle", () -> FabricBlockEntityTypeBuilder.create(OminousCandleBlockEntity::new,
+	public static final BlockEntityType<OminousCandleBlockEntity> OMINOUS_CANDLE = register("ominous_candle", FabricBlockEntityTypeBuilder.create(OminousCandleBlockEntity::new,
 		TFBlocks.OMINOUS_CANDLE.get(), TFBlocks.OMINOUS_WHITE_CANDLE.get(),
 		TFBlocks.OMINOUS_ORANGE_CANDLE.get(), TFBlocks.OMINOUS_MAGENTA_CANDLE.get(),
 		TFBlocks.OMINOUS_LIGHT_BLUE_CANDLE.get(), TFBlocks.OMINOUS_YELLOW_CANDLE.get(),
@@ -91,4 +94,18 @@ public class TFBlockEntities {
 		TFBlocks.OMINOUS_BLUE_CANDLE.get(), TFBlocks.OMINOUS_BROWN_CANDLE.get(),
 		TFBlocks.OMINOUS_GREEN_CANDLE.get(), TFBlocks.OMINOUS_RED_CANDLE.get(),
 		TFBlocks.OMINOUS_BLACK_CANDLE.get()).build());
+
+	public static void register() {
+		if (registered) {
+			return;
+		}
+
+		registered = true;
+		BLOCK_ENTITIES.forEach((id, type) -> Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, id, type));
+	}
+
+	private static <T extends BlockEntityType<?>> T register(String name, T type) {
+		BLOCK_ENTITIES.put(TwilightForestMod.prefix(name), type);
+		return type;
+	}
 }

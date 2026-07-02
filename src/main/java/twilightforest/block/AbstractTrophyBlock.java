@@ -78,7 +78,7 @@ public abstract class AbstractTrophyBlock extends BaseEntityBlock {
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-		return createTickerHelper(type, TFBlockEntities.TROPHY.get(), TrophyBlockEntity::tick);
+		return createTickerHelper(type, TFBlockEntities.TROPHY, TrophyBlockEntity::tick);
 	}
 
 	public BossVariant getVariant() {

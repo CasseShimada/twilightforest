@@ -29,7 +29,7 @@ public class CarminiteReactorBlockEntity extends BlockEntity {
 
 
 	public CarminiteReactorBlockEntity(BlockPos pos, BlockState state) {
-		super(TFBlockEntities.CARMINITE_REACTOR.get(), pos, state);
+		super(TFBlockEntities.CARMINITE_REACTOR, pos, state);
 		RandomSource rand = RandomSource.create();
 
 		// determine the two smaller bursts

@@ -31,7 +31,7 @@ public class GrowingBeanstalkBlockEntity extends BlockEntity {
 	private int blocksSkipped;
 
 	public GrowingBeanstalkBlockEntity(BlockPos pos, BlockState state) {
-		super(TFBlockEntities.BEANSTALK_GROWER.get(), pos, state);
+		super(TFBlockEntities.BEANSTALK_GROWER, pos, state);
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, GrowingBeanstalkBlockEntity te) {

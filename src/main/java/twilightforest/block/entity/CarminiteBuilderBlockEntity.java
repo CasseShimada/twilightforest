@@ -31,7 +31,7 @@ public class CarminiteBuilderBlockEntity extends BlockEntity {
 	private Player trackedPlayer;
 
 	public CarminiteBuilderBlockEntity(BlockPos pos, BlockState state) {
-		super(TFBlockEntities.TOWER_BUILDER.get(), pos, state);
+		super(TFBlockEntities.TOWER_BUILDER, pos, state);
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, CarminiteBuilderBlockEntity te) {

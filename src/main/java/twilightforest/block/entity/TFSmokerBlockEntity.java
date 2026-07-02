@@ -14,7 +14,7 @@ public class TFSmokerBlockEntity extends BlockEntity {
 	private long counter = 0;
 
 	public TFSmokerBlockEntity(BlockPos pos, BlockState state) {
-		super(TFBlockEntities.SMOKER.get(), pos, state);
+		super(TFBlockEntities.SMOKER, pos, state);
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, TFSmokerBlockEntity te) {

@@ -40,7 +40,7 @@ public class MasonJarBlockEntity extends JarBlockEntity {
 	protected int itemRotation = 0;
 
 	public MasonJarBlockEntity(BlockPos pos, BlockState state) {
-		super(TFBlockEntities.MASON_JAR.get(), pos, state);
+		super(TFBlockEntities.MASON_JAR, pos, state);
 		this.item = new MasonJarItemStackHandler(this);
 	}
 

@@ -91,6 +91,6 @@ public class FireJetBlock extends BaseEntityBlock {
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-		return createTickerHelper(type, TFBlockEntities.FLAME_JET.get(), FireJetBlockEntity::tick);
+		return createTickerHelper(type, TFBlockEntities.FLAME_JET, FireJetBlockEntity::tick);
 	}
 }

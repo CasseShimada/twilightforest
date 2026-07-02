@@ -30,7 +30,7 @@ public class GhastTrapBlockEntity extends BlockEntity {
 	private int counter = 0;
 
 	public GhastTrapBlockEntity(BlockPos pos, BlockState state) {
-		super(TFBlockEntities.GHAST_TRAP.get(), pos, state);
+		super(TFBlockEntities.GHAST_TRAP, pos, state);
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, GhastTrapBlockEntity te) {
