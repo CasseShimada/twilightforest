@@ -6,13 +6,13 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
- * Minimal DeferredHolder replacement used to decouple the mod codebase from loader-specific helpers.
+ * Transitional holder used while public block and item constants migrate to direct vanilla values.
  *
- * <p>Values are created and registered when {@link DeferredRegister#register()} is called.</p>
+ * <p>Values are created and bound by their owning module's vanilla registry pass.</p>
  */
 public class DeferredHolder<R, T extends R> implements Supplier<T> {
 	private final Identifier id;
-	final Supplier<? extends T> factory; // package-private for DeferredRegister
+	final Supplier<? extends T> factory; // package-private for the block/item registration passes
 	private T value;
 
 	DeferredHolder(Identifier id, Supplier<? extends T> factory) {
