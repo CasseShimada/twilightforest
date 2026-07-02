@@ -463,9 +463,6 @@ public class ClientEvents {
 	}
 
 	public static boolean areCuriosEquipped(LivingEntity entity) {
-//		if (ModList.get().isLoaded("curios")) {
-//			return CuriosCompat.isCurioEquippedAndVisible(entity, stack -> stack.getItem() instanceof TrophyItem);
-//		}
 		return false;
 	}
 

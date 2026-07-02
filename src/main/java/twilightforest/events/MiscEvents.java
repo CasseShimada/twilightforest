@@ -21,7 +21,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.BlockHitResult;
-import net.fabricmc.loader.api.FabricLoader;
 import twilightforest.network.PacketDistributor;
 import twilightforest.entity.monster.DeathTome;
 import twilightforest.entity.passive.Bighorn;
@@ -60,11 +59,6 @@ public class MiscEvents {
 	public static void armorChanged(LivingEntity living, EquipmentSlot slot, ItemStack to) {
 		// from what I can see, vanilla doesn't have a hook for this in the item class. So this will have to do.
 		// we only have to check equipping, when its unequipped the sound instance handles the rest
-
-		//if we have a cicada in our curios slot, don't try to run this
-		 if (FabricLoader.getInstance().isModLoaded("curios")) {
-		 	//if (CuriosCompat.isCurioEquipped(living, stack -> stack.is(TFBlocks.CICADA.asItem()))) return;
-		 }
 
 		if (living != null && !living.level().isClientSide() && slot == EquipmentSlot.HEAD && to.is(TFBlocks.CICADA.asItem())) {
 			PacketDistributor.sendToPlayersTrackingEntityAndSelf(living, new CreateMovingCicadaSoundPacket(living.getId()));

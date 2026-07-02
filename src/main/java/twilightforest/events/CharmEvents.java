@@ -350,10 +350,6 @@ public class CharmEvents {
 	}
 
 	private static boolean hasCharmCurio(Item item, Player player) {
-//		if (ModList.get().isLoaded("curios")) {
-//			return CuriosCompat.findAndConsumeCurio(item, player);
-//		}
-
 		return false;
 	}
 }

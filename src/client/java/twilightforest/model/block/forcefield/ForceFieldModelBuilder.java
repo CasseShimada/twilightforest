@@ -179,7 +179,7 @@ public class ForceFieldModelBuilder extends CustomLoaderBuilder {
 
 
 	/**
-	 * Forge copy of ElementBuilder, with some things changed
+	 * ElementBuilder-style helper with custom force field extensions.
 	 */
 	public class ForceFieldElementBuilder {
 		private Vector3f from = new Vector3f();
