@@ -14,7 +14,6 @@ import net.minecraft.world.entity.vehicle.boat.Boat;
 import net.minecraft.world.entity.vehicle.boat.ChestBoat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
-import twilightforest.util.registry.DeferredRegister;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
 import twilightforest.entity.*;
@@ -26,6 +25,7 @@ import twilightforest.entity.projectile.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
@@ -34,10 +34,12 @@ public class TFEntities {
 
 	private static final Map<Identifier, EntityType<?>> ENTITY_TYPES = new LinkedHashMap<>();
 	private static final Map<Identifier, Identifier> ENTITY_ALIASES = new LinkedHashMap<>();
-	private static final DeferredRegister<Item> SPAWN_EGGS = DeferredRegister.create(Registries.ITEM, TwilightForestMod.ID);
+	private static final Map<Identifier, Item> SPAWN_EGGS = new LinkedHashMap<>();
+	private static final Map<Identifier, Identifier> SPAWN_EGG_ALIASES = new LinkedHashMap<>();
 	private static final Map<EntityType<? extends LivingEntity>, Supplier<AttributeSupplier.Builder>> ATTRIBUTES = new HashMap<>();
 	private static final Map<EntityType<?>, SpawnPlacements.SpawnPredicate<?>> SPAWN_PREDICATES = new HashMap<>();
 	private static boolean registered;
+	private static boolean spawnEggsRegistered;
 
 	public static final EntityType<Adherent> ADHERENT = registerWithAttributes("adherent", EntityType.Builder.of(Adherent::new, MobCategory.MONSTER).sized(0.8F, 2.2F).clientTrackingRange(8), Adherent::registerAttributes);
 	public static final EntityType<AlphaYeti> ALPHA_YETI = registerWithEgg("alpha_yeti", EntityType.Builder.of(AlphaYeti::new, MobCategory.MONSTER).sized(3.8F, 5.0F).clientTrackingRange(16), AlphaYeti::registerAttributes, Monster::checkAnyLightMonsterSpawnRules);
@@ -159,12 +161,19 @@ public class TFEntities {
 
 	public static <E extends Mob> EntityType<E> registerWithEgg(String name, EntityType.Builder<E> builder, Supplier<AttributeSupplier.Builder> attributes, @Nullable SpawnPlacements.SpawnPredicate<E> predicate) {
 		EntityType<E> ret = register(name, builder.build(createIDFor(name)));
-		SPAWN_EGGS.register(name + "_spawn_egg", () -> new SpawnEggItem(new Item.Properties().spawnEgg(ret).setId(ResourceKey.create(Registries.ITEM, TwilightForestMod.prefix(name + "_spawn_egg")))));
+		registerSpawnEgg(name + "_spawn_egg", ret);
 		ATTRIBUTES.put(ret, attributes);
 		if (predicate != null) {
 			SPAWN_PREDICATES.put(ret, predicate);
 		}
 		return ret;
+	}
+
+	private static void registerSpawnEgg(String name, EntityType<? extends Mob> entityType) {
+		if (spawnEggsRegistered) throw new IllegalStateException("Cannot register new spawn eggs after item registry has been frozen.");
+		Identifier id = TwilightForestMod.prefix(name);
+		ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, id);
+		SPAWN_EGGS.put(id, new SpawnEggItem(new Item.Properties().spawnEgg(entityType).setId(itemKey)));
 	}
 
 	private static <E extends Entity> EntityType<E> register(String name, EntityType<E> type) {
@@ -183,11 +192,13 @@ public class TFEntities {
 	}
 
 	public static void addSpawnEggAlias(Identifier from, Identifier to) {
-		SPAWN_EGGS.addAlias(from, to);
+		if (spawnEggsRegistered) throw new IllegalStateException("Cannot add aliases after spawn eggs have been registered.");
+		SPAWN_EGG_ALIASES.put(from, to);
 	}
 
 	public static Collection<? extends Item> registeredSpawnEggs() {
-		return SPAWN_EGGS.getEntries().stream().map(Supplier::get).toList();
+		if (!spawnEggsRegistered) throw new IllegalStateException("Spawn eggs have not been registered yet.");
+		return List.copyOf(SPAWN_EGGS.values());
 	}
 
 	public static void forEachAttribute(BiConsumer<EntityType<? extends LivingEntity>, Supplier<AttributeSupplier.Builder>> consumer) {
@@ -209,12 +220,24 @@ public class TFEntities {
 	}
 
 	public static void registerSpawnEggs() {
-		SPAWN_EGGS.register();
+		if (spawnEggsRegistered) {
+			return;
+		}
+
+		spawnEggsRegistered = true;
+		SPAWN_EGGS.forEach((id, item) -> Registry.register(BuiltInRegistries.ITEM, id, item));
+		applySpawnEggAliases();
 	}
 
 	private static void applyEntityAliases() {
 		if (!ENTITY_ALIASES.isEmpty()) {
 			TwilightForestMod.LOGGER.warn("Skipping entity type registry aliases on Fabric to avoid registry sync duplicates.");
+		}
+	}
+
+	private static void applySpawnEggAliases() {
+		if (!SPAWN_EGG_ALIASES.isEmpty()) {
+			TwilightForestMod.LOGGER.warn("Skipping item registry aliases on Fabric to avoid registry sync duplicates.");
 		}
 	}
 }
