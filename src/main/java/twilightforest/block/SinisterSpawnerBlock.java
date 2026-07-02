@@ -115,25 +115,25 @@ public class SinisterSpawnerBlock extends BaseEntityBlock {
 	}
 
 	private List<ParticleOptions> particlesFromItem(ItemStack stack) {
-		if (stack.is(TFItems.NAGA_TROPHY.get()) || stack.is(TFBlocks.NAGA_BOSS_SPAWNER.asItem())) {
+		if (stack.is(TFItems.NAGA_TROPHY) || stack.is(TFBlocks.NAGA_BOSS_SPAWNER.asItem())) {
 			return List.of(ParticleTypes.SMOKE, ParticleTypes.CRIT);
-		} else if (stack.is(TFItems.LICH_TROPHY.get()) || stack.is(TFBlocks.LICH_BOSS_SPAWNER.asItem())) {
+		} else if (stack.is(TFItems.LICH_TROPHY) || stack.is(TFBlocks.LICH_BOSS_SPAWNER.asItem())) {
 			return List.of(ParticleTypes.SMOKE, TFParticleType.OMINOUS_FLAME);
-		} else if (stack.is(TFItems.MINOSHROOM_TROPHY.get()) || stack.is(TFBlocks.MINOSHROOM_BOSS_SPAWNER.asItem())) {
+		} else if (stack.is(TFItems.MINOSHROOM_TROPHY) || stack.is(TFBlocks.MINOSHROOM_BOSS_SPAWNER.asItem())) {
 			return List.of(ParticleTypes.SMOKE, ParticleTypes.CRIMSON_SPORE);
-		} else if (stack.is(TFItems.HYDRA_TROPHY.get()) || stack.is(TFBlocks.HYDRA_BOSS_SPAWNER.asItem())) {
+		} else if (stack.is(TFItems.HYDRA_TROPHY) || stack.is(TFBlocks.HYDRA_BOSS_SPAWNER.asItem())) {
 			return List.of(ParticleTypes.SMOKE, ParticleTypes.FLAME);
-		} else if (stack.is(TFItems.KNIGHT_PHANTOM_TROPHY.get()) || stack.is(KNIGHT_PHANTOM_BOSS_SPAWNER.asItem())) {
+		} else if (stack.is(TFItems.KNIGHT_PHANTOM_TROPHY) || stack.is(KNIGHT_PHANTOM_BOSS_SPAWNER.asItem())) {
 			return List.of(ParticleTypes.SMOKE, TFParticleType.OMINOUS_FLAME);
-		} else if (stack.is(TFItems.UR_GHAST_TROPHY.get()) || stack.is(TFBlocks.UR_GHAST_BOSS_SPAWNER.asItem())) {
+		} else if (stack.is(TFItems.UR_GHAST_TROPHY) || stack.is(TFBlocks.UR_GHAST_BOSS_SPAWNER.asItem())) {
 			return List.of(ParticleTypes.SMOKE, DustParticleOptions.REDSTONE);
-		} else if (stack.is(TFItems.ALPHA_YETI_TROPHY.get()) || stack.is(TFBlocks.ALPHA_YETI_BOSS_SPAWNER.asItem())) {
+		} else if (stack.is(TFItems.ALPHA_YETI_TROPHY) || stack.is(TFBlocks.ALPHA_YETI_BOSS_SPAWNER.asItem())) {
 			return List.of(TFParticleType.SNOW, ParticleTypes.FALLING_WATER);
-		} else if (stack.is(TFItems.SNOW_QUEEN_TROPHY.get()) || stack.is(TFBlocks.SNOW_QUEEN_BOSS_SPAWNER.asItem())) {
+		} else if (stack.is(TFItems.SNOW_QUEEN_TROPHY) || stack.is(TFBlocks.SNOW_QUEEN_BOSS_SPAWNER.asItem())) {
 			return List.of(TFParticleType.SNOW, TFParticleType.SNOW_WARNING);
 		} else if (stack.is(TFBlocks.FINAL_BOSS_BOSS_SPAWNER.asItem())) {
 			return List.of(TFParticleType.ANNIHILATE);
-		} else if (stack.is(TFItems.QUEST_RAM_TROPHY.get())) {
+		} else if (stack.is(TFItems.QUEST_RAM_TROPHY)) {
 			return List.of(TFParticleType.TRANSFORMATION_PARTICLE);
 		}
 
