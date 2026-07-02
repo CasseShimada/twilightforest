@@ -141,7 +141,7 @@ public class TFBlocks {
 	public static final DeferredBlock<CarpetBlock> CORONATION_CARPET = registerWithItem("coronation_carpet", properties -> new WoolCarpetBlock(DyeColor.RED, properties), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CARPET.red()).isValidSpawn(Blocks::always));
 
 	//ominous
-	public static final DeferredBlock<OminousFireBlock> OMINOUS_FIRE = register("ominous_fire", OminousFireBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).replaceable().noCollision().instabreak().lightLevel((state) -> 15).sound(SoundType.WOOL).pushReaction(PushReaction.DESTROY));
+	public static final OminousFireBlock OMINOUS_FIRE = registerDirect("ominous_fire", OminousFireBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).replaceable().noCollision().instabreak().lightLevel((state) -> 15).sound(SoundType.WOOL).pushReaction(PushReaction.DESTROY));
 	public static final DeferredBlock<OminousCandleBlock> OMINOUS_CANDLE = ominousCandle("ominous_candle", MapColor.SAND, Blocks.CANDLE);
 	public static final DeferredBlock<OminousCandleBlock> OMINOUS_WHITE_CANDLE = ominousCandle("ominous_white_candle", MapColor.WOOL, Blocks.DYED_CANDLE.white());
 	public static final DeferredBlock<OminousCandleBlock> OMINOUS_ORANGE_CANDLE = ominousCandle("ominous_orange_candle", MapColor.COLOR_ORANGE, Blocks.DYED_CANDLE.orange());
