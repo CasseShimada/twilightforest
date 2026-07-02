@@ -67,7 +67,7 @@ public class MoonwormQueenCategory implements IRecipeCategory<MoonwormQueenRepai
 	public void setRecipe(IRecipeLayoutBuilder builder, MoonwormQueenRepairRecipe recipe, IFocusGroup focuses) {
 		builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).addItemStack(RecipeViewerConstants.DAMAGED_MOONWORM_QUEEN);
 
-		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 19, 1).addItemStack(new ItemStack(TFItems.TORCHBERRIES.get()));
+		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 19, 1).addItemStack(new ItemStack(TFItems.TORCHBERRIES));
 		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 37, 1).addItemStacks(RecipeViewerConstants.BERRY_2_LIST);
 		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 1, 19).addItemStacks(RecipeViewerConstants.BERRY_3_LIST);
 		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 19, 19).addItemStacks(RecipeViewerConstants.BERRY_4_LIST);
