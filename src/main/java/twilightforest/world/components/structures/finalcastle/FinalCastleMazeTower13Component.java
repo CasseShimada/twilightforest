@@ -562,16 +562,16 @@ public class FinalCastleMazeTower13Component extends TowerWingComponent {
 
 	public BlockState doorColor() {
 		if (color == TFBlocks.PINK_CASTLE_RUNE_BRICK.defaultBlockState()) {
-			return TFBlocks.PINK_CASTLE_DOOR.get().defaultBlockState();
+			return TFBlocks.PINK_CASTLE_DOOR.defaultBlockState();
 		}
 		if (color == TFBlocks.BLUE_CASTLE_RUNE_BRICK.defaultBlockState()) {
-			return TFBlocks.BLUE_CASTLE_DOOR.get().defaultBlockState();
+			return TFBlocks.BLUE_CASTLE_DOOR.defaultBlockState();
 		}
 		if (color == TFBlocks.YELLOW_CASTLE_RUNE_BRICK.defaultBlockState()) {
-			return TFBlocks.YELLOW_CASTLE_DOOR.get().defaultBlockState();
+			return TFBlocks.YELLOW_CASTLE_DOOR.defaultBlockState();
 		}
 		if (color == TFBlocks.VIOLET_CASTLE_RUNE_BRICK.defaultBlockState()) {
-			return TFBlocks.VIOLET_CASTLE_DOOR.get().defaultBlockState();
+			return TFBlocks.VIOLET_CASTLE_DOOR.defaultBlockState();
 		}
 		TwilightForestMod.LOGGER.warn("Couldn't add door to tower, rune color couldn't be read");
 		return Blocks.AIR.defaultBlockState();

@@ -79,7 +79,7 @@ public class FinalCastleLargeTowerComponent extends TowerWingComponent {
 		this.placeBlock(world, deco.blockState, 4, -7, 4, sbb);
 
 		// door, first floor
-		final BlockState castleDoor = TFBlocks.YELLOW_CASTLE_DOOR.get().defaultBlockState();
+		final BlockState castleDoor = TFBlocks.YELLOW_CASTLE_DOOR.defaultBlockState();
 		this.generateBox(world, sbb, 0, 1, 1, 0, 4, 3, castleDoor, AIR, false);
 
 		// sign placed by template

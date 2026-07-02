@@ -276,8 +276,8 @@ public class FinalCastleMainComponent extends TFStructureComponentOld {
 		this.generateBox(world, sbb, 24, 10, 12, 24, 10, 24, fieldBlock, fieldBlock, false);
 
 		// doors in dungeon force field
-		this.generateBox(world, sbb, 17, 1, 12, 19, 4, 12, TFBlocks.PINK_CASTLE_DOOR.get().defaultBlockState(), AIR, false);
-		this.generateBox(world, sbb, 17, 1, 24, 19, 4, 24, TFBlocks.PINK_CASTLE_DOOR.get().defaultBlockState(), AIR, false);
+		this.generateBox(world, sbb, 17, 1, 12, 19, 4, 12, TFBlocks.PINK_CASTLE_DOOR.defaultBlockState(), AIR, false);
+		this.generateBox(world, sbb, 17, 1, 24, 19, 4, 24, TFBlocks.PINK_CASTLE_DOOR.defaultBlockState(), AIR, false);
 
 		// stairs to stair towers
 		makeSmallTowerStairs(world, sbb, Rotation.NONE);
@@ -286,10 +286,10 @@ public class FinalCastleMainComponent extends TFStructureComponentOld {
 		makeLargeTowerStairs(world, sbb, Rotation.CLOCKWISE_180);
 
 		// door, first floor
-		this.generateBox(world, sbb, 48, 1, 23, 48, 4, 25, TFBlocks.YELLOW_CASTLE_DOOR.get().defaultBlockState(), AIR, false);
+		this.generateBox(world, sbb, 48, 1, 23, 48, 4, 25, TFBlocks.YELLOW_CASTLE_DOOR.defaultBlockState(), AIR, false);
 
 		// door, second floor
-		this.generateBox(world, sbb, 0, 31, 23, 0, 34, 25, TFBlocks.BLUE_CASTLE_DOOR.get().defaultBlockState(), AIR, false);
+		this.generateBox(world, sbb, 0, 31, 23, 0, 34, 25, TFBlocks.BLUE_CASTLE_DOOR.defaultBlockState(), AIR, false);
 	}
 
 	private void makeSmallTowerStairs(WorldGenLevel world, BoundingBox sbb, Rotation rotation) {

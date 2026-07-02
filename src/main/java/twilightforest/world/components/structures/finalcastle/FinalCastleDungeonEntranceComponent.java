@@ -58,7 +58,7 @@ public class FinalCastleDungeonEntranceComponent extends FinalCastleDungeonRoom3
 		}
 
 		// door
-		final BlockState castleDoor = TFBlocks.PINK_CASTLE_DOOR.get().defaultBlockState();
+		final BlockState castleDoor = TFBlocks.PINK_CASTLE_DOOR.defaultBlockState();
 		this.generateBox(world, sbb, 23, 0, 12, 23, 3, 14, castleDoor, AIR, false);
 		this.generateBox(world, sbb, 23, 4, 12, 23, 4, 14, deco.blockState, deco.blockState, false);
 	}

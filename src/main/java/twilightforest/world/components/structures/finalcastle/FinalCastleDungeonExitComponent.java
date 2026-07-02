@@ -60,7 +60,7 @@ public class FinalCastleDungeonExitComponent extends FinalCastleDungeonRoom31Com
 		super.postProcess(world, manager, generator, rand, sbb, chunkPosIn, blockPos);
 
 		// door
-		final BlockState castleDoor = TFBlocks.PINK_CASTLE_DOOR.get().defaultBlockState();
+		final BlockState castleDoor = TFBlocks.PINK_CASTLE_DOOR.defaultBlockState();
 
 		this.generateBox(world, sbb, 7, 0, 16, 7, 3, 18, castleDoor, AIR, false);
 		this.generateBox(world, sbb, 7, 4, 16, 7, 4, 18, deco.blockState, deco.blockState, false);
