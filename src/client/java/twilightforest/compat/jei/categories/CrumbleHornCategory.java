@@ -35,7 +35,7 @@ public class CrumbleHornCategory implements IRecipeCategory<CrumbleRecipe> {
 	public CrumbleHornCategory(IGuiHelper helper) {
 		Identifier location = TwilightForestMod.getGuiTexture("crumble_horn_jei.png");
 		this.background = helper.createDrawable(location, 0, 0, RecipeViewerConstants.GENERIC_RECIPE_WIDTH, RecipeViewerConstants.GENERIC_RECIPE_HEIGHT);
-		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, TFItems.CRUMBLE_HORN.get().getDefaultInstance());
+		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, TFItems.CRUMBLE_HORN.getDefaultInstance());
 		this.crumbleSlot = helper.createDrawable(location, 116, 0, 26, 26);
 		this.localizedName = Component.translatable("gui.twilightforest.crumble_horn_jei");
 	}
