@@ -31,7 +31,7 @@ public record WipeOreMeterPacket(InteractionHand hand) implements CustomPacketPa
 	public static void handle(WipeOreMeterPacket message, PayloadContext ctx) {
 		ctx.enqueueWork(() -> {
 			ItemStack heldStack = ctx.player().getItemInHand(message.hand());
-			if (heldStack.is(TFItems.ORE_METER.get())) {
+			if (heldStack.is(TFItems.ORE_METER)) {
 				heldStack.remove(TFDataComponents.ORE_DATA);
 				heldStack.remove(TFDataComponents.ORE_FILTER);
 			}

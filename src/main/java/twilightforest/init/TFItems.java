@@ -50,7 +50,7 @@ public class TFItems {
 	public static final Item WROUGHT_IRON_BAR = registerDirect("wrought_iron_bar", Item::new, Item.Properties::new);
 	//items.register("Wand of Pacification [NYI]", new Item().setIconIndex(6).setTranslationKey("wandPacification").setMaxStackSize(1));
 	public static final Item MAGIC_PAINTING = registerDirect("magic_painting", MagicPaintingItem::new, Item.Properties::new);
-	public static final DeferredItem<Item> ORE_METER = register("ore_meter", OreMeterItem::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+	public static final Item ORE_METER = registerDirect("ore_meter", OreMeterItem::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 	public static final Item FILLED_MAGIC_MAP = registerDirect("filled_magic_map", MagicMapItem::new, Item.Properties::new);
 	public static final Item FILLED_MAZE_MAP = registerDirect("filled_maze_map", properties -> new MazeMapItem(false, properties), Item.Properties::new);
 	public static final Item FILLED_ORE_MAP = registerDirect("filled_ore_map", properties -> new MazeMapItem(true, properties), Item.Properties::new);

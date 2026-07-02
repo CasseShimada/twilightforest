@@ -31,7 +31,7 @@ public class MinecraftMixin {
 			return;
 		}
 		ItemStack stack = this.player.getMainHandItem();
-		if (!stack.is(TFItems.ORE_METER.get())) {
+		if (!stack.is(TFItems.ORE_METER)) {
 			return;
 		}
 		if (!stack.has(TFDataComponents.ORE_DATA) && !stack.has(TFDataComponents.ORE_FILTER)) {

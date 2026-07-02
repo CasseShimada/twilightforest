@@ -174,8 +174,8 @@ public class OverlayHandler {
 	}
 
 	private static void renderOreMeterStats(GuiGraphicsExtractor graphics, Player player) {
-		if (player.isHolding(TFItems.ORE_METER.get())) {
-			InteractionHand handToUse = player.getItemInHand(InteractionHand.MAIN_HAND).is(TFItems.ORE_METER.get()) ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+		if (player.isHolding(TFItems.ORE_METER)) {
+			InteractionHand handToUse = player.getItemInHand(InteractionHand.MAIN_HAND).is(TFItems.ORE_METER) ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
 			ItemStack selectedMeter = player.getItemInHand(handToUse);
 			if (OreMeterItem.isLoading(selectedMeter)) {
 				int dots = (OreMeterItem.getLoadProgress(selectedMeter) / 5) % 3;
