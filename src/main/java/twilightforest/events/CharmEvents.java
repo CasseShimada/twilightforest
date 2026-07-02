@@ -210,7 +210,7 @@ public class CharmEvents {
 
 			if (player.getRandom().nextFloat() <= 0.15F) {
 				if (damage >= 2) {
-					setState = TFBlocks.SKULL_CHEST.get().withPropertiesOf(setState);
+					setState = TFBlocks.SKULL_CHEST.withPropertiesOf(setState);
 					TwilightForestMod.LOGGER.debug("{}'s Casket damage value was too high, placing Skull Chest instead", player.getName().getString());
 				} else {
 					damage = damage + 1;

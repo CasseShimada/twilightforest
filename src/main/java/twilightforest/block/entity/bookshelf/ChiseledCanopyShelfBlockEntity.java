@@ -28,7 +28,7 @@ public class ChiseledCanopyShelfBlockEntity extends ChiseledBookShelfBlockEntity
 	private final BookshelfSpawner spawner = new BookshelfSpawner() {
 		@Override
 		public void broadcastEvent(Level level, BlockPos pos, int id) {
-			level.blockEvent(pos, TFBlocks.CHISELED_CANOPY_BOOKSHELF.get(), id, 0);
+			level.blockEvent(pos, TFBlocks.CHISELED_CANOPY_BOOKSHELF, id, 0);
 		}
 
 		@Override

@@ -779,7 +779,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 	private void putTrappableBookshelf(BlockPos pos, WorldGenLevel level, RegistryAccess registryAccess, RandomSource random, Rotation dataRotation) {
 		boolean isHostile = random.nextInt(12) == 0;
 		Rotation stateRotation = this.placeSettings.getRotation().getRotated(dataRotation);
-		BlockState shelf = TFBlocks.CHISELED_CANOPY_BOOKSHELF.value().defaultBlockState().setValue(ChiseledCanopyShelfBlock.SPAWNER, isHostile).rotate(stateRotation);
+		BlockState shelf = TFBlocks.CHISELED_CANOPY_BOOKSHELF.defaultBlockState().setValue(ChiseledCanopyShelfBlock.SPAWNER, isHostile).rotate(stateRotation);
 
 		IntList filledSlots = new IntArrayList();
 		for (int index = 0; index < 6; index++) {
