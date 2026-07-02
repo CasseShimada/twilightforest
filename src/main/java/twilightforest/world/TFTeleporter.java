@@ -457,7 +457,7 @@ public class TFTeleporter {
 	private static boolean isTreeSupport(BlockState state) {
 		return state.is(BlockTags.LOGS)
 			|| state.is(BlockTags.LEAVES)
-			|| state.is(TFBlocks.HARDENED_DARK_LEAVES.get());
+			|| state.is(TFBlocks.HARDENED_DARK_LEAVES);
 	}
 
 	protected static double getYFactor(ServerLevel world) {

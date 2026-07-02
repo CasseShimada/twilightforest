@@ -104,7 +104,7 @@ public final class FeatureLogic {
 	}
 
 	public static boolean isBlockNotOk(BlockState state) {
-		return state.liquid() || state.is(Blocks.BEDROCK) || state.getBlock() instanceof GiantBlock || state.is(TFBlockTags.CLOUDS) || state.is(TFBlocks.HARDENED_DARK_LEAVES.get());
+		return state.liquid() || state.is(Blocks.BEDROCK) || state.getBlock() instanceof GiantBlock || state.is(TFBlockTags.CLOUDS) || state.is(TFBlocks.HARDENED_DARK_LEAVES);
 	}
 
 	// North is treated for default rotation and null means you're not on the wall
