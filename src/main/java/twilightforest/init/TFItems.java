@@ -138,12 +138,12 @@ public class TFItems {
 	public static final DeferredItem<Item> PHANTOM_HELMET = register("phantom_helmet", properties -> new PhantomArmorItem(TFArmorMaterials.PHANTOM, ArmorType.HELMET, properties), () -> new Item.Properties().durability(ArmorType.HELMET.getDurability(30)).rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> PHANTOM_CHESTPLATE = register("phantom_chestplate", properties -> new PhantomArmorItem(TFArmorMaterials.PHANTOM, ArmorType.CHESTPLATE, properties), () -> new Item.Properties().durability(ArmorType.CHESTPLATE.getDurability(30)).rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> ICE_BOMB = register("ice_bomb", IceBombItem::new, () -> new Item.Properties().stacksTo(16));
-	public static final DeferredItem<Item> ARCTIC_FUR = register("arctic_fur", Item::new, Item.Properties::new);
+	public static final Item ARCTIC_FUR = registerDirect("arctic_fur", Item::new, Item.Properties::new);
 	public static final DeferredItem<Item> ARCTIC_HELMET = register("arctic_helmet", properties -> new ArcticArmorItem(TFArmorMaterials.ARCTIC, ArmorType.HELMET, properties), Item.Properties::new);
 	public static final DeferredItem<Item> ARCTIC_CHESTPLATE = register("arctic_chestplate", properties -> new ArcticArmorItem(TFArmorMaterials.ARCTIC, ArmorType.CHESTPLATE, properties), Item.Properties::new);
 	public static final DeferredItem<Item> ARCTIC_LEGGINGS = register("arctic_leggings", properties -> new ArcticArmorItem(TFArmorMaterials.ARCTIC, ArmorType.LEGGINGS, properties), () -> new Item.Properties().durability(ArmorType.LEGGINGS.getDurability(10)));
 	public static final DeferredItem<Item> ARCTIC_BOOTS = register("arctic_boots", properties -> new ArcticArmorItem(TFArmorMaterials.ARCTIC, ArmorType.BOOTS, properties), () -> new Item.Properties().durability(ArmorType.BOOTS.getDurability(10)));
-	public static final DeferredItem<Item> ALPHA_YETI_FUR = register("alpha_yeti_fur", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final Item ALPHA_YETI_FUR = registerDirect("alpha_yeti_fur", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> YETI_HELMET = register("yeti_helmet", properties -> new YetiArmorItem(TFArmorMaterials.YETI, ArmorType.HELMET, properties), () -> new Item.Properties().durability(ArmorType.HELMET.getDurability(20)).rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> YETI_CHESTPLATE = register("yeti_chestplate", properties -> new YetiArmorItem(TFArmorMaterials.YETI, ArmorType.CHESTPLATE, properties), () -> new Item.Properties().durability(ArmorType.CHESTPLATE.getDurability(20)).rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> YETI_LEGGINGS = register("yeti_leggings", properties -> new YetiArmorItem(TFArmorMaterials.YETI, ArmorType.LEGGINGS, properties), () -> new Item.Properties().durability(ArmorType.LEGGINGS.getDurability(20)).rarity(Rarity.UNCOMMON));
@@ -158,13 +158,13 @@ public class TFItems {
 	public static final DeferredItem<Item> GIANT_PICKAXE = register("giant_pickaxe", properties -> new GiantPickItem(TFToolMaterials.GIANT, properties), () -> new Item.Properties().pickaxe(TFToolMaterials.GIANT, 8.0F, -3.5F).attributes(GiantPickItem.createGiantAttributes(TFToolMaterials.GIANT, 8, -3.5F)));
 	public static final DeferredItem<Item> GIANT_SWORD = register("giant_sword", properties -> new Item(properties.sword(TFToolMaterials.GIANT, 10.0F, -3.5F).attributes(GiantPickItem.createGiantAttributes(TFToolMaterials.GIANT, 10, -3.5F))), Item.Properties::new);
 	public static final DeferredItem<Item> LAMP_OF_CINDERS = register("lamp_of_cinders", LampOfCindersItem::new, () -> new Item.Properties().fireResistant().durability(1024).rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> CUBE_TALISMAN = register("cube_talisman", Item::new, () -> new Item.Properties().fireResistant().rarity(Rarity.UNCOMMON));
+	public static final Item CUBE_TALISMAN = registerDirect("cube_talisman", Item::new, () -> new Item.Properties().fireResistant().rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> CUBE_OF_ANNIHILATION = register("cube_of_annihilation", CubeOfAnnihilationItem::new, () -> new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> MOON_DIAL = register("moon_dial", MoonDialItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> POCKET_WATCH = register("pocket_watch", PocketWatchItem::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> EMPERORS_CLOTH = register("emperors_cloth", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
-	public static final DeferredItem<Item> FOUR_LEAF_CLOVER = register("four_leaf_clover", Item::new, Item.Properties::new);
-	public static final DeferredItem<Item> CROWN_SPLINTER = register("crown_splinter", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final Item FOUR_LEAF_CLOVER = registerDirect("four_leaf_clover", Item::new, Item.Properties::new);
+	public static final Item CROWN_SPLINTER = registerDirect("crown_splinter", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> MYSTIC_CROWN = register("mystic_crown", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1).attributes(ItemAttributeModifiers.builder().add(Attributes.ARMOR, new AttributeModifier(Identifier.withDefaultNamespace("armor." + EquipmentSlot.HEAD.getName()), 2.0F, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.HEAD).build()).equippable(EquipmentSlot.HEAD));
 
 	public static final DeferredItem<Item> KEEPSAKE_CASKET = register("keepsake_casket", KeepsakeCasketItem::new, () -> new Item.Properties().useBlockDescriptionPrefix().rarity(Rarity.UNCOMMON));
