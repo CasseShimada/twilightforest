@@ -462,10 +462,6 @@ public class ClientEvents {
 		);
 	}
 
-	public static boolean areCuriosEquipped(LivingEntity entity) {
-		return false;
-	}
-
 	public static float consumeShakeIntensity() {
 		float current = shakeIntensity;
 		shakeIntensity = 0.0F;

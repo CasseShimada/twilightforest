@@ -25,7 +25,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
 		if (!(state instanceof FabricRenderState fabricState)) {
 			return;
 		}
-		boolean wearingTrophy = entity.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof TrophyItem || ClientEvents.areCuriosEquipped(entity);
+		boolean wearingTrophy = entity.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof TrophyItem;
 		fabricState.setData(ClientEvents.HEAD_KEY, wearingTrophy);
 		fabricState.setData(ShieldLayer.SHIELD_COUNT_KEY, ShieldLayer.getShieldCount(entity));
 

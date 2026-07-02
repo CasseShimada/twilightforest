@@ -81,8 +81,8 @@ public class CharmEvents {
 	}
 
 	private static boolean charmOfLife(Player player) {
-		boolean charm2 = TFItemStackUtils.consumeInventoryItem(player, TFItems.CHARM_OF_LIFE_2.get(), getPlayerData(player), false) || hasCharmCurio(TFItems.CHARM_OF_LIFE_2.get(), player);
-		boolean charm1 = !charm2 && (TFItemStackUtils.consumeInventoryItem(player, TFItems.CHARM_OF_LIFE_1.get(), getPlayerData(player), false) || hasCharmCurio(TFItems.CHARM_OF_LIFE_1.get(), player));
+		boolean charm2 = TFItemStackUtils.consumeInventoryItem(player, TFItems.CHARM_OF_LIFE_2.get(), getPlayerData(player), false);
+		boolean charm1 = !charm2 && TFItemStackUtils.consumeInventoryItem(player, TFItems.CHARM_OF_LIFE_1.get(), getPlayerData(player), false);
 
 		if (charm2 || charm1) {
 			if (charm1) {
@@ -162,7 +162,7 @@ public class CharmEvents {
 		}
 
 		//do we even have a charm? No? Then stop operation
-		if (!TFItemStackUtils.consumeInventoryItem(player, charm, getPlayerData(player), true) && !hasCharmCurio(charm, player)) {
+		if (!TFItemStackUtils.consumeInventoryItem(player, charm, getPlayerData(player), true)) {
 			return false;
 		}
 
@@ -349,7 +349,4 @@ public class CharmEvents {
 		return slots;
 	}
 
-	private static boolean hasCharmCurio(Item item, Player player) {
-		return false;
-	}
 }
