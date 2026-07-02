@@ -36,7 +36,7 @@ public class TFCreativeTabs {
 
 	public static final CreativeModeTab BLOCKS = FabricCreativeModeTab.builder()
 		.title(Component.translatable("itemGroup.twilightforest.blocks"))
-		.icon(() -> new ItemStack(TFBlocks.NAGA_COURTYARD_MINIATURE_STRUCTURE.get()))
+		.icon(() -> new ItemStack(TFBlocks.NAGA_COURTYARD_MINIATURE_STRUCTURE))
 		.displayItems((parameters, output) -> {
 			output.accept(TFBlocks.TWILIGHT_OAK_LOG);
 			output.accept(TFBlocks.TWILIGHT_OAK_WOOD);
@@ -406,7 +406,7 @@ public class TFCreativeTabs {
 
 	public static final CreativeModeTab ITEMS = FabricCreativeModeTab.builder()
 		.title(Component.translatable("itemGroup.twilightforest.items"))
-		.icon(() -> new ItemStack(TFBlocks.TWILIGHT_PORTAL_MINIATURE_STRUCTURE.get()))
+		.icon(() -> new ItemStack(TFBlocks.TWILIGHT_PORTAL_MINIATURE_STRUCTURE))
 		.displayItems((parameters, output) -> {
 			output.accept(TFItems.MAGIC_MAP);
 			output.accept(TFItems.MAZE_MAP);

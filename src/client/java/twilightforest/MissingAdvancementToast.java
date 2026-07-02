@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import twilightforest.init.TFBlocks;
 
 public class MissingAdvancementToast implements Toast {
-	public static final MissingAdvancementToast FALLBACK = new MissingAdvancementToast(Component.translatable("misc.twilightforest.advancement_hidden"), new ItemStack(TFBlocks.TWILIGHT_PORTAL_MINIATURE_STRUCTURE.get()));
+	public static final MissingAdvancementToast FALLBACK = new MissingAdvancementToast(Component.translatable("misc.twilightforest.advancement_hidden"), new ItemStack(TFBlocks.TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
 	private static final Component UPPER_TEXT = Component.translatable("misc.twilightforest.advancement_required");
 	private static final Identifier BACKGROUND_SPRITE = Identifier.withDefaultNamespace("toast/advancement");
 
