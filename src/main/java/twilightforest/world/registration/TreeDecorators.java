@@ -15,5 +15,5 @@ public final class TreeDecorators {
 			.add(TFBlocks.LIVEROOT_BLOCK.get().defaultBlockState(), 1)
 	);
 	public static final TreeRootsDecorator LIVING_ROOTS = new TreeRootsDecorator(3, 1, 5, TreeDecorators.ROOT_BLEND_PROVIDER, 1);
-	public static final TrunkSideDecorator FIREFLY = new TrunkSideDecorator(2, 1.0f, BlockStateProvider.simple(TFBlocks.FIREFLY.get().defaultBlockState()));
+	public static final TrunkSideDecorator FIREFLY = new TrunkSideDecorator(2, 1.0f, BlockStateProvider.simple(TFBlocks.FIREFLY.defaultBlockState()));
 }

@@ -34,9 +34,9 @@ public class TFBlockEntities {
 	public static final BlockEntityType<NagaSpawnerBlockEntity> NAGA_SPAWNER = register("naga_spawner", FabricBlockEntityTypeBuilder.create(NagaSpawnerBlockEntity::new, TFBlocks.NAGA_BOSS_SPAWNER.get()).build());
 	public static final BlockEntityType<SnowQueenSpawnerBlockEntity> SNOW_QUEEN_SPAWNER = register("snow_queen_spawner", FabricBlockEntityTypeBuilder.create(SnowQueenSpawnerBlockEntity::new, TFBlocks.SNOW_QUEEN_BOSS_SPAWNER.get()).build());
 	public static final BlockEntityType<UrGhastSpawnerBlockEntity> UR_GHAST_SPAWNER = register("tower_boss_spawner", FabricBlockEntityTypeBuilder.create(UrGhastSpawnerBlockEntity::new, TFBlocks.UR_GHAST_BOSS_SPAWNER.get()).build());
-	public static final BlockEntityType<CicadaBlockEntity> CICADA = register("cicada", FabricBlockEntityTypeBuilder.create(CicadaBlockEntity::new, TFBlocks.CICADA.get()).build());
-	public static final BlockEntityType<FireflyBlockEntity> FIREFLY = register("firefly", FabricBlockEntityTypeBuilder.create(FireflyBlockEntity::new, TFBlocks.FIREFLY.get()).build());
-	public static final BlockEntityType<MoonwormBlockEntity> MOONWORM = register("moonworm", FabricBlockEntityTypeBuilder.create(MoonwormBlockEntity::new, TFBlocks.MOONWORM.get()).build());
+	public static final BlockEntityType<CicadaBlockEntity> CICADA = register("cicada", FabricBlockEntityTypeBuilder.create(CicadaBlockEntity::new, TFBlocks.CICADA).build());
+	public static final BlockEntityType<FireflyBlockEntity> FIREFLY = register("firefly", FabricBlockEntityTypeBuilder.create(FireflyBlockEntity::new, TFBlocks.FIREFLY).build());
+	public static final BlockEntityType<MoonwormBlockEntity> MOONWORM = register("moonworm", FabricBlockEntityTypeBuilder.create(MoonwormBlockEntity::new, TFBlocks.MOONWORM).build());
 	public static final BlockEntityType<SkullChestBlockEntity> SKULL_CHEST = register("skull_chest", FabricBlockEntityTypeBuilder.create(SkullChestBlockEntity::new, TFBlocks.SKULL_CHEST.get()).build());
 	public static final BlockEntityType<KeepsakeCasketBlockEntity> KEEPSAKE_CASKET = register("keepsake_casket", FabricBlockEntityTypeBuilder.create(KeepsakeCasketBlockEntity::new, TFBlocks.KEEPSAKE_CASKET).build());
 	public static final BlockEntityType<BrazierBlockEntity> BRAZIER = register("brazier", FabricBlockEntityTypeBuilder.create(BrazierBlockEntity::new, TFBlocks.BRAZIER.get()).build());

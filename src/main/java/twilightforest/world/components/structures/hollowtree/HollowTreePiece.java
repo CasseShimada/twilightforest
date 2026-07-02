@@ -45,8 +45,8 @@ public abstract class HollowTreePiece extends StructurePiece {
 	public static final BlockStateProvider DEFAULT_VINE = BlockStateProvider.simple(Blocks.VINE.defaultBlockState());
 	public static final BlockStateProvider DEFAULT_BUG = new WeightedStateProvider(
 		WeightedList.<BlockState>builder()
-			.add(TFBlocks.FIREFLY.value().defaultBlockState().setValue(CritterBlock.FACING, Direction.NORTH))
-			.add(TFBlocks.CICADA.value().defaultBlockState().setValue(CritterBlock.FACING, Direction.NORTH))
+			.add(TFBlocks.FIREFLY.defaultBlockState().setValue(CritterBlock.FACING, Direction.NORTH))
+			.add(TFBlocks.CICADA.defaultBlockState().setValue(CritterBlock.FACING, Direction.NORTH))
 	);
 	public static final BlockStateProvider DEFAULT_DUNGEON_AIR = BlockStateProvider.simple(Blocks.AIR);
 	public static final BlockStateProvider DEFAULT_DUNGEON_LOOT_BLOCK = BlockStateProvider.simple(Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.WEST));

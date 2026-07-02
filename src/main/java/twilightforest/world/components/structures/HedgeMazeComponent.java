@@ -52,7 +52,7 @@ public class HedgeMazeComponent extends TFStructureComponentOld {
 		TFMaze maze = new TFMaze(MSIZE, MSIZE, rand);
 
 		maze.oddBias = 2;
-		maze.torchBlockState = TFBlocks.FIREFLY.get().defaultBlockState();
+		maze.torchBlockState = TFBlocks.FIREFLY.defaultBlockState();
 		maze.wallBlockState = TFBlocks.HEDGE.defaultBlockState();
 		maze.type = 4;
 		maze.tall = 3;

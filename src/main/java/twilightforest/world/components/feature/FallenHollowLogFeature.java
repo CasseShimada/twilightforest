@@ -24,7 +24,7 @@ public class FallenHollowLogFeature extends Feature<NoneFeatureConfiguration> {
 	final BlockState oakLogWithZAxis = TFBlocks.TWILIGHT_OAK_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Z);
 	final BlockState oakLogWithXAxis = TFBlocks.TWILIGHT_OAK_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.X);
 	final BlockState grass = Blocks.GRASS_BLOCK.defaultBlockState();
-	final BlockState firefly = TFBlocks.FIREFLY.get().defaultBlockState();
+	final BlockState firefly = TFBlocks.FIREFLY.defaultBlockState();
 
 	public FallenHollowLogFeature(Codec<NoneFeatureConfiguration> configIn) {
 		super(configIn);

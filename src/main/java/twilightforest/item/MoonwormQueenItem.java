@@ -65,7 +65,7 @@ public class MoonwormQueenItem extends Item {
 		if (player != null) {
 			ItemStack stack = player.getItemInHand(context.getHand());
 
-			if (!TFItemStackUtils.isAtZeroDurability(stack) && player.mayUseItemAt(pos, context.getClickedFace(), stack) && level.isUnobstructed(TFBlocks.MOONWORM.get().defaultBlockState(), pos, CollisionContext.empty())) {
+			if (!TFItemStackUtils.isAtZeroDurability(stack) && player.mayUseItemAt(pos, context.getClickedFace(), stack) && level.isUnobstructed(TFBlocks.MOONWORM.defaultBlockState(), pos, CollisionContext.empty())) {
 				if (this.tryPlace(blockItemUseContext).consumesAction()) {
 					SoundType soundtype = level.getBlockState(pos).getSoundType();
 					level.playSound(player, pos, soundtype.getPlaceSound(), SoundSource.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
@@ -144,7 +144,7 @@ public class MoonwormQueenItem extends Item {
 
 	@Nullable
 	protected BlockState getPlacementState(BlockPlaceContext context) {
-		BlockState blockstate = TFBlocks.MOONWORM.get().getStateForPlacement(context);
+		BlockState blockstate = TFBlocks.MOONWORM.getStateForPlacement(context);
 		return blockstate != null && this.canPlace(context, blockstate) ? blockstate : null;
 	}
 

@@ -80,7 +80,7 @@ public class MoonwormShot extends TFThrowable {
 		BlockPos pos = result.getBlockPos().relative(result.getDirection());
 		BlockState currentState = this.level().getBlockState(pos);
 		if (currentState.canBeReplaced() && !currentState.is(BlockTags.FIRE) && MoonwormBlock.canSurvive(this.level(), pos, result.getDirection()) && !currentState.is(Blocks.LAVA)) {
-			this.level().setBlockAndUpdate(pos, TFBlocks.MOONWORM.get().defaultBlockState()
+			this.level().setBlockAndUpdate(pos, TFBlocks.MOONWORM.defaultBlockState()
 				.setValue(DirectionalBlock.FACING, result.getDirection())
 				.setValue(BlockStateProperties.WATERLOGGED, currentState.getFluidState().is(Fluids.WATER)));
 
@@ -103,7 +103,7 @@ public class MoonwormShot extends TFThrowable {
 	protected void onHitEntity(EntityHitResult result) {
 		super.onHitEntity(result);
 		if (result.getEntity() instanceof Player player && !player.hasItemInSlot(EquipmentSlot.HEAD)) {
-			player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(TFBlocks.MOONWORM.get()));
+			player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(TFBlocks.MOONWORM));
 		} else {
 			if (this.level() instanceof ServerLevel serverLevel) {
 				result.getEntity().hurtServer(serverLevel, TFDamageTypes.getIndirectEntityDamageSource(this.level(), TFDamageTypes.MOONWORM, this, this.getOwner()), this.random.nextInt(3) == 0 ? 1 : 0);

@@ -104,7 +104,7 @@ public class TreeConfigurations {
 			new TrunkSideDecorator( // A few more Fireflies!
 				4,
 				0.5f,
-				BlockStateProvider.simple(TFBlocks.FIREFLY.get().defaultBlockState().setValue(FireflyBlock.FACING, Direction.NORTH))
+				BlockStateProvider.simple(TFBlocks.FIREFLY.defaultBlockState().setValue(FireflyBlock.FACING, Direction.NORTH))
 			),
 			new DangleFromTreeDecorator(
 				1,

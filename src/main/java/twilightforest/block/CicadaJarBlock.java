@@ -35,7 +35,7 @@ public class CicadaJarBlock extends JarBlock {
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
 		if (player.isShiftKeyDown() && level.getBlockEntity(pos) instanceof JarBlockEntity jarBE) {
 			if (level instanceof ServerLevel sl) {
-				ItemEntity cicada = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(TFBlocks.CICADA.get()));
+				ItemEntity cicada = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(TFBlocks.CICADA));
 				level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 				cicada.spawnAtLocation(sl, cicada.getItem());
 				cicada.spawnAtLocation(sl, Util.make(new ItemStack(TFItems.MASON_JAR), jar -> jar.set(TFDataComponents.JAR_LID, new JarLid(jarBE.lid))));

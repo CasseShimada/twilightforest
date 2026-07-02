@@ -133,13 +133,13 @@ public abstract class CritterBlock extends BaseEntityBlock implements SimpleWate
 		if (stack.is(TFItems.MASON_JAR)) {
 			ItemContainerContents contents = stack.getComponents().get(DataComponents.CONTAINER);
 			if (contents == null || contents.copyOne().isEmpty()) {
-				if (this == TFBlocks.FIREFLY.get()) {
+				if (this == TFBlocks.FIREFLY) {
 					ItemStack newStack = Util.make(new ItemStack(TFItems.FIREFLY_JAR), jar -> jar.set(TFDataComponents.JAR_LID, stack.get(TFDataComponents.JAR_LID)));
 					stack.consume(1, player);
 					InventoryUtil.giveItemToPlayer(player, newStack);
 					level.setBlockAndUpdate(pos, state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState());
 					return InteractionResult.SUCCESS;
-				} else if (this == TFBlocks.CICADA.get()) {
+				} else if (this == TFBlocks.CICADA) {
 					ItemStack newStack = Util.make(new ItemStack(TFItems.CICADA_JAR), jar -> jar.set(TFDataComponents.JAR_LID, stack.get(TFDataComponents.JAR_LID)));
 					stack.consume(1, player);
 					InventoryUtil.giveItemToPlayer(player, newStack);
