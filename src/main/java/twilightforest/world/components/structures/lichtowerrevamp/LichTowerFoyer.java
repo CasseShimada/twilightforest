@@ -119,7 +119,7 @@ public final class LichTowerFoyer extends TwilightJigsawPiece implements PieceBe
 					lootBlock.setLootTable(TFLootTables.TOWER_ROOM, random.nextLong());
 				}
 
-				level.setBlock(pos.below(), TFBlocks.CANOPY_PLANKS.value().defaultBlockState(), Block.UPDATE_CLIENTS);
+				level.setBlock(pos.below(), TFBlocks.CANOPY_PLANKS.defaultBlockState(), Block.UPDATE_CLIENTS);
 			}
 		}
 	}
