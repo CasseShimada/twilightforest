@@ -56,22 +56,22 @@ public class ColorHandler {
 		register(tint(
 			state -> 0xFF000000 | 106 << 16 | 156 << 8 | 23,
 			(state, getter, pos) -> seasonalLeafColor(pos, 16, 16, 16, 106, 156, 23, 251, 108, 27)
-		), TFBlocks.TIME_LEAVES.get());
+		), TFBlocks.TIME_LEAVES);
 
 		register(tint(
 			state -> 0xFF000000 | 108 << 16 | 204 << 8 | 234,
 			(state, getter, pos) -> seasonalLeafColor(pos, 27, 63, 39, 108, 204, 234, 96, 107, 121)
-		), TFBlocks.TRANSFORMATION_LEAVES.get());
+		), TFBlocks.TRANSFORMATION_LEAVES);
 
 		register(tint(
 			state -> 0xFF000000 | 252 << 16 | 241 << 8 | 68,
 			(state, getter, pos) -> seasonalLeafColor(pos, 31, 33, 32, 252, 241, 68, 237, 172, 9)
-		), TFBlocks.MINING_LEAVES.get());
+		), TFBlocks.MINING_LEAVES);
 
 		register(tint(
 			state -> 0xFF000000 | 54 << 16 | 76 << 8 | 3,
 			(state, getter, pos) -> seasonalLeafColor(pos, 63, 63, 63, 54, 76, 3, 168, 199, 43)
-		), TFBlocks.SORTING_LEAVES.get());
+		), TFBlocks.SORTING_LEAVES);
 
 		register(tint(
 			state -> -1,
@@ -84,22 +84,22 @@ public class ColorHandler {
 		register(tint(
 			state -> FoliageColor.FOLIAGE_DEFAULT,
 			(state, getter, pos) -> BiomeColors.getAverageFoliageColor(getter, pos)
-		), TFBlocks.TWILIGHT_OAK_LEAVES.get(), TFBlocks.DARK_LEAVES.get(), TFBlocks.HARDENED_DARK_LEAVES, TFBlocks.GIANT_LEAVES, TFBlocks.FALLEN_LEAVES);
+		), TFBlocks.TWILIGHT_OAK_LEAVES, TFBlocks.DARK_LEAVES, TFBlocks.HARDENED_DARK_LEAVES, TFBlocks.GIANT_LEAVES, TFBlocks.FALLEN_LEAVES);
 
 		register(tint(
 			state -> FoliageColor.FOLIAGE_EVERGREEN,
 			(state, getter, pos) -> CANOPY_COLORIZER.apply(BiomeColors.getAverageFoliageColor(getter, pos))
-		), TFBlocks.CANOPY_LEAVES.get());
+		), TFBlocks.CANOPY_LEAVES);
 
 		register(tint(
 			state -> FoliageColor.FOLIAGE_BIRCH,
 			(state, getter, pos) -> MANGROVE_COLORIZER.apply(BiomeColors.getAverageFoliageColor(getter, pos))
-		), TFBlocks.MANGROVE_LEAVES.get());
+		), TFBlocks.MANGROVE_LEAVES);
 
 		register(tint(
 			state -> FoliageColor.FOLIAGE_DEFAULT,
 			(state, getter, pos) -> rainbowLeafColor(pos)
-		), TFBlocks.RAINBOW_OAK_LEAVES.get());
+		), TFBlocks.RAINBOW_OAK_LEAVES);
 
 		register(tint(state -> FoliageColor.FOLIAGE_EVERGREEN), TFBlocks.BEANSTALK_LEAVES, TFBlocks.THORN_LEAVES);
 

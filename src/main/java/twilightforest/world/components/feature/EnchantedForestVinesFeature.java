@@ -81,7 +81,7 @@ public class EnchantedForestVinesFeature extends Feature<NoneFeatureConfiguratio
 
 		for (Direction dir : Direction.values()) {
 			BlockPos relativePos = pos.relative(dir);
-			if (dir != Direction.DOWN && VineBlock.isAcceptableNeighbour(world, relativePos, dir) && !world.getBlockState(relativePos).is(TFBlocks.RAINBOW_OAK_LEAVES.get())) {
+			if (dir != Direction.DOWN && VineBlock.isAcceptableNeighbour(world, relativePos, dir) && !world.getBlockState(relativePos).is(TFBlocks.RAINBOW_OAK_LEAVES)) {
 				if (!isTree(world.getBlockState(relativePos)))
 					isTree = false;
 

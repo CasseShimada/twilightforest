@@ -16,6 +16,6 @@ public class HardenedDarkLeavesBlock extends Block {
 
 	@Override
 	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
-		return new ItemStack(TFBlocks.DARK_LEAVES.get());
+		return new ItemStack(TFBlocks.DARK_LEAVES);
 	}
 }
