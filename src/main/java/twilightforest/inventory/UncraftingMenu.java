@@ -644,7 +644,7 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 
 	@Override
 	public boolean stillValid(Player player) {
-		return !TFConfig.disableEntireTable && stillValid(this.positionData, player, TFBlocks.UNCRAFTING_TABLE.get());
+		return !TFConfig.disableEntireTable && stillValid(this.positionData, player, TFBlocks.UNCRAFTING_TABLE);
 	}
 
 	@Override

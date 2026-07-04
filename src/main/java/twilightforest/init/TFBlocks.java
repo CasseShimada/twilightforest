@@ -68,7 +68,7 @@ public class TFBlocks {
 	public static final Block FALLEN_LEAVES = registerDirect("fallen_leaves", FallenLeavesBlock::new, () -> BlockBehaviour.Properties.of().ignitedByLava().instabreak().mapColor(MapColor.PLANT).noCollision().noOcclusion().replaceable().pushReaction(PushReaction.DESTROY).sound(SoundType.AZALEA_LEAVES));
 	public static final Block ROOT_BLOCK = registerDirectWithItem("root", Block::new, () -> BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(2.0F, 3.0F));
 	public static final LiverootBlock LIVEROOT_BLOCK = registerDirectWithItem("liveroot_block", LiverootBlock::new, () -> BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.COLOR_LIGHT_GREEN).sound(SoundType.WOOD).strength(2.0F, 3.0F));
-	public static final DeferredBlock<Block> UNCRAFTING_TABLE = registerWithTooltipItem("uncrafting_table", UncraftingTableBlock::new, () -> BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.FIRE).sound(SoundType.WOOD).strength(2.5F),
+	public static final UncraftingTableBlock UNCRAFTING_TABLE = registerDirectWithTooltipItem("uncrafting_table", UncraftingTableBlock::new, () -> BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.FIRE).sound(SoundType.WOOD).strength(2.5F),
 		(stack, context, display, tooltip, flag) -> {
 			if (TFConfig.disableEntireTable) {
 				tooltip.accept(Component.translatable("block.twilightforest.uncrafting_table.disabled").withStyle(ChatFormatting.RED));
