@@ -46,8 +46,8 @@ public class LichTowerUtil {
 	private final Supplier<List<Block>> STAIR_DECAY_BLOCKS = Suppliers.memoize(() -> List.of(
 		TFBlocks.TWILIGHT_OAK_SLAB.value(),
 		TFBlocks.CANOPY_SLAB.value(),
-		TFBlocks.TWILIGHT_OAK_BANISTER.value(),
-		TFBlocks.CANOPY_BANISTER.value()
+		TFBlocks.TWILIGHT_OAK_BANISTER,
+		TFBlocks.CANOPY_BANISTER
 	));
 	private final Supplier<StructureProcessor[]> stairDecayProcessors = Suppliers.memoize(() -> {
 		List<Block> filter = this.STAIR_DECAY_BLOCKS.get();
