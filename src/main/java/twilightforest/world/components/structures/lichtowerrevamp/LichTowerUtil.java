@@ -44,8 +44,8 @@ public class LichTowerUtil {
 		map.put(TFEntities.SWARM_SPIDER, 1);
 	}))));
 	private final Supplier<List<Block>> STAIR_DECAY_BLOCKS = Suppliers.memoize(() -> List.of(
-		TFBlocks.TWILIGHT_OAK_SLAB.value(),
-		TFBlocks.CANOPY_SLAB.value(),
+		TFBlocks.TWILIGHT_OAK_SLAB,
+		TFBlocks.CANOPY_SLAB,
 		TFBlocks.TWILIGHT_OAK_BANISTER,
 		TFBlocks.CANOPY_BANISTER
 	));

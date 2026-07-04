@@ -237,7 +237,7 @@ public final class TwilightForestMod implements ModInitializer {
 		flammables.add(TFBlocks.HOLLOW_TWILIGHT_OAK_LOG_CLIMBABLE.get(), 5, 5);
 		flammables.add(TFBlocks.TWILIGHT_OAK_BANISTER, 5, 20);
 		flammables.add(TFBlocks.TWILIGHT_OAK_PLANKS.get(), 5, 20);
-		flammables.add(TFBlocks.TWILIGHT_OAK_SLAB.get(), 5, 20);
+		flammables.add(TFBlocks.TWILIGHT_OAK_SLAB, 5, 20);
 		flammables.add(TFBlocks.TWILIGHT_OAK_STAIRS.get(), 5, 20);
 		flammables.add(TFBlocks.TWILIGHT_OAK_FENCE.get(), 5, 20);
 		flammables.add(TFBlocks.TWILIGHT_OAK_GATE.get(), 5, 20);
@@ -251,7 +251,7 @@ public final class TwilightForestMod implements ModInitializer {
 		flammables.add(TFBlocks.HOLLOW_CANOPY_LOG_CLIMBABLE.get(), 5, 5);
 		flammables.add(TFBlocks.CANOPY_BANISTER, 5, 20);
 		flammables.add(TFBlocks.CANOPY_PLANKS.get(), 5, 20);
-		flammables.add(TFBlocks.CANOPY_SLAB.get(), 5, 20);
+		flammables.add(TFBlocks.CANOPY_SLAB, 5, 20);
 		flammables.add(TFBlocks.CANOPY_STAIRS.get(), 5, 20);
 		flammables.add(TFBlocks.CANOPY_FENCE.get(), 5, 20);
 		flammables.add(TFBlocks.CANOPY_GATE.get(), 5, 20);

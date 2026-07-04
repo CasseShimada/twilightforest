@@ -20,7 +20,7 @@ public class TFBlockFamilies {
 
 	public static final BlockFamily TWILIGHT_OAK = familyBuilder(TFBlocks.TWILIGHT_OAK_PLANKS.get())
 		.stairs(TFBlocks.TWILIGHT_OAK_STAIRS.get())
-		.slab(TFBlocks.TWILIGHT_OAK_SLAB.get())
+		.slab(TFBlocks.TWILIGHT_OAK_SLAB)
 		.button(TFBlocks.TWILIGHT_OAK_BUTTON.get())
 		.fence(TFBlocks.TWILIGHT_OAK_FENCE.get())
 		.fenceGate(TFBlocks.TWILIGHT_OAK_GATE.get())
@@ -34,7 +34,7 @@ public class TFBlockFamilies {
 
 	public static final BlockFamily CANOPY = familyBuilder(TFBlocks.CANOPY_PLANKS.get())
 		.stairs(TFBlocks.CANOPY_STAIRS.get())
-		.slab(TFBlocks.CANOPY_SLAB.get())
+		.slab(TFBlocks.CANOPY_SLAB)
 		.button(TFBlocks.CANOPY_BUTTON.get())
 		.fence(TFBlocks.CANOPY_FENCE.get())
 		.fenceGate(TFBlocks.CANOPY_GATE.get())
@@ -48,7 +48,7 @@ public class TFBlockFamilies {
 
 	public static final BlockFamily MANGROVE = familyBuilder(TFBlocks.MANGROVE_PLANKS.get())
 		.stairs(TFBlocks.MANGROVE_STAIRS.get())
-		.slab(TFBlocks.MANGROVE_SLAB.get())
+		.slab(TFBlocks.MANGROVE_SLAB)
 		.button(TFBlocks.MANGROVE_BUTTON.get())
 		.fence(TFBlocks.MANGROVE_FENCE.get())
 		.fenceGate(TFBlocks.MANGROVE_GATE.get())
@@ -62,7 +62,7 @@ public class TFBlockFamilies {
 
 	public static final BlockFamily DARKWOOD = familyBuilder(TFBlocks.DARK_PLANKS.get())
 		.stairs(TFBlocks.DARK_STAIRS.get())
-		.slab(TFBlocks.DARK_SLAB.get())
+		.slab(TFBlocks.DARK_SLAB)
 		.button(TFBlocks.DARK_BUTTON.get())
 		.fence(TFBlocks.DARK_FENCE.get())
 		.fenceGate(TFBlocks.DARK_GATE.get())
@@ -76,7 +76,7 @@ public class TFBlockFamilies {
 
 	public static final BlockFamily TIMEWOOD = familyBuilder(TFBlocks.TIME_PLANKS.get())
 		.stairs(TFBlocks.TIME_STAIRS.get())
-		.slab(TFBlocks.TIME_SLAB.get())
+		.slab(TFBlocks.TIME_SLAB)
 		.button(TFBlocks.TIME_BUTTON.get())
 		.fence(TFBlocks.TIME_FENCE.get())
 		.fenceGate(TFBlocks.TIME_GATE.get())
@@ -90,7 +90,7 @@ public class TFBlockFamilies {
 
 	public static final BlockFamily TRANSWOOD = familyBuilder(TFBlocks.TRANSFORMATION_PLANKS.get())
 		.stairs(TFBlocks.TRANSFORMATION_STAIRS.get())
-		.slab(TFBlocks.TRANSFORMATION_SLAB.get())
+		.slab(TFBlocks.TRANSFORMATION_SLAB)
 		.button(TFBlocks.TRANSFORMATION_BUTTON.get())
 		.fence(TFBlocks.TRANSFORMATION_FENCE.get())
 		.fenceGate(TFBlocks.TRANSFORMATION_GATE.get())
@@ -104,7 +104,7 @@ public class TFBlockFamilies {
 
 	public static final BlockFamily MINEWOOD = familyBuilder(TFBlocks.MINING_PLANKS.get())
 		.stairs(TFBlocks.MINING_STAIRS.get())
-		.slab(TFBlocks.MINING_SLAB.get())
+		.slab(TFBlocks.MINING_SLAB)
 		.button(TFBlocks.MINING_BUTTON.get())
 		.fence(TFBlocks.MINING_FENCE.get())
 		.fenceGate(TFBlocks.MINING_GATE.get())
@@ -118,7 +118,7 @@ public class TFBlockFamilies {
 
 	public static final BlockFamily SORTWOOD = familyBuilder(TFBlocks.SORTING_PLANKS.get())
 		.stairs(TFBlocks.SORTING_STAIRS.get())
-		.slab(TFBlocks.SORTING_SLAB.get())
+		.slab(TFBlocks.SORTING_SLAB)
 		.button(TFBlocks.SORTING_BUTTON.get())
 		.fence(TFBlocks.SORTING_FENCE.get())
 		.fenceGate(TFBlocks.SORTING_GATE.get())
