@@ -186,14 +186,14 @@ public final class TwilightForestMod implements ModInitializer {
 		twilightforest$waterCauldron.twilightforest$put(TFItems.ARCTIC_LEGGINGS, TwilightForestMod::cleanDyedItem);
 		twilightforest$waterCauldron.twilightforest$put(TFItems.ARCTIC_BOOTS, TwilightForestMod::cleanDyedItem);
 
-		StrippableBlockRegistry.register(TFBlocks.TWILIGHT_OAK_LOG.get(), TFBlocks.STRIPPED_TWILIGHT_OAK_LOG.get());
-		StrippableBlockRegistry.register(TFBlocks.CANOPY_LOG.get(), TFBlocks.STRIPPED_CANOPY_LOG.get());
-		StrippableBlockRegistry.register(TFBlocks.MANGROVE_LOG.get(), TFBlocks.STRIPPED_MANGROVE_LOG.get());
-		StrippableBlockRegistry.register(TFBlocks.DARK_LOG.get(), TFBlocks.STRIPPED_DARK_LOG.get());
-		StrippableBlockRegistry.register(TFBlocks.TIME_LOG.get(), TFBlocks.STRIPPED_TIME_LOG.get());
-		StrippableBlockRegistry.register(TFBlocks.TRANSFORMATION_LOG.get(), TFBlocks.STRIPPED_TRANSFORMATION_LOG.get());
-		StrippableBlockRegistry.register(TFBlocks.MINING_LOG.get(), TFBlocks.STRIPPED_MINING_LOG.get());
-		StrippableBlockRegistry.register(TFBlocks.SORTING_LOG.get(), TFBlocks.STRIPPED_SORTING_LOG.get());
+		StrippableBlockRegistry.register(TFBlocks.TWILIGHT_OAK_LOG.get(), TFBlocks.STRIPPED_TWILIGHT_OAK_LOG);
+		StrippableBlockRegistry.register(TFBlocks.CANOPY_LOG.get(), TFBlocks.STRIPPED_CANOPY_LOG);
+		StrippableBlockRegistry.register(TFBlocks.MANGROVE_LOG.get(), TFBlocks.STRIPPED_MANGROVE_LOG);
+		StrippableBlockRegistry.register(TFBlocks.DARK_LOG.get(), TFBlocks.STRIPPED_DARK_LOG);
+		StrippableBlockRegistry.register(TFBlocks.TIME_LOG.get(), TFBlocks.STRIPPED_TIME_LOG);
+		StrippableBlockRegistry.register(TFBlocks.TRANSFORMATION_LOG.get(), TFBlocks.STRIPPED_TRANSFORMATION_LOG);
+		StrippableBlockRegistry.register(TFBlocks.MINING_LOG.get(), TFBlocks.STRIPPED_MINING_LOG);
+		StrippableBlockRegistry.register(TFBlocks.SORTING_LOG.get(), TFBlocks.STRIPPED_SORTING_LOG);
 
 		StrippableBlockRegistry.register(TFBlocks.TWILIGHT_OAK_WOOD.get(), TFBlocks.STRIPPED_TWILIGHT_OAK_WOOD.get());
 		StrippableBlockRegistry.register(TFBlocks.CANOPY_WOOD.get(), TFBlocks.STRIPPED_CANOPY_WOOD.get());
@@ -230,7 +230,7 @@ public final class TwilightForestMod implements ModInitializer {
 		FlammableBlockRegistry flammables = FlammableBlockRegistry.getDefaultInstance();
 		flammables.add(TFBlocks.TWILIGHT_OAK_LOG.get(), 5, 5);
 		flammables.add(TFBlocks.TWILIGHT_OAK_WOOD.get(), 5, 5);
-		flammables.add(TFBlocks.STRIPPED_TWILIGHT_OAK_LOG.get(), 5, 5);
+		flammables.add(TFBlocks.STRIPPED_TWILIGHT_OAK_LOG, 5, 5);
 		flammables.add(TFBlocks.STRIPPED_TWILIGHT_OAK_WOOD.get(), 5, 5);
 		flammables.add(TFBlocks.HOLLOW_TWILIGHT_OAK_LOG_HORIZONTAL.get(), 5, 5);
 		flammables.add(TFBlocks.HOLLOW_TWILIGHT_OAK_LOG_VERTICAL.get(), 5, 5);
@@ -244,7 +244,7 @@ public final class TwilightForestMod implements ModInitializer {
 
 		flammables.add(TFBlocks.CANOPY_LOG.get(), 5, 5);
 		flammables.add(TFBlocks.CANOPY_WOOD.get(), 5, 5);
-		flammables.add(TFBlocks.STRIPPED_CANOPY_LOG.get(), 5, 5);
+		flammables.add(TFBlocks.STRIPPED_CANOPY_LOG, 5, 5);
 		flammables.add(TFBlocks.STRIPPED_CANOPY_WOOD.get(), 5, 5);
 		flammables.add(TFBlocks.HOLLOW_CANOPY_LOG_HORIZONTAL.get(), 5, 5);
 		flammables.add(TFBlocks.HOLLOW_CANOPY_LOG_VERTICAL.get(), 5, 5);
