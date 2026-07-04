@@ -471,14 +471,14 @@ public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CL
 	public static final DeferredBlock<RotatedPillarBlock> MINING_WOOD = registerWithItem("mining_wood", RotatedPillarBlock::new, () -> MINING_BARK_PROPS);
 	public static final DeferredBlock<RotatedPillarBlock> SORTING_WOOD = registerWithItem("sorting_wood", RotatedPillarBlock::new, () -> SORTING_BARK_PROPS);
 
-	public static final DeferredBlock<RotatedPillarBlock> STRIPPED_TWILIGHT_OAK_WOOD = registerWithItem("stripped_twilight_oak_wood", RotatedPillarBlock::new, () -> TWILIGHT_OAK_STRIPPED_PROPS);
-	public static final DeferredBlock<RotatedPillarBlock> STRIPPED_CANOPY_WOOD = registerWithItem("stripped_canopy_wood", RotatedPillarBlock::new, () -> CANOPY_STRIPPED_PROPS);
-	public static final DeferredBlock<RotatedPillarBlock> STRIPPED_MANGROVE_WOOD = registerWithItem("stripped_mangrove_wood", RotatedPillarBlock::new, () -> MANGROVE_STRIPPED_PROPS);
-	public static final DeferredBlock<RotatedPillarBlock> STRIPPED_DARK_WOOD = registerWithItem("stripped_dark_wood", RotatedPillarBlock::new, () -> DARK_STRIPPED_PROPS);
-	public static final DeferredBlock<RotatedPillarBlock> STRIPPED_TIME_WOOD = registerWithItem("stripped_time_wood", RotatedPillarBlock::new, () -> TIME_STRIPPED_PROPS);
-	public static final DeferredBlock<RotatedPillarBlock> STRIPPED_TRANSFORMATION_WOOD = registerWithItem("stripped_transformation_wood", RotatedPillarBlock::new, () -> TRANSFORMATION_STRIPPED_PROPS);
-	public static final DeferredBlock<RotatedPillarBlock> STRIPPED_MINING_WOOD = registerWithItem("stripped_mining_wood", RotatedPillarBlock::new, () -> MINING_STRIPPED_PROPS);
-	public static final DeferredBlock<RotatedPillarBlock> STRIPPED_SORTING_WOOD = registerWithItem("stripped_sorting_wood", RotatedPillarBlock::new, () -> SORTING_STRIPPED_PROPS);
+	public static final RotatedPillarBlock STRIPPED_TWILIGHT_OAK_WOOD = registerDirectWithItem("stripped_twilight_oak_wood", RotatedPillarBlock::new, () -> TWILIGHT_OAK_STRIPPED_PROPS);
+	public static final RotatedPillarBlock STRIPPED_CANOPY_WOOD = registerDirectWithItem("stripped_canopy_wood", RotatedPillarBlock::new, () -> CANOPY_STRIPPED_PROPS);
+	public static final RotatedPillarBlock STRIPPED_MANGROVE_WOOD = registerDirectWithItem("stripped_mangrove_wood", RotatedPillarBlock::new, () -> MANGROVE_STRIPPED_PROPS);
+	public static final RotatedPillarBlock STRIPPED_DARK_WOOD = registerDirectWithItem("stripped_dark_wood", RotatedPillarBlock::new, () -> DARK_STRIPPED_PROPS);
+	public static final RotatedPillarBlock STRIPPED_TIME_WOOD = registerDirectWithItem("stripped_time_wood", RotatedPillarBlock::new, () -> TIME_STRIPPED_PROPS);
+	public static final RotatedPillarBlock STRIPPED_TRANSFORMATION_WOOD = registerDirectWithItem("stripped_transformation_wood", RotatedPillarBlock::new, () -> TRANSFORMATION_STRIPPED_PROPS);
+	public static final RotatedPillarBlock STRIPPED_MINING_WOOD = registerDirectWithItem("stripped_mining_wood", RotatedPillarBlock::new, () -> MINING_STRIPPED_PROPS);
+	public static final RotatedPillarBlock STRIPPED_SORTING_WOOD = registerDirectWithItem("stripped_sorting_wood", RotatedPillarBlock::new, () -> SORTING_STRIPPED_PROPS);
 
 	public static final TimeLogCoreBlock TIME_LOG_CORE = registerDirectWithItem("time_log_core", TimeLogCoreBlock::new, () -> TIME_LOG_PROPS);
 	public static final TransLogCoreBlock TRANSFORMATION_LOG_CORE = registerDirectWithItem("transformation_log_core", TransLogCoreBlock::new, () -> TRANSFORMATION_LOG_PROPS);
