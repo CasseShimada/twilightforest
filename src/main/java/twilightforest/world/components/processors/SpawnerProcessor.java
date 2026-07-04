@@ -71,7 +71,7 @@ public class SpawnerProcessor implements StructureProcessor {
 	public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos offset, BlockPos piecePos, BlockPos originalPos, StructureTemplate.StructureBlockInfo modifiedInfo, StructurePlaceSettings placeSettings) {
 		CompoundTag nbtInfo = modifiedInfo.nbt();
 
-		if (nbtInfo != null && (modifiedInfo.state().is(Blocks.SPAWNER) || modifiedInfo.state().is(TFBlocks.SINISTER_SPAWNER.get()))) {
+		if (nbtInfo != null && (modifiedInfo.state().is(Blocks.SPAWNER) || modifiedInfo.state().is(TFBlocks.SINISTER_SPAWNER))) {
 			if (this.range.isPresent()) {
 				nbtInfo.putShort("SpawnRange", this.range.get());
 			}

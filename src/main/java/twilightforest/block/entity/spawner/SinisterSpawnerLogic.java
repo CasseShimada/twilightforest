@@ -99,7 +99,7 @@ public abstract class SinisterSpawnerLogic extends BaseSpawner {
 
 	@Override
 	public void broadcastEvent(Level level, BlockPos pos, int eventId) {
-		level.blockEvent(pos, TFBlocks.SINISTER_SPAWNER.get(), eventId, 0);
+		level.blockEvent(pos, TFBlocks.SINISTER_SPAWNER, eventId, 0);
 	}
 
 	@Override

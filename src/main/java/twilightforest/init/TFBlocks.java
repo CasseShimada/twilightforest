@@ -88,7 +88,7 @@ public class TFBlocks {
 	public static final Block ROPE = registerDirect("rope", RopeBlock::new, () -> BlockBehaviour.Properties.of().forceSolidOff().noOcclusion().pushReaction(PushReaction.DESTROY).sound(SoundType.WOOL).strength(0.3F, 3.0F));
 	public static final TransparentBlock CANOPY_WINDOW = registerDirectWithItem("canopy_window", TransparentBlock::new, () -> BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.HAT).strength(0.3F).sound(SoundType.GLASS).noOcclusion().isValidSpawn((pState, pLevel, pPos, pValue) -> false).isRedstoneConductor((pState, pLevel, pPos) -> false).isSuffocating((pState, pLevel, pPos) -> false).isViewBlocking((pState, pLevel, pPos) -> false));
 	public static final IronBarsBlock CANOPY_WINDOW_PANE = registerDirectWithItem("canopy_window_pane", IronBarsBlock::new, () -> BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.HAT).strength(0.3F).sound(SoundType.GLASS).noOcclusion());
-	public static final DeferredBlock<Block> SINISTER_SPAWNER = registerWithTooltipItem("sinister_spawner", SinisterSpawnerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SPAWNER).noLootTable(),
+	public static final SinisterSpawnerBlock SINISTER_SPAWNER = registerDirectWithTooltipItem("sinister_spawner", SinisterSpawnerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SPAWNER).noLootTable(),
 		(stack, context, display, tooltip, flag) -> {
 			TypedEntityData<net.minecraft.world.level.block.entity.BlockEntityType<?>> data = stack.get(DataComponents.BLOCK_ENTITY_DATA);
 			if (data != null) {

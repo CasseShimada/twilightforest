@@ -631,7 +631,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 	}
 
 	private void putSinisterSpawner(BlockPos pos, WorldGenLevel level, RandomSource random, String[] parameters) {
-		level.setBlock(pos, TFBlocks.SINISTER_SPAWNER.value().defaultBlockState(), Block.UPDATE_CLIENTS);
+		level.setBlock(pos, TFBlocks.SINISTER_SPAWNER.defaultBlockState(), Block.UPDATE_CLIENTS);
 
 		if (!(level.getBlockEntity(pos) instanceof SinisterSpawnerBlockEntity spawner))
 			return;

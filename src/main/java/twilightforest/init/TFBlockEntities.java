@@ -46,7 +46,7 @@ public class TFBlockEntities {
 	public static final BlockEntityType<CandelabraBlockEntity> CANDELABRA = register("candelabra", FabricBlockEntityTypeBuilder.create(CandelabraBlockEntity::new, TFBlocks.CANDELABRA).build());
 	public static final BlockEntityType<JarBlockEntity> JAR = register("jar", FabricBlockEntityTypeBuilder.create(JarBlockEntity::new, TFBlocks.FIREFLY_JAR, TFBlocks.CICADA_JAR).build());
 	public static final BlockEntityType<MasonJarBlockEntity> MASON_JAR = register("mason_jar", FabricBlockEntityTypeBuilder.create(MasonJarBlockEntity::new, TFBlocks.MASON_JAR).build());
-	public static final BlockEntityType<SinisterSpawnerBlockEntity> SINISTER_SPAWNER = register("sinister_spawner", FabricBlockEntityTypeBuilder.create(SinisterSpawnerBlockEntity::new, TFBlocks.SINISTER_SPAWNER.get()).build());
+	public static final BlockEntityType<SinisterSpawnerBlockEntity> SINISTER_SPAWNER = register("sinister_spawner", FabricBlockEntityTypeBuilder.create(SinisterSpawnerBlockEntity::new, TFBlocks.SINISTER_SPAWNER).build());
 	public static final BlockEntityType<DryingRackBlockEntity> DRYING_RACK = register("drying_rack", FabricBlockEntityTypeBuilder.create(DryingRackBlockEntity::new,
 		TFBlocks.OAK_DRYING_RACK, TFBlocks.SPRUCE_DRYING_RACK,
 		TFBlocks.BIRCH_DRYING_RACK, TFBlocks.JUNGLE_DRYING_RACK,
