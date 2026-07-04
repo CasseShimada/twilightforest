@@ -494,7 +494,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		switch (parameters[0]) {
 			case "air", "empty" -> {} // No-Op; block already replaced
 			case "bookshelf" -> level.setBlock(pos, Blocks.BOOKSHELF.defaultBlockState(), Block.UPDATE_CLIENTS);
-			case "canopy_shelf", "canopy_bookshelf" -> level.setBlock(pos, TFBlocks.CANOPY_BOOKSHELF.value().defaultBlockState(), Block.UPDATE_CLIENTS);
+			case "canopy_shelf", "canopy_bookshelf" -> level.setBlock(pos, TFBlocks.CANOPY_BOOKSHELF.defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "stone_brick_slab" -> level.setBlock(pos, Blocks.STONE_BRICK_SLAB.defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "lava" -> level.setBlock(pos, Blocks.LAVA.defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "water" -> level.setBlock(pos, Blocks.WATER.defaultBlockState(), Block.UPDATE_CLIENTS);
@@ -591,7 +591,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			}
 		}
 
-		if (level.getBlockState(pos.above()).is(TFBlocks.CANOPY_BOOKSHELF.get())) {
+		if (level.getBlockState(pos.above()).is(TFBlocks.CANOPY_BOOKSHELF)) {
 			level.setBlock(pos.above(), TFBlocks.CANOPY_SLAB.value().defaultBlockState().setValue(SlabBlock.TYPE, SlabType.TOP), Block.UPDATE_CLIENTS);
 		}
 	}
@@ -771,7 +771,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			lootBlock.setLootTable(lootTableId, random.nextLong());
 		}
 
-		if (level.getBlockState(pos.above()).is(TFBlocks.CANOPY_BOOKSHELF.get())) {
+		if (level.getBlockState(pos.above()).is(TFBlocks.CANOPY_BOOKSHELF)) {
 			level.setBlock(pos.above(), TFBlocks.CANOPY_SLAB.value().defaultBlockState().setValue(SlabBlock.TYPE, SlabType.TOP), Block.UPDATE_CLIENTS);
 		}
 	}

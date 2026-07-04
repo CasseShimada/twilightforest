@@ -255,7 +255,7 @@ public final class TwilightForestMod implements ModInitializer {
 		flammables.add(TFBlocks.CANOPY_STAIRS.get(), 5, 20);
 		flammables.add(TFBlocks.CANOPY_FENCE.get(), 5, 20);
 		flammables.add(TFBlocks.CANOPY_GATE.get(), 5, 20);
-		flammables.add(TFBlocks.CANOPY_BOOKSHELF.get(), 5, 20);
+		flammables.add(TFBlocks.CANOPY_BOOKSHELF, 5, 20);
 
 		LootEvents.GIANT_PICK_CONVERSIONS.put(Blocks.COBBLESTONE, TFBlocks.GIANT_COBBLESTONE.asItem());
 		LootEvents.GIANT_PICK_CONVERSIONS.put(Blocks.OAK_LOG, TFBlocks.GIANT_LOG.asItem());
