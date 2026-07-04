@@ -502,7 +502,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 			case "terrorcotta_arcs" -> level.setBlock(pos, TFBlocks.TERRORCOTTA_ARCS.defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "mason_jar" -> this.putMasonJar(pos, level, random, parameters);
 			case "canopy_slab" -> level.setBlock(pos, TFBlocks.CANOPY_SLAB.defaultBlockState(), Block.UPDATE_CLIENTS);
-			case "canopy_stairs" -> level.setBlock(pos, TFBlocks.CANOPY_STAIRS.value().defaultBlockState(), Block.UPDATE_CLIENTS);
+			case "canopy_stairs" -> level.setBlock(pos, TFBlocks.CANOPY_STAIRS.defaultBlockState(), Block.UPDATE_CLIENTS);
 			case "creeper_head" -> this.putHead(pos, level, random, parameters, Blocks.CREEPER_HEAD, dataRotation);
 			case "skeleton_skull" -> this.putHead(pos, level, random, parameters, Blocks.SKELETON_SKULL, dataRotation);
 			case "wither_skull" -> this.putHead(pos, level, random, parameters, Blocks.WITHER_SKELETON_SKULL, dataRotation);

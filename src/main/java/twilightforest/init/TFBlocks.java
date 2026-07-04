@@ -510,7 +510,7 @@ public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CL
 	public static final SaplingBlock RAINBOW_OAK_SAPLING = registerDirectWithItem("rainbow_oak_sapling", properties -> new SaplingBlock(TFTreeGrowers.RAINBOW_OAK, properties), () -> BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).instabreak().sound(SoundType.GRASS).noCollision().randomTicks());
 
 	public static final DeferredBlock<Block> TWILIGHT_OAK_PLANKS = registerWithItem("twilight_oak_planks", Block::new, () -> BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
-	public static final DeferredBlock<StairBlock> TWILIGHT_OAK_STAIRS = registerWithItem("twilight_oak_stairs", properties -> new StairBlock(TWILIGHT_OAK_PLANKS.get().defaultBlockState(), properties), () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_OAK_PLANKS.get()));
+	public static final StairBlock TWILIGHT_OAK_STAIRS = registerDirectWithItem("twilight_oak_stairs", properties -> new StairBlock(TWILIGHT_OAK_PLANKS.get().defaultBlockState(), properties), () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_OAK_PLANKS.get()));
 	public static final SlabBlock TWILIGHT_OAK_SLAB = registerDirectWithItem("twilight_oak_slab", SlabBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_OAK_PLANKS.get()));
 	public static final ButtonBlock TWILIGHT_OAK_BUTTON = registerDirectWithItem("twilight_oak_button", properties -> new ButtonBlock(TFWoodTypes.TWILIGHT_OAK_SET, 30, properties), () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_OAK_PLANKS.get()).noCollision().strength(0.5F));
 	public static final FenceBlock TWILIGHT_OAK_FENCE = registerDirectWithItem("twilight_oak_fence", FenceBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_OAK_PLANKS.get()));
@@ -526,7 +526,7 @@ public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CL
 	public static final DryingRackBlock TWILIGHT_OAK_DRYING_RACK = registerDirectWithItem("twilight_oak_drying_rack", DryingRackBlock::new, () -> copyAndScaleProperties(TWILIGHT_OAK_SLAB, 0.5F));
 
 	public static final DeferredBlock<Block> CANOPY_PLANKS = registerWithItem("canopy_planks", Block::new, () -> BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).mapColor(MapColor.PODZOL).strength(2.0F, 3.0F).sound(SoundType.WOOD));
-	public static final DeferredBlock<StairBlock> CANOPY_STAIRS = registerWithItem("canopy_stairs", properties -> new StairBlock(CANOPY_PLANKS.get().defaultBlockState(), properties), () -> BlockBehaviour.Properties.ofFullCopy(CANOPY_PLANKS.get()));
+	public static final StairBlock CANOPY_STAIRS = registerDirectWithItem("canopy_stairs", properties -> new StairBlock(CANOPY_PLANKS.get().defaultBlockState(), properties), () -> BlockBehaviour.Properties.ofFullCopy(CANOPY_PLANKS.get()));
 	public static final SlabBlock CANOPY_SLAB = registerDirectWithItem("canopy_slab", SlabBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(CANOPY_PLANKS.get()));
 	public static final ButtonBlock CANOPY_BUTTON = registerDirectWithItem("canopy_button", properties -> new ButtonBlock(TFWoodTypes.CANOPY_WOOD_SET, 30, properties), () -> BlockBehaviour.Properties.ofFullCopy(CANOPY_PLANKS.get()).noCollision().strength(0.5F));
 	public static final FenceBlock CANOPY_FENCE = registerDirectWithItem("canopy_fence", FenceBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(CANOPY_PLANKS.get()));
@@ -543,7 +543,7 @@ public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CL
 	public static final DryingRackBlock CANOPY_DRYING_RACK = registerDirectWithItem("canopy_drying_rack", DryingRackBlock::new, () -> copyAndScaleProperties(CANOPY_SLAB, 0.5F));
 
 	public static final DeferredBlock<Block> MANGROVE_PLANKS = registerWithItem("mangrove_planks", Block::new, () -> BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).mapColor(MapColor.DIRT).strength(2.0F, 3.0F).sound(SoundType.WOOD));
-	public static final DeferredBlock<StairBlock> MANGROVE_STAIRS = registerWithItem("mangrove_stairs", properties -> new StairBlock(MANGROVE_PLANKS.get().defaultBlockState(), properties), () -> BlockBehaviour.Properties.ofFullCopy(MANGROVE_PLANKS.get()));
+	public static final StairBlock MANGROVE_STAIRS = registerDirectWithItem("mangrove_stairs", properties -> new StairBlock(MANGROVE_PLANKS.get().defaultBlockState(), properties), () -> BlockBehaviour.Properties.ofFullCopy(MANGROVE_PLANKS.get()));
 	public static final SlabBlock MANGROVE_SLAB = registerDirectWithItem("mangrove_slab", SlabBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(MANGROVE_PLANKS.get()));
 	public static final ButtonBlock MANGROVE_BUTTON = registerDirectWithItem("mangrove_button", properties -> new ButtonBlock(TFWoodTypes.MANGROVE_WOOD_SET, 30, properties), () -> BlockBehaviour.Properties.ofFullCopy(MANGROVE_PLANKS.get()).noCollision().strength(0.5F));
 	public static final FenceBlock MANGROVE_FENCE = registerDirectWithItem("mangrove_fence", FenceBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(MANGROVE_PLANKS.get()));
@@ -559,7 +559,7 @@ public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CL
 	public static final DryingRackBlock MANGROVE_DRYING_RACK = registerDirectWithItem("mangrove_drying_rack", DryingRackBlock::new, () -> copyAndScaleProperties(MANGROVE_SLAB, 0.5F));
 
 	public static final DeferredBlock<Block> DARK_PLANKS = registerWithItem("dark_planks", Block::new, () -> BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).mapColor(MapColor.COLOR_ORANGE).strength(2.0F, 3.0F).sound(SoundType.WOOD));
-	public static final DeferredBlock<StairBlock> DARK_STAIRS = registerWithItem("dark_stairs", properties -> new StairBlock(DARK_PLANKS.get().defaultBlockState(), properties), () -> BlockBehaviour.Properties.ofFullCopy(DARK_PLANKS.get()));
+	public static final StairBlock DARK_STAIRS = registerDirectWithItem("dark_stairs", properties -> new StairBlock(DARK_PLANKS.get().defaultBlockState(), properties), () -> BlockBehaviour.Properties.ofFullCopy(DARK_PLANKS.get()));
 	public static final SlabBlock DARK_SLAB = registerDirectWithItem("dark_slab", SlabBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(DARK_PLANKS.get()).sound(SoundType.WOOD));
 	public static final ButtonBlock DARK_BUTTON = registerDirectWithItem("dark_button", properties -> new ButtonBlock(TFWoodTypes.DARK_WOOD_SET, 30, properties), () -> BlockBehaviour.Properties.ofFullCopy(DARK_PLANKS.get()).noCollision().strength(0.5F));
 	public static final FenceBlock DARK_FENCE = registerDirectWithItem("dark_fence", FenceBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(DARK_PLANKS.get()));
@@ -575,7 +575,7 @@ public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CL
 	public static final DryingRackBlock DARK_DRYING_RACK = registerDirectWithItem("dark_drying_rack", DryingRackBlock::new, () -> copyAndScaleProperties(DARK_SLAB, 0.5F));
 
 	public static final DeferredBlock<Block> TIME_PLANKS = registerWithItem("time_planks", Block::new, () -> BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).mapColor(MapColor.DIRT).strength(2.0F, 3.0F).sound(SoundType.WOOD));
-	public static final DeferredBlock<StairBlock> TIME_STAIRS = registerWithItem("time_stairs", properties -> new StairBlock(TIME_PLANKS.get().defaultBlockState(), properties), () -> BlockBehaviour.Properties.ofFullCopy(TIME_PLANKS.get()));
+	public static final StairBlock TIME_STAIRS = registerDirectWithItem("time_stairs", properties -> new StairBlock(TIME_PLANKS.get().defaultBlockState(), properties), () -> BlockBehaviour.Properties.ofFullCopy(TIME_PLANKS.get()));
 	public static final SlabBlock TIME_SLAB = registerDirectWithItem("time_slab", SlabBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TIME_PLANKS.get()).sound(SoundType.WOOD));
 	public static final ButtonBlock TIME_BUTTON = registerDirectWithItem("time_button", properties -> new ButtonBlock(TFWoodTypes.TIME_WOOD_SET, 30, properties), () -> BlockBehaviour.Properties.ofFullCopy(TIME_PLANKS.get()).noCollision().strength(0.5F));
 	public static final FenceBlock TIME_FENCE = registerDirectWithItem("time_fence", FenceBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TIME_PLANKS.get()));
@@ -591,7 +591,7 @@ public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CL
 	public static final DryingRackBlock TIME_DRYING_RACK = registerDirectWithItem("time_drying_rack", DryingRackBlock::new, () -> copyAndScaleProperties(TIME_SLAB, 0.5F));
 
 	public static final DeferredBlock<Block> TRANSFORMATION_PLANKS = registerWithItem("transformation_planks", Block::new, () -> BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
-	public static final DeferredBlock<StairBlock> TRANSFORMATION_STAIRS = registerWithItem("transformation_stairs", properties -> new StairBlock(TRANSFORMATION_PLANKS.get().defaultBlockState(), properties), () -> BlockBehaviour.Properties.ofFullCopy(TRANSFORMATION_PLANKS.get()));
+	public static final StairBlock TRANSFORMATION_STAIRS = registerDirectWithItem("transformation_stairs", properties -> new StairBlock(TRANSFORMATION_PLANKS.get().defaultBlockState(), properties), () -> BlockBehaviour.Properties.ofFullCopy(TRANSFORMATION_PLANKS.get()));
 	public static final SlabBlock TRANSFORMATION_SLAB = registerDirectWithItem("transformation_slab", SlabBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TRANSFORMATION_PLANKS.get()));
 	public static final ButtonBlock TRANSFORMATION_BUTTON = registerDirectWithItem("transformation_button", properties -> new ButtonBlock(TFWoodTypes.TRANSFORMATION_WOOD_SET, 30, properties), () -> BlockBehaviour.Properties.ofFullCopy(TRANSFORMATION_PLANKS.get()).noCollision().strength(0.5F));
 	public static final FenceBlock TRANSFORMATION_FENCE = registerDirectWithItem("transformation_fence", FenceBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TRANSFORMATION_PLANKS.get()));
@@ -607,7 +607,7 @@ public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CL
 	public static final DryingRackBlock TRANSFORMATION_DRYING_RACK = registerDirectWithItem("transformation_drying_rack", DryingRackBlock::new, () -> copyAndScaleProperties(TRANSFORMATION_SLAB, 0.5F));
 
 	public static final DeferredBlock<Block> MINING_PLANKS = registerWithItem("mining_planks", Block::new, () -> BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).mapColor(MapColor.SAND).strength(2.0F, 3.0F).sound(SoundType.WOOD));
-	public static final DeferredBlock<StairBlock> MINING_STAIRS = registerWithItem("mining_stairs", properties -> new StairBlock(MINING_PLANKS.get().defaultBlockState(), properties), () -> BlockBehaviour.Properties.ofFullCopy(MINING_PLANKS.get()));
+	public static final StairBlock MINING_STAIRS = registerDirectWithItem("mining_stairs", properties -> new StairBlock(MINING_PLANKS.get().defaultBlockState(), properties), () -> BlockBehaviour.Properties.ofFullCopy(MINING_PLANKS.get()));
 	public static final SlabBlock MINING_SLAB = registerDirectWithItem("mining_slab", SlabBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(MINING_PLANKS.get()));
 	public static final ButtonBlock MINING_BUTTON = registerDirectWithItem("mining_button", properties -> new ButtonBlock(TFWoodTypes.MINING_WOOD_SET, 30, properties), () -> BlockBehaviour.Properties.ofFullCopy(MINING_PLANKS.get()).noCollision().strength(0.5F));
 	public static final FenceBlock MINING_FENCE = registerDirectWithItem("mining_fence", FenceBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(MINING_PLANKS.get()));
@@ -623,7 +623,7 @@ public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CL
 	public static final DryingRackBlock MINING_DRYING_RACK = registerDirectWithItem("mining_drying_rack", DryingRackBlock::new, () -> copyAndScaleProperties(MINING_SLAB, 0.5F));
 
 	public static final DeferredBlock<Block> SORTING_PLANKS = registerWithItem("sorting_planks", Block::new, () -> BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).mapColor(MapColor.PODZOL).strength(2.0F, 3.0F).sound(SoundType.WOOD));
-	public static final DeferredBlock<StairBlock> SORTING_STAIRS = registerWithItem("sorting_stairs", properties -> new StairBlock(SORTING_PLANKS.get().defaultBlockState(), properties), () -> BlockBehaviour.Properties.ofFullCopy(SORTING_PLANKS.get()));
+	public static final StairBlock SORTING_STAIRS = registerDirectWithItem("sorting_stairs", properties -> new StairBlock(SORTING_PLANKS.get().defaultBlockState(), properties), () -> BlockBehaviour.Properties.ofFullCopy(SORTING_PLANKS.get()));
 	public static final SlabBlock SORTING_SLAB = registerDirectWithItem("sorting_slab", SlabBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(SORTING_PLANKS.get()));
 	public static final ButtonBlock SORTING_BUTTON = registerDirectWithItem("sorting_button", properties -> new ButtonBlock(TFWoodTypes.SORTING_WOOD_SET, 30, properties), () -> BlockBehaviour.Properties.ofFullCopy(SORTING_PLANKS.get()).noCollision().strength(0.5F));
 	public static final FenceBlock SORTING_FENCE = registerDirectWithItem("sorting_fence", FenceBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(SORTING_PLANKS.get()));
