@@ -730,7 +730,7 @@ public class Hydra extends BaseTFBoss implements TFMultipartEntity {
 
 	@Override
 	public Block getDeathContainer(RandomSource random) {
-		return TFBlocks.MANGROVE_CHEST.get();
+		return TFBlocks.MANGROVE_CHEST;
 	}
 
 	@Override

@@ -523,7 +523,7 @@ public class UrGhast extends BaseTFBoss {
 
 	@Override
 	public Block getDeathContainer(RandomSource random) {
-		return TFBlocks.DARK_CHEST.get();
+		return TFBlocks.DARK_CHEST;
 	}
 
 	@Override

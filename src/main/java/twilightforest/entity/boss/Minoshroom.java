@@ -193,7 +193,7 @@ public class Minoshroom extends BaseTFBoss implements ITFCharger {
 
 	@Override
 	public Block getDeathContainer(RandomSource random) {
-		return TFBlocks.MANGROVE_CHEST.get();
+		return TFBlocks.MANGROVE_CHEST;
 	}
 
 	@Override

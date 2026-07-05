@@ -320,7 +320,7 @@ public class AlphaYeti extends BaseTFBoss implements RangedAttackMob, IHostileMo
 
 	@Override
 	public Block getDeathContainer(RandomSource random) {
-		return TFBlocks.CANOPY_CHEST.get();
+		return TFBlocks.CANOPY_CHEST;
 	}
 
 	@Override

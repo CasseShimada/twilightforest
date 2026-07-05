@@ -34,7 +34,7 @@ public class PlateauBoss extends BaseTFBoss {
 
 	@Override
 	public Block getDeathContainer(RandomSource random) {
-		return TFBlocks.CANOPY_CHEST.get();
+		return TFBlocks.CANOPY_CHEST;
 	}
 
 	@Override

@@ -638,23 +638,23 @@ public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CL
 	public static final BanisterBlock SORTING_BANISTER = registerDirectWithTooltipItem("sorting_banister", BanisterBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(SORTING_PLANKS), simpleTooltip("block.twilightforest.banister.cycle", ChatFormatting.GRAY));
 	public static final DryingRackBlock SORTING_DRYING_RACK = registerDirectWithItem("sorting_drying_rack", DryingRackBlock::new, () -> copyAndScaleProperties(SORTING_SLAB, 0.5F));
 
-	public static final DeferredBlock<ChestBlock> TWILIGHT_OAK_CHEST = registerWithItem("twilight_oak_chest", TFChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_OAK_PLANKS).strength(2.5F));
-	public static final DeferredBlock<ChestBlock> CANOPY_CHEST = registerWithItem("canopy_chest", TFChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(CANOPY_PLANKS).strength(2.5F));
-	public static final DeferredBlock<ChestBlock> MANGROVE_CHEST = registerWithItem("mangrove_chest", TFChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(MANGROVE_PLANKS).strength(2.5F));
-	public static final DeferredBlock<ChestBlock> DARK_CHEST = registerWithItem("dark_chest", TFChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(DARK_PLANKS).strength(2.5F));
-	public static final DeferredBlock<ChestBlock> TIME_CHEST = registerWithItem("time_chest", TFChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TIME_PLANKS).strength(2.5F));
-	public static final DeferredBlock<ChestBlock> TRANSFORMATION_CHEST = registerWithItem("transformation_chest", TFChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TRANSFORMATION_PLANKS).strength(2.5F));
-	public static final DeferredBlock<ChestBlock> MINING_CHEST = registerWithItem("mining_chest", TFChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(MINING_PLANKS).strength(2.5F));
-	public static final DeferredBlock<ChestBlock> SORTING_CHEST = registerWithItem("sorting_chest", TFChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(SORTING_PLANKS).strength(2.5F));
+	public static final ChestBlock TWILIGHT_OAK_CHEST = registerDirectWithItem("twilight_oak_chest", TFChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_OAK_PLANKS).strength(2.5F));
+	public static final ChestBlock CANOPY_CHEST = registerDirectWithItem("canopy_chest", TFChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(CANOPY_PLANKS).strength(2.5F));
+	public static final ChestBlock MANGROVE_CHEST = registerDirectWithItem("mangrove_chest", TFChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(MANGROVE_PLANKS).strength(2.5F));
+	public static final ChestBlock DARK_CHEST = registerDirectWithItem("dark_chest", TFChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(DARK_PLANKS).strength(2.5F));
+	public static final ChestBlock TIME_CHEST = registerDirectWithItem("time_chest", TFChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TIME_PLANKS).strength(2.5F));
+	public static final ChestBlock TRANSFORMATION_CHEST = registerDirectWithItem("transformation_chest", TFChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TRANSFORMATION_PLANKS).strength(2.5F));
+	public static final ChestBlock MINING_CHEST = registerDirectWithItem("mining_chest", TFChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(MINING_PLANKS).strength(2.5F));
+	public static final ChestBlock SORTING_CHEST = registerDirectWithItem("sorting_chest", TFChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(SORTING_PLANKS).strength(2.5F));
 
-	public static final DeferredBlock<TFTrappedChestBlock> TWILIGHT_OAK_TRAPPED_CHEST = registerWithItem("twilight_oak_trapped_chest", TFTrappedChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_OAK_PLANKS).strength(2.5F));
-	public static final DeferredBlock<TFTrappedChestBlock> CANOPY_TRAPPED_CHEST = registerWithItem("canopy_trapped_chest", TFTrappedChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(CANOPY_PLANKS).strength(2.5F));
-	public static final DeferredBlock<TFTrappedChestBlock> MANGROVE_TRAPPED_CHEST = registerWithItem("mangrove_trapped_chest", TFTrappedChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(MANGROVE_PLANKS).strength(2.5F));
-	public static final DeferredBlock<TFTrappedChestBlock> DARK_TRAPPED_CHEST = registerWithItem("dark_trapped_chest", TFTrappedChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(DARK_PLANKS).strength(2.5F));
-	public static final DeferredBlock<TFTrappedChestBlock> TIME_TRAPPED_CHEST = registerWithItem("time_trapped_chest", TFTrappedChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TIME_PLANKS).strength(2.5F));
-	public static final DeferredBlock<TFTrappedChestBlock> TRANSFORMATION_TRAPPED_CHEST = registerWithItem("transformation_trapped_chest", TFTrappedChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TRANSFORMATION_PLANKS).strength(2.5F));
-	public static final DeferredBlock<TFTrappedChestBlock> MINING_TRAPPED_CHEST = registerWithItem("mining_trapped_chest", TFTrappedChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(MINING_PLANKS).strength(2.5F));
-	public static final DeferredBlock<TFTrappedChestBlock> SORTING_TRAPPED_CHEST = registerWithItem("sorting_trapped_chest", TFTrappedChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(SORTING_PLANKS).strength(2.5F));
+	public static final TFTrappedChestBlock TWILIGHT_OAK_TRAPPED_CHEST = registerDirectWithItem("twilight_oak_trapped_chest", TFTrappedChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_OAK_PLANKS).strength(2.5F));
+	public static final TFTrappedChestBlock CANOPY_TRAPPED_CHEST = registerDirectWithItem("canopy_trapped_chest", TFTrappedChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(CANOPY_PLANKS).strength(2.5F));
+	public static final TFTrappedChestBlock MANGROVE_TRAPPED_CHEST = registerDirectWithItem("mangrove_trapped_chest", TFTrappedChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(MANGROVE_PLANKS).strength(2.5F));
+	public static final TFTrappedChestBlock DARK_TRAPPED_CHEST = registerDirectWithItem("dark_trapped_chest", TFTrappedChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(DARK_PLANKS).strength(2.5F));
+	public static final TFTrappedChestBlock TIME_TRAPPED_CHEST = registerDirectWithItem("time_trapped_chest", TFTrappedChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TIME_PLANKS).strength(2.5F));
+	public static final TFTrappedChestBlock TRANSFORMATION_TRAPPED_CHEST = registerDirectWithItem("transformation_trapped_chest", TFTrappedChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TRANSFORMATION_PLANKS).strength(2.5F));
+	public static final TFTrappedChestBlock MINING_TRAPPED_CHEST = registerDirectWithItem("mining_trapped_chest", TFTrappedChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(MINING_PLANKS).strength(2.5F));
+	public static final TFTrappedChestBlock SORTING_TRAPPED_CHEST = registerDirectWithItem("sorting_trapped_chest", TFTrappedChestBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(SORTING_PLANKS).strength(2.5F));
 
 	//Flower Pots
 	public static final FlowerPotBlock POTTED_TWILIGHT_OAK_SAPLING = registerDirect("potted_twilight_oak_sapling", properties -> new FlowerPotBlock(TWILIGHT_OAK_SAPLING, properties), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT));

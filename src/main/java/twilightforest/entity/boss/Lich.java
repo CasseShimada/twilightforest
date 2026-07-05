@@ -905,7 +905,7 @@ public class Lich extends BaseTFBoss {
 
 	@Override
 	public Block getDeathContainer(RandomSource random) {
-		return getRandom().nextBoolean() ? TFBlocks.CANOPY_CHEST.get() : TFBlocks.TWILIGHT_OAK_CHEST.get();
+		return getRandom().nextBoolean() ? TFBlocks.CANOPY_CHEST : TFBlocks.TWILIGHT_OAK_CHEST;
 	}
 
 	@Override

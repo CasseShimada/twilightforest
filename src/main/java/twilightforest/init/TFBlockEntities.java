@@ -67,14 +67,14 @@ public class TFBlockEntities {
 		TFBlocks.ALPHA_YETI_WALL_TROPHY, TFBlocks.SNOW_QUEEN_WALL_TROPHY, TFBlocks.QUEST_RAM_WALL_TROPHY).build());
 
 	public static final BlockEntityType<TFChestBlockEntity> TF_CHEST = register("tf_chest", FabricBlockEntityTypeBuilder.create(TFChestBlockEntity::new,
-		TFBlocks.TWILIGHT_OAK_CHEST.get(), TFBlocks.CANOPY_CHEST.get(), TFBlocks.MANGROVE_CHEST.get(),
-		TFBlocks.DARK_CHEST.get(), TFBlocks.TIME_CHEST.get(), TFBlocks.TRANSFORMATION_CHEST.get(),
-		TFBlocks.MINING_CHEST.get(), TFBlocks.SORTING_CHEST.get()).build());
+		TFBlocks.TWILIGHT_OAK_CHEST, TFBlocks.CANOPY_CHEST, TFBlocks.MANGROVE_CHEST,
+		TFBlocks.DARK_CHEST, TFBlocks.TIME_CHEST, TFBlocks.TRANSFORMATION_CHEST,
+		TFBlocks.MINING_CHEST, TFBlocks.SORTING_CHEST).build());
 
 	public static final BlockEntityType<TFTrappedChestBlockEntity> TF_TRAPPED_CHEST = register("tf_trapped_chest", FabricBlockEntityTypeBuilder.create(TFTrappedChestBlockEntity::new,
-		TFBlocks.TWILIGHT_OAK_TRAPPED_CHEST.get(), TFBlocks.CANOPY_TRAPPED_CHEST.get(), TFBlocks.MANGROVE_TRAPPED_CHEST.get(),
-		TFBlocks.DARK_TRAPPED_CHEST.get(), TFBlocks.TIME_TRAPPED_CHEST.get(), TFBlocks.TRANSFORMATION_TRAPPED_CHEST.get(),
-		TFBlocks.MINING_TRAPPED_CHEST.get(), TFBlocks.SORTING_TRAPPED_CHEST.get()).build());
+		TFBlocks.TWILIGHT_OAK_TRAPPED_CHEST, TFBlocks.CANOPY_TRAPPED_CHEST, TFBlocks.MANGROVE_TRAPPED_CHEST,
+		TFBlocks.DARK_TRAPPED_CHEST, TFBlocks.TIME_TRAPPED_CHEST, TFBlocks.TRANSFORMATION_TRAPPED_CHEST,
+		TFBlocks.MINING_TRAPPED_CHEST, TFBlocks.SORTING_TRAPPED_CHEST).build());
 
 	public static final BlockEntityType<SkullCandleBlockEntity> SKULL_CANDLE = register("skull_candle", FabricBlockEntityTypeBuilder.create(SkullCandleBlockEntity::new,
 		TFBlocks.ZOMBIE_SKULL_CANDLE, TFBlocks.ZOMBIE_WALL_SKULL_CANDLE,

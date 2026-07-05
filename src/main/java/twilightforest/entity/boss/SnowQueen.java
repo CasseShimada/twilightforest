@@ -432,7 +432,7 @@ public class SnowQueen extends BaseTFBoss implements IBreathAttacker, TFMultipar
 
 	@Override
 	public Block getDeathContainer(RandomSource random) {
-		return TFBlocks.TWILIGHT_OAK_CHEST.get();
+		return TFBlocks.TWILIGHT_OAK_CHEST;
 	}
 
 	@Override

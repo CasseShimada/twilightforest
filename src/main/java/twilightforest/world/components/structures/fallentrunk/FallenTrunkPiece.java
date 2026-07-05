@@ -198,7 +198,7 @@ public class FallenTrunkPiece extends StructurePiece {
 		Vec3i chestOffset = Util.getRandom(possibleChestsOffsets.stream().toList(), random);
 		BlockPos chestSpawnerPos = spawnerPos.offset(chestOffset);
 
-		BlockState chestState = TFBlocks.TWILIGHT_OAK_CHEST.get().defaultBlockState().setValue(ChestBlock.FACING, chestOffset.getX() < 0 ? orientation : orientation.getOpposite());
+		BlockState chestState = TFBlocks.TWILIGHT_OAK_CHEST.defaultBlockState().setValue(ChestBlock.FACING, chestOffset.getX() < 0 ? orientation : orientation.getOpposite());
 		BlockPos chestPos = getWorldPos(chestSpawnerPos.getX(), chestSpawnerPos.getY(), chestSpawnerPos.getZ());
 		RandomSource chestRandom = RandomSource.create(random.nextLong());
 		this.createChest(level, box, chestRandom, chestPos, chestLootTable, chestState);

@@ -537,7 +537,7 @@ public class Naga extends BaseTFBoss implements TFMultipartEntity {
 
 	@Override
 	public Block getDeathContainer(RandomSource random) {
-		return random.nextBoolean() ? TFBlocks.TWILIGHT_OAK_CHEST.get() : TFBlocks.CANOPY_CHEST.get();
+		return random.nextBoolean() ? TFBlocks.TWILIGHT_OAK_CHEST : TFBlocks.CANOPY_CHEST;
 	}
 
 	@Override
