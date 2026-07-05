@@ -27,7 +27,7 @@ public class TFBlockFamilies {
 		.pressurePlate(TFBlocks.TWILIGHT_OAK_PLATE)
 		.door(TFBlocks.TWILIGHT_OAK_DOOR)
 		.trapdoor(TFBlocks.TWILIGHT_OAK_TRAPDOOR)
-		.sign(TFBlocks.TWILIGHT_OAK_SIGN.get(), TFBlocks.TWILIGHT_WALL_SIGN.get())
+		.sign(TFBlocks.TWILIGHT_OAK_SIGN, TFBlocks.TWILIGHT_WALL_SIGN)
 		.recipeGroupPrefix("wooden")
 		.recipeUnlockedBy("has_planks")
 		.getFamily();
@@ -41,7 +41,7 @@ public class TFBlockFamilies {
 		.pressurePlate(TFBlocks.CANOPY_PLATE)
 		.door(TFBlocks.CANOPY_DOOR)
 		.trapdoor(TFBlocks.CANOPY_TRAPDOOR)
-		.sign(TFBlocks.CANOPY_SIGN.get(), TFBlocks.CANOPY_WALL_SIGN.get())
+		.sign(TFBlocks.CANOPY_SIGN, TFBlocks.CANOPY_WALL_SIGN)
 		.recipeGroupPrefix("wooden")
 		.recipeUnlockedBy("has_planks")
 		.getFamily();
@@ -55,7 +55,7 @@ public class TFBlockFamilies {
 		.pressurePlate(TFBlocks.MANGROVE_PLATE)
 		.door(TFBlocks.MANGROVE_DOOR)
 		.trapdoor(TFBlocks.MANGROVE_TRAPDOOR)
-		.sign(TFBlocks.MANGROVE_SIGN.get(), TFBlocks.MANGROVE_WALL_SIGN.get())
+		.sign(TFBlocks.MANGROVE_SIGN, TFBlocks.MANGROVE_WALL_SIGN)
 		.recipeGroupPrefix("wooden")
 		.recipeUnlockedBy("has_planks")
 		.getFamily();
@@ -69,7 +69,7 @@ public class TFBlockFamilies {
 		.pressurePlate(TFBlocks.DARK_PLATE)
 		.door(TFBlocks.DARK_DOOR)
 		.trapdoor(TFBlocks.DARK_TRAPDOOR)
-		.sign(TFBlocks.DARK_SIGN.get(), TFBlocks.DARK_WALL_SIGN.get())
+		.sign(TFBlocks.DARK_SIGN, TFBlocks.DARK_WALL_SIGN)
 		.recipeGroupPrefix("wooden")
 		.recipeUnlockedBy("has_planks")
 		.getFamily();
@@ -83,7 +83,7 @@ public class TFBlockFamilies {
 		.pressurePlate(TFBlocks.TIME_PLATE)
 		.door(TFBlocks.TIME_DOOR)
 		.trapdoor(TFBlocks.TIME_TRAPDOOR)
-		.sign(TFBlocks.TIME_SIGN.get(), TFBlocks.TIME_WALL_SIGN.get())
+		.sign(TFBlocks.TIME_SIGN, TFBlocks.TIME_WALL_SIGN)
 		.recipeGroupPrefix("wooden")
 		.recipeUnlockedBy("has_planks")
 		.getFamily();
@@ -97,7 +97,7 @@ public class TFBlockFamilies {
 		.pressurePlate(TFBlocks.TRANSFORMATION_PLATE)
 		.door(TFBlocks.TRANSFORMATION_DOOR)
 		.trapdoor(TFBlocks.TRANSFORMATION_TRAPDOOR)
-		.sign(TFBlocks.TRANSFORMATION_SIGN.get(), TFBlocks.TRANSFORMATION_WALL_SIGN.get())
+		.sign(TFBlocks.TRANSFORMATION_SIGN, TFBlocks.TRANSFORMATION_WALL_SIGN)
 		.recipeGroupPrefix("wooden")
 		.recipeUnlockedBy("has_planks")
 		.getFamily();
@@ -111,7 +111,7 @@ public class TFBlockFamilies {
 		.pressurePlate(TFBlocks.MINING_PLATE)
 		.door(TFBlocks.MINING_DOOR)
 		.trapdoor(TFBlocks.MINING_TRAPDOOR)
-		.sign(TFBlocks.MINING_SIGN.get(), TFBlocks.MINING_WALL_SIGN.get())
+		.sign(TFBlocks.MINING_SIGN, TFBlocks.MINING_WALL_SIGN)
 		.recipeGroupPrefix("wooden")
 		.recipeUnlockedBy("has_planks")
 		.getFamily();
@@ -125,7 +125,7 @@ public class TFBlockFamilies {
 		.pressurePlate(TFBlocks.SORTING_PLATE)
 		.door(TFBlocks.SORTING_DOOR)
 		.trapdoor(TFBlocks.SORTING_TRAPDOOR)
-		.sign(TFBlocks.SORTING_SIGN.get(), TFBlocks.SORTING_WALL_SIGN.get())
+		.sign(TFBlocks.SORTING_SIGN, TFBlocks.SORTING_WALL_SIGN)
 		.recipeGroupPrefix("wooden")
 		.recipeUnlockedBy("has_planks")
 		.getFamily();
