@@ -94,7 +94,7 @@ public class JarBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
 	}
 
 	public Item getDefaultLid() {
-		return TFBlocks.TWILIGHT_OAK_LOG.get().asItem();
+		return TFBlocks.TWILIGHT_OAK_LOG.asItem();
 	}
 
 	@Override

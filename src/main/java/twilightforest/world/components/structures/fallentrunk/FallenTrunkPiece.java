@@ -39,7 +39,7 @@ import twilightforest.world.components.structures.type.FallenTrunkStructure;
 import java.util.*;
 
 public class FallenTrunkPiece extends StructurePiece {
-	public static final BlockStateProvider DEFAULT_LOG = BlockStateProvider.simple(TFBlocks.TWILIGHT_OAK_LOG.get());
+	public static final BlockStateProvider DEFAULT_LOG = BlockStateProvider.simple(TFBlocks.TWILIGHT_OAK_LOG);
 
 	public static final int ERODED_LENGTH = 2;
 	protected static final float MOSS_CHANCE = 0.44F;

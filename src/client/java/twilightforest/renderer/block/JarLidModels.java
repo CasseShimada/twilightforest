@@ -21,14 +21,14 @@ public final class JarLidModels {
 	private record LidResource(Item lid, Identifier modelId) {}
 
 	private static final List<LidResource> LIDS = List.of(
-		lid(TFBlocks.MANGROVE_LOG.get().asItem(), "mangrove_log"),
-		lid(TFBlocks.CANOPY_LOG.get().asItem(), "canopy_log"),
-		lid(TFBlocks.DARK_LOG.get().asItem(), "dark_log"),
-		lid(TFBlocks.MINING_LOG.get().asItem(), "mining_log"),
-		lid(TFBlocks.SORTING_LOG.get().asItem(), "sorting_log"),
-		lid(TFBlocks.TIME_LOG.get().asItem(), "time_log"),
-		lid(TFBlocks.TRANSFORMATION_LOG.get().asItem(), "transformation_log"),
-		lid(TFBlocks.TWILIGHT_OAK_LOG.get().asItem(), "twilight_oak_log"),
+		lid(TFBlocks.MANGROVE_LOG.asItem(), "mangrove_log"),
+		lid(TFBlocks.CANOPY_LOG.asItem(), "canopy_log"),
+		lid(TFBlocks.DARK_LOG.asItem(), "dark_log"),
+		lid(TFBlocks.MINING_LOG.asItem(), "mining_log"),
+		lid(TFBlocks.SORTING_LOG.asItem(), "sorting_log"),
+		lid(TFBlocks.TIME_LOG.asItem(), "time_log"),
+		lid(TFBlocks.TRANSFORMATION_LOG.asItem(), "transformation_log"),
+		lid(TFBlocks.TWILIGHT_OAK_LOG.asItem(), "twilight_oak_log"),
 		lid(Items.ACACIA_LOG, "acacia_log"),
 		lid(Items.BIRCH_LOG, "birch_log"),
 		lid(Items.CHERRY_LOG, "cherry_log"),

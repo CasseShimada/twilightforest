@@ -855,7 +855,7 @@ public class DarkTowerMainComponent extends DarkTowerWingComponent {
 	}
 
 	private void makeWoodPillar(WorldGenLevel world, int x, int y, int z, Rotation rotation, BoundingBox sbb) {
-		final BlockState log = TFBlocks.DARK_LOG.get().defaultBlockState();
+		final BlockState log = TFBlocks.DARK_LOG.defaultBlockState();
 		this.setBlockStateRotated(world, log, x, y + 2, z, rotation, sbb);
 		this.setBlockStateRotated(world, log, x, y + 3, z, rotation, sbb);
 		this.setBlockStateRotated(world, log, x, y + 4, z, rotation, sbb);
@@ -1140,7 +1140,7 @@ public class DarkTowerMainComponent extends DarkTowerWingComponent {
 	 * Make a lattice of log blocks
 	 */
 	protected void makeTimberBeams(WorldGenLevel world, RandomSource rand, BoundingBox sbb, Rotation rotation, int y, boolean isBottom, boolean isTop, int top) {
-		BlockState beamID = TFBlocks.TWILIGHT_OAK_LOG.get().defaultBlockState();
+		BlockState beamID = TFBlocks.TWILIGHT_OAK_LOG.defaultBlockState();
 		BlockState beamStateNS = beamID.setValue(RotatedPillarBlock.AXIS, Direction.Axis.Z);
 		BlockState beamStateUD = beamID.setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y);
 		BlockState beamStateEW = beamID.setValue(RotatedPillarBlock.AXIS, Direction.Axis.X);

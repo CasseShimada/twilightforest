@@ -379,14 +379,14 @@ public class TFBlocks {
 	public static final BlockBehaviour.Properties MINING_STRIPPED_PROPS = logProperties(MapColor.SAND).strength(2.0F).sound(SoundType.WOOD);
 	public static final BlockBehaviour.Properties SORTING_STRIPPED_PROPS = logProperties(MapColor.PODZOL).strength(2.0F).sound(SoundType.WOOD);
 
-	public static final DeferredBlock<RotatedPillarBlock> TWILIGHT_OAK_LOG = registerWithItem("twilight_oak_log", RotatedPillarBlock::new, () -> TWILIGHT_OAK_LOG_PROPS);
-	public static final DeferredBlock<RotatedPillarBlock> CANOPY_LOG = registerWithItem("canopy_log", RotatedPillarBlock::new, () -> CANOPY_LOG_PROPS);
-	public static final DeferredBlock<RotatedPillarBlock> MANGROVE_LOG = registerWithItem("mangrove_log", RotatedPillarBlock::new, () -> MANGROVE_LOG_PROPS);
-	public static final DeferredBlock<RotatedPillarBlock> DARK_LOG = registerWithItem("dark_log", RotatedPillarBlock::new, () -> DARK_LOG_PROPS);
-	public static final DeferredBlock<RotatedPillarBlock> TIME_LOG = registerWithItem("time_log", RotatedPillarBlock::new, () -> TIME_LOG_PROPS);
-	public static final DeferredBlock<RotatedPillarBlock> TRANSFORMATION_LOG = registerWithItem("transformation_log", RotatedPillarBlock::new, () -> TRANSFORMATION_LOG_PROPS);
-	public static final DeferredBlock<RotatedPillarBlock> MINING_LOG = registerWithItem("mining_log", RotatedPillarBlock::new, () -> MINING_LOG_PROPS);
-	public static final DeferredBlock<RotatedPillarBlock> SORTING_LOG = registerWithItem("sorting_log", RotatedPillarBlock::new, () -> SORTING_LOG_PROPS);
+	public static final RotatedPillarBlock TWILIGHT_OAK_LOG = registerDirectWithItem("twilight_oak_log", RotatedPillarBlock::new, () -> TWILIGHT_OAK_LOG_PROPS);
+	public static final RotatedPillarBlock CANOPY_LOG = registerDirectWithItem("canopy_log", RotatedPillarBlock::new, () -> CANOPY_LOG_PROPS);
+	public static final RotatedPillarBlock MANGROVE_LOG = registerDirectWithItem("mangrove_log", RotatedPillarBlock::new, () -> MANGROVE_LOG_PROPS);
+	public static final RotatedPillarBlock DARK_LOG = registerDirectWithItem("dark_log", RotatedPillarBlock::new, () -> DARK_LOG_PROPS);
+	public static final RotatedPillarBlock TIME_LOG = registerDirectWithItem("time_log", RotatedPillarBlock::new, () -> TIME_LOG_PROPS);
+	public static final RotatedPillarBlock TRANSFORMATION_LOG = registerDirectWithItem("transformation_log", RotatedPillarBlock::new, () -> TRANSFORMATION_LOG_PROPS);
+	public static final RotatedPillarBlock MINING_LOG = registerDirectWithItem("mining_log", RotatedPillarBlock::new, () -> MINING_LOG_PROPS);
+	public static final RotatedPillarBlock SORTING_LOG = registerDirectWithItem("sorting_log", RotatedPillarBlock::new, () -> SORTING_LOG_PROPS);
 
 	public static final DeferredBlock<HorizontalHollowLogBlock> HOLLOW_TWILIGHT_OAK_LOG_HORIZONTAL = registerCustomID("hollow_twilight_oak_log_horizontal", HorizontalHollowLogBlock::new, () -> TWILIGHT_OAK_BARK_PROPS, "hollow_twilight_oak_log");
 	public static final DeferredBlock<HorizontalHollowLogBlock> HOLLOW_CANOPY_LOG_HORIZONTAL = registerCustomID("hollow_canopy_log_horizontal", HorizontalHollowLogBlock::new, () -> CANOPY_BARK_PROPS, "hollow_canopy_log");

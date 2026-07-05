@@ -728,8 +728,8 @@ public class DarkTowerWingComponent extends TowerWingComponent {
 
 				TFStructureDecorator logDeco = new StructureDecoratorDarkTower();
 
-				logDeco.pillarState = TFBlocks.DARK_LOG.get().defaultBlockState();
-				logDeco.platformState = TFBlocks.DARK_LOG.get().defaultBlockState();
+				logDeco.pillarState = TFBlocks.DARK_LOG.defaultBlockState();
+				logDeco.platformState = TFBlocks.DARK_LOG.defaultBlockState();
 
 				decorateTreasureRoom(world, sbb, rotation, y, 4, logDeco);
 			} else {
@@ -742,7 +742,7 @@ public class DarkTowerWingComponent extends TowerWingComponent {
 	 * Make a mostly soid timber floor
 	 */
 	protected void makeTimberFloor(WorldGenLevel world, BoundingBox sbb, Rotation rotation, int y) {
-		BlockState beamID = TFBlocks.DARK_LOG.get().defaultBlockState();
+		BlockState beamID = TFBlocks.DARK_LOG.defaultBlockState();
 		BlockState beamStateNS = beamID.setValue(RotatedPillarBlock.AXIS, Direction.Axis.Z);
 		BlockState beamStateUD = beamID.setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y);
 		BlockState beamStateEW = beamID.setValue(RotatedPillarBlock.AXIS, Direction.Axis.X);
@@ -775,7 +775,7 @@ public class DarkTowerWingComponent extends TowerWingComponent {
 	 * Make a lattice of log blocks
 	 */
 	protected void makeSmallTimberBeams(WorldGenLevel world, RandomSource rand, BoundingBox sbb, Rotation rotation, int y, boolean bottom) {
-		BlockState beamID = TFBlocks.DARK_LOG.get().defaultBlockState();
+		BlockState beamID = TFBlocks.DARK_LOG.defaultBlockState();
 		BlockState beamStateNS = beamID.setValue(RotatedPillarBlock.AXIS, Direction.Axis.X);
 		BlockState beamStateUD = beamID.setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y);
 		BlockState beamStateEW = beamID.setValue(RotatedPillarBlock.AXIS, Direction.Axis.Z);
