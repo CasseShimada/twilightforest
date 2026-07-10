@@ -1,5 +1,6 @@
 package twilightforest.events;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.BlockPos;
@@ -53,7 +54,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.fabricmc.loader.api.FabricLoader;
-import twilightforest.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
 import twilightforest.advancements.DrinkFromFlaskTrigger;
@@ -504,7 +504,7 @@ public class EntityEvents {
 	}
 
 	public static void handleQuestSync(ServerPlayer player) {
-		PacketDistributor.sendToPlayer(player, new SyncQuestsPacket(questingRamCurrentContext.getContext()));
+		ServerPlayNetworking.send(player, new SyncQuestsPacket(questingRamCurrentContext.getContext()));
 	}
 
 	public static void handleEntityLoad(Entity entity) {
