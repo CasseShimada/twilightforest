@@ -4,24 +4,19 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Util;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import twilightforest.TwilightForestMod;
 import twilightforest.block.AbstractTrophyBlock;
 import twilightforest.block.TrophyBlock;
 import twilightforest.block.TrophyWallBlock;
@@ -84,31 +79,7 @@ public class TrophyRenderer implements BlockEntityRenderer<TrophyBlockEntity, Tr
 
 	@Nullable
 	public static TrophyBlockModel createTrophyModel(EntityModelSet set, BossVariant variant) {
-		return createTrophyModel((type, layer) -> {
-			try {
-				if (Minecraft.getInstance().level == null) {
-					return createFallback(set, variant);
-				}
-
-				Entity entity = type.create(Minecraft.getInstance().level, EntitySpawnReason.SPAWN_ITEM_USE);
-				if (entity == null) {
-					return createFallback(set, variant);
-				}
-
-				var renderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(entity);
-				if (renderer instanceof LivingEntityRenderer<?, ?, ?> livingRenderer) {
-					return (TrophyBlockModel) livingRenderer.getModel()
-						.getClass()
-						.getDeclaredConstructor(ModelPart.class)
-						.newInstance(set.bakeLayer(layer));
-				}
-
-				return createFallback(set, variant);
-			} catch (Exception e) {
-				TwilightForestMod.LOGGER.warn("Failed to create trophy renderer for entity {}, using fallback", type.getDescription().getString());
-				return createFallback(set, variant);
-			}
-		}, variant);
+		return createFallback(set, variant);
 	}
 
 	@Nullable
