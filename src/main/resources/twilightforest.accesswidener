@@ -8,3 +8,5 @@ accessible field net/minecraft/world/level/saveddata/maps/MapItemSavedData track
 accessible method net/minecraft/world/level/saveddata/maps/MapItemSavedData addDecoration (Lnet/minecraft/core/Holder;Lnet/minecraft/world/level/LevelAccessor;Ljava/lang/String;DDDLnet/minecraft/network/chat/Component;)V
 accessible method net/minecraft/world/level/saveddata/maps/MapItemSavedData setDecorationsDirty ()V
 accessible field net/minecraft/client/color/item/ItemTintSources ID_MAPPER Lnet/minecraft/util/ExtraCodecs$LateBoundIdMapper;
+accessible method net/minecraft/world/level/block/state/properties/BlockSetType register (Lnet/minecraft/world/level/block/state/properties/BlockSetType;)Lnet/minecraft/world/level/block/state/properties/BlockSetType;
+accessible method net/minecraft/world/level/block/state/properties/WoodType register (Lnet/minecraft/world/level/block/state/properties/WoodType;)Lnet/minecraft/world/level/block/state/properties/WoodType;
