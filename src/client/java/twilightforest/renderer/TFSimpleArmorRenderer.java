@@ -8,12 +8,9 @@ import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.layers.EquipmentLayerRenderer;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
-import net.minecraft.client.resources.model.EquipmentAssetManager;
-import net.minecraft.client.resources.model.sprite.AtlasManager;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.AtlasIds;
 import net.minecraft.resources.Identifier;
@@ -30,7 +27,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.lang.reflect.Field;
 
 public class TFSimpleArmorRenderer implements ArmorRenderer {
 	public static final List<TFSimpleArmorRenderer> INSTANCES = new ArrayList<>();
@@ -89,26 +85,10 @@ public class TFSimpleArmorRenderer implements ArmorRenderer {
 
 	private static EquipmentLayerRenderer createEquipmentRenderer() {
 		Minecraft mc = Minecraft.getInstance();
-		EntityRenderDispatcher dispatcher = mc.getEntityRenderDispatcher();
-
-		try {
-			EquipmentAssetManager assets = getPrivateFieldByType(dispatcher, EquipmentAssetManager.class);
-			AtlasManager atlasManager = getPrivateFieldByType(dispatcher, AtlasManager.class);
-			return new EquipmentLayerRenderer(assets, atlasManager.getAtlasOrThrow(AtlasIds.ARMOR_TRIMS));
-		} catch (ReflectiveOperationException e) {
-			TwilightForestMod.LOGGER.error("Failed to create equipment renderer", e);
-			return null;
-		}
-	}
-
-	private static <T> T getPrivateFieldByType(Object target, Class<T> type) throws ReflectiveOperationException {
-		for (Field field : target.getClass().getDeclaredFields()) {
-			if (type.isAssignableFrom(field.getType())) {
-				field.setAccessible(true);
-				return type.cast(field.get(target));
-			}
-		}
-		throw new NoSuchFieldException("Field of type " + type.getName() + " not found in " + target.getClass().getName());
+		return new EquipmentLayerRenderer(
+			mc.getEntityRenderDispatcher().equipmentAssets,
+			mc.getAtlasManager().getAtlasOrThrow(AtlasIds.ARMOR_TRIMS)
+		);
 	}
 
 	private static void setPartVisibility(HumanoidModel<HumanoidRenderState> model, EquipmentSlot slot) {
