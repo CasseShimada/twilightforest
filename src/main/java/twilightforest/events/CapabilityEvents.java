@@ -1,5 +1,7 @@
 package twilightforest.events;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -11,7 +13,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.LevelData;
-import twilightforest.network.PacketDistributor;
 import twilightforest.components.entity.FortificationShieldAttachment;
 import twilightforest.config.TFConfig;
 import twilightforest.init.TFDataAttachments;
@@ -30,7 +31,9 @@ public class CapabilityEvents {
 
 			if (player.onGround() || player.isSwimming() || player.isInWater()) {
 				TFDataAttachments.set(player, TFDataAttachments.FEATHER_FAN, false);
-				PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new UpdateFeatherFanFallPacket(player.getId(), false));
+				UpdateFeatherFanFallPacket packet = new UpdateFeatherFanFallPacket(player.getId(), false);
+				PlayerLookup.tracking(player).forEach(tracker -> ServerPlayNetworking.send(tracker, packet));
+				ServerPlayNetworking.send(player, packet);
 			}
 		}
 		TFDataAttachments.get(player, TFDataAttachments.YETI_THROWING).tick(player);
@@ -95,7 +98,7 @@ public class CapabilityEvents {
 	private static void updateCapabilities(ServerPlayer clientTarget, Entity shielded) {
 		var attachment = TFDataAttachments.get(shielded, TFDataAttachments.FORTIFICATION_SHIELDS);
 		if (attachment.shieldsLeft() > 0) {
-			PacketDistributor.sendToPlayer(clientTarget, new UpdateShieldPacket(shielded.getId(), attachment.temporaryShieldsLeft(), attachment.permanentShieldsLeft()));
+			ServerPlayNetworking.send(clientTarget, new UpdateShieldPacket(shielded.getId(), attachment.temporaryShieldsLeft(), attachment.permanentShieldsLeft()));
 		}
 	}
 
