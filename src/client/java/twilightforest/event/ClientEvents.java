@@ -86,6 +86,7 @@ import twilightforest.init.TFDimension;
 import twilightforest.item.EnderBowItem;
 import twilightforest.item.GiantPickItem;
 import twilightforest.item.IceBowItem;
+import twilightforest.item.MoonDialItem;
 import twilightforest.item.SeekerBowItem;
 import twilightforest.item.TripleBowItem;
 import twilightforest.mixin.client.accessor.ClientLevelAccessor;
@@ -222,8 +223,19 @@ public class ClientEvents {
 	}
 
 	private static void addCustomTooltips(ItemStack item, Item.TooltipContext context, TooltipFlag flag, List<Component> lines) {
+		int descriptionIndex = 1;
 		if (item.has(TFDataComponents.EMPERORS_CLOTH)) {
-			lines.add(1, EMPERORS_CLOTH_TOOLTIP);
+			lines.add(descriptionIndex++, EMPERORS_CLOTH_TOOLTIP);
+		}
+
+		if (item.getItem() instanceof MoonDialItem) {
+			LocalDate today = LocalDate.now();
+			boolean aprilFools = today.getMonth() == Month.APRIL && today.getDayOfMonth() == 1;
+			var level = Minecraft.getInstance().level;
+			String phaseType = level != null && level.dimensionType().hasSkyLight()
+				? String.valueOf(Math.floorMod(level.getOverworldClockTime() / 24000L, 8))
+				: aprilFools ? "unknown_fools" : "unknown";
+			lines.add(descriptionIndex, Component.translatable("item.twilightforest.moon_dial.phase_" + phaseType).withStyle(ChatFormatting.GRAY));
 		}
 
 		if (item.is(TFItemTags.WIP)) {
