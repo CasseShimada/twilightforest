@@ -7,7 +7,6 @@ import net.minecraft.world.level.TicketStorage;
 import org.apache.logging.log4j.Logger;
 import twilightforest.TwilightForestMod;
 
-import java.lang.reflect.Field;
 import java.util.Map;
 
 public final class SaveDebug {
@@ -15,7 +14,6 @@ public final class SaveDebug {
 	private static volatile boolean shutdownInProgress;
 	private static volatile long shutdownStartNanos;
 	private static volatile boolean clearedKeepAliveTickets;
-	private static volatile Field ticketStorageField;
 
 	private SaveDebug() {
 	}
@@ -74,35 +72,9 @@ public final class SaveDebug {
 	private static void clearKeepAliveTickets(MinecraftServer server) {
 		for (ServerLevel level : server.getAllLevels()) {
 			ServerChunkCache chunkSource = level.getChunkSource();
-			TicketStorage storage = getTicketStorage(chunkSource);
-			if (storage == null) {
-				continue;
-			}
+			TicketStorage storage = chunkSource.ticketStorage;
 			storage.removeTicketIf((ticket, chunkKey) -> ticket.getType().shouldKeepDimensionActive(), null);
 			LOGGER.warn("Cleared keep-alive tickets during shutdown for {}", level.dimension().identifier());
-		}
-	}
-
-	private static TicketStorage getTicketStorage(ServerChunkCache chunkSource) {
-		try {
-			Field field = ticketStorageField;
-			if (field == null) {
-				for (Field candidate : ServerChunkCache.class.getDeclaredFields()) {
-					if (TicketStorage.class.isAssignableFrom(candidate.getType())) {
-						field = candidate;
-						break;
-					}
-				}
-				if (field == null) {
-					throw new NoSuchFieldException("TicketStorage field not found");
-				}
-				field.setAccessible(true);
-				ticketStorageField = field;
-			}
-			return (TicketStorage) field.get(chunkSource);
-		} catch (ReflectiveOperationException e) {
-			LOGGER.error("Failed to access ServerChunkCache.ticketStorage for shutdown cleanup", e);
-			return null;
 		}
 	}
 }
