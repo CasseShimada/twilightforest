@@ -1,15 +1,9 @@
 package twilightforest.init;
 
-import net.minecraft.core.Holder;
-import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import twilightforest.TwilightForestMod;
 import twilightforest.world.components.structures.*;
 import twilightforest.world.components.structures.courtyard.*;
@@ -24,13 +18,13 @@ import twilightforest.world.components.structures.minotaurmaze.*;
 import twilightforest.world.components.structures.mushroomtower.*;
 import twilightforest.world.components.structures.stronghold.*;
 import twilightforest.world.components.structures.trollcave.*;
+import twilightforest.util.registry.RegistryAliasUtil;
 
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
 public class TFStructurePieceTypes {
-	private static final Logger LOGGER = LoggerFactory.getLogger(TwilightForestMod.ID);
 	private static final Map<Identifier, StructurePieceType> STRUCTURE_PIECE_TYPES = new LinkedHashMap<>();
 	private static final Map<Identifier, Identifier> ALIASES = new LinkedHashMap<>();
 	private static boolean registered;
@@ -266,67 +260,6 @@ public class TFStructurePieceTypes {
 	}
 
 	private static void applyAliases() {
-		if (ALIASES.isEmpty()) {
-			return;
-		}
-		if (!(BuiltInRegistries.STRUCTURE_PIECE instanceof MappedRegistry<StructurePieceType> mapped)) {
-			LOGGER.warn("Registry aliasing is not supported for {}", BuiltInRegistries.STRUCTURE_PIECE.key().identifier());
-			return;
-		}
-
-		try {
-			Map<Identifier, Holder.Reference<StructurePieceType>> byLocation = resolveMap(mapped, "byLocation", Identifier.class, Holder.Reference.class);
-			Map<ResourceKey<StructurePieceType>, Holder.Reference<StructurePieceType>> byKey = resolveMap(mapped, "byKey", ResourceKey.class, Holder.Reference.class);
-			Map<ResourceKey<StructurePieceType>, RegistrationInfo> registrationInfos = resolveMap(mapped, "registrationInfos", ResourceKey.class, RegistrationInfo.class);
-			if (byLocation == null || byKey == null || registrationInfos == null) {
-				LOGGER.warn("Registry aliasing is not supported for {}", BuiltInRegistries.STRUCTURE_PIECE.key().identifier());
-				return;
-			}
-
-			for (Map.Entry<Identifier, Identifier> entry : ALIASES.entrySet()) {
-				Identifier from = entry.getKey();
-				if (byLocation.containsKey(from)) continue;
-				Identifier to = entry.getValue();
-				Holder.Reference<StructurePieceType> target = byLocation.get(to);
-				if (target == null) {
-					LOGGER.warn("Alias target {} missing in registry {}", to, BuiltInRegistries.STRUCTURE_PIECE.key().identifier());
-					continue;
-				}
-				ResourceKey<StructurePieceType> fromKey = ResourceKey.create(BuiltInRegistries.STRUCTURE_PIECE.key(), from);
-				byLocation.put(from, target);
-				byKey.put(fromKey, target);
-				RegistrationInfo info = registrationInfos.get(target.key());
-				if (info != null) {
-					registrationInfos.put(fromKey, info);
-				}
-			}
-		} catch (ReflectiveOperationException e) {
-			LOGGER.warn("Failed applying aliases for {}", BuiltInRegistries.STRUCTURE_PIECE.key().identifier(), e);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private static <K, V> Map<K, V> resolveMap(MappedRegistry<?> registry, String nameHint, Class<?> keyClass, Class<?> valueClass) throws ReflectiveOperationException {
-		try {
-			var field = MappedRegistry.class.getDeclaredField(nameHint);
-			field.setAccessible(true);
-			return (Map<K, V>) field.get(registry);
-		} catch (NoSuchFieldException ignored) {
-			for (var field : MappedRegistry.class.getDeclaredFields()) {
-				if (!Map.class.isAssignableFrom(field.getType())) {
-					continue;
-				}
-				field.setAccessible(true);
-				Object value = field.get(registry);
-				if (!(value instanceof Map<?, ?> map) || map.isEmpty()) {
-					continue;
-				}
-				var entry = map.entrySet().iterator().next();
-				if (keyClass.isInstance(entry.getKey()) && valueClass.isInstance(entry.getValue())) {
-					return (Map<K, V>) map;
-				}
-			}
-			return null;
-		}
+		RegistryAliasUtil.applyAliases(BuiltInRegistries.STRUCTURE_PIECE, ALIASES);
 	}
 }

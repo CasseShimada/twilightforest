@@ -23,6 +23,7 @@ import twilightforest.item.food.TFConsumables;
 import twilightforest.item.food.TFFoods;
 import twilightforest.tags.TFBannerPatternTags;
 import twilightforest.util.TFToolMaterials;
+import twilightforest.util.registry.RegistryAliasUtil;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -326,9 +327,7 @@ public class TFItems {
 	}
 
 	private static void applyItemAliases() {
-		if (!ITEM_ALIASES.isEmpty()) {
-			TwilightForestMod.LOGGER.warn("Skipping item registry aliases on Fabric to avoid registry sync duplicates.");
-		}
+		RegistryAliasUtil.applyAliases(BuiltInRegistries.ITEM, ITEM_ALIASES);
 	}
 
 	private interface ItemEntry {

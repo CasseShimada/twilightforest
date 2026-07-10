@@ -21,6 +21,7 @@ import twilightforest.entity.boss.*;
 import twilightforest.entity.monster.*;
 import twilightforest.entity.passive.*;
 import twilightforest.entity.projectile.*;
+import twilightforest.util.registry.RegistryAliasUtil;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -230,14 +231,10 @@ public class TFEntities {
 	}
 
 	private static void applyEntityAliases() {
-		if (!ENTITY_ALIASES.isEmpty()) {
-			TwilightForestMod.LOGGER.warn("Skipping entity type registry aliases on Fabric to avoid registry sync duplicates.");
-		}
+		RegistryAliasUtil.applyAliases(BuiltInRegistries.ENTITY_TYPE, ENTITY_ALIASES);
 	}
 
 	private static void applySpawnEggAliases() {
-		if (!SPAWN_EGG_ALIASES.isEmpty()) {
-			TwilightForestMod.LOGGER.warn("Skipping item registry aliases on Fabric to avoid registry sync duplicates.");
-		}
+		RegistryAliasUtil.applyAliases(BuiltInRegistries.ITEM, SPAWN_EGG_ALIASES);
 	}
 }

@@ -33,6 +33,7 @@ import twilightforest.enums.FireJetVariant;
 import twilightforest.enums.TowerDeviceVariant;
 import twilightforest.item.WroughtIronFenceItem;
 import twilightforest.item.TooltipBlockItem;
+import twilightforest.util.registry.RegistryAliasUtil;
 import twilightforest.util.woods.TFWoodTypes;
 import twilightforest.world.components.feature.trees.growers.TFTreeGrowers;
 
@@ -789,9 +790,7 @@ public static final DeferredBlock<ClimbableHollowLogBlock> HOLLOW_SORTING_LOG_CL
 	}
 
 	private static void applyBlockAliases() {
-		if (!BLOCK_ALIASES.isEmpty()) {
-			TwilightForestMod.LOGGER.warn("Skipping block registry aliases on Fabric to avoid duplicate block state ids.");
-		}
+		RegistryAliasUtil.applyAliases(BuiltInRegistries.BLOCK, BLOCK_ALIASES);
 	}
 
 	private interface BlockEntry {

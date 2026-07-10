@@ -9,7 +9,7 @@ public class TFRemapper {
 	public static void addRegistryAliases() {
 
 		remapBlockAndItem("yeti_trophy", "alpha_yeti_trophy");
-		remapBlockAndItem("yeti_wall_trophy", "alpha_yeti_wall_trophy");
+		remapBlock("yeti_wall_trophy", "alpha_yeti_wall_trophy");
 		remapBlockAndItem("boss_spawner_naga", "naga_boss_spawner");
 		remapBlockAndItem("boss_spawner_lich", "lich_boss_spawner");
 		remapBlockAndItem("boss_spawner_minoshroom", "minoshroom_boss_spawner");
@@ -93,12 +93,12 @@ public class TFRemapper {
 
 		remapBlockAndItem("rainboak_leaves", "rainbow_oak_leaves");
 		remapBlockAndItem("rainboak_sapling", "rainbow_oak_sapling");
-		remapBlockAndItem("potted_rainboak_sapling", "potted_rainbow_oak_sapling");
+		remapBlock("potted_rainboak_sapling", "potted_rainbow_oak_sapling");
 
 		remapBlockAndItem("dark_gate", "dark_fence_gate");
 		remapBlockAndItem("dark_plate", "dark_pressure_plate");
 		remapBlockAndItem("darkwood_sign", "dark_sign");
-		remapBlockAndItem("darkwood_wall_sign", "dark_wall_sign");
+		remapBlock("darkwood_wall_sign", "dark_wall_sign");
 		remapBlockAndItem("darkwood_banister", "dark_banister");
 
 		remapBlockAndItem("trans_planks", "transformation_planks");
@@ -111,7 +111,7 @@ public class TFRemapper {
 		remapBlockAndItem("trans_door", "transformation_door");
 		remapBlockAndItem("trans_trapdoor", "transformation_trapdoor");
 		remapBlockAndItem("trans_sign", "transformation_sign");
-		remapBlockAndItem("trans_wall_sign", "transformation_wall_sign");
+		remapBlock("trans_wall_sign", "transformation_wall_sign");
 		remapBlockAndItem("trans_banister", "transformation_banister");
 
 		remapBlockAndItem("mine_planks", "mining_planks");
@@ -124,7 +124,7 @@ public class TFRemapper {
 		remapBlockAndItem("mine_door", "mining_door");
 		remapBlockAndItem("mine_trapdoor", "mining_trapdoor");
 		remapBlockAndItem("mine_sign", "mining_sign");
-		remapBlockAndItem("mine_wall_sign", "mining_wall_sign");
+		remapBlock("mine_wall_sign", "mining_wall_sign");
 		remapBlockAndItem("mine_banister", "mining_banister");
 
 		remapBlockAndItem("sort_planks", "sorting_planks");
@@ -137,7 +137,7 @@ public class TFRemapper {
 		remapBlockAndItem("sort_door", "sorting_door");
 		remapBlockAndItem("sort_trapdoor", "sorting_trapdoor");
 		remapBlockAndItem("sort_sign", "sorting_sign");
-		remapBlockAndItem("sort_wall_sign", "sorting_wall_sign");
+		remapBlock("sort_wall_sign", "sorting_wall_sign");
 		remapBlockAndItem("sort_banister", "sorting_banister");
 
 		remapItem("shield_scepter", "fortification_scepter");
@@ -183,8 +183,12 @@ public class TFRemapper {
 	}
 
 	private static void remapBlockAndItem(String oldId, String newId) {
-		TFBlocks.addAlias(TwilightForestMod.prefix(oldId), TwilightForestMod.prefix(newId));
+		remapBlock(oldId, newId);
 		remapItem(oldId, newId);
+	}
+
+	private static void remapBlock(String oldId, String newId) {
+		TFBlocks.addAlias(TwilightForestMod.prefix(oldId), TwilightForestMod.prefix(newId));
 	}
 
 	private static void remapItem(String oldId, String newId) {
