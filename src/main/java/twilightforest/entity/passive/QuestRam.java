@@ -1,6 +1,7 @@
 package twilightforest.entity.passive;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.particles.ColorParticleOption;
@@ -35,7 +36,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import twilightforest.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.entity.EnforcedHomePoint;
 import twilightforest.entity.ai.goal.QuestRamEatWoolGoal;
@@ -224,7 +224,7 @@ public class QuestRam extends Animal implements EnforcedHomePoint {
 							0.0F, 0.0F, 0.0F);
 					}
 
-					PacketDistributor.sendToPlayer(serverplayer, packet);
+					ServerPlayNetworking.send(serverplayer, packet);
 				}
 			}
 		}
