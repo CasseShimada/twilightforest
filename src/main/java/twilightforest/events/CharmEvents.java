@@ -1,5 +1,6 @@
 package twilightforest.events;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -27,7 +28,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.world.damagesource.DamageSource;
-import twilightforest.network.PacketDistributor;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.KeepsakeCasketBlock;
 import twilightforest.block.entity.SkullChestBlockEntity;
@@ -99,7 +99,7 @@ public class CharmEvents {
 			}
 
 			if (player instanceof ServerPlayer serverPlayer) {
-				PacketDistributor.sendToPlayer(serverPlayer, new SpawnCharmPacket(new ItemStack(charm1 ? TFItems.CHARM_OF_LIFE_1 : TFItems.CHARM_OF_LIFE_2), ResourceKey.create(Registries.SOUND_EVENT, TFSounds.CHARM_LIFE.location())));
+				ServerPlayNetworking.send(serverPlayer, new SpawnCharmPacket(new ItemStack(charm1 ? TFItems.CHARM_OF_LIFE_1 : TFItems.CHARM_OF_LIFE_2), ResourceKey.create(Registries.SOUND_EVENT, TFSounds.CHARM_LIFE.location())));
 				serverPlayer.awardStat(TFStats.LIFE_CHARMS_ACTIVATED);
 			}
 
@@ -295,7 +295,7 @@ public class CharmEvents {
 			ItemStack stack = TFItemStackUtils.loadItem(player.registryAccess(), playerData.getCompoundOrEmpty(CONSUMED_CHARM_TAG));
 
 			if (player instanceof ServerPlayer serverPlayer) {
-				PacketDistributor.sendToPlayer(serverPlayer, new SpawnCharmPacket(stack, ResourceKey.create(Registries.SOUND_EVENT, TFSounds.CHARM_KEEP.location())));
+				ServerPlayNetworking.send(serverPlayer, new SpawnCharmPacket(stack, ResourceKey.create(Registries.SOUND_EVENT, TFSounds.CHARM_KEEP.location())));
 				serverPlayer.awardStat(TFStats.KEEPING_CHARMS_ACTIVATED);
 			}
 			playerData.remove(CONSUMED_CHARM_TAG);
