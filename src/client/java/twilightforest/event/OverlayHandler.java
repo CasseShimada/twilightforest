@@ -36,10 +36,10 @@ import twilightforest.init.TFDataAttachments;
 import twilightforest.init.TFDataComponents;
 import twilightforest.init.TFItems;
 import twilightforest.item.OreMeterItem;
+import twilightforest.mixin.client.accessor.HudInvoker;
 import twilightforest.util.ComponentAlignment;
 
 import java.text.DecimalFormat;
-import java.lang.reflect.Method;
 import java.util.*;
 
 public class OverlayHandler {
@@ -51,8 +51,6 @@ public class OverlayHandler {
 	public static final Map<Long, OreMeterInfoCache> ORE_METER_STAT_CACHE = new HashMap<>();
 
 	private static final QuestingRamCurrentContext questingRamCurrentContext = QuestingRamCurrentContext.INSTANCE;
-	private static Method renderFoodMethod;
-	private static Method canRenderCrosshairMethod;
 
 	public static void registerOverlays() {
 		HudElementRegistry.attachElementAfter(VanillaHudElements.CROSSHAIR, TwilightForestMod.prefix("quest_ram_indicator"), (graphics, tickCounter) -> {
@@ -131,15 +129,7 @@ public class OverlayHandler {
 	}
 
 	private static boolean canRenderCrosshairForSpectator(Gui gui, HitResult hitResult) {
-		try {
-			if (canRenderCrosshairMethod == null) {
-				canRenderCrosshairMethod = Gui.class.getDeclaredMethod("canRenderCrosshairForSpectator", HitResult.class);
-				canRenderCrosshairMethod.setAccessible(true);
-			}
-			return (boolean) canRenderCrosshairMethod.invoke(gui, hitResult);
-		} catch (ReflectiveOperationException e) {
-			return hitResult != null;
-		}
+		return ((HudInvoker) (Object) gui.hud).twilightforest$canRenderCrosshairForSpectator(hitResult);
 	}
 
 	private static boolean shouldRenderHostileMountBar(Minecraft minecraft, Player player) {
@@ -155,15 +145,7 @@ public class OverlayHandler {
 	}
 
 	private static void invokeRenderFood(Gui gui, GuiGraphicsExtractor graphics, Player player, int yPos, int xPos) {
-		try {
-			if (renderFoodMethod == null) {
-				renderFoodMethod = Gui.class.getDeclaredMethod("renderFood", GuiGraphicsExtractor.class, Player.class, int.class, int.class);
-				renderFoodMethod.setAccessible(true);
-			}
-			renderFoodMethod.invoke(gui, graphics, player, yPos, xPos);
-		} catch (ReflectiveOperationException e) {
-			// If reflection fails, skip rendering the bar.
-		}
+		((HudInvoker) (Object) gui.hud).twilightforest$extractFood(graphics, player, yPos, xPos);
 	}
 
 	private static void renderShieldCount(GuiGraphicsExtractor graphics, Gui gui, int screenWidth, int screenHeight, int shieldCount) {

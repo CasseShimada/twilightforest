@@ -67,6 +67,7 @@
     "client.accessor.BossHealthOverlayAccessor",
     "client.accessor.CameraAccessor",
     "client.accessor.BiomeManagerAccessor",
+    "client.accessor.HudInvoker",
     "client.accessor.LevelRendererAccessor",
     "client.MapRendererMixin",
     "client.MinecraftMusicMixin",
