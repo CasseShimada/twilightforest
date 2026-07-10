@@ -9,7 +9,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -71,15 +70,6 @@ public final class PacketDistributor {
 		sendToPlayersTrackingEntity(entity, payload);
 		if (entity instanceof ServerPlayer sp) {
 			ServerPlayNetworking.send(sp, payload);
-		}
-	}
-
-	public static void sendToPlayersTrackingChunk(ServerLevel level, ChunkPos chunkPos, CustomPacketPayload payload) {
-		Objects.requireNonNull(level, "level");
-		Objects.requireNonNull(chunkPos, "chunkPos");
-		Objects.requireNonNull(payload, "payload");
-		for (ServerPlayer player : PlayerLookup.tracking(level, chunkPos)) {
-			ServerPlayNetworking.send(player, payload);
 		}
 	}
 

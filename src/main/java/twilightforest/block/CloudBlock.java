@@ -1,5 +1,7 @@
 package twilightforest.block;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -14,7 +16,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.phys.Vec3;
-import twilightforest.network.PacketDistributor;
 import org.apache.commons.lang3.tuple.Pair;
 import twilightforest.config.TFConfig;
 import twilightforest.init.TFParticleType;
@@ -80,7 +81,7 @@ public class CloudBlock extends Block {
 				particlePacket.queueParticle(TFParticleType.CLOUD_PUFF, x, y, z, xSpeed, ySpeed, zSpeed);
 			}
 
-			PacketDistributor.sendToPlayersTrackingChunk(serverLevel, ChunkPos.containing(pos), particlePacket);
+			PlayerLookup.tracking(serverLevel, ChunkPos.containing(pos)).forEach(player -> ServerPlayNetworking.send(player, particlePacket));
 		}
 	}
 

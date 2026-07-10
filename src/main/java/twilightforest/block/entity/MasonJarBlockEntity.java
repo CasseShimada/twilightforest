@@ -1,5 +1,7 @@
 package twilightforest.block.entity;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentGetter;
@@ -23,7 +25,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
-import twilightforest.network.PacketDistributor;
 import twilightforest.init.TFBlockEntities;
 import twilightforest.network.SetMasonJarItemPacket;
 
@@ -123,7 +124,8 @@ public class MasonJarBlockEntity extends JarBlockEntity {
 			this.level.getLightEngine().checkBlock(pos);
 		}
 		if (this.level instanceof ServerLevel serverLevel) {
-			PacketDistributor.sendToPlayersTrackingChunk(serverLevel, ChunkPos.containing(this.getBlockPos()), new SetMasonJarItemPacket(this.getBlockPos(), this.item.getItem(), this.itemRotation));
+			SetMasonJarItemPacket packet = new SetMasonJarItemPacket(this.getBlockPos(), this.item.getItem(), this.itemRotation);
+			PlayerLookup.tracking(serverLevel, ChunkPos.containing(this.getBlockPos())).forEach(player -> ServerPlayNetworking.send(player, packet));
 		}
 	}
 
