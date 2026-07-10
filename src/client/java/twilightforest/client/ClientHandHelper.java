@@ -1,10 +1,13 @@
 package twilightforest.client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import twilightforest.init.TFParticleType;
 import twilightforest.item.LifedrainScepterItem;
 
 public final class ClientHandHelper {
@@ -15,6 +18,23 @@ public final class ClientHandHelper {
 		return Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
 	}
 
+	public static void makeRedMagicTrail(Level level, LivingEntity source, Vec3 target) {
+		Vec3 handPos = getPlayerHandPos(source, getPartialTick());
+		double distance = handPos.distanceTo(target);
+
+		for (double i = 0; i <= distance * 3; i++) {
+			Vec3 particlePos = handPos.subtract(target).scale(i / (distance * 3));
+			particlePos = handPos.subtract(particlePos);
+			float r = 1.0F;
+			float g = 0.5F;
+			float b = 0.5F;
+			level.addParticle(ColorParticleOption.create(TFParticleType.MAGIC_EFFECT, r, g, b), particlePos.x(), particlePos.y(), particlePos.z(), 0.0D, 0.0D, 0.0D);
+		}
+	}
+
+	/**
+	 * Based on the hand positioning used by the vanilla fishing hook renderer.
+	 */
 	public static Vec3 getPlayerHandPos(LivingEntity living, float partialTicks) {
 		float armSwing = Mth.sin(Mth.sqrt(living.getAttackAnim(partialTicks)) * (float) Math.PI);
 		int hand = living.getMainArm() == HumanoidArm.RIGHT ? 1 : -1;

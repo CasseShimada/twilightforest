@@ -3,11 +3,8 @@ package twilightforest.network;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import twilightforest.TwilightForestMod;
-import twilightforest.item.LifedrainScepterItem;
 
 public record LifedrainParticlePacket(int entityID, Vec3 victimPos) implements CustomPacketPayload {
 
@@ -28,19 +25,5 @@ public record LifedrainParticlePacket(int entityID, Vec3 victimPos) implements C
 	@Override
 	public Type<? extends CustomPacketPayload> type() {
 		return TYPE;
-	}
-
-	@SuppressWarnings("Convert2Lambda")
-	public static void handle(LifedrainParticlePacket packet, PayloadContext ctx) {
-		// Client-only logic; this handler is only registered for S2C.
-		ctx.enqueueWork(new Runnable() {
-			@Override
-			public void run() {
-				Entity entity = ctx.player().level().getEntity(packet.entityID());
-				if (entity instanceof LivingEntity living) {
-					LifedrainScepterItem.makeRedMagicTrail(living.level(), living, packet.victimPos());
-				}
-			}
-		});
 	}
 }

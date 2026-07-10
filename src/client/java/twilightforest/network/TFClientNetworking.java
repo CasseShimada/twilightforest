@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import twilightforest.client.MissingAdvancementToast;
 import twilightforest.client.MovingCicadaSoundInstance;
+import twilightforest.client.ClientHandHelper;
 import twilightforest.client.renderer.TFWeatherRenderer;
 import twilightforest.config.TFConfig;
 import twilightforest.entity.CharmEffect;
@@ -45,7 +46,6 @@ public final class TFClientNetworking {
 
 	private static void registerReceivers() {
 		registerCommon(EnforceProgressionStatusPacket.TYPE, EnforceProgressionStatusPacket::handle);
-		registerCommon(LifedrainParticlePacket.TYPE, LifedrainParticlePacket::handle);
 		registerCommon(MovePlayerPacket.TYPE, MovePlayerPacket::handle);
 		registerCommon(ParticlePacket.TYPE, ParticlePacket::handle);
 		registerCommon(SetMasonJarItemPacket.TYPE, SetMasonJarItemPacket::handle);
@@ -60,6 +60,7 @@ public final class TFClientNetworking {
 
 		ClientPlayNetworking.registerGlobalReceiver(AreaProtectionPacket.TYPE, TFClientNetworking::handleAreaProtection);
 		ClientPlayNetworking.registerGlobalReceiver(CreateMovingCicadaSoundPacket.TYPE, TFClientNetworking::handleMovingCicadaSound);
+		ClientPlayNetworking.registerGlobalReceiver(LifedrainParticlePacket.TYPE, TFClientNetworking::handleLifedrainParticles);
 		ClientPlayNetworking.registerGlobalReceiver(MagicMapPacket.TYPE, TFClientNetworking::handleMagicMap);
 		ClientPlayNetworking.registerGlobalReceiver(MazeMapPacket.TYPE, TFClientNetworking::handleMazeMap);
 		ClientPlayNetworking.registerGlobalReceiver(MissingAdvancementToastPacket.TYPE, TFClientNetworking::handleMissingAdvancementToast);
@@ -108,6 +109,15 @@ public final class TFClientNetworking {
 			Entity entity = context.player().level().getEntity(packet.entityID());
 			if (entity instanceof LivingEntity living) {
 				context.client().getSoundManager().queueTickingSound(new MovingCicadaSoundInstance(living));
+			}
+		});
+	}
+
+	private static void handleLifedrainParticles(LifedrainParticlePacket packet, ClientPlayNetworking.Context context) {
+		context.client().execute(() -> {
+			Entity entity = context.player().level().getEntity(packet.entityID());
+			if (entity instanceof LivingEntity living) {
+				ClientHandHelper.makeRedMagicTrail(living.level(), living, packet.victimPos());
 			}
 		});
 	}

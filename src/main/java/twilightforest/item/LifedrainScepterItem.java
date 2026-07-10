@@ -1,11 +1,8 @@
 package twilightforest.item;
 
 import net.minecraft.ChatFormatting;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -13,7 +10,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -38,7 +34,6 @@ import twilightforest.enchantment.RechargeScepterEffect;
 import twilightforest.init.TFDamageTypes;
 import twilightforest.init.TFEnchantments;
 import twilightforest.init.TFItems;
-import twilightforest.init.TFParticleType;
 import twilightforest.init.TFSounds;
 import twilightforest.loot.TFLootTables;
 import twilightforest.network.LifedrainParticlePacket;
@@ -215,73 +210,6 @@ public class LifedrainScepterItem extends Item {
 					target.setDeltaMovement(0, 0.15D, 0);
 				}
 			}
-		}
-	}
-
-	public static void makeRedMagicTrail(Level level, LivingEntity source, Vec3 target) {
-		// make particle trail
-		Vec3 handPos = getPlayerHandPos(source, getClientPartialTick());
-		double distance = handPos.distanceTo(target);
-
-		for (double i = 0; i <= distance * 3; i++) {
-			Vec3 particlePos = handPos.subtract(target).scale(i / (distance * 3));
-			particlePos = handPos.subtract(particlePos);
-			float r = 1.0F;
-			float g = 0.5F;
-			float b = 0.5F;
-			level.addParticle(ColorParticleOption.create(TFParticleType.MAGIC_EFFECT, r, g, b), particlePos.x(), particlePos.y(), particlePos.z(), 0.0D, 0.0D, 0.0D);
-		}
-	}
-
-	/**
-	 * Slightly reformatted vanilla copy of:
-	 * net.minecraft.client.renderer.entity.FishingHookRenderer#getPlayerHandPos(net.minecraft.world.entity.player.Player, float, float)
-	 * ( cant link it cuz its client only or some shit, idk, you do it, wise guy )
-	 */
-	private static Vec3 getPlayerHandPos(LivingEntity living, float partialTicks) {
-		Vec3 clientPos = getClientHandPos(living, partialTicks);
-		if (clientPos != null) {
-			return clientPos;
-		}
-
-		float armSwing = Mth.sin(Mth.sqrt(living.getAttackAnim(partialTicks)) * (float) Math.PI);
-		int hand = living.getMainArm() == HumanoidArm.RIGHT ? 1 : -1;
-		if (!(living.getMainHandItem().getItem() instanceof LifedrainScepterItem)) hand = -hand;
-
-		float yRot = Mth.lerp(partialTicks, living.yBodyRotO, living.yBodyRot) * (float) (Math.PI / 180.0);
-		double sin = Mth.sin(yRot);
-		double cos = Mth.cos(yRot);
-		float scale = living.getScale();
-		double offset = (double) hand * 0.35 * (double) scale;
-		double factor = 0.8 * (double) scale;
-		float crouch = living.isCrouching() ? -0.1875F : 0.0F;
-		return living.getEyePosition(partialTicks).add(-cos * offset - sin * factor, (double) crouch - 0.45 * (double) scale, -sin * offset + cos * factor);
-	}
-
-	private static float getClientPartialTick() {
-		if (FabricLoader.getInstance().getEnvironmentType() != EnvType.CLIENT) {
-			return 0.0F;
-		}
-
-		try {
-			Class<?> helper = Class.forName("twilightforest.client.ClientHandHelper");
-			return ((Float) helper.getMethod("getPartialTick").invoke(null)).floatValue();
-		} catch (Throwable ignored) {
-			return 0.0F;
-		}
-	}
-
-	@Nullable
-	private static Vec3 getClientHandPos(LivingEntity living, float partialTicks) {
-		if (FabricLoader.getInstance().getEnvironmentType() != EnvType.CLIENT) {
-			return null;
-		}
-
-		try {
-			Class<?> helper = Class.forName("twilightforest.client.ClientHandHelper");
-			return (Vec3) helper.getMethod("getPlayerHandPos", LivingEntity.class, float.class).invoke(null, living, partialTicks);
-		} catch (Throwable ignored) {
-			return null;
 		}
 	}
 
