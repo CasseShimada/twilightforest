@@ -1,5 +1,7 @@
 package twilightforest.item;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -8,6 +10,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -28,7 +31,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import twilightforest.network.PacketDistributor;
 import twilightforest.tags.TFEntityTypeTags;
 import twilightforest.enchantment.RechargeScepterEffect;
 import twilightforest.init.TFDamageTypes;
@@ -98,7 +100,7 @@ public class LifedrainScepterItem extends Item {
 			particlePacket.queueParticle(options, target.getX() + x, target.getY() + y, target.getZ() + z, x * speed, y * speed, z * speed);
 		}
 
-		PacketDistributor.sendToPlayersTrackingEntity(target, particlePacket);
+		PlayerLookup.tracking(target).forEach(player -> ServerPlayNetworking.send(player, particlePacket));
 	}
 
 	/**
@@ -154,7 +156,11 @@ public class LifedrainScepterItem extends Item {
 
 			if (pointedEntity instanceof LivingEntity target && !(target instanceof ArmorStand)) {
 				if (!level.isClientSide() && !target.isDeadOrDying()) {
-					PacketDistributor.sendToPlayersTrackingEntityAndSelf(living, new LifedrainParticlePacket(living.getId(), target.getEyePosition()));
+					LifedrainParticlePacket packet = new LifedrainParticlePacket(living.getId(), target.getEyePosition());
+					PlayerLookup.tracking(living).forEach(player -> ServerPlayNetworking.send(player, packet));
+					if (living instanceof ServerPlayer player) {
+						ServerPlayNetworking.send(player, packet);
+					}
 					level.playSound(null, living.blockPosition(), TFSounds.LIFE_SCEPTER_DRAIN, SoundSource.PLAYERS);
 				}
 
