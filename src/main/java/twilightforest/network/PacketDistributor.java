@@ -32,22 +32,9 @@ public final class PacketDistributor {
 		});
 	}
 
-	private static MinecraftServer requireServer() {
-		MinecraftServer s = server;
-		if (s == null) throw new IllegalStateException("Server not available (called too early or from client-only context)");
-		return s;
-	}
-
 	@Nullable
 	public static MinecraftServer getServer() {
 		return server;
-	}
-
-	public static void sendToAllPlayers(CustomPacketPayload payload) {
-		Objects.requireNonNull(payload, "payload");
-		for (ServerPlayer player : PlayerLookup.all(requireServer())) {
-			ServerPlayNetworking.send(player, payload);
-		}
 	}
 
 	public static void sendToPlayer(ServerPlayer player, CustomPacketPayload payload) {

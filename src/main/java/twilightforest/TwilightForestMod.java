@@ -7,6 +7,8 @@ import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleBuilder;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.FuelValueEvents;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
@@ -169,9 +171,10 @@ public final class TwilightForestMod implements ModInitializer {
 
 	private static void registerGameRules() {
 		GameRule<Boolean> rule = ENFORCED_PROGRESSION_RULE.get();
-		GameRuleEvents.changeCallback(rule).register((enforced, server) ->
-			PacketDistributor.sendToAllPlayers(new EnforceProgressionStatusPacket(enforced))
-		);
+		GameRuleEvents.changeCallback(rule).register((enforced, server) -> {
+			EnforceProgressionStatusPacket packet = new EnforceProgressionStatusPacket(enforced);
+			PlayerLookup.all(server).forEach(player -> ServerPlayNetworking.send(player, packet));
+		});
 	}
 
 	private static void initCommon() {
