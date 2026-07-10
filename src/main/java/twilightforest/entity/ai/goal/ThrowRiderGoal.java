@@ -1,5 +1,6 @@
 package twilightforest.entity.ai.goal;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -8,7 +9,6 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import twilightforest.network.PacketDistributor;
 import twilightforest.components.entity.YetiThrowAttachment;
 import twilightforest.tags.TFEntityTypeTags;
 import twilightforest.events.HostileMountEvents;
@@ -87,7 +87,7 @@ public class ThrowRiderGoal extends MeleeAttackGoal {
 				player.push(throwVec.x(), throwVec.y(), throwVec.z());
 
 				if (player instanceof ServerPlayer server) {
-					PacketDistributor.sendToPlayer(server, new MovePlayerPacket(throwVec.x(), throwVec.y(), throwVec.z()));
+					ServerPlayNetworking.send(server, new MovePlayerPacket(throwVec.x(), throwVec.y(), throwVec.z()));
 				}
 			} else rider.push(throwVec.x(), throwVec.y(), throwVec.z());
 		}
