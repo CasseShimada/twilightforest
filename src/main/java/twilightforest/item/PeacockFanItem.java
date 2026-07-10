@@ -1,5 +1,7 @@
 package twilightforest.item;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -23,7 +25,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
-import twilightforest.network.PacketDistributor;
 import twilightforest.block.LightableBlock;
 import twilightforest.init.TFDataAttachments;
 import twilightforest.init.TFSounds;
@@ -53,7 +54,11 @@ public class PeacockFanItem extends Item {
 			stack.hurtAndBreak(fanned + 1, player, slot);
 			if (flag) {
 				TFDataAttachments.set(player, TFDataAttachments.FEATHER_FAN, true);
-				PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new UpdateFeatherFanFallPacket(player.getId(), true));
+				UpdateFeatherFanFallPacket packet = new UpdateFeatherFanFallPacket(player.getId(), true);
+				PlayerLookup.tracking(player).forEach(tracker -> ServerPlayNetworking.send(tracker, packet));
+				if (player instanceof ServerPlayer serverPlayer) {
+					ServerPlayNetworking.send(serverPlayer, packet);
+				}
 			} else {
 				AABB fanBox = this.getEffectAABB(player);
 				Vec3 lookVec = player.getLookAngle();
@@ -68,7 +73,7 @@ public class PeacockFanItem extends Item {
 								fanBox.minZ + level.getRandom().nextFloat() * (fanBox.maxZ - fanBox.minZ),
 								lookVec.x(), lookVec.y(), lookVec.z());
 						}
-						PacketDistributor.sendToPlayer(serverplayer, packet);
+						ServerPlayNetworking.send(serverplayer, packet);
 					}
 				}
 			}
@@ -127,7 +132,7 @@ public class PeacockFanItem extends Item {
 			}
 
 			if (entity instanceof ServerPlayer pushedPlayer && pushedPlayer != player && !pushedPlayer.isShiftKeyDown()) {
-				PacketDistributor.sendToPlayer(pushedPlayer, new MovePlayerPacket(moveVec.x(), moveVec.y(), moveVec.z()));
+				ServerPlayNetworking.send(pushedPlayer, new MovePlayerPacket(moveVec.x(), moveVec.y(), moveVec.z()));
 				player.getCooldowns().addCooldown(fan, 40);
 				fannedEntities += 2;
 			}
