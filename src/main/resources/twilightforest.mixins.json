@@ -52,6 +52,7 @@
     "client.BiomeColorsMixin",
     "client.ClientLevelMixin",
     "client.ClientAdvancementsAccessor",
+    "client.LocalPlayerMixin",
     "client.EntityRenderDispatcherMixin",
     "client.FogEnvironmentMixin",
     "client.CapeLayerMixin",

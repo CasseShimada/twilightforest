@@ -1,8 +1,6 @@
 package twilightforest.util;
 
 import net.minecraft.advancements.AdvancementHolder;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,8 +15,8 @@ public class PlayerHelper {
 		if (player instanceof ServerPlayer serverPlayer) {
 			ServerLevel world = serverPlayer.level();
 			return world.getServer().getAdvancements().get(advancementLocation);
-		} else if (player.level().isClientSide()) {
-			return getClientAdvancement(player, advancementLocation);
+		} else if (player instanceof ClientAdvancementAccess access) {
+			return access.twilightforest$getAdvancement(advancementLocation);
 		}
 
 		return null;
@@ -28,8 +26,8 @@ public class PlayerHelper {
 		if (player instanceof ServerPlayer) {
 			return holder != null && ((ServerPlayer) player).getAdvancements().getOrStartProgress(holder).isDone();
 		}
-		if (player.level().isClientSide()) {
-			return hasClientAdvancement(player, holder);
+		if (player instanceof ClientAdvancementAccess access) {
+			return access.twilightforest$hasAdvancement(holder);
 		}
 		return false;
 	}
@@ -49,39 +47,19 @@ public class PlayerHelper {
 				AdvancementHolder adv = world.getServer().getAdvancements().get(advancementLocation);
 				return adv != null && sp.getAdvancements().getOrStartProgress(adv).isDone();
 			}
-			if (player.level().isClientSide()) {
-				AdvancementHolder adv = getClientAdvancement(player, advancementLocation);
-				return adv != null && hasClientAdvancement(player, adv);
+			if (player instanceof ClientAdvancementAccess access) {
+				AdvancementHolder adv = access.twilightforest$getAdvancement(advancementLocation);
+				return adv != null && access.twilightforest$hasAdvancement(adv);
 			}
 			return false;
 		}
 		return true;
 	}
 
-	@Nullable
-	private static AdvancementHolder getClientAdvancement(Player player, Identifier advancementLocation) {
-		if (FabricLoader.getInstance().getEnvironmentType() != EnvType.CLIENT) {
-			return null;
-		}
+	public interface ClientAdvancementAccess {
+		@Nullable
+		AdvancementHolder twilightforest$getAdvancement(Identifier advancementLocation);
 
-		try {
-			Class<?> helper = Class.forName("twilightforest.client.ClientAdvancementHelper");
-			return (AdvancementHolder) helper.getMethod("getAdvancement", Player.class, Identifier.class).invoke(null, player, advancementLocation);
-		} catch (Throwable ignored) {
-			return null;
-		}
-	}
-
-	private static boolean hasClientAdvancement(Player player, @Nullable AdvancementHolder holder) {
-		if (FabricLoader.getInstance().getEnvironmentType() != EnvType.CLIENT) {
-			return false;
-		}
-
-		try {
-			Class<?> helper = Class.forName("twilightforest.client.ClientAdvancementHelper");
-			return (Boolean) helper.getMethod("hasAdvancement", Player.class, AdvancementHolder.class).invoke(null, player, holder);
-		} catch (Throwable ignored) {
-			return false;
-		}
+		boolean twilightforest$hasAdvancement(@Nullable AdvancementHolder holder);
 	}
 }
