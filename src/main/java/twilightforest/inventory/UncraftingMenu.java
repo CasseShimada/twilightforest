@@ -2,6 +2,7 @@ package twilightforest.inventory;
 
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Holder;
@@ -24,7 +25,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.Level;
-import twilightforest.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
@@ -405,7 +405,7 @@ public class UncraftingMenu extends AbstractCraftingMenu {
 		this.uncraftingMatrix.uncraftingCost = uncraftingCost;
 		this.uncraftingMatrix.recraftingCost = recraftingCost;
 		if (this.level instanceof ServerLevel) {
-			PacketDistributor.sendToPlayer((ServerPlayer) this.player, new UpdateUncraftingCostPacket(uncraftingCost, recraftingCost));
+			ServerPlayNetworking.send((ServerPlayer) this.player, new UpdateUncraftingCostPacket(uncraftingCost, recraftingCost));
 		}
 	}
 
