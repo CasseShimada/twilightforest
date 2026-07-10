@@ -1,7 +1,10 @@
 package twilightforest.events;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -21,7 +24,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.BlockHitResult;
-import twilightforest.network.PacketDistributor;
 import twilightforest.entity.monster.DeathTome;
 import twilightforest.entity.passive.Bighorn;
 import twilightforest.entity.passive.DwarfRabbit;
@@ -61,7 +63,11 @@ public class MiscEvents {
 		// we only have to check equipping, when its unequipped the sound instance handles the rest
 
 		if (living != null && !living.level().isClientSide() && slot == EquipmentSlot.HEAD && to.is(TFBlocks.CICADA.asItem())) {
-			PacketDistributor.sendToPlayersTrackingEntityAndSelf(living, new CreateMovingCicadaSoundPacket(living.getId()));
+			CreateMovingCicadaSoundPacket packet = new CreateMovingCicadaSoundPacket(living.getId());
+			PlayerLookup.tracking(living).forEach(player -> ServerPlayNetworking.send(player, packet));
+			if (living instanceof ServerPlayer player) {
+				ServerPlayNetworking.send(player, packet);
+			}
 		}
 	}
 
