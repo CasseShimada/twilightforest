@@ -37,12 +37,6 @@ public final class PacketDistributor {
 		return server;
 	}
 
-	public static void sendToPlayer(ServerPlayer player, CustomPacketPayload payload) {
-		Objects.requireNonNull(player, "player");
-		Objects.requireNonNull(payload, "payload");
-		ServerPlayNetworking.send(player, payload);
-	}
-
 	public static void sendToPlayersTrackingEntity(Entity entity, CustomPacketPayload payload) {
 		Objects.requireNonNull(entity, "entity");
 		Objects.requireNonNull(payload, "payload");
