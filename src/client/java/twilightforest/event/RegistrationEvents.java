@@ -28,6 +28,10 @@ import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.client.renderer.item.properties.conditional.ConditionalItemModelProperties;
+import net.minecraft.client.renderer.item.properties.numeric.RangeSelectItemModelProperties;
+import net.minecraft.client.renderer.item.properties.select.SelectItemModelProperties;
+import net.minecraft.client.renderer.special.SpecialModelRenderers;
 import net.minecraft.client.model.object.boat.BoatModel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
@@ -119,44 +123,44 @@ public class RegistrationEvents {
 	}
 
 	private static void registerItemModelTypes() {
-		registerLateBound(net.minecraft.client.renderer.special.SpecialModelRenderers.class,
+		registerLateBound(SpecialModelRenderers.ID_MAPPER, SpecialModelRenderers.class,
 			TwilightForestMod.prefix("tf_chest"), TFChestSpecialRenderer.Unbaked.MAP_CODEC);
-		registerLateBound(net.minecraft.client.renderer.special.SpecialModelRenderers.class,
+		registerLateBound(SpecialModelRenderers.ID_MAPPER, SpecialModelRenderers.class,
 			TwilightForestMod.prefix("skull_chest"), SkullChestSpecialRenderer.Unbaked.MAP_CODEC);
-		registerLateBound(net.minecraft.client.renderer.special.SpecialModelRenderers.class,
+		registerLateBound(SpecialModelRenderers.ID_MAPPER, SpecialModelRenderers.class,
 			TwilightForestMod.prefix("keepsake_casket"), KeepsakeCasketSpecialRenderer.Unbaked.MAP_CODEC);
-		registerLateBound(net.minecraft.client.renderer.special.SpecialModelRenderers.class,
+		registerLateBound(SpecialModelRenderers.ID_MAPPER, SpecialModelRenderers.class,
 			TwilightForestMod.prefix("candelabra"), CandelabraSpecialRenderer.Unbaked.MAP_CODEC);
-		registerLateBound(net.minecraft.client.renderer.special.SpecialModelRenderers.class,
+		registerLateBound(SpecialModelRenderers.ID_MAPPER, SpecialModelRenderers.class,
 			TwilightForestMod.prefix("cicada"), CicadaSpecialRenderer.Unbaked.MAP_CODEC);
-		registerLateBound(net.minecraft.client.renderer.special.SpecialModelRenderers.class,
+		registerLateBound(SpecialModelRenderers.ID_MAPPER, SpecialModelRenderers.class,
 			TwilightForestMod.prefix("firefly"), FireflySpecialRenderer.Unbaked.MAP_CODEC);
-		registerLateBound(net.minecraft.client.renderer.special.SpecialModelRenderers.class,
+		registerLateBound(SpecialModelRenderers.ID_MAPPER, SpecialModelRenderers.class,
 			TwilightForestMod.prefix("moonworm"), MoonwormSpecialRenderer.Unbaked.MAP_CODEC);
-		registerLateBound(net.minecraft.client.renderer.special.SpecialModelRenderers.class,
+		registerLateBound(SpecialModelRenderers.ID_MAPPER, SpecialModelRenderers.class,
 			TwilightForestMod.prefix("mason_jar"), MasonJarSpecialRenderer.Unbaked.MAP_CODEC);
-		registerLateBound(net.minecraft.client.renderer.special.SpecialModelRenderers.class,
+		registerLateBound(SpecialModelRenderers.ID_MAPPER, SpecialModelRenderers.class,
 			TwilightForestMod.prefix("skull_candle"), SkullCandleSpecialRenderer.Unbaked.MAP_CODEC);
-		registerLateBound(net.minecraft.client.renderer.special.SpecialModelRenderers.class,
+		registerLateBound(SpecialModelRenderers.ID_MAPPER, SpecialModelRenderers.class,
 			TwilightForestMod.prefix("boss_trophy"), TrophySpecialRenderer.Unbaked.MAP_CODEC);
-		registerLateBound(net.minecraft.client.renderer.special.SpecialModelRenderers.class,
+		registerLateBound(SpecialModelRenderers.ID_MAPPER, SpecialModelRenderers.class,
 			TwilightForestMod.prefix("mystic_crown"), MysticCrownSpecialRenderer.Unbaked.MAP_CODEC);
-		registerLateBound(net.minecraft.client.renderer.special.SpecialModelRenderers.class,
+		registerLateBound(SpecialModelRenderers.ID_MAPPER, SpecialModelRenderers.class,
 			TwilightForestMod.prefix("knightmetal_shield"), KnightmetalShieldSpecialRenderer.Unbaked.MAP_CODEC);
 
-		registerLateBound(net.minecraft.client.renderer.item.properties.conditional.ConditionalItemModelProperties.class,
+		registerLateBound(ConditionalItemModelProperties.ID_MAPPER, ConditionalItemModelProperties.class,
 			TwilightForestMod.prefix("natural_dimension"), NaturalDimension.TYPE);
-		registerLateBound(net.minecraft.client.renderer.item.properties.conditional.ConditionalItemModelProperties.class,
+		registerLateBound(ConditionalItemModelProperties.ID_MAPPER, ConditionalItemModelProperties.class,
 			TwilightForestMod.prefix("moonworm_queen_pulse"), MoonwormQueenPulse.TYPE);
-		registerLateBound(net.minecraft.client.renderer.item.properties.conditional.ConditionalItemModelProperties.class,
+		registerLateBound(ConditionalItemModelProperties.ID_MAPPER, ConditionalItemModelProperties.class,
 			TwilightForestMod.prefix("ore_meter_flash"), OreMeterFlash.TYPE);
 
-		registerLateBound(net.minecraft.client.renderer.item.properties.numeric.RangeSelectItemModelProperties.class,
+		registerLateBound(RangeSelectItemModelProperties.ID_MAPPER, RangeSelectItemModelProperties.class,
 			TwilightForestMod.prefix("potion_flask_dosage"), PotionFlaskDosage.TYPE);
-		registerLateBound(net.minecraft.client.renderer.item.properties.numeric.RangeSelectItemModelProperties.class,
+		registerLateBound(RangeSelectItemModelProperties.ID_MAPPER, RangeSelectItemModelProperties.class,
 			TwilightForestMod.prefix("potion_flask_damage"), PotionFlaskDamage.TYPE);
 
-		registerLateBound(net.minecraft.client.renderer.item.properties.select.SelectItemModelProperties.class,
+		registerLateBound(SelectItemModelProperties.ID_MAPPER, SelectItemModelProperties.class,
 			TwilightForestMod.prefix("experiment_115_variant"), Experiment115Type.TYPE);
 	}
 
@@ -169,21 +173,8 @@ public class RegistrationEvents {
 		});
 	}
 
-	@SuppressWarnings("unchecked")
-	private static <V> void registerLateBound(Class<?> owner, Identifier id, V value) {
+	private static <V> void registerLateBound(ExtraCodecs.LateBoundIdMapper<Identifier, V> mapper, Class<?> owner, Identifier id, V value) {
 		try {
-			java.lang.reflect.Field mapperField = null;
-			for (var field : owner.getDeclaredFields()) {
-				if (ExtraCodecs.LateBoundIdMapper.class.isAssignableFrom(field.getType())) {
-					mapperField = field;
-					break;
-				}
-			}
-			if (mapperField == null) {
-				throw new NoSuchFieldException("LateBoundIdMapper field not found in " + owner.getName());
-			}
-			mapperField.setAccessible(true);
-			ExtraCodecs.LateBoundIdMapper<Identifier, V> mapper = (ExtraCodecs.LateBoundIdMapper<Identifier, V>) mapperField.get(null);
 			mapper.put(id, value);
 		} catch (Throwable t) {
 			TwilightForestMod.LOGGER.warn("Failed to register item model entry {} in {}", id, owner.getName(), t);
