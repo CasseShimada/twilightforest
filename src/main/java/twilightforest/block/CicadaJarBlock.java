@@ -56,7 +56,7 @@ public class CicadaJarBlock extends JarBlock {
 	public void destroy(LevelAccessor accessor, BlockPos pos, BlockState state) {
 		super.destroy(accessor, pos, state);
 		if (accessor.isClientSide())
-			ClientSoundHelper.stopSound(TFSounds.CICADA.location(), SoundSource.BLOCKS);
+			ClientSoundHelper.stopSound(accessor, TFSounds.CICADA.location(), SoundSource.BLOCKS);
 	}
 
 	@Override

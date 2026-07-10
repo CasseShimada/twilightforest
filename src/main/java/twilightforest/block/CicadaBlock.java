@@ -50,6 +50,6 @@ public class CicadaBlock extends CritterBlock {
 	public void destroy(LevelAccessor accessor, BlockPos pos, BlockState state) {
 		super.destroy(accessor, pos, state);
 		if (accessor.isClientSide())
-			ClientSoundHelper.stopSound(TFSounds.CICADA.location(), SoundSource.NEUTRAL);
+			ClientSoundHelper.stopSound(accessor, TFSounds.CICADA.location(), SoundSource.NEUTRAL);
 	}
 }
