@@ -1,5 +1,6 @@
 package twilightforest.mixin.client;
 
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
@@ -14,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import twilightforest.init.TFDataComponents;
 import twilightforest.init.TFItems;
 import twilightforest.init.TFSounds;
-import twilightforest.network.ClientPacketDistributor;
 import twilightforest.network.WipeOreMeterPacket;
 
 @Mixin(Minecraft.class)
@@ -38,7 +38,7 @@ public class MinecraftMixin {
 			return;
 		}
 
-		ClientPacketDistributor.sendToServer(new WipeOreMeterPacket(InteractionHand.MAIN_HAND));
+		ClientPlayNetworking.send(new WipeOreMeterPacket(InteractionHand.MAIN_HAND));
 		stack.remove(TFDataComponents.ORE_DATA);
 		stack.remove(TFDataComponents.ORE_FILTER);
 		this.level.playSound(this.player, this.player.blockPosition(), TFSounds.ORE_METER_CLEAR, SoundSource.PLAYERS, 1.25F, this.level.getRandom().nextFloat() * 0.2F + 0.6F);
