@@ -72,10 +72,12 @@ import twilightforest.block.GiantBlock;
 import twilightforest.block.MiniatureStructureBlock;
 import twilightforest.block.entity.GrowingBeanstalkBlockEntity;
 import twilightforest.client.BugModelAnimationHelper;
+import twilightforest.client.ClientPortalHelper;
 import twilightforest.client.OptifineWarningScreen;
 import twilightforest.client.renderer.TFRenderPipelines;
 import twilightforest.client.renderer.RenderStateUtil;
 import twilightforest.client.renderer.TFWeatherRenderer;
+import twilightforest.components.entity.TFPortalAttachment;
 import twilightforest.config.TFConfig;
 import twilightforest.events.HostileMountEvents;
 import twilightforest.init.TFDataAttachments;
@@ -160,7 +162,11 @@ public class ClientEvents {
 			time++;
 
 			if (mc.player != null) {
-				TFDataAttachments.get(mc.player, TFDataAttachments.TF_PORTAL_COOLDOWN).tick(mc.player);
+				TFPortalAttachment portal = TFDataAttachments.get(mc.player, TFDataAttachments.TF_PORTAL_COOLDOWN);
+				portal.tick(mc.player);
+				if (portal.isInsidePortal() && ClientPortalHelper.handlePortalScreenClose(mc.player)) {
+					portal.setInPortal(false);
+				}
 			}
 
 			lastAurora = aurora;

@@ -10,10 +10,7 @@ public final class ClientPortalHelper {
 	private ClientPortalHelper() {
 	}
 
-	public static boolean handlePortalScreenClose(Player player, boolean inPortal) {
-		if (!inPortal) {
-			return false;
-		}
+	public static boolean handlePortalScreenClose(Player player) {
 		if (!(player instanceof LocalPlayer local)) {
 			return false;
 		}
