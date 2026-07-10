@@ -1,5 +1,6 @@
 package twilightforest.item;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -25,7 +26,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import twilightforest.network.PacketDistributor;
 import twilightforest.tags.TFBlockTags;
 import twilightforest.init.TFParticleType;
 import twilightforest.init.TFSounds;
@@ -169,7 +169,7 @@ public class OreMagnetItem extends Item {
 									Vec3 offset = new Vec3((level.getRandom().nextDouble() - 0.5D) * 1.25D, (level.getRandom().nextDouble() - 0.5D) * 1.25D, (level.getRandom().nextDouble() - 0.5D) * 1.25D);
 									particlePacket.queueParticle(TFParticleType.LOG_CORE_PARTICLE, xyz.add(offset), new Vec3(0.8, 0.9, 0.2));
 								}
-								PacketDistributor.sendToPlayer(serverplayer, particlePacket);
+								ServerPlayNetworking.send(serverplayer, particlePacket);
 							}
 						}
 					}
