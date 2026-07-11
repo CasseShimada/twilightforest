@@ -38,7 +38,7 @@ public class FinalCastleStructure extends ControlledSpawningStructure {
 
 	@Override
 	protected @Nullable StructurePiece getFirstPiece(GenerationContext context, RandomSource random, ChunkPos chunkPos, int x, int y, int z) {
-		return new FinalCastleMainComponent(0, x, y, z);
+		return new FinalCastleMainComponent(0, x, y, z, context.structureTemplateManager());
 	}
 
 	@Override

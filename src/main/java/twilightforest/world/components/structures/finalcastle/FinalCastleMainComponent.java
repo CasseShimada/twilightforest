@@ -15,6 +15,7 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.mixin.accessor.StructurePiecesBuilderAccessor;
@@ -28,13 +29,16 @@ import java.util.List;
 
 
 public class FinalCastleMainComponent extends TFStructureComponentOld {
+	private final StructureTemplateManager structureTemplateManager;
 
 	public FinalCastleMainComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
 		super(TFStructurePieceTypes.TFFCMain, nbt);
+		this.structureTemplateManager = ctx.structureTemplateManager();
 	}
 
-	public FinalCastleMainComponent(int i, int x, int y, int z) {
+	public FinalCastleMainComponent(int i, int x, int y, int z, StructureTemplateManager structureTemplateManager) {
 		super(TFStructurePieceTypes.TFFCMain, i, x, y, z);
+		this.structureTemplateManager = structureTemplateManager;
 		this.setOrientation(Direction.SOUTH);
 		this.spawnListIndex = 1; // main monsters
 
@@ -57,7 +61,7 @@ public class FinalCastleMainComponent extends TFStructureComponentOld {
 		roof.addChildren(this, list, rand);
 
 		// boss gazebo on roof
-		TFStructureComponentOld gazebo = new FinalCastleBossGazeboComponent(5, this, getLocatorPosition().getX(), getLocatorPosition().getY(), getLocatorPosition().getZ());
+		TFStructureComponentOld gazebo = new FinalCastleBossGazeboComponent(5, this, getLocatorPosition().getX(), getLocatorPosition().getY(), getLocatorPosition().getZ(), this.structureTemplateManager);
 		list.addPiece(gazebo);
 		gazebo.addChildren(this, list, rand);
 
@@ -67,7 +71,7 @@ public class FinalCastleMainComponent extends TFStructureComponentOld {
 		list.addPiece(tower0);
 		tower0.addChildren(this, list, rand);
 
-		FinalCastleLargeTowerComponent tower1 = new FinalCastleLargeTowerComponent(3, boundingBox.maxX(), boundingBox.minY() + 3, boundingBox.minZ(), Direction.EAST);
+		FinalCastleLargeTowerComponent tower1 = new FinalCastleLargeTowerComponent(3, boundingBox.maxX(), boundingBox.minY() + 3, boundingBox.minZ(), Direction.EAST, this.structureTemplateManager);
 		list.addPiece(tower1);
 		tower1.addChildren(this, list, rand);
 
