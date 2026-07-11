@@ -1,5 +1,7 @@
 package twilightforest.block;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -25,7 +27,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import twilightforest.network.PacketDistributor;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.block.entity.bookshelf.ChiseledCanopyShelfBlockEntity;
 import twilightforest.init.TFBlockEntities;
@@ -84,7 +86,7 @@ public class ChiseledCanopyShelfBlock extends ChiseledBookShelfBlock {
 					(double) pos.getZ() + 0.5D + level.getRandom().nextGaussian() * 0.02D * level.getRandom().nextGaussian(),
 					0.15F * level.getRandom().nextGaussian(), 0.15F * level.getRandom().nextGaussian(), 0.15F * level.getRandom().nextGaussian());
 			}
-			PacketDistributor.sendToPlayersNear(serverLevel, null, pos.getX(), pos.getY(), pos.getZ(), 32.0D, particlePacket);
+			PlayerLookup.around(serverLevel, new Vec3(pos.getX(), pos.getY(), pos.getZ()), 32.0D).forEach(tracker -> ServerPlayNetworking.send(tracker, particlePacket));
 		}
 		super.playerDestroy(level, player, pos, state, entity, stack);
 	}
