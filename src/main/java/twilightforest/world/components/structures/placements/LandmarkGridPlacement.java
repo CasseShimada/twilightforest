@@ -41,7 +41,7 @@ public class LandmarkGridPlacement extends StructurePlacement {
 		if (!LegacyLandmarkPlacements.chunkHasLandmarkCenter(chunkX, chunkZ))
 			return false;
 
-		return this.landmark.isEmpty() || LegacyLandmarkPlacements.pickVarietyLandmark(chunkX, chunkZ) == this.landmark.get();
+		return this.landmark.isEmpty() || LegacyLandmarkPlacements.pickVarietyLandmark(state.getLevelSeed(), chunkX, chunkZ) == this.landmark.get();
 	}
 
 	@Override

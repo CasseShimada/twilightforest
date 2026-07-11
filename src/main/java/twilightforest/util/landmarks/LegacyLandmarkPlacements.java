@@ -104,6 +104,10 @@ public class LegacyLandmarkPlacements {
 	}
 
 	public static ResourceKey<Structure> pickVarietyLandmark(int chunkX, int chunkZ) {
+		return pickVarietyLandmark(WorldUtil.getOverworldSeed(), chunkX, chunkZ);
+	}
+
+	public static ResourceKey<Structure> pickVarietyLandmark(long worldSeed, int chunkX, int chunkZ) {
 		// set the chunkX and chunkZ to the center of the biome in case they arent already
 		chunkX = Math.round(chunkX / 16F) * 16;
 		chunkZ = Math.round(chunkZ / 16F) * 16;
@@ -123,7 +127,7 @@ public class LegacyLandmarkPlacements {
 
 		// okay, well that takes care of most special cases
 		return VARIETY_LANDMARKS
-			.getRandom(new LegacyRandomSource(WorldUtil.getOverworldSeed() + chunkX * 25117L + chunkZ * 151121L))
+			.getRandom(new LegacyRandomSource(worldSeed + chunkX * 25117L + chunkZ * 151121L))
 			.orElse(TFStructures.HOLLOW_HILL_SMALL);
 	}
 
