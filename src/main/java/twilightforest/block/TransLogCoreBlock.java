@@ -1,5 +1,7 @@
 package twilightforest.block;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
@@ -15,7 +17,6 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
 import net.minecraft.world.phys.Vec3;
-import twilightforest.network.PacketDistributor;
 import twilightforest.config.TFConfig;
 import twilightforest.init.TFBiomes;
 import twilightforest.init.TFParticleType;
@@ -80,7 +81,7 @@ public class TransLogCoreBlock extends SpecialMagicLogBlock {
 				Vec3 offset = new Vec3(Math.cos(angle), 0.0D, Math.sin(angle)).scale(2.0D);
 				particlePacket.queueParticle(TFParticleType.TRANSFORMATION_PARTICLE, xyz.add(offset), Vec3.ZERO.subtract(offset));
 			}
-			PacketDistributor.sendToPlayersNear(level, null, xyz.x(), xyz.y(), xyz.z(), 64.0D, particlePacket);
+			PlayerLookup.around(level, xyz, 64.0D).forEach(player -> ServerPlayNetworking.send(player, particlePacket));
 			break;
 		}
 	}

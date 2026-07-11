@@ -1,5 +1,7 @@
 package twilightforest.block;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -17,7 +19,6 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import twilightforest.network.PacketDistributor;
 import twilightforest.config.TFConfig;
 import twilightforest.tags.TFEntityTypeTags;
 import twilightforest.init.TFParticleType;
@@ -138,7 +139,7 @@ public class SortLogCoreBlock extends SpecialMagicLogBlock {
 									double y = diff.y - 1.75D + rand.nextDouble() * 0.5D;
 									double z = diff.z - 0.25D + rand.nextDouble() * 0.5D;
 									particlePacket.queueParticle(TFParticleType.SORTING_PARTICLE, xyz, new Vec3(x, y, z).scale(1D / len));
-									PacketDistributor.sendToPlayersNear(level, null, xyz.x(), xyz.y(), xyz.z(), 64.0D, particlePacket);
+									PlayerLookup.around(level, xyz, 64.0D).forEach(player -> ServerPlayNetworking.send(player, particlePacket));
 								}
 							}
 							break;
