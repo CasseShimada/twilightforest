@@ -62,7 +62,7 @@ public class LichTowerStructure extends ControlledSpawningStructure implements C
 
 		// getFirstPiece() call is wrapped in an Optional#ofNullable
 		//noinspection DataFlowIssue
-		return placeContext == null ? null : new LichTowerFoyer(context.structureTemplateManager(), placeContext, true, random.nextBoolean());
+		return placeContext == null ? null : new LichTowerFoyer(context.structureTemplateManager(), context.registryAccess(), placeContext, true, random.nextBoolean());
 	}
 
 	@Override

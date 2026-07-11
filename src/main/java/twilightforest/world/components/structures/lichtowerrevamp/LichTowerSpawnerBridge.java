@@ -14,7 +14,6 @@ import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
-import twilightforest.network.PacketDistributor;
 import twilightforest.world.components.structures.PieceBeardifierModifier;
 import twilightforest.TFRegistries;
 import twilightforest.init.TFStructurePieceTypes;
@@ -26,7 +25,6 @@ import twilightforest.world.components.processors.WoodMultiPaletteSwizzle;
 import twilightforest.world.components.structures.TwilightJigsawPiece;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public class LichTowerSpawnerBridge extends TwilightJigsawPiece implements PieceBeardifierModifier {
@@ -61,7 +59,7 @@ public class LichTowerSpawnerBridge extends TwilightJigsawPiece implements Piece
 		}
 	}
 
-	public LichTowerSpawnerBridge(int genDepth, StructureTemplateManager structureManager, Identifier templateLocation, JigsawPlaceContext jigsawContext, boolean invertedPalette) {
+	public LichTowerSpawnerBridge(int genDepth, StructureTemplateManager structureManager, RegistryAccess registryAccess, Identifier templateLocation, JigsawPlaceContext jigsawContext, boolean invertedPalette) {
 		super(TFStructurePieceTypes.LICH_SPAWNER_BRIDGE, genDepth, structureManager, templateLocation, jigsawContext);
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(lichTowerUtil.getCentralBridgeSpawnerProcessor()));
@@ -69,7 +67,6 @@ public class LichTowerSpawnerBridge extends TwilightJigsawPiece implements Piece
 		this.invertedPalette = invertedPalette;
 
 		if (this.invertedPalette) {
-			RegistryAccess registryAccess = Objects.requireNonNull(PacketDistributor.getServer()).registryAccess();
 			addInvertedWoodProcessors(registryAccess, this.placeSettings);
 		}
 	}

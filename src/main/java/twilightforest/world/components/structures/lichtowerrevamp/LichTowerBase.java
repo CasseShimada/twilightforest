@@ -2,6 +2,7 @@ package twilightforest.world.components.structures.lichtowerrevamp;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
@@ -34,19 +35,22 @@ import twilightforest.world.components.structures.util.SortablePiece;
 public final class LichTowerBase extends TwilightJigsawPiece implements PieceBeardifierModifier, SpawnIndexProvider, SortablePiece {
 	private static final LichTowerUtil lichTowerUtil = new LichTowerUtil();
 
+	private final RegistryAccess registryAccess;
 	private final int casketWingIndex;
 
 	public LichTowerBase(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
 		super(TFStructurePieceTypes.LICH_TOWER_BASE, compoundTag, ctx, readSettings(compoundTag));
 
+		this.registryAccess = ctx.registryAccess();
 		this.casketWingIndex = compoundTag.getIntOr("CasketWingIdx", -1);
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(TrimProcessor.INSTANCE));
 	}
 
-	public LichTowerBase(StructureTemplateManager structureManager, JigsawPlaceContext jigsawContext) {
+	public LichTowerBase(StructureTemplateManager structureManager, RegistryAccess registryAccess, JigsawPlaceContext jigsawContext) {
 		super(TFStructurePieceTypes.LICH_TOWER_BASE, 1, structureManager, TwilightForestMod.prefix("lich_tower/tower_base"), jigsawContext);
 
+		this.registryAccess = registryAccess;
 		this.boundingBox = BoundingBoxUtils.cloneWithAdjustments(this.boundingBox, 0, 0, 0, 0, 30,0);
 		this.casketWingIndex = this.firstMatchIndex(r -> "twilightforest:lich_tower/bridge".equals(r.target()));
 
@@ -63,7 +67,7 @@ public final class LichTowerBase extends TwilightJigsawPiece implements PieceBea
 	@Override
 	protected void processJigsaw(StructurePiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, int jigsawIndex) {
 		switch (connection.target()) {
-			case "twilightforest:lich_tower/tower_below" -> LichTowerSegment.buildTowerBySegments(pieceAccessor, random, connection.pos(), connection.orientation(), this, this.structureManager, random.nextIntBetweenInclusive(12, 15));
+			case "twilightforest:lich_tower/tower_below" -> LichTowerSegment.buildTowerBySegments(pieceAccessor, random, connection.pos(), connection.orientation(), this, this.structureManager, this.registryAccess, random.nextIntBetweenInclusive(12, 15));
 			case "twilightforest:lich_tower/bridge" -> {
 				Identifier room;
 				if (jigsawIndex == this.casketWingIndex) {

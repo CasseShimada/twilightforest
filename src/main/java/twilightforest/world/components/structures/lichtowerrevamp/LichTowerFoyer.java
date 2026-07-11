@@ -2,6 +2,7 @@ package twilightforest.world.components.structures.lichtowerrevamp;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.RandomizableContainer;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class LichTowerFoyer extends TwilightJigsawPiece implements PieceBeardifierModifier, SpawnIndexProvider {
+	private final RegistryAccess registryAccess;
 	private final boolean putChest;
 	private final boolean chestSide;
 
@@ -40,15 +42,17 @@ public final class LichTowerFoyer extends TwilightJigsawPiece implements PieceBe
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings);
 
+		this.registryAccess = ctx.registryAccess();
 		this.putChest = compoundTag.getBooleanOr("put_chest", false);
 		this.chestSide = compoundTag.getBooleanOr("chest_side", false);
 	}
 
-	public LichTowerFoyer(StructureTemplateManager structureManager, JigsawPlaceContext placeContext, boolean putChest, boolean chestSide) {
+	public LichTowerFoyer(StructureTemplateManager structureManager, RegistryAccess registryAccess, JigsawPlaceContext placeContext, boolean putChest, boolean chestSide) {
 		super(TFStructurePieceTypes.LICH_TOWER_FOYER, 0, structureManager, TwilightForestMod.prefix("lich_tower/tower_foyer"), placeContext);
 
 		LichTowerUtil.addDefaultProcessors(this.placeSettings);
 
+		this.registryAccess = registryAccess;
 		this.putChest = putChest;
 		this.chestSide = chestSide;
 	}
@@ -70,7 +74,7 @@ public final class LichTowerFoyer extends TwilightJigsawPiece implements PieceBe
 
 			if (placeableJunction == null) return;
 
-			StructurePiece towerBase = new LichTowerBase(this.structureManager, placeableJunction);
+			StructurePiece towerBase = new LichTowerBase(this.structureManager, this.registryAccess, placeableJunction);
 			pieceAccessor.addPiece(towerBase);
 			towerBase.addChildren(this, pieceAccessor, random);
 		} else if ("twilightforest:shelf".equals(connection.target()) && random.nextFloat() <= 0.5f) {
