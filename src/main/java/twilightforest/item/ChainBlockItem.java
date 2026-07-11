@@ -1,7 +1,5 @@
 package twilightforest.item;
 
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -14,7 +12,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.ToolMaterial;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +20,6 @@ import twilightforest.init.TFDataComponents;
 import twilightforest.init.TFEnchantments;
 import twilightforest.init.TFEntities;
 import twilightforest.init.TFSounds;
-import twilightforest.network.PacketDistributor;
 import twilightforest.tags.TFBlockTags;
 
 import java.util.UUID;
@@ -91,10 +87,12 @@ public class ChainBlockItem extends Item {
 	public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
 		//dont try to check harvest level if we arent thrown
 		if (stack.get(TFDataComponents.THROWN_PROJECTILE) == null || !state.is(TFBlockTags.MINEABLE_WITH_BLOCK_AND_CHAIN)) return false;
-		MinecraftServer server = PacketDistributor.getServer();
-		if (server != null) {
-			int destruction = EnchantmentHelper.getItemEnchantmentLevel(server.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(TFEnchantments.DESTRUCTION), stack);
-			if (destruction > 0) return !state.is(this.getHarvestLevel(destruction).incorrectBlocksForDrops()); //FIXME 1.21.3
+		var enchantments = stack.getEnchantments();
+		for (var enchantment : enchantments.keySet()) {
+			if (enchantment.is(TFEnchantments.DESTRUCTION)) {
+				int destruction = enchantments.getLevel(enchantment);
+				return destruction > 0 && !state.is(this.getHarvestLevel(destruction).incorrectBlocksForDrops()); //FIXME 1.21.3
+			}
 		}
 		return false;
 	}
