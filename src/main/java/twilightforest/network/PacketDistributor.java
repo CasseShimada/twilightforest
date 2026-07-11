@@ -7,7 +7,6 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,14 +34,6 @@ public final class PacketDistributor {
 	@Nullable
 	public static MinecraftServer getServer() {
 		return server;
-	}
-
-	public static void sendToPlayersTrackingEntity(Entity entity, CustomPacketPayload payload) {
-		Objects.requireNonNull(entity, "entity");
-		Objects.requireNonNull(payload, "payload");
-		for (ServerPlayer player : PlayerLookup.tracking(entity)) {
-			ServerPlayNetworking.send(player, payload);
-		}
 	}
 
 	public static void sendToPlayersNear(ServerLevel level, ServerPlayer excluded, double x, double y, double z, double radius, CustomPacketPayload payload) {

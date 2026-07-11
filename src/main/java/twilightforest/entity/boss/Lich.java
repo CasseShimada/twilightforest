@@ -1,5 +1,7 @@
 package twilightforest.entity.boss;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.particles.ColorParticleOption;
@@ -50,7 +52,6 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import twilightforest.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.block.LightableBlock;
 import twilightforest.block.OminousCandleBlock;
@@ -470,7 +471,7 @@ public class Lich extends BaseTFBoss {
 						particlePacket.queueParticle(ParticleTypes.SMOKE, x, y, z, 0.0D, 0.0D, 0.0D);
 					}
 
-					PacketDistributor.sendToPlayersTrackingEntity(this, particlePacket);
+					PlayerLookup.tracking(this).forEach(player -> ServerPlayNetworking.send(player, particlePacket));
 
 					clone.remove(Entity.RemovalReason.DISCARDED);
 				}
@@ -684,7 +685,7 @@ public class Lich extends BaseTFBoss {
 				}
 			}
 
-			PacketDistributor.sendToPlayersTrackingEntity(this, particlePacket);
+			PlayerLookup.tracking(this).forEach(player -> ServerPlayNetworking.send(player, particlePacket));
 		}
 	}
 
@@ -703,7 +704,7 @@ public class Lich extends BaseTFBoss {
 						packet.queueParticle(ColorParticleOption.create(TFParticleType.MAGIC_EFFECT, red, green, blue), tx, ty, tz, 0.0D, 0.0D, 0.0D);
 					}
 
-					PacketDistributor.sendToPlayersTrackingEntity(this, packet);
+					PlayerLookup.tracking(this).forEach(player -> ServerPlayNetworking.send(player, packet));
 				}
 			}
 		}
