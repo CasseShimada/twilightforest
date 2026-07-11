@@ -1,5 +1,7 @@
 package twilightforest.entity.monster;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -29,7 +31,6 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
-import twilightforest.network.PacketDistributor;
 import twilightforest.tags.TFItemTags;
 import twilightforest.entity.ai.goal.FlockToSameKindGoal;
 import twilightforest.entity.ai.goal.PanicOnFlockDeathGoal;
@@ -168,7 +169,7 @@ public class Kobold extends Monster {
 						vec31.z() + vec3.z() * this.random.nextGaussian(),
 						0.0D, 0.0D, 0.0D));
 			}
-			PacketDistributor.sendToPlayersTrackingEntity(this, particlePacket);
+			PlayerLookup.tracking(this).forEach(player -> ServerPlayNetworking.send(player, particlePacket));
 		}
 	}
 
