@@ -1,5 +1,7 @@
 package twilightforest.block;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.*;
 import net.minecraft.server.level.ServerLevel;
@@ -23,7 +25,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
-import twilightforest.network.PacketDistributor;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.block.entity.TrophyBlockEntity;
 import twilightforest.enums.BossVariant;
@@ -231,7 +233,7 @@ public abstract class AbstractTrophyBlock extends BaseEntityBlock {
 					break;
 			}
 
-			PacketDistributor.sendToPlayersNear(server, null, pos.getX(), pos.getY(), pos.getZ(), 32.0F, particlePacket);
+			PlayerLookup.around(server, new Vec3(pos.getX(), pos.getY(), pos.getZ()), 32.0F).forEach(player -> ServerPlayNetworking.send(player, particlePacket));
 		}
 	}
 }
