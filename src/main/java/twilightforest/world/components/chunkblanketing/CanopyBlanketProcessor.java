@@ -22,7 +22,6 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 import net.minecraft.world.level.levelgen.structure.Structure;
 import twilightforest.init.custom.ChunkBlanketProcessors;
 import twilightforest.util.landmarks.LegacyLandmarkPlacements;
-import twilightforest.util.WorldUtil;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -77,7 +76,7 @@ public record CanopyBlanketProcessor(HolderSet<Biome> biomesForApplication, Bloc
 		int hx = nearestCenter.getX();
 		int hz = nearestCenter.getZ();
 
-		RandomSource random = new XoroshiroRandomSource(WorldUtil.getOverworldSeed(), Mth.getSeed(chunkOrigin));
+		RandomSource random = new XoroshiroRandomSource(level.getSeed(), Mth.getSeed(chunkOrigin));
 
 		for (int dZ = 0; dZ < 16; dZ++) {
 			for (int dX = 0; dX < 16; dX++) {
