@@ -9,7 +9,6 @@ import com.mojang.serialization.JsonOps;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
@@ -23,7 +22,6 @@ import twilightforest.util.datamaps.CrumbledBlock;
 import twilightforest.util.datamaps.EntityTransformation;
 import twilightforest.util.datamaps.MagicMapBiomeColor;
 import twilightforest.util.datamaps.OreMapOreColor;
-import twilightforest.network.PacketDistributor;
 import twilightforest.item.MagicMapItem;
 
 import java.io.Reader;
@@ -76,16 +74,6 @@ public final class TFDataMaps {
 	@Nullable
 	public static MagicMapBiomeColor getMagicMapColor(Holder<Biome> biome) {
 		return biome.unwrapKey().map(key -> MAGIC_MAP_BIOME_COLOR.get(key.identifier())).orElse(null);
-	}
-
-	@Nullable
-	public static MagicMapBiomeColor getMagicMapColor(Biome biome) {
-		var server = PacketDistributor.getServer();
-		if (server == null) {
-			return null;
-		}
-		Identifier key = server.registryAccess().lookupOrThrow(Registries.BIOME).getKey(biome);
-		return key == null ? null : MAGIC_MAP_BIOME_COLOR.get(key);
 	}
 
 	private static <T> ReloadedDataMap<T> dataMap(String path, Codec<T> codec) {
