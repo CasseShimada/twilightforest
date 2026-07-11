@@ -45,13 +45,6 @@ public final class PacketDistributor {
 		}
 	}
 
-	public static void sendToPlayersTrackingEntityAndSelf(Entity entity, CustomPacketPayload payload) {
-		sendToPlayersTrackingEntity(entity, payload);
-		if (entity instanceof ServerPlayer sp) {
-			ServerPlayNetworking.send(sp, payload);
-		}
-	}
-
 	public static void sendToPlayersNear(ServerLevel level, ServerPlayer excluded, double x, double y, double z, double radius, CustomPacketPayload payload) {
 		Objects.requireNonNull(level, "level");
 		Objects.requireNonNull(payload, "payload");
