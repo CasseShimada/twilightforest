@@ -1,12 +1,13 @@
 package twilightforest.util.multiparts;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.entity.TFMultipartEntity;
 import twilightforest.entity.TFPart;
-import twilightforest.network.PacketDistributor;
 import twilightforest.network.UpdateTFMultipartPacket;
 
 import java.util.ArrayList;
@@ -119,7 +120,8 @@ public class MultipartEntityUtil {
 	public Entity sendDirtyMultipartEntityData(Entity entity) {
 		if (entity instanceof TFMultipartEntity) {
 			TFPart.assignPartIDs(entity);
-			PacketDistributor.sendToPlayersTrackingEntity(entity, new UpdateTFMultipartPacket(entity));
+			UpdateTFMultipartPacket packet = new UpdateTFMultipartPacket(entity);
+			PlayerLookup.tracking(entity).forEach(player -> ServerPlayNetworking.send(player, packet));
 		}
 		return entity;
 	}
