@@ -1,5 +1,7 @@
 package twilightforest.entity.monster;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -29,7 +31,6 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import twilightforest.network.PacketDistributor;
 import twilightforest.TwilightForestMod;
 import twilightforest.entity.ai.goal.HeavySpearAttackGoal;
 import twilightforest.init.TFSounds;
@@ -213,7 +214,7 @@ public class UpperGoblinKnight extends Monster {
 					pz + (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.25F * this.getRandom().nextGaussian(),
 					0, 0, 0);
 			}
-			PacketDistributor.sendToPlayersTrackingEntity(this, particlePacket);
+			PlayerLookup.tracking(this).forEach(player -> ServerPlayNetworking.send(player, particlePacket));
 		}
 
 		// damage things in front that aren't us or our "mount"
