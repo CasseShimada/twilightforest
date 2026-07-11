@@ -4,14 +4,13 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.util.random.WeightedList;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import twilightforest.init.TFBiomes;
 import twilightforest.init.TFStructures;
-import twilightforest.util.WorldUtil;
 import twilightforest.util.iterators.XZQuadrantIterator;
 
 import java.util.Map;
@@ -74,7 +73,7 @@ public class LegacyLandmarkPlacements {
 		return deltaChunkX + deltaChunkZ;
 	}
 
-	public static ResourceKey<Structure> pickLandmarkAtBlock(int blockX, int blockZ, LevelReader world) {
+	public static ResourceKey<Structure> pickLandmarkAtBlock(int blockX, int blockZ, ServerLevelAccessor world) {
 		return pickLandmarkForChunk(blockX >> 4, blockZ >> 4, world);
 	}
 
@@ -83,7 +82,7 @@ public class LegacyLandmarkPlacements {
 	 *
 	 * @return The feature in the chunk "region"
 	 */
-	public static ResourceKey<Structure> pickLandmarkForChunk(int chunkX, int chunkZ, LevelReader world) {
+	public static ResourceKey<Structure> pickLandmarkForChunk(int chunkX, int chunkZ, ServerLevelAccessor world) {
 		// set the chunkX and chunkZ to the center of the biome
 		chunkX = Math.round(chunkX / 16F) * 16;
 		chunkZ = Math.round(chunkZ / 16F) * 16;
@@ -100,11 +99,7 @@ public class LegacyLandmarkPlacements {
 				return biomeFeature;
 		}
 
-		return pickVarietyLandmark(chunkX, chunkZ);
-	}
-
-	public static ResourceKey<Structure> pickVarietyLandmark(int chunkX, int chunkZ) {
-		return pickVarietyLandmark(WorldUtil.getOverworldSeed(), chunkX, chunkZ);
+		return pickVarietyLandmark(world.getLevel().getSeed(), chunkX, chunkZ);
 	}
 
 	public static ResourceKey<Structure> pickVarietyLandmark(long worldSeed, int chunkX, int chunkZ) {

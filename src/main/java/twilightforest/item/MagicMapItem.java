@@ -112,7 +112,7 @@ public class MagicMapItem extends MapItem {
 
 	@Override
 	public void update(Level level, Entity viewer, MapItemSavedData data) {
-		if (level.dimension() == data.dimension && viewer instanceof Player && !level.isClientSide()) {
+		if (level.dimension() == data.dimension && viewer instanceof Player && level instanceof ServerLevel serverLevel) {
 			int biomesPerPixel = 4;
 			int blocksPerPixel = 16; // don't even bother with the scale, just hardcode it
 			int centerX = data.centerX;
@@ -168,7 +168,7 @@ public class MagicMapItem extends MapItem {
 							int worldX = (centerX / blocksPerPixel + xPixel - 64) * blocksPerPixel;
 							int worldZ = (centerZ / blocksPerPixel + zPixel - 64) * blocksPerPixel;
 							if (LegacyLandmarkPlacements.blockIsInLandmarkCenter(worldX, worldZ)) {
-								ResourceKey<Structure> structureKey = LegacyLandmarkPlacements.pickLandmarkAtBlock(worldX, worldZ, level);
+								ResourceKey<Structure> structureKey = LegacyLandmarkPlacements.pickLandmarkAtBlock(worldX, worldZ, serverLevel);
 								// Filters by structures we want to give icons for
 								Optional<Holder.Reference<Structure>> structureRefOpt = structureRegistry.get(structureKey);
 								if (structureRefOpt.map(structureRef -> structureRef.is(TFStructureTags.LANDMARK)).orElse(false)) {
