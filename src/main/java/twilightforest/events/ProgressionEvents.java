@@ -1,5 +1,7 @@
 package twilightforest.events;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.ServerLevel;
@@ -12,9 +14,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.TriState;
 import net.fabricmc.fabric.api.entity.FakePlayer;
-import twilightforest.network.PacketDistributor;
 import twilightforest.TwilightForestMod;
 import twilightforest.tags.TFBlockTags;
 import twilightforest.entity.monster.Kobold;
@@ -84,7 +86,8 @@ public class ProgressionEvents {
 	}
 
 	private static void sendAreaProtectionPacket(ServerLevel level, BlockPos pos, List<BoundingBox> sbb) {
-		PacketDistributor.sendToPlayersNear(level, null, pos.getX(), pos.getY(), pos.getZ(), 64, new AreaProtectionPacket(sbb, pos));
+		AreaProtectionPacket packet = new AreaProtectionPacket(sbb, pos);
+		PlayerLookup.around(level, new Vec3(pos.getX(), pos.getY(), pos.getZ()), 64).forEach(player -> ServerPlayNetworking.send(player, packet));
 	}
 
 	public static boolean shouldCancelAttackInProtectedArea(LivingEntity target, Entity sourceEntity) {
