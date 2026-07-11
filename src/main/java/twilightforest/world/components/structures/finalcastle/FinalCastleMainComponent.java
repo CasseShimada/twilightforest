@@ -30,15 +30,18 @@ import java.util.List;
 
 public class FinalCastleMainComponent extends TFStructureComponentOld {
 	private final StructureTemplateManager structureTemplateManager;
+	private final long worldSeed;
 
 	public FinalCastleMainComponent(StructurePieceSerializationContext ctx, CompoundTag nbt) {
 		super(TFStructurePieceTypes.TFFCMain, nbt);
 		this.structureTemplateManager = ctx.structureTemplateManager();
+		this.worldSeed = 0L;
 	}
 
-	public FinalCastleMainComponent(int i, int x, int y, int z, StructureTemplateManager structureTemplateManager) {
+	public FinalCastleMainComponent(int i, int x, int y, int z, StructureTemplateManager structureTemplateManager, long worldSeed) {
 		super(TFStructurePieceTypes.TFFCMain, i, x, y, z);
 		this.structureTemplateManager = structureTemplateManager;
+		this.worldSeed = worldSeed;
 		this.setOrientation(Direction.SOUTH);
 		this.spawnListIndex = 1; // main monsters
 
@@ -108,13 +111,13 @@ public class FinalCastleMainComponent extends TFStructureComponentOld {
 
 		// mural on front
 		BlockPos mc = this.offsetTowerCCoords(48, 23, 25, 1, Direction.SOUTH);
-		FinalCastleMuralComponent mural0 = new FinalCastleMuralComponent(7, mc.getX(), mc.getY(), mc.getZ(), 35, 30, Direction.SOUTH);
+		FinalCastleMuralComponent mural0 = new FinalCastleMuralComponent(7, mc.getX(), mc.getY(), mc.getZ(), 35, 30, Direction.SOUTH, this.worldSeed);
 		list.addPiece(mural0);
 		mural0.addChildren(this, list, rand);
 
 		// mural inside
 		BlockPos mc1 = this.offsetTowerCCoords(48, 33, 24, -1, Direction.SOUTH);
-		FinalCastleMuralComponent mural1 = new FinalCastleMuralComponent(7, mc1.getX(), mc1.getY(), mc.getZ(), 19, 12, Direction.NORTH);
+		FinalCastleMuralComponent mural1 = new FinalCastleMuralComponent(7, mc1.getX(), mc1.getY(), mc.getZ(), 19, 12, Direction.NORTH, this.worldSeed);
 		list.addPiece(mural1);
 		mural1.addChildren(this, list, rand);
 

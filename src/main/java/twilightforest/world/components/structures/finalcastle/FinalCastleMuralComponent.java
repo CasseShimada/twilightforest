@@ -32,12 +32,12 @@ public class FinalCastleMuralComponent extends TFStructureComponentOld {
 		}
 	}
 
-	public FinalCastleMuralComponent(int i, int x, int y, int z, int width, int height, Direction direction) {
+	public FinalCastleMuralComponent(int i, int x, int y, int z, int width, int height, Direction direction, long worldSeed) {
 		super(TFStructurePieceTypes.TFFCMur, i, x, y, z);
 		this.setOrientation(direction);
 		this.boundingBox = TFStructureComponentOld.getComponentToAddBoundingBox2(x, y, z, 0, -height / 2, -width / 2, 1, height - 1, width - 1, direction);
 
-		this.mural = new FinalCastleMural(this.boundingBox, ((StructurePieceFieldsAccessor) this).twilightforest$getOrientation(), WorldUtil.getOverworldSeed() + (this.boundingBox.minX() * 321534781L) ^ (this.boundingBox.minZ() * 756839L));
+		this.mural = new FinalCastleMural(this.boundingBox, ((StructurePieceFieldsAccessor) this).twilightforest$getOrientation(), worldSeed + (this.boundingBox.minX() * 321534781L) ^ (this.boundingBox.minZ() * 756839L));
 	}
 
 	@Override
