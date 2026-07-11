@@ -1,5 +1,7 @@
 package twilightforest.entity.projectile;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
@@ -21,7 +23,6 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.*;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
-import twilightforest.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.tags.TFBlockTags;
 import twilightforest.init.TFItems;
@@ -142,7 +143,7 @@ public class CubeOfAnnihilation extends ThrowableProjectile {
 					}
 				}
 			}
-			PacketDistributor.sendToPlayersNear(server, null, pos.getX(), pos.getY(), pos.getZ(), 32.0D, particlePacket);
+			PlayerLookup.around(server, new Vec3(pos.getX(), pos.getY(), pos.getZ()), 32.0D).forEach(player -> ServerPlayNetworking.send(player, particlePacket));
 		}
 	}
 
