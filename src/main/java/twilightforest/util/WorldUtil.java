@@ -9,7 +9,6 @@ import net.minecraft.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -43,10 +42,6 @@ public final class WorldUtil {
 
 	public static long getOverworldSeed() {
 		return Objects.requireNonNull(PacketDistributor.getServer()).overworld().getSeed();
-	}
-
-	public static RegistryAccess getRegistryAccess() {
-		return Objects.requireNonNull(PacketDistributor.getServer()).registryAccess();
 	}
 
 	public static Difficulty getDifficulty() {

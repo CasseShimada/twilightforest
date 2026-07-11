@@ -68,7 +68,6 @@ import twilightforest.mixin.accessor.BaseSpawnerAccessor;
 import twilightforest.util.BoundingBoxUtils;
 import twilightforest.util.DirectionUtil;
 import twilightforest.util.RotationUtil;
-import twilightforest.util.WorldUtil;
 import twilightforest.util.entities.EntityUtil;
 import twilightforest.util.jigsaw.JigsawPlaceContext;
 import twilightforest.util.jigsaw.JigsawRecord;
@@ -467,7 +466,7 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 
 		level.removeBlock(pos, false); // Clears block entity data left by Data Marker
 
-		this.handleDataParams(pos, level, WorldUtil.getRegistryAccess(), random, parameters, dataRotation);
+		this.handleDataParams(pos, level, level.registryAccess(), random, parameters, dataRotation);
 	}
 
 	private @Nullable BlockPos danglingBlock(BlockPos pos, WorldGenLevel level, RandomSource random, BlockState binding, String parameters) {
