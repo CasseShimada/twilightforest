@@ -13,7 +13,6 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.StructureManager;
@@ -42,10 +41,6 @@ public final class WorldUtil {
 
 	public static long getOverworldSeed() {
 		return Objects.requireNonNull(PacketDistributor.getServer()).overworld().getSeed();
-	}
-
-	public static Difficulty getDifficulty() {
-		return Objects.requireNonNull(PacketDistributor.getServer()).getWorldData().getDifficulty();
 	}
 
 	/**
