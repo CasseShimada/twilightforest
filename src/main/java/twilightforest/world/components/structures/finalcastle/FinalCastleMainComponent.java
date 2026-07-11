@@ -145,7 +145,7 @@ public class FinalCastleMainComponent extends TFStructureComponentOld {
 
 				// don't check if the bounding box is clear, there's either nothing there or we've made a terrible mistake
 				list.addPiece(sTower);
-				sTower.buildTowards(this, list, rand, dest);
+				sTower.buildTowards(this, list, rand, dest, this.structureTemplateManager);
 
 				// check if we've successfully built the end tower
 				//TwilightForestMod.LOGGER.debug("Working towards {},{},{}", dest.getX(), dest.getY(), dest.getZ());

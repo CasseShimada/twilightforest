@@ -19,7 +19,7 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
-import twilightforest.network.PacketDistributor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFStructurePieceTypes;
@@ -33,13 +33,16 @@ public class FinalCastleBellTower21Component extends FinalCastleMazeTower13Compo
 	public static final Identifier BELL_TOWER_TEMP_POOL = TwilightForestMod.prefix("final_castle/temp/bell_tower");
 
 	private static final int FLOORS = 8;
+	private final StructureTemplateManager structureTemplateManager;
 
 	public FinalCastleBellTower21Component(StructurePieceSerializationContext ctx, CompoundTag nbt) {
 		super(TFStructurePieceTypes.TFFCBelTo, nbt);
+		this.structureTemplateManager = ctx.structureTemplateManager();
 	}
 
-	public FinalCastleBellTower21Component(int i, int x, int y, int z, Direction direction) {
+	public FinalCastleBellTower21Component(int i, int x, int y, int z, Direction direction, StructureTemplateManager structureTemplateManager) {
 		super(TFStructurePieceTypes.TFFCBelTo, i, x, y, z, FLOORS, 1, TFBlocks.BLUE_CASTLE_RUNE_BRICK.defaultBlockState(), direction);
+		this.structureTemplateManager = structureTemplateManager;
 		this.size = 21;
 		this.height = FLOORS * 8 + 1;
 		this.boundingBox = TFStructureComponentOld.getComponentToAddBoundingBox2(x, y, z, -6, -8, -this.size / 2, this.size - 1, this.height, this.size - 1, direction);
@@ -63,7 +66,7 @@ public class FinalCastleBellTower21Component extends FinalCastleMazeTower13Compo
 		list.addPiece(roof);
 		roof.addChildren(this, list, rand);
 
-		TwilightJigsawPiece templatePiece = TwilightJigsawPiece.initializeTemplateFromPool(BELL_TOWER_TEMP_POOL, this.getWorldPos(0, 9, 10), ((twilightforest.mixin.accessor.StructurePieceFieldsAccessor) this).twilightforest$getRotation().rotation().rotate(FrontAndTop.WEST_UP), "twilightforest:final_castle/room", rand, this.genDepth + 1, PacketDistributor.getServer().getStructureManager());
+		TwilightJigsawPiece templatePiece = TwilightJigsawPiece.initializeTemplateFromPool(BELL_TOWER_TEMP_POOL, this.getWorldPos(0, 9, 10), ((twilightforest.mixin.accessor.StructurePieceFieldsAccessor) this).twilightforest$getRotation().rotation().rotate(FrontAndTop.WEST_UP), "twilightforest:final_castle/room", rand, this.genDepth + 1, this.structureTemplateManager);
 		if (templatePiece != null) {
 			list.addPiece(templatePiece);
 			templatePiece.addChildren(parent, list, rand);

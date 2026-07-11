@@ -21,6 +21,7 @@ import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFStructurePieceTypes;
@@ -112,7 +113,7 @@ public class FinalCastleMazeTower13Component extends TowerWingComponent {
 	/**
 	 * Build more components towards the destination
 	 */
-	public void buildTowards(StructurePiece parent, StructurePieceAccessor list, RandomSource rand, BlockPos dest) {
+	public void buildTowards(StructurePiece parent, StructurePieceAccessor list, RandomSource rand, BlockPos dest, StructureTemplateManager structureTemplateManager) {
 		// regular building first, adds roof/foundation
 		this.addChildren(parent, list, rand);
 
@@ -122,9 +123,9 @@ public class FinalCastleMazeTower13Component extends TowerWingComponent {
 			if (this.isWithinRange(dest.getX(), dest.getZ(), this.boundingBox.minX() + 6, this.boundingBox.minZ() + 6, 30)) {
 				//TwilightForestMod.LOGGER.debug("We are within range of our destination, building final tower");
 				int howFar = 20;
-				if (!buildEndTowerTowards(list, rand, dest, this.findBestDirectionTowards(dest), howFar)) {
-					if (!buildEndTowerTowards(list, rand, dest, this.findSecondDirectionTowards(dest), howFar)) {
-						buildEndTowerTowards(list, rand, dest, this.findThirdDirectionTowards(dest), howFar);
+				if (!buildEndTowerTowards(list, rand, dest, this.findBestDirectionTowards(dest), howFar, structureTemplateManager)) {
+					if (!buildEndTowerTowards(list, rand, dest, this.findSecondDirectionTowards(dest), howFar, structureTemplateManager)) {
+						buildEndTowerTowards(list, rand, dest, this.findThirdDirectionTowards(dest), howFar, structureTemplateManager);
 					}
 				}
 			} else {
@@ -133,13 +134,13 @@ public class FinalCastleMazeTower13Component extends TowerWingComponent {
 				Direction facing = this.findBestDirectionTowards(dest);
 
 				// build left or right, not straight if we can help it
-				if (facing == this.getOrientation() || !buildContinueTowerTowards(list, rand, dest, facing, howFar)) {
+				if (facing == this.getOrientation() || !buildContinueTowerTowards(list, rand, dest, facing, howFar, structureTemplateManager)) {
 					facing = this.findSecondDirectionTowards(dest);
-					if (facing == this.getOrientation() || !buildContinueTowerTowards(list, rand, dest, facing, howFar)) {
+					if (facing == this.getOrientation() || !buildContinueTowerTowards(list, rand, dest, facing, howFar, structureTemplateManager)) {
 						facing = this.findThirdDirectionTowards(dest);
-						if (facing == this.getOrientation() || !buildContinueTowerTowards(list, rand, dest, facing, howFar)) {
+						if (facing == this.getOrientation() || !buildContinueTowerTowards(list, rand, dest, facing, howFar, structureTemplateManager)) {
 							// fine, just go straight
-							buildContinueTowerTowards(list, rand, dest, this.getOrientation(), howFar);
+							buildContinueTowerTowards(list, rand, dest, this.getOrientation(), howFar, structureTemplateManager);
 						}
 					}
 				}
@@ -229,7 +230,7 @@ public class FinalCastleMazeTower13Component extends TowerWingComponent {
 		return this.getOrientation();
 	}
 
-	private boolean buildContinueTowerTowards(StructurePieceAccessor list, RandomSource rand, BlockPos dest, Direction facing, int howFar) {
+	private boolean buildContinueTowerTowards(StructurePieceAccessor list, RandomSource rand, BlockPos dest, Direction facing, int howFar, StructureTemplateManager structureTemplateManager) {
 		BlockPos opening = this.getValidOpeningCC(rand, facing);
 
 		// adjust opening towards dest.getY() if we are getting close to dest
@@ -271,7 +272,7 @@ public class FinalCastleMazeTower13Component extends TowerWingComponent {
 				if (intersect == null) {
 					//TwilightForestMod.LOGGER.debug("tower success!");
 					list.addPiece(sTower);
-					sTower.buildTowards(this, list, rand, dest);
+					sTower.buildTowards(this, list, rand, dest, structureTemplateManager);
 
 					// add bridge
 					BlockPos bc = this.offsetTowerCCoords(opening.getX(), opening.getY(), opening.getZ(), 1, facing);
@@ -348,7 +349,7 @@ public class FinalCastleMazeTower13Component extends TowerWingComponent {
 		return openY;
 	}
 
-	private boolean buildEndTowerTowards(StructurePieceAccessor list, RandomSource rand, BlockPos dest, Direction facing, int howFar) {
+	private boolean buildEndTowerTowards(StructurePieceAccessor list, RandomSource rand, BlockPos dest, Direction facing, int howFar, StructureTemplateManager structureTemplateManager) {
 		BlockPos opening = this.getValidOpeningCC(rand, facing);
 		opening = new BlockPos(
 			opening.getX(),
@@ -367,7 +368,7 @@ public class FinalCastleMazeTower13Component extends TowerWingComponent {
 		if (this.color == TFBlocks.YELLOW_CASTLE_RUNE_BRICK.defaultBlockState()) {
 			eTower = new FinalCastleEntranceTowerComponent(this.getGenDepth() + 1, tc.getX(), tc.getY(), tc.getZ(), facing);
 		} else {
-			eTower = new FinalCastleBellTower21Component(this.getGenDepth() + 1, tc.getX(), tc.getY(), tc.getZ(), facing);
+			eTower = new FinalCastleBellTower21Component(this.getGenDepth() + 1, tc.getX(), tc.getY(), tc.getZ(), facing, structureTemplateManager);
 		}
 
 		BoundingBox largerBB = BoundingBoxUtils.cloneWithAdjustments(eTower.getBoundingBox(), -6, 0, -6, 6, 0, 6);
