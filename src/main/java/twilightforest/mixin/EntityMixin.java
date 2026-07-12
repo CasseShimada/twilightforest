@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import twilightforest.ASMHooks;
+import twilightforest.entity.boss.UrGhast;
 import twilightforest.events.HostileMountEvents;
 
 @Mixin(Entity.class)
@@ -48,7 +48,7 @@ public abstract class EntityMixin {
 
 	@Inject(method = "isInWaterOrRain", at = @At("RETURN"), cancellable = true)
 	private void twilightforest$allowUrGhastTearsToCountAsRain(CallbackInfoReturnable<Boolean> cir) {
-		if (!cir.getReturnValueZ() && ASMHooks.isEntityInUrGhastTears((Entity) (Object) this)) {
+		if (!cir.getReturnValueZ() && UrGhast.isEntityInTantrumTears((Entity) (Object) this)) {
 			cir.setReturnValue(true);
 		}
 	}

@@ -13,6 +13,7 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
@@ -86,6 +87,22 @@ public class UrGhast extends BaseTFBoss {
 			.add(Attributes.MAX_HEALTH, 250)
 			.add(Attributes.FOLLOW_RANGE, 128.0D)
 			.add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
+	}
+
+	public static boolean isEntityInTantrumTears(Entity entity) {
+		if (!(entity instanceof Player) || !entity.level().hasChunkAt(entity.blockPosition()) || !entity.level().canSeeSkyFromBelowWater(entity.blockPosition())) {
+			return false;
+		}
+
+		AABB tearArea = entity.getBoundingBox().inflate(32.0D);
+		for (UrGhast urGhast : entity.level().getEntitiesOfClass(UrGhast.class, tearArea, UrGhast::isInTantrum)) {
+			AABB tears = urGhast.getBoundingBox().move(0.0D, -16.0D, 0.0D).inflate(0.0D, 16.0D, 0.0D);
+			if (tears.intersects(entity.getBoundingBox())) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	@Override
