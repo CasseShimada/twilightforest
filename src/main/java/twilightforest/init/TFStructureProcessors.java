@@ -19,9 +19,8 @@ import java.util.Map;
  */
 public class TFStructureProcessors {
 
-	private static final Map<Identifier, MapCodec<? extends StructureProcessor>> STRUCTURE_PROCESSORS = new LinkedHashMap<>();
 	private static final Map<Identifier, Identifier> ALIASES = new LinkedHashMap<>();
-	private static boolean registered;
+	private static boolean aliasesApplied;
 
 	public static final MapCodec<CobbleVariants> COBBLE_VARIANTS = registerProcessor("cobble_variants", CobbleVariants.CODEC);
 	public static final MapCodec<SmoothStoneVariants> SMOOTH_STONE_VARIANTS = registerProcessor("smooth_stone_variants", SmoothStoneVariants.CODEC);
@@ -47,24 +46,22 @@ public class TFStructureProcessors {
 	public static final MapCodec<VerticalDecayProcessor> VERTICAL_DECAY = registerProcessor("vertical_decay", VerticalDecayProcessor.CODEC);
 	public static final MapCodec<WoodMultiPaletteSwizzle> PLANK_MULTISWIZZLE = registerProcessor("wood_multiswizzle", WoodMultiPaletteSwizzle.CODEC);
 
-	public static void register() {
-		if (registered) {
+	public static void init() {
+		if (aliasesApplied) {
 			return;
 		}
 
-		registered = true;
-		STRUCTURE_PROCESSORS.forEach((id, codec) -> Registry.register(BuiltInRegistries.STRUCTURE_PROCESSOR, id, codec));
+		aliasesApplied = true;
 		applyAliases();
 	}
 
 	public static void addAlias(Identifier from, Identifier to) {
-		if (registered) throw new IllegalStateException("Cannot add aliases after structure processors have been registered.");
+		if (aliasesApplied) throw new IllegalStateException("Cannot add aliases after structure processor aliases have been applied.");
 		ALIASES.put(from, to);
 	}
 
 	private static <P extends StructureProcessor> MapCodec<P> registerProcessor(String name, MapCodec<P> processor) {
-		STRUCTURE_PROCESSORS.put(TwilightForestMod.prefix(name), processor);
-		return processor;
+		return Registry.register(BuiltInRegistries.STRUCTURE_PROCESSOR, TwilightForestMod.prefix(name), processor);
 	}
 
 	private static void applyAliases() {
