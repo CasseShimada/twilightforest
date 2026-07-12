@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import twilightforest.ASMHooks;
 import twilightforest.util.density.CustomDensityBeardifier;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
@@ -26,14 +25,9 @@ public class BeardifierMixin implements CustomDensityBeardifier {
 		this.twilightforest$customDensities = customDensities;
 	}
 
-	@Override
-	public @Nullable ObjectListIterator<DensityFunction> twilightforest$getCustomDensities() {
-		return this.twilightforest$customDensities;
-	}
-
 	@Inject(method = "forStructuresInChunk", at = @At("RETURN"), cancellable = true)
 	private static void twilightforest$attachCustomDensities(StructureManager structureManager, ChunkPos chunkPos, CallbackInfoReturnable<Beardifier> cir) {
-		ObjectListIterator<DensityFunction> customDensities = ASMHooks.gatherCustomTerrain(structureManager, chunkPos);
+		ObjectListIterator<DensityFunction> customDensities = CustomDensityBeardifier.gatherCustomTerrain(structureManager, chunkPos);
 		if (!customDensities.hasNext()) {
 			return;
 		}
@@ -54,7 +48,7 @@ public class BeardifierMixin implements CustomDensityBeardifier {
 		ObjectListIterator<DensityFunction> custom = this.twilightforest$customDensities;
 		if (custom != null) {
 			double base = cir.getReturnValue();
-			double updated = ASMHooks.getCustomDensity(base, context, custom);
+			double updated = CustomDensityBeardifier.applyCustomDensity(base, context, custom);
 			if (updated != base) {
 				cir.setReturnValue(updated);
 			}
