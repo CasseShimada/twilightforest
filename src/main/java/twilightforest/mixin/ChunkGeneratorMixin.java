@@ -11,13 +11,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import twilightforest.ASMHooks;
+import twilightforest.util.WorldUtil;
 
 @Mixin(ChunkGenerator.class)
 public class ChunkGeneratorMixin {
 	@Inject(method = "findNearestMapStructure", at = @At("RETURN"), cancellable = true)
 	private void twilightforest$resolveNonRandomSpreadMapStructure(ServerLevel level, HolderSet<Structure> targetStructures, BlockPos pos, int searchRadius, boolean skipKnown, CallbackInfoReturnable<Pair<BlockPos, Holder<Structure>>> cir) {
-		Pair<BlockPos, Holder<Structure>> resolved = ASMHooks.resolveNearestNonRandomSpreadMapStructure(cir.getReturnValue(), level, targetStructures, pos, searchRadius, skipKnown);
+		Pair<BlockPos, Holder<Structure>> resolved = WorldUtil.findNearestMapLandmark(level, targetStructures, pos, searchRadius, skipKnown).orElse(cir.getReturnValue());
 		if (resolved != cir.getReturnValue()) {
 			cir.setReturnValue(resolved);
 		}
