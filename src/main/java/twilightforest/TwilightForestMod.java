@@ -139,7 +139,7 @@ public final class TwilightForestMod implements ModInitializer {
 		TFDataSerializers.register();
 		TFFeatureModifiers.register();
 		TFEnchantmentEffects.init();
-		TFDensityFunctions.register();
+		TFDensityFunctions.init();
 		TFRemapper.addStructureProcessorAliases();
 		TFStructureProcessors.register();
 		TFRemapper.addStructurePieceAliases();

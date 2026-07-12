@@ -8,7 +8,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.DensityFunctions;
 import net.minecraft.world.level.levelgen.Noises;
@@ -20,14 +19,8 @@ import twilightforest.init.custom.BiomeLayerStack;
 import twilightforest.world.components.chunkgenerators.*;
 import twilightforest.world.components.layer.BiomeDensitySource;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 @SuppressWarnings("unused")
 public class TFDensityFunctions {
-	private static final Map<Identifier, MapCodec<? extends DensityFunction>> DENSITY_FUNCTION_TYPES = new LinkedHashMap<>();
-	private static boolean registered;
-
 	public static final MapCodec<TerrainDensityRouter> BIOME_DRIVEN_TERRAIN = register("biome_driven_terrain", TerrainDensityRouter.CODEC);
 	public static final MapCodec<NoiseDensityRouter> BIOME_DRIVEN_NOISE = register("biome_driven_noise", NoiseDensityRouter.CODEC);
 	public static final MapCodec<FocusedDensityFunction> FOCUSED = register("focused", FocusedDensityFunction.CODEC);
@@ -42,17 +35,10 @@ public class TFDensityFunctions {
 	public static final ResourceKey<DensityFunction> SKYLIGHT_TERRAIN = ResourceKey.create(Registries.DENSITY_FUNCTION, TwilightForestMod.prefix("skylight_terrain"));
 
 	private static <T extends DensityFunction> MapCodec<T> register(String name, MapCodec<T> keyCodec) {
-		DENSITY_FUNCTION_TYPES.put(TwilightForestMod.prefix(name), keyCodec);
-		return keyCodec;
+		return Registry.register(BuiltInRegistries.DENSITY_FUNCTION_TYPE, TwilightForestMod.prefix(name), keyCodec);
 	}
 
-	public static void register() {
-		if (registered) {
-			return;
-		}
-
-		registered = true;
-		DENSITY_FUNCTION_TYPES.forEach((id, codec) -> Registry.register(BuiltInRegistries.DENSITY_FUNCTION_TYPE, id, codec));
+	public static void init() {
 	}
 
 	public static void bootstrap(BootstrapContext<DensityFunction> context) {
