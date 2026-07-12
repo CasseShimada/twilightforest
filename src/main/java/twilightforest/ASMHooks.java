@@ -3,10 +3,7 @@ package twilightforest;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectListIterator;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.DensityFunction;
@@ -17,9 +14,7 @@ import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
-import twilightforest.util.ArmorUtil;
 import twilightforest.entity.boss.UrGhast;
-import twilightforest.init.TFDataComponents;
 import twilightforest.world.components.structures.CustomDensitySource;
 
 import java.util.Iterator;
@@ -28,39 +23,6 @@ import java.util.List;
 // TODO: Think about reorganizing each group into their own class or subclass of ASMHooks
 @SuppressWarnings({"JavadocReference", "unused", "RedundantSuppression", "deprecation"})
 public class ASMHooks {
-
-	private static final ArmorUtil armorUtil = new ArmorUtil();
-
-	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// armor
-	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * {@link twilightforest.asm.transformers.armor.ArmorVisibilityRenderingTransformer}<p/>
-	 *
-	 * Injection Point:<br/>
-	 * {@link net.minecraft.world.entity.LivingEntity#getVisibilityPercent(Entity)}
-	 */
-	public static float modifyArmorVisibility(float o, LivingEntity entity) {
-		return o - armorUtil.getShroudedArmorPercentage(entity);
-	}
-
-	/**
-	 * {@link twilightforest.asm.transformers.armor.CancelArmorRenderingTransformer}<p/>
-	 *
-	 * Injection Point:<br/>
-	 * {@link net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer#renderArmorPiece(PoseStack, MultiBufferSource, ItemStack, EquipmentSlot, int, HumanoidModel)}
-	 */
-	public static boolean cancelArmorRendering(boolean o, ItemStack stack) {
-		if (o && stack.get(TFDataComponents.EMPERORS_CLOTH) != null) {
-			return false;
-		}
-		return o;
-	}
-
-	public static boolean fixCapeRendering(boolean o, ItemStack stack) {
-		return o && stack.get(TFDataComponents.EMPERORS_CLOTH) == null;
-	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// beardifier

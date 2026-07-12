@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import twilightforest.ASMHooks;
+import twilightforest.init.TFDataComponents;
 
 @Mixin(WingsLayer.class)
 public abstract class WingsLayerMixin {
@@ -18,7 +18,7 @@ public abstract class WingsLayerMixin {
 		cancellable = true
 	)
 	private void twilightforest$hideShroudedWings(PoseStack stack, SubmitNodeCollector nodeCollector, int light, HumanoidRenderState state, float yRot, float xRot, CallbackInfo ci) {
-		if (!ASMHooks.cancelArmorRendering(true, state.chestEquipment)) {
+		if (state.chestEquipment.has(TFDataComponents.EMPERORS_CLOTH)) {
 			ci.cancel();
 		}
 	}

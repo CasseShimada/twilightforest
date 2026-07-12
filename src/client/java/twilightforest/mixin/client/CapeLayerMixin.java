@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import twilightforest.ASMHooks;
+import twilightforest.init.TFDataComponents;
 
 @Mixin(CapeLayer.class)
 public abstract class CapeLayerMixin {
@@ -28,6 +28,6 @@ public abstract class CapeLayerMixin {
 		)
 	)
 	private boolean twilightforest$showCapeWhenWingsAreShrouded(CapeLayer layer, ItemStack stack, EquipmentClientInfo.LayerType layerType, PoseStack poseStack, SubmitNodeCollector nodeCollector, int light, AvatarRenderState state, float yRot, float xRot) {
-		return ASMHooks.fixCapeRendering(this.hasLayer(stack, layerType), stack);
+		return this.hasLayer(stack, layerType) && !stack.has(TFDataComponents.EMPERORS_CLOTH);
 	}
 }

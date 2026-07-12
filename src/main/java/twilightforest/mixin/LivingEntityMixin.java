@@ -9,12 +9,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import twilightforest.ASMHooks;
 import twilightforest.events.EntityEvents;
 import twilightforest.events.ToolEvents;
+import twilightforest.util.ArmorUtil;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
+	private static final ArmorUtil ARMOR_UTIL = new ArmorUtil();
+
 	@ModifyVariable(method = "hurtServer", at = @At("HEAD"), argsOnly = true)
 	private float twilightforest$modifyDamage(float amount, ServerLevel level, DamageSource source) {
 		LivingEntity self = (LivingEntity) (Object) this;
@@ -37,6 +39,6 @@ public abstract class LivingEntityMixin {
 		)
 	)
 	private float twilightforest$hideShroudedArmorFromVisibility(LivingEntity entity) {
-		return ASMHooks.modifyArmorVisibility(entity.getArmorCoverPercentage(), entity);
+		return entity.getArmorCoverPercentage() - ARMOR_UTIL.getShroudedArmorPercentage(entity);
 	}
 }
