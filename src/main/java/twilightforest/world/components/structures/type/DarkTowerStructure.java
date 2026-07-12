@@ -71,7 +71,7 @@ public class DarkTowerStructure extends ControlledSpawningStructure {
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_knights"))),
 			new HintConfig(HintConfig.book("darktower", 3), TFEntities.KOBOLD),
 			new DecorationConfig(1, false, true, true),
-			true, Optional.of(Holder.direct(TFMapDecorations.DARK_TOWER)),
+			true, Optional.of(TFMapDecorations.DARK_TOWER),
 			new StructureSettings(
 				context.lookup(Registries.BIOME).getOrThrow(TFBiomeTags.VALID_DARK_TOWER_BIOMES),
 				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedList.of()))), // Landmarks have Controlled Mob spawning

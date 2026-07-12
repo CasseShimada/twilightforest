@@ -58,7 +58,7 @@ public class AuroraPalaceStructure extends ControlledSpawningStructure {
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_yeti"))),
 			new HintConfig(HintConfig.book("icetower", 3), TFEntities.KOBOLD),
 			new DecorationConfig(2, false, true, false),
-			true, Optional.of(Holder.direct(TFMapDecorations.AURORA_PALACE)),
+			true, Optional.of(TFMapDecorations.AURORA_PALACE),
 			new StructureSettings(
 				context.lookup(Registries.BIOME).getOrThrow(TFBiomeTags.VALID_AURORA_PALACE_BIOMES),
 				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedList.of()))), // Landmarks have Controlled Mob spawning

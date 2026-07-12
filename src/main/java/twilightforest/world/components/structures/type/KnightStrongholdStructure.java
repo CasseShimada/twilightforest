@@ -68,7 +68,7 @@ public class KnightStrongholdStructure extends ControlledSpawningStructure {
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_trophy_pedestal"))),
 			new HintConfig(HintConfig.book("tfstronghold", 4), TFEntities.KOBOLD),
 			new DecorationConfig(3, true, false, false),
-			true, Optional.of(Holder.direct(TFMapDecorations.KNIGHT_STRONGHOLD)),
+			true, Optional.of(TFMapDecorations.KNIGHT_STRONGHOLD),
 			new StructureSettings(
 				context.lookup(Registries.BIOME).getOrThrow(TFBiomeTags.VALID_KNIGHT_STRONGHOLD_BIOMES),
 				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedList.of()))), // Landmarks have Controlled Mob spawning

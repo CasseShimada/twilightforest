@@ -105,7 +105,7 @@ public class HollowHillStructure extends LandmarkStructure implements Configurab
 			)), List.of(), List.of()),
 			context.lookup(TFRegistries.Keys.STRUCTURE_SPELEOTHEM_SETTINGS).getOrThrow(StructureSpeleothemConfigs.SMALL_HILL),
 			new DecorationConfig(1, true, false, false),
-			true, Optional.of(Holder.direct(TFMapDecorations.SMALL_HOLLOW_HILL)),
+			true, Optional.of(TFMapDecorations.SMALL_HOLLOW_HILL),
 			new StructureSettings(
 				context.lookup(Registries.BIOME).getOrThrow(TFBiomeTags.VALID_HOLLOW_HILL_BIOMES),
 				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedList.of()))), // Landmarks have Controlled Mob spawning
@@ -132,7 +132,7 @@ public class HollowHillStructure extends LandmarkStructure implements Configurab
 			)), List.of(), List.of()),
 			context.lookup(TFRegistries.Keys.STRUCTURE_SPELEOTHEM_SETTINGS).getOrThrow(StructureSpeleothemConfigs.MEDIUM_HILL),
 			new DecorationConfig(2, true, false, false),
-			true, Optional.of(Holder.direct(TFMapDecorations.MEDIUM_HOLLOW_HILL)),
+			true, Optional.of(TFMapDecorations.MEDIUM_HOLLOW_HILL),
 			new StructureSettings(
 				context.lookup(Registries.BIOME).getOrThrow(TFBiomeTags.VALID_HOLLOW_HILL_BIOMES),
 				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedList.of()))), // Landmarks have Controlled Mob spawning
@@ -160,7 +160,7 @@ public class HollowHillStructure extends LandmarkStructure implements Configurab
 			))),
 			context.lookup(TFRegistries.Keys.STRUCTURE_SPELEOTHEM_SETTINGS).getOrThrow(StructureSpeleothemConfigs.LARGE_HILL),
 			new DecorationConfig(3, true, false, false),
-			true, Optional.of(Holder.direct(TFMapDecorations.LARGE_HOLLOW_HILL)),
+			true, Optional.of(TFMapDecorations.LARGE_HOLLOW_HILL),
 			new StructureSettings(
 				context.lookup(Registries.BIOME).getOrThrow(TFBiomeTags.VALID_HOLLOW_HILL_BIOMES),
 				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedList.of()))), // Landmarks have Controlled Mob spawning

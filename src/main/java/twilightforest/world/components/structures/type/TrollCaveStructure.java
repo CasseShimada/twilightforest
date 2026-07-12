@@ -88,7 +88,7 @@ public class TrollCaveStructure extends ProgressionStructure implements Configur
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_merge"))),
 			new HintConfig(HintConfig.book("trollcave", 3), TFEntities.KOBOLD),
 			new DecorationConfig(4, true, true, false),
-			false, Optional.of(Holder.direct(TFMapDecorations.TROLL_CAVES)),
+			false, Optional.of(TFMapDecorations.TROLL_CAVES),
 			new StructureSettings(
 				context.lookup(Registries.BIOME).getOrThrow(TFBiomeTags.VALID_TROLL_CAVE_BIOMES),
 				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedList.of()))), // Landmarks have Controlled Mob spawning

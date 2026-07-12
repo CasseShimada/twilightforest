@@ -71,7 +71,7 @@ public class FinalCastleStructure extends ControlledSpawningStructure {
 			// TODO: change this when we make a book for the castle
 			new HintConfig(HintConfig.defaultBook(), TFEntities.KOBOLD),
 			new DecorationConfig(4, false, true, false),
-			true, Optional.of(Holder.direct(TFMapDecorations.FINAL_CASTLE)),
+			true, Optional.of(TFMapDecorations.FINAL_CASTLE),
 			new StructureSettings(
 				context.lookup(Registries.BIOME).getOrThrow(TFBiomeTags.VALID_FINAL_CASTLE_BIOMES),
 				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedList.of()))), // Landmarks have Controlled Mob spawning

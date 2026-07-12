@@ -78,7 +78,7 @@ public class LabyrinthStructure extends ControlledSpawningStructure implements C
 			new AdvancementLockConfig(List.of(TwilightForestMod.prefix("progress_lich"))),
 			new HintConfig(HintConfig.book("labyrinth", 5), TFEntities.KOBOLD),
 			new DecorationConfig(3, true, false, false),
-			true, Optional.of(Holder.direct(TFMapDecorations.LABYRINTH)),
+			true, Optional.of(TFMapDecorations.LABYRINTH),
 			new StructureSettings(
 				context.lookup(Registries.BIOME).getOrThrow(TFBiomeTags.VALID_LABYRINTH_BIOMES),
 				Arrays.stream(MobCategory.values()).collect(Collectors.toMap(category -> category, category -> new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedList.of()))), // Landmarks have Controlled Mob spawning
