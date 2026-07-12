@@ -1,7 +1,6 @@
 package twilightforest.init.custom;
 
 import net.minecraft.core.Registry;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -14,14 +13,7 @@ import twilightforest.init.TFMobEffects;
 import twilightforest.init.TFSounds;
 import twilightforest.util.Enforcement;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 public class Enforcements {
-
-	private static final Map<Identifier, Enforcement> ENFORCEMENTS = new LinkedHashMap<>();
-	private static boolean registered;
-
 	public static final ResourceKey<Enforcement> DARKNESS_KEY = key("darkness");
 	public static final ResourceKey<Enforcement> HUNGER_KEY = key("hunger");
 	public static final ResourceKey<Enforcement> FIRE_KEY = key("fire");
@@ -67,16 +59,9 @@ public class Enforcements {
 	}
 
 	private static Enforcement register(ResourceKey<Enforcement> key, Enforcement enforcement) {
-		ENFORCEMENTS.put(key.identifier(), enforcement);
-		return enforcement;
+		return Registry.register(TFRegistries.ENFORCEMENT, key.identifier(), enforcement);
 	}
 
-	public static void register() {
-		if (registered) {
-			return;
-		}
-
-		registered = true;
-		ENFORCEMENTS.forEach((id, enforcement) -> Registry.register(TFRegistries.ENFORCEMENT, id, enforcement));
+	public static void init() {
 	}
 }
