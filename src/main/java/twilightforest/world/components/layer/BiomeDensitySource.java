@@ -12,13 +12,12 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import org.jetbrains.annotations.NotNull;
+import twilightforest.TwilightForestMod;
 import twilightforest.init.custom.BiomeLayerStack;
-import twilightforest.util.WorldUtil;
 import twilightforest.world.components.chunkgenerators.TerrainColumn;
 import twilightforest.world.components.layer.vanillalegacy.BiomeLayerFactory;
 import twilightforest.world.components.layer.vanillalegacy.area.LazyArea;
 import twilightforest.world.components.layer.vanillalegacy.context.LazyAreaContext;
-import twilightforest.TwilightForestMod;
 
 import java.util.Comparator;
 import java.util.List;
@@ -40,21 +39,13 @@ public class BiomeDensitySource {
 	private final Map<ResourceKey<Biome>, TerrainColumn> biomeList;
 
 	private final Holder<BiomeLayerFactory> genBiomeConfig;
-	private final Supplier<LazyArea> genBiomes;
 
 	public BiomeDensitySource(List<TerrainColumn> list, Holder<BiomeLayerFactory> biomeLayerFactory) {
 		this(list.stream().collect(Collectors.toMap(TerrainColumn::getResourceKey, Function.identity())), biomeLayerFactory);
 	}
 
 	public BiomeDensitySource(Map<ResourceKey<Biome>, TerrainColumn> list, Holder<BiomeLayerFactory> biomeLayerFactory) {
-		super();
-
 		this.genBiomeConfig = biomeLayerFactory;
-		this.genBiomes = Suppliers.memoize(() -> {
-			long worldSeed = WorldUtil.getOverworldSeed();
-			return this.genBiomeConfig.value().build(salt -> new LazyAreaContext(25, worldSeed, salt));
-		});
-
 		this.biomeList = list;
 	}
 
@@ -62,37 +53,17 @@ public class BiomeDensitySource {
 		return this.genBiomeConfig;
 	}
 
-	@NotNull
-	public Holder<Biome> getBiomeColumnKey(int biomeX, int biomeZ) {
-		return this.biomeList.get(this.genBiomes.get().getBiome(biomeX, biomeZ)).getMainBiome();
-	}
-
-	public Holder<Biome> getNoiseBiome(int biomeX, int biomeY, int biomeZ) {
-		return this.biomeList.get(this.genBiomes.get().getBiome(biomeX, biomeZ)).getBiome(biomeY);
-	}
-
-	public Optional<TerrainColumn> getTerrainColumn(int biomeX, int biomeZ) {
-		return this.getTerrainColumn(this.genBiomes.get().getBiome(biomeX, biomeZ));
+	// Only used for building a cache
+	public Stream<Holder<Biome>> collectPossibleBiomes() {
+		return this.biomeList.values().stream().flatMap(TerrainColumn::getBiomes);
 	}
 
 	public Optional<TerrainColumn> getTerrainColumn(ResourceKey<Biome> biome) {
 		return Optional.ofNullable(this.biomeList.get(biome));
 	}
 
-	// Only used for building a cache
-	public Stream<Holder<Biome>> collectPossibleBiomes() {
-		return this.biomeList.values().stream().flatMap(TerrainColumn::getBiomes);
-	}
-
-	public void addDebugInfo(List<String> info, BlockPos cameraPos) {
-		ResourceKey<Biome> biomeKey = this.genBiomes.get().getBiome(cameraPos.getX() >> 2, cameraPos.getZ() >> 2);
-		TerrainColumn biomeColumn = this.biomeList.get(biomeKey);
-		Holder<Biome> biomeAtY = biomeColumn.getBiome(cameraPos.getY() >> 2);
-		info.add("BiomeDensitySource at " + cameraPos + ":");
-		info.add("Twilight Biome Column:");
-		biomeColumn.getBiomesDebug(info::add);
-		info.add("Primary Biome: " + biomeKey.identifier());
-		info.add("Biome at elevation: " + biomeAtY.unwrapKey().map(ResourceKey::identifier).map(Identifier::toString).orElse("NOT REFERENCED"));
+	public Runtime createRuntime(long worldSeed) {
+		return new Runtime(this, worldSeed);
 	}
 
 	public static final class DensityData {
@@ -110,106 +81,149 @@ public class BiomeDensitySource {
 	private static final double BLEND_RADIUS = 8.75;
 	private static final int BLEND_RADIUS_INT = Mth.floor(BLEND_RADIUS + 1.0);
 	private static final int BLOCK_XYZ_OFFSET = QuartPos.SIZE / 2;
-	private static final Set<String> LOGGED_WORLDGEN_ANOMALIES = ConcurrentHashMap.newKeySet();
+	public static final class Runtime {
+		private final BiomeDensitySource source;
+		private final long worldSeed;
+		private final Supplier<LazyArea> genBiomes;
+		private final Set<String> loggedWorldgenAnomalies = ConcurrentHashMap.newKeySet();
 
-	private static void logWorldgenAnomalyOnce(String key, String message, Object... args) {
-		if (LOGGED_WORLDGEN_ANOMALIES.add(key)) {
-			TwilightForestMod.LOGGER.warn(message, args);
+		private Runtime(BiomeDensitySource source, long worldSeed) {
+			this.source = source;
+			this.worldSeed = worldSeed;
+			this.genBiomes = Suppliers.memoize(() -> source.genBiomeConfig.value().build(salt -> new LazyAreaContext(25, worldSeed, salt)));
 		}
-	}
 
-	public DensityData sampleTerrain(int blockX, int blockZ, DensityFunction.FunctionContext context) {
-		double totalMappedDepth = 0.0;
-		double totalContribution = 0.0;
-		double totalScale = 0.0;
-		double totalScaleContribution = 0.0;
+		public long worldSeed() {
+			return this.worldSeed;
+		}
 
-		int blockXWithOffset = blockX - BLOCK_XYZ_OFFSET;
-		int blockZWithOffset = blockZ - BLOCK_XYZ_OFFSET;
+		@NotNull
+		public Holder<Biome> getBiomeColumnKey(int biomeX, int biomeZ) {
+			return this.source.biomeList.get(this.genBiomes.get().getBiome(biomeX, biomeZ)).getMainBiome();
+		}
 
-		int xQuartStart = (blockXWithOffset - BLEND_RADIUS_INT) >> QuartPos.BITS;
-		int zQuartStart = (blockZWithOffset - BLEND_RADIUS_INT) >> QuartPos.BITS;
-		int xQuartEnd = (blockXWithOffset + BLEND_RADIUS_INT) >> QuartPos.BITS;
-		int zQuartEnd = (blockZWithOffset + BLEND_RADIUS_INT) >> QuartPos.BITS;
-		int xCount = xQuartEnd - xQuartStart + 1;
-		int zCount = zQuartEnd - zQuartStart + 1;
+		public Holder<Biome> getNoiseBiome(int biomeX, int biomeY, int biomeZ) {
+			return this.source.biomeList.get(this.genBiomes.get().getBiome(biomeX, biomeZ)).getBiome(biomeY);
+		}
 
-		double xQuartDelta = (blockXWithOffset - (xQuartStart << QuartPos.BITS)) * (1.0 / QuartPos.SIZE);
-		double zQuartDelta = (blockZWithOffset - (zQuartStart << QuartPos.BITS)) * (1.0 / QuartPos.SIZE);
+		private Optional<TerrainColumn> getTerrainColumn(int biomeX, int biomeZ) {
+			return this.getTerrainColumn(this.genBiomes.get().getBiome(biomeX, biomeZ));
+		}
 
-		for (int cz = 0, cx = 0; ; ) {
-			double dX = xQuartDelta - cx;
-			double dZ = zQuartDelta - cz;
+		private Optional<TerrainColumn> getTerrainColumn(ResourceKey<Biome> biome) {
+			return this.source.getTerrainColumn(biome);
+		}
 
-			double distSq = dX * dX + dZ * dZ;
+		public void addDebugInfo(List<String> info, BlockPos cameraPos) {
+			ResourceKey<Biome> biomeKey = this.genBiomes.get().getBiome(cameraPos.getX() >> 2, cameraPos.getZ() >> 2);
+			TerrainColumn biomeColumn = this.source.biomeList.get(biomeKey);
+			Holder<Biome> biomeAtY = biomeColumn.getBiome(cameraPos.getY() >> 2);
+			info.add("BiomeDensitySource at " + cameraPos + ":");
+			info.add("Twilight Biome Column:");
+			biomeColumn.getBiomesDebug(info::add);
+			info.add("Primary Biome: " + biomeKey.identifier());
+			info.add("Biome at elevation: " + biomeAtY.unwrapKey().map(ResourceKey::identifier).map(Identifier::toString).orElse("NOT REFERENCED"));
+		}
 
-			if (distSq < BLEND_RADIUS * BLEND_RADIUS) {
-				int sampleBiomeX = cx + xQuartStart;
-				int sampleBiomeZ = cz + zQuartStart;
-				Optional<TerrainColumn> terrainColumn = this.getTerrainColumn(sampleBiomeX, sampleBiomeZ);
-				if (terrainColumn.isPresent()) {
-					double falloff = BLEND_RADIUS * BLEND_RADIUS * terrainColumn.get().weight(context);
-					double scaleFalloff = BLEND_RADIUS * BLEND_RADIUS * terrainColumn.get().weight(context);
+		private void logWorldgenAnomalyOnce(String key, String message, Object... args) {
+			if (this.loggedWorldgenAnomalies.add(key)) {
+				TwilightForestMod.LOGGER.warn(message, args);
+			}
+		}
 
-					double neighborDepth = terrainColumn.get().depth(context);
-					double neighborScale = terrainColumn.get().scale(context);
+		public DensityData sampleTerrain(int blockX, int blockZ, DensityFunction.FunctionContext context) {
+			double totalMappedDepth = 0.0;
+			double totalContribution = 0.0;
+			double totalScale = 0.0;
+			double totalScaleContribution = 0.0;
 
-					falloff *= Math.exp((distSq * 2f + neighborDepth) * -0.4f);
-					totalMappedDepth += neighborDepth * falloff;
-					totalContribution += falloff;
+			int blockXWithOffset = blockX - BLOCK_XYZ_OFFSET;
+			int blockZWithOffset = blockZ - BLOCK_XYZ_OFFSET;
 
-					scaleFalloff *= Math.exp((distSq * 2f + neighborScale) * -0.4f);
-					totalScale += neighborScale * scaleFalloff;
-					totalScaleContribution += scaleFalloff;
-				} else {
-					ResourceKey<Biome> missingBiome = this.genBiomes.get().getBiome(sampleBiomeX, sampleBiomeZ);
-					logWorldgenAnomalyOnce(
-						"missing_column:" + missingBiome.identifier(),
-						"TF terrain trace: missing terrain column for biome={} sampledAtQuart=({}, {}) block=({}, {})",
-						missingBiome.identifier(),
-						sampleBiomeX,
-						sampleBiomeZ,
-						blockX,
-						blockZ
-					);
+			int xQuartStart = (blockXWithOffset - BLEND_RADIUS_INT) >> QuartPos.BITS;
+			int zQuartStart = (blockZWithOffset - BLEND_RADIUS_INT) >> QuartPos.BITS;
+			int xQuartEnd = (blockXWithOffset + BLEND_RADIUS_INT) >> QuartPos.BITS;
+			int zQuartEnd = (blockZWithOffset + BLEND_RADIUS_INT) >> QuartPos.BITS;
+			int xCount = xQuartEnd - xQuartStart + 1;
+			int zCount = zQuartEnd - zQuartStart + 1;
+
+			double xQuartDelta = (blockXWithOffset - (xQuartStart << QuartPos.BITS)) * (1.0 / QuartPos.SIZE);
+			double zQuartDelta = (blockZWithOffset - (zQuartStart << QuartPos.BITS)) * (1.0 / QuartPos.SIZE);
+
+			for (int cz = 0, cx = 0; ; ) {
+				double dX = xQuartDelta - cx;
+				double dZ = zQuartDelta - cz;
+
+				double distSq = dX * dX + dZ * dZ;
+
+				if (distSq < BLEND_RADIUS * BLEND_RADIUS) {
+					int sampleBiomeX = cx + xQuartStart;
+					int sampleBiomeZ = cz + zQuartStart;
+					Optional<TerrainColumn> terrainColumn = this.getTerrainColumn(sampleBiomeX, sampleBiomeZ);
+					if (terrainColumn.isPresent()) {
+						double falloff = BLEND_RADIUS * BLEND_RADIUS * terrainColumn.get().weight(context);
+						double scaleFalloff = BLEND_RADIUS * BLEND_RADIUS * terrainColumn.get().weight(context);
+
+						double neighborDepth = terrainColumn.get().depth(context);
+						double neighborScale = terrainColumn.get().scale(context);
+
+						falloff *= Math.exp((distSq * 2f + neighborDepth) * -0.4f);
+						totalMappedDepth += neighborDepth * falloff;
+						totalContribution += falloff;
+
+						scaleFalloff *= Math.exp((distSq * 2f + neighborScale) * -0.4f);
+						totalScale += neighborScale * scaleFalloff;
+						totalScaleContribution += scaleFalloff;
+					} else {
+						ResourceKey<Biome> missingBiome = this.genBiomes.get().getBiome(sampleBiomeX, sampleBiomeZ);
+						this.logWorldgenAnomalyOnce(
+							"missing_column:" + missingBiome.identifier(),
+							"TF terrain trace: missing terrain column for biome={} sampledAtQuart=({}, {}) block=({}, {})",
+							missingBiome.identifier(),
+							sampleBiomeX,
+							sampleBiomeZ,
+							blockX,
+							blockZ
+						);
+					}
 				}
+
+				cz++;
+				if (cz < zCount) continue;
+				cz = 0;
+				cx++;
+				if (cx >= xCount) break;
 			}
 
-			cz++;
-			if (cz < zCount) continue;
-			cz = 0;
-			cx++;
-			if (cx >= xCount) break;
-		}
+			if (totalContribution <= 0.0D || totalScaleContribution <= 0.0D) {
+				this.logWorldgenAnomalyOnce(
+					"zero_contribution:" + (blockX >> 4) + ":" + (blockZ >> 4),
+					"TF terrain trace: zero terrain contribution at block=({}, {}) chunk=({}, {}) depthContribution={} scaleContribution={}",
+					blockX,
+					blockZ,
+					blockX >> 4,
+					blockZ >> 4,
+					totalContribution,
+					totalScaleContribution
+				);
+			}
 
-		if (totalContribution <= 0.0D || totalScaleContribution <= 0.0D) {
-			logWorldgenAnomalyOnce(
-				"zero_contribution:" + (blockX >> 4) + ":" + (blockZ >> 4),
-				"TF terrain trace: zero terrain contribution at block=({}, {}) chunk=({}, {}) depthContribution={} scaleContribution={}",
-				blockX,
-				blockZ,
-				blockX >> 4,
-				blockZ >> 4,
-				totalContribution,
-				totalScaleContribution
-			);
+			DensityData result = new DensityData(totalMappedDepth / totalContribution, totalScale / totalScaleContribution);
+			if (!Double.isFinite(result.depth) || !Double.isFinite(result.scale)) {
+				this.logWorldgenAnomalyOnce(
+					"nonfinite_density:" + (blockX >> 4) + ":" + (blockZ >> 4),
+					"TF terrain trace: non-finite terrain sample at block=({}, {}) chunk=({}, {}) depth={} scale={} depthContribution={} scaleContribution={}",
+					blockX,
+					blockZ,
+					blockX >> 4,
+					blockZ >> 4,
+					result.depth,
+					result.scale,
+					totalContribution,
+					totalScaleContribution
+				);
+			}
+			return result;
 		}
-
-		DensityData result = new DensityData(totalMappedDepth / totalContribution, totalScale / totalScaleContribution);
-		if (!Double.isFinite(result.depth) || !Double.isFinite(result.scale)) {
-			logWorldgenAnomalyOnce(
-				"nonfinite_density:" + (blockX >> 4) + ":" + (blockZ >> 4),
-				"TF terrain trace: non-finite terrain sample at block=({}, {}) chunk=({}, {}) depth={} scale={} depthContribution={} scaleContribution={}",
-				blockX,
-				blockZ,
-				blockX >> 4,
-				blockZ >> 4,
-				result.depth,
-				result.scale,
-				totalContribution,
-				totalScaleContribution
-			);
-		}
-		return result;
 	}
 }

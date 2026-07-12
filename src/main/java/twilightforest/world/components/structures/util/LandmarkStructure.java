@@ -118,7 +118,7 @@ public abstract class LandmarkStructure extends Structure implements DecorationC
 		int biomeX = (Math.round(chunkPos.x() / 16F) << 6) + 2;
 		int biomeZ = (Math.round(chunkPos.z() / 16F) << 6) + 2;
 
-		Holder<Biome> biomeAt = twilightBiomeProvider.getMainBiome(biomeX, biomeZ);
+		Holder<Biome> biomeAt = twilightBiomeProvider.getMainBiome(biomeX, biomeZ, context.randomState().sampler());
 
 		return context.validBiome().test(biomeAt) ? this.findGenerationPoint(context) : Optional.empty();
 	}

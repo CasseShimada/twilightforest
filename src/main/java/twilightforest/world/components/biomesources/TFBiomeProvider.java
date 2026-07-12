@@ -9,6 +9,7 @@ import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
 import twilightforest.TFRegistries;
 import twilightforest.world.components.layer.BiomeDensitySource;
+import twilightforest.world.components.layer.BiomeDensityRuntimeContextHolder;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -40,11 +41,11 @@ public class TFBiomeProvider extends BiomeSource {
 
 	@Override
 	public Holder<Biome> getNoiseBiome(int biomeX, int biomeY, int biomeZ, Climate.Sampler sampler) {
-		return this.biomeTerrainDataHolder.value().getNoiseBiome(biomeX, biomeY, biomeZ);
+		return this.runtime(sampler).getNoiseBiome(biomeX, biomeY, biomeZ);
 	}
 
-	public Holder<Biome> getMainBiome(int biomeX, int biomeZ) {
-		return this.biomeTerrainDataHolder.value().getBiomeColumnKey(biomeX, biomeZ);
+	public Holder<Biome> getMainBiome(int biomeX, int biomeZ, Climate.Sampler sampler) {
+		return this.runtime(sampler).getBiomeColumnKey(biomeX, biomeZ);
 	}
 
 	@Deprecated
@@ -56,6 +57,10 @@ public class TFBiomeProvider extends BiomeSource {
 	public void addDebugInfo(List<String> info, BlockPos cameraPos, Climate.Sampler sampler) {
 		super.addDebugInfo(info, cameraPos, sampler);
 
-		this.biomeTerrainDataHolder.value().addDebugInfo(info, cameraPos);
+		this.runtime(sampler).addDebugInfo(info, cameraPos);
+	}
+
+	private BiomeDensitySource.Runtime runtime(Climate.Sampler sampler) {
+		return BiomeDensityRuntimeContextHolder.get(sampler).runtime(this.biomeTerrainDataHolder.value());
 	}
 }

@@ -54,7 +54,6 @@ import twilightforest.init.custom.Enforcements;
 import twilightforest.events.TFEventHandlers;
 import twilightforest.events.LootEvents;
 import twilightforest.network.EnforceProgressionStatusPacket;
-import twilightforest.network.PacketDistributor;
 import twilightforest.network.TFNetworking;
 import twilightforest.util.HolidayEvent;
 import twilightforest.util.Restriction;
@@ -89,7 +88,6 @@ public final class TwilightForestMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		PacketDistributor.init();
 		TFNetworking.init();
 		TFDataAttachments.init();
 		ServerLifecycleEvents.SERVER_STOPPING.register(SaveDebug::onServerStopping);

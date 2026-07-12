@@ -25,22 +25,16 @@ import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFDimensionData;
-import twilightforest.network.PacketDistributor;
 import twilightforest.util.landmarks.LegacyLandmarkPlacements;
 import twilightforest.world.components.structures.placements.LandmarkGridPlacement;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
 public final class WorldUtil {
 	private WorldUtil() {
-	}
-
-	public static long getOverworldSeed() {
-		return Objects.requireNonNull(PacketDistributor.getServer()).overworld().getSeed();
 	}
 
 	/**
