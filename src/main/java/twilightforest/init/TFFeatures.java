@@ -61,7 +61,7 @@ public class TFFeatures {
 	public static final Feature<RandomPatchConfiguration> DARK_FOREST_PLACER = register("dark_forest_placer", new DarkForestFeature(RandomPatchConfiguration.CODEC));
 	public static final Feature<WeightedListFeatureConfig> WEIGHTED_LIST_SELECTOR = register("weighted_list", new WeightedListFeature(WeightedListFeatureConfig.CODEC));
 
-	public static void register() {
+	public static void init() {
 	}
 
 	private static <FC extends FeatureConfiguration> Feature<FC> register(String name, Feature<FC> feature) {
