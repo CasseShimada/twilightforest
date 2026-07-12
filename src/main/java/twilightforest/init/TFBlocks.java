@@ -44,7 +44,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class TFBlocks {
-	private static final Map<Identifier, BlockEntry> BLOCKS = new LinkedHashMap<>();
+	private static final Map<Identifier, Block> BLOCKS = new LinkedHashMap<>();
 	private static final Map<Identifier, Identifier> BLOCK_ALIASES = new LinkedHashMap<>();
 	private static final List<Runnable> BLOCK_ITEM_REGISTRATIONS = new ArrayList<>();
 	private static boolean registered;
@@ -685,7 +685,7 @@ public class TFBlocks {
 		}
 
 		registered = true;
-		BLOCKS.values().forEach(BlockEntry::register);
+		BLOCKS.forEach((id, block) -> Registry.register(BuiltInRegistries.BLOCK, id, block));
 		BLOCK_ITEM_REGISTRATIONS.forEach(Runnable::run);
 		applyBlockAliases();
 	}
@@ -728,28 +728,12 @@ public class TFBlocks {
 		if (registered) throw new IllegalStateException("Cannot register new blocks after block registry has been frozen.");
 		Identifier id = TwilightForestMod.prefix(name);
 		T value = block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, id)));
-		BLOCKS.put(id, new BlockEntry() {
-			@Override
-			public Block value() {
-				return value;
-			}
-
-			@Override
-			public void register() {
-				Registry.register(BuiltInRegistries.BLOCK, id, value);
-			}
-		});
+		BLOCKS.put(id, value);
 		return value;
 	}
 
 	private static void applyBlockAliases() {
 		RegistryAliasUtil.applyAliases(BuiltInRegistries.BLOCK, BLOCK_ALIASES);
-	}
-
-	private interface BlockEntry {
-		Block value();
-
-		void register();
 	}
 
 	public static OminousCandleBlock ominousCandle(String name, MapColor mapColor, Block candle) {
