@@ -7,7 +7,6 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.core.registries.BuiltInRegistries;
 import twilightforest.entity.boss.Lich;
 import twilightforest.entity.projectile.LichBolt;
 import twilightforest.entity.projectile.LichBomb;
@@ -96,7 +95,7 @@ public class LichShadowsGoal extends Goal {
 
 	public void checkAndSpawnClones(LivingEntity targetedEntity) {
 		// if not, spawn one!
-		if (this.lich.countMyClones() < this.lich.getAttributeValue(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(TFAttributes.CLONE_COUNT))) this.spawnShadowClone(targetedEntity);
+		if (this.lich.countMyClones() < this.lich.getAttributeValue(TFAttributes.CLONE_COUNT)) this.spawnShadowClone(targetedEntity);
 	}
 
 	private void spawnShadowClone(LivingEntity targetedEntity) {
