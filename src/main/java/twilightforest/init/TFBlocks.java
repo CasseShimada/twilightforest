@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
-import twilightforest.util.registry.DeferredBlock;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.*;
 import twilightforest.config.TFConfig;
@@ -274,20 +273,20 @@ public class TFBlocks {
 
 	//mini structures
 	public static final MiniatureStructureBlock TWILIGHT_PORTAL_MINIATURE_STRUCTURE = registerDirectWithItem("twilight_portal_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.of().noCollision().noOcclusion().requiresCorrectToolForDrops().strength(0.75F));
-//	public static final DeferredBlock<Block> HEDGE_MAZE_MINIATURE_STRUCTURE = register("hedge_maze_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
-//	public static final DeferredBlock<Block> HOLLOW_HILL_MINIATURE_STRUCTURE = register("hollow_hill_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
-//	public static final DeferredBlock<Block> QUEST_GROVE_MINIATURE_STRUCTURE = register("quest_grove_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
-//	public static final DeferredBlock<Block> MUSHROOM_TOWER_MINIATURE_STRUCTURE = register("mushroom_tower_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
+//	public static final MiniatureStructureBlock HEDGE_MAZE_MINIATURE_STRUCTURE = registerDirectWithItem("hedge_maze_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
+//	public static final MiniatureStructureBlock HOLLOW_HILL_MINIATURE_STRUCTURE = registerDirectWithItem("hollow_hill_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
+//	public static final MiniatureStructureBlock QUEST_GROVE_MINIATURE_STRUCTURE = registerDirectWithItem("quest_grove_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
+//	public static final MiniatureStructureBlock MUSHROOM_TOWER_MINIATURE_STRUCTURE = registerDirectWithItem("mushroom_tower_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
 	public static final MiniatureStructureBlock NAGA_COURTYARD_MINIATURE_STRUCTURE = registerDirectWithItem("naga_courtyard_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
 	public static final MiniatureStructureBlock LICH_TOWER_MINIATURE_STRUCTURE = registerDirectWithItem("lich_tower_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
-//	public static final DeferredBlock<Block> MINOTAUR_LABYRINTH_MINIATURE_STRUCTURE = register("minotaur_labyrinth_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
-//	public static final DeferredBlock<Block> HYDRA_LAIR_MINIATURE_STRUCTURE = register("hydra_lair_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
-//	public static final DeferredBlock<Block> GOBLIN_STRONGHOLD_MINIATURE_STRUCTURE = register("goblin_stronghold_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
-//	public static final DeferredBlock<Block> DARK_TOWER_MINIATURE_STRUCTURE = register("dark_tower_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
-//	public static final DeferredBlock<Block> YETI_CAVE_MINIATURE_STRUCTURE = register("yeti_cave_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
-//	public static final DeferredBlock<Block> AURORA_PALACE_MINIATURE_STRUCTURE = register("aurora_palace_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
-//	public static final DeferredBlock<Block> TROLL_CAVE_COTTAGE_MINIATURE_STRUCTURE = register("troll_cave_cottage_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
-//	public static final DeferredBlock<Block> FINAL_CASTLE_MINIATURE_STRUCTURE = register("final_castle_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
+//	public static final MiniatureStructureBlock MINOTAUR_LABYRINTH_MINIATURE_STRUCTURE = registerDirectWithItem("minotaur_labyrinth_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
+//	public static final MiniatureStructureBlock HYDRA_LAIR_MINIATURE_STRUCTURE = registerDirectWithItem("hydra_lair_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
+//	public static final MiniatureStructureBlock GOBLIN_STRONGHOLD_MINIATURE_STRUCTURE = registerDirectWithItem("goblin_stronghold_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
+//	public static final MiniatureStructureBlock DARK_TOWER_MINIATURE_STRUCTURE = registerDirectWithItem("dark_tower_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
+//	public static final MiniatureStructureBlock YETI_CAVE_MINIATURE_STRUCTURE = registerDirectWithItem("yeti_cave_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
+//	public static final MiniatureStructureBlock AURORA_PALACE_MINIATURE_STRUCTURE = registerDirectWithItem("aurora_palace_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
+//	public static final MiniatureStructureBlock TROLL_CAVE_COTTAGE_MINIATURE_STRUCTURE = registerDirectWithItem("troll_cave_cottage_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
+//	public static final MiniatureStructureBlock FINAL_CASTLE_MINIATURE_STRUCTURE = registerDirectWithItem("final_castle_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
 
 	//storage blocks
 	public static final KnightmetalBlock KNIGHTMETAL_BLOCK = registerDirectWithTooltipItem("knightmetal_block", KnightmetalBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().sound(SoundType.NETHERITE_BLOCK).strength(5.0F, 40.0F), simpleTooltip("block.twilightforest.knightmetal_block.desc", ChatFormatting.GRAY));
@@ -675,10 +674,6 @@ public class TFBlocks {
 	public static final FlowerPotBlock POTTED_GREEN_THORN = registerDirect("potted_green_thorn", properties -> new SpecialFlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, () -> GREEN_THORNS, properties), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT));
 	public static final FlowerPotBlock POTTED_DEAD_THORN = registerDirect("potted_dead_thorn", properties -> new SpecialFlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, () -> BURNT_THORNS, properties), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT));
 
-	public static <T extends Block> DeferredBlock<T> register(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
-		return registerBlock(name, () -> block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, TwilightForestMod.prefix(name)))));
-	}
-
 	public static void addAlias(Identifier from, Identifier to) {
 		if (registered) throw new IllegalStateException("Cannot add aliases after blocks have been registered.");
 		BLOCK_ALIASES.put(from, to);
@@ -695,18 +690,8 @@ public class TFBlocks {
 		applyBlockAliases();
 	}
 
-	public static <T extends Block> DeferredBlock<T> registerCustomID(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties, String id) {
-		return registerBlock(name, () -> block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, TwilightForestMod.prefix(name))).overrideDescription("block.twilightforest." + id)));
-	}
-
 	private static <T extends Block> T registerDirectCustomID(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties, String id) {
 		return registerDirect(name, block, () -> properties.get().overrideDescription("block.twilightforest." + id));
-	}
-
-	public static <T extends Block> DeferredBlock<T> registerWithItem(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
-		DeferredBlock<T> ret = registerBlock(name, () -> block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, TwilightForestMod.prefix(name)))));
-		BLOCK_ITEM_REGISTRATIONS.add(() -> TFItems.registerBlockItem(name, itemProps -> new BlockItem(ret.get(), itemProps), () -> new Item.Properties().useBlockDescriptionPrefix()));
-		return ret;
 	}
 
 	private static <T extends Block> T registerDirectWithItem(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
@@ -715,34 +700,16 @@ public class TFBlocks {
 		return value;
 	}
 
-	public static <T extends Block> DeferredBlock<T> registerWithTooltipItem(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties, TooltipBlockItem.TooltipAppender tooltipAppender) {
-		DeferredBlock<T> ret = registerBlock(name, () -> block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, TwilightForestMod.prefix(name)))));
-		BLOCK_ITEM_REGISTRATIONS.add(() -> TFItems.registerBlockItem(name, itemProps -> new TooltipBlockItem(ret.get(), itemProps, tooltipAppender), () -> new Item.Properties().useBlockDescriptionPrefix()));
-		return ret;
-	}
-
 	private static <T extends Block> T registerDirectWithTooltipItem(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties, TooltipBlockItem.TooltipAppender tooltipAppender) {
 		T value = registerDirect(name, block, properties);
 		BLOCK_ITEM_REGISTRATIONS.add(() -> TFItems.registerBlockItem(name, itemProps -> new TooltipBlockItem(value, itemProps, tooltipAppender), () -> new Item.Properties().useBlockDescriptionPrefix()));
 		return value;
 	}
 
-	public static <T extends Block> DeferredBlock<T> registerFireResistantItem(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
-		DeferredBlock<T> ret = registerBlock(name, () -> block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, TwilightForestMod.prefix(name)))));
-		BLOCK_ITEM_REGISTRATIONS.add(() -> TFItems.registerBlockItem(name, itemProps -> new BlockItem(ret.get(), itemProps), () -> new Item.Properties().useBlockDescriptionPrefix().fireResistant().rarity(Rarity.UNCOMMON)));
-		return ret;
-	}
-
 	private static <T extends Block> T registerDirectFireResistantItem(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
 		T value = registerDirect(name, block, properties);
 		BLOCK_ITEM_REGISTRATIONS.add(() -> TFItems.registerBlockItem(name, itemProps -> new BlockItem(value, itemProps), () -> new Item.Properties().useBlockDescriptionPrefix().fireResistant().rarity(Rarity.UNCOMMON)));
 		return value;
-	}
-
-	public static <T extends Block> DeferredBlock<T> registerDoubleBlockItem(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
-		DeferredBlock<T> ret = registerBlock(name, () -> block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, TwilightForestMod.prefix(name)))));
-		BLOCK_ITEM_REGISTRATIONS.add(() -> TFItems.registerBlockItem(name, itemProps -> new DoubleHighBlockItem(ret.get(), itemProps), () -> new Item.Properties().useBlockDescriptionPrefix()));
-		return ret;
 	}
 
 	private static <T extends Block> T registerDirectDoubleBlockItem(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
@@ -755,24 +722,6 @@ public class TFBlocks {
 		T value = registerDirect(name, block, properties);
 		BLOCK_ITEM_REGISTRATIONS.add(() -> TFItems.registerBlockItem(name, itemProps -> new WroughtIronFenceItem(value, itemProps), () -> new Item.Properties().useBlockDescriptionPrefix()));
 		return value;
-	}
-
-	private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<? extends T> factory) {
-		if (registered) throw new IllegalStateException("Cannot register new blocks after block registry has been frozen.");
-		Identifier id = TwilightForestMod.prefix(name);
-		DeferredBlock<T> holder = DeferredBlock.create(id, factory);
-		BLOCKS.put(id, new BlockEntry() {
-			@Override
-			public Block value() {
-				return holder.get();
-			}
-
-			@Override
-			public void register() {
-				holder.register(BuiltInRegistries.BLOCK);
-			}
-		});
-		return holder;
 	}
 
 	private static <T extends Block> T registerDirect(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
