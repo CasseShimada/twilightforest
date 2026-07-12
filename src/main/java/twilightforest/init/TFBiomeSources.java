@@ -8,15 +8,8 @@ import twilightforest.TwilightForestMod;
 import twilightforest.world.components.biomesources.TFBiomeProvider;
 
 public class TFBiomeSources {
-	public static final MapCodec<TFBiomeProvider> TWILIGHT_BIOMES = TFBiomeProvider.TF_CODEC;
-	private static boolean registered;
+	public static final MapCodec<TFBiomeProvider> TWILIGHT_BIOMES = Registry.register(BuiltInRegistries.BIOME_SOURCE, TwilightForestMod.prefix("twilight_biomes"), TFBiomeProvider.TF_CODEC);
 
-	public static void register() {
-		if (registered) {
-			return;
-		}
-
-		registered = true;
-		Registry.register(BuiltInRegistries.BIOME_SOURCE, TwilightForestMod.prefix("twilight_biomes"), TWILIGHT_BIOMES);
+	public static void init() {
 	}
 }
