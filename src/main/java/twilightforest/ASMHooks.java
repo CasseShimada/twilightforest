@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.objects.ObjectListIterator;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
@@ -18,7 +17,6 @@ import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
-import twilightforest.init.TFDataAttachments;
 import twilightforest.util.ArmorUtil;
 import twilightforest.entity.boss.UrGhast;
 import twilightforest.init.TFDataComponents;
@@ -123,18 +121,4 @@ public class ASMHooks {
 		return false;
 	}
 
-	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// mob
-	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * {@link twilightforest.asm.transformers.mob.PathFinderUnrestrainedByLeash}
-	 *
-	 * Injection Point:<br/>
-	 * {@link net.minecraft.world.entity.PathfinderMob#shouldStayCloseToLeashHolder()}<br/>
-	 * Targets: IRETURN
-	 */
-	public static boolean overrideStayCloseToHolder(boolean prior, PathfinderMob mob) {
-		return prior && !TFDataAttachments.has(mob, TFDataAttachments.LEASH_PATHFINDER_OVERRIDE);
-	}
 }
