@@ -33,13 +33,12 @@ import java.util.function.Supplier;
 
 public class TFEntities {
 
-	private static final Map<Identifier, EntityType<?>> ENTITY_TYPES = new LinkedHashMap<>();
 	private static final Map<Identifier, Identifier> ENTITY_ALIASES = new LinkedHashMap<>();
 	private static final Map<Identifier, Item> SPAWN_EGGS = new LinkedHashMap<>();
 	private static final Map<Identifier, Identifier> SPAWN_EGG_ALIASES = new LinkedHashMap<>();
 	private static final Map<EntityType<? extends LivingEntity>, Supplier<AttributeSupplier.Builder>> ATTRIBUTES = new HashMap<>();
 	private static final Map<EntityType<?>, SpawnPlacements.SpawnPredicate<?>> SPAWN_PREDICATES = new HashMap<>();
-	private static boolean registered;
+	private static boolean entityAliasesApplied;
 	private static boolean spawnEggsRegistered;
 
 	public static final EntityType<Adherent> ADHERENT = registerWithAttributes("adherent", EntityType.Builder.of(Adherent::new, MobCategory.MONSTER).sized(0.8F, 2.2F).clientTrackingRange(8), Adherent::registerAttributes);
@@ -178,9 +177,7 @@ public class TFEntities {
 	}
 
 	private static <E extends Entity> EntityType<E> register(String name, EntityType<E> type) {
-		if (registered) throw new IllegalStateException("Cannot register new entity types after registry has been frozen.");
-		ENTITY_TYPES.put(TwilightForestMod.prefix(name), type);
-		return type;
+		return Registry.register(BuiltInRegistries.ENTITY_TYPE, TwilightForestMod.prefix(name), type);
 	}
 
 	private static ResourceKey<EntityType<?>> createIDFor(String name) {
@@ -188,7 +185,7 @@ public class TFEntities {
 	}
 
 	public static void addEntityAlias(Identifier from, Identifier to) {
-		if (registered) throw new IllegalStateException("Cannot add aliases after entity types have been registered.");
+		if (entityAliasesApplied) throw new IllegalStateException("Cannot add aliases after entity type aliases have been applied.");
 		ENTITY_ALIASES.put(from, to);
 	}
 
@@ -210,13 +207,12 @@ public class TFEntities {
 		SPAWN_PREDICATES.forEach(consumer);
 	}
 
-	public static void register() {
-		if (registered) {
+	public static void init() {
+		if (entityAliasesApplied) {
 			return;
 		}
 
-		registered = true;
-		ENTITY_TYPES.forEach((id, type) -> Registry.register(BuiltInRegistries.ENTITY_TYPE, id, type));
+		entityAliasesApplied = true;
 		applyEntityAliases();
 	}
 
