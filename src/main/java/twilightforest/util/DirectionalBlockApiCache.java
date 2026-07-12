@@ -11,17 +11,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Cached Fabric {@link BlockApiLookup} access keyed by position.
- *
- * <p>This replaces the previous BlockCapability cache used by the Sorting Core without pulling in a porting layer.</p>
+ * Cached Fabric {@link BlockApiLookup} access keyed by level and position.
  */
-public class BlockCapabilityDirectionalCache<R> {
+public final class DirectionalBlockApiCache<R> {
 
-	private final Map<BlockPosAndLookup<R>, BlockApiCache<R, Direction>> data = new HashMap<>();
+	private final Map<CacheKey<R>, BlockApiCache<R, Direction>> data = new HashMap<>();
 
 	@Nullable
 	public R get(BlockApiLookup<R, Direction> lookup, ServerLevel level, BlockPos pos, Direction direction) {
-		BlockPosAndLookup<R> key = new BlockPosAndLookup<>(pos, lookup);
+		CacheKey<R> key = new CacheKey<>(level, pos.immutable(), lookup);
 		BlockApiCache<R, Direction> cache = this.data.get(key);
 		if (cache == null) {
 			cache = BlockApiCache.create(lookup, level, pos);
@@ -30,7 +28,7 @@ public class BlockCapabilityDirectionalCache<R> {
 		return cache.find(direction);
 	}
 
-	private record BlockPosAndLookup<R>(BlockPos pos, BlockApiLookup<R, Direction> lookup) {
+	private record CacheKey<R>(ServerLevel level, BlockPos pos, BlockApiLookup<R, Direction> lookup) {
 
 	}
 }

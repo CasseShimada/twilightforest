@@ -23,14 +23,14 @@ import twilightforest.config.TFConfig;
 import twilightforest.tags.TFEntityTypeTags;
 import twilightforest.init.TFParticleType;
 import twilightforest.network.ParticlePacket;
-import twilightforest.util.BlockCapabilityDirectionalCache;
+import twilightforest.util.DirectionalBlockApiCache;
 import twilightforest.util.WorldUtil;
 
 import java.util.*;
 
 public class SortLogCoreBlock extends SpecialMagicLogBlock {
 
-	private final BlockCapabilityDirectionalCache<Storage<ItemVariant>> capabilityCache = new BlockCapabilityDirectionalCache<>();
+	private final DirectionalBlockApiCache<Storage<ItemVariant>> blockApiCache = new DirectionalBlockApiCache<>();
 
 	public SortLogCoreBlock(Properties properties) {
 		super(properties);
@@ -54,7 +54,7 @@ public class SortLogCoreBlock extends SpecialMagicLogBlock {
 					if (Math.abs(blockPos.getX() - pos.getX()) <= 2 && Math.abs(blockPos.getY() - pos.getY()) <= 2 && Math.abs(blockPos.getZ() - pos.getZ()) <= 2) {
 						List<Storage<ItemVariant>> storages = new ArrayList<>();
 						for (Direction side : Direction.values()) {
-							Storage<ItemVariant> storage = this.capabilityCache.get(ItemStorage.SIDED, level, blockPos, side);
+							Storage<ItemVariant> storage = this.blockApiCache.get(ItemStorage.SIDED, level, blockPos, side);
 							if (storage != null) storages.add(storage);
 						}
 						if (!storages.isEmpty()) {
@@ -62,7 +62,7 @@ public class SortLogCoreBlock extends SpecialMagicLogBlock {
 						}
 					} else { // Output if its outside that range
 						for (Direction side : Direction.values()) {
-							Storage<ItemVariant> storage = this.capabilityCache.get(ItemStorage.SIDED, level, blockPos, side);
+							Storage<ItemVariant> storage = this.blockApiCache.get(ItemStorage.SIDED, level, blockPos, side);
 							if (storage != null) outputMap.put(storage, Vec3.upFromBottomCenterOf(blockPos, 1.9D));
 						}
 					}
