@@ -95,7 +95,7 @@ public final class TwilightForestMod implements ModInitializer {
 		ResourceConditions.register(UncraftingTableCondition.TYPE);
 		TFRegistries.bootstrap();
 		// Registries
-		registerDeferredRegistries();
+		registerStaticRegistries();
 		registerDynamicRegistries();
 		registerReloadListeners();
 		registerCommands();
@@ -105,7 +105,7 @@ public final class TwilightForestMod implements ModInitializer {
 		initCommon();
 	}
 
-	private static void registerDeferredRegistries() {
+	private static void registerStaticRegistries() {
 		TFSounds.register();
 		TFDataComponents.register();
 		TFRemapper.addBlockAliases();
