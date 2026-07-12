@@ -2,19 +2,12 @@ package twilightforest.init;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import twilightforest.TwilightForestMod;
 import twilightforest.world.components.structures.type.*;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 public class TFStructureTypes {
-	private static final Map<Identifier, StructureType<?>> STRUCTURE_TYPES = new LinkedHashMap<>();
-	private static boolean registered;
-
 	public static final StructureType<ProgressionWrappedStructure> PROGRESSION_WRAPPED = registerType("progression", () -> ProgressionWrappedStructure.CODEC);
 	public static final StructureType<FallenTrunkStructure> FALLEN_TRUNK = registerType("fallen_trunk", () -> FallenTrunkStructure.CODEC);
 	public static final StructureType<HollowTreeStructure> HOLLOW_TREE = registerType("hollow_tree", () -> HollowTreeStructure.CODEC);
@@ -35,16 +28,9 @@ public class TFStructureTypes {
 	public static final StructureType<FinalCastleStructure> FINAL_CASTLE = registerType("final_castle", () -> FinalCastleStructure.CODEC);
 
 	private static <P extends Structure> StructureType<P> registerType(String name, StructureType<P> type) {
-		STRUCTURE_TYPES.put(TwilightForestMod.prefix(name), type);
-		return type;
+		return Registry.register(BuiltInRegistries.STRUCTURE_TYPE, TwilightForestMod.prefix(name), type);
 	}
 
-	public static void register() {
-		if (registered) {
-			return;
-		}
-
-		registered = true;
-		STRUCTURE_TYPES.forEach((id, type) -> Registry.register(BuiltInRegistries.STRUCTURE_TYPE, id, type));
+	public static void init() {
 	}
 }
