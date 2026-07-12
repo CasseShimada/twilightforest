@@ -10,7 +10,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import twilightforest.init.custom.BiomeLayerStack;
 import twilightforest.init.custom.BiomeLayerTypes;
-import twilightforest.util.WorldUtil;
 import twilightforest.world.components.layer.vanillalegacy.Area;
 import twilightforest.world.components.layer.vanillalegacy.BiomeLayerFactory;
 import twilightforest.world.components.layer.vanillalegacy.BiomeLayerType;
@@ -42,10 +41,11 @@ public record KeyBiomesLayer(List<ResourceKey<Biome>> keyBiomes) implements Area
 
 	@Override
 	public ResourceKey<Biome> applyPixel(RandomContext randomContext, Area layer, int x, int z) {
-		final Random rand = new Random(WorldUtil.getOverworldSeed() + (x & -4) * 25117L + (z & -4) * 151121L);
+		long worldSeed = randomContext.getWorldSeed();
+		final Random rand = new Random(worldSeed + (x & -4) * 25117L + (z & -4) * 151121L);
 		int ox = rand.nextInt(2) + 1;
 		int oz = rand.nextInt(2) + 1;
-		rand.setSeed(WorldUtil.getOverworldSeed() + (x / 8) * 25117L + (z / 8) * 151121L);
+		rand.setSeed(worldSeed + (x / 8) * 25117L + (z / 8) * 151121L);
 		int offset = rand.nextInt(3);
 		if ((x & 3) == ox && (z & 3) == oz) {
 			// determine which of the 4

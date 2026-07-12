@@ -13,6 +13,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import org.jetbrains.annotations.NotNull;
 import twilightforest.init.custom.BiomeLayerStack;
+import twilightforest.util.WorldUtil;
 import twilightforest.world.components.chunkgenerators.TerrainColumn;
 import twilightforest.world.components.layer.vanillalegacy.BiomeLayerFactory;
 import twilightforest.world.components.layer.vanillalegacy.area.LazyArea;
@@ -49,7 +50,10 @@ public class BiomeDensitySource {
 		super();
 
 		this.genBiomeConfig = biomeLayerFactory;
-		this.genBiomes = Suppliers.memoize(() -> this.genBiomeConfig.value().build(salt -> new LazyAreaContext(25, salt)));
+		this.genBiomes = Suppliers.memoize(() -> {
+			long worldSeed = WorldUtil.getOverworldSeed();
+			return this.genBiomeConfig.value().build(salt -> new LazyAreaContext(25, worldSeed, salt));
+		});
 
 		this.biomeList = list;
 	}

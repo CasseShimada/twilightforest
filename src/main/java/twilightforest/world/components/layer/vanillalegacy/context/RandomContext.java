@@ -5,11 +5,18 @@ import net.minecraft.util.LinearCongruentialGenerator;
 import net.minecraft.world.level.biome.Biome;
 
 public class RandomContext implements Context {
+	private final long worldSeed;
 	private final long seed;
 	private long rval;
 
-	public RandomContext(long seed) {
+	public RandomContext(long worldSeed, long seed) {
+		this.worldSeed = worldSeed;
 		this.seed = seed;
+	}
+
+	@Override
+	public long getWorldSeed() {
+		return this.worldSeed;
 	}
 
 	public void initRandom(long x, long z) {

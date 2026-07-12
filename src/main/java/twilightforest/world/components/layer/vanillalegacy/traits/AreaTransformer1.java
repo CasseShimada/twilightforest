@@ -9,7 +9,7 @@ import twilightforest.world.components.layer.vanillalegacy.context.RandomContext
 public interface AreaTransformer1 extends DimensionTransformer {
 	default <R extends Area> R run(BigContext<R> context, R area) {
 		return context.createResult((x, z) -> {
-			RandomContext randomContext = new RandomContext(context.getSeed());
+			RandomContext randomContext = new RandomContext(context.getWorldSeed(), context.getSeed());
 			randomContext.initRandom(x, z);
 			return this.applyPixel(randomContext, area, x, z);
 		}, area);
