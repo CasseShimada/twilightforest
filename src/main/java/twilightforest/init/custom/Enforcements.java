@@ -5,7 +5,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.core.registries.BuiltInRegistries;
 import twilightforest.TFRegistries;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.TFDamageTypes;
@@ -42,7 +41,7 @@ public class Enforcements {
 
 	public static final Enforcement FROST = register(FROST_KEY, new Enforcement((player, level, restriction) -> {
 		if (player.tickCount % 60 == 0 && level.tickRateManager().runsNormally()) {
-			player.addEffect(new MobEffectInstance(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(TFMobEffects.FROSTY), 100, (int) restriction.multiplier(), false, true));
+			player.addEffect(new MobEffectInstance(TFMobEffects.FROSTY, 100, (int) restriction.multiplier(), false, true));
 		}
 	}));
 
