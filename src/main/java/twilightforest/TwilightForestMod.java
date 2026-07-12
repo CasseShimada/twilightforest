@@ -252,9 +252,9 @@ public final class TwilightForestMod implements ModInitializer {
 		flammables.add(TFBlocks.CANOPY_WOOD, 5, 5);
 		flammables.add(TFBlocks.STRIPPED_CANOPY_LOG, 5, 5);
 		flammables.add(TFBlocks.STRIPPED_CANOPY_WOOD, 5, 5);
-		flammables.add(TFBlocks.HOLLOW_CANOPY_LOG_HORIZONTAL.get(), 5, 5);
-		flammables.add(TFBlocks.HOLLOW_CANOPY_LOG_VERTICAL.get(), 5, 5);
-		flammables.add(TFBlocks.HOLLOW_CANOPY_LOG_CLIMBABLE.get(), 5, 5);
+		flammables.add(TFBlocks.HOLLOW_CANOPY_LOG_HORIZONTAL, 5, 5);
+		flammables.add(TFBlocks.HOLLOW_CANOPY_LOG_VERTICAL, 5, 5);
+		flammables.add(TFBlocks.HOLLOW_CANOPY_LOG_CLIMBABLE, 5, 5);
 		flammables.add(TFBlocks.CANOPY_BANISTER, 5, 20);
 		flammables.add(TFBlocks.CANOPY_PLANKS, 5, 20);
 		flammables.add(TFBlocks.CANOPY_SLAB, 5, 20);
