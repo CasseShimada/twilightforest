@@ -3,20 +3,13 @@ package twilightforest.init;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.entity.*;
 import twilightforest.block.entity.bookshelf.ChiseledCanopyShelfBlockEntity;
 import twilightforest.block.entity.spawner.*;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 public class TFBlockEntities {
-	private static final Map<Identifier, BlockEntityType<?>> BLOCK_ENTITIES = new LinkedHashMap<>();
-	private static boolean registered;
-
 	public static final BlockEntityType<AntibuilderBlockEntity> ANTIBUILDER = register("antibuilder", FabricBlockEntityTypeBuilder.create(AntibuilderBlockEntity::new, TFBlocks.ANTIBUILDER).build());
 	public static final BlockEntityType<CinderFurnaceBlockEntity> CINDER_FURNACE = register("cinder_furnace", FabricBlockEntityTypeBuilder.create(CinderFurnaceBlockEntity::new, TFBlocks.CINDER_FURNACE).build());
 	public static final BlockEntityType<CarminiteReactorBlockEntity> CARMINITE_REACTOR = register("carminite_reactor", FabricBlockEntityTypeBuilder.create(CarminiteReactorBlockEntity::new, TFBlocks.CARMINITE_REACTOR).build());
@@ -95,17 +88,10 @@ public class TFBlockEntities {
 		TFBlocks.OMINOUS_GREEN_CANDLE, TFBlocks.OMINOUS_RED_CANDLE,
 		TFBlocks.OMINOUS_BLACK_CANDLE).build());
 
-	public static void register() {
-		if (registered) {
-			return;
-		}
-
-		registered = true;
-		BLOCK_ENTITIES.forEach((id, type) -> Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, id, type));
+	public static void init() {
 	}
 
 	private static <T extends BlockEntityType<?>> T register(String name, T type) {
-		BLOCK_ENTITIES.put(TwilightForestMod.prefix(name), type);
-		return type;
+		return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, TwilightForestMod.prefix(name), type);
 	}
 }
