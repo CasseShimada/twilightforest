@@ -20,9 +20,12 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.function.Predicate;
 
-public class MultipartEntityUtil {
+public final class MultipartEntityUtil {
 
 	private static final Map<Level, Set<Entity>> TRACKED_MULTIPARTS = Collections.synchronizedMap(new WeakHashMap<>());
+
+	private MultipartEntityUtil() {
+	}
 
 	public static void trackMultipartEntity(Entity entity) {
 		if (!(entity instanceof TFMultipartEntity multipart) || multipart.getParts() == null) {
@@ -117,12 +120,11 @@ public class MultipartEntityUtil {
 		return null;
 	}
 
-	public Entity sendDirtyMultipartEntityData(Entity entity) {
+	public static void sendDirtyMultipartEntityData(Entity entity) {
 		if (entity instanceof TFMultipartEntity) {
 			TFPart.assignPartIDs(entity);
 			UpdateTFMultipartPacket packet = new UpdateTFMultipartPacket(entity);
 			PlayerLookup.tracking(entity).forEach(player -> ServerPlayNetworking.send(player, packet));
 		}
-		return entity;
 	}
 }

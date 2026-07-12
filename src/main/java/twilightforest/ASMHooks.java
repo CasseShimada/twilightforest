@@ -20,7 +20,6 @@ import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFDataAttachments;
 import twilightforest.util.ArmorUtil;
-import twilightforest.util.multiparts.MultipartEntityUtil;
 import twilightforest.entity.boss.UrGhast;
 import twilightforest.init.TFDataComponents;
 import twilightforest.world.components.structures.CustomDensitySource;
@@ -33,7 +32,6 @@ import java.util.List;
 public class ASMHooks {
 
 	private static final ArmorUtil armorUtil = new ArmorUtil();
-	private static final MultipartEntityUtil multipartEntityUtil = new MultipartEntityUtil();
 
 	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// armor
@@ -123,16 +121,6 @@ public class ASMHooks {
 		}
 
 		return false;
-	}
-
-	/**
-	 * {@link twilightforest.asm.transformers.multipart.SendDirtytEntityDataTransformer}<p/>
-	 *
-	 * Injection Point:<br/>
-	 * {@link net.minecraft.server.level.ServerEntity#sendDirtyEntityData}
-	 */
-	public static Entity sendDirtyEntityData(Entity entity) {
-		return multipartEntityUtil.sendDirtyMultipartEntityData(entity);
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

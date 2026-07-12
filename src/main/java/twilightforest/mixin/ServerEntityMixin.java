@@ -9,10 +9,10 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import twilightforest.ASMHooks;
 import twilightforest.entity.TFMultipartEntity;
 import twilightforest.entity.TFPart;
 import twilightforest.network.UpdateTFMultipartPacket;
+import twilightforest.util.multiparts.MultipartEntityUtil;
 
 @Mixin(ServerEntity.class)
 public class ServerEntityMixin {
@@ -20,7 +20,7 @@ public class ServerEntityMixin {
 
 	@Inject(method = "sendDirtyEntityData", at = @At("TAIL"))
 	private void twilightforest$sendMultipartUpdates(CallbackInfo ci) {
-		ASMHooks.sendDirtyEntityData(this.entity);
+		MultipartEntityUtil.sendDirtyMultipartEntityData(this.entity);
 	}
 
 	@Inject(method = "sendChanges", at = @At("TAIL"))
