@@ -19,7 +19,7 @@ public class TFDataSerializers {
 	public static final EntityDataSerializer<Holder<TinyBirdVariant>> TINY_BIRD_VARIANT = EntityDataSerializer.forValueType(ByteBufCodecs.holderRegistry(TFRegistries.Keys.TINY_BIRD_VARIANT));
 	public static final EntityDataSerializer<Holder<MagicPaintingVariant>> MAGIC_PAINTING_VARIANT = EntityDataSerializer.forValueType(ByteBufCodecs.holderRegistry(TFRegistries.Keys.MAGIC_PAINTINGS));
 
-	public static void register() {
+	public static void init() {
 		FabricEntityDataRegistry.register(TwilightForestMod.prefix("string_list"), STRING_LIST);
 		FabricEntityDataRegistry.register(TwilightForestMod.prefix("dwarf_rabbit_variant"), DWARF_RABBIT_VARIANT);
 		FabricEntityDataRegistry.register(TwilightForestMod.prefix("tiny_bird_variant"), TINY_BIRD_VARIANT);
