@@ -7,16 +7,12 @@ import twilightforest.TwilightForestMod;
 import twilightforest.advancements.predicate.ItemColorPredicate;
 
 public class TFItemSubPredicates {
+	public static final DataComponentPredicate.Type<ItemColorPredicate> COLOR = Registry.register(
+		BuiltInRegistries.DATA_COMPONENT_PREDICATE_TYPE,
+		TwilightForestMod.prefix("color"),
+		new DataComponentPredicate.ConcreteType<>(ItemColorPredicate.CODEC)
+	);
 
-	public static final DataComponentPredicate.Type<ItemColorPredicate> COLOR = new DataComponentPredicate.ConcreteType<>(ItemColorPredicate.CODEC);
-	private static boolean registered;
-
-	public static void register() {
-		if (registered) {
-			return;
-		}
-
-		registered = true;
-		Registry.register(BuiltInRegistries.DATA_COMPONENT_PREDICATE_TYPE, TwilightForestMod.prefix("color"), COLOR);
+	public static void init() {
 	}
 }
