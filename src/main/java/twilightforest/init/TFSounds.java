@@ -6,14 +6,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import twilightforest.TwilightForestMod;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 public final class TFSounds {
-
-	private static final Map<Identifier, SoundEvent> SOUND_EVENTS = new LinkedHashMap<>();
-	private static boolean registered;
-
 	public static final SoundEvent ACID_RAIN_BURNS = createEvent("environment.twilightforest.acid_rain");
 	public static final SoundEvent ALPHA_YETI_ALERT = createEvent("entity.twilightforest.alpha_yeti.alert");
 	public static final SoundEvent ALPHA_YETI_DEATH = createEvent("entity.twilightforest.alpha_yeti.death");
@@ -340,19 +333,11 @@ public final class TFSounds {
 	public static final SoundEvent MUSIC_DISC_THREAD = createEvent("music_disc.twilightforest.thread");
 	public static final SoundEvent MUSIC_DISC_MOTION = createEvent("music_disc.twilightforest.motion");
 
-	public static void register() {
-		if (registered) {
-			return;
-		}
-
-		registered = true;
-		SOUND_EVENTS.forEach((id, sound) -> Registry.register(BuiltInRegistries.SOUND_EVENT, id, sound));
+	public static void init() {
 	}
 
 	private static SoundEvent createEvent(String sound) {
 		Identifier id = TwilightForestMod.prefix(sound);
-		SoundEvent event = SoundEvent.createVariableRangeEvent(id);
-		SOUND_EVENTS.put(id, event);
-		return event;
+		return Registry.register(BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));
 	}
 }
