@@ -41,7 +41,7 @@
       "relativeTo": "minecraft:bookshelf",
       "placement": "after",
       "items": [
-        "twilightforest:empty_canopy_bookshelf",
+        "twilightforest:chiseled_canopy_bookshelf",
         "twilightforest:canopy_bookshelf"
       ]
     }

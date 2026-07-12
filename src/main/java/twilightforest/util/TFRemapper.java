@@ -67,7 +67,9 @@ public final class TFRemapper {
 		remapBlockAndItem("stone_twist", "twisted_stone");
 		remapBlockAndItem("stone_twist_thin", "twisted_stone_pillar");
 		remapBlockAndItem("stone_pillar_bold", "bold_stone_pillar");
-		remapBlockAndItem("empty_bookshelf", "empty_canopy_bookshelf");
+		remapBlockAndItem("empty_bookshelf", "chiseled_canopy_bookshelf");
+		remapBlockAndItem("empty_canopy_bookshelf", "chiseled_canopy_bookshelf");
+		remapBlockAndItem("death_tome_spawner", "chiseled_canopy_bookshelf");
 		remapBlockAndItem("royal_rags", "coronation_carpet");
 		remapBlockAndItem("cursed_spawner", "sinister_spawner");
 
