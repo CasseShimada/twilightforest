@@ -14,16 +14,15 @@ public class TFPOITypes {
 	private static boolean registered;
 
 	public static final ResourceKey<PoiType> GHAST_TRAP_KEY = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, TwilightForestMod.prefix("ghast_trap"));
-	public static PoiType GHAST_TRAP;
 
-	public static void register() {
+	public static void init() {
 		if (registered) {
 			return;
 		}
 
 		registered = true;
-		GHAST_TRAP = new PoiType(ImmutableSet.copyOf(TFBlocks.GHAST_TRAP.getStateDefinition().getPossibleStates()), 0, 1);
-		Holder.Reference<PoiType> holder = Registry.registerForHolder(BuiltInRegistries.POINT_OF_INTEREST_TYPE, GHAST_TRAP_KEY, GHAST_TRAP);
-		PoiTypesInvoker.twilightforest$registerBlockStates(holder, GHAST_TRAP.matchingStates());
+		PoiType ghastTrap = new PoiType(ImmutableSet.copyOf(TFBlocks.GHAST_TRAP.getStateDefinition().getPossibleStates()), 0, 1);
+		Holder.Reference<PoiType> holder = Registry.registerForHolder(BuiltInRegistries.POINT_OF_INTEREST_TYPE, GHAST_TRAP_KEY, ghastTrap);
+		PoiTypesInvoker.twilightforest$registerBlockStates(holder, ghastTrap.matchingStates());
 	}
 }
