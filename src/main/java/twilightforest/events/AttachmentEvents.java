@@ -22,7 +22,9 @@ import twilightforest.network.UpdateShieldPacket;
 import twilightforest.world.NoReturnTeleporter;
 import twilightforest.world.TFTeleporter;
 
-public class CapabilityEvents {
+public final class AttachmentEvents {
+	private AttachmentEvents() {
+	}
 
 	public static void onPlayerTick(ServerPlayer player) {
 		if (TFDataAttachments.get(player, TFDataAttachments.FEATHER_FAN)) {
@@ -78,7 +80,7 @@ public class CapabilityEvents {
 		if (player == null || player.level().isClientSide()) {
 			return;
 		}
-		updateCapabilities(player, player);
+		syncAttachments(player, player);
 		if (!TFDataAttachments.has(player, TFDataAttachments.BANISHED_TO_TWILIGHT_FOREST)) {
 			newSpawnInTwilightForest(player);
 		}
@@ -86,16 +88,15 @@ public class CapabilityEvents {
 
 	public static void onPlayerChangeWorld(ServerPlayer player) {
 		if (player != null && !player.level().isClientSide()) {
-			updateCapabilities(player, player);
+			syncAttachments(player, player);
 		}
 	}
 
 	public static void onStartTracking(ServerPlayer tracker, Entity target) {
-		updateCapabilities(tracker, target);
+		syncAttachments(tracker, target);
 	}
 
-	// send any capabilities that are needed client-side
-	private static void updateCapabilities(ServerPlayer clientTarget, Entity shielded) {
+	private static void syncAttachments(ServerPlayer clientTarget, Entity shielded) {
 		var attachment = TFDataAttachments.get(shielded, TFDataAttachments.FORTIFICATION_SHIELDS);
 		if (attachment.shieldsLeft() > 0) {
 			ServerPlayNetworking.send(clientTarget, new UpdateShieldPacket(shielded.getId(), attachment.temporaryShieldsLeft(), attachment.permanentShieldsLeft()));

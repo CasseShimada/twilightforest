@@ -90,7 +90,7 @@ public final class TFEventHandlers {
 		ServerTickEvents.END_LEVEL_TICK.register(world -> {
 			for (ServerPlayer player : world.players()) {
 				TFTickHandler.onPlayerTick(player, world);
-				CapabilityEvents.onPlayerTick(player);
+				AttachmentEvents.onPlayerTick(player);
 			}
 		});
 
@@ -110,7 +110,7 @@ public final class TFEventHandlers {
 			if (ProgressionEvents.shouldCancelAttackInProtectedArea(entity, source.getEntity())) {
 				return false;
 			}
-			if (!CapabilityEvents.handleShieldDamage(entity, source)) {
+			if (!AttachmentEvents.handleShieldDamage(entity, source)) {
 				return false;
 			}
 			if (!HostileMountEvents.handleIncomingDamage(entity, source, amount)) {
@@ -147,17 +147,17 @@ public final class TFEventHandlers {
 
 		ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
 			CharmEvents.onPlayerRespawn(newPlayer, alive);
-			CapabilityEvents.onPlayerRespawn(newPlayer);
+			AttachmentEvents.onPlayerRespawn(newPlayer);
 		});
 
-		ServerPlayerEvents.JOIN.register(CapabilityEvents::onPlayerJoin);
+		ServerPlayerEvents.JOIN.register(AttachmentEvents::onPlayerJoin);
 
 		ServerEntityLevelChangeEvents.AFTER_PLAYER_CHANGE_LEVEL.register((player, origin, destination) ->
-			CapabilityEvents.onPlayerChangeWorld(player)
+			AttachmentEvents.onPlayerChangeWorld(player)
 		);
 
 		EntityTrackingEvents.START_TRACKING.register((entity, player) ->
-			CapabilityEvents.onStartTracking(player, entity)
+			AttachmentEvents.onStartTracking(player, entity)
 		);
 
 		ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register((player, isReloading) ->
