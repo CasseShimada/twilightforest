@@ -23,6 +23,7 @@ import twilightforest.entity.passive.*;
 import twilightforest.entity.projectile.*;
 import twilightforest.util.registry.RegistryAliasUtil;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -34,12 +35,12 @@ import java.util.function.Supplier;
 public class TFEntities {
 
 	private static final Map<Identifier, Identifier> ENTITY_ALIASES = new LinkedHashMap<>();
-	private static final Map<Identifier, Item> SPAWN_EGGS = new LinkedHashMap<>();
+	private static final List<Item> SPAWN_EGGS = new ArrayList<>();
 	private static final Map<Identifier, Identifier> SPAWN_EGG_ALIASES = new LinkedHashMap<>();
 	private static final Map<EntityType<? extends LivingEntity>, Supplier<AttributeSupplier.Builder>> ATTRIBUTES = new HashMap<>();
 	private static final Map<EntityType<?>, SpawnPlacements.SpawnPredicate<?>> SPAWN_PREDICATES = new HashMap<>();
 	private static boolean entityAliasesApplied;
-	private static boolean spawnEggsRegistered;
+	private static boolean spawnEggAliasesApplied;
 
 	public static final EntityType<Adherent> ADHERENT = registerWithAttributes("adherent", EntityType.Builder.of(Adherent::new, MobCategory.MONSTER).sized(0.8F, 2.2F).clientTrackingRange(8), Adherent::registerAttributes);
 	public static final EntityType<AlphaYeti> ALPHA_YETI = registerWithEgg("alpha_yeti", EntityType.Builder.of(AlphaYeti::new, MobCategory.MONSTER).sized(3.8F, 5.0F).clientTrackingRange(16), AlphaYeti::registerAttributes, Monster::checkAnyLightMonsterSpawnRules);
@@ -170,10 +171,10 @@ public class TFEntities {
 	}
 
 	private static void registerSpawnEgg(String name, EntityType<? extends Mob> entityType) {
-		if (spawnEggsRegistered) throw new IllegalStateException("Cannot register new spawn eggs after item registry has been frozen.");
+		if (spawnEggAliasesApplied) throw new IllegalStateException("Cannot register new spawn eggs after spawn egg aliases have been applied.");
 		Identifier id = TwilightForestMod.prefix(name);
 		ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, id);
-		SPAWN_EGGS.put(id, new SpawnEggItem(new Item.Properties().spawnEgg(entityType).setId(itemKey)));
+		SPAWN_EGGS.add(Registry.register(BuiltInRegistries.ITEM, id, new SpawnEggItem(new Item.Properties().spawnEgg(entityType).setId(itemKey))));
 	}
 
 	private static <E extends Entity> EntityType<E> register(String name, EntityType<E> type) {
@@ -190,13 +191,12 @@ public class TFEntities {
 	}
 
 	public static void addSpawnEggAlias(Identifier from, Identifier to) {
-		if (spawnEggsRegistered) throw new IllegalStateException("Cannot add aliases after spawn eggs have been registered.");
+		if (spawnEggAliasesApplied) throw new IllegalStateException("Cannot add aliases after spawn egg aliases have been applied.");
 		SPAWN_EGG_ALIASES.put(from, to);
 	}
 
 	public static Collection<? extends Item> registeredSpawnEggs() {
-		if (!spawnEggsRegistered) throw new IllegalStateException("Spawn eggs have not been registered yet.");
-		return List.copyOf(SPAWN_EGGS.values());
+		return List.copyOf(SPAWN_EGGS);
 	}
 
 	public static void forEachAttribute(BiConsumer<EntityType<? extends LivingEntity>, Supplier<AttributeSupplier.Builder>> consumer) {
@@ -216,13 +216,12 @@ public class TFEntities {
 		applyEntityAliases();
 	}
 
-	public static void registerSpawnEggs() {
-		if (spawnEggsRegistered) {
+	public static void initSpawnEggAliases() {
+		if (spawnEggAliasesApplied) {
 			return;
 		}
 
-		spawnEggsRegistered = true;
-		SPAWN_EGGS.forEach((id, item) -> Registry.register(BuiltInRegistries.ITEM, id, item));
+		spawnEggAliasesApplied = true;
 		applySpawnEggAliases();
 	}
 
