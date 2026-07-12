@@ -32,9 +32,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class TFCreativeTabs {
-	private static boolean registered;
-
-	public static final CreativeModeTab BLOCKS = FabricCreativeModeTab.builder()
+	public static final CreativeModeTab BLOCKS = register("blocks", FabricCreativeModeTab.builder()
 		.title(Component.translatable("itemGroup.twilightforest.blocks"))
 		.icon(() -> new ItemStack(TFBlocks.NAGA_COURTYARD_MINIATURE_STRUCTURE))
 		.displayItems((parameters, output) -> {
@@ -402,9 +400,9 @@ public class TFCreativeTabs {
 			output.accept(TFBlocks.KNIGHTMETAL_BLOCK);
 			output.accept(TFBlocks.CARMINITE_BLOCK);
 			output.accept(TFBlocks.ARCTIC_FUR_BLOCK);
-		}).build();
+		}).build());
 
-	public static final CreativeModeTab ITEMS = FabricCreativeModeTab.builder()
+	public static final CreativeModeTab ITEMS = register("items", FabricCreativeModeTab.builder()
 		.title(Component.translatable("itemGroup.twilightforest.items"))
 		.icon(() -> new ItemStack(TFBlocks.TWILIGHT_PORTAL_MINIATURE_STRUCTURE))
 		.displayItems((parameters, output) -> {
@@ -488,9 +486,9 @@ public class TFCreativeTabs {
 			output.accept(TFItems.MINING_CHEST_BOAT);
 			output.accept(TFItems.SORTING_CHEST_BOAT);
 			createSpawnEggsAlphabetical(output);
-		}).build();
+		}).build());
 
-	public static final CreativeModeTab EQUIPMENT = FabricCreativeModeTab.builder()
+	public static final CreativeModeTab EQUIPMENT = register("equipment", FabricCreativeModeTab.builder()
 		.title(Component.translatable("itemGroup.twilightforest.equipment"))
 		.icon(() -> new ItemStack(TFItems.KNIGHTMETAL_PICKAXE))
 		.displayItems((parameters, output) -> {
@@ -566,17 +564,13 @@ public class TFCreativeTabs {
 			output.accept(TFItems.CRUMBLE_HORN);
 			output.accept(TFItems.PEACOCK_FEATHER_FAN);
 			output.accept(TFItems.MOONWORM_QUEEN);
-		}).build();
+		}).build());
 
-	public static void register() {
-		if (registered) {
-			return;
-		}
+	public static void init() {
+	}
 
-		registered = true;
-		Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, TwilightForestMod.prefix("blocks"), BLOCKS);
-		Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, TwilightForestMod.prefix("items"), ITEMS);
-		Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, TwilightForestMod.prefix("equipment"), EQUIPMENT);
+	private static CreativeModeTab register(String name, CreativeModeTab tab) {
+		return Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, TwilightForestMod.prefix(name), tab);
 	}
 
 	private static void generateGearWithEnchants(CreativeModeTab.Output output, ItemLike item, EnchantmentInstance... instances) {
