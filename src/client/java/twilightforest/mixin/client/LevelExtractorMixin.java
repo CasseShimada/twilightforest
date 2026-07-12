@@ -5,7 +5,7 @@ import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import twilightforest.ASMHooksClient;
+import twilightforest.util.multiparts.MultipartEntityClientUtil;
 
 import java.util.Iterator;
 
@@ -16,6 +16,6 @@ public class LevelExtractorMixin {
 		at = @At(value = "INVOKE", target = "Ljava/lang/Iterable;iterator()Ljava/util/Iterator;")
 	)
 	private Iterator<Entity> twilightforest$injectMultipartEntities(Iterable<Entity> iterable) {
-		return ASMHooksClient.resolveEntitiesForRendering(iterable.iterator());
+		return MultipartEntityClientUtil.injectTFPartEntities(iterable.iterator());
 	}
 }

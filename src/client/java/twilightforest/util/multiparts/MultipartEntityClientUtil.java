@@ -8,13 +8,16 @@ import twilightforest.entity.TFPart;
 
 import java.util.Iterator;
 
-public class MultipartEntityClientUtil {
-	public Iterator<Entity> injectTFPartEntities(Iterator<Entity> iter) {
+public final class MultipartEntityClientUtil {
+	private MultipartEntityClientUtil() {
+	}
+
+	public static Iterator<Entity> injectTFPartEntities(Iterator<Entity> iter) {
 		return new MultipartEntityIteratorWrapper(iter);
 	}
 
 	@Nullable
-	public EntityRenderer<?, ?> tryLookupTFPartRenderer(@Nullable EntityRenderer<?, ?> renderer, Entity entity) {
+	public static EntityRenderer<?, ?> tryLookupTFPartRenderer(@Nullable EntityRenderer<?, ?> renderer, Entity entity) {
 		if (entity instanceof TFPart<?> part) {
 			return BakedMultiPartRenderers.lookup(part.renderer());
 		}

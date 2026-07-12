@@ -2,12 +2,10 @@ package twilightforest.util.multiparts;
 
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.world.entity.Entity;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import tamaized.beanification.junit.MockitoFixer;
 import twilightforest.entity.TFPart;
-import twilightforest.util.multiparts.MultipartEntityClientUtil;
 import net.minecraft.resources.Identifier;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,14 +13,6 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoFixer.class)
 public class MultipartEntityUtilTests {
-
-	private MultipartEntityClientUtil instance;
-
-	@BeforeEach
-	public void setup() {
-		instance = new MultipartEntityClientUtil();
-	}
-
 	@Test
 	public void tryLookupTFPartRenderer() {
 		Identifier location = Identifier.withDefaultNamespace("test");
@@ -34,7 +24,7 @@ public class MultipartEntityUtilTests {
 
 		EntityRenderer<?, ?> originalRenderer = mock(EntityRenderer.class);
 
-		EntityRenderer<?, ?> result = instance.tryLookupTFPartRenderer(originalRenderer, part);
+		EntityRenderer<?, ?> result = MultipartEntityClientUtil.tryLookupTFPartRenderer(originalRenderer, part);
 
 		assertNotNull(result);
 		assertSame(partRenderer, result);
@@ -49,7 +39,7 @@ public class MultipartEntityUtilTests {
 
 		EntityRenderer<?, ?> originalRenderer = mock(EntityRenderer.class);
 
-		EntityRenderer<?, ?> result = instance.tryLookupTFPartRenderer(originalRenderer, mock(Entity.class));
+		EntityRenderer<?, ?> result = MultipartEntityClientUtil.tryLookupTFPartRenderer(originalRenderer, mock(Entity.class));
 
 		assertNotNull(result);
 		assertNotSame(partRenderer, result);
