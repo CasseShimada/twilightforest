@@ -109,7 +109,7 @@ public final class TwilightForestMod implements ModInitializer {
 		TFSounds.init();
 		TFDataComponents.register();
 		TFRemapper.addBlockAliases();
-		TFBlocks.register();
+		TFBlocks.init();
 		TFRemapper.addEntityAliases();
 		TFEntities.init();
 		TFRemapper.addItemAliases();

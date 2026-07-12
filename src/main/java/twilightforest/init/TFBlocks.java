@@ -44,10 +44,9 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class TFBlocks {
-	private static final Map<Identifier, Block> BLOCKS = new LinkedHashMap<>();
 	private static final Map<Identifier, Identifier> BLOCK_ALIASES = new LinkedHashMap<>();
 	private static final List<Runnable> BLOCK_ITEM_REGISTRATIONS = new ArrayList<>();
-	private static boolean registered;
+	private static boolean initialized;
 	private static final float LEAF_PARTICLE_CHANCE = 0.01F;
 
 	public static final TFPortalBlock TWILIGHT_PORTAL = registerDirect("twilight_portal", TFPortalBlock::new, () -> BlockBehaviour.Properties.of().pushReaction(PushReaction.BLOCK).strength(-1.0F).sound(SoundType.GLASS).lightLevel((state) -> 11).noCollision().noOcclusion().noLootTable());
@@ -675,17 +674,16 @@ public class TFBlocks {
 	public static final FlowerPotBlock POTTED_DEAD_THORN = registerDirect("potted_dead_thorn", properties -> new SpecialFlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, () -> BURNT_THORNS, properties), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT));
 
 	public static void addAlias(Identifier from, Identifier to) {
-		if (registered) throw new IllegalStateException("Cannot add aliases after blocks have been registered.");
+		if (initialized) throw new IllegalStateException("Cannot add aliases after blocks have been initialized.");
 		BLOCK_ALIASES.put(from, to);
 	}
 
-	public static void register() {
-		if (registered) {
+	public static void init() {
+		if (initialized) {
 			return;
 		}
 
-		registered = true;
-		BLOCKS.forEach((id, block) -> Registry.register(BuiltInRegistries.BLOCK, id, block));
+		initialized = true;
 		BLOCK_ITEM_REGISTRATIONS.forEach(Runnable::run);
 		applyBlockAliases();
 	}
@@ -725,11 +723,9 @@ public class TFBlocks {
 	}
 
 	private static <T extends Block> T registerDirect(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
-		if (registered) throw new IllegalStateException("Cannot register new blocks after block registry has been frozen.");
+		if (initialized) throw new IllegalStateException("Cannot register new blocks after blocks have been initialized.");
 		Identifier id = TwilightForestMod.prefix(name);
-		T value = block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, id)));
-		BLOCKS.put(id, value);
-		return value;
+		return Registry.register(BuiltInRegistries.BLOCK, id, block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, id))));
 	}
 
 	private static void applyBlockAliases() {
