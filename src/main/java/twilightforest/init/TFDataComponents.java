@@ -10,7 +10,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.Identifier;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.Unit;
 import net.minecraft.world.level.block.Block;
@@ -22,14 +21,9 @@ import twilightforest.components.item.*;
 import twilightforest.entity.MagicPaintingVariant;
 import twilightforest.init.custom.MagicPaintingVariants;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.UUID;
 
 public class TFDataComponents {
-	private static final Map<Identifier, DataComponentType<?>> DATA_COMPONENTS = new LinkedHashMap<>();
-	private static boolean registered;
-
 	public static final DataComponentType<Unit> EMPERORS_CLOTH = register("emperors_cloth", DataComponentType.<Unit>builder().persistent(Unit.CODEC).networkSynchronized(StreamCodec.unit(Unit.INSTANCE)).build());
 	public static final DataComponentType<PotionFlaskComponent> POTION_FLASK_CONTENTS = register("flask_contents", DataComponentType.<PotionFlaskComponent>builder().persistent(PotionFlaskComponent.CODEC).networkSynchronized(PotionFlaskComponent.STREAM_CODEC).build());
 	public static final DataComponentType<Unit> INFINITE_GLASS_SWORD = register("infinite_glass_sword", DataComponentType.<Unit>builder().persistent(Unit.CODEC).networkSynchronized(StreamCodec.unit(Unit.INSTANCE)).build());
@@ -48,18 +42,11 @@ public class TFDataComponents {
 	public static final DataComponentType<Integer> ORE_RANGE = register("ore_range", DataComponentType.<Integer>builder().persistent(ExtraCodecs.NON_NEGATIVE_INT.orElse(1)).networkSynchronized(ByteBufCodecs.VAR_INT).cacheEncoding().build());
 	public static final DataComponentType<Block> ORE_FILTER = register("ore_filter", DataComponentType.<Block>builder().persistent(BuiltInRegistries.BLOCK.byNameCodec().orElse(Blocks.AIR)).networkSynchronized(ByteBufCodecs.registry(Registries.BLOCK)).cacheEncoding().build());
 
-	public static void register() {
-		if (registered) {
-			return;
-		}
-
-		registered = true;
-		DATA_COMPONENTS.forEach((id, type) -> Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, id, type));
+	public static void init() {
 	}
 
 	private static @NotNull <T> DataComponentType<T> register(String name, DataComponentType<T> type) {
-		DATA_COMPONENTS.put(TwilightForestMod.prefix(name), type);
-		return type;
+		return Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, TwilightForestMod.prefix(name), type);
 	}
 
 	private static @NotNull <T> DataComponentType<T> register(String name, final Codec<T> codec) {
