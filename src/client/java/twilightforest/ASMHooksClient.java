@@ -2,26 +2,13 @@ package twilightforest;
 
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.biome.Biome;
 import org.jetbrains.annotations.Nullable;
-import twilightforest.client.FoliageColorHandler;
 import twilightforest.util.multiparts.MultipartEntityClientUtil;
 
 import java.util.Iterator;
 
 public class ASMHooksClient {
-	private static final FoliageColorHandler foliageColorHandler = new FoliageColorHandler();
 	private static final MultipartEntityClientUtil multipartEntityUtil = new MultipartEntityClientUtil();
-
-	/**
-	 * {@link twilightforest.asm.transformers.foliage.FoliageColorResolverTransformer}<p/>
-	 *
-	 * Injection Point:<br/>
-	 * {@link net.minecraft.client.renderer.BiomeColors#FOLIAGE_COLOR_RESOLVER}
-	 */
-	public static int resolveFoliageColor(int o, Biome biome, double x, double z) {
-		return foliageColorHandler.get(o, biome, x, z);
-	}
 
 	/**
 	 * {@link twilightforest.asm.transformers.multipart.ResolveEntitiesForRendereringTransformer}<p/>

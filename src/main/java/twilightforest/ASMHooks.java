@@ -4,26 +4,18 @@ import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectListIterator;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.DensityFunction;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -31,18 +23,12 @@ import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.util.TriState;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFDataAttachments;
 import twilightforest.util.ArmorUtil;
 import twilightforest.util.multiparts.MultipartEntityUtil;
-import twilightforest.block.CloudBlock;
-import twilightforest.block.WroughtIronFenceBlock;
-import twilightforest.config.TFConfig;
 import twilightforest.entity.boss.UrGhast;
-import twilightforest.init.TFBlocks;
 import twilightforest.init.TFDataComponents;
-import twilightforest.init.custom.ChunkBlanketProcessors;
 import twilightforest.util.WorldUtil;
 import twilightforest.world.components.structures.CustomDensitySource;
 
@@ -127,47 +113,6 @@ public class ASMHooks {
 		return o + newDensity;
 	}
 
-	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// chunk
-	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * {@link twilightforest.asm.transformers.chunk.ChunkStatusTaskTransformer}<p/>
-	 *
-	 * Injection Point:<br/>
-	 * {@link net.minecraft.world.level.chunk.status.ChunkStatusTasks#generateSurface}
-	 */
-	public static void chunkBlanketing(ChunkAccess chunkAccess, WorldGenRegion worldGenRegion) {
-		ChunkBlanketProcessors.chunkBlanketing(chunkAccess, worldGenRegion);
-	}
-
-	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// cloud
-	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * {@link twilightforest.asm.transformers.cloud.IsRainingAtTransformer}<p/>
-	 *
-	 * Injection Point:<br/>
-	 * {@link net.minecraft.world.level.Level#isRainingAt(BlockPos)}
-	 */
-	public static boolean isRainingAt(boolean isRaining, Level level, BlockPos pos) {
-		if (!isRaining && TFConfig.commonCloudBlockPrecipitationDistance > 0) {
-			LevelChunk chunk = level.getChunkAt(pos);
-			for (int y = pos.getY(); y < pos.getY() + TFConfig.commonCloudBlockPrecipitationDistance; y++) {
-				BlockPos newPos = pos.atY(y);
-				BlockState state = chunk.getBlockState(newPos);
-				if (state.getBlock() instanceof CloudBlock cloudBlock && cloudBlock.getCurrentPrecipitation(newPos, level, level.getRainLevel(1.0F)).getLeft() == Biome.Precipitation.RAIN) {
-					return true;
-				}
-				if (Heightmap.Types.MOTION_BLOCKING.isOpaque().test(state)) {
-					return false;
-				}
-			}
-		}
-		return isRaining;
-	}
-
 	public static boolean isEntityInUrGhastTears(Entity entity) {
 		if (!(entity instanceof Player) || !entity.level().hasChunkAt(entity.blockPosition())) {
 			return false;
@@ -185,37 +130,6 @@ public class ASMHooks {
 		}
 
 		return false;
-	}
-
-	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// conquered
-	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * {@link twilightforest.asm.transformers.conquered.StructureStartLoadStaticTransformer}<p/>
-	 *
-	 * Injection Point:<br/>
-	 * {@link net.minecraft.world.level.levelgen.structure.StructureStart#loadStaticStart(StructurePieceSerializationContext, CompoundTag, long)}<br/>
-	 * Targets: {@link net.minecraft.world.level.levelgen.structure.StructureStart#StructureStart(Structure, ChunkPos, int, PiecesContainer)}
-	 */
-	public static StructureStart loadStaticStart(StructureStart start, PiecesContainer piecesContainer, CompoundTag nbt) {
-		return start;
-	}
-
-	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// lead
-	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * {@link twilightforest.asm.transformers.lead.LeashFenceKnotSurvivesTransformer}<p/>
-	 *
-	 * Injection Point:<br/>
-	 * {@link net.minecraft.world.entity.decoration.LeashFenceKnotEntity#survives()}
-	 */
-	public static boolean leashFenceKnotSurvives(boolean o, LeashFenceKnotEntity entity) {
-		if (o) return true; // Short-circuit to avoid an unnecessary #getBlockState call
-		BlockState fenceState = entity.level().getBlockState(entity.getPos());
-		return fenceState.is(TFBlocks.WROUGHT_IRON_FENCE) && fenceState.getValue(WroughtIronFenceBlock.POST) != WroughtIronFenceBlock.PostState.NONE;
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -241,31 +155,6 @@ public class ASMHooks {
 	 */
 	public static Entity sendDirtyEntityData(Entity entity) {
 		return multipartEntityUtil.sendDirtyMultipartEntityData(entity);
-	}
-
-	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// shroom
-	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * {@link twilightforest.asm.transformers.shroom.ModifySoilDecisionForMushroomBlockSurvivabilityTransformer}<p/>
-	 *
-	 * Injection Point:<br/>
-	 * {@link net.minecraft.world.level.block.MushroomBlock#canSurvive(BlockState, LevelReader, BlockPos)}<br/>
-	 * Targets: {@link BlockState#canSustainPlant(BlockGetter, BlockPos, Direction, BlockState)}
-	 */
-	public static TriState modifySoilDecisionForMushroomBlockSurvivability(TriState o, LevelReader level, BlockPos pos) {
-		if (o != TriState.DEFAULT)
-			return o; // Short-circuit - We should not override non-default soil behaviour otherwise this would allow Mushrooms to survive on ALL blocks
-		for (int x = -1; x <= 1; x++) {
-			for (int z = -1; z <= 1; z++) {
-				if (x == 0 && z == 0)
-					continue;
-				if (level.getBlockState(pos.offset(x, -1, z)).is(TFBlocks.TWILIGHT_PORTAL))
-					return TriState.TRUE;
-			}
-		}
-		return o;
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
