@@ -29,9 +29,8 @@ import java.util.List;
 
 //this was all put into 1 class because it seems like a waste to have it in 2
 public class TFCaveCarvers {
-	private static TFCavesCarver tfCaves;
-	private static TFCavesCarver highlandCaves;
-	private static boolean registered;
+	private static final TFCavesCarver TF_CAVES = register("tf_caves", makeTfCaves());
+	private static final TFCavesCarver HIGHLAND_CAVES = register("highland_caves", makeHighlandCaves());
 
 	private static TFCavesCarver makeTfCaves() {
 		return new TFCavesCarver(
@@ -67,14 +66,11 @@ public class TFCaveCarvers {
 		);
 	}
 
-	public static void register() {
-		if (registered) {
-			return;
-		}
+	public static void init() {
+	}
 
-		registered = true;
-		tfCaves = Registry.register(BuiltInRegistries.CARVER, TwilightForestMod.prefix("tf_caves"), makeTfCaves());
-		highlandCaves = Registry.register(BuiltInRegistries.CARVER, TwilightForestMod.prefix("highland_caves"), makeHighlandCaves());
+	private static TFCavesCarver register(String name, TFCavesCarver carver) {
+		return Registry.register(BuiltInRegistries.CARVER, TwilightForestMod.prefix(name), carver);
 	}
 
 	public static final ResourceKey<ConfiguredWorldCarver<?>> TFCAVES_CONFIGURED = registerKey("tf_caves");
@@ -86,7 +82,7 @@ public class TFCaveCarvers {
 
 	public static void bootstrap(BootstrapContext<ConfiguredWorldCarver<?>> context) {
 		HolderGetter<Block> blocks = context.lookup(Registries.BLOCK);
-		context.register(TFCAVES_CONFIGURED, getTfCaves().configured(new CaveCarverConfiguration(
+		context.register(TFCAVES_CONFIGURED, TF_CAVES.configured(new CaveCarverConfiguration(
 			0.1F,
 			UniformHeight.of(VerticalAnchor.aboveBottom(16), VerticalAnchor.absolute(-8)),
 			ConstantFloat.of(0.6F),
@@ -97,7 +93,7 @@ public class TFCaveCarvers {
 			ConstantFloat.of(-0.7F)
 		)));
 
-		context.register(HIGHLANDCAVES_CONFIGURED, getHighlandCaves().configured(new CaveCarverConfiguration(
+		context.register(HIGHLANDCAVES_CONFIGURED, HIGHLAND_CAVES.configured(new CaveCarverConfiguration(
 			1f,
 			BiasedToBottomHeight.of(VerticalAnchor.absolute(8), VerticalAnchor.absolute(32), 16),
 			ConstantFloat.of(0.6f),
@@ -107,21 +103,5 @@ public class TFCaveCarvers {
 			ConstantFloat.of(1.1f),
 			UniformFloat.of(-0.9F, -0.65F)
 		)));
-	}
-
-	private static TFCavesCarver getTfCaves() {
-		if (tfCaves == null) {
-			throw new IllegalStateException("Twilight Forest cave carvers have not been registered yet");
-		}
-
-		return tfCaves;
-	}
-
-	private static TFCavesCarver getHighlandCaves() {
-		if (highlandCaves == null) {
-			throw new IllegalStateException("Twilight Forest cave carvers have not been registered yet");
-		}
-
-		return highlandCaves;
 	}
 }
