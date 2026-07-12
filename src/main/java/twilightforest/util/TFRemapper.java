@@ -4,9 +4,42 @@ import net.minecraft.resources.Identifier;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.*;
 
-public class TFRemapper {
+public final class TFRemapper {
+	private final AliasTarget target;
 
-	public static void addRegistryAliases() {
+	private TFRemapper(AliasTarget target) {
+		this.target = target;
+	}
+
+	public static void addBlockAliases() {
+		addAliases(AliasTarget.BLOCK);
+	}
+
+	public static void addItemAliases() {
+		addAliases(AliasTarget.ITEM);
+	}
+
+	public static void addEntityAliases() {
+		addAliases(AliasTarget.ENTITY_TYPE);
+	}
+
+	public static void addSpawnEggAliases() {
+		addAliases(AliasTarget.SPAWN_EGG);
+	}
+
+	public static void addStructurePieceAliases() {
+		addAliases(AliasTarget.STRUCTURE_PIECE);
+	}
+
+	public static void addStructureProcessorAliases() {
+		addAliases(AliasTarget.STRUCTURE_PROCESSOR);
+	}
+
+	private static void addAliases(AliasTarget target) {
+		new TFRemapper(target).addRegistryAliases();
+	}
+
+	private void addRegistryAliases() {
 
 		remapBlockAndItem("yeti_trophy", "alpha_yeti_trophy");
 		remapBlock("yeti_wall_trophy", "alpha_yeti_wall_trophy");
@@ -179,31 +212,56 @@ public class TFRemapper {
 		remapStructurePiece("TFNCDu", "TFNCTe"); // Terrace Duct
 		remapStructurePiece("TFNCSt", "TFNCTe"); // Terrace Statue
 
-		TFStructureProcessors.addAlias(TwilightForestMod.prefix("meta_block_processor"), Identifier.withDefaultNamespace("jigsaw_replacement"));
+		remapStructureProcessor(TwilightForestMod.prefix("meta_block_processor"), Identifier.withDefaultNamespace("jigsaw_replacement"));
 	}
 
-	private static void remapBlockAndItem(String oldId, String newId) {
+	private void remapBlockAndItem(String oldId, String newId) {
 		remapBlock(oldId, newId);
 		remapItem(oldId, newId);
 	}
 
-	private static void remapBlock(String oldId, String newId) {
-		TFBlocks.addAlias(TwilightForestMod.prefix(oldId), TwilightForestMod.prefix(newId));
+	private void remapBlock(String oldId, String newId) {
+		if (this.target == AliasTarget.BLOCK) {
+			TFBlocks.addAlias(TwilightForestMod.prefix(oldId), TwilightForestMod.prefix(newId));
+		}
 	}
 
-	private static void remapItem(String oldId, String newId) {
-		TFItems.addAlias(TwilightForestMod.prefix(oldId), TwilightForestMod.prefix(newId));
+	private void remapItem(String oldId, String newId) {
+		if (this.target == AliasTarget.ITEM) {
+			TFItems.addAlias(TwilightForestMod.prefix(oldId), TwilightForestMod.prefix(newId));
+		}
 	}
 
-	private static void remapEntity(String oldId, String newId) {
-		TFEntities.addEntityAlias(TwilightForestMod.prefix(oldId), TwilightForestMod.prefix(newId));
+	private void remapEntity(String oldId, String newId) {
+		if (this.target == AliasTarget.ENTITY_TYPE) {
+			TFEntities.addEntityAlias(TwilightForestMod.prefix(oldId), TwilightForestMod.prefix(newId));
+		}
 	}
 
-	private static void remapSpawnEgg(String oldId, String newId) {
-		TFEntities.addSpawnEggAlias(TwilightForestMod.prefix(oldId), TwilightForestMod.prefix(newId));
+	private void remapSpawnEgg(String oldId, String newId) {
+		if (this.target == AliasTarget.SPAWN_EGG) {
+			TFEntities.addSpawnEggAlias(TwilightForestMod.prefix(oldId), TwilightForestMod.prefix(newId));
+		}
 	}
 
-	private static void remapStructurePiece(String oldId, String newId) {
-		TFStructurePieceTypes.addAlias(TwilightForestMod.prefix(oldId), TwilightForestMod.prefix(newId));
+	private void remapStructurePiece(String oldId, String newId) {
+		if (this.target == AliasTarget.STRUCTURE_PIECE) {
+			TFStructurePieceTypes.addAlias(TwilightForestMod.prefix(oldId), TwilightForestMod.prefix(newId));
+		}
+	}
+
+	private void remapStructureProcessor(Identifier oldId, Identifier newId) {
+		if (this.target == AliasTarget.STRUCTURE_PROCESSOR) {
+			TFStructureProcessors.addAlias(oldId, newId);
+		}
+	}
+
+	private enum AliasTarget {
+		BLOCK,
+		ITEM,
+		ENTITY_TYPE,
+		SPAWN_EGG,
+		STRUCTURE_PIECE,
+		STRUCTURE_PROCESSOR
 	}
 }

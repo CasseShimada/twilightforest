@@ -94,7 +94,6 @@ public final class TwilightForestMod implements ModInitializer {
 		ServerLifecycleEvents.SERVER_STOPPED.register(SaveDebug::onServerStopped);
 		ResourceConditions.register(UncraftingTableCondition.TYPE);
 		TFRegistries.bootstrap();
-		TFRemapper.addRegistryAliases();
 		// Registries
 		registerDeferredRegistries();
 		registerDynamicRegistries();
@@ -109,14 +108,18 @@ public final class TwilightForestMod implements ModInitializer {
 	private static void registerDeferredRegistries() {
 		TFSounds.register();
 		TFDataComponents.register();
+		TFRemapper.addBlockAliases();
 		TFBlocks.register();
+		TFRemapper.addEntityAliases();
 		TFEntities.register();
+		TFRemapper.addItemAliases();
 		TFItems.register();
 		TFStats.register();
 		TFLoot.register();
 		TFPOITypes.register();
 		TFFeatures.register();
 		TFCreativeTabs.register();
+		TFRemapper.addSpawnEggAliases();
 		TFEntities.registerSpawnEggs();
 		TFMenuTypes.register();
 		TFRecipes.registerTypes();
@@ -137,7 +140,9 @@ public final class TwilightForestMod implements ModInitializer {
 		TFFeatureModifiers.register();
 		TFEnchantmentEffects.register();
 		TFDensityFunctions.register();
+		TFRemapper.addStructureProcessorAliases();
 		TFStructureProcessors.register();
+		TFRemapper.addStructurePieceAliases();
 		TFStructurePieceTypes.register();
 		ChunkBlanketProcessors.register();
 		TFStructurePlacementTypes.register();
