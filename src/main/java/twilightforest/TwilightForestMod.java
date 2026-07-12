@@ -141,7 +141,7 @@ public final class TwilightForestMod implements ModInitializer {
 		TFRemapper.addStructureProcessorAliases();
 		TFStructureProcessors.init();
 		TFRemapper.addStructurePieceAliases();
-		TFStructurePieceTypes.register();
+		TFStructurePieceTypes.init();
 		ChunkBlanketProcessors.init();
 		TFStructurePlacementTypes.init();
 	}

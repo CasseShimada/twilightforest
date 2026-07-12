@@ -25,9 +25,8 @@ import java.util.Locale;
 import java.util.Map;
 
 public class TFStructurePieceTypes {
-	private static final Map<Identifier, StructurePieceType> STRUCTURE_PIECE_TYPES = new LinkedHashMap<>();
 	private static final Map<Identifier, Identifier> ALIASES = new LinkedHashMap<>();
-	private static boolean registered;
+	private static boolean aliasesApplied;
 
 	// Single-Piece Structures
 	//IStructurePieceTypes that can be referred to
@@ -239,23 +238,20 @@ public class TFStructurePieceTypes {
 	public static final StructurePieceType TFFCWrT = registerPieceType("TFFCWrT", FinalCastleWreckedTowerComponent::new);
 
 	private static StructurePieceType registerPieceType(String name, StructurePieceType structurePieceType) {
-		if (registered) throw new IllegalStateException("Cannot register new structure piece types after registry has been frozen.");
-		STRUCTURE_PIECE_TYPES.put(TwilightForestMod.prefix(name.toLowerCase(Locale.ROOT)), structurePieceType);
-		return structurePieceType;
+		return Registry.register(BuiltInRegistries.STRUCTURE_PIECE, TwilightForestMod.prefix(name.toLowerCase(Locale.ROOT)), structurePieceType);
 	}
 
 	public static void addAlias(Identifier from, Identifier to) {
-		if (registered) throw new IllegalStateException("Cannot add aliases after structure piece types have been registered.");
+		if (aliasesApplied) throw new IllegalStateException("Cannot add aliases after structure piece type aliases have been applied.");
 		ALIASES.put(from, to);
 	}
 
-	public static void register() {
-		if (registered) {
+	public static void init() {
+		if (aliasesApplied) {
 			return;
 		}
 
-		registered = true;
-		STRUCTURE_PIECE_TYPES.forEach((id, type) -> Registry.register(BuiltInRegistries.STRUCTURE_PIECE, id, type));
+		aliasesApplied = true;
 		applyAliases();
 	}
 
