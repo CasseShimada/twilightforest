@@ -6,7 +6,6 @@ import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.world.level.ChunkPos;
@@ -26,17 +25,12 @@ import twilightforest.world.components.chunkblanketing.ChunkBlanketProcessor;
 import twilightforest.world.components.chunkblanketing.ChunkBlanketType;
 import twilightforest.world.components.chunkblanketing.GlacierBlanketProcessor;
 
-import java.util.LinkedHashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 public final class ChunkBlanketProcessors {
-	private static final Map<Identifier, ChunkBlanketType> CHUNK_BLANKETING_TYPES = new LinkedHashMap<>();
-	private static boolean registered;
-
 	public static final Codec<ChunkBlanketType> TYPE_CODEC = Codec.lazyInitialized(TFRegistries.CHUNK_BLANKET_TYPES::byNameCodec);
 	public static final Codec<ChunkBlanketProcessor> DISPATCH_CODEC = TYPE_CODEC.dispatch("type", ChunkBlanketProcessor::getType, ChunkBlanketType::getCodec);
 
@@ -48,17 +42,10 @@ public final class ChunkBlanketProcessors {
 
 	public static ChunkBlanketType registerType(String name, MapCodec<? extends ChunkBlanketProcessor> codec) {
 		ChunkBlanketType type = () -> codec;
-		CHUNK_BLANKETING_TYPES.put(TwilightForestMod.prefix(name), type);
-		return type;
+		return Registry.register(TFRegistries.CHUNK_BLANKET_TYPES, TwilightForestMod.prefix(name), type);
 	}
 
-	public static void register() {
-		if (registered) {
-			return;
-		}
-
-		registered = true;
-		CHUNK_BLANKETING_TYPES.forEach((id, type) -> Registry.register(TFRegistries.CHUNK_BLANKET_TYPES, id, type));
+	public static void init() {
 	}
 
 	public static void bootstrap(BootstrapContext<ChunkBlanketProcessor> context) {
