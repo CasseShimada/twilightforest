@@ -130,7 +130,7 @@ public final class TwilightForestMod implements ModInitializer {
 		TFCaveCarvers.register();
 		TFRecipes.registerSerializers();
 		TFMapDecorations.init();
-		TFParticleType.register();
+		TFParticleType.init();
 		TFBlockEntities.register();
 		TFStructureTypes.init();
 		TFBiomeSources.init();
