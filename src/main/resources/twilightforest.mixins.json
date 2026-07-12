@@ -10,7 +10,6 @@
     "ClimateSamplerMixin",
     "LevelDayTimeMixin",
     "NoiseChunkMixin",
-    "NoiseBasedChunkGeneratorMixin",
     "RandomStateMixin",
     "EntityMixin",
     "LevelMultipartMixin",
