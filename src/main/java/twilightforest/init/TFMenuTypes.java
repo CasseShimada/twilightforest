@@ -8,16 +8,12 @@ import twilightforest.TwilightForestMod;
 import twilightforest.inventory.UncraftingMenu;
 
 public class TFMenuTypes {
-	private static boolean registered;
+	public static final MenuType<UncraftingMenu> UNCRAFTING = Registry.register(
+		BuiltInRegistries.MENU,
+		TwilightForestMod.prefix("uncrafting"),
+		new MenuType<>(UncraftingMenu::fromNetwork, FeatureFlags.REGISTRY.allFlags())
+	);
 
-	public static final MenuType<UncraftingMenu> UNCRAFTING = new MenuType<>(UncraftingMenu::fromNetwork, FeatureFlags.REGISTRY.allFlags());
-
-	public static void register() {
-		if (registered) {
-			return;
-		}
-
-		registered = true;
-		Registry.register(BuiltInRegistries.MENU, TwilightForestMod.prefix("uncrafting"), UNCRAFTING);
+	public static void init() {
 	}
 }
