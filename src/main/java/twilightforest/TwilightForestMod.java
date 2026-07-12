@@ -238,9 +238,9 @@ public final class TwilightForestMod implements ModInitializer {
 		flammables.add(TFBlocks.TWILIGHT_OAK_WOOD, 5, 5);
 		flammables.add(TFBlocks.STRIPPED_TWILIGHT_OAK_LOG, 5, 5);
 		flammables.add(TFBlocks.STRIPPED_TWILIGHT_OAK_WOOD, 5, 5);
-		flammables.add(TFBlocks.HOLLOW_TWILIGHT_OAK_LOG_HORIZONTAL.get(), 5, 5);
-		flammables.add(TFBlocks.HOLLOW_TWILIGHT_OAK_LOG_VERTICAL.get(), 5, 5);
-		flammables.add(TFBlocks.HOLLOW_TWILIGHT_OAK_LOG_CLIMBABLE.get(), 5, 5);
+		flammables.add(TFBlocks.HOLLOW_TWILIGHT_OAK_LOG_HORIZONTAL, 5, 5);
+		flammables.add(TFBlocks.HOLLOW_TWILIGHT_OAK_LOG_VERTICAL, 5, 5);
+		flammables.add(TFBlocks.HOLLOW_TWILIGHT_OAK_LOG_CLIMBABLE, 5, 5);
 		flammables.add(TFBlocks.TWILIGHT_OAK_BANISTER, 5, 20);
 		flammables.add(TFBlocks.TWILIGHT_OAK_PLANKS, 5, 20);
 		flammables.add(TFBlocks.TWILIGHT_OAK_SLAB, 5, 20);

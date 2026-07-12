@@ -16,10 +16,14 @@ public class HollowLogItem extends BlockItem {
 	private final Block climbable;
 
 	public HollowLogItem(Holder<Block> horizontalLog, Holder<Block> verticalLog, Holder<Block> climbable, Properties properties) {
-		super(verticalLog.value(), properties);
-		this.horizontalLog = horizontalLog.value();
-		this.verticalLog = verticalLog.value();
-		this.climbable = climbable.value();
+		this(horizontalLog.value(), verticalLog.value(), climbable.value(), properties);
+	}
+
+	public HollowLogItem(Block horizontalLog, Block verticalLog, Block climbable, Properties properties) {
+		super(verticalLog, properties);
+		this.horizontalLog = horizontalLog;
+		this.verticalLog = verticalLog;
+		this.climbable = climbable;
 	}
 
 	@Nullable
