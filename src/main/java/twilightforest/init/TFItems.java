@@ -27,6 +27,7 @@ import twilightforest.util.registry.RegistryAliasUtil;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -35,7 +36,7 @@ public class TFItems {
 
 	private static final Rarity TWILIGHT_RARITY = Rarity.RARE;
 
-	private static final Map<Identifier, ItemEntry> ITEMS = new LinkedHashMap<>();
+	private static final Map<Identifier, Item> ITEMS = new LinkedHashMap<>();
 	private static final Map<Identifier, Identifier> ITEM_ALIASES = new LinkedHashMap<>();
 	private static boolean registered;
 
@@ -274,37 +275,14 @@ public class TFItems {
 		if (registered) throw new IllegalStateException("Cannot register new items after item registry has been frozen.");
 		Identifier id = TwilightForestMod.prefix(name);
 		T value = item.apply(properties.get().setId(ResourceKey.create(Registries.ITEM, id)));
-		ITEMS.put(id, new ItemEntry() {
-			@Override
-			public Item value() {
-				return value;
-			}
-
-			@Override
-			public void register() {
-				Registry.register(BuiltInRegistries.ITEM, id, value);
-			}
-		});
+		ITEMS.put(id, value);
 		return value;
 	}
 
 	public static <T extends Item> void registerBlockItem(String name, Function<Item.Properties, T> item, Supplier<Item.Properties> properties) {
 		if (registered) throw new IllegalStateException("Cannot register new items after item registry has been frozen.");
 		Identifier id = TwilightForestMod.prefix(name);
-		ITEMS.put(id, new ItemEntry() {
-			private T value;
-
-			@Override
-			public Item value() {
-				if (this.value == null) throw new IllegalStateException("Block item not registered yet: " + id);
-				return this.value;
-			}
-
-			@Override
-			public void register() {
-				this.value = Registry.register(BuiltInRegistries.ITEM, id, item.apply(properties.get().setId(ResourceKey.create(Registries.ITEM, id))));
-			}
-		});
+		ITEMS.put(id, item.apply(properties.get().setId(ResourceKey.create(Registries.ITEM, id))));
 	}
 
 	public static void addAlias(Identifier from, Identifier to) {
@@ -313,7 +291,7 @@ public class TFItems {
 	}
 
 	public static Collection<? extends Item> registeredItems() {
-		return ITEMS.values().stream().map(ItemEntry::value).toList();
+		return List.copyOf(ITEMS.values());
 	}
 
 	public static void register() {
@@ -322,17 +300,11 @@ public class TFItems {
 		}
 
 		registered = true;
-		ITEMS.values().forEach(ItemEntry::register);
+		ITEMS.forEach((id, item) -> Registry.register(BuiltInRegistries.ITEM, id, item));
 		applyItemAliases();
 	}
 
 	private static void applyItemAliases() {
 		RegistryAliasUtil.applyAliases(BuiltInRegistries.ITEM, ITEM_ALIASES);
-	}
-
-	private interface ItemEntry {
-		Item value();
-
-		void register();
 	}
 }
