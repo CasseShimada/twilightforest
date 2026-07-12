@@ -113,7 +113,7 @@ public final class TwilightForestMod implements ModInitializer {
 		TFRemapper.addEntityAliases();
 		TFEntities.init();
 		TFRemapper.addItemAliases();
-		TFItems.register();
+		TFItems.init();
 		TFLoot.init();
 		TFPOITypes.init();
 		TFFeatures.init();

@@ -25,6 +25,7 @@ import twilightforest.tags.TFBannerPatternTags;
 import twilightforest.util.TFToolMaterials;
 import twilightforest.util.registry.RegistryAliasUtil;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -36,9 +37,9 @@ public class TFItems {
 
 	private static final Rarity TWILIGHT_RARITY = Rarity.RARE;
 
-	private static final Map<Identifier, Item> ITEMS = new LinkedHashMap<>();
+	private static final List<Item> ITEMS = new ArrayList<>();
 	private static final Map<Identifier, Identifier> ITEM_ALIASES = new LinkedHashMap<>();
-	private static boolean registered;
+	private static boolean aliasesApplied;
 
 	public static final Item NAGA_SCALE = register("naga_scale", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final Item NAGA_CHESTPLATE = register("naga_chestplate", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.NAGA, ArmorType.CHESTPLATE)), () -> new Item.Properties().durability(ArmorType.CHESTPLATE.getDurability(21)).rarity(Rarity.UNCOMMON));
@@ -272,35 +273,34 @@ public class TFItems {
 	}
 
 	public static <T extends Item> T register(String name, Function<Item.Properties, T> item, Supplier<Item.Properties> properties) {
-		if (registered) throw new IllegalStateException("Cannot register new items after item registry has been frozen.");
+		if (aliasesApplied) throw new IllegalStateException("Cannot register new items after item aliases have been applied.");
 		Identifier id = TwilightForestMod.prefix(name);
-		T value = item.apply(properties.get().setId(ResourceKey.create(Registries.ITEM, id)));
-		ITEMS.put(id, value);
+		T value = Registry.register(BuiltInRegistries.ITEM, id, item.apply(properties.get().setId(ResourceKey.create(Registries.ITEM, id))));
+		ITEMS.add(value);
 		return value;
 	}
 
 	public static <T extends Item> void registerBlockItem(String name, Function<Item.Properties, T> item, Supplier<Item.Properties> properties) {
-		if (registered) throw new IllegalStateException("Cannot register new items after item registry has been frozen.");
+		if (aliasesApplied) throw new IllegalStateException("Cannot register new items after item aliases have been applied.");
 		Identifier id = TwilightForestMod.prefix(name);
-		ITEMS.put(id, item.apply(properties.get().setId(ResourceKey.create(Registries.ITEM, id))));
+		ITEMS.add(Registry.register(BuiltInRegistries.ITEM, id, item.apply(properties.get().setId(ResourceKey.create(Registries.ITEM, id)))));
 	}
 
 	public static void addAlias(Identifier from, Identifier to) {
-		if (registered) throw new IllegalStateException("Cannot add aliases after items have been registered.");
+		if (aliasesApplied) throw new IllegalStateException("Cannot add aliases after item aliases have been applied.");
 		ITEM_ALIASES.put(from, to);
 	}
 
 	public static Collection<? extends Item> registeredItems() {
-		return List.copyOf(ITEMS.values());
+		return List.copyOf(ITEMS);
 	}
 
-	public static void register() {
-		if (registered) {
+	public static void init() {
+		if (aliasesApplied) {
 			return;
 		}
 
-		registered = true;
-		ITEMS.forEach((id, item) -> Registry.register(BuiltInRegistries.ITEM, id, item));
+		aliasesApplied = true;
 		applyItemAliases();
 	}
 
