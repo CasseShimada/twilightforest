@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import twilightforest.init.TFBlocks;
@@ -65,6 +66,7 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 		this.builder(TFBlockTags.TOWERWOOD)
 			.add(key(TFBlocks.TOWERWOOD), key(TFBlocks.MOSSY_TOWERWOOD), key(TFBlocks.CRACKED_TOWERWOOD), key(TFBlocks.INFESTED_TOWERWOOD));
 		this.addCloudTags();
+		this.addProtectionTags();
 		this.addProtectedMaterialTags();
 		this.addTreeTags();
 		this.addLogTags();
@@ -83,6 +85,54 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 		this.builder(BlockTags.DAMPENS_VIBRATIONS)
 			.addTag(TFBlockTags.CLOUDS)
 			.add(key(TFBlocks.ARCTIC_FUR_BLOCK));
+	}
+
+	private void addProtectionTags() {
+		this.builder(TFBlockTags.COMMON_PROTECTIONS).add(
+			key(TFBlocks.NAGA_BOSS_SPAWNER),
+			key(TFBlocks.LICH_BOSS_SPAWNER),
+			key(TFBlocks.MINOSHROOM_BOSS_SPAWNER),
+			key(TFBlocks.HYDRA_BOSS_SPAWNER),
+			key(TFBlocks.KNIGHT_PHANTOM_BOSS_SPAWNER),
+			key(TFBlocks.UR_GHAST_BOSS_SPAWNER),
+			key(TFBlocks.ALPHA_YETI_BOSS_SPAWNER),
+			key(TFBlocks.SNOW_QUEEN_BOSS_SPAWNER),
+			key(TFBlocks.FINAL_BOSS_BOSS_SPAWNER),
+			key(TFBlocks.STRONGHOLD_SHIELD),
+			key(TFBlocks.UNBREAKABLE_VANISHING_BLOCK),
+			key(TFBlocks.LOCKED_VANISHING_BLOCK),
+			key(TFBlocks.PINK_FORCE_FIELD),
+			key(TFBlocks.ORANGE_FORCE_FIELD),
+			key(TFBlocks.GREEN_FORCE_FIELD),
+			key(TFBlocks.BLUE_FORCE_FIELD),
+			key(TFBlocks.VIOLET_FORCE_FIELD),
+			key(TFBlocks.SKULL_CHEST),
+			key(TFBlocks.KEEPSAKE_CASKET),
+			key(TFBlocks.TROPHY_PEDESTAL),
+			key(Blocks.BARRIER),
+			key(Blocks.BEDROCK),
+			key(Blocks.END_PORTAL),
+			key(Blocks.END_PORTAL_FRAME),
+			key(Blocks.END_GATEWAY),
+			key(Blocks.COMMAND_BLOCK),
+			key(Blocks.REPEATING_COMMAND_BLOCK),
+			key(Blocks.CHAIN_COMMAND_BLOCK),
+			key(Blocks.STRUCTURE_BLOCK),
+			key(Blocks.JIGSAW),
+			key(Blocks.MOVING_PISTON),
+			key(Blocks.LIGHT),
+			key(Blocks.REINFORCED_DEEPSLATE)
+		);
+		this.builder(TFBlockTags.CARMINITE_REACTOR_IMMUNE).addTag(TFBlockTags.COMMON_PROTECTIONS);
+		this.builder(BlockTags.DRAGON_IMMUNE)
+			.addTag(TFBlockTags.COMMON_PROTECTIONS)
+			.add(key(TFBlocks.GIANT_OBSIDIAN), key(TFBlocks.FAKE_DIAMOND), key(TFBlocks.FAKE_GOLD));
+		this.builder(BlockTags.FEATURES_CANNOT_REPLACE)
+			.addTag(TFBlockTags.COMMON_PROTECTIONS)
+			.add(key(TFBlocks.LIVEROOT_BLOCK), key(TFBlocks.MANGROVE_ROOT), key(TFBlocks.SINISTER_SPAWNER));
+		this.builder(BlockTags.WITHER_IMMUNE)
+			.addTag(TFBlockTags.COMMON_PROTECTIONS)
+			.add(key(TFBlocks.FAKE_DIAMOND), key(TFBlocks.FAKE_GOLD));
 	}
 
 	private void addProtectedMaterialTags() {
