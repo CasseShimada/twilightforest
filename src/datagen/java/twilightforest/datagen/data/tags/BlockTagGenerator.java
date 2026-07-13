@@ -70,6 +70,7 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 		this.addProtectionTags();
 		this.addProtectedMaterialTags();
 		this.addPortalTags();
+		this.addGameplayBehaviorTags();
 		this.addTreeTags();
 		this.addLogTags();
 		this.addHollowLogTags();
@@ -273,6 +274,23 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 			.addTag(BlockTags.LEAVES)
 			.addTag(SAPLINGS)
 			.addOptionalTag(BlockTags.CROPS);
+	}
+
+	private void addGameplayBehaviorTags() {
+		this.builder(TFBlockTags.FIRE_JET_FUEL).add(key(Blocks.LAVA));
+		this.builder(TFBlockTags.PENGUINS_SPAWNABLE_ON).addOptionalTag(BlockTags.ICE);
+		this.builder(TFBlockTags.GIANTS_SPAWNABLE_ON).addTag(TFBlockTags.CLOUDS);
+		this.builder(TFBlockTags.SUPPORTS_STALAGMITES)
+			.add(key(Blocks.PACKED_ICE))
+			.addTag(TFBlockTags.DEADROCK);
+		this.builder(TFBlockTags.CANNOT_TROLL_CAVE_HOLLOW).add(
+			key(Blocks.RED_MUSHROOM_BLOCK),
+			key(Blocks.BROWN_MUSHROOM_BLOCK),
+			key(TFBlocks.HUGE_MUSHGLOOM)
+		);
+		this.builder(TFBlockTags.TIME_CORE_EXCLUDED).add(key(Blocks.NETHER_PORTAL));
+		this.builder(TFBlockTags.CARMINITE_REACTOR_ORES)
+			.add(key(Blocks.NETHER_QUARTZ_ORE), key(Blocks.NETHER_GOLD_ORE));
 	}
 
 	private void addTreeTags() {
