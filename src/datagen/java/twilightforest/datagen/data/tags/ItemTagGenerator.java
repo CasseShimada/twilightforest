@@ -446,12 +446,53 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 		this.builder(TFItemTags.AC_FERNS).add(key(TFBlocks.FIDDLEHEAD.asItem()));
 		this.builder(TFItemTags.AC_RAW_MEATS).add(key(TFItems.RAW_VENISON), key(TFItems.RAW_MEEF));
 		this.builder(TFItemTags.CA_PLANT_FOODS).add(key(TFItems.TORCHBERRIES));
+		this.builder(TFItemTags.CA_PLANTS).add(
+			key(TFItems.LIVEROOT),
+			key(TFItems.MAGIC_BEANS),
+			key(TFItems.HUGE_WATER_LILY),
+			key(TFItems.HUGE_LILY_PAD),
+			key(TFBlocks.TROLLVIDR.asItem()),
+			key(TFBlocks.UNRIPE_TROLLBER.asItem()),
+			key(TFBlocks.TROLLBER.asItem()),
+			key(TFBlocks.HUGE_STALK.asItem()),
+			key(TFBlocks.THORN_ROSE.asItem()),
+			key(TFBlocks.MAYAPPLE.asItem()),
+			key(TFBlocks.CLOVER_PATCH.asItem()),
+			key(TFBlocks.FIDDLEHEAD.asItem()),
+			key(TFBlocks.MUSHGLOOM.asItem()),
+			key(TFBlocks.TORCHBERRY_PLANT.asItem()),
+			key(TFBlocks.ROOT_STRAND.asItem()),
+			key(TFItems.FALLEN_LEAVES),
+			key(TFBlocks.HEDGE.asItem()),
+			key(TFBlocks.ROOT_BLOCK.asItem()),
+			key(TFBlocks.LIVEROOT_BLOCK.asItem())
+		);
 		this.builder(TFItemTags.CURIOS_CHARM).add(
 			key(TFItems.CHARM_OF_LIFE_1),
 			key(TFItems.CHARM_OF_LIFE_2),
 			key(TFItems.CHARM_OF_KEEPING_1),
 			key(TFItems.CHARM_OF_KEEPING_2),
 			key(TFItems.CHARM_OF_KEEPING_3)
+		);
+		this.builder(TFItemTags.CURIOS_HEAD).add(
+			key(TFItems.NAGA_TROPHY),
+			key(TFItems.LICH_TROPHY),
+			key(TFItems.MINOSHROOM_TROPHY),
+			key(TFItems.HYDRA_TROPHY),
+			key(TFItems.KNIGHT_PHANTOM_TROPHY),
+			key(TFItems.UR_GHAST_TROPHY),
+			key(TFItems.ALPHA_YETI_TROPHY),
+			key(TFItems.SNOW_QUEEN_TROPHY),
+			key(TFItems.QUEST_RAM_TROPHY),
+			key(TFBlocks.CICADA.asItem()),
+			key(TFBlocks.FIREFLY.asItem()),
+			key(TFBlocks.MOONWORM.asItem()),
+			key(TFItems.CREEPER_SKULL_CANDLE),
+			key(TFItems.PIGLIN_SKULL_CANDLE),
+			key(TFItems.PLAYER_SKULL_CANDLE),
+			key(TFItems.SKELETON_SKULL_CANDLE),
+			key(TFItems.WITHER_SKELETON_SKULL_CANDLE),
+			key(TFItems.ZOMBIE_SKULL_CANDLE)
 		);
 		this.builder(TFItemTags.FD_CABBAGE_ROLL_INGREDIENTS)
 			.add(key(TFItems.RAW_VENISON), key(TFItems.RAW_MEEF));
