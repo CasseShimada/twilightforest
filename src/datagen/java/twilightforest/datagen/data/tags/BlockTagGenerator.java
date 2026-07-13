@@ -324,6 +324,34 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 		this.builder(TFBlockTags.TIME_CORE_EXCLUDED).add(key(Blocks.NETHER_PORTAL));
 		this.builder(TFBlockTags.CARMINITE_REACTOR_ORES)
 			.add(key(Blocks.NETHER_QUARTZ_ORE), key(Blocks.NETHER_GOLD_ORE));
+		this.builder(TFBlockTags.PLANTS_HANG_ON)
+			.add(
+				key(Blocks.MOSS_BLOCK),
+				key(TFBlocks.MANGROVE_ROOT),
+				key(TFBlocks.ROOT_BLOCK),
+				key(TFBlocks.LIVEROOT_BLOCK)
+			)
+			.addTag(BlockTags.DIRT);
+		this.builder(TFBlockTags.ICE_BOMB_REPLACEABLES)
+			.add(
+				key(TFBlocks.MAYAPPLE),
+				key(TFBlocks.FIDDLEHEAD),
+				key(Blocks.SHORT_GRASS),
+				key(Blocks.TALL_GRASS),
+				key(Blocks.FERN),
+				key(Blocks.LARGE_FERN)
+			)
+			.addOptionalTag(BlockTags.FLOWERS);
+		this.builder(TFBlockTags.DRUID_PROJECTILE_REPLACEABLE)
+			.addTag(BlockTags.LEAVES)
+			.addTag(BlockTags.LOGS)
+			.addTag(BlockTags.PLANKS)
+			.addTag(BlockTags.OVERWORLD_CARVER_REPLACEABLES)
+			.addOptionalTag(BlockTags.NETHER_CARVER_REPLACEABLES)
+			.addOptionalTag(BlockTags.REPLACEABLE_BY_TREES)
+			.addOptionalTag(BlockTags.LUSH_GROUND_REPLACEABLE)
+			.addOptionalTag(BlockTags.SCULK_REPLACEABLE)
+			.addOptionalTag(ConventionalBlockTags.ORES);
 	}
 
 	private void addWorldgenBehaviorTags() {
