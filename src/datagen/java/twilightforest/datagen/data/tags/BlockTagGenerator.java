@@ -64,11 +64,24 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 
 		this.builder(TFBlockTags.TOWERWOOD)
 			.add(key(TFBlocks.TOWERWOOD), key(TFBlocks.MOSSY_TOWERWOOD), key(TFBlocks.CRACKED_TOWERWOOD), key(TFBlocks.INFESTED_TOWERWOOD));
+		this.addCloudTags();
 		this.addProtectedMaterialTags();
 		this.addTreeTags();
 		this.addLogTags();
 		this.addWoodFamilyTags();
 		this.addShapeTags();
+	}
+
+	private void addCloudTags() {
+		this.builder(TFBlockTags.CLOUDS).add(
+			key(TFBlocks.FLUFFY_CLOUD),
+			key(TFBlocks.WISPY_CLOUD),
+			key(TFBlocks.RAINY_CLOUD),
+			key(TFBlocks.SNOWY_CLOUD)
+		);
+		this.builder(BlockTags.DAMPENS_VIBRATIONS)
+			.addTag(TFBlockTags.CLOUDS)
+			.add(key(TFBlocks.ARCTIC_FUR_BLOCK));
 	}
 
 	private void addProtectedMaterialTags() {
