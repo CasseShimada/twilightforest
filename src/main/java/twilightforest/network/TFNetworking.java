@@ -2,6 +2,12 @@ package twilightforest.network;
 
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import twilightforest.config.TFConfig;
+import twilightforest.init.TFDataComponents;
+import twilightforest.init.TFItems;
+import twilightforest.inventory.UncraftingMenu;
 
 public final class TFNetworking {
 	private TFNetworking() {
@@ -42,7 +48,48 @@ public final class TFNetworking {
 	}
 
 	private static void registerServerReceivers() {
-		ServerPlayNetworking.registerGlobalReceiver(UncraftingGuiPacket.TYPE, UncraftingGuiPacket::handle);
-		ServerPlayNetworking.registerGlobalReceiver(WipeOreMeterPacket.TYPE, WipeOreMeterPacket::handle);
+		ServerPlayNetworking.registerGlobalReceiver(UncraftingGuiPacket.TYPE, TFNetworking::handleUncraftingGui);
+		ServerPlayNetworking.registerGlobalReceiver(WipeOreMeterPacket.TYPE, TFNetworking::handleWipeOreMeter);
+	}
+
+	private static void handleUncraftingGui(UncraftingGuiPacket packet, ServerPlayNetworking.Context context) {
+		context.server().execute(() -> {
+			AbstractContainerMenu container = context.player().containerMenu;
+			if (!(container instanceof UncraftingMenu uncrafting)) return;
+
+			switch (packet.operationType()) {
+				case 0 -> uncrafting.unrecipeInCycle++;
+				case 1 -> uncrafting.unrecipeInCycle--;
+				case 2 -> {
+					if (!TFConfig.disableIngredientSwitching) {
+						uncrafting.ingredientsInCycle++;
+					}
+				}
+				case 3 -> {
+					if (!TFConfig.disableIngredientSwitching) {
+						uncrafting.ingredientsInCycle--;
+					}
+				}
+				case 4 -> uncrafting.recipeInCycle++;
+				case 5 -> uncrafting.recipeInCycle--;
+			}
+
+			if (packet.operationType() < 4) {
+				uncrafting.slotsChanged(uncrafting.tinkerInput);
+			}
+			if (packet.operationType() >= 4) {
+				uncrafting.slotsChanged(uncrafting.getCraftSlots());
+			}
+		});
+	}
+
+	private static void handleWipeOreMeter(WipeOreMeterPacket packet, ServerPlayNetworking.Context context) {
+		context.server().execute(() -> {
+			ItemStack heldStack = context.player().getItemInHand(packet.hand());
+			if (heldStack.is(TFItems.ORE_METER)) {
+				heldStack.remove(TFDataComponents.ORE_DATA);
+				heldStack.remove(TFDataComponents.ORE_FILTER);
+			}
+		});
 	}
 }

@@ -1,14 +1,10 @@
 package twilightforest.network;
 
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import twilightforest.TwilightForestMod;
-import twilightforest.config.TFConfig;
-import twilightforest.inventory.UncraftingMenu;
 
 public record UncraftingGuiPacket(int operationType) implements CustomPacketPayload {
 
@@ -28,34 +24,4 @@ public record UncraftingGuiPacket(int operationType) implements CustomPacketPayl
 		return TYPE;
 	}
 
-	public static void handle(UncraftingGuiPacket message, ServerPlayNetworking.Context context) {
-		context.server().execute(() -> {
-			AbstractContainerMenu container = context.player().containerMenu;
-
-			if (container instanceof UncraftingMenu uncrafting) {
-				switch (message.operationType()) {
-					case 0 -> uncrafting.unrecipeInCycle++;
-					case 1 -> uncrafting.unrecipeInCycle--;
-					case 2 -> {
-						if (!TFConfig.disableIngredientSwitching) {
-							uncrafting.ingredientsInCycle++;
-						}
-					}
-					case 3 -> {
-						if (!TFConfig.disableIngredientSwitching) {
-							uncrafting.ingredientsInCycle--;
-						}
-					}
-					case 4 -> uncrafting.recipeInCycle++;
-					case 5 -> uncrafting.recipeInCycle--;
-				}
-
-				if (message.operationType() < 4)
-					uncrafting.slotsChanged(uncrafting.tinkerInput);
-
-				if (message.operationType() >= 4)
-					uncrafting.slotsChanged(uncrafting.getCraftSlots());
-			}
-		});
-	}
 }

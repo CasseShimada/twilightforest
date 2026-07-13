@@ -1,15 +1,11 @@
 package twilightforest.network;
 
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.item.ItemStack;
 import twilightforest.TwilightForestMod;
-import twilightforest.init.TFDataComponents;
-import twilightforest.init.TFItems;
 
 public record WipeOreMeterPacket(InteractionHand hand) implements CustomPacketPayload {
 
@@ -29,13 +25,4 @@ public record WipeOreMeterPacket(InteractionHand hand) implements CustomPacketPa
 		return TYPE;
 	}
 
-	public static void handle(WipeOreMeterPacket message, ServerPlayNetworking.Context context) {
-		context.server().execute(() -> {
-			ItemStack heldStack = context.player().getItemInHand(message.hand());
-			if (heldStack.is(TFItems.ORE_METER)) {
-				heldStack.remove(TFDataComponents.ORE_DATA);
-				heldStack.remove(TFDataComponents.ORE_FILTER);
-			}
-		});
-	}
 }
