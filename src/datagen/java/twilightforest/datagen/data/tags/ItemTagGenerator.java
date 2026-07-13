@@ -138,6 +138,7 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 		this.addEquipmentTags();
 		this.addEnchantableTags();
 		this.addVanillaUtilityTags();
+		this.addTwilightForestUtilityTags();
 	}
 
 	private void addEquipmentTags() {
@@ -310,6 +311,32 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 			.addTag(TFItemTags.TRANSFORMATION_LOGS)
 			.addTag(TFItemTags.MINING_LOGS)
 			.addTag(TFItemTags.SORTING_LOGS);
+	}
+
+	private void addTwilightForestUtilityTags() {
+		this.builder(TFItemTags.ARCTIC_FUR).add(key(TFItems.ARCTIC_FUR));
+		this.builder(TFItemTags.BANNED_UNCRAFTABLES).add(key(TFBlocks.GIANT_LOG.asItem()));
+		this.builder(TFItemTags.BANNED_UNCRAFTING_INGREDIENTS).add(
+			key(TFBlocks.INFESTED_TOWERWOOD.asItem()),
+			key(TFBlocks.HOLLOW_OAK_SAPLING.asItem()),
+			key(TFBlocks.TIME_SAPLING.asItem()),
+			key(TFBlocks.TRANSFORMATION_SAPLING.asItem()),
+			key(TFBlocks.MINING_SAPLING.asItem()),
+			key(TFBlocks.SORTING_SAPLING.asItem()),
+			key(TFItems.TRANSFORMATION_POWDER)
+		);
+		this.builder(TFItemTags.BLOCK_AND_CHAIN_ENCHANTABLE).add(key(TFItems.BLOCK_AND_CHAIN));
+		this.builder(TFItemTags.FIERY_VIAL).add(key(TFItems.FIERY_BLOOD), key(TFItems.FIERY_TEARS));
+		this.builder(TFItemTags.IMMUNE_TO_THORNS)
+			.add(key(TFBlocks.THORN_LEAVES.asItem()), key(TFBlocks.THORN_ROSE.asItem()));
+		this.builder(TFItemTags.KEPT_ON_DEATH)
+			.add(key(TFItems.TOWER_KEY), key(TFItems.PHANTOM_HELMET), key(TFItems.PHANTOM_CHESTPLATE));
+		this.builder(TFItemTags.SCEPTERS).add(
+			key(TFItems.TWILIGHT_SCEPTER),
+			key(TFItems.LIFEDRAIN_SCEPTER),
+			key(TFItems.ZOMBIE_SCEPTER),
+			key(TFItems.FORTIFICATION_SCEPTER)
+		);
 	}
 
 	private static ResourceKey<Item> key(Item item) {
