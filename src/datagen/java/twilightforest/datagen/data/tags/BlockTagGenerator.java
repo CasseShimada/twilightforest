@@ -123,6 +123,23 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 			key(Blocks.LIGHT),
 			key(Blocks.REINFORCED_DEEPSLATE)
 		);
+		this.builder(TFBlockTags.ANTIBUILDER_IGNORES)
+			.add(
+				key(Blocks.REDSTONE_LAMP),
+				key(Blocks.TNT),
+				key(Blocks.WATER),
+				key(TFBlocks.ANTIBUILDER),
+				key(TFBlocks.CARMINITE_BUILDER),
+				key(TFBlocks.BUILT_BLOCK),
+				key(TFBlocks.REACTOR_DEBRIS),
+				key(TFBlocks.CARMINITE_REACTOR),
+				key(TFBlocks.REAPPEARING_BLOCK),
+				key(TFBlocks.GHAST_TRAP),
+				key(TFBlocks.FAKE_DIAMOND),
+				key(TFBlocks.FAKE_GOLD)
+			)
+			.addTag(TFBlockTags.COMMON_PROTECTIONS)
+			.addOptional(externalKey("gravestone", "gravestone"));
 		this.builder(TFBlockTags.CARMINITE_REACTOR_IMMUNE).addTag(TFBlockTags.COMMON_PROTECTIONS);
 		this.builder(BlockTags.DRAGON_IMMUNE)
 			.addTag(TFBlockTags.COMMON_PROTECTIONS)
@@ -351,5 +368,9 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 
 	private static ResourceKey<Block> key(Block block) {
 		return BuiltInRegistries.BLOCK.getResourceKey(block).orElseThrow();
+	}
+
+	private static ResourceKey<Block> externalKey(String namespace, String path) {
+		return ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(namespace, path));
 	}
 }
