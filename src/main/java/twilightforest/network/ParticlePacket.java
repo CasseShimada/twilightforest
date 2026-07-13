@@ -61,14 +61,10 @@ public class ParticlePacket implements CustomPacketPayload {
 		this.queuedParticles.add(new QueuedParticle(particleOptions, xyz.x, xyz.y, xyz.z, xyz2.x, xyz2.y, xyz2.z));
 	}
 
-	private record QueuedParticle(ParticleOptions particleOptions, double x, double y, double z, double x2, double y2, double z2) {
+	List<QueuedParticle> queuedParticles() {
+		return List.copyOf(this.queuedParticles);
 	}
 
-	public static void handle(ParticlePacket message, PayloadContext ctx) {
-		ctx.enqueueWork(() -> {
-			for (QueuedParticle queuedParticle : message.queuedParticles) {
-				ctx.player().level().addParticle(queuedParticle.particleOptions, queuedParticle.x, queuedParticle.y, queuedParticle.z, queuedParticle.x2, queuedParticle.y2, queuedParticle.z2);
-			}
-		});
+	record QueuedParticle(ParticleOptions particleOptions, double x, double y, double z, double x2, double y2, double z2) {
 	}
 }

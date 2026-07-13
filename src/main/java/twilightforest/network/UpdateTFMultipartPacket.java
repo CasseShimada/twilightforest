@@ -51,36 +51,6 @@ public record UpdateTFMultipartPacket(int entityId, @Nullable Entity entity, @Nu
 		return TYPE;
 	}
 
-	public static void handle(UpdateTFMultipartPacket message, PayloadContext ctx) {
-		ctx.enqueueWork(() -> {
-			int eId = message.entity != null && message.entityId <= 0 ? message.entity.getId() : message.entityId; // Account for Singleplayer
-			Entity ent = ctx.player().level().getEntity(eId);
-			if (ent == null) return;
-			if (!(ent instanceof TFMultipartEntity multipart)) return;
-
-			TFPart.assignPartIDs(ent);
-
-			TFPart<?>[] parts = multipart.getParts();
-			if (parts == null) return;
-
-			for (TFPart<?> tfPart : parts) {
-				if (tfPart == null) continue;
-
-				if (message.data == null && message.entity instanceof TFMultipartEntity singleplayerMultipart) { // Account for Singleplayer
-					Arrays.stream(singleplayerMultipart.getParts())
-						.filter(p -> p.getId() == tfPart.getId())
-						.findFirst()
-						.ifPresent(p -> tfPart.readData(p.writeData()));
-				} else if (message.data != null) {
-					PartDataHolder data = message.data.get(tfPart.getId());
-					if (data != null) {
-						tfPart.readData(data);
-					}
-				}
-			}
-		});
-	}
-
 	public record PartDataHolder(double x, double y, double z,
 								 float yRot, float xRot,
 								 float width, float height,

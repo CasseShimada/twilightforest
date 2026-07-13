@@ -4,10 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import twilightforest.TwilightForestMod;
-import twilightforest.init.TFDataAttachments;
 
 public record UpdateFeatherFanFallPacket(int entityID, boolean falling) implements CustomPacketPayload {
 
@@ -28,12 +25,4 @@ public record UpdateFeatherFanFallPacket(int entityID, boolean falling) implemen
 		return TYPE;
 	}
 
-	public static void handle(UpdateFeatherFanFallPacket message, PayloadContext ctx) {
-		ctx.enqueueWork(() -> {
-			Entity entity = ctx.player().level().getEntity(message.entityID());
-			if (entity instanceof Player) {
-				TFDataAttachments.set(entity, TFDataAttachments.FEATHER_FAN, message.falling());
-			}
-		});
-	}
 }

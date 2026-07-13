@@ -4,10 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import twilightforest.TwilightForestMod;
-import twilightforest.init.TFDataAttachments;
 
 public record UpdateShieldPacket(int entityID, int temporaryShields, int permanentShields) implements CustomPacketPayload {
 
@@ -29,19 +26,4 @@ public record UpdateShieldPacket(int entityID, int temporaryShields, int permane
 		return TYPE;
 	}
 
-	@SuppressWarnings("Convert2Lambda")
-	public static void handle(UpdateShieldPacket message, PayloadContext ctx) {
-		// Client-only logic; this handler is only registered for S2C.
-		ctx.enqueueWork(new Runnable() {
-			@Override
-			public void run() {
-				Entity entity = ctx.player().level().getEntity(message.entityID());
-				if (entity instanceof LivingEntity living) {
-					var attachment = TFDataAttachments.get(living, TFDataAttachments.FORTIFICATION_SHIELDS);
-					attachment.setShields(living, message.temporaryShields(), true);
-					attachment.setShields(living, message.permanentShields(), false);
-				}
-			}
-		});
-	}
 }

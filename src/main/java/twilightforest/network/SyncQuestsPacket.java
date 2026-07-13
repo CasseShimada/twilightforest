@@ -6,7 +6,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import twilightforest.TwilightForestMod;
 import twilightforest.entity.passive.quest.ram.QuestingRamContext;
-import twilightforest.entity.passive.quest.ram.QuestingRamCurrentContext;
 
 public record SyncQuestsPacket(QuestingRamContext ram) implements CustomPacketPayload {
 
@@ -21,7 +20,4 @@ public record SyncQuestsPacket(QuestingRamContext ram) implements CustomPacketPa
 		return TYPE;
 	}
 
-	public static void handle(SyncQuestsPacket packet, PayloadContext context) {
-		context.enqueueWork(() -> QuestingRamCurrentContext.INSTANCE.setContext(packet.ram()));
-	}
 }

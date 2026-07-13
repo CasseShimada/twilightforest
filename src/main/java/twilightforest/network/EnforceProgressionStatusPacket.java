@@ -26,9 +26,4 @@ public record EnforceProgressionStatusPacket(boolean enforce) implements CustomP
 		return TYPE;
 	}
 
-	public static void handle(EnforceProgressionStatusPacket message, PayloadContext ctx) {
-		ctx.enqueueWork(() -> {
-			enforcedProgression = message.enforce();
-		});
-	}
 }

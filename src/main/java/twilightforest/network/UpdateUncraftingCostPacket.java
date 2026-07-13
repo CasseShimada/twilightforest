@@ -4,9 +4,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import twilightforest.TwilightForestMod;
-import twilightforest.inventory.UncraftingMenu;
 
 public record UpdateUncraftingCostPacket(int uncraftingCost, int recraftingCost) implements CustomPacketPayload {
 
@@ -22,14 +20,4 @@ public record UpdateUncraftingCostPacket(int uncraftingCost, int recraftingCost)
 		return TYPE;
 	}
 
-	public static void handle(UpdateUncraftingCostPacket message, PayloadContext ctx) {
-		// Client-only logic; this handler is only registered for S2C.
-		ctx.enqueueWork(() -> {
-			AbstractContainerMenu container = ctx.player().containerMenu;
-
-			if (container instanceof UncraftingMenu uncrafting) {
-				uncrafting.updateCosts(message.uncraftingCost(), message.recraftingCost());
-			}
-		});
-	}
 }

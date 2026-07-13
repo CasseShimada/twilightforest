@@ -6,7 +6,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.item.ItemStack;
 import twilightforest.TwilightForestMod;
-import twilightforest.block.entity.MasonJarBlockEntity;
 
 public record SetMasonJarItemPacket(BlockPos pos, boolean empty, ItemStack stack, int rotation) implements CustomPacketPayload {
 	public static final Type<SetMasonJarItemPacket> TYPE = new Type<>(TwilightForestMod.prefix("set_mason_jar_item"));
@@ -35,13 +34,4 @@ public record SetMasonJarItemPacket(BlockPos pos, boolean empty, ItemStack stack
 		return TYPE;
 	}
 
-	public static void handle(SetMasonJarItemPacket packet, PayloadContext ctx) {
-		ctx.enqueueWork(() -> {
-			if (ctx.player().level().getBlockEntity(packet.pos()) instanceof MasonJarBlockEntity blockEntity) {
-				blockEntity.getItemHandler().setItem(packet.stack());
-				blockEntity.setItemRotation(packet.rotation());
-				blockEntity.setChanged();
-			}
-		});
-	}
 }

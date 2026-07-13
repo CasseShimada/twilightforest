@@ -4,7 +4,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import twilightforest.config.TFConfig;
 import twilightforest.TwilightForestMod;
 
 import java.util.List;
@@ -43,18 +42,4 @@ public record SyncUncraftingTableConfigPacket(
 		return TYPE;
 	}
 
-	public static void handle(SyncUncraftingTableConfigPacket message, PayloadContext ctx) {
-		ctx.enqueueWork(() -> {
-			TFConfig.uncraftingXpCostMultiplier = message.uncraftingMultiplier();
-			TFConfig.repairingXpCostMultiplier = message.repairingMultiplier();
-			TFConfig.allowShapelessUncrafting = message.allowShapeless();
-			TFConfig.disableIngredientSwitching = message.disableIngredientSwitching();
-			TFConfig.disableUncraftingOnly = message.disabledUncrafting();
-			TFConfig.disableEntireTable = message.disabledTable();
-			TFConfig.disableUncraftingRecipes = message.disabledRecipes();
-			TFConfig.reverseRecipeBlacklist = message.flipRecipeList();
-			TFConfig.blacklistedUncraftingModIds = message.disabledModids();
-			TFConfig.flipUncraftingModIdList = message.flipModidList();
-		});
-	}
 }

@@ -6,16 +6,17 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
+import twilightforest.block.entity.MasonJarBlockEntity;
 import twilightforest.client.MissingAdvancementToast;
 import twilightforest.client.MovingCicadaSoundInstance;
 import twilightforest.client.ClientHandHelper;
@@ -23,9 +24,14 @@ import twilightforest.client.renderer.TFWeatherRenderer;
 import twilightforest.config.TFConfig;
 import twilightforest.entity.CharmEffect;
 import twilightforest.entity.ProtectionBox;
+import twilightforest.entity.TFMultipartEntity;
+import twilightforest.entity.TFPart;
 import twilightforest.entity.boss.bar.ClientTFBossBar;
+import twilightforest.entity.passive.quest.ram.QuestingRamCurrentContext;
+import twilightforest.init.TFDataAttachments;
 import twilightforest.init.TFEntities;
 import twilightforest.init.TFParticleType;
+import twilightforest.inventory.UncraftingMenu;
 import twilightforest.item.MagicMapItem;
 import twilightforest.item.MazeMapItem;
 import twilightforest.item.mapdata.TFMagicMapData;
@@ -33,8 +39,8 @@ import twilightforest.item.mapdata.TFMazeMapData;
 import twilightforest.mixin.client.accessor.BossHealthOverlayAccessor;
 import twilightforest.particle.data.LeafParticleData;
 
+import java.util.Arrays;
 import java.util.Random;
-import java.util.function.BiConsumer;
 
 public final class TFClientNetworking {
 	private TFClientNetworking() {
@@ -45,18 +51,18 @@ public final class TFClientNetworking {
 	}
 
 	private static void registerReceivers() {
-		registerCommon(EnforceProgressionStatusPacket.TYPE, EnforceProgressionStatusPacket::handle);
-		registerCommon(MovePlayerPacket.TYPE, MovePlayerPacket::handle);
-		registerCommon(ParticlePacket.TYPE, ParticlePacket::handle);
-		registerCommon(SetMasonJarItemPacket.TYPE, SetMasonJarItemPacket::handle);
-		registerCommon(SyncQuestsPacket.TYPE, SyncQuestsPacket::handle);
-		registerCommon(SyncUncraftingTableConfigPacket.TYPE, SyncUncraftingTableConfigPacket::handle);
-		registerCommon(UpdateDeathTimePacket.TYPE, UpdateDeathTimePacket::handle);
-		registerCommon(UpdateFeatherFanFallPacket.TYPE, UpdateFeatherFanFallPacket::handle);
-		registerCommon(UpdateShieldPacket.TYPE, UpdateShieldPacket::handle);
-		registerCommon(UpdateTFMultipartPacket.TYPE, UpdateTFMultipartPacket::handle);
-		registerCommon(UpdateThrownPacket.TYPE, UpdateThrownPacket::handle);
-		registerCommon(UpdateUncraftingCostPacket.TYPE, UpdateUncraftingCostPacket::handle);
+		ClientPlayNetworking.registerGlobalReceiver(EnforceProgressionStatusPacket.TYPE, TFClientNetworking::handleEnforceProgressionStatus);
+		ClientPlayNetworking.registerGlobalReceiver(MovePlayerPacket.TYPE, TFClientNetworking::handleMovePlayer);
+		ClientPlayNetworking.registerGlobalReceiver(ParticlePacket.TYPE, TFClientNetworking::handleParticles);
+		ClientPlayNetworking.registerGlobalReceiver(SetMasonJarItemPacket.TYPE, TFClientNetworking::handleSetMasonJarItem);
+		ClientPlayNetworking.registerGlobalReceiver(SyncQuestsPacket.TYPE, TFClientNetworking::handleSyncQuests);
+		ClientPlayNetworking.registerGlobalReceiver(SyncUncraftingTableConfigPacket.TYPE, TFClientNetworking::handleSyncUncraftingTableConfig);
+		ClientPlayNetworking.registerGlobalReceiver(UpdateDeathTimePacket.TYPE, TFClientNetworking::handleUpdateDeathTime);
+		ClientPlayNetworking.registerGlobalReceiver(UpdateFeatherFanFallPacket.TYPE, TFClientNetworking::handleUpdateFeatherFanFall);
+		ClientPlayNetworking.registerGlobalReceiver(UpdateShieldPacket.TYPE, TFClientNetworking::handleUpdateShield);
+		ClientPlayNetworking.registerGlobalReceiver(UpdateTFMultipartPacket.TYPE, TFClientNetworking::handleUpdateTFMultipart);
+		ClientPlayNetworking.registerGlobalReceiver(UpdateThrownPacket.TYPE, TFClientNetworking::handleUpdateThrown);
+		ClientPlayNetworking.registerGlobalReceiver(UpdateUncraftingCostPacket.TYPE, TFClientNetworking::handleUpdateUncraftingCost);
 
 		ClientPlayNetworking.registerGlobalReceiver(AreaProtectionPacket.TYPE, TFClientNetworking::handleAreaProtection);
 		ClientPlayNetworking.registerGlobalReceiver(CreateMovingCicadaSoundPacket.TYPE, TFClientNetworking::handleMovingCicadaSound);
@@ -71,8 +77,128 @@ public final class TFClientNetworking {
 		ClientPlayNetworking.registerGlobalReceiver(TFBossBarPacket.UpdateTFBossBarStylePacket.TYPE, TFClientNetworking::handleBossBarStyle);
 	}
 
-	private static <T extends CustomPacketPayload> void registerCommon(CustomPacketPayload.Type<T> type, BiConsumer<T, PayloadContext> handler) {
-		ClientPlayNetworking.registerGlobalReceiver(type, (packet, context) -> handler.accept(packet, new ClientPayloadContext(context)));
+	private static void handleEnforceProgressionStatus(EnforceProgressionStatusPacket packet, ClientPlayNetworking.Context context) {
+		context.client().execute(() -> EnforceProgressionStatusPacket.enforcedProgression = packet.enforce());
+	}
+
+	private static void handleMovePlayer(MovePlayerPacket packet, ClientPlayNetworking.Context context) {
+		context.client().execute(() -> context.player().push(packet.motionX(), packet.motionY(), packet.motionZ()));
+	}
+
+	private static void handleParticles(ParticlePacket packet, ClientPlayNetworking.Context context) {
+		context.client().execute(() -> {
+			for (ParticlePacket.QueuedParticle particle : packet.queuedParticles()) {
+				context.player().level().addParticle(particle.particleOptions(), particle.x(), particle.y(), particle.z(), particle.x2(), particle.y2(), particle.z2());
+			}
+		});
+	}
+
+	private static void handleSetMasonJarItem(SetMasonJarItemPacket packet, ClientPlayNetworking.Context context) {
+		context.client().execute(() -> {
+			if (context.player().level().getBlockEntity(packet.pos()) instanceof MasonJarBlockEntity blockEntity) {
+				blockEntity.getItemHandler().setItem(packet.stack());
+				blockEntity.setItemRotation(packet.rotation());
+				blockEntity.setChanged();
+			}
+		});
+	}
+
+	private static void handleSyncQuests(SyncQuestsPacket packet, ClientPlayNetworking.Context context) {
+		context.client().execute(() -> QuestingRamCurrentContext.INSTANCE.setContext(packet.ram()));
+	}
+
+	private static void handleSyncUncraftingTableConfig(SyncUncraftingTableConfigPacket packet, ClientPlayNetworking.Context context) {
+		context.client().execute(() -> {
+			TFConfig.uncraftingXpCostMultiplier = packet.uncraftingMultiplier();
+			TFConfig.repairingXpCostMultiplier = packet.repairingMultiplier();
+			TFConfig.allowShapelessUncrafting = packet.allowShapeless();
+			TFConfig.disableIngredientSwitching = packet.disableIngredientSwitching();
+			TFConfig.disableUncraftingOnly = packet.disabledUncrafting();
+			TFConfig.disableEntireTable = packet.disabledTable();
+			TFConfig.disableUncraftingRecipes = packet.disabledRecipes();
+			TFConfig.reverseRecipeBlacklist = packet.flipRecipeList();
+			TFConfig.blacklistedUncraftingModIds = packet.disabledModids();
+			TFConfig.flipUncraftingModIdList = packet.flipModidList();
+		});
+	}
+
+	private static void handleUpdateDeathTime(UpdateDeathTimePacket packet, ClientPlayNetworking.Context context) {
+		context.client().execute(() -> {
+			Entity entity = context.player().level().getEntity(packet.entityID());
+			if (entity instanceof LivingEntity living) {
+				living.deathTime = packet.deathTime();
+			}
+		});
+	}
+
+	private static void handleUpdateFeatherFanFall(UpdateFeatherFanFallPacket packet, ClientPlayNetworking.Context context) {
+		context.client().execute(() -> {
+			Entity entity = context.player().level().getEntity(packet.entityID());
+			if (entity instanceof Player) {
+				TFDataAttachments.set(entity, TFDataAttachments.FEATHER_FAN, packet.falling());
+			}
+		});
+	}
+
+	private static void handleUpdateShield(UpdateShieldPacket packet, ClientPlayNetworking.Context context) {
+		context.client().execute(() -> {
+			Entity entity = context.player().level().getEntity(packet.entityID());
+			if (entity instanceof LivingEntity living) {
+				var attachment = TFDataAttachments.get(living, TFDataAttachments.FORTIFICATION_SHIELDS);
+				attachment.setShields(living, packet.temporaryShields(), true);
+				attachment.setShields(living, packet.permanentShields(), false);
+			}
+		});
+	}
+
+	private static void handleUpdateTFMultipart(UpdateTFMultipartPacket packet, ClientPlayNetworking.Context context) {
+		context.client().execute(() -> {
+			int entityId = packet.entity() != null && packet.entityId() <= 0 ? packet.entity().getId() : packet.entityId();
+			Entity entity = context.player().level().getEntity(entityId);
+			if (!(entity instanceof TFMultipartEntity multipart)) return;
+
+			TFPart.assignPartIDs(entity);
+			TFPart<?>[] parts = multipart.getParts();
+			if (parts == null) return;
+
+			for (TFPart<?> part : parts) {
+				if (part == null) continue;
+
+				if (packet.data() == null && packet.entity() instanceof TFMultipartEntity singleplayerMultipart) {
+					Arrays.stream(singleplayerMultipart.getParts())
+						.filter(singleplayerPart -> singleplayerPart.getId() == part.getId())
+						.findFirst()
+						.ifPresent(singleplayerPart -> part.readData(singleplayerPart.writeData()));
+				} else if (packet.data() != null) {
+					UpdateTFMultipartPacket.PartDataHolder data = packet.data().get(part.getId());
+					if (data != null) {
+						part.readData(data);
+					}
+				}
+			}
+		});
+	}
+
+	private static void handleUpdateThrown(UpdateThrownPacket packet, ClientPlayNetworking.Context context) {
+		context.client().execute(() -> {
+			Level level = context.player().level();
+			Entity entity = level.getEntity(packet.entityID());
+			if (entity instanceof Player player) {
+				var attachment = TFDataAttachments.get(player, TFDataAttachments.YETI_THROWING);
+				LivingEntity thrower = packet.thrower() != 0 ? (LivingEntity) level.getEntity(packet.thrower()) : null;
+				attachment.setThrown(player, packet.thrown(), thrower);
+				attachment.setThrowCooldown(player, packet.throwCooldown());
+			}
+		});
+	}
+
+	private static void handleUpdateUncraftingCost(UpdateUncraftingCostPacket packet, ClientPlayNetworking.Context context) {
+		context.client().execute(() -> {
+			AbstractContainerMenu container = context.player().containerMenu;
+			if (container instanceof UncraftingMenu uncrafting) {
+				uncrafting.updateCosts(packet.uncraftingCost(), packet.recraftingCost());
+			}
+		});
 	}
 
 	private static void handleAreaProtection(AreaProtectionPacket packet, ClientPlayNetworking.Context context) {
@@ -225,15 +351,4 @@ public final class TFClientNetworking {
 		});
 	}
 
-	private record ClientPayloadContext(ClientPlayNetworking.Context context) implements PayloadContext {
-		@Override
-		public Player player() {
-			return context.player();
-		}
-
-		@Override
-		public void enqueueWork(Runnable task) {
-			context.client().execute(task);
-		}
-	}
 }
