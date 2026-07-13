@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 import twilightforest.init.TFBlocks;
 import twilightforest.tags.TFBlockTags;
 import twilightforest.util.TFBlockFamilies;
@@ -73,6 +74,7 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 		this.addHollowLogTags();
 		this.addWoodFamilyTags();
 		this.addShapeTags();
+		this.addStorageBlockTags();
 	}
 
 	private void addCloudTags() {
@@ -364,6 +366,28 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 			key(TFBlocks.POTTED_GREEN_THORN),
 			key(TFBlocks.POTTED_DEAD_THORN)
 		);
+	}
+
+	private void addStorageBlockTags() {
+		this.builder(TFBlockTags.STORAGE_BLOCKS_ARCTIC_FUR).add(key(TFBlocks.ARCTIC_FUR_BLOCK));
+		this.builder(TFBlockTags.STORAGE_BLOCKS_CARMINITE).add(key(TFBlocks.CARMINITE_BLOCK));
+		this.builder(TFBlockTags.STORAGE_BLOCKS_FIERY).add(key(TFBlocks.FIERY_BLOCK));
+		this.builder(TFBlockTags.STORAGE_BLOCKS_IRONWOOD).add(key(TFBlocks.IRONWOOD_BLOCK));
+		this.builder(TFBlockTags.STORAGE_BLOCKS_KNIGHTMETAL).add(key(TFBlocks.KNIGHTMETAL_BLOCK));
+		this.builder(TFBlockTags.STORAGE_BLOCKS_STEELEAF).add(key(TFBlocks.STEELEAF_BLOCK));
+
+		this.builder(ConventionalBlockTags.STORAGE_BLOCKS)
+			.addTag(TFBlockTags.STORAGE_BLOCKS_ARCTIC_FUR)
+			.addTag(TFBlockTags.STORAGE_BLOCKS_CARMINITE)
+			.addTag(TFBlockTags.STORAGE_BLOCKS_FIERY)
+			.addTag(TFBlockTags.STORAGE_BLOCKS_IRONWOOD)
+			.addTag(TFBlockTags.STORAGE_BLOCKS_KNIGHTMETAL)
+			.addTag(TFBlockTags.STORAGE_BLOCKS_STEELEAF);
+		this.builder(BlockTags.BEACON_BASE_BLOCKS)
+			.addTag(TFBlockTags.STORAGE_BLOCKS_FIERY)
+			.addTag(TFBlockTags.STORAGE_BLOCKS_IRONWOOD)
+			.addTag(TFBlockTags.STORAGE_BLOCKS_KNIGHTMETAL)
+			.addTag(TFBlockTags.STORAGE_BLOCKS_STEELEAF);
 	}
 
 	private static ResourceKey<Block> key(Block block) {
