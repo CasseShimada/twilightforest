@@ -128,6 +128,7 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 
 		this.addEquipmentTags();
 		this.addEnchantableTags();
+		this.addVanillaUtilityTags();
 	}
 
 	private void addEquipmentTags() {
@@ -263,6 +264,43 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 		);
 		this.builder(ItemTags.MINING_ENCHANTABLE).add(key(TFItems.BLOCK_AND_CHAIN));
 		this.builder(ItemTags.MINING_LOOT_ENCHANTABLE).add(key(TFItems.BLOCK_AND_CHAIN));
+	}
+
+	private void addVanillaUtilityTags() {
+		this.builder(ItemTags.BEACON_PAYMENT_ITEMS)
+			.addTag(TFItemTags.IRONWOOD_INGOTS)
+			.addTag(TFItemTags.STEELEAF_INGOTS)
+			.addTag(TFItemTags.KNIGHTMETAL_INGOTS)
+			.addTag(TFItemTags.FIERY_INGOTS);
+		this.builder(ItemTags.BOATS).add(
+			key(TFItems.TWILIGHT_OAK_BOAT),
+			key(TFItems.CANOPY_BOAT),
+			key(TFItems.MANGROVE_BOAT),
+			key(TFItems.DARK_BOAT),
+			key(TFItems.TIME_BOAT),
+			key(TFItems.TRANSFORMATION_BOAT),
+			key(TFItems.MINING_BOAT),
+			key(TFItems.SORTING_BOAT)
+		);
+		this.builder(ItemTags.CHEST_BOATS).add(
+			key(TFItems.TWILIGHT_OAK_CHEST_BOAT),
+			key(TFItems.CANOPY_CHEST_BOAT),
+			key(TFItems.MANGROVE_CHEST_BOAT),
+			key(TFItems.DARK_CHEST_BOAT),
+			key(TFItems.TIME_CHEST_BOAT),
+			key(TFItems.TRANSFORMATION_CHEST_BOAT),
+			key(TFItems.MINING_CHEST_BOAT),
+			key(TFItems.SORTING_CHEST_BOAT)
+		);
+		this.builder(ItemTags.BREAKS_DECORATED_POTS).add(key(TFItems.BLOCK_AND_CHAIN));
+		this.builder(ItemTags.LOGS_THAT_BURN)
+			.addTag(TFItemTags.TWILIGHT_OAK_LOGS)
+			.addTag(TFItemTags.CANOPY_LOGS)
+			.addTag(TFItemTags.MANGROVE_LOGS)
+			.addTag(TFItemTags.TIME_LOGS)
+			.addTag(TFItemTags.TRANSFORMATION_LOGS)
+			.addTag(TFItemTags.MINING_LOGS)
+			.addTag(TFItemTags.SORTING_LOGS);
 	}
 
 	private static ResourceKey<Item> key(Item item) {
