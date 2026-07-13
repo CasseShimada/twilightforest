@@ -2,7 +2,9 @@ package twilightforest.datagen.data.tags;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.BlockFamily;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -17,6 +19,8 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
+	private static final TagKey<Block> LOGS_THAT_BURN = TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("logs_that_burn"));
+
 	public BlockTagGenerator(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
 		super(output, registries);
 	}
@@ -50,7 +54,35 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 
 		this.builder(TFBlockTags.TOWERWOOD)
 			.add(key(TFBlocks.TOWERWOOD), key(TFBlocks.MOSSY_TOWERWOOD), key(TFBlocks.CRACKED_TOWERWOOD), key(TFBlocks.INFESTED_TOWERWOOD));
+		this.addLogTags();
 		this.addWoodFamilyTags();
+	}
+
+	private void addLogTags() {
+		this.addLogTag(TFBlockTags.TWILIGHT_OAK_LOGS, TFBlocks.TWILIGHT_OAK_LOG, TFBlocks.STRIPPED_TWILIGHT_OAK_LOG, TFBlocks.TWILIGHT_OAK_WOOD, TFBlocks.STRIPPED_TWILIGHT_OAK_WOOD);
+		this.addLogTag(TFBlockTags.CANOPY_LOGS, TFBlocks.CANOPY_LOG, TFBlocks.STRIPPED_CANOPY_LOG, TFBlocks.CANOPY_WOOD, TFBlocks.STRIPPED_CANOPY_WOOD);
+		this.addLogTag(TFBlockTags.MANGROVE_LOGS, TFBlocks.MANGROVE_LOG, TFBlocks.STRIPPED_MANGROVE_LOG, TFBlocks.MANGROVE_WOOD, TFBlocks.STRIPPED_MANGROVE_WOOD);
+		this.addLogTag(TFBlockTags.DARKWOOD_LOGS, TFBlocks.DARK_LOG, TFBlocks.STRIPPED_DARK_LOG, TFBlocks.DARK_WOOD, TFBlocks.STRIPPED_DARK_WOOD);
+		this.addLogTag(TFBlockTags.TIME_LOGS, TFBlocks.TIME_LOG, TFBlocks.STRIPPED_TIME_LOG, TFBlocks.TIME_WOOD, TFBlocks.STRIPPED_TIME_WOOD);
+		this.addLogTag(TFBlockTags.TRANSFORMATION_LOGS, TFBlocks.TRANSFORMATION_LOG, TFBlocks.STRIPPED_TRANSFORMATION_LOG, TFBlocks.TRANSFORMATION_WOOD, TFBlocks.STRIPPED_TRANSFORMATION_WOOD);
+		this.addLogTag(TFBlockTags.MINING_LOGS, TFBlocks.MINING_LOG, TFBlocks.STRIPPED_MINING_LOG, TFBlocks.MINING_WOOD, TFBlocks.STRIPPED_MINING_WOOD);
+		this.addLogTag(TFBlockTags.SORTING_LOGS, TFBlocks.SORTING_LOG, TFBlocks.STRIPPED_SORTING_LOG, TFBlocks.SORTING_WOOD, TFBlocks.STRIPPED_SORTING_WOOD);
+
+		this.builder(TFBlockTags.TF_LOGS)
+			.addTag(TFBlockTags.TWILIGHT_OAK_LOGS)
+			.addTag(TFBlockTags.CANOPY_LOGS)
+			.addTag(TFBlockTags.MANGROVE_LOGS)
+			.addTag(TFBlockTags.DARKWOOD_LOGS)
+			.addTag(TFBlockTags.TIME_LOGS)
+			.addTag(TFBlockTags.TRANSFORMATION_LOGS)
+			.addTag(TFBlockTags.MINING_LOGS)
+			.addTag(TFBlockTags.SORTING_LOGS);
+		this.builder(BlockTags.LOGS).addTag(TFBlockTags.TF_LOGS);
+		this.builder(LOGS_THAT_BURN).addTag(TFBlockTags.TF_LOGS);
+	}
+
+	private void addLogTag(TagKey<Block> tag, Block log, Block strippedLog, Block wood, Block strippedWood) {
+		this.builder(tag).add(key(log), key(strippedLog), key(wood), key(strippedWood));
 	}
 
 	private void addWoodFamilyTags() {
