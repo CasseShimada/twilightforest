@@ -8,9 +8,11 @@ import twilightforest.TwilightForestMod;
 import twilightforest.datagen.data.tags.BlockEntityTypeTagGenerator;
 import twilightforest.datagen.data.tags.BlockTagGenerator;
 import twilightforest.datagen.data.tags.DamageTypeTagGenerator;
+import twilightforest.datagen.data.tags.DimensionTypeTagGenerator;
 import twilightforest.datagen.data.tags.EntityTypeTagGenerator;
 import twilightforest.datagen.data.tags.ItemTagGenerator;
 import twilightforest.init.TFDamageTypes;
+import twilightforest.init.TFDimensionData;
 
 public final class TwilightForestDataGenerator implements DataGeneratorEntrypoint {
 	@Override
@@ -21,11 +23,13 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		pack.addProvider(EntityTypeTagGenerator::new);
 		pack.addProvider(BlockEntityTypeTagGenerator::new);
 		pack.addProvider(DamageTypeTagGenerator::new);
+		pack.addProvider(DimensionTypeTagGenerator::new);
 	}
 
 	@Override
 	public void buildRegistry(RegistrySetBuilder registryBuilder) {
 		registryBuilder.add(Registries.DAMAGE_TYPE, TFDamageTypes::bootstrap);
+		registryBuilder.add(Registries.DIMENSION_TYPE, TFDimensionData::bootstrapType);
 	}
 
 	@Override
