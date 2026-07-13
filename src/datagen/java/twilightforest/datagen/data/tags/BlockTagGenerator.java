@@ -76,6 +76,7 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 		this.addShapeTags();
 		this.addStorageBlockTags();
 		this.addConventionTags();
+		this.addMiningTags();
 	}
 
 	private void addCloudTags() {
@@ -457,6 +458,30 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 			key(TFBlocks.UR_GHAST_BOSS_SPAWNER),
 			key(TFBlocks.ALPHA_YETI_BOSS_SPAWNER),
 			key(TFBlocks.SNOW_QUEEN_BOSS_SPAWNER)
+		);
+	}
+
+	private void addMiningTags() {
+		this.builder(BlockTags.MINEABLE_WITH_HOE).add(
+			key(TFBlocks.TWILIGHT_OAK_LEAVES),
+			key(TFBlocks.CANOPY_LEAVES),
+			key(TFBlocks.MANGROVE_LEAVES),
+			key(TFBlocks.DARK_LEAVES),
+			key(TFBlocks.RAINBOW_OAK_LEAVES),
+			key(TFBlocks.TIME_LEAVES),
+			key(TFBlocks.TRANSFORMATION_LEAVES),
+			key(TFBlocks.MINING_LEAVES),
+			key(TFBlocks.SORTING_LEAVES),
+			key(TFBlocks.THORN_LEAVES),
+			key(TFBlocks.THORN_ROSE),
+			key(TFBlocks.BEANSTALK_LEAVES),
+			key(TFBlocks.STEELEAF_BLOCK),
+			key(TFBlocks.ARCTIC_FUR_BLOCK)
+		);
+		this.builder(BlockTags.MINEABLE_WITH_SHOVEL).add(
+			key(TFBlocks.SMOKER),
+			key(TFBlocks.FIRE_JET),
+			key(TFBlocks.UBEROUS_SOIL)
 		);
 	}
 
