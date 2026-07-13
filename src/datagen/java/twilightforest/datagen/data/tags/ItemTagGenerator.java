@@ -342,6 +342,19 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 			key(TFItems.FORTIFICATION_SCEPTER)
 		);
 		this.builder(TFItemTags.UNCRAFTING_IGNORES_COST).addOptionalTag(ConventionalItemTags.WOODEN_RODS);
+		this.builder(TFItemTags.WIP).add(
+			key(TFBlocks.AURORALIZED_GLASS.asItem()),
+			key(TFItems.QUEST_RAM_BANNER_PATTERN),
+			key(TFBlocks.FINAL_BOSS_BOSS_SPAWNER.asItem()),
+			key(TFItems.CUBE_TALISMAN),
+			key(TFItems.CUBE_OF_ANNIHILATION),
+			key(TFBlocks.CINDER_FURNACE.asItem()),
+			key(TFBlocks.CINDER_LOG.asItem()),
+			key(TFBlocks.CINDER_WOOD.asItem()),
+			key(TFBlocks.SLIDER.asItem()),
+			key(TFBlocks.BRAZIER.asItem()),
+			key(TFBlocks.MAZE_SLIME_BLOCK.asItem())
+		);
 	}
 
 	private static ResourceKey<Item> key(Item item) {
