@@ -55,7 +55,6 @@
         "type": "holding_item",
         "invert": false,
         "item_stack": {
-          "count": 1,
           "id": "minecraft:gold_ingot"
         },
         "max": 1.0,
@@ -71,7 +70,6 @@
         "type": "holding_item",
         "invert": false,
         "item_stack": {
-          "count": 1,
           "id": "minecraft:gold_ingot"
         },
         "max": 1.0,
@@ -93,7 +91,6 @@
         "type": "holding_item",
         "invert": false,
         "item_stack": {
-          "count": 1,
           "id": "minecraft:gold_ingot"
         },
         "max": 1.0,
@@ -109,7 +106,6 @@
         "type": "holding_item",
         "invert": false,
         "item_stack": {
-          "count": 1,
           "id": "minecraft:gold_ingot"
         },
         "max": 1.0,
@@ -131,7 +127,6 @@
         "type": "holding_item",
         "invert": false,
         "item_stack": {
-          "count": 1,
           "id": "minecraft:gold_ingot"
         },
         "max": 1.0,

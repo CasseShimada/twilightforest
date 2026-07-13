@@ -105,6 +105,10 @@ public record MagicPaintingVariant(int width, int height, List<Layer> layers, Co
 				this(type, multiplier, invert, min, max, Float.NaN, Float.NaN, ItemStackRef.of(item), Optional.empty());
 			}
 
+			public OpacityModifier(Type type, float multiplier, boolean invert, float min, float max, ItemStackRef item) {
+				this(type, multiplier, invert, min, max, Float.NaN, Float.NaN, item, Optional.empty());
+			}
+
 			public OpacityModifier(Type type, float multiplier, boolean invert, float min, float max, MobEffectCategory effectCategory) {
 				this(type, multiplier, invert, min, max, Float.NaN, Float.NaN, null, Optional.of(effectCategory));
 			}
