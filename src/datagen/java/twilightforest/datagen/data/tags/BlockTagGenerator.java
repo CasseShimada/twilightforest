@@ -601,6 +601,33 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 			key(TFBlocks.FIRE_JET),
 			key(TFBlocks.UBEROUS_SOIL)
 		);
+		this.builder(TFBlockTags.MINEABLE_WITH_BLOCK_AND_CHAIN)
+			.addTag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.addTag(BlockTags.MINEABLE_WITH_AXE)
+			.addTag(BlockTags.MINEABLE_WITH_SHOVEL)
+			.addTag(BlockTags.MINEABLE_WITH_HOE);
+		this.builder(TFBlockTags.BLOCK_AND_CHAIN_NEVER_BREAKS)
+			.addTag(TFBlockTags.MAZESTONE)
+			.addTag(TFBlockTags.CASTLE_BLOCKS)
+			.addTag(TFBlockTags.DEADROCK)
+			.addTag(BlockTags.WITHER_IMMUNE)
+			.add(
+				key(TFBlocks.TIME_LOG_CORE),
+				key(TFBlocks.TRANSFORMATION_LOG_CORE),
+				key(TFBlocks.MINING_LOG_CORE),
+				key(TFBlocks.SORTING_LOG_CORE),
+				key(TFBlocks.GIANT_OBSIDIAN)
+			);
+		this.builder(TFBlockTags.MAZEBREAKER_ACCELERATED)
+			.addTag(TFBlockTags.MAZESTONE)
+			.addTag(TFBlockTags.CASTLE_BLOCKS);
+		this.builder(TFBlockTags.INCORRECT_FOR_GIANT_TOOL).addOptionalTag(BlockTags.INCORRECT_FOR_STONE_TOOL);
+		this.builder(TFBlockTags.INCORRECT_FOR_GLASS_TOOL).addOptionalTag(BlockTags.INCORRECT_FOR_WOODEN_TOOL);
+		this.builder(TFBlockTags.INCORRECT_FOR_ICE_TOOL).addOptionalTag(BlockTags.INCORRECT_FOR_WOODEN_TOOL);
+		this.builder(TFBlockTags.INCORRECT_FOR_IRONWOOD_TOOL).addOptionalTag(BlockTags.INCORRECT_FOR_IRON_TOOL);
+		this.builder(TFBlockTags.INCORRECT_FOR_FIERY_TOOL).addOptionalTag(BlockTags.INCORRECT_FOR_NETHERITE_TOOL);
+		this.builder(TFBlockTags.INCORRECT_FOR_STEELEAF_TOOL).addOptionalTag(BlockTags.INCORRECT_FOR_DIAMOND_TOOL);
+		this.builder(TFBlockTags.INCORRECT_FOR_KNIGHTMETAL_TOOL).addOptionalTag(BlockTags.INCORRECT_FOR_DIAMOND_TOOL);
 	}
 
 	private static ResourceKey<Block> key(Block block) {
