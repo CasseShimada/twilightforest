@@ -20,6 +20,7 @@ import java.util.concurrent.CompletableFuture;
 
 public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
 	private static final TagKey<Block> LOGS_THAT_BURN = TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("logs_that_burn"));
+	private static final TagKey<Block> SAPLINGS = TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("saplings"));
 
 	public BlockTagGenerator(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
 		super(output, registries);
@@ -54,8 +55,51 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 
 		this.builder(TFBlockTags.TOWERWOOD)
 			.add(key(TFBlocks.TOWERWOOD), key(TFBlocks.MOSSY_TOWERWOOD), key(TFBlocks.CRACKED_TOWERWOOD), key(TFBlocks.INFESTED_TOWERWOOD));
+		this.addTreeTags();
 		this.addLogTags();
 		this.addWoodFamilyTags();
+	}
+
+	private void addTreeTags() {
+		this.builder(BlockTags.LEAVES).add(
+			key(TFBlocks.RAINBOW_OAK_LEAVES),
+			key(TFBlocks.TWILIGHT_OAK_LEAVES),
+			key(TFBlocks.CANOPY_LEAVES),
+			key(TFBlocks.MANGROVE_LEAVES),
+			key(TFBlocks.DARK_LEAVES),
+			key(TFBlocks.HARDENED_DARK_LEAVES),
+			key(TFBlocks.TIME_LEAVES),
+			key(TFBlocks.TRANSFORMATION_LEAVES),
+			key(TFBlocks.MINING_LEAVES),
+			key(TFBlocks.SORTING_LEAVES),
+			key(TFBlocks.THORN_LEAVES),
+			key(TFBlocks.BEANSTALK_LEAVES)
+		);
+		this.builder(SAPLINGS).add(
+			key(TFBlocks.TWILIGHT_OAK_SAPLING),
+			key(TFBlocks.CANOPY_SAPLING),
+			key(TFBlocks.MANGROVE_SAPLING),
+			key(TFBlocks.DARKWOOD_SAPLING),
+			key(TFBlocks.TIME_SAPLING),
+			key(TFBlocks.TRANSFORMATION_SAPLING),
+			key(TFBlocks.MINING_SAPLING),
+			key(TFBlocks.SORTING_SAPLING),
+			key(TFBlocks.HOLLOW_OAK_SAPLING),
+			key(TFBlocks.RAINBOW_OAK_SAPLING)
+		);
+		this.builder(BlockTags.REPLACEABLE_BY_TREES).add(
+			key(TFBlocks.HARDENED_DARK_LEAVES),
+			key(TFBlocks.MAYAPPLE),
+			key(TFBlocks.FIDDLEHEAD),
+			key(TFBlocks.MOSS_PATCH),
+			key(TFBlocks.CLOVER_PATCH),
+			key(TFBlocks.MUSHGLOOM),
+			key(TFBlocks.FIREFLY),
+			key(TFBlocks.FALLEN_LEAVES),
+			key(TFBlocks.TORCHBERRY_PLANT),
+			key(TFBlocks.ROOT_STRAND),
+			key(TFBlocks.ROOT_BLOCK)
+		);
 	}
 
 	private void addLogTags() {
