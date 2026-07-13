@@ -1,5 +1,5 @@
 {
-  "remove": [
+  "fabric:remove": [
     "twilightforest:yeti_helmet"
   ],
   "values": []

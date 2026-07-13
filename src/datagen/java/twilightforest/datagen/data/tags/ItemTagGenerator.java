@@ -3,6 +3,7 @@ package twilightforest.datagen.data.tags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.tags.TagAppender;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
@@ -13,6 +14,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagAppender;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
@@ -21,6 +23,7 @@ import twilightforest.init.TFItems;
 import twilightforest.tags.TFBlockTags;
 import twilightforest.tags.TFItemTags;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
@@ -254,6 +257,18 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 	}
 
 	private void addEnchantableTags() {
+		this.fabricBuilder(ItemTags.EQUIPPABLE_ENCHANTABLE).removeAll(List.of(
+			key(TFItems.PHANTOM_HELMET),
+			key(TFItems.PHANTOM_CHESTPLATE)
+		));
+		this.fabricBuilder(ItemTags.FIRE_ASPECT_ENCHANTABLE).removeAll(List.of(
+			key(TFItems.FIERY_SWORD),
+			key(TFItems.ICE_SWORD)
+		));
+		this.fabricBuilder(ItemTags.VANISHING_ENCHANTABLE).removeAll(List.of(
+			key(TFItems.PHANTOM_HELMET),
+			key(TFItems.PHANTOM_CHESTPLATE)
+		));
 		this.builder(ItemTags.BOW_ENCHANTABLE).add(
 			key(TFItems.TRIPLE_BOW),
 			key(TFItems.SEEKER_BOW),
@@ -312,6 +327,7 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 	}
 
 	private void addVanillaUtilityTags() {
+		this.fabricBuilder(ItemTags.TRIMMABLE_ARMOR).remove(key(TFItems.YETI_HELMET));
 		this.builder(ItemTags.BEACON_PAYMENT_ITEMS)
 			.addTag(TFItemTags.IRONWOOD_INGOTS)
 			.addTag(TFItemTags.STEELEAF_INGOTS)
@@ -400,6 +416,24 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 
 	private void addTwilightForestUtilityTags() {
 		this.builder(TFItemTags.ARCTIC_FUR).add(key(TFItems.ARCTIC_FUR));
+		TagAppender<Item> lowerOnDryingRack = this.builder(TFItemTags.RENDER_LOWER_ON_DRYING_RACK);
+		FabricTagAppender<Item> fabricLowerOnDryingRack = fabricAppender(lowerOnDryingRack);
+		fabricLowerOnDryingRack.removeTag(ConventionalItemTags.SHIELD_TOOLS);
+		lowerOnDryingRack.addAll(List.of(
+			key(TFBlocks.ZOMBIE_SKULL_CANDLE.asItem()),
+			key(TFBlocks.SKELETON_SKULL_CANDLE.asItem()),
+			key(TFBlocks.WITHER_SKELE_SKULL_CANDLE.asItem()),
+			key(TFBlocks.CREEPER_SKULL_CANDLE.asItem()),
+			key(TFBlocks.PLAYER_SKULL_CANDLE.asItem()),
+			key(TFBlocks.PIGLIN_SKULL_CANDLE.asItem()),
+			key(Items.POINTED_DRIPSTONE),
+			key(Items.RECOVERY_COMPASS),
+			key(Items.CLOCK),
+			key(Items.SPYGLASS),
+			key(Items.TRIDENT)
+		));
+		fabricLowerOnDryingRack.forceAddTag(ItemTags.BANNERS);
+		fabricLowerOnDryingRack.forceAddTag(ConventionalItemTags.TOOLS);
 		this.builder(TFItemTags.BANNED_UNCRAFTABLES).add(key(TFBlocks.GIANT_LOG.asItem()));
 		this.builder(TFItemTags.BANNED_UNCRAFTING_INGREDIENTS).add(
 			key(TFBlocks.INFESTED_TOWERWOOD.asItem()),
@@ -581,5 +615,14 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 
 	private static ResourceKey<Item> key(Item item) {
 		return BuiltInRegistries.ITEM.getResourceKey(item).orElseThrow();
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T> FabricTagAppender<T> fabricAppender(TagAppender<T> appender) {
+		return (FabricTagAppender<T>) appender;
+	}
+
+	private FabricTagAppender<Item> fabricBuilder(TagKey<Item> tag) {
+		return fabricAppender(this.builder(tag));
 	}
 }

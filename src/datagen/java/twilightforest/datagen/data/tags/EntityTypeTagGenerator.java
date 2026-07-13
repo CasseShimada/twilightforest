@@ -1,10 +1,12 @@
 package twilightforest.datagen.data.tags;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagAppender;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalEntityTypeTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.tags.TagAppender;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.EntityType;
@@ -12,6 +14,7 @@ import net.minecraft.world.entity.EntityTypes;
 import twilightforest.init.TFEntities;
 import twilightforest.tags.TFEntityTypeTags;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public final class EntityTypeTagGenerator extends FabricTagsProvider.EntityTypeTagsProvider {
@@ -118,6 +121,17 @@ public final class EntityTypeTagGenerator extends FabricTagsProvider.EntityTypeT
 			.add(key(TFEntities.PLATEAU_BOSS));
 		this.builder(ConventionalEntityTypeTags.BOSSES).addTag(TFEntityTypeTags.BOSSES);
 		this.builder(TFEntityTypeTags.DONT_KILL_BUGS).add(key(TFEntities.MOONWORM_SHOT));
+		TagAppender<EntityType<?>> lichPoppables = this.builder(TFEntityTypeTags.LICH_POPPABLES);
+		FabricTagAppender<EntityType<?>> fabricLichPoppables = fabricAppender(lichPoppables);
+		fabricLichPoppables.removeTag(ConventionalEntityTypeTags.BOSSES);
+		fabricLichPoppables.forceAddTag(EntityTypeTags.SKELETONS);
+		lichPoppables.addAll(List.of(
+			key(EntityTypes.ZOMBIE),
+			key(EntityTypes.ENDERMAN),
+			key(EntityTypes.SPIDER),
+			key(EntityTypes.CREEPER),
+			key(TFEntities.SWARM_SPIDER)
+		));
 		this.builder(TFEntityTypeTags.LICH_DEFLECTS_PHASE_2)
 			.add(key(TFEntities.WAND_BOLT))
 			.add(key(TFEntities.LICH_BOLT))
@@ -190,5 +204,10 @@ public final class EntityTypeTagGenerator extends FabricTagsProvider.EntityTypeT
 
 	private static ResourceKey<EntityType<?>> key(EntityType<?> entityType) {
 		return BuiltInRegistries.ENTITY_TYPE.getResourceKey(entityType).orElseThrow();
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T> FabricTagAppender<T> fabricAppender(TagAppender<T> appender) {
+		return (FabricTagAppender<T>) appender;
 	}
 }

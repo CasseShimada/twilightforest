@@ -1,5 +1,5 @@
 {
-  "remove": [
+  "fabric:remove": [
     "#c:bosses"
   ],
   "values": [

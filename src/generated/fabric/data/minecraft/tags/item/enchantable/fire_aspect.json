@@ -1,5 +1,5 @@
 {
-  "remove": [
+  "fabric:remove": [
     "twilightforest:fiery_sword",
     "twilightforest:ice_sword"
   ],
