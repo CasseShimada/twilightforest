@@ -7,6 +7,7 @@ import net.minecraft.core.registries.Registries;
 import twilightforest.TFRegistries;
 import twilightforest.TwilightForestMod;
 import twilightforest.datagen.data.tags.BannerPatternTagGenerator;
+import twilightforest.datagen.data.tags.BiomeTagGenerator;
 import twilightforest.datagen.data.tags.BlockEntityTypeTagGenerator;
 import twilightforest.datagen.data.tags.BlockTagGenerator;
 import twilightforest.datagen.data.tags.DamageTypeTagGenerator;
@@ -34,6 +35,7 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		BlockTagGenerator blockTags = pack.addProvider(BlockTagGenerator::new);
 		pack.addProvider((output, registries) -> new ItemTagGenerator(output, registries, blockTags));
 		pack.addProvider(BannerPatternTagGenerator::new);
+		pack.addProvider(BiomeTagGenerator::new);
 		pack.addProvider(EntityTypeTagGenerator::new);
 		pack.addProvider(BlockEntityTypeTagGenerator::new);
 		pack.addProvider(DamageTypeTagGenerator::new);
