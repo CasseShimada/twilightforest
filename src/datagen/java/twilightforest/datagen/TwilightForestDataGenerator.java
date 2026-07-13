@@ -7,6 +7,7 @@ import net.minecraft.core.registries.Registries;
 import twilightforest.TFRegistries;
 import twilightforest.TwilightForestMod;
 import twilightforest.datagen.data.registries.BannerPatternGenerator;
+import twilightforest.datagen.data.registries.ChunkBlanketProcessorGenerator;
 import twilightforest.datagen.data.registries.ConfiguredCarverGenerator;
 import twilightforest.datagen.data.registries.DamageTypeGenerator;
 import twilightforest.datagen.data.registries.DwarfRabbitVariantGenerator;
@@ -32,6 +33,7 @@ import twilightforest.init.TFDamageTypes;
 import twilightforest.init.TFDimensionData;
 import twilightforest.init.TFPlacedFeatures;
 import twilightforest.init.TFStructures;
+import twilightforest.init.custom.ChunkBlanketProcessors;
 import twilightforest.init.custom.DwarfRabbitVariants;
 import twilightforest.init.custom.StructureSpeleothemConfigs;
 import twilightforest.init.custom.TinyBirdVariants;
@@ -42,6 +44,7 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 	public void onInitializeDataGenerator(FabricDataGenerator dataGenerator) {
 		FabricDataGenerator.Pack pack = dataGenerator.createPack();
 		pack.addProvider(BannerPatternGenerator::new);
+		pack.addProvider(ChunkBlanketProcessorGenerator::new);
 		pack.addProvider(ConfiguredCarverGenerator::new);
 		pack.addProvider(DamageTypeGenerator::new);
 		pack.addProvider(DwarfRabbitVariantGenerator::new);
@@ -71,6 +74,7 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		registryBuilder.add(Registries.PLACED_FEATURE, TFPlacedFeatures::bootstrap);
 		registryBuilder.add(Registries.BIOME, TFBiomes::bootstrap);
 		registryBuilder.add(Registries.STRUCTURE, TFStructures::bootstrap);
+		registryBuilder.add(TFRegistries.Keys.CHUNK_BLANKET_PROCESSORS, ChunkBlanketProcessors::bootstrap);
 		registryBuilder.add(TFRegistries.Keys.DWARF_RABBIT_VARIANT, DwarfRabbitVariants::bootstrap);
 		registryBuilder.add(TFRegistries.Keys.STRUCTURE_SPELEOTHEM_SETTINGS, StructureSpeleothemConfigs::bootstrap);
 		registryBuilder.add(TFRegistries.Keys.TINY_BIRD_VARIANT, TinyBirdVariants::bootstrap);
