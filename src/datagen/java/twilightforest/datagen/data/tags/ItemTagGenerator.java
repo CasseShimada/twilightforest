@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import twilightforest.init.TFBlocks;
+import twilightforest.init.TFItems;
 import twilightforest.tags.TFBlockTags;
 import twilightforest.tags.TFItemTags;
 
@@ -72,6 +73,24 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 		this.copy(ConventionalBlockTags.WOODEN_CHESTS, ConventionalItemTags.WOODEN_CHESTS);
 		this.copy(ConventionalBlockTags.WOODEN_FENCE_GATES, ConventionalItemTags.WOODEN_FENCE_GATES);
 		this.copy(ConventionalBlockTags.ROPES, ConventionalItemTags.ROPES);
+
+		this.builder(TFItemTags.FIERY_INGOTS).add(key(TFItems.FIERY_INGOT));
+		this.builder(TFItemTags.IRONWOOD_INGOTS).add(key(TFItems.IRONWOOD_INGOT));
+		this.builder(TFItemTags.KNIGHTMETAL_INGOTS).add(key(TFItems.KNIGHTMETAL_INGOT));
+		this.builder(TFItemTags.STEELEAF_INGOTS).add(key(TFItems.STEELEAF_INGOT));
+		this.builder(TFItemTags.WROUGHT_IRON_INGOTS).add(key(TFItems.WROUGHT_IRON_BAR));
+		this.builder(ConventionalItemTags.INGOTS)
+			.addTag(TFItemTags.IRONWOOD_INGOTS)
+			.addTag(TFItemTags.FIERY_INGOTS)
+			.addTag(TFItemTags.KNIGHTMETAL_INGOTS)
+			.addTag(TFItemTags.STEELEAF_INGOTS);
+		this.builder(TFItemTags.CARMINITE_GEMS).add(key(TFItems.CARMINITE));
+		this.builder(ConventionalItemTags.GEMS).addTag(TFItemTags.CARMINITE_GEMS);
+		this.builder(TFItemTags.RAW_MATERIALS_IRONWOOD).add(key(TFItems.RAW_IRONWOOD));
+		this.builder(TFItemTags.RAW_MATERIALS_KNIGHTMETAL).add(key(TFItems.ARMOR_SHARD_CLUSTER));
+		this.builder(ConventionalItemTags.RAW_MATERIALS)
+			.addTag(TFItemTags.RAW_MATERIALS_IRONWOOD)
+			.addTag(TFItemTags.RAW_MATERIALS_KNIGHTMETAL);
 	}
 
 	private static ResourceKey<Item> key(Item item) {
