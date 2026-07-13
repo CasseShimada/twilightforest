@@ -7,6 +7,8 @@ import net.minecraft.core.registries.Registries;
 import twilightforest.TFRegistries;
 import twilightforest.TwilightForestMod;
 import twilightforest.datagen.data.registries.BannerPatternGenerator;
+import twilightforest.datagen.data.registries.BiomeLayerStackGenerator;
+import twilightforest.datagen.data.registries.BiomeTerrainDataGenerator;
 import twilightforest.datagen.data.registries.ChunkBlanketProcessorGenerator;
 import twilightforest.datagen.data.registries.ConfiguredCarverGenerator;
 import twilightforest.datagen.data.registries.DamageTypeGenerator;
@@ -35,6 +37,7 @@ import twilightforest.init.TFDamageTypes;
 import twilightforest.init.TFDimensionData;
 import twilightforest.init.TFPlacedFeatures;
 import twilightforest.init.TFStructures;
+import twilightforest.init.custom.BiomeLayerStack;
 import twilightforest.init.custom.ChunkBlanketProcessors;
 import twilightforest.init.custom.DwarfRabbitVariants;
 import twilightforest.init.custom.MagicPaintingVariants;
@@ -48,6 +51,8 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 	public void onInitializeDataGenerator(FabricDataGenerator dataGenerator) {
 		FabricDataGenerator.Pack pack = dataGenerator.createPack();
 		pack.addProvider(BannerPatternGenerator::new);
+		pack.addProvider(BiomeLayerStackGenerator::new);
+		pack.addProvider(BiomeTerrainDataGenerator::new);
 		pack.addProvider(ChunkBlanketProcessorGenerator::new);
 		pack.addProvider(ConfiguredCarverGenerator::new);
 		pack.addProvider(DamageTypeGenerator::new);
@@ -80,6 +85,8 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		registryBuilder.add(Registries.PLACED_FEATURE, TFPlacedFeatures::bootstrap);
 		registryBuilder.add(Registries.BIOME, TFBiomes::bootstrap);
 		registryBuilder.add(Registries.STRUCTURE, TFStructures::bootstrap);
+		registryBuilder.add(TFRegistries.Keys.BIOME_STACK, BiomeLayerStack::bootstrap);
+		registryBuilder.add(TFRegistries.Keys.BIOME_TERRAIN_DATA, BiomeLayerStack::bootstrapData);
 		registryBuilder.add(TFRegistries.Keys.CHUNK_BLANKET_PROCESSORS, ChunkBlanketProcessors::bootstrap);
 		registryBuilder.add(TFRegistries.Keys.DWARF_RABBIT_VARIANT, DwarfRabbitVariants::bootstrap);
 		registryBuilder.add(TFRegistries.Keys.MAGIC_PAINTINGS, MagicPaintingVariants::bootstrap);
