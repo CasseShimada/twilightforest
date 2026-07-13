@@ -1,7 +1,6 @@
 {
   "values": [
     "minecraft:nether_portal",
-    "#twilightforest:deadrock",
     "twilightforest:castle_brick",
     "twilightforest:thick_castle_brick",
     "twilightforest:mossy_castle_brick",
@@ -17,6 +16,7 @@
     "twilightforest:blue_force_field",
     "twilightforest:violet_force_field",
     "twilightforest:brown_thorns",
-    "twilightforest:green_thorns"
+    "twilightforest:green_thorns",
+    "#twilightforest:deadrock"
   ]
 }

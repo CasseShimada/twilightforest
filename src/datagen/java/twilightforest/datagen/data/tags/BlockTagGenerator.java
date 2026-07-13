@@ -68,6 +68,7 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 			.add(key(TFBlocks.TOWERWOOD), key(TFBlocks.MOSSY_TOWERWOOD), key(TFBlocks.CRACKED_TOWERWOOD), key(TFBlocks.INFESTED_TOWERWOOD));
 		this.addCloudTags();
 		this.addProtectionTags();
+		this.addInteractionProtectionTags();
 		this.addProtectedMaterialTags();
 		this.addPortalTags();
 		this.addGameplayBehaviorTags();
@@ -159,6 +160,37 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 		this.builder(BlockTags.WITHER_IMMUNE)
 			.addTag(TFBlockTags.COMMON_PROTECTIONS)
 			.add(key(TFBlocks.FAKE_DIAMOND), key(TFBlocks.FAKE_GOLD));
+	}
+
+	private void addInteractionProtectionTags() {
+		this.builder(TFBlockTags.ANNIHILATION_INCLUSIONS)
+			.add(
+				key(Blocks.NETHER_PORTAL),
+				key(TFBlocks.CASTLE_BRICK),
+				key(TFBlocks.THICK_CASTLE_BRICK),
+				key(TFBlocks.MOSSY_CASTLE_BRICK),
+				key(TFBlocks.CASTLE_ROOF_TILE),
+				key(TFBlocks.WORN_CASTLE_BRICK),
+				key(TFBlocks.BLUE_CASTLE_RUNE_BRICK),
+				key(TFBlocks.VIOLET_CASTLE_RUNE_BRICK),
+				key(TFBlocks.YELLOW_CASTLE_RUNE_BRICK),
+				key(TFBlocks.PINK_CASTLE_RUNE_BRICK),
+				key(TFBlocks.PINK_FORCE_FIELD),
+				key(TFBlocks.ORANGE_FORCE_FIELD),
+				key(TFBlocks.GREEN_FORCE_FIELD),
+				key(TFBlocks.BLUE_FORCE_FIELD),
+				key(TFBlocks.VIOLET_FORCE_FIELD),
+				key(TFBlocks.BROWN_THORNS),
+				key(TFBlocks.GREEN_THORNS)
+			)
+			.addTag(TFBlockTags.DEADROCK);
+		this.builder(TFBlockTags.PROGRESSION_ALLOW_BREAKING)
+			.add(key(TFBlocks.SKULL_CHEST), key(TFBlocks.KEEPSAKE_CASKET))
+			.addOptional(externalKey("gravestone", "gravestone"));
+		this.builder(TFBlockTags.STRUCTURE_BANNED_INTERACTIONS)
+			.add(key(Blocks.LEVER), key(TFBlocks.ANTIBUILDER))
+			.addOptionalTag(BlockTags.BUTTONS)
+			.addOptionalTag(ConventionalBlockTags.CHESTS);
 	}
 
 	private void addProtectedMaterialTags() {
