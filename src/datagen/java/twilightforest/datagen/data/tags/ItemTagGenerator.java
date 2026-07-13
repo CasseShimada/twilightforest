@@ -303,6 +303,20 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 			key(TFItems.SORTING_CHEST_BOAT)
 		);
 		this.builder(ItemTags.BREAKS_DECORATED_POTS).add(key(TFItems.BLOCK_AND_CHAIN));
+		this.builder(ItemTags.FREEZE_IMMUNE_WEARABLES).add(
+			key(TFItems.FIERY_HELMET),
+			key(TFItems.FIERY_CHESTPLATE),
+			key(TFItems.FIERY_LEGGINGS),
+			key(TFItems.FIERY_BOOTS),
+			key(TFItems.ARCTIC_HELMET),
+			key(TFItems.ARCTIC_CHESTPLATE),
+			key(TFItems.ARCTIC_LEGGINGS),
+			key(TFItems.ARCTIC_BOOTS),
+			key(TFItems.YETI_HELMET),
+			key(TFItems.YETI_CHESTPLATE),
+			key(TFItems.YETI_LEGGINGS),
+			key(TFItems.YETI_BOOTS)
+		);
 		this.builder(ItemTags.LOGS_THAT_BURN)
 			.addTag(TFItemTags.TWILIGHT_OAK_LOGS)
 			.addTag(TFItemTags.CANOPY_LOGS)
@@ -311,6 +325,42 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 			.addTag(TFItemTags.TRANSFORMATION_LOGS)
 			.addTag(TFItemTags.MINING_LOGS)
 			.addTag(TFItemTags.SORTING_LOGS);
+		this.builder(ItemTags.MEAT).add(
+			key(TFItems.RAW_VENISON),
+			key(TFItems.COOKED_VENISON),
+			key(TFItems.RAW_MEEF),
+			key(TFItems.COOKED_MEEF),
+			key(TFItems.MEEF_STROGANOFF),
+			key(TFItems.EXPERIMENT_115),
+			key(TFItems.HYDRA_CHOP)
+		);
+		this.addSkullCandles(ItemTags.NOTE_BLOCK_TOP_INSTRUMENTS);
+		this.builder(ItemTags.PIGLIN_LOVED).add(
+			key(TFItems.GOLDEN_MINOTAUR_AXE),
+			key(TFItems.CHARM_OF_KEEPING_3),
+			key(TFItems.CHARM_OF_LIFE_2),
+			key(TFItems.LAMP_OF_CINDERS)
+		);
+		this.addSkullCandles(ItemTags.SKULLS);
+		this.builder(ItemTags.TRIM_MATERIALS).add(
+			key(TFItems.IRONWOOD_INGOT),
+			key(TFItems.STEELEAF_INGOT),
+			key(TFItems.KNIGHTMETAL_INGOT),
+			key(TFItems.NAGA_SCALE),
+			key(TFItems.CARMINITE),
+			key(TFItems.FIERY_INGOT)
+		);
+	}
+
+	private void addSkullCandles(TagKey<Item> tag) {
+		this.builder(tag).add(
+			key(TFBlocks.ZOMBIE_SKULL_CANDLE.asItem()),
+			key(TFBlocks.SKELETON_SKULL_CANDLE.asItem()),
+			key(TFBlocks.WITHER_SKELE_SKULL_CANDLE.asItem()),
+			key(TFBlocks.CREEPER_SKULL_CANDLE.asItem()),
+			key(TFBlocks.PLAYER_SKULL_CANDLE.asItem()),
+			key(TFBlocks.PIGLIN_SKULL_CANDLE.asItem())
+		);
 	}
 
 	private void addTwilightForestUtilityTags() {
