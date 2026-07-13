@@ -1,7 +1,13 @@
 {
   "values": [
-    "#minecraft:skeletons",
-    "#minecraft:frog_food",
+    {
+      "id": "#minecraft:skeletons",
+      "required": false
+    },
+    {
+      "id": "#minecraft:frog_food",
+      "required": false
+    },
     "minecraft:blaze",
     "minecraft:breeze",
     "minecraft:iron_golem",

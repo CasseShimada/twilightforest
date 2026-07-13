@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.tag.convention.v2.ConventionalEntityTypeTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
 import twilightforest.init.TFEntities;
@@ -36,6 +37,28 @@ public final class EntityTypeTagGenerator extends FabricTagsProvider.EntityTypeT
 			.add(key(TFEntities.WAND_BOLT))
 			.add(key(TFEntities.LICH_BOLT))
 			.add(key(TFEntities.LICH_BOMB));
+		this.builder(TFEntityTypeTags.LIFEDRAIN_DROPS_NO_FLESH)
+			.addOptionalTag(EntityTypeTags.SKELETONS)
+			.addOptionalTag(EntityTypeTags.FROG_FOOD)
+			.add(key(EntityTypes.BLAZE))
+			.add(key(EntityTypes.BREEZE))
+			.add(key(EntityTypes.IRON_GOLEM))
+			.add(key(EntityTypes.PHANTOM))
+			.add(key(EntityTypes.SHULKER))
+			.add(key(EntityTypes.SKELETON_HORSE))
+			.add(key(EntityTypes.SNOW_GOLEM))
+			.add(key(EntityTypes.VEX))
+			.add(key(EntityTypes.WITHER))
+			.add(key(TFEntities.CARMINITE_GOLEM))
+			.add(key(TFEntities.DEATH_TOME))
+			.add(key(TFEntities.ICE_CRYSTAL))
+			.add(key(TFEntities.KNIGHT_PHANTOM))
+			.add(key(TFEntities.LICH))
+			.add(key(TFEntities.MOSQUITO_SWARM))
+			.add(key(TFEntities.SNOW_GUARDIAN))
+			.add(key(TFEntities.STABLE_ICE_CORE))
+			.add(key(TFEntities.UNSTABLE_ICE_CORE))
+			.add(key(TFEntities.WRAITH));
 		this.builder(TFEntityTypeTags.RIDES_OBSTRUCT_SNATCHING)
 			.add(key(TFEntities.PINCH_BEETLE))
 			.add(key(TFEntities.YETI))
