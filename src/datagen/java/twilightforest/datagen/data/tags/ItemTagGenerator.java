@@ -135,10 +135,44 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 		this.builder(TFItemTags.TINY_BIRD_TEMPT_ITEMS).addOptionalTag(ConventionalItemTags.SEEDS);
 		this.builder(TFItemTags.KOBOLD_PACIFICATION_BREADS).add(key(Items.BREAD));
 
+		this.addConventionTags();
 		this.addEquipmentTags();
 		this.addEnchantableTags();
 		this.addVanillaUtilityTags();
 		this.addTwilightForestUtilityTags();
+	}
+
+	private void addConventionTags() {
+		this.builder(ConventionalItemTags.FEATHERS).add(key(TFItems.RAVEN_FEATHER));
+		this.builder(ConventionalItemTags.BERRY_FOODS).add(key(TFItems.TORCHBERRIES));
+		this.builder(ConventionalItemTags.COOKED_MEAT_FOODS).add(
+			key(TFItems.COOKED_VENISON),
+			key(TFItems.COOKED_MEEF),
+			key(TFItems.HYDRA_CHOP)
+		);
+		this.builder(ConventionalItemTags.EDIBLE_WHEN_PLACED_FOODS).add(key(TFItems.EXPERIMENT_115));
+		this.builder(ConventionalItemTags.RAW_MEAT_FOODS).add(key(TFItems.RAW_VENISON), key(TFItems.RAW_MEEF));
+		this.builder(ConventionalItemTags.SOUP_FOODS).add(key(TFItems.MEEF_STROGANOFF));
+		this.builder(ConventionalItemTags.MUSHROOMS).add(key(TFBlocks.MUSHGLOOM.asItem()));
+		this.builder(ConventionalItemTags.MUSIC_DISCS).add(
+			key(TFItems.MUSIC_DISC_RADIANCE),
+			key(TFItems.MUSIC_DISC_STEPS),
+			key(TFItems.MUSIC_DISC_SUPERSTITIOUS),
+			key(TFItems.MUSIC_DISC_HOME),
+			key(TFItems.MUSIC_DISC_WAYFARER),
+			key(TFItems.MUSIC_DISC_FINDINGS),
+			key(TFItems.MUSIC_DISC_MAKER),
+			key(TFItems.MUSIC_DISC_THREAD),
+			key(TFItems.MUSIC_DISC_MOTION)
+		);
+		this.builder(TFItemTags.PAPER).add(key(Items.PAPER));
+		this.builder(ConventionalItemTags.BOW_TOOLS).add(
+			key(TFItems.TRIPLE_BOW),
+			key(TFItems.SEEKER_BOW),
+			key(TFItems.ICE_BOW),
+			key(TFItems.ENDER_BOW)
+		);
+		this.builder(ConventionalItemTags.SHIELD_TOOLS).add(key(TFItems.KNIGHTMETAL_SHIELD));
 	}
 
 	private void addEquipmentTags() {
