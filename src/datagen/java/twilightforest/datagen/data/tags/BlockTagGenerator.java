@@ -19,6 +19,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
+	private static final TagKey<Block> FIRE = TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("fire"));
 	private static final TagKey<Block> LOGS_THAT_BURN = TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("logs_that_burn"));
 	private static final TagKey<Block> SAPLINGS = TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("saplings"));
 
@@ -50,8 +51,16 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 		this.builder(BlockTags.OVERWORLD_CARVER_REPLACEABLES).add(key(TFBlocks.TROLLSTEINN));
 		this.builder(BlockTags.NEEDS_IRON_TOOL)
 			.add(key(TFBlocks.FIERY_BLOCK), key(TFBlocks.KNIGHTMETAL_BLOCK));
+		this.builder(BlockTags.NEEDS_STONE_TOOL).add(
+			key(TFBlocks.UNDERBRICK),
+			key(TFBlocks.CRACKED_UNDERBRICK),
+			key(TFBlocks.MOSSY_UNDERBRICK),
+			key(TFBlocks.UNDERBRICK_FLOOR),
+			key(TFBlocks.IRON_LADDER)
+		);
 		this.builder(BlockTags.MOSS_REPLACEABLE)
 			.add(key(TFBlocks.ROOT_BLOCK), key(TFBlocks.LIVEROOT_BLOCK), key(TFBlocks.TROLLSTEINN));
+		this.builder(FIRE).add(key(TFBlocks.OMINOUS_FIRE));
 
 		this.builder(TFBlockTags.TOWERWOOD)
 			.add(key(TFBlocks.TOWERWOOD), key(TFBlocks.MOSSY_TOWERWOOD), key(TFBlocks.CRACKED_TOWERWOOD), key(TFBlocks.INFESTED_TOWERWOOD));
