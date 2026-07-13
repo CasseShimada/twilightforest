@@ -2,11 +2,15 @@ package twilightforest.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.Registries;
 import twilightforest.TwilightForestMod;
 import twilightforest.datagen.data.tags.BlockEntityTypeTagGenerator;
 import twilightforest.datagen.data.tags.BlockTagGenerator;
+import twilightforest.datagen.data.tags.DamageTypeTagGenerator;
 import twilightforest.datagen.data.tags.EntityTypeTagGenerator;
 import twilightforest.datagen.data.tags.ItemTagGenerator;
+import twilightforest.init.TFDamageTypes;
 
 public final class TwilightForestDataGenerator implements DataGeneratorEntrypoint {
 	@Override
@@ -16,6 +20,12 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		pack.addProvider((output, registries) -> new ItemTagGenerator(output, registries, blockTags));
 		pack.addProvider(EntityTypeTagGenerator::new);
 		pack.addProvider(BlockEntityTypeTagGenerator::new);
+		pack.addProvider(DamageTypeTagGenerator::new);
+	}
+
+	@Override
+	public void buildRegistry(RegistrySetBuilder registryBuilder) {
+		registryBuilder.add(Registries.DAMAGE_TYPE, TFDamageTypes::bootstrap);
 	}
 
 	@Override
