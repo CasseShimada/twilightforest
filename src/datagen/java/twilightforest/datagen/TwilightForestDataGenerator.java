@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import twilightforest.TwilightForestMod;
+import twilightforest.datagen.data.tags.BannerPatternTagGenerator;
 import twilightforest.datagen.data.tags.BlockEntityTypeTagGenerator;
 import twilightforest.datagen.data.tags.BlockTagGenerator;
 import twilightforest.datagen.data.tags.DamageTypeTagGenerator;
@@ -12,6 +13,7 @@ import twilightforest.datagen.data.tags.DimensionTypeTagGenerator;
 import twilightforest.datagen.data.tags.EntityTypeTagGenerator;
 import twilightforest.datagen.data.tags.ItemTagGenerator;
 import twilightforest.datagen.data.tags.PaintingVariantTagGenerator;
+import twilightforest.init.TFBannerPatterns;
 import twilightforest.init.TFDamageTypes;
 import twilightforest.init.TFDimensionData;
 
@@ -21,6 +23,7 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		FabricDataGenerator.Pack pack = dataGenerator.createPack();
 		BlockTagGenerator blockTags = pack.addProvider(BlockTagGenerator::new);
 		pack.addProvider((output, registries) -> new ItemTagGenerator(output, registries, blockTags));
+		pack.addProvider(BannerPatternTagGenerator::new);
 		pack.addProvider(EntityTypeTagGenerator::new);
 		pack.addProvider(BlockEntityTypeTagGenerator::new);
 		pack.addProvider(DamageTypeTagGenerator::new);
@@ -30,6 +33,7 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 
 	@Override
 	public void buildRegistry(RegistrySetBuilder registryBuilder) {
+		registryBuilder.add(Registries.BANNER_PATTERN, TFBannerPatterns::bootstrap);
 		registryBuilder.add(Registries.DAMAGE_TYPE, TFDamageTypes::bootstrap);
 		registryBuilder.add(Registries.DIMENSION_TYPE, TFDimensionData::bootstrapType);
 	}
