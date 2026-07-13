@@ -58,6 +58,7 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 		this.addTreeTags();
 		this.addLogTags();
 		this.addWoodFamilyTags();
+		this.addShapeTags();
 	}
 
 	private void addTreeTags() {
@@ -151,6 +152,42 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 	private void addFamilyVariant(TagKey<Block> tag, BlockFamily family, BlockFamily.Variant variant) {
 		Block block = Objects.requireNonNull(family.get(variant), () -> family.getBaseBlock() + " is missing " + variant);
 		this.builder(tag).add(key(block));
+	}
+
+	private void addShapeTags() {
+		this.builder(BlockTags.SLABS).add(key(TFBlocks.AURORA_SLAB));
+		this.builder(BlockTags.STAIRS).add(
+			key(TFBlocks.CASTLE_BRICK_STAIRS),
+			key(TFBlocks.WORN_CASTLE_BRICK_STAIRS),
+			key(TFBlocks.CRACKED_CASTLE_BRICK_STAIRS),
+			key(TFBlocks.MOSSY_CASTLE_BRICK_STAIRS),
+			key(TFBlocks.ENCASED_CASTLE_BRICK_STAIRS),
+			key(TFBlocks.BOLD_CASTLE_BRICK_STAIRS),
+			key(TFBlocks.NAGASTONE_STAIRS_LEFT),
+			key(TFBlocks.NAGASTONE_STAIRS_RIGHT),
+			key(TFBlocks.MOSSY_NAGASTONE_STAIRS_LEFT),
+			key(TFBlocks.MOSSY_NAGASTONE_STAIRS_RIGHT),
+			key(TFBlocks.CRACKED_NAGASTONE_STAIRS_LEFT),
+			key(TFBlocks.CRACKED_NAGASTONE_STAIRS_RIGHT)
+		);
+		this.builder(BlockTags.FLOWER_POTS).add(
+			key(TFBlocks.POTTED_TWILIGHT_OAK_SAPLING),
+			key(TFBlocks.POTTED_CANOPY_SAPLING),
+			key(TFBlocks.POTTED_MANGROVE_SAPLING),
+			key(TFBlocks.POTTED_DARKWOOD_SAPLING),
+			key(TFBlocks.POTTED_RAINBOW_OAK_SAPLING),
+			key(TFBlocks.POTTED_HOLLOW_OAK_SAPLING),
+			key(TFBlocks.POTTED_TIME_SAPLING),
+			key(TFBlocks.POTTED_TRANSFORMATION_SAPLING),
+			key(TFBlocks.POTTED_MINING_SAPLING),
+			key(TFBlocks.POTTED_SORTING_SAPLING),
+			key(TFBlocks.POTTED_MAYAPPLE),
+			key(TFBlocks.POTTED_FIDDLEHEAD),
+			key(TFBlocks.POTTED_MUSHGLOOM),
+			key(TFBlocks.POTTED_THORN),
+			key(TFBlocks.POTTED_GREEN_THORN),
+			key(TFBlocks.POTTED_DEAD_THORN)
+		);
 	}
 
 	private static ResourceKey<Block> key(Block block) {
