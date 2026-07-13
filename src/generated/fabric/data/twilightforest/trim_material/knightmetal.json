@@ -3,6 +3,5 @@
   "description": {
     "color": "#808C72",
     "translate": "trim_material.twilightforest.knightmetal"
-  },
-  "ingredient": "twilightforest:knightmetal_ingot"
+  }
 }
