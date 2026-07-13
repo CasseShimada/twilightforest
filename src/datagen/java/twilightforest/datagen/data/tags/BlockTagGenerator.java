@@ -393,6 +393,8 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 	}
 
 	private void addConventionTags() {
+		this.builder(TFBlockTags.ROOT_GROUND).add(key(TFBlocks.ROOT_BLOCK));
+		this.builder(TFBlockTags.ROOT_ORES).add(key(TFBlocks.LIVEROOT_BLOCK));
 		this.builder(ConventionalBlockTags.BOOKSHELVES).add(key(TFBlocks.CANOPY_BOOKSHELF));
 		this.builder(ConventionalBlockTags.TRAPPED_CHESTS).add(
 			key(TFBlocks.TWILIGHT_OAK_TRAPPED_CHEST),
