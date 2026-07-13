@@ -50,6 +50,7 @@ public class TFDimensionData {
 		HolderSet<net.minecraft.world.level.block.Block> infiniburn = context.lookup(Registries.BLOCK).getOrThrow(BlockTags.INFINIBURN_OVERWORLD);
 		EnvironmentAttributeMap attributes = EnvironmentAttributeMap.builder()
 			.set(EnvironmentAttributes.BED_RULE, BedRule.CAN_SLEEP_WHEN_DARK)
+			.set(EnvironmentAttributes.CAN_PILLAGER_PATROL_SPAWN, false)
 			.set(EnvironmentAttributes.CAN_START_RAID, false)
 			.set(EnvironmentAttributes.RESPAWN_ANCHOR_WORKS, false)
 			.set(EnvironmentAttributes.NETHER_PORTAL_SPAWNS_PIGLINS, true)

@@ -131,6 +131,7 @@
   },
   "temperature": 0.9,
   "attributes": {
+    "minecraft:gameplay/snow_golem_melts": true,
     "minecraft:visual/fog_color": "#c0ffd8",
     "minecraft:visual/sky_color": "#20224a",
     "minecraft:visual/water_fog_color": "#050533",

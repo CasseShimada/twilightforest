@@ -8,6 +8,7 @@
         "translate": "block.minecraft.bed.no_sleep"
       }
     },
+    "minecraft:gameplay/can_pillager_patrol_spawn": false,
     "minecraft:gameplay/can_start_raid": false,
     "minecraft:gameplay/nether_portal_spawns_piglin": true,
     "minecraft:gameplay/piglins_zombify": true,

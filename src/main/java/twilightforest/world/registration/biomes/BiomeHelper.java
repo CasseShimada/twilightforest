@@ -13,6 +13,7 @@ import net.minecraft.world.attribute.AmbientSounds;
 import net.minecraft.world.attribute.BackgroundMusic;
 import net.minecraft.world.attribute.EnvironmentAttributeMap;
 import net.minecraft.world.attribute.EnvironmentAttributes;
+import net.minecraft.world.attribute.modifier.FloatModifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.MobCategory;
@@ -649,6 +650,16 @@ public abstract class BiomeHelper {
 
 		public TFBiomeEffectsBuilder skyColor(int color) {
 			this.attributes.set(EnvironmentAttributes.SKY_COLOR, color);
+			return this;
+		}
+
+		public TFBiomeEffectsBuilder closerWaterFog() {
+			this.attributes.modify(EnvironmentAttributes.WATER_FOG_END_DISTANCE, FloatModifier.MULTIPLY, 0.85F);
+			return this;
+		}
+
+		public TFBiomeEffectsBuilder snowGolemMelts() {
+			this.attributes.set(EnvironmentAttributes.SNOW_GOLEM_MELTS, true);
 			return this;
 		}
 
