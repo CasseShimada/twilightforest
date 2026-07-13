@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "twilightforest-datagen",
+  "version": "1.0.0",
+  "name": "Twilight Forest Data Generation",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "twilightforest.datagen.TwilightForestDataGenerator"
+    ]
+  },
+  "depends": {
+    "fabricloader": "*",
+    "fabric-api": "*",
+    "twilightforest": "*"
+  }
+}
