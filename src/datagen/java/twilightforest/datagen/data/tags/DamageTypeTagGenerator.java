@@ -55,11 +55,41 @@ public final class DamageTypeTagGenerator extends FabricTagsProvider<DamageType>
 		this.builder(DamageTypeTags.DAMAGES_HELMET)
 			.add(TFDamageTypes.GHAST_TEAR)
 			.add(TFDamageTypes.THROWN_BLOCK);
+		this.builder(DamageTypeTags.IGNITES_ARMOR_STANDS)
+			.add(TFDamageTypes.HYDRA_FIRE)
+			.add(TFDamageTypes.HYDRA_MORTAR)
+			.add(TFDamageTypes.FIRE_JET)
+			.add(TFDamageTypes.SCORCHED);
 		this.builder(DamageTypeTags.IS_EXPLOSION).add(TFDamageTypes.LICH_BOMB);
 		this.builder(DamageTypeTags.IS_FALL).add(TFDamageTypes.YEETED);
+		this.builder(DamageTypeTags.IS_FIRE)
+			.add(TFDamageTypes.HYDRA_FIRE)
+			.add(TFDamageTypes.HYDRA_MORTAR)
+			.add(TFDamageTypes.FIERY)
+			.add(TFDamageTypes.FIRE_JET)
+			.add(TFDamageTypes.SCORCHED);
+		this.builder(DamageTypeTags.IS_PROJECTILE)
+			.add(TFDamageTypes.LICH_BOLT)
+			.add(TFDamageTypes.LICH_BOMB)
+			.add(TFDamageTypes.THROWN_AXE)
+			.add(TFDamageTypes.THROWN_PICKAXE)
+			.add(TFDamageTypes.THROWN_BLOCK)
+			.add(TFDamageTypes.LEAF_BRAIN)
+			.add(TFDamageTypes.LOST_WORDS)
+			.add(TFDamageTypes.SCHOOLED)
+			.add(TFDamageTypes.SNOWBALL_FIGHT)
+			.add(TFDamageTypes.TWILIGHT_SCEPTER)
+			.add(TFDamageTypes.LIFEDRAIN);
 		this.builder(DamageTypeTags.NO_ANGER).add(TFDamageTypes.SLAM);
 		this.builder(DamageTypeTags.NO_KNOCKBACK).add(TFDamageTypes.OMINOUS_FIRE);
 		this.builder(DamageTypeTags.PANIC_ENVIRONMENTAL_CAUSES).add(TFDamageTypes.OMINOUS_FIRE);
+		this.builder(DamageTypeTags.WITCH_RESISTANT_TO)
+			.add(TFDamageTypes.LICH_BOLT)
+			.add(TFDamageTypes.LICH_BOMB)
+			.add(TFDamageTypes.LEAF_BRAIN)
+			.add(TFDamageTypes.LOST_WORDS)
+			.add(TFDamageTypes.SCHOOLED)
+			.add(TFDamageTypes.ACID_RAIN);
 		this.builder(DamageTypeTags.WITHER_IMMUNE_TO).add(TFDamageTypes.OMINOUS_FIRE);
 		this.builder(TFDamageTypeTags.BREAKS_LICH_SHIELDS)
 			.add(TFDamageTypes.LICH_BOLT)
