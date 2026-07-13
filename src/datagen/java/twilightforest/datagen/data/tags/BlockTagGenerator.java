@@ -64,10 +64,60 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 
 		this.builder(TFBlockTags.TOWERWOOD)
 			.add(key(TFBlocks.TOWERWOOD), key(TFBlocks.MOSSY_TOWERWOOD), key(TFBlocks.CRACKED_TOWERWOOD), key(TFBlocks.INFESTED_TOWERWOOD));
+		this.addProtectedMaterialTags();
 		this.addTreeTags();
 		this.addLogTags();
 		this.addWoodFamilyTags();
 		this.addShapeTags();
+	}
+
+	private void addProtectedMaterialTags() {
+		this.builder(TFBlockTags.CASTLE_BLOCKS).add(
+			key(TFBlocks.CASTLE_BRICK),
+			key(TFBlocks.WORN_CASTLE_BRICK),
+			key(TFBlocks.CRACKED_CASTLE_BRICK),
+			key(TFBlocks.MOSSY_CASTLE_BRICK),
+			key(TFBlocks.CASTLE_ROOF_TILE),
+			key(TFBlocks.THICK_CASTLE_BRICK),
+			key(TFBlocks.BOLD_CASTLE_BRICK_TILE),
+			key(TFBlocks.BOLD_CASTLE_BRICK_PILLAR),
+			key(TFBlocks.ENCASED_CASTLE_BRICK_TILE),
+			key(TFBlocks.ENCASED_CASTLE_BRICK_PILLAR),
+			key(TFBlocks.CASTLE_BRICK_STAIRS),
+			key(TFBlocks.WORN_CASTLE_BRICK_STAIRS),
+			key(TFBlocks.CRACKED_CASTLE_BRICK_STAIRS),
+			key(TFBlocks.MOSSY_CASTLE_BRICK_STAIRS),
+			key(TFBlocks.ENCASED_CASTLE_BRICK_STAIRS),
+			key(TFBlocks.BOLD_CASTLE_BRICK_STAIRS),
+			key(TFBlocks.PINK_CASTLE_RUNE_BRICK),
+			key(TFBlocks.YELLOW_CASTLE_RUNE_BRICK),
+			key(TFBlocks.BLUE_CASTLE_RUNE_BRICK),
+			key(TFBlocks.VIOLET_CASTLE_RUNE_BRICK),
+			key(TFBlocks.PINK_CASTLE_DOOR),
+			key(TFBlocks.YELLOW_CASTLE_DOOR),
+			key(TFBlocks.BLUE_CASTLE_DOOR),
+			key(TFBlocks.VIOLET_CASTLE_DOOR)
+		);
+		this.builder(TFBlockTags.MAZESTONE).add(
+			key(TFBlocks.MAZESTONE),
+			key(TFBlocks.MAZESTONE_BRICK),
+			key(TFBlocks.CRACKED_MAZESTONE),
+			key(TFBlocks.MOSSY_MAZESTONE),
+			key(TFBlocks.CUT_MAZESTONE),
+			key(TFBlocks.DECORATIVE_MAZESTONE),
+			key(TFBlocks.MAZESTONE_MOSAIC),
+			key(TFBlocks.MAZESTONE_BORDER)
+		);
+		this.builder(TFBlockTags.DEADROCK).add(
+			key(TFBlocks.DEADROCK),
+			key(TFBlocks.CRACKED_DEADROCK),
+			key(TFBlocks.WEATHERED_DEADROCK)
+		);
+		this.builder(BlockTags.NEEDS_DIAMOND_TOOL)
+			.add(key(TFBlocks.AURORA_BLOCK))
+			.addTag(TFBlockTags.CASTLE_BLOCKS)
+			.addTag(TFBlockTags.MAZESTONE)
+			.addTag(TFBlockTags.DEADROCK);
 	}
 
 	private void addTreeTags() {
