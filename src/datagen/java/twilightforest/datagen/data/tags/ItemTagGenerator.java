@@ -444,6 +444,58 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 
 	private void addIntegrationTags() {
 		this.builder(TFItemTags.AC_FERNS).add(key(TFBlocks.FIDDLEHEAD.asItem()));
+		this.builder(TFItemTags.AC_FERROMAGNETIC_ITEMS)
+			.addTag(TFItemTags.STORAGE_BLOCKS_IRONWOOD)
+			.addTag(TFItemTags.STORAGE_BLOCKS_STEELEAF)
+			.addTag(TFItemTags.STORAGE_BLOCKS_KNIGHTMETAL)
+			.add(
+				key(TFBlocks.CANDELABRA.asItem()),
+				key(TFBlocks.WROUGHT_IRON_FENCE.asItem()),
+				key(TFItems.RAW_IRONWOOD),
+				key(TFItems.IRONWOOD_INGOT),
+				key(TFItems.STEELEAF_INGOT),
+				key(TFItems.ARMOR_SHARD),
+				key(TFItems.ARMOR_SHARD_CLUSTER),
+				key(TFItems.KNIGHTMETAL_INGOT),
+				key(TFItems.KNIGHTMETAL_RING),
+				key(TFItems.FIERY_INGOT),
+				key(TFItems.CHARM_OF_KEEPING_2),
+				key(TFItems.ORE_MAGNET),
+				key(TFItems.IRONWOOD_HELMET),
+				key(TFItems.IRONWOOD_CHESTPLATE),
+				key(TFItems.IRONWOOD_LEGGINGS),
+				key(TFItems.IRONWOOD_BOOTS),
+				key(TFItems.STEELEAF_HELMET),
+				key(TFItems.STEELEAF_CHESTPLATE),
+				key(TFItems.STEELEAF_LEGGINGS),
+				key(TFItems.STEELEAF_BOOTS),
+				key(TFItems.KNIGHTMETAL_HELMET),
+				key(TFItems.KNIGHTMETAL_CHESTPLATE),
+				key(TFItems.KNIGHTMETAL_LEGGINGS),
+				key(TFItems.KNIGHTMETAL_BOOTS),
+				key(TFItems.FIERY_HELMET),
+				key(TFItems.FIERY_CHESTPLATE),
+				key(TFItems.FIERY_LEGGINGS),
+				key(TFItems.FIERY_BOOTS),
+				key(TFItems.IRONWOOD_SWORD),
+				key(TFItems.IRONWOOD_PICKAXE),
+				key(TFItems.IRONWOOD_AXE),
+				key(TFItems.IRONWOOD_SHOVEL),
+				key(TFItems.IRONWOOD_HOE),
+				key(TFItems.STEELEAF_SWORD),
+				key(TFItems.STEELEAF_PICKAXE),
+				key(TFItems.STEELEAF_AXE),
+				key(TFItems.STEELEAF_SHOVEL),
+				key(TFItems.STEELEAF_HOE),
+				key(TFItems.KNIGHTMETAL_SWORD),
+				key(TFItems.KNIGHTMETAL_PICKAXE),
+				key(TFItems.KNIGHTMETAL_AXE),
+				key(TFItems.BLOCK_AND_CHAIN),
+				key(TFItems.KNIGHTMETAL_SHIELD),
+				key(TFItems.FIERY_SWORD),
+				key(TFItems.FIERY_PICKAXE),
+				key(TFItems.MAZEBREAKER_PICKAXE)
+			);
 		this.builder(TFItemTags.AC_RAW_MEATS).add(key(TFItems.RAW_VENISON), key(TFItems.RAW_MEEF));
 		this.builder(TFItemTags.CA_PLANT_FOODS).add(key(TFItems.TORCHBERRIES));
 		this.builder(TFItemTags.CA_PLANTS).add(
