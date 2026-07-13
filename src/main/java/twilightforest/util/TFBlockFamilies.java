@@ -1,6 +1,5 @@
 package twilightforest.util;
 
-import com.google.common.collect.Maps;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.world.level.block.Block;
@@ -9,6 +8,7 @@ import twilightforest.init.TFBlocks;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 // For datagen only. Load this after TFBlocks has registered its values.
 public class TFBlockFamilies {
 
-	private static final Map<Block, BlockFamily> MAP = Maps.newHashMap();
+	private static final Map<Block, BlockFamily> MAP = new LinkedHashMap<>();
 
 	public static final BlockFamily TWILIGHT_OAK = familyBuilder(TFBlocks.TWILIGHT_OAK_PLANKS)
 		.stairs(TFBlocks.TWILIGHT_OAK_STAIRS)
@@ -28,6 +28,7 @@ public class TFBlockFamilies {
 		.door(TFBlocks.TWILIGHT_OAK_DOOR)
 		.trapdoor(TFBlocks.TWILIGHT_OAK_TRAPDOOR)
 		.sign(TFBlocks.TWILIGHT_OAK_SIGN, TFBlocks.TWILIGHT_WALL_SIGN)
+		.hangingSign(TFBlocks.TWILIGHT_OAK_HANGING_SIGN, TFBlocks.TWILIGHT_OAK_WALL_HANGING_SIGN)
 		.recipeGroupPrefix("wooden")
 		.recipeUnlockedBy("has_planks")
 		.getFamily();
@@ -42,6 +43,7 @@ public class TFBlockFamilies {
 		.door(TFBlocks.CANOPY_DOOR)
 		.trapdoor(TFBlocks.CANOPY_TRAPDOOR)
 		.sign(TFBlocks.CANOPY_SIGN, TFBlocks.CANOPY_WALL_SIGN)
+		.hangingSign(TFBlocks.CANOPY_HANGING_SIGN, TFBlocks.CANOPY_WALL_HANGING_SIGN)
 		.recipeGroupPrefix("wooden")
 		.recipeUnlockedBy("has_planks")
 		.getFamily();
@@ -56,6 +58,7 @@ public class TFBlockFamilies {
 		.door(TFBlocks.MANGROVE_DOOR)
 		.trapdoor(TFBlocks.MANGROVE_TRAPDOOR)
 		.sign(TFBlocks.MANGROVE_SIGN, TFBlocks.MANGROVE_WALL_SIGN)
+		.hangingSign(TFBlocks.MANGROVE_HANGING_SIGN, TFBlocks.MANGROVE_WALL_HANGING_SIGN)
 		.recipeGroupPrefix("wooden")
 		.recipeUnlockedBy("has_planks")
 		.getFamily();
@@ -70,6 +73,7 @@ public class TFBlockFamilies {
 		.door(TFBlocks.DARK_DOOR)
 		.trapdoor(TFBlocks.DARK_TRAPDOOR)
 		.sign(TFBlocks.DARK_SIGN, TFBlocks.DARK_WALL_SIGN)
+		.hangingSign(TFBlocks.DARK_HANGING_SIGN, TFBlocks.DARK_WALL_HANGING_SIGN)
 		.recipeGroupPrefix("wooden")
 		.recipeUnlockedBy("has_planks")
 		.getFamily();
@@ -84,6 +88,7 @@ public class TFBlockFamilies {
 		.door(TFBlocks.TIME_DOOR)
 		.trapdoor(TFBlocks.TIME_TRAPDOOR)
 		.sign(TFBlocks.TIME_SIGN, TFBlocks.TIME_WALL_SIGN)
+		.hangingSign(TFBlocks.TIME_HANGING_SIGN, TFBlocks.TIME_WALL_HANGING_SIGN)
 		.recipeGroupPrefix("wooden")
 		.recipeUnlockedBy("has_planks")
 		.getFamily();
@@ -98,6 +103,7 @@ public class TFBlockFamilies {
 		.door(TFBlocks.TRANSFORMATION_DOOR)
 		.trapdoor(TFBlocks.TRANSFORMATION_TRAPDOOR)
 		.sign(TFBlocks.TRANSFORMATION_SIGN, TFBlocks.TRANSFORMATION_WALL_SIGN)
+		.hangingSign(TFBlocks.TRANSFORMATION_HANGING_SIGN, TFBlocks.TRANSFORMATION_WALL_HANGING_SIGN)
 		.recipeGroupPrefix("wooden")
 		.recipeUnlockedBy("has_planks")
 		.getFamily();
@@ -112,6 +118,7 @@ public class TFBlockFamilies {
 		.door(TFBlocks.MINING_DOOR)
 		.trapdoor(TFBlocks.MINING_TRAPDOOR)
 		.sign(TFBlocks.MINING_SIGN, TFBlocks.MINING_WALL_SIGN)
+		.hangingSign(TFBlocks.MINING_HANGING_SIGN, TFBlocks.MINING_WALL_HANGING_SIGN)
 		.recipeGroupPrefix("wooden")
 		.recipeUnlockedBy("has_planks")
 		.getFamily();
@@ -126,6 +133,7 @@ public class TFBlockFamilies {
 		.door(TFBlocks.SORTING_DOOR)
 		.trapdoor(TFBlocks.SORTING_TRAPDOOR)
 		.sign(TFBlocks.SORTING_SIGN, TFBlocks.SORTING_WALL_SIGN)
+		.hangingSign(TFBlocks.SORTING_HANGING_SIGN, TFBlocks.SORTING_WALL_HANGING_SIGN)
 		.recipeGroupPrefix("wooden")
 		.recipeUnlockedBy("has_planks")
 		.getFamily();
