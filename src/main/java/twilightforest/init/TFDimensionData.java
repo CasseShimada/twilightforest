@@ -52,13 +52,17 @@ public class TFDimensionData {
 			.set(EnvironmentAttributes.BED_RULE, BedRule.CAN_SLEEP_WHEN_DARK)
 			.set(EnvironmentAttributes.CAN_PILLAGER_PATROL_SPAWN, false)
 			.set(EnvironmentAttributes.CAN_START_RAID, false)
+			.set(EnvironmentAttributes.CLOUD_COLOR, 0xCCFFFFFF)
+			.set(EnvironmentAttributes.CLOUD_HEIGHT, 192.33F)
+			.set(EnvironmentAttributes.FOG_COLOR, 0xC0D8FF)
 			.set(EnvironmentAttributes.RESPAWN_ANCHOR_WORKS, false)
 			.set(EnvironmentAttributes.NETHER_PORTAL_SPAWNS_PIGLINS, true)
 			.set(EnvironmentAttributes.PIGLINS_ZOMBIFY, true)
+			.set(EnvironmentAttributes.SKY_COLOR, 0x78A7FF)
 			.build();
 
 		return new DimensionType(
-			false, //fixed time
+			true, //fixed time
 			true, //skylight
 			false, //ceiling
 			false, //ender dragon fight

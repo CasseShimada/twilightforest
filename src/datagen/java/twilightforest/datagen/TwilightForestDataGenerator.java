@@ -12,6 +12,7 @@ import twilightforest.datagen.data.registries.BiomeTerrainDataGenerator;
 import twilightforest.datagen.data.registries.ChunkBlanketProcessorGenerator;
 import twilightforest.datagen.data.registries.ConfiguredCarverGenerator;
 import twilightforest.datagen.data.registries.DamageTypeGenerator;
+import twilightforest.datagen.data.registries.DimensionTypeGenerator;
 import twilightforest.datagen.data.registries.DwarfRabbitVariantGenerator;
 import twilightforest.datagen.data.registries.MagicPaintingVariantGenerator;
 import twilightforest.datagen.data.registries.RestrictionGenerator;
@@ -56,6 +57,7 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		pack.addProvider(ChunkBlanketProcessorGenerator::new);
 		pack.addProvider(ConfiguredCarverGenerator::new);
 		pack.addProvider(DamageTypeGenerator::new);
+		pack.addProvider(DimensionTypeGenerator::new);
 		pack.addProvider(DwarfRabbitVariantGenerator::new);
 		pack.addProvider(MagicPaintingVariantGenerator::new);
 		pack.addProvider(RestrictionGenerator::new);
