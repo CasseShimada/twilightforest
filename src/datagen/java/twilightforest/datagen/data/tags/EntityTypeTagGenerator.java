@@ -164,6 +164,28 @@ public final class EntityTypeTagGenerator extends FabricTagsProvider.EntityTypeT
 			.add(key(EntityTypes.TRADER_LLAMA))
 			.add(key(EntityTypes.DONKEY))
 			.add(key(EntityTypes.MULE));
+		this.addIntegrationTags();
+	}
+
+	private void addIntegrationTags() {
+		this.builder(TFEntityTypeTags.AETHER_DEFLECTABLE_PROJECTILES)
+			.add(key(TFEntities.NATURE_BOLT))
+			.add(key(TFEntities.LICH_BOLT))
+			.add(key(TFEntities.WAND_BOLT))
+			.add(key(TFEntities.SLIME_BLOB))
+			.add(key(TFEntities.ICE_SNOWBALL));
+		this.builder(TFEntityTypeTags.AETHER_FIRE_MOB).add(key(TFEntities.FIRE_BEETLE));
+		this.builder(TFEntityTypeTags.AETHER_PIGS).add(key(TFEntities.BOAR));
+		this.builder(TFEntityTypeTags.AC_RESISTS_ACID)
+			.add(key(TFEntities.HYDRA))
+			.add(key(TFEntities.NAGA));
+		this.builder(TFEntityTypeTags.AC_RESISTS_MAGNETS).addTag(TFEntityTypeTags.BOSSES);
+		this.builder(TFEntityTypeTags.AC_RESISTS_TREMORSAURUS_ROAR)
+			.add(key(TFEntities.HYDRA))
+			.add(key(TFEntities.UR_GHAST));
+		this.builder(TFEntityTypeTags.AN_JAR_BLACKLIST).addTag(TFEntityTypeTags.BOSSES);
+		this.builder(TFEntityTypeTags.AN_JAR_RELEASE_BLACKLIST).addTag(TFEntityTypeTags.BOSSES);
+		this.builder(TFEntityTypeTags.IE_SHADER_BLACKLIST).addTag(TFEntityTypeTags.BOSSES);
 	}
 
 	private static ResourceKey<EntityType<?>> key(EntityType<?> entityType) {
