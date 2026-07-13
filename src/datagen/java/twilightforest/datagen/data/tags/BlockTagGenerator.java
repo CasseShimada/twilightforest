@@ -74,6 +74,7 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 		this.addHollowLogTags();
 		this.addWoodFamilyTags();
 		this.addBanisterTags();
+		this.addFunctionalBlockTags();
 		this.addShapeTags();
 		this.addStorageBlockTags();
 		this.addConventionTags();
@@ -353,6 +354,60 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 			key(TFBlocks.TRANSFORMATION_BANISTER),
 			key(TFBlocks.MINING_BANISTER),
 			key(TFBlocks.SORTING_BANISTER)
+		);
+	}
+
+	private void addFunctionalBlockTags() {
+		this.builder(TFBlockTags.TF_CHESTS).add(
+			key(TFBlocks.TWILIGHT_OAK_CHEST),
+			key(TFBlocks.CANOPY_CHEST),
+			key(TFBlocks.MANGROVE_CHEST),
+			key(TFBlocks.DARK_CHEST),
+			key(TFBlocks.TIME_CHEST),
+			key(TFBlocks.TRANSFORMATION_CHEST),
+			key(TFBlocks.MINING_CHEST),
+			key(TFBlocks.SORTING_CHEST)
+		);
+		this.builder(TFBlockTags.DRYING_RACKS).add(
+			key(TFBlocks.OAK_DRYING_RACK),
+			key(TFBlocks.SPRUCE_DRYING_RACK),
+			key(TFBlocks.BIRCH_DRYING_RACK),
+			key(TFBlocks.JUNGLE_DRYING_RACK),
+			key(TFBlocks.ACACIA_DRYING_RACK),
+			key(TFBlocks.DARK_OAK_DRYING_RACK),
+			key(TFBlocks.CRIMSON_DRYING_RACK),
+			key(TFBlocks.WARPED_DRYING_RACK),
+			key(TFBlocks.VANGROVE_DRYING_RACK),
+			key(TFBlocks.BAMBOO_DRYING_RACK),
+			key(TFBlocks.CHERRY_DRYING_RACK),
+			key(TFBlocks.TWILIGHT_OAK_DRYING_RACK),
+			key(TFBlocks.CANOPY_DRYING_RACK),
+			key(TFBlocks.MANGROVE_DRYING_RACK),
+			key(TFBlocks.DARK_DRYING_RACK),
+			key(TFBlocks.TIME_DRYING_RACK),
+			key(TFBlocks.TRANSFORMATION_DRYING_RACK),
+			key(TFBlocks.MINING_DRYING_RACK),
+			key(TFBlocks.SORTING_DRYING_RACK)
+		);
+		this.builder(TFBlockTags.TROPHIES).add(
+			key(TFBlocks.NAGA_TROPHY),
+			key(TFBlocks.NAGA_WALL_TROPHY),
+			key(TFBlocks.LICH_TROPHY),
+			key(TFBlocks.LICH_WALL_TROPHY),
+			key(TFBlocks.MINOSHROOM_TROPHY),
+			key(TFBlocks.MINOSHROOM_WALL_TROPHY),
+			key(TFBlocks.HYDRA_TROPHY),
+			key(TFBlocks.HYDRA_WALL_TROPHY),
+			key(TFBlocks.KNIGHT_PHANTOM_TROPHY),
+			key(TFBlocks.KNIGHT_PHANTOM_WALL_TROPHY),
+			key(TFBlocks.UR_GHAST_TROPHY),
+			key(TFBlocks.UR_GHAST_WALL_TROPHY),
+			key(TFBlocks.ALPHA_YETI_TROPHY),
+			key(TFBlocks.ALPHA_YETI_WALL_TROPHY),
+			key(TFBlocks.SNOW_QUEEN_TROPHY),
+			key(TFBlocks.SNOW_QUEEN_WALL_TROPHY),
+			key(TFBlocks.QUEST_RAM_TROPHY),
+			key(TFBlocks.QUEST_RAM_WALL_TROPHY)
 		);
 	}
 
