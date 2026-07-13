@@ -39,6 +39,26 @@ public final class EntityTypeTagGenerator extends FabricTagsProvider.EntityTypeT
 		this.builder(EntityTypeTags.REDIRECTABLE_PROJECTILE)
 			.add(key(TFEntities.HYDRA_MORTAR))
 			.add(key(TFEntities.LICH_BOLT));
+		this.builder(EntityTypeTags.ARTHROPOD)
+			.add(key(TFEntities.CARMINITE_BROODLING))
+			.add(key(TFEntities.FIRE_BEETLE))
+			.add(key(TFEntities.HEDGE_SPIDER))
+			.add(key(TFEntities.HELMET_CRAB))
+			.add(key(TFEntities.KING_SPIDER))
+			.add(key(TFEntities.PINCH_BEETLE))
+			.add(key(TFEntities.SLIME_BEETLE))
+			.add(key(TFEntities.SWARM_SPIDER))
+			.add(key(TFEntities.TOWERWOOD_BORER));
+		this.builder(EntityTypeTags.FROG_FOOD).add(key(TFEntities.MAZE_SLIME));
+		this.builder(EntityTypeTags.SKELETONS)
+			.add(key(TFEntities.SKELETON_DRUID))
+			.add(key(TFEntities.LICH))
+			.add(key(TFEntities.KNIGHT_PHANTOM));
+		this.builder(EntityTypeTags.UNDEAD).add(key(TFEntities.WRAITH));
+		this.builder(EntityTypeTags.ZOMBIES)
+			.add(key(TFEntities.LICH_MINION))
+			.add(key(TFEntities.LOYAL_ZOMBIE))
+			.add(key(TFEntities.RISING_ZOMBIE));
 		this.builder(TFEntityTypeTags.BOSSES)
 			.add(key(TFEntities.NAGA))
 			.add(key(TFEntities.LICH))
