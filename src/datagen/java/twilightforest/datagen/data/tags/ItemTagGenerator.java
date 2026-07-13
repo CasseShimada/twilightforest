@@ -10,6 +10,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
@@ -24,6 +25,10 @@ import java.util.concurrent.CompletableFuture;
 
 public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
 	private static final TagKey<Item> DYEABLE = TagKey.create(Registries.ITEM, Identifier.withDefaultNamespace("dyeable"));
+	private static final TagKey<Item> SLABS = TagKey.create(Registries.ITEM, Identifier.withDefaultNamespace("slabs"));
+	private static final TagKey<Item> SMALL_FLOWERS = TagKey.create(Registries.ITEM, Identifier.withDefaultNamespace("small_flowers"));
+	private static final TagKey<Item> STAIRS = TagKey.create(Registries.ITEM, Identifier.withDefaultNamespace("stairs"));
+	private static final TagKey<Block> SAPLINGS_BLOCKS = TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("saplings"));
 
 	public ItemTagGenerator(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registries, BlockTagGenerator blockTags) {
 		super(output, registries, blockTags);
@@ -69,6 +74,10 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 		);
 		this.copy(BlockTags.STANDING_SIGNS, ItemTags.SIGNS);
 		this.copy(BlockTags.CEILING_HANGING_SIGNS, ItemTags.HANGING_SIGNS);
+		this.copy(SAPLINGS_BLOCKS, ItemTags.SAPLINGS);
+		this.copy(BlockTags.SLABS, SLABS);
+		this.copy(BlockTags.STAIRS, STAIRS);
+		this.builder(SMALL_FLOWERS).add(key(TFBlocks.THORN_ROSE.asItem()));
 
 		this.copy(TFBlockTags.STORAGE_BLOCKS_ARCTIC_FUR, TFItemTags.STORAGE_BLOCKS_ARCTIC_FUR);
 		this.copy(TFBlockTags.STORAGE_BLOCKS_CARMINITE, TFItemTags.STORAGE_BLOCKS_CARMINITE);
