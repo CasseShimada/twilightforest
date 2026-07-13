@@ -2,6 +2,7 @@ package twilightforest.datagen.data.tags;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalEntityTypeTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
@@ -19,6 +20,17 @@ public final class EntityTypeTagGenerator extends FabricTagsProvider.EntityTypeT
 
 	@Override
 	protected void addTags(HolderLookup.Provider registries) {
+		this.builder(TFEntityTypeTags.BOSSES)
+			.add(key(TFEntities.NAGA))
+			.add(key(TFEntities.LICH))
+			.add(key(TFEntities.MINOSHROOM))
+			.add(key(TFEntities.HYDRA))
+			.add(key(TFEntities.KNIGHT_PHANTOM))
+			.add(key(TFEntities.UR_GHAST))
+			.add(key(TFEntities.ALPHA_YETI))
+			.add(key(TFEntities.SNOW_QUEEN))
+			.add(key(TFEntities.PLATEAU_BOSS));
+		this.builder(ConventionalEntityTypeTags.BOSSES).addTag(TFEntityTypeTags.BOSSES);
 		this.builder(TFEntityTypeTags.DONT_KILL_BUGS).add(key(TFEntities.MOONWORM_SHOT));
 		this.builder(TFEntityTypeTags.LICH_DEFLECTS_PHASE_2)
 			.add(key(TFEntities.WAND_BOLT))
@@ -28,6 +40,15 @@ public final class EntityTypeTagGenerator extends FabricTagsProvider.EntityTypeT
 			.add(key(TFEntities.PINCH_BEETLE))
 			.add(key(TFEntities.YETI))
 			.add(key(TFEntities.ALPHA_YETI));
+		this.builder(TFEntityTypeTags.MULTIPLAYER_INCLUSIVE_ENTITIES)
+			.add(key(TFEntities.NAGA))
+			.add(key(TFEntities.LICH))
+			.add(key(TFEntities.MINOSHROOM))
+			.add(key(TFEntities.HYDRA))
+			.add(key(TFEntities.UR_GHAST))
+			.add(key(TFEntities.ALPHA_YETI))
+			.add(key(TFEntities.SNOW_QUEEN))
+			.add(key(TFEntities.PLATEAU_BOSS));
 		this.builder(TFEntityTypeTags.SORTABLE_ENTITIES)
 			.add(key(EntityTypes.CHEST_MINECART))
 			.add(key(EntityTypes.HOPPER_MINECART))
