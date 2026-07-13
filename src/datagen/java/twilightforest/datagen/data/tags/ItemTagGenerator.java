@@ -548,6 +548,35 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 		);
 		this.builder(TFItemTags.FD_CABBAGE_ROLL_INGREDIENTS)
 			.add(key(TFItems.RAW_VENISON), key(TFItems.RAW_MEEF));
+		this.builder(TFItemTags.RANDOMIUM_BLACKLIST)
+			.addTag(TFItemTags.WIP)
+			.add(
+				key(TFItems.GLASS_SWORD),
+				key(TFBlocks.TIME_LOG_CORE.asItem()),
+				key(TFBlocks.TRANSFORMATION_LOG_CORE.asItem()),
+				key(TFBlocks.MINING_LOG_CORE.asItem()),
+				key(TFBlocks.SORTING_LOG_CORE.asItem()),
+				key(TFBlocks.ANTIBUILDER.asItem()),
+				key(TFBlocks.STRONGHOLD_SHIELD.asItem()),
+				key(TFBlocks.LOCKED_VANISHING_BLOCK.asItem()),
+				key(TFBlocks.BROWN_THORNS.asItem()),
+				key(TFBlocks.GREEN_THORNS.asItem()),
+				key(TFBlocks.BURNT_THORNS.asItem()),
+				key(TFBlocks.PINK_FORCE_FIELD.asItem()),
+				key(TFBlocks.ORANGE_FORCE_FIELD.asItem()),
+				key(TFBlocks.GREEN_FORCE_FIELD.asItem()),
+				key(TFBlocks.BLUE_FORCE_FIELD.asItem()),
+				key(TFBlocks.VIOLET_FORCE_FIELD.asItem()),
+				key(TFBlocks.FINAL_BOSS_BOSS_SPAWNER.asItem()),
+				key(TFBlocks.NAGA_BOSS_SPAWNER.asItem()),
+				key(TFBlocks.LICH_BOSS_SPAWNER.asItem()),
+				key(TFBlocks.MINOSHROOM_BOSS_SPAWNER.asItem()),
+				key(TFBlocks.HYDRA_BOSS_SPAWNER.asItem()),
+				key(TFBlocks.KNIGHT_PHANTOM_BOSS_SPAWNER.asItem()),
+				key(TFBlocks.UR_GHAST_BOSS_SPAWNER.asItem()),
+				key(TFBlocks.ALPHA_YETI_BOSS_SPAWNER.asItem()),
+				key(TFBlocks.SNOW_QUEEN_BOSS_SPAWNER.asItem())
+			);
 	}
 
 	private static ResourceKey<Item> key(Item item) {
