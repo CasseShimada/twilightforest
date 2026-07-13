@@ -140,6 +140,7 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 		this.addEnchantableTags();
 		this.addVanillaUtilityTags();
 		this.addTwilightForestUtilityTags();
+		this.addIntegrationTags();
 	}
 
 	private void addConventionTags() {
@@ -439,6 +440,21 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 			key(TFBlocks.BRAZIER.asItem()),
 			key(TFBlocks.MAZE_SLIME_BLOCK.asItem())
 		);
+	}
+
+	private void addIntegrationTags() {
+		this.builder(TFItemTags.AC_FERNS).add(key(TFBlocks.FIDDLEHEAD.asItem()));
+		this.builder(TFItemTags.AC_RAW_MEATS).add(key(TFItems.RAW_VENISON), key(TFItems.RAW_MEEF));
+		this.builder(TFItemTags.CA_PLANT_FOODS).add(key(TFItems.TORCHBERRIES));
+		this.builder(TFItemTags.CURIOS_CHARM).add(
+			key(TFItems.CHARM_OF_LIFE_1),
+			key(TFItems.CHARM_OF_LIFE_2),
+			key(TFItems.CHARM_OF_KEEPING_1),
+			key(TFItems.CHARM_OF_KEEPING_2),
+			key(TFItems.CHARM_OF_KEEPING_3)
+		);
+		this.builder(TFItemTags.FD_CABBAGE_ROLL_INGREDIENTS)
+			.add(key(TFItems.RAW_VENISON), key(TFItems.RAW_MEEF));
 	}
 
 	private static ResourceKey<Item> key(Item item) {
