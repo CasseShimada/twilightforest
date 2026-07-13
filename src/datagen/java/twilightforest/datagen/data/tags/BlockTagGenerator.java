@@ -69,6 +69,7 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 		this.addCloudTags();
 		this.addProtectionTags();
 		this.addProtectedMaterialTags();
+		this.addPortalTags();
 		this.addTreeTags();
 		this.addLogTags();
 		this.addHollowLogTags();
@@ -205,6 +206,73 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 			.addTag(TFBlockTags.CASTLE_BLOCKS)
 			.addTag(TFBlockTags.MAZESTONE)
 			.addTag(TFBlockTags.DEADROCK);
+	}
+
+	private void addPortalTags() {
+		this.builder(TFBlockTags.PORTAL_POOL).add(key(Blocks.WATER));
+		this.builder(TFBlockTags.PORTAL_EDGE)
+			.add(key(Blocks.FARMLAND), key(Blocks.DIRT_PATH), key(Blocks.GRASS_BLOCK))
+			.addTag(BlockTags.DIRT);
+		this.builder(TFBlockTags.GENERATED_PORTAL_DECO).add(
+			key(Blocks.BROWN_MUSHROOM),
+			key(Blocks.RED_MUSHROOM),
+			key(Blocks.SHORT_GRASS),
+			key(Blocks.FERN),
+			key(Blocks.BLUE_ORCHID),
+			key(Blocks.AZURE_BLUET),
+			key(Blocks.LILY_OF_THE_VALLEY),
+			key(Blocks.OXEYE_DAISY),
+			key(Blocks.ALLIUM),
+			key(Blocks.CORNFLOWER),
+			key(Blocks.WHITE_TULIP),
+			key(Blocks.PINK_TULIP),
+			key(Blocks.ORANGE_TULIP),
+			key(Blocks.RED_TULIP),
+			key(TFBlocks.MUSHGLOOM),
+			key(TFBlocks.MAYAPPLE),
+			key(TFBlocks.FIDDLEHEAD)
+		);
+		this.builder(TFBlockTags.PORTAL_DECO)
+			.add(
+				key(Blocks.BAMBOO),
+				key(Blocks.SHORT_GRASS),
+				key(Blocks.TALL_GRASS),
+				key(Blocks.FERN),
+				key(Blocks.LARGE_FERN),
+				key(Blocks.DEAD_BUSH),
+				key(Blocks.SUGAR_CANE),
+				key(Blocks.CHORUS_PLANT),
+				key(Blocks.CHORUS_FLOWER),
+				key(Blocks.SWEET_BERRY_BUSH),
+				key(Blocks.NETHER_WART),
+				key(Blocks.COCOA),
+				key(Blocks.VINE),
+				key(Blocks.GLOW_LICHEN),
+				key(Blocks.RED_MUSHROOM),
+				key(Blocks.BROWN_MUSHROOM),
+				key(Blocks.WARPED_FUNGUS),
+				key(Blocks.CRIMSON_FUNGUS),
+				key(Blocks.ATTACHED_MELON_STEM),
+				key(Blocks.ATTACHED_PUMPKIN_STEM),
+				key(Blocks.MOSS_CARPET),
+				key(Blocks.PINK_PETALS),
+				key(Blocks.BIG_DRIPLEAF),
+				key(Blocks.BIG_DRIPLEAF_STEM),
+				key(Blocks.SMALL_DRIPLEAF),
+				key(TFBlocks.FIDDLEHEAD),
+				key(TFBlocks.MOSS_PATCH),
+				key(TFBlocks.MAYAPPLE),
+				key(TFBlocks.CLOVER_PATCH),
+				key(TFBlocks.MUSHGLOOM),
+				key(TFBlocks.FALLEN_LEAVES),
+				key(TFBlocks.GIANT_LEAVES),
+				key(TFBlocks.STEELEAF_BLOCK),
+				key(TFBlocks.HARDENED_DARK_LEAVES)
+			)
+			.addOptionalTag(BlockTags.FLOWERS)
+			.addTag(BlockTags.LEAVES)
+			.addTag(SAPLINGS)
+			.addOptionalTag(BlockTags.CROPS);
 	}
 
 	private void addTreeTags() {
