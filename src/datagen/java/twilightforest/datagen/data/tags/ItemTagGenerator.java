@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
@@ -103,6 +104,22 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 			key(Blocks.PACKED_ICE.asItem()),
 			key(Blocks.BLUE_ICE.asItem())
 		);
+
+		this.builder(TFItemTags.BOAR_TEMPT_ITEMS)
+			.addOptionalTag(ConventionalItemTags.CARROT_CROPS)
+			.addOptionalTag(ConventionalItemTags.POTATO_CROPS)
+			.addOptionalTag(ConventionalItemTags.BEETROOT_CROPS);
+		this.builder(TFItemTags.DEER_TEMPT_ITEMS)
+			.add(key(Items.APPLE))
+			.addOptionalTag(ConventionalItemTags.WHEAT_CROPS);
+		this.builder(TFItemTags.DWARF_RABBIT_TEMPT_ITEMS)
+			.add(key(Items.GOLDEN_CARROT), key(Items.DANDELION))
+			.addOptionalTag(ConventionalItemTags.CARROT_CROPS);
+		this.builder(TFItemTags.PENGUIN_TEMPT_ITEMS).addOptionalTag(ItemTags.FISHES);
+		this.builder(TFItemTags.RAVEN_TEMPT_ITEMS).addOptionalTag(ConventionalItemTags.SEEDS);
+		this.builder(TFItemTags.SQUIRREL_TEMPT_ITEMS).addOptionalTag(ConventionalItemTags.SEEDS);
+		this.builder(TFItemTags.TINY_BIRD_TEMPT_ITEMS).addOptionalTag(ConventionalItemTags.SEEDS);
+		this.builder(TFItemTags.KOBOLD_PACIFICATION_BREADS).add(key(Items.BREAD));
 	}
 
 	private static ResourceKey<Item> key(Item item) {
