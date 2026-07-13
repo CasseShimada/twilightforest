@@ -2,9 +2,12 @@ package twilightforest.datagen.data.tags;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -20,6 +23,8 @@ import twilightforest.tags.TFItemTags;
 import java.util.concurrent.CompletableFuture;
 
 public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
+	private static final TagKey<Item> DYEABLE = TagKey.create(Registries.ITEM, Identifier.withDefaultNamespace("dyeable"));
+
 	public ItemTagGenerator(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registries, BlockTagGenerator blockTags) {
 		super(output, registries, blockTags);
 	}
@@ -120,6 +125,85 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 		this.builder(TFItemTags.SQUIRREL_TEMPT_ITEMS).addOptionalTag(ConventionalItemTags.SEEDS);
 		this.builder(TFItemTags.TINY_BIRD_TEMPT_ITEMS).addOptionalTag(ConventionalItemTags.SEEDS);
 		this.builder(TFItemTags.KOBOLD_PACIFICATION_BREADS).add(key(Items.BREAD));
+
+		this.addEquipmentTags();
+	}
+
+	private void addEquipmentTags() {
+		this.builder(ItemTags.AXES).add(
+			key(TFItems.IRONWOOD_AXE),
+			key(TFItems.STEELEAF_AXE),
+			key(TFItems.KNIGHTMETAL_AXE),
+			key(TFItems.GOLDEN_MINOTAUR_AXE),
+			key(TFItems.DIAMOND_MINOTAUR_AXE)
+		);
+		this.addPickaxes(ItemTags.PICKAXES);
+		this.addPickaxes(ItemTags.CLUSTER_MAX_HARVESTABLES);
+		this.builder(ItemTags.SHOVELS).add(key(TFItems.IRONWOOD_SHOVEL), key(TFItems.STEELEAF_SHOVEL));
+		this.builder(ItemTags.HOES).add(key(TFItems.IRONWOOD_HOE), key(TFItems.STEELEAF_HOE));
+		this.builder(ItemTags.SWORDS).add(
+			key(TFItems.IRONWOOD_SWORD),
+			key(TFItems.STEELEAF_SWORD),
+			key(TFItems.KNIGHTMETAL_SWORD),
+			key(TFItems.FIERY_SWORD),
+			key(TFItems.GIANT_SWORD),
+			key(TFItems.ICE_SWORD),
+			key(TFItems.GLASS_SWORD)
+		);
+
+		this.builder(ItemTags.HEAD_ARMOR).add(
+			key(TFItems.IRONWOOD_HELMET),
+			key(TFItems.STEELEAF_HELMET),
+			key(TFItems.KNIGHTMETAL_HELMET),
+			key(TFItems.ARCTIC_HELMET),
+			key(TFItems.YETI_HELMET),
+			key(TFItems.FIERY_HELMET),
+			key(TFItems.PHANTOM_HELMET)
+		);
+		this.builder(ItemTags.CHEST_ARMOR).add(
+			key(TFItems.IRONWOOD_CHESTPLATE),
+			key(TFItems.STEELEAF_CHESTPLATE),
+			key(TFItems.KNIGHTMETAL_CHESTPLATE),
+			key(TFItems.ARCTIC_CHESTPLATE),
+			key(TFItems.YETI_CHESTPLATE),
+			key(TFItems.FIERY_CHESTPLATE),
+			key(TFItems.PHANTOM_CHESTPLATE),
+			key(TFItems.NAGA_CHESTPLATE)
+		);
+		this.builder(ItemTags.LEG_ARMOR).add(
+			key(TFItems.IRONWOOD_LEGGINGS),
+			key(TFItems.STEELEAF_LEGGINGS),
+			key(TFItems.KNIGHTMETAL_LEGGINGS),
+			key(TFItems.ARCTIC_LEGGINGS),
+			key(TFItems.YETI_LEGGINGS),
+			key(TFItems.FIERY_LEGGINGS),
+			key(TFItems.NAGA_LEGGINGS)
+		);
+		this.builder(ItemTags.FOOT_ARMOR).add(
+			key(TFItems.IRONWOOD_BOOTS),
+			key(TFItems.STEELEAF_BOOTS),
+			key(TFItems.KNIGHTMETAL_BOOTS),
+			key(TFItems.ARCTIC_BOOTS),
+			key(TFItems.YETI_BOOTS),
+			key(TFItems.FIERY_BOOTS)
+		);
+		this.builder(DYEABLE).add(
+			key(TFItems.ARCTIC_HELMET),
+			key(TFItems.ARCTIC_CHESTPLATE),
+			key(TFItems.ARCTIC_LEGGINGS),
+			key(TFItems.ARCTIC_BOOTS)
+		);
+	}
+
+	private void addPickaxes(TagKey<Item> tag) {
+		this.builder(tag).add(
+			key(TFItems.IRONWOOD_PICKAXE),
+			key(TFItems.STEELEAF_PICKAXE),
+			key(TFItems.KNIGHTMETAL_PICKAXE),
+			key(TFItems.MAZEBREAKER_PICKAXE),
+			key(TFItems.FIERY_PICKAXE),
+			key(TFItems.GIANT_PICKAXE)
+		);
 	}
 
 	private static ResourceKey<Item> key(Item item) {
