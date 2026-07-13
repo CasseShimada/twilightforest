@@ -462,6 +462,58 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 	}
 
 	private void addMiningTags() {
+		this.builder(BlockTags.MINEABLE_WITH_PICKAXE)
+			.add(
+				key(TFBlocks.NAGASTONE),
+				key(TFBlocks.NAGASTONE_HEAD),
+				key(TFBlocks.STRONGHOLD_SHIELD),
+				key(TFBlocks.TROPHY_PEDESTAL),
+				key(TFBlocks.AURORA_PILLAR),
+				key(TFBlocks.AURORA_SLAB),
+				key(TFBlocks.UNDERBRICK),
+				key(TFBlocks.MOSSY_UNDERBRICK),
+				key(TFBlocks.CRACKED_UNDERBRICK),
+				key(TFBlocks.UNDERBRICK_FLOOR),
+				key(TFBlocks.TROLLSTEINN),
+				key(TFBlocks.GIANT_LEAVES),
+				key(TFBlocks.GIANT_OBSIDIAN),
+				key(TFBlocks.GIANT_COBBLESTONE),
+				key(TFBlocks.GIANT_LOG),
+				key(TFBlocks.CINDER_FURNACE),
+				key(TFBlocks.TWILIGHT_PORTAL_MINIATURE_STRUCTURE),
+				key(TFBlocks.NAGA_COURTYARD_MINIATURE_STRUCTURE),
+				key(TFBlocks.LICH_TOWER_MINIATURE_STRUCTURE),
+				key(TFBlocks.KNIGHTMETAL_BLOCK),
+				key(TFBlocks.IRONWOOD_BLOCK),
+				key(TFBlocks.FIERY_BLOCK),
+				key(TFBlocks.CARMINITE_BLOCK),
+				key(TFBlocks.SPIRAL_BRICKS),
+				key(TFBlocks.ETCHED_NAGASTONE),
+				key(TFBlocks.NAGASTONE_PILLAR),
+				key(TFBlocks.NAGASTONE_STAIRS_LEFT),
+				key(TFBlocks.NAGASTONE_STAIRS_RIGHT),
+				key(TFBlocks.MOSSY_ETCHED_NAGASTONE),
+				key(TFBlocks.MOSSY_NAGASTONE_PILLAR),
+				key(TFBlocks.MOSSY_NAGASTONE_STAIRS_LEFT),
+				key(TFBlocks.MOSSY_NAGASTONE_STAIRS_RIGHT),
+				key(TFBlocks.CRACKED_ETCHED_NAGASTONE),
+				key(TFBlocks.CRACKED_NAGASTONE_PILLAR),
+				key(TFBlocks.CRACKED_NAGASTONE_STAIRS_LEFT),
+				key(TFBlocks.CRACKED_NAGASTONE_STAIRS_RIGHT),
+				key(TFBlocks.IRON_LADDER),
+				key(TFBlocks.TWISTED_STONE),
+				key(TFBlocks.TWISTED_STONE_PILLAR),
+				key(TFBlocks.SKULL_CHEST),
+				key(TFBlocks.KEEPSAKE_CASKET),
+				key(TFBlocks.BOLD_STONE_PILLAR),
+				key(TFBlocks.TERRORCOTTA_CURVES),
+				key(TFBlocks.TERRORCOTTA_LINES),
+				key(TFBlocks.TERRORCOTTA_ARCS),
+				key(TFBlocks.SINISTER_SPAWNER)
+			)
+			.addTag(TFBlockTags.MAZESTONE)
+			.addTag(TFBlockTags.CASTLE_BLOCKS)
+			.addTag(TFBlockTags.DEADROCK);
 		this.builder(BlockTags.MINEABLE_WITH_HOE).add(
 			key(TFBlocks.TWILIGHT_OAK_LEAVES),
 			key(TFBlocks.CANOPY_LEAVES),
