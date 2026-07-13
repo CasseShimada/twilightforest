@@ -14,10 +14,17 @@ import twilightforest.datagen.data.tags.DimensionTypeTagGenerator;
 import twilightforest.datagen.data.tags.EntityTypeTagGenerator;
 import twilightforest.datagen.data.tags.ItemTagGenerator;
 import twilightforest.datagen.data.tags.PaintingVariantTagGenerator;
+import twilightforest.datagen.data.tags.StructureTagGenerator;
 import twilightforest.datagen.data.tags.WoodPaletteTagGenerator;
 import twilightforest.init.TFBannerPatterns;
+import twilightforest.init.TFBiomes;
+import twilightforest.init.TFCaveCarvers;
+import twilightforest.init.TFConfiguredFeatures;
 import twilightforest.init.TFDamageTypes;
 import twilightforest.init.TFDimensionData;
+import twilightforest.init.TFPlacedFeatures;
+import twilightforest.init.TFStructures;
+import twilightforest.init.custom.StructureSpeleothemConfigs;
 import twilightforest.init.custom.WoodPalettes;
 
 public final class TwilightForestDataGenerator implements DataGeneratorEntrypoint {
@@ -32,14 +39,21 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		pack.addProvider(DamageTypeTagGenerator::new);
 		pack.addProvider(DimensionTypeTagGenerator::new);
 		pack.addProvider(PaintingVariantTagGenerator::new);
+		pack.addProvider(StructureTagGenerator::new);
 		pack.addProvider(WoodPaletteTagGenerator::new);
 	}
 
 	@Override
 	public void buildRegistry(RegistrySetBuilder registryBuilder) {
 		registryBuilder.add(Registries.BANNER_PATTERN, TFBannerPatterns::bootstrap);
+		registryBuilder.add(Registries.CONFIGURED_CARVER, TFCaveCarvers::bootstrap);
+		registryBuilder.add(Registries.CONFIGURED_FEATURE, TFConfiguredFeatures::bootstrap);
 		registryBuilder.add(Registries.DAMAGE_TYPE, TFDamageTypes::bootstrap);
 		registryBuilder.add(Registries.DIMENSION_TYPE, TFDimensionData::bootstrapType);
+		registryBuilder.add(Registries.PLACED_FEATURE, TFPlacedFeatures::bootstrap);
+		registryBuilder.add(Registries.BIOME, TFBiomes::bootstrap);
+		registryBuilder.add(Registries.STRUCTURE, TFStructures::bootstrap);
+		registryBuilder.add(TFRegistries.Keys.STRUCTURE_SPELEOTHEM_SETTINGS, StructureSpeleothemConfigs::bootstrap);
 		registryBuilder.add(TFRegistries.Keys.WOOD_PALETTES, WoodPalettes::bootstrap);
 	}
 
