@@ -34,7 +34,7 @@
     [],
     [
       "minecraft:patch_grass_taiga",
-      "minecraft:patch_large_fern",
+      "twilightforest:patch_large_fern",
       "twilightforest:grove_ruins",
       "twilightforest:stone_circle",
       "twilightforest:outside_stalagmite",

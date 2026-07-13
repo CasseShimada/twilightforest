@@ -135,9 +135,9 @@ public class TFPlacedFeatures {
 	public static final ResourceKey<PlacedFeature> PATCH_GRASS_TAIGA_2 = registerKey("patch_grass_taiga_2");
 	public static final ResourceKey<PlacedFeature> PATCH_GRASS_TAIGA = registerKey("patch_grass_taiga");
 	public static final ResourceKey<PlacedFeature> PATCH_GRASS_JUNGLE = registerKey("patch_grass_jungle");
-	public static final ResourceKey<PlacedFeature> PATCH_TALL_GRASS = PlacementUtils.createKey("patch_tall_grass");
-	public static final ResourceKey<PlacedFeature> PATCH_LARGE_FERN = PlacementUtils.createKey("patch_large_fern");
-	public static final ResourceKey<PlacedFeature> FLOWER_FOREST_FLOWERS = PlacementUtils.createKey("flower_forest_flowers");
+	public static final ResourceKey<PlacedFeature> PATCH_TALL_GRASS = registerKey("patch_tall_grass");
+	public static final ResourceKey<PlacedFeature> PATCH_LARGE_FERN = registerKey("patch_large_fern");
+	public static final ResourceKey<PlacedFeature> FLOWER_FOREST_FLOWERS = registerKey("flower_forest_flowers");
 
 	private static List<PlacementModifier> tfTreeCheckArea(BlockState sapling) {
 		return tfTreeCheckArea(sapling, HolderSet.empty());
@@ -211,7 +211,7 @@ public class TFPlacedFeatures {
 		context.register(PLACED_PUMPKIN_LAMPPOST, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.PUMPKIN_LAMPPOST), tfFeatureCheckArea(AvoidLandmarkModifier.checkSurface(), 10).build()));
 		context.register(PLACED_SMOKER, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.SMOKER), ImmutableList.<PlacementModifier>builder().add(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, InSquarePlacement.spread(), BiomeFilter.biome()).build()));
 		context.register(PLACED_STONE_CIRCLE, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.STONE_CIRCLE), tfFeatureCheckArea(AvoidLandmarkModifier.checkSurface(), 105).build()));
-		context.register(PLACED_THORNS, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.THORNS), ImmutableList.<PlacementModifier>builder().add(ChunkBlanketingModifier.addThorns(HolderSet.direct(biomes.getOrThrow(TFBiomes.THORNLANDS)))).build()));
+		context.register(PLACED_THORNS, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.THORNS), ImmutableList.<PlacementModifier>builder().add(ChunkBlanketingModifier.addThorns(HolderSet.direct(biomes.getOrThrow(TFBiomes.THORNLANDS))), BiomeFilter.biome()).build()));
 		context.register(PLACED_TORCH_BERRIES, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.TORCH_BERRIES), ImmutableList.<PlacementModifier>builder().add(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(60)), CountPlacement.of(8), InSquarePlacement.spread(), AvoidLandmarkModifier.checkUnderground(), BiomeFilter.biome()).build()));
 		context.register(PLACED_TROLL_ROOTS, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.TROLL_ROOTS), ImmutableList.<PlacementModifier>builder().add(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, CountOnEveryLayerPlacement.of(12), BiomeFilter.biome()).build()));
 		context.register(PLACED_TROLL_MUSHGLOOMS, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.TROLL_MUSHGLOOMS), ImmutableList.<PlacementModifier>builder().add(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(15)), CountPlacement.of(3), AvoidLandmarkModifier.checkUnderground(), BiomeFilter.biome()).build()));
@@ -236,7 +236,7 @@ public class TFPlacedFeatures {
 		context.register(PLACED_DARK_RED_MUSHROOMS, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.DARK_RED_MUSHROOMS), ImmutableList.<PlacementModifier>builder().add(RarityFilter.onAverageOnceEvery(3), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome()).build()));
 		context.register(PLACED_DARK_DEAD_BUSHES, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.DARK_DEAD_BUSHES), ImmutableList.<PlacementModifier>builder().add(RarityFilter.onAverageOnceEvery(3), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome()).build()));
 
-		context.register(PLACED_ENCHANTED_FOREST_VINES, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.ENCHANTED_FOREST_VINES), ImmutableList.<PlacementModifier>builder().add(PlacementUtils.HEIGHTMAP).build()));
+		context.register(PLACED_ENCHANTED_FOREST_VINES, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.ENCHANTED_FOREST_VINES), ImmutableList.<PlacementModifier>builder().add(PlacementUtils.HEIGHTMAP, BiomeFilter.biome()).build()));
 
 		context.register(PLACED_LEGACY_COAL_ORE, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.LEGACY_COAL_ORE), ImmutableList.<PlacementModifier>builder().add(HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(127)), InSquarePlacement.spread(), CountPlacement.of(20), BiomeFilter.biome()).build()));
 		context.register(PLACED_LEGACY_IRON_ORE, new PlacedFeature(features.getOrThrow(TFConfiguredFeatures.LEGACY_IRON_ORE), ImmutableList.<PlacementModifier>builder().add(HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(63)), InSquarePlacement.spread(), CountPlacement.of(20), BiomeFilter.biome()).build()));
