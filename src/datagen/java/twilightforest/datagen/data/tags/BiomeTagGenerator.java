@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import twilightforest.init.TFBiomes;
 import twilightforest.tags.TFBiomeTags;
@@ -54,5 +55,42 @@ public final class BiomeTagGenerator extends FabricTagsProvider<Biome> {
 			.add(TFBiomes.GLACIER);
 		this.builder(BiomeTags.WITHOUT_WANDERING_TRADER_SPAWNS).addTag(TFBiomeTags.IS_TWILIGHT);
 		this.builder(BiomeTags.WITHOUT_ZOMBIE_SIEGES).addTag(TFBiomeTags.IS_TWILIGHT);
+
+		this.builder(TFBiomeTags.VALID_AURORA_PALACE_BIOMES).add(TFBiomes.GLACIER);
+		this.builder(TFBiomeTags.VALID_DARK_TOWER_BIOMES).add(TFBiomes.DARK_FOREST_CENTER);
+		this.builder(TFBiomeTags.VALID_FINAL_CASTLE_BIOMES).add(TFBiomes.FINAL_PLATEAU);
+		this.builder(TFBiomeTags.VALID_GIANT_HOUSE_BIOMES).add(TFBiomes.HIGHLANDS);
+		this.addPrimaryLandmarkBiomes(TFBiomeTags.VALID_HEDGE_MAZE_BIOMES);
+		this.addPrimaryLandmarkBiomes(TFBiomeTags.VALID_HOLLOW_HILL_BIOMES);
+		this.builder(TFBiomeTags.VALID_HOLLOW_TREE_BIOMES)
+			.add(TFBiomes.DENSE_FOREST)
+			.add(TFBiomes.FIRE_SWAMP)
+			.add(TFBiomes.DENSE_MUSHROOM_FOREST)
+			.add(TFBiomes.FIREFLY_FOREST)
+			.add(TFBiomes.FOREST)
+			.add(TFBiomes.MUSHROOM_FOREST)
+			.add(TFBiomes.OAK_SAVANNAH)
+			.add(TFBiomes.ENCHANTED_FOREST);
+		this.builder(TFBiomeTags.VALID_HYDRA_LAIR_BIOMES).add(TFBiomes.FIRE_SWAMP);
+		this.builder(TFBiomeTags.VALID_KNIGHT_STRONGHOLD_BIOMES).add(TFBiomes.DARK_FOREST);
+		this.builder(TFBiomeTags.VALID_LABYRINTH_BIOMES).add(TFBiomes.SWAMP);
+		this.addPrimaryLandmarkBiomes(TFBiomeTags.VALID_LICH_TOWER_BIOMES);
+		this.builder(TFBiomeTags.VALID_MUSHROOM_TOWER_BIOMES).add(TFBiomes.DENSE_MUSHROOM_FOREST);
+		this.addPrimaryLandmarkBiomes(TFBiomeTags.VALID_NAGA_COURTYARD_BIOMES);
+		this.builder(TFBiomeTags.VALID_QUEST_GROVE_BIOMES).add(TFBiomes.ENCHANTED_FOREST);
+		this.builder(TFBiomeTags.VALID_TROLL_CAVE_BIOMES).add(TFBiomes.HIGHLANDS);
+		this.builder(TFBiomeTags.VALID_YETI_CAVE_BIOMES).add(TFBiomes.SNOWY_FOREST);
+	}
+
+	private void addPrimaryLandmarkBiomes(TagKey<Biome> tag) {
+		this.builder(tag)
+			.add(TFBiomes.CLEARING)
+			.add(TFBiomes.DENSE_FOREST)
+			.add(TFBiomes.DENSE_MUSHROOM_FOREST)
+			.add(TFBiomes.FIREFLY_FOREST)
+			.add(TFBiomes.FOREST)
+			.add(TFBiomes.MUSHROOM_FOREST)
+			.add(TFBiomes.OAK_SAVANNAH)
+			.add(TFBiomes.SPOOKY_FOREST);
 	}
 }
