@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Blocks;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
@@ -91,6 +92,17 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 		this.builder(ConventionalItemTags.RAW_MATERIALS)
 			.addTag(TFItemTags.RAW_MATERIALS_IRONWOOD)
 			.addTag(TFItemTags.RAW_MATERIALS_KNIGHTMETAL);
+
+		this.builder(TFItemTags.REPAIRS_FIERY_TOOLS).addTag(TFItemTags.FIERY_INGOTS);
+		this.builder(TFItemTags.REPAIRS_IRONWOOD_TOOLS).addTag(TFItemTags.IRONWOOD_INGOTS);
+		this.builder(TFItemTags.REPAIRS_KNIGHTMETAL_TOOLS).addTag(TFItemTags.KNIGHTMETAL_INGOTS);
+		this.builder(TFItemTags.REPAIRS_STEELEAF_TOOLS).addTag(TFItemTags.STEELEAF_INGOTS);
+		this.builder(TFItemTags.REPAIRS_GIANT_TOOLS).add(key(TFBlocks.GIANT_COBBLESTONE.asItem()));
+		this.builder(TFItemTags.REPAIRS_ICE_TOOLS).add(
+			key(Blocks.ICE.asItem()),
+			key(Blocks.PACKED_ICE.asItem()),
+			key(Blocks.BLUE_ICE.asItem())
+		);
 	}
 
 	private static ResourceKey<Item> key(Item item) {
