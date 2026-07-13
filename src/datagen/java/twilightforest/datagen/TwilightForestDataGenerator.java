@@ -9,6 +9,8 @@ import twilightforest.TwilightForestMod;
 import twilightforest.datagen.data.registries.BannerPatternGenerator;
 import twilightforest.datagen.data.registries.ConfiguredCarverGenerator;
 import twilightforest.datagen.data.registries.DamageTypeGenerator;
+import twilightforest.datagen.data.registries.DwarfRabbitVariantGenerator;
+import twilightforest.datagen.data.registries.TinyBirdVariantGenerator;
 import twilightforest.datagen.data.registries.WoodPaletteGenerator;
 import twilightforest.datagen.data.tags.BannerPatternTagGenerator;
 import twilightforest.datagen.data.tags.BiomeTagGenerator;
@@ -29,7 +31,9 @@ import twilightforest.init.TFDamageTypes;
 import twilightforest.init.TFDimensionData;
 import twilightforest.init.TFPlacedFeatures;
 import twilightforest.init.TFStructures;
+import twilightforest.init.custom.DwarfRabbitVariants;
 import twilightforest.init.custom.StructureSpeleothemConfigs;
+import twilightforest.init.custom.TinyBirdVariants;
 import twilightforest.init.custom.WoodPalettes;
 
 public final class TwilightForestDataGenerator implements DataGeneratorEntrypoint {
@@ -39,6 +43,8 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		pack.addProvider(BannerPatternGenerator::new);
 		pack.addProvider(ConfiguredCarverGenerator::new);
 		pack.addProvider(DamageTypeGenerator::new);
+		pack.addProvider(DwarfRabbitVariantGenerator::new);
+		pack.addProvider(TinyBirdVariantGenerator::new);
 		pack.addProvider(WoodPaletteGenerator::new);
 		BlockTagGenerator blockTags = pack.addProvider(BlockTagGenerator::new);
 		pack.addProvider((output, registries) -> new ItemTagGenerator(output, registries, blockTags));
@@ -63,7 +69,9 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		registryBuilder.add(Registries.PLACED_FEATURE, TFPlacedFeatures::bootstrap);
 		registryBuilder.add(Registries.BIOME, TFBiomes::bootstrap);
 		registryBuilder.add(Registries.STRUCTURE, TFStructures::bootstrap);
+		registryBuilder.add(TFRegistries.Keys.DWARF_RABBIT_VARIANT, DwarfRabbitVariants::bootstrap);
 		registryBuilder.add(TFRegistries.Keys.STRUCTURE_SPELEOTHEM_SETTINGS, StructureSpeleothemConfigs::bootstrap);
+		registryBuilder.add(TFRegistries.Keys.TINY_BIRD_VARIANT, TinyBirdVariants::bootstrap);
 		registryBuilder.add(TFRegistries.Keys.WOOD_PALETTES, WoodPalettes::bootstrap);
 	}
 
