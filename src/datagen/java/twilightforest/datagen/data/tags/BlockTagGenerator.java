@@ -31,6 +31,17 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 
 		this.builder(BlockTags.INVALID_SPAWN_INSIDE).add(key(TFBlocks.TWILIGHT_PORTAL));
 		this.builder(BlockTags.PORTALS).add(key(TFBlocks.TWILIGHT_PORTAL));
+
+		this.builder(BlockTags.OCCLUDES_VIBRATION_SIGNALS).add(key(TFBlocks.ARCTIC_FUR_BLOCK));
+		this.builder(BlockTags.STRIDER_WARM_BLOCKS).add(key(TFBlocks.FIERY_BLOCK));
+		this.builder(BlockTags.WALLS).add(key(TFBlocks.WROUGHT_IRON_FENCE));
+		this.builder(BlockTags.WOOL_CARPETS).add(key(TFBlocks.CORONATION_CARPET));
+
+		this.builder(BlockTags.OVERWORLD_CARVER_REPLACEABLES).add(key(TFBlocks.TROLLSTEINN));
+		this.builder(BlockTags.NEEDS_IRON_TOOL)
+			.add(key(TFBlocks.FIERY_BLOCK), key(TFBlocks.KNIGHTMETAL_BLOCK));
+		this.builder(BlockTags.MOSS_REPLACEABLE)
+			.add(key(TFBlocks.ROOT_BLOCK), key(TFBlocks.LIVEROOT_BLOCK), key(TFBlocks.TROLLSTEINN));
 	}
 
 	private static ResourceKey<Block> key(Block block) {
