@@ -127,6 +127,7 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 		this.builder(TFItemTags.KOBOLD_PACIFICATION_BREADS).add(key(Items.BREAD));
 
 		this.addEquipmentTags();
+		this.addEnchantableTags();
 	}
 
 	private void addEquipmentTags() {
@@ -204,6 +205,64 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 			key(TFItems.FIERY_PICKAXE),
 			key(TFItems.GIANT_PICKAXE)
 		);
+	}
+
+	private void addEnchantableTags() {
+		this.builder(ItemTags.BOW_ENCHANTABLE).add(
+			key(TFItems.TRIPLE_BOW),
+			key(TFItems.SEEKER_BOW),
+			key(TFItems.ICE_BOW),
+			key(TFItems.ENDER_BOW)
+		);
+		this.builder(ItemTags.CHEST_ARMOR_ENCHANTABLE).add(
+			key(TFItems.NAGA_CHESTPLATE),
+			key(TFItems.IRONWOOD_CHESTPLATE),
+			key(TFItems.STEELEAF_CHESTPLATE),
+			key(TFItems.KNIGHTMETAL_CHESTPLATE),
+			key(TFItems.PHANTOM_CHESTPLATE),
+			key(TFItems.FIERY_CHESTPLATE),
+			key(TFItems.ARCTIC_CHESTPLATE),
+			key(TFItems.YETI_CHESTPLATE)
+		);
+		this.builder(ItemTags.HEAD_ARMOR_ENCHANTABLE).add(
+			key(TFItems.IRONWOOD_HELMET),
+			key(TFItems.STEELEAF_HELMET),
+			key(TFItems.KNIGHTMETAL_HELMET),
+			key(TFItems.PHANTOM_HELMET),
+			key(TFItems.FIERY_HELMET),
+			key(TFItems.ARCTIC_HELMET),
+			key(TFItems.YETI_HELMET)
+		);
+		this.builder(ItemTags.LEG_ARMOR_ENCHANTABLE).add(
+			key(TFItems.NAGA_LEGGINGS),
+			key(TFItems.IRONWOOD_LEGGINGS),
+			key(TFItems.STEELEAF_LEGGINGS),
+			key(TFItems.KNIGHTMETAL_LEGGINGS),
+			key(TFItems.FIERY_LEGGINGS),
+			key(TFItems.ARCTIC_LEGGINGS),
+			key(TFItems.YETI_LEGGINGS)
+		);
+		this.builder(ItemTags.FOOT_ARMOR_ENCHANTABLE).add(
+			key(TFItems.IRONWOOD_BOOTS),
+			key(TFItems.STEELEAF_BOOTS),
+			key(TFItems.KNIGHTMETAL_BOOTS),
+			key(TFItems.FIERY_BOOTS),
+			key(TFItems.ARCTIC_BOOTS),
+			key(TFItems.YETI_BOOTS)
+		);
+		this.builder(ItemTags.DURABILITY_ENCHANTABLE).add(
+			key(TFItems.TRIPLE_BOW),
+			key(TFItems.SEEKER_BOW),
+			key(TFItems.ICE_BOW),
+			key(TFItems.ENDER_BOW),
+			key(TFItems.BLOCK_AND_CHAIN),
+			key(TFItems.KNIGHTMETAL_SHIELD),
+			key(TFItems.ORE_MAGNET),
+			key(TFItems.PEACOCK_FEATHER_FAN),
+			key(TFItems.CRUMBLE_HORN)
+		);
+		this.builder(ItemTags.MINING_ENCHANTABLE).add(key(TFItems.BLOCK_AND_CHAIN));
+		this.builder(ItemTags.MINING_LOOT_ENCHANTABLE).add(key(TFItems.BLOCK_AND_CHAIN));
 	}
 
 	private static ResourceKey<Item> key(Item item) {
