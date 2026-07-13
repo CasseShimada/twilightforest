@@ -83,6 +83,7 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 		this.addShapeTags();
 		this.addStorageBlockTags();
 		this.addConventionTags();
+		this.addIntegrationTags();
 		this.addOreToolTags();
 		this.addMiningTags();
 	}
@@ -788,6 +789,22 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 			.addOptionalTag(ConventionalBlockTags.GRAVELS)
 			.addOptionalTag(BlockTags.NYLIUM)
 			.addTag(TFBlockTags.ROOT_ORES);
+	}
+
+	private void addIntegrationTags() {
+		this.builder(TFBlockTags.AC_FERROMAGNETIC_BLOCKS)
+			.add(key(TFBlocks.CANDELABRA), key(TFBlocks.WROUGHT_IRON_FENCE))
+			.addTag(TFBlockTags.STORAGE_BLOCKS_IRONWOOD)
+			.addTag(TFBlockTags.STORAGE_BLOCKS_STEELEAF)
+			.addTag(TFBlockTags.STORAGE_BLOCKS_KNIGHTMETAL);
+		this.builder(TFBlockTags.AC_GLOOMOTH_LIGHT_SOURCES)
+			.add(key(TFBlocks.FIREFLY_SPAWNER), key(TFBlocks.FIREFLY_JAR));
+		this.builder(TFBlockTags.AC_UNDERZEALOT_LIGHT_SOURCES)
+			.add(key(TFBlocks.FIREFLY), key(TFBlocks.MOONWORM));
+		this.builder(TFBlockTags.ARTIFACTS_CAMPSITE_CHESTS).addTag(TFBlockTags.TF_CHESTS);
+		this.builder(TFBlockTags.FD_COMPOST_ACTIVATORS)
+			.add(key(TFBlocks.UBEROUS_SOIL), key(TFBlocks.MUSHGLOOM));
+		this.builder(TFBlockTags.FD_HEAT_SOURCES).addTag(TFBlockTags.STORAGE_BLOCKS_FIERY);
 	}
 
 	private void addMiningTags() {
