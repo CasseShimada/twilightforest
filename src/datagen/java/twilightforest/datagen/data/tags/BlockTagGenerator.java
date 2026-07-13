@@ -71,6 +71,7 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 		this.addProtectedMaterialTags();
 		this.addPortalTags();
 		this.addGameplayBehaviorTags();
+		this.addWorldgenBehaviorTags();
 		this.addTreeTags();
 		this.addLogTags();
 		this.addHollowLogTags();
@@ -291,6 +292,29 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 		this.builder(TFBlockTags.TIME_CORE_EXCLUDED).add(key(Blocks.NETHER_PORTAL));
 		this.builder(TFBlockTags.CARMINITE_REACTOR_ORES)
 			.add(key(Blocks.NETHER_QUARTZ_ORE), key(Blocks.NETHER_GOLD_ORE));
+	}
+
+	private void addWorldgenBehaviorTags() {
+		this.builder(TFBlockTags.WORLDGEN_REPLACEABLES)
+			.addOptionalTag(BlockTags.LUSH_GROUND_REPLACEABLE)
+			.addOptionalTag(BlockTags.REPLACEABLE_BY_TREES);
+		this.builder(TFBlockTags.CARVER_REPLACEABLES)
+			.addTag(BlockTags.OVERWORLD_CARVER_REPLACEABLES)
+			.add(key(Blocks.SNOW_BLOCK));
+		this.builder(TFBlockTags.ROOT_TRACE_SKIP)
+			.add(
+				key(TFBlocks.ROOT_BLOCK),
+				key(TFBlocks.LIVEROOT_BLOCK),
+				key(TFBlocks.MANGROVE_ROOT),
+				key(TFBlocks.TIME_WOOD)
+			)
+			.addTag(BlockTags.LOGS)
+			.addTag(BlockTags.FEATURES_CANNOT_REPLACE);
+		this.builder(TFBlockTags.SMALL_LAKES_DONT_REPLACE)
+			.add(key(TFBlocks.ROOT_BLOCK), key(TFBlocks.LIVEROOT_BLOCK), key(Blocks.MUSHROOM_STEM))
+			.addTag(BlockTags.FEATURES_CANNOT_REPLACE)
+			.addTag(BlockTags.LOGS)
+			.addTag(BlockTags.LEAVES);
 	}
 
 	private void addTreeTags() {
