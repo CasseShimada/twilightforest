@@ -417,6 +417,45 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 		this.builder(ConventionalBlockTags.GLASS_BLOCKS).add(key(TFBlocks.AURORALIZED_GLASS));
 		this.builder(ConventionalBlockTags.PLAYER_WORKSTATIONS_CRAFTING_TABLES).add(key(TFBlocks.UNCRAFTING_TABLE));
 		this.builder(ConventionalBlockTags.ROPES).add(key(TFBlocks.ROPE));
+		this.builder(ConventionalBlockTags.RELOCATION_NOT_SUPPORTED).add(
+			key(TFBlocks.TWILIGHT_PORTAL),
+			key(TFBlocks.STRONGHOLD_SHIELD),
+			key(TFBlocks.TIME_LOG_CORE),
+			key(TFBlocks.TRANSFORMATION_LOG_CORE),
+			key(TFBlocks.MINING_LOG_CORE),
+			key(TFBlocks.SORTING_LOG_CORE),
+			key(TFBlocks.ANTIBUILDER),
+			key(TFBlocks.BUILT_BLOCK),
+			key(TFBlocks.FAKE_DIAMOND),
+			key(TFBlocks.FAKE_GOLD),
+			key(TFBlocks.REACTOR_DEBRIS),
+			key(TFBlocks.LOCKED_VANISHING_BLOCK),
+			key(TFBlocks.VANISHING_BLOCK),
+			key(TFBlocks.UNBREAKABLE_VANISHING_BLOCK),
+			key(TFBlocks.REAPPEARING_BLOCK),
+			key(TFBlocks.BEANSTALK_GROWER),
+			key(TFBlocks.GIANT_COBBLESTONE),
+			key(TFBlocks.GIANT_LOG),
+			key(TFBlocks.GIANT_LEAVES),
+			key(TFBlocks.GIANT_OBSIDIAN),
+			key(TFBlocks.BROWN_THORNS),
+			key(TFBlocks.GREEN_THORNS),
+			key(TFBlocks.BURNT_THORNS),
+			key(TFBlocks.PINK_FORCE_FIELD),
+			key(TFBlocks.ORANGE_FORCE_FIELD),
+			key(TFBlocks.GREEN_FORCE_FIELD),
+			key(TFBlocks.BLUE_FORCE_FIELD),
+			key(TFBlocks.VIOLET_FORCE_FIELD),
+			key(TFBlocks.FINAL_BOSS_BOSS_SPAWNER),
+			key(TFBlocks.NAGA_BOSS_SPAWNER),
+			key(TFBlocks.LICH_BOSS_SPAWNER),
+			key(TFBlocks.MINOSHROOM_BOSS_SPAWNER),
+			key(TFBlocks.HYDRA_BOSS_SPAWNER),
+			key(TFBlocks.KNIGHT_PHANTOM_BOSS_SPAWNER),
+			key(TFBlocks.UR_GHAST_BOSS_SPAWNER),
+			key(TFBlocks.ALPHA_YETI_BOSS_SPAWNER),
+			key(TFBlocks.SNOW_QUEEN_BOSS_SPAWNER)
+		);
 	}
 
 	private static ResourceKey<Block> key(Block block) {
