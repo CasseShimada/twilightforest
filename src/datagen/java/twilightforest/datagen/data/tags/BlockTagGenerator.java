@@ -21,6 +21,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
+	private static final TagKey<Block> COAL_ORES = TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("coal_ores"));
 	private static final TagKey<Block> FIRE = TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("fire"));
 	private static final TagKey<Block> LOGS_THAT_BURN = TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("logs_that_burn"));
 	private static final TagKey<Block> SAPLINGS = TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("saplings"));
@@ -82,6 +83,7 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 		this.addShapeTags();
 		this.addStorageBlockTags();
 		this.addConventionTags();
+		this.addOreToolTags();
 		this.addMiningTags();
 	}
 
@@ -753,6 +755,39 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 			key(TFBlocks.ALPHA_YETI_BOSS_SPAWNER),
 			key(TFBlocks.SNOW_QUEEN_BOSS_SPAWNER)
 		);
+	}
+
+	private void addOreToolTags() {
+		this.builder(TFBlockTags.MINING_CORE_EXCLUDED).addOptionalTag(COAL_ORES);
+		this.builder(TFBlockTags.ORE_MAGNET_IGNORE).addOptionalTag(COAL_ORES);
+		this.builder(TFBlockTags.ORE_MAGNET_SAFE_REPLACE_BLOCK)
+			.addTag(BlockTags.DIRT)
+			.addOptionalTag(ConventionalBlockTags.GRAVELS)
+			.addOptionalTag(ConventionalBlockTags.SANDS)
+			.addOptionalTag(BlockTags.NYLIUM)
+			.addOptionalTag(BlockTags.BASE_STONE_OVERWORLD)
+			.addOptionalTag(BlockTags.BASE_STONE_NETHER)
+			.addOptionalTag(ConventionalBlockTags.END_STONES)
+			.addOptionalTag(BlockTags.DEEPSLATE_ORE_REPLACEABLES)
+			.addOptionalTag(BlockTags.STONE_ORE_REPLACEABLES)
+			.addTag(TFBlockTags.ROOT_GROUND);
+		this.builder(TFBlockTags.ORE_METER_TARGETABLE)
+			.add(
+				key(Blocks.BUDDING_AMETHYST),
+				key(Blocks.CALCITE),
+				key(Blocks.SOUL_SAND),
+				key(Blocks.SOUL_SOIL)
+			)
+			.addOptionalTag(ConventionalBlockTags.ORES)
+			.addOptionalTag(BlockTags.BASE_STONE_OVERWORLD)
+			.addOptionalTag(BlockTags.BASE_STONE_NETHER)
+			.addTag(BlockTags.DIRT)
+			.addOptionalTag(ConventionalBlockTags.SANDS)
+			.addOptionalTag(ConventionalBlockTags.SANDSTONE_BLOCKS)
+			.addOptionalTag(BlockTags.TERRACOTTA)
+			.addOptionalTag(ConventionalBlockTags.GRAVELS)
+			.addOptionalTag(BlockTags.NYLIUM)
+			.addTag(TFBlockTags.ROOT_ORES);
 	}
 
 	private void addMiningTags() {
