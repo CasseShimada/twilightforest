@@ -326,17 +326,22 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 			key(TFItems.TRANSFORMATION_POWDER)
 		);
 		this.builder(TFItemTags.BLOCK_AND_CHAIN_ENCHANTABLE).add(key(TFItems.BLOCK_AND_CHAIN));
+		this.builder(TFItemTags.EMPERORS_CLOTH_APPLICABLE)
+			.add(key(Items.ELYTRA))
+			.addOptionalTag(ConventionalItemTags.ARMORS);
 		this.builder(TFItemTags.FIERY_VIAL).add(key(TFItems.FIERY_BLOOD), key(TFItems.FIERY_TEARS));
 		this.builder(TFItemTags.IMMUNE_TO_THORNS)
 			.add(key(TFBlocks.THORN_LEAVES.asItem()), key(TFBlocks.THORN_ROSE.asItem()));
 		this.builder(TFItemTags.KEPT_ON_DEATH)
 			.add(key(TFItems.TOWER_KEY), key(TFItems.PHANTOM_HELMET), key(TFItems.PHANTOM_CHESTPLATE));
+		this.builder(TFItemTags.PORTAL_ACTIVATOR).addOptionalTag(ConventionalItemTags.DIAMOND_GEMS);
 		this.builder(TFItemTags.SCEPTERS).add(
 			key(TFItems.TWILIGHT_SCEPTER),
 			key(TFItems.LIFEDRAIN_SCEPTER),
 			key(TFItems.ZOMBIE_SCEPTER),
 			key(TFItems.FORTIFICATION_SCEPTER)
 		);
+		this.builder(TFItemTags.UNCRAFTING_IGNORES_COST).addOptionalTag(ConventionalItemTags.WOODEN_RODS);
 	}
 
 	private static ResourceKey<Item> key(Item item) {
