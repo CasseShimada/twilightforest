@@ -73,6 +73,7 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 		this.addLogTags();
 		this.addHollowLogTags();
 		this.addWoodFamilyTags();
+		this.addBanisterTags();
 		this.addShapeTags();
 		this.addStorageBlockTags();
 		this.addConventionTags();
@@ -330,6 +331,31 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 		this.builder(BlockTags.PLANKS).addTag(TFBlockTags.TOWERWOOD);
 	}
 
+	private void addBanisterTags() {
+		this.builder(TFBlockTags.BANISTERS).add(
+			key(TFBlocks.OAK_BANISTER),
+			key(TFBlocks.SPRUCE_BANISTER),
+			key(TFBlocks.BIRCH_BANISTER),
+			key(TFBlocks.JUNGLE_BANISTER),
+			key(TFBlocks.ACACIA_BANISTER),
+			key(TFBlocks.DARK_OAK_BANISTER),
+			key(TFBlocks.CRIMSON_BANISTER),
+			key(TFBlocks.WARPED_BANISTER),
+			key(TFBlocks.VANGROVE_BANISTER),
+			key(TFBlocks.BAMBOO_BANISTER),
+			key(TFBlocks.CHERRY_BANISTER),
+			key(TFBlocks.PALE_OAK_BANISTER),
+			key(TFBlocks.TWILIGHT_OAK_BANISTER),
+			key(TFBlocks.CANOPY_BANISTER),
+			key(TFBlocks.MANGROVE_BANISTER),
+			key(TFBlocks.DARK_BANISTER),
+			key(TFBlocks.TIME_BANISTER),
+			key(TFBlocks.TRANSFORMATION_BANISTER),
+			key(TFBlocks.MINING_BANISTER),
+			key(TFBlocks.SORTING_BANISTER)
+		);
+	}
+
 	private void addFamilyVariant(TagKey<Block> tag, BlockFamily family, BlockFamily.Variant variant) {
 		Block block = Objects.requireNonNull(family.get(variant), () -> family.getBaseBlock() + " is missing " + variant);
 		this.builder(tag).add(key(block));
@@ -462,6 +488,46 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 	}
 
 	private void addMiningTags() {
+		this.builder(BlockTags.MINEABLE_WITH_AXE)
+			.add(
+				key(TFBlocks.HEDGE),
+				key(TFBlocks.ROOT_BLOCK),
+				key(TFBlocks.LIVEROOT_BLOCK),
+				key(TFBlocks.MANGROVE_ROOT),
+				key(TFBlocks.UNCRAFTING_TABLE),
+				key(TFBlocks.ENCASED_SMOKER),
+				key(TFBlocks.ENCASED_FIRE_JET),
+				key(TFBlocks.TIME_LOG_CORE),
+				key(TFBlocks.TRANSFORMATION_LOG_CORE),
+				key(TFBlocks.MINING_LOG_CORE),
+				key(TFBlocks.SORTING_LOG_CORE),
+				key(TFBlocks.REAPPEARING_BLOCK),
+				key(TFBlocks.VANISHING_BLOCK),
+				key(TFBlocks.ANTIBUILDER),
+				key(TFBlocks.CARMINITE_REACTOR),
+				key(TFBlocks.CARMINITE_BUILDER),
+				key(TFBlocks.GHAST_TRAP),
+				key(TFBlocks.HUGE_STALK),
+				key(TFBlocks.HUGE_MUSHGLOOM),
+				key(TFBlocks.HUGE_MUSHGLOOM_STEM),
+				key(TFBlocks.CINDER_LOG),
+				key(TFBlocks.CINDER_WOOD),
+				key(TFBlocks.IRONWOOD_BLOCK),
+				key(TFBlocks.CHISELED_CANOPY_BOOKSHELF),
+				key(TFBlocks.CANOPY_BOOKSHELF),
+				key(TFBlocks.TWILIGHT_OAK_CHEST),
+				key(TFBlocks.CANOPY_CHEST),
+				key(TFBlocks.MANGROVE_CHEST),
+				key(TFBlocks.DARK_CHEST),
+				key(TFBlocks.TIME_CHEST),
+				key(TFBlocks.TRANSFORMATION_CHEST),
+				key(TFBlocks.MINING_CHEST),
+				key(TFBlocks.SORTING_CHEST),
+				key(TFBlocks.HUGE_LILY_PAD)
+			)
+			.addTag(TFBlockTags.BANISTERS)
+			.addTag(TFBlockTags.HOLLOW_LOGS)
+			.addTag(TFBlockTags.TOWERWOOD);
 		this.builder(BlockTags.MINEABLE_WITH_PICKAXE)
 			.add(
 				key(TFBlocks.NAGASTONE),
