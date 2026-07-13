@@ -9,6 +9,7 @@ import twilightforest.TwilightForestMod;
 import twilightforest.datagen.data.registries.BannerPatternGenerator;
 import twilightforest.datagen.data.registries.ConfiguredCarverGenerator;
 import twilightforest.datagen.data.registries.DamageTypeGenerator;
+import twilightforest.datagen.data.registries.WoodPaletteGenerator;
 import twilightforest.datagen.data.tags.BannerPatternTagGenerator;
 import twilightforest.datagen.data.tags.BiomeTagGenerator;
 import twilightforest.datagen.data.tags.BlockEntityTypeTagGenerator;
@@ -38,6 +39,7 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		pack.addProvider(BannerPatternGenerator::new);
 		pack.addProvider(ConfiguredCarverGenerator::new);
 		pack.addProvider(DamageTypeGenerator::new);
+		pack.addProvider(WoodPaletteGenerator::new);
 		BlockTagGenerator blockTags = pack.addProvider(BlockTagGenerator::new);
 		pack.addProvider((output, registries) -> new ItemTagGenerator(output, registries, blockTags));
 		pack.addProvider(BannerPatternTagGenerator::new);
