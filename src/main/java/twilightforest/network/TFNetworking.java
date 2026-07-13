@@ -2,7 +2,6 @@ package twilightforest.network;
 
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.world.entity.player.Player;
 
 public final class TFNetworking {
 	private TFNetworking() {
@@ -43,23 +42,7 @@ public final class TFNetworking {
 	}
 
 	private static void registerServerReceivers() {
-		ServerPlayNetworking.registerGlobalReceiver(UncraftingGuiPacket.TYPE, (packet, context) ->
-			UncraftingGuiPacket.handle(packet, new ServerPayloadContext(context))
-		);
-		ServerPlayNetworking.registerGlobalReceiver(WipeOreMeterPacket.TYPE, (packet, context) ->
-			WipeOreMeterPacket.handle(packet, new ServerPayloadContext(context))
-		);
-	}
-
-	private record ServerPayloadContext(ServerPlayNetworking.Context context) implements PayloadContext {
-		@Override
-		public Player player() {
-			return context.player();
-		}
-
-		@Override
-		public void enqueueWork(Runnable task) {
-			context.server().execute(task);
-		}
+		ServerPlayNetworking.registerGlobalReceiver(UncraftingGuiPacket.TYPE, UncraftingGuiPacket::handle);
+		ServerPlayNetworking.registerGlobalReceiver(WipeOreMeterPacket.TYPE, WipeOreMeterPacket::handle);
 	}
 }

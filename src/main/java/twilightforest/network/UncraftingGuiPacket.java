@@ -1,5 +1,6 @@
 package twilightforest.network;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -27,10 +28,9 @@ public record UncraftingGuiPacket(int operationType) implements CustomPacketPayl
 		return TYPE;
 	}
 
-	public static void handle(UncraftingGuiPacket message, PayloadContext ctx) {
-		// Server-only logic; this handler is only registered for C2S.
-		ctx.enqueueWork(() -> {
-			AbstractContainerMenu container = ctx.player().containerMenu;
+	public static void handle(UncraftingGuiPacket message, ServerPlayNetworking.Context context) {
+		context.server().execute(() -> {
+			AbstractContainerMenu container = context.player().containerMenu;
 
 			if (container instanceof UncraftingMenu uncrafting) {
 				switch (message.operationType()) {
