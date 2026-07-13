@@ -21,6 +21,24 @@ public final class EntityTypeTagGenerator extends FabricTagsProvider.EntityTypeT
 
 	@Override
 	protected void addTags(HolderLookup.Provider registries) {
+		this.builder(EntityTypeTags.ARROWS)
+			.add(key(TFEntities.ICE_ARROW))
+			.add(key(TFEntities.SEEKER_ARROW));
+		this.builder(EntityTypeTags.IMPACT_PROJECTILES)
+			.add(key(TFEntities.NATURE_BOLT))
+			.add(key(TFEntities.LICH_BOLT))
+			.add(key(TFEntities.WAND_BOLT))
+			.add(key(TFEntities.LICH_BOMB))
+			.add(key(TFEntities.MOONWORM_SHOT))
+			.add(key(TFEntities.SLIME_BLOB))
+			.add(key(TFEntities.THROWN_WEP))
+			.add(key(TFEntities.THROWN_ICE))
+			.add(key(TFEntities.FALLING_ICE))
+			.add(key(TFEntities.ICE_SNOWBALL))
+			.add(key(TFEntities.CHAIN_BLOCK));
+		this.builder(EntityTypeTags.REDIRECTABLE_PROJECTILE)
+			.add(key(TFEntities.HYDRA_MORTAR))
+			.add(key(TFEntities.LICH_BOLT));
 		this.builder(TFEntityTypeTags.BOSSES)
 			.add(key(TFEntities.NAGA))
 			.add(key(TFEntities.LICH))
