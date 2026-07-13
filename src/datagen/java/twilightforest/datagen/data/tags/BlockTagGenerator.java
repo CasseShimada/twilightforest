@@ -75,6 +75,7 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 		this.addWoodFamilyTags();
 		this.addShapeTags();
 		this.addStorageBlockTags();
+		this.addConventionTags();
 	}
 
 	private void addCloudTags() {
@@ -315,6 +316,7 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 			this.addFamilyVariant(BlockTags.WOODEN_DOORS, family, BlockFamily.Variant.DOOR);
 			this.addFamilyVariant(BlockTags.WOODEN_FENCES, family, BlockFamily.Variant.FENCE);
 			this.addFamilyVariant(BlockTags.FENCE_GATES, family, BlockFamily.Variant.FENCE_GATE);
+			this.addFamilyVariant(ConventionalBlockTags.WOODEN_FENCE_GATES, family, BlockFamily.Variant.FENCE_GATE);
 			this.addFamilyVariant(BlockTags.WOODEN_PRESSURE_PLATES, family, BlockFamily.Variant.PRESSURE_PLATE);
 			this.addFamilyVariant(BlockTags.WOODEN_SLABS, family, BlockFamily.Variant.SLAB);
 			this.addFamilyVariant(BlockTags.WOODEN_STAIRS, family, BlockFamily.Variant.STAIRS);
@@ -388,6 +390,33 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 			.addTag(TFBlockTags.STORAGE_BLOCKS_IRONWOOD)
 			.addTag(TFBlockTags.STORAGE_BLOCKS_KNIGHTMETAL)
 			.addTag(TFBlockTags.STORAGE_BLOCKS_STEELEAF);
+	}
+
+	private void addConventionTags() {
+		this.builder(ConventionalBlockTags.BOOKSHELVES).add(key(TFBlocks.CANOPY_BOOKSHELF));
+		this.builder(ConventionalBlockTags.TRAPPED_CHESTS).add(
+			key(TFBlocks.TWILIGHT_OAK_TRAPPED_CHEST),
+			key(TFBlocks.CANOPY_TRAPPED_CHEST),
+			key(TFBlocks.MANGROVE_TRAPPED_CHEST),
+			key(TFBlocks.DARK_TRAPPED_CHEST),
+			key(TFBlocks.TIME_TRAPPED_CHEST),
+			key(TFBlocks.TRANSFORMATION_TRAPPED_CHEST),
+			key(TFBlocks.MINING_TRAPPED_CHEST),
+			key(TFBlocks.SORTING_TRAPPED_CHEST)
+		);
+		this.builder(ConventionalBlockTags.WOODEN_CHESTS).add(
+			key(TFBlocks.TWILIGHT_OAK_CHEST),
+			key(TFBlocks.CANOPY_CHEST),
+			key(TFBlocks.MANGROVE_CHEST),
+			key(TFBlocks.DARK_CHEST),
+			key(TFBlocks.TIME_CHEST),
+			key(TFBlocks.TRANSFORMATION_CHEST),
+			key(TFBlocks.MINING_CHEST),
+			key(TFBlocks.SORTING_CHEST)
+		);
+		this.builder(ConventionalBlockTags.GLASS_BLOCKS).add(key(TFBlocks.AURORALIZED_GLASS));
+		this.builder(ConventionalBlockTags.PLAYER_WORKSTATIONS_CRAFTING_TABLES).add(key(TFBlocks.UNCRAFTING_TABLE));
+		this.builder(ConventionalBlockTags.ROPES).add(key(TFBlocks.ROPE));
 	}
 
 	private static ResourceKey<Block> key(Block block) {
