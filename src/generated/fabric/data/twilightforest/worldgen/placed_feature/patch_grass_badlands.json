@@ -1,10 +1,6 @@
 {
-  "feature": "minecraft:taiga_grass",
+  "feature": "minecraft:grass",
   "placement": [
-    {
-      "type": "minecraft:count",
-      "count": 7
-    },
     {
       "type": "minecraft:in_square"
     },

@@ -22,6 +22,7 @@ import twilightforest.datagen.data.registries.EnchantmentGenerator;
 import twilightforest.datagen.data.registries.JukeboxSongGenerator;
 import twilightforest.datagen.data.registries.MagicPaintingVariantGenerator;
 import twilightforest.datagen.data.registries.NoiseSettingsGenerator;
+import twilightforest.datagen.data.registries.PlacedFeatureGenerator;
 import twilightforest.datagen.data.registries.RestrictionGenerator;
 import twilightforest.datagen.data.registries.StructureGenerator;
 import twilightforest.datagen.data.registries.StructureSetGenerator;
@@ -82,6 +83,7 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		pack.addProvider(JukeboxSongGenerator::new);
 		pack.addProvider(MagicPaintingVariantGenerator::new);
 		pack.addProvider(NoiseSettingsGenerator::new);
+		pack.addProvider(PlacedFeatureGenerator::new);
 		pack.addProvider(RestrictionGenerator::new);
 		pack.addProvider(StructureGenerator::new);
 		pack.addProvider(StructureSetGenerator::new);

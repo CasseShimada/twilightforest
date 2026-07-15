@@ -26,7 +26,7 @@
     },
     {
       "type": "minecraft:heightmap",
-      "heightmap": "OCEAN_FLOOR"
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES"
     },
     {
       "type": "twilightforest:no_structure",
@@ -35,6 +35,18 @@
       "occupies_underground": false,
       "occupies_vegetation": false,
       "structures_allowed": []
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:would_survive",
+        "state": {
+          "Name": "twilightforest:darkwood_sapling",
+          "Properties": {
+            "stage": "0"
+          }
+        }
+      }
     },
     {
       "type": "minecraft:biome"
