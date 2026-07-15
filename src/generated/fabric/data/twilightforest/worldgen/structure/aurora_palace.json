@@ -1,65 +1,39 @@
 {
-  "type": "twilightforest:lich_tower",
-  "adjust_structure_elevation": true,
+  "type": "twilightforest:aurora_palace",
+  "adjust_structure_elevation": false,
   "advancements_required": [
-    "twilightforest:progress_naga"
+    "twilightforest:progress_yeti"
   ],
   "allow_biome_surface_decorations": false,
   "allow_biome_underground_decorations": true,
-  "allow_biome_vegetation": false,
+  "allow_biome_vegetation": true,
   "ambient_spawns": [],
-  "biomes": "#twilightforest:valid_lich_tower_biomes",
-  "chunk_clearance_radius": 0.0,
+  "biomes": "#twilightforest:valid_aurora_palace_biomes",
+  "chunk_clearance_radius": 2.0,
   "hint_item": {
-    "name": "lichtower",
-    "pages": 4
+    "name": "icetower",
+    "pages": 3
   },
   "hint_mob": "twilightforest:kobold",
   "labelled_monster_spawns": {
     "0": [
       {
-        "type": "twilightforest:rising_zombie",
-        "maxCount": 2,
-        "minCount": 1,
-        "weight": 2
-      }
-    ],
-    "1": [
-      {
-        "type": "minecraft:zombie",
+        "type": "twilightforest:snow_guardian",
         "maxCount": 2,
         "minCount": 1,
         "weight": 10
       },
       {
-        "type": "minecraft:skeleton",
+        "type": "twilightforest:stable_ice_core",
         "maxCount": 2,
         "minCount": 1,
         "weight": 10
       },
       {
-        "type": "minecraft:creeper",
-        "maxCount": 1,
-        "minCount": 1,
-        "weight": 1
-      },
-      {
-        "type": "minecraft:enderman",
+        "type": "twilightforest:unstable_ice_core",
         "maxCount": 2,
         "minCount": 1,
-        "weight": 1
-      },
-      {
-        "type": "twilightforest:death_tome",
-        "maxCount": 3,
-        "minCount": 2,
-        "weight": 10
-      },
-      {
-        "type": "minecraft:witch",
-        "maxCount": 1,
-        "minCount": 1,
-        "weight": 1
+        "weight": 5
       }
     ]
   },
@@ -98,7 +72,6 @@
     }
   },
   "step": "surface_structures",
-  "structure_icon": "twilightforest:lich_tower",
-  "terrain_adaptation": "beard_thin",
+  "structure_icon": "twilightforest:aurora_palace",
   "water_spawns": []
 }

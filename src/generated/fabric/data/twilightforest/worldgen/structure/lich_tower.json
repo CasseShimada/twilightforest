@@ -1,45 +1,47 @@
 {
-  "type": "twilightforest:labyrinth",
-  "adjust_structure_elevation": false,
+  "type": "twilightforest:lich_tower",
+  "adjust_structure_elevation": true,
   "advancements_required": [
-    "twilightforest:progress_lich"
+    "twilightforest:progress_naga"
   ],
-  "allow_biome_surface_decorations": true,
-  "allow_biome_underground_decorations": false,
-  "allow_biome_vegetation": true,
+  "allow_biome_surface_decorations": false,
+  "allow_biome_underground_decorations": true,
+  "allow_biome_vegetation": false,
   "ambient_spawns": [],
-  "biomes": "#twilightforest:valid_labyrinth_biomes",
-  "chunk_clearance_radius": 3.0,
+  "biomes": "#twilightforest:valid_lich_tower_biomes",
+  "chunk_clearance_radius": 0.0,
   "hint_item": {
-    "name": "labyrinth",
-    "pages": 5
+    "name": "lichtower",
+    "pages": 4
   },
   "hint_mob": "twilightforest:kobold",
   "labelled_monster_spawns": {
     "0": [
       {
-        "type": "twilightforest:minotaur",
-        "maxCount": 3,
-        "minCount": 2,
-        "weight": 20
+        "type": "twilightforest:rising_zombie",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 2
+      }
+    ],
+    "1": [
+      {
+        "type": "minecraft:zombie",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 10
       },
       {
-        "type": "minecraft:cave_spider",
+        "type": "minecraft:skeleton",
         "maxCount": 2,
         "minCount": 1,
         "weight": 10
       },
       {
         "type": "minecraft:creeper",
-        "maxCount": 2,
+        "maxCount": 1,
         "minCount": 1,
-        "weight": 10
-      },
-      {
-        "type": "twilightforest:maze_slime",
-        "maxCount": 4,
-        "minCount": 2,
-        "weight": 10
+        "weight": 1
       },
       {
         "type": "minecraft:enderman",
@@ -48,22 +50,16 @@
         "weight": 1
       },
       {
-        "type": "twilightforest:fire_beetle",
-        "maxCount": 2,
-        "minCount": 1,
+        "type": "twilightforest:death_tome",
+        "maxCount": 3,
+        "minCount": 2,
         "weight": 10
       },
       {
-        "type": "twilightforest:slime_beetle",
-        "maxCount": 2,
-        "minCount": 1,
-        "weight": 10
-      },
-      {
-        "type": "twilightforest:pinch_beetle",
+        "type": "minecraft:witch",
         "maxCount": 1,
         "minCount": 1,
-        "weight": 10
+        "weight": 1
       }
     ]
   },
@@ -101,8 +97,8 @@
       "spawns": []
     }
   },
-  "step": "underground_structures",
-  "structure_icon": "twilightforest:labyrinth",
-  "terrain_adaptation": "bury",
+  "step": "surface_structures",
+  "structure_icon": "twilightforest:lich_tower",
+  "terrain_adaptation": "beard_thin",
   "water_spawns": []
 }

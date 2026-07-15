@@ -1,41 +1,25 @@
 {
-  "type": "twilightforest:aurora_palace",
+  "type": "twilightforest:final_castle",
   "adjust_structure_elevation": false,
   "advancements_required": [
-    "twilightforest:progress_yeti"
+    "twilightforest:progress_troll"
   ],
   "allow_biome_surface_decorations": false,
   "allow_biome_underground_decorations": true,
   "allow_biome_vegetation": true,
   "ambient_spawns": [],
-  "biomes": "#twilightforest:valid_aurora_palace_biomes",
-  "chunk_clearance_radius": 2.0,
+  "biomes": "#twilightforest:valid_final_castle_biomes",
+  "chunk_clearance_radius": 4.0,
   "hint_item": {
-    "name": "icetower",
-    "pages": 3
+    "name": "unknown",
+    "pages": 2
   },
   "hint_mob": "twilightforest:kobold",
   "labelled_monster_spawns": {
-    "0": [
-      {
-        "type": "twilightforest:snow_guardian",
-        "maxCount": 2,
-        "minCount": 1,
-        "weight": 10
-      },
-      {
-        "type": "twilightforest:stable_ice_core",
-        "maxCount": 2,
-        "minCount": 1,
-        "weight": 10
-      },
-      {
-        "type": "twilightforest:unstable_ice_core",
-        "maxCount": 2,
-        "minCount": 1,
-        "weight": 5
-      }
-    ]
+    "0": [],
+    "1": [],
+    "2": [],
+    "3": []
   },
   "spawn_overrides": {
     "ambient": {
@@ -72,6 +56,7 @@
     }
   },
   "step": "surface_structures",
-  "structure_icon": "twilightforest:aurora_palace",
+  "structure_icon": "twilightforest:final_castle",
+  "terrain_adaptation": "beard_box",
   "water_spawns": []
 }

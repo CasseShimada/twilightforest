@@ -1,19 +1,31 @@
 {
-  "type": "twilightforest:hydra_lair",
+  "type": "twilightforest:yeti_cave",
   "adjust_structure_elevation": false,
   "advancements_required": [
-    "twilightforest:progress_labyrinth"
+    "twilightforest:progress_lich"
   ],
-  "allow_biome_surface_decorations": false,
+  "allow_biome_surface_decorations": true,
   "allow_biome_underground_decorations": false,
   "allow_biome_vegetation": true,
-  "biomes": "#twilightforest:valid_hydra_lair_biomes",
+  "ambient_spawns": [],
+  "biomes": "#twilightforest:valid_yeti_cave_biomes",
+  "center_in_chunk": false,
   "chunk_clearance_radius": 2.0,
   "hint_item": {
-    "name": "hydralair",
-    "pages": 4
+    "name": "yeticave",
+    "pages": 3
   },
   "hint_mob": "twilightforest:kobold",
+  "labelled_monster_spawns": {
+    "0": [
+      {
+        "type": "twilightforest:yeti",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 5
+      }
+    ]
+  },
   "spawn_overrides": {
     "ambient": {
       "bounding_box": "full",
@@ -48,7 +60,8 @@
       "spawns": []
     }
   },
-  "speleothem_config": "twilightforest:hydra_lair",
+  "speleothem_config": "twilightforest:yeti_cave",
   "step": "surface_structures",
-  "structure_icon": "twilightforest:hydra_lair"
+  "structure_icon": "twilightforest:yeti_lair",
+  "water_spawns": []
 }
