@@ -28,7 +28,6 @@ import static twilightforest.entity.MagicPaintingVariant.Layer.Parallax;
 
 public class MagicPaintingVariants {
 	public static final Map<Identifier, Pair<String, String>> MAGIC_PAINTING_LANG_HELPER = new HashMap<>();
-	public static final Map<Identifier, MagicPaintingVariant> MAGIC_PAINTING_ATLAS_HELPER = new HashMap<>();
 
 	public static final Codec<Holder<MagicPaintingVariant>> CODEC = RegistryFileCodec.create(TFRegistries.Keys.MAGIC_PAINTINGS, MagicPaintingVariant.CODEC, false);
 	public static final StreamCodec<? super RegistryFriendlyByteBuf, Holder<MagicPaintingVariant>> STREAM_CODEC = ByteBufCodecs.holderRegistry(TFRegistries.Keys.MAGIC_PAINTINGS);
@@ -117,7 +116,6 @@ public class MagicPaintingVariants {
 	private static void register(BootstrapContext<MagicPaintingVariant> context, ResourceKey<MagicPaintingVariant> key, String title, String author, int width, int height, Identifier backSprite, List<Layer> layers) {
 		Component authorComponent = Component.translatable(key.identifier().toLanguageKey("magic_painting", "author"));
 		MagicPaintingVariant variant = new MagicPaintingVariant(width * 16, height * 16, layers, authorComponent, backSprite);
-		MAGIC_PAINTING_ATLAS_HELPER.put(key.identifier(), variant);
 		MAGIC_PAINTING_LANG_HELPER.put(key.identifier(), Pair.of(title, author));
 		context.register(key, variant);
 	}
