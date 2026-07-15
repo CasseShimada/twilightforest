@@ -12,6 +12,7 @@ import twilightforest.datagen.data.registries.BiomeGenerator;
 import twilightforest.datagen.data.registries.BiomeTerrainDataGenerator;
 import twilightforest.datagen.data.registries.ChunkBlanketProcessorGenerator;
 import twilightforest.datagen.data.registries.ConfiguredCarverGenerator;
+import twilightforest.datagen.data.registries.ConfiguredFeatureGenerator;
 import twilightforest.datagen.data.registries.DamageTypeGenerator;
 import twilightforest.datagen.data.registries.DensityFunctionGenerator;
 import twilightforest.datagen.data.registries.DimensionGenerator;
@@ -71,6 +72,7 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		pack.addProvider(BiomeTerrainDataGenerator::new);
 		pack.addProvider(ChunkBlanketProcessorGenerator::new);
 		pack.addProvider(ConfiguredCarverGenerator::new);
+		pack.addProvider(ConfiguredFeatureGenerator::new);
 		pack.addProvider(DamageTypeGenerator::new);
 		pack.addProvider(DensityFunctionGenerator::new);
 		pack.addProvider(DimensionGenerator::new);
