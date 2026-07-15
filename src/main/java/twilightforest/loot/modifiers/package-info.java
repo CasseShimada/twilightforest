@@ -1,9 +1,0 @@
-@FieldsAreNonnullByDefault
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
-package twilightforest.loot.modifiers;
-
-import twilightforest.util.annotation.FieldsAreNonnullByDefault;
-import twilightforest.util.annotation.MethodsReturnNonnullByDefault;
-
-import javax.annotation.ParametersAreNonnullByDefault;
