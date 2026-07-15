@@ -6,6 +6,7 @@ import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import twilightforest.TFRegistries;
 import twilightforest.TwilightForestMod;
+import twilightforest.datagen.data.DataMapGenerator;
 import twilightforest.datagen.data.registries.BannerPatternGenerator;
 import twilightforest.datagen.data.registries.BiomeLayerStackGenerator;
 import twilightforest.datagen.data.registries.BiomeGenerator;
@@ -67,6 +68,7 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 	@Override
 	public void onInitializeDataGenerator(FabricDataGenerator dataGenerator) {
 		FabricDataGenerator.Pack pack = dataGenerator.createPack();
+		pack.addProvider(DataMapGenerator::new);
 		pack.addProvider(BannerPatternGenerator::new);
 		pack.addProvider(BiomeGenerator::new);
 		pack.addProvider(BiomeLayerStackGenerator::new);
