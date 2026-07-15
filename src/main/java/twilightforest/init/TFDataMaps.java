@@ -98,18 +98,18 @@ public final class TFDataMaps {
 		}
 	}
 
-	private static final class ReloadedDataMap<T> {
+	static final class ReloadedDataMap<T> {
 		private final Identifier id;
 		private final Codec<T> codec;
 		private final Map<Identifier, T> values = new HashMap<>();
 
-		private ReloadedDataMap(Identifier id, Codec<T> codec) {
+		ReloadedDataMap(Identifier id, Codec<T> codec) {
 			this.id = id;
 			this.codec = codec;
 		}
 
 		@Nullable
-		private T get(Identifier key) {
+		T get(Identifier key) {
 			return this.values.get(key);
 		}
 
@@ -117,34 +117,41 @@ public final class TFDataMaps {
 			this.values.clear();
 		}
 
-		private void load(ResourceManager manager) {
-			Resource resource = manager.getResource(this.id).orElse(null);
-			if (resource == null) {
+		void load(ResourceManager manager) {
+			List<Resource> resources = manager.getResourceStack(this.id);
+			if (resources.isEmpty()) {
 				TwilightForestMod.LOGGER.warn("Missing data map resource {}", this.id);
 				return;
 			}
 
+			resources.forEach(this::load);
+		}
+
+		private void load(Resource resource) {
 			try (Reader reader = resource.openAsReader()) {
 				JsonObject root = JsonParser.parseReader(reader).getAsJsonObject();
 				JsonObject entries = root.getAsJsonObject("values");
 				if (entries == null) {
-					TwilightForestMod.LOGGER.warn("Data map {} has no values object", this.id);
+					TwilightForestMod.LOGGER.warn("Data map {} from pack {} has no values object", this.id, resource.sourcePackId());
 					return;
+				}
+				if (root.has("replace") && root.get("replace").getAsBoolean()) {
+					this.clear();
 				}
 
 				for (Map.Entry<String, JsonElement> entry : entries.entrySet()) {
 					Identifier key = Identifier.tryParse(entry.getKey());
 					if (key == null) {
-						TwilightForestMod.LOGGER.warn("Invalid data map key {} in {}", entry.getKey(), this.id);
+						TwilightForestMod.LOGGER.warn("Invalid data map key {} in {} from pack {}", entry.getKey(), this.id, resource.sourcePackId());
 						continue;
 					}
 
 					DataResult<T> result = this.codec.parse(JsonOps.INSTANCE, entry.getValue());
-					result.resultOrPartial(error -> TwilightForestMod.LOGGER.warn("Failed to parse data map {} entry {}: {}", this.id, key, error))
+					result.resultOrPartial(error -> TwilightForestMod.LOGGER.warn("Failed to parse data map {} entry {} from pack {}: {}", this.id, key, resource.sourcePackId(), error))
 						.ifPresent(value -> this.values.put(key, value));
 				}
 			} catch (Exception e) {
-				TwilightForestMod.LOGGER.error("Failed reading data map {}", this.id, e);
+				TwilightForestMod.LOGGER.error("Failed reading data map {} from pack {}", this.id, resource.sourcePackId(), e);
 			}
 		}
 	}
