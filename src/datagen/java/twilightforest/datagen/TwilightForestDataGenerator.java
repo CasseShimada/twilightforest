@@ -13,6 +13,7 @@ import twilightforest.datagen.data.registries.ChunkBlanketProcessorGenerator;
 import twilightforest.datagen.data.registries.ConfiguredCarverGenerator;
 import twilightforest.datagen.data.registries.DamageTypeGenerator;
 import twilightforest.datagen.data.registries.DensityFunctionGenerator;
+import twilightforest.datagen.data.registries.DimensionGenerator;
 import twilightforest.datagen.data.registries.DimensionTypeGenerator;
 import twilightforest.datagen.data.registries.DwarfRabbitVariantGenerator;
 import twilightforest.datagen.data.registries.EnchantmentGenerator;
@@ -67,6 +68,7 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		pack.addProvider(ConfiguredCarverGenerator::new);
 		pack.addProvider(DamageTypeGenerator::new);
 		pack.addProvider(DensityFunctionGenerator::new);
+		pack.addProvider(DimensionGenerator::new);
 		pack.addProvider(DimensionTypeGenerator::new);
 		pack.addProvider(DwarfRabbitVariantGenerator::new);
 		pack.addProvider(EnchantmentGenerator::new);
@@ -98,6 +100,7 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		registryBuilder.add(Registries.CONFIGURED_FEATURE, TFConfiguredFeatures::bootstrap);
 		registryBuilder.add(Registries.DAMAGE_TYPE, TFDamageTypes::bootstrap);
 		registryBuilder.add(Registries.DENSITY_FUNCTION, TFDensityFunctions::bootstrap);
+		registryBuilder.add(Registries.LEVEL_STEM, TFDimensionData::bootstrapStem);
 		registryBuilder.add(Registries.DIMENSION_TYPE, TFDimensionData::bootstrapType);
 		registryBuilder.add(Registries.ENCHANTMENT, TFEnchantments::bootstrap);
 		registryBuilder.add(Registries.PLACED_FEATURE, TFPlacedFeatures::bootstrap);
