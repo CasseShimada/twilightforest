@@ -87,7 +87,8 @@ public class TFDimensionData {
 
 	public static NoiseGeneratorSettings makeNoiseSettings(BootstrapContext<NoiseGeneratorSettings> context, boolean skylight) {
 		HolderGetter<DensityFunction> densityFunctions = context.lookup(Registries.DENSITY_FUNCTION);
-		DensityFunction finalDensity = new DensityFunctions.HolderHolder(densityFunctions.getOrThrow(skylight ? TFDensityFunctions.SKYLIGHT_TERRAIN : TFDensityFunctions.FORESTED_TERRAIN));
+		DensityFunction terrainDensity = new DensityFunctions.HolderHolder(densityFunctions.getOrThrow(skylight ? TFDensityFunctions.SKYLIGHT_TERRAIN : TFDensityFunctions.FORESTED_TERRAIN));
+		DensityFunction finalDensity = skylight ? terrainDensity : DensityFunctions.add(terrainDensity, StructureDensityMarker.INSTANCE);
 
 		NoiseSettings tfNoise = NoiseSettings.create(
 			-32, //TODO Deliberate over this. For now it'll be -32
@@ -111,7 +112,7 @@ public class TFDimensionData {
 				DensityFunctions.zero(),
 				DensityFunctions.zero(),
 				DensityFunctions.zero(),
-				finalDensity,
+				DensityFunctions.zero(),
 				finalDensity,
 				DensityFunctions.zero(),
 				DensityFunctions.zero(),
@@ -149,5 +150,24 @@ public class TFDimensionData {
 		);
 
 		context.register(TWILIGHT_LEVEL_STEM, stem);
+	}
+
+	private enum StructureDensityMarker implements DensityFunctions.BeardifierOrMarker {
+		INSTANCE;
+
+		@Override
+		public double compute(DensityFunction.FunctionContext context) {
+			return 0.0;
+		}
+
+		@Override
+		public double minValue() {
+			return 0.0;
+		}
+
+		@Override
+		public double maxValue() {
+			return 0.0;
+		}
 	}
 }

@@ -18,6 +18,7 @@ import twilightforest.datagen.data.registries.DwarfRabbitVariantGenerator;
 import twilightforest.datagen.data.registries.EnchantmentGenerator;
 import twilightforest.datagen.data.registries.JukeboxSongGenerator;
 import twilightforest.datagen.data.registries.MagicPaintingVariantGenerator;
+import twilightforest.datagen.data.registries.NoiseSettingsGenerator;
 import twilightforest.datagen.data.registries.RestrictionGenerator;
 import twilightforest.datagen.data.registries.StructureSpeleothemConfigGenerator;
 import twilightforest.datagen.data.registries.TinyBirdVariantGenerator;
@@ -71,6 +72,7 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		pack.addProvider(EnchantmentGenerator::new);
 		pack.addProvider(JukeboxSongGenerator::new);
 		pack.addProvider(MagicPaintingVariantGenerator::new);
+		pack.addProvider(NoiseSettingsGenerator::new);
 		pack.addProvider(RestrictionGenerator::new);
 		pack.addProvider(StructureSpeleothemConfigGenerator::new);
 		pack.addProvider(TinyBirdVariantGenerator::new);
@@ -101,6 +103,7 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		registryBuilder.add(Registries.PLACED_FEATURE, TFPlacedFeatures::bootstrap);
 		registryBuilder.add(Registries.BIOME, TFBiomes::bootstrap);
 		registryBuilder.add(Registries.JUKEBOX_SONG, TFJukeboxSongs::bootstrap);
+		registryBuilder.add(Registries.NOISE_SETTINGS, TFDimensionData::bootstrapNoise);
 		registryBuilder.add(Registries.STRUCTURE, TFStructures::bootstrap);
 		registryBuilder.add(Registries.TRIM_MATERIAL, TFTrimMaterials::bootstrap);
 		registryBuilder.add(TFRegistries.Keys.BIOME_STACK, BiomeLayerStack::bootstrap);

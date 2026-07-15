@@ -22,7 +22,6 @@
     "final_density": "twilightforest:skylight_terrain",
     "fluid_level_floodedness": 0.0,
     "fluid_level_spread": 0.0,
-    "initial_density_without_jaggedness": "twilightforest:skylight_terrain",
     "lava": 0.0,
     "preliminary_surface_level": 0.0,
     "ridges": 0.0,
@@ -61,9 +60,7 @@
         "type": "minecraft:condition",
         "if_true": {
           "type": "minecraft:biome",
-          "biome_is": [
-            "twilightforest:highlands"
-          ]
+          "biome_is": "twilightforest:highlands"
         },
         "then_run": {
           "type": "minecraft:condition",
@@ -200,9 +197,7 @@
         "type": "minecraft:condition",
         "if_true": {
           "type": "minecraft:biome",
-          "biome_is": [
-            "twilightforest:snowy_forest"
-          ]
+          "biome_is": "twilightforest:snowy_forest"
         },
         "then_run": {
           "type": "minecraft:sequence",
@@ -275,9 +270,7 @@
         "type": "minecraft:condition",
         "if_true": {
           "type": "minecraft:biome",
-          "biome_is": [
-            "twilightforest:glacier"
-          ]
+          "biome_is": "twilightforest:glacier"
         },
         "then_run": {
           "type": "minecraft:sequence",
