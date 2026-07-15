@@ -8,6 +8,7 @@ import twilightforest.TFRegistries;
 import twilightforest.TwilightForestMod;
 import twilightforest.datagen.data.registries.BannerPatternGenerator;
 import twilightforest.datagen.data.registries.BiomeLayerStackGenerator;
+import twilightforest.datagen.data.registries.BiomeGenerator;
 import twilightforest.datagen.data.registries.BiomeTerrainDataGenerator;
 import twilightforest.datagen.data.registries.ChunkBlanketProcessorGenerator;
 import twilightforest.datagen.data.registries.ConfiguredCarverGenerator;
@@ -65,6 +66,7 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 	public void onInitializeDataGenerator(FabricDataGenerator dataGenerator) {
 		FabricDataGenerator.Pack pack = dataGenerator.createPack();
 		pack.addProvider(BannerPatternGenerator::new);
+		pack.addProvider(BiomeGenerator::new);
 		pack.addProvider(BiomeLayerStackGenerator::new);
 		pack.addProvider(BiomeTerrainDataGenerator::new);
 		pack.addProvider(ChunkBlanketProcessorGenerator::new);

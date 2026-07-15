@@ -1,4 +1,29 @@
 {
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "block_search_extent": 8,
+        "offset": 2.0,
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 12000,
+        "min_delay": 1200,
+        "replace_current_music": true,
+        "sound": "twilightforest:music.twilightforest.twilight_forest"
+      }
+    },
+    "minecraft:visual/fog_color": "#003f21",
+    "minecraft:visual/sky_color": "#002112",
+    "minecraft:visual/water_fog_color": "#050533",
+    "minecraft:visual/water_fog_end_distance": {
+      "argument": 0.85,
+      "modifier": "multiply"
+    }
+  },
   "carvers": "twilightforest:tf_caves",
   "downfall": 0.9,
   "effects": {
@@ -100,30 +125,5 @@
     "water_ambient": [],
     "water_creature": []
   },
-  "temperature": 0.8,
-  "attributes": {
-    "minecraft:visual/water_fog_end_distance": {
-      "argument": 0.85,
-      "modifier": "multiply"
-    },
-    "minecraft:visual/fog_color": "#003f21",
-    "minecraft:visual/sky_color": "#002112",
-    "minecraft:visual/water_fog_color": "#050533",
-    "minecraft:audio/ambient_sounds": {
-      "mood": {
-        "block_search_extent": 8,
-        "offset": 2.0,
-        "sound": "minecraft:ambient.cave",
-        "tick_delay": 6000
-      }
-    },
-    "minecraft:audio/background_music": {
-      "default": {
-        "max_delay": 12000,
-        "min_delay": 1200,
-        "replace_current_music": true,
-        "sound": "twilightforest:music.twilightforest.twilight_forest"
-      }
-    }
-  }
+  "temperature": 0.8
 }

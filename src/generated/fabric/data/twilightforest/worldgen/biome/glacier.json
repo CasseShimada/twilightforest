@@ -1,4 +1,25 @@
 {
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "block_search_extent": 8,
+        "offset": 2.0,
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 12000,
+        "min_delay": 1200,
+        "replace_current_music": true,
+        "sound": "twilightforest:music.twilightforest.twilight_forest"
+      }
+    },
+    "minecraft:visual/fog_color": "#361f88",
+    "minecraft:visual/sky_color": "#130d28",
+    "minecraft:visual/water_fog_color": "#050533"
+  },
   "carvers": "twilightforest:tf_caves",
   "creature_spawn_probability": 0.15,
   "downfall": 0.1,
@@ -50,26 +71,5 @@
     "water_ambient": [],
     "water_creature": []
   },
-  "temperature": 0.08,
-  "attributes": {
-    "minecraft:visual/fog_color": "#361f88",
-    "minecraft:visual/sky_color": "#130d28",
-    "minecraft:visual/water_fog_color": "#050533",
-    "minecraft:audio/ambient_sounds": {
-      "mood": {
-        "block_search_extent": 8,
-        "offset": 2.0,
-        "sound": "minecraft:ambient.cave",
-        "tick_delay": 6000
-      }
-    },
-    "minecraft:audio/background_music": {
-      "default": {
-        "max_delay": 12000,
-        "min_delay": 1200,
-        "replace_current_music": true,
-        "sound": "twilightforest:music.twilightforest.twilight_forest"
-      }
-    }
-  }
+  "temperature": 0.08
 }
