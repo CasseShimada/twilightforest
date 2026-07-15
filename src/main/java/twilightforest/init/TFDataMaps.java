@@ -1,11 +1,10 @@
 package twilightforest.init;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -100,12 +99,12 @@ public final class TFDataMaps {
 
 	static final class ReloadedDataMap<T> {
 		private final Identifier id;
-		private final Codec<T> codec;
+		private final Codec<DataMapFile<T>> codec;
 		private final Map<Identifier, T> values = new HashMap<>();
 
 		ReloadedDataMap(Identifier id, Codec<T> codec) {
 			this.id = id;
-			this.codec = codec;
+			this.codec = DataMapFile.codec(codec);
 		}
 
 		@Nullable
@@ -129,30 +128,26 @@ public final class TFDataMaps {
 
 		private void load(Resource resource) {
 			try (Reader reader = resource.openAsReader()) {
-				JsonObject root = JsonParser.parseReader(reader).getAsJsonObject();
-				JsonObject entries = root.getAsJsonObject("values");
-				if (entries == null) {
-					TwilightForestMod.LOGGER.warn("Data map {} from pack {} has no values object", this.id, resource.sourcePackId());
-					return;
-				}
-				if (root.has("replace") && root.get("replace").getAsBoolean()) {
-					this.clear();
-				}
-
-				for (Map.Entry<String, JsonElement> entry : entries.entrySet()) {
-					Identifier key = Identifier.tryParse(entry.getKey());
-					if (key == null) {
-						TwilightForestMod.LOGGER.warn("Invalid data map key {} in {} from pack {}", entry.getKey(), this.id, resource.sourcePackId());
-						continue;
-					}
-
-					DataResult<T> result = this.codec.parse(JsonOps.INSTANCE, entry.getValue());
-					result.resultOrPartial(error -> TwilightForestMod.LOGGER.warn("Failed to parse data map {} entry {} from pack {}: {}", this.id, key, resource.sourcePackId(), error))
-						.ifPresent(value -> this.values.put(key, value));
-				}
+				DataResult<DataMapFile<T>> result = this.codec.parse(JsonOps.INSTANCE, JsonParser.parseReader(reader));
+				result.resultOrPartial(error -> TwilightForestMod.LOGGER.warn("Failed to parse data map {} from pack {}: {}", this.id, resource.sourcePackId(), error))
+					.ifPresent(file -> {
+						if (file.replace()) {
+							this.clear();
+						}
+						this.values.putAll(file.values());
+					});
 			} catch (Exception e) {
 				TwilightForestMod.LOGGER.error("Failed reading data map {} from pack {}", this.id, resource.sourcePackId(), e);
 			}
+		}
+	}
+
+	private record DataMapFile<T>(boolean replace, Map<Identifier, T> values) {
+		private static <T> Codec<DataMapFile<T>> codec(Codec<T> valueCodec) {
+			return RecordCodecBuilder.create(instance -> instance.group(
+				Codec.BOOL.optionalFieldOf("replace", false).forGetter(DataMapFile::replace),
+				Codec.unboundedMap(Identifier.CODEC, valueCodec).fieldOf("values").forGetter(DataMapFile::values)
+			).apply(instance, DataMapFile::new));
 		}
 	}
 }
