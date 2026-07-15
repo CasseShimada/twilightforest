@@ -10,6 +10,7 @@ import twilightforest.datagen.assets.AtlasGenerator;
 import twilightforest.datagen.assets.EquipmentAssetsGenerator;
 import twilightforest.datagen.assets.ParticleGenerator;
 import twilightforest.datagen.data.DataMapGenerator;
+import twilightforest.datagen.data.custom.QuestGenerator;
 import twilightforest.datagen.data.custom.StalactiteGenerator;
 import twilightforest.datagen.data.registries.BannerPatternGenerator;
 import twilightforest.datagen.data.registries.BiomeLayerStackGenerator;
@@ -76,6 +77,7 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		pack.addProvider(EquipmentAssetsGenerator::new);
 		pack.addProvider(ParticleGenerator::new);
 		pack.addProvider(DataMapGenerator::new);
+		pack.addProvider(QuestGenerator::new);
 		pack.addProvider(StalactiteGenerator::new);
 		pack.addProvider(BannerPatternGenerator::new);
 		pack.addProvider(BiomeGenerator::new);
