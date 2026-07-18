@@ -55,6 +55,10 @@ public class WroughtIronFenceBlock extends Block implements SimpleWaterloggedBlo
 		this.registerDefaultState(this.getStateDefinition().any().setValue(POST, PostState.POST).setValue(EAST_FENCE, FenceSide.NONE).setValue(NORTH_FENCE, FenceSide.NONE).setValue(SOUTH_FENCE, FenceSide.NONE).setValue(WEST_FENCE, FenceSide.NONE).setValue(WATERLOGGED, false));
 	}
 
+	public static boolean supportsLeashKnot(BlockState state) {
+		return state.getBlock() instanceof WroughtIronFenceBlock && state.getValue(POST) != PostState.NONE;
+	}
+
 	private static boolean isConnected(BlockState state, Property<FenceSide> side) {
 		return state.getValue(side) != FenceSide.NONE;
 	}

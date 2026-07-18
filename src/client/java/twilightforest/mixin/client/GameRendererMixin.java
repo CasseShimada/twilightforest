@@ -1,8 +1,8 @@
 package twilightforest.mixin.client;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.Camera;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import twilightforest.client.event.ClientEvents;
+import twilightforest.client.event.TravellersClientEvents;
 import twilightforest.config.TFConfig;
 import twilightforest.item.EnderBowItem;
 import twilightforest.item.IceBowItem;
@@ -19,32 +20,33 @@ import twilightforest.item.SeekerBowItem;
 import twilightforest.item.TripleBowItem;
 import twilightforest.mixin.client.accessor.CameraAccessor;
 
-@Mixin(GameRenderer.class)
+@Mixin(Camera.class)
 public class GameRendererMixin {
-	@Inject(method = "getFov", at = @At("RETURN"), cancellable = true)
-	private void twilightforest$adjustBowFov(Camera camera, float partialTick, boolean useFovSetting, CallbackInfoReturnable<Float> cir) {
+	@Inject(method = "calculateFov", at = @At("RETURN"), cancellable = true)
+	private void twilightforest$adjustFov(float partialTick, CallbackInfoReturnable<Float> cir) {
+		Camera camera = (Camera) (Object) this;
 		Entity entity = camera.entity();
-		if (!(entity instanceof Player player) || !player.isUsingItem()) {
+		if (!(entity instanceof Player player)) {
 			return;
 		}
-		if (!(player.getUseItem().getItem() instanceof TripleBowItem
+
+		float current = cir.getReturnValueF();
+		if (player.isUsingItem() && (player.getUseItem().getItem() instanceof TripleBowItem
 			|| player.getUseItem().getItem() instanceof EnderBowItem
 			|| player.getUseItem().getItem() instanceof IceBowItem
 			|| player.getUseItem().getItem() instanceof SeekerBowItem)) {
-			return;
+			float useProgress = player.getTicksUsingItem() / 20.0F;
+			useProgress = useProgress > 1.0F ? 1.0F : useProgress * useProgress;
+			current = (float) Mth.lerp(Minecraft.getInstance().options.fovEffectScale().get(),
+				1.0F, current * (1.0F - useProgress * 0.15F));
 		}
-
-		float f = player.getTicksUsingItem() / 20.0F;
-		f = f > 1.0F ? 1.0F : f * f;
-		float current = cir.getReturnValueF();
-		float scaled = (float) Mth.lerp(Minecraft.getInstance().options.fovEffectScale().get(), 1.0F, (current * (1.0F - f * 0.15F)));
-		cir.setReturnValue(scaled);
+		cir.setReturnValue(TravellersClientEvents.modifyFov(current, player));
 	}
 
-	@Inject(method = "updateCamera", at = @At("TAIL"))
-	private void twilightforest$shakeCamera(Camera camera, CallbackInfo ci) {
-		Minecraft mc = Minecraft.getInstance();
-		if (!TFConfig.firstPersonEffects || mc.isPaused() || mc.player == null) {
+	@Inject(method = "update", at = @At("TAIL"))
+	private void twilightforest$shakeCamera(DeltaTracker deltaTracker, CallbackInfo ci) {
+		Minecraft minecraft = Minecraft.getInstance();
+		if (!TFConfig.firstPersonEffects || minecraft.isPaused() || minecraft.player == null) {
 			ClientEvents.consumeShakeIntensity();
 			return;
 		}
@@ -54,10 +56,9 @@ public class GameRendererMixin {
 			return;
 		}
 
-		float yaw = camera.yRot();
-		float pitch = camera.xRot();
-		float yawOffset = (mc.player.getRandom().nextFloat() * 2F - 1F) * intensity;
-		float pitchOffset = (mc.player.getRandom().nextFloat() * 2F - 1F) * intensity;
-		((CameraAccessor) camera).twilightforest$setRotation(yaw + yawOffset, pitch + pitchOffset);
+		Camera camera = (Camera) (Object) this;
+		float yawOffset = (minecraft.player.getRandom().nextFloat() * 2.0F - 1.0F) * intensity;
+		float pitchOffset = (minecraft.player.getRandom().nextFloat() * 2.0F - 1.0F) * intensity;
+		((CameraAccessor) camera).twilightforest$setRotation(camera.yRot() + yawOffset, camera.xRot() + pitchOffset);
 	}
 }

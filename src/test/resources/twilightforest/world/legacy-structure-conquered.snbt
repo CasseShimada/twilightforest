@@ -1,0 +1,19 @@
+{
+  DataVersion: 4189,
+  data: {
+    entries: [
+      {
+        structure: "twilightforest:naga_courtyard",
+        chunk_x: 7,
+        chunk_z: -9,
+        conquered: 1b
+      },
+      {
+        structure: "twilightforest:lich_tower",
+        chunk_x: -12,
+        chunk_z: 18,
+        conquered: 0b
+      }
+    ]
+  }
+}

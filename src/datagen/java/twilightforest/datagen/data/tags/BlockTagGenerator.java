@@ -74,6 +74,7 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 		this.addPortalTags();
 		this.addGameplayBehaviorTags();
 		this.addWorldgenBehaviorTags();
+		this.addBushTags();
 		this.addTreeTags();
 		this.addLogTags();
 		this.addHollowLogTags();
@@ -380,6 +381,40 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 			.addTag(BlockTags.LEAVES);
 	}
 
+	private void addBushTags() {
+		this.builder(TFBlockTags.OREBERRY_BUSHES_SURVIVE)
+			.addOptionalTag(ConventionalBlockTags.STONES)
+			.addOptionalTag(BlockTags.STONE_BRICKS)
+			.addOptionalTag(ConventionalBlockTags.ORES_IN_GROUND_STONE)
+			.addOptionalTag(ConventionalBlockTags.ORES_IN_GROUND_DEEPSLATE)
+			.addOptionalTag(ConventionalBlockTags.ORES_IN_GROUND_NETHERRACK)
+			.addOptionalTag(ConventionalBlockTags.COBBLESTONES)
+			.addOptionalTag(ConventionalBlockTags.NETHERRACKS)
+			.add(
+				key(TFBlocks.GIANT_COBBLESTONE),
+				key(Blocks.POLISHED_ANDESITE),
+				key(Blocks.POLISHED_DIORITE),
+				key(Blocks.POLISHED_GRANITE),
+				key(Blocks.SMOOTH_STONE),
+				key(Blocks.INFESTED_CHISELED_STONE_BRICKS),
+				key(Blocks.INFESTED_CRACKED_STONE_BRICKS),
+				key(Blocks.INFESTED_MOSSY_STONE_BRICKS),
+				key(Blocks.INFESTED_STONE_BRICKS)
+			);
+		this.builder(TFBlockTags.TF_BERRY_BUSHES_SURVIVE)
+			.addTag(BlockTags.DIRT)
+			.add(key(Blocks.SNOW_BLOCK));
+		this.builder(TFBlockTags.TF_BERRY_BUSHES_REPLACE)
+			.addOptionalTag(BlockTags.REPLACEABLE)
+			.addOptionalTag(BlockTags.FLOWERS)
+			.add(key(TFBlocks.MAYAPPLE));
+		this.builder(TFBlockTags.DARK_TOWER_BERRY_BUSHES_SURVIVE)
+			.addOptionalTag(ConventionalBlockTags.NETHERRACKS)
+			.addOptionalTag(ConventionalBlockTags.ORES_IN_GROUND_NETHERRACK)
+			.add(key(Blocks.BLACKSTONE), key(Blocks.SOUL_SAND), key(Blocks.SOUL_SOIL));
+		this.builder(TFBlockTags.DARK_TOWER_BERRY_BUSHES_DIE).addOptionalTag(BlockTags.NYLIUM);
+	}
+
 	private void addTreeTags() {
 		this.builder(BlockTags.LEAVES).add(
 			key(TFBlocks.RAINBOW_OAK_LEAVES),
@@ -596,6 +631,7 @@ public final class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvide
 			key(TFBlocks.VANGROVE_DRYING_RACK),
 			key(TFBlocks.BAMBOO_DRYING_RACK),
 			key(TFBlocks.CHERRY_DRYING_RACK),
+			key(TFBlocks.PALE_OAK_DRYING_RACK),
 			key(TFBlocks.TWILIGHT_OAK_DRYING_RACK),
 			key(TFBlocks.CANOPY_DRYING_RACK),
 			key(TFBlocks.MANGROVE_DRYING_RACK),

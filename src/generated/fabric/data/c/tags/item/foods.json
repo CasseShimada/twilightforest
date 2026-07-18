@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#c:foods/jerky",
+      "required": false
+    },
+    "twilightforest:gelatinous_slime_drop",
+    "twilightforest:gelatinous_maze_slime_drop",
+    "twilightforest:berry_medley",
+    "twilightforest:maze_wafer"
+  ]
+}

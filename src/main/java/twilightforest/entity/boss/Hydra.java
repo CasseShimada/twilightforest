@@ -51,6 +51,8 @@ public class Hydra extends BaseTFBoss implements TFMultipartEntity {
 	private static final int MAX_HEALTH = 360;
 	private static float HEADS_ACTIVITY_FACTOR = 0.3F;
 	public static final int MAX_HEADS = 7;
+	private static final int DEFAULT_ACTIVE_HEAD_COUNT = 3;
+	private static final int ALL_HEADS_MASK = (1 << MAX_HEADS) - 1;
 
 	private static final int SECONDARY_FLAME_CHANCE = 10;
 	private static final int SECONDARY_MORTAR_CHANCE = 16;
@@ -234,7 +236,10 @@ public class Hydra extends BaseTFBoss implements TFMultipartEntity {
 	@Override
 	public void readAdditionalSaveData(ValueInput input) {
 		super.readAdditionalSaveData(input);
-		this.activateHeadsOnLoad(input.getByteOr("NumHeads", (byte) 0));
+		boolean hasCurrentFormatMarker = input.list("HeadNames", Codec.STRING).isPresent();
+		byte defaultHeads = (byte) (hasCurrentFormatMarker ? (1 << DEFAULT_ACTIVE_HEAD_COUNT) - 1 : DEFAULT_ACTIVE_HEAD_COUNT);
+		byte savedHeads = input.read("NumHeads", Codec.BYTE).orElse(defaultHeads);
+		this.restoreHeadsOnLoad(decodeSavedHeadMask(savedHeads, hasCurrentFormatMarker));
 		List<String> names = new ArrayList<>();
 		for (String name : input.listOrEmpty("HeadNames", Codec.STRING)) {
 			names.add(name);
@@ -249,16 +254,23 @@ public class Hydra extends BaseTFBoss implements TFMultipartEntity {
 	}
 
 	/**
-	 * Activates heads based on a byte saved to nbt.
-	 * This allows all the same heads to activate on world reload as heads are randomly chosen when one is killed
+	 * Restores the full head activity mask saved by current versions. Historical versions used the same
+	 * {@code NumHeads} key for an active-head count; {@code HeadNames} distinguishes the current mask format.
 	 */
-	private void activateHeadsOnLoad(byte heads) {
+	private void restoreHeadsOnLoad(int headMask) {
 		for (int i = 0; i < MAX_HEADS; i++) {
-			if ((heads & 1 << i) != 0) {
-				this.hc[i].setNextState(HydraHeadContainer.State.IDLE);
-				this.hc[i].endCurrentAction();
-			}
+			this.hc[i].restoreActiveState((headMask & 1 << i) != 0);
 		}
+	}
+
+	static int decodeSavedHeadMask(byte savedHeads, boolean hasCurrentFormatMarker) {
+		int value = Byte.toUnsignedInt(savedHeads);
+		if (hasCurrentFormatMarker) {
+			return value & ALL_HEADS_MASK;
+		}
+
+		int legacyCount = Math.min(value, MAX_HEADS);
+		return legacyCount == 0 ? 0 : (1 << legacyCount) - 1;
 	}
 
 	// TODO modernize this more (old AI copypasta still kind of here)

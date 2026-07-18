@@ -1,0 +1,36 @@
+{
+  forge_1_20_1: {
+    EntityType: "twilightforest:death_tome",
+    MobSpawnsLeft: 5,
+    SpawnDelay: 400,
+    MaxPlayerDistance: 8
+  },
+  forge_clamped_remaining: {
+    EntityType: "twilightforest:death_tome",
+    MobSpawnsLeft: 14,
+    SpawnDelay: 240,
+    MaxPlayerDistance: 12
+  },
+  transition_missing_count: {
+    EntityType: "twilightforest:death_tome",
+    SpawnDelay: 400,
+    MaxPlayerDistance: 8
+  },
+  current_keys_take_precedence: {
+    Delay: 23s,
+    EntityType: "twilightforest:death_tome",
+    MobSpawnsLeft: 9,
+    SpawnDelay: 400,
+    MaxPlayerDistance: 8
+  },
+  incomplete_legacy: {
+    EntityType: "twilightforest:death_tome",
+    SpawnDelay: 400
+  },
+  invalid_delay: {
+    EntityType: "twilightforest:death_tome",
+    MobSpawnsLeft: 5,
+    SpawnDelay: 40000,
+    MaxPlayerDistance: 8
+  }
+}

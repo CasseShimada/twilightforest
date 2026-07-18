@@ -1,5 +1,6 @@
 package twilightforest.block.entity;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -194,12 +195,20 @@ public class GrowingBeanstalkBlockEntity extends BlockEntity {
 		output.putInt("ticker", this.ticker);
 		output.putInt("layer", this.layer);
 		output.putBoolean("isAreaClearEnough", this.isAreaClearEnough);
+		output.putBoolean("clear", this.isAreaClearEnough);
 		output.putInt("nextLeafY", this.nextLeafY);
+		output.putInt("next_leaf", this.nextLeafY);
 		output.putInt("yOffset", this.yOffset);
+		output.putInt("beardifierGroundDelta", this.yOffset);
+		output.putInt("y_offset", this.yOffset);
 		output.putFloat("cScale", this.cScale);
+		output.putFloat("spiral_scale", this.cScale);
 		output.putFloat("rScale", this.rScale);
+		output.putFloat("radius", this.rScale);
 		output.putInt("maxY", this.maxY);
+		output.putInt("max_y", this.maxY);
 		output.putInt("blocksSkipped", this.blocksSkipped);
+		output.putInt("blocks_skipped", this.blocksSkipped);
 	}
 
 	@Override
@@ -207,13 +216,51 @@ public class GrowingBeanstalkBlockEntity extends BlockEntity {
 		super.loadAdditional(input);
 		this.ticker = input.getIntOr("ticker", 0);
 		this.layer = input.getIntOr("layer", 0);
-		this.isAreaClearEnough = input.getBooleanOr("isAreaClearEnough", true);
-		this.nextLeafY = input.getIntOr("nextLeafY", 0);
-		this.yOffset = input.getIntOr("yOffset", 0);
-		this.cScale = input.getFloatOr("cScale", 0.0F);
-		this.rScale = input.getFloatOr("rScale", 0.0F);
-		this.maxY = input.getIntOr("maxY", 0);
-		this.blocksSkipped = input.getIntOr("blocksSkipped", 0);
+
+		PersistentState state = readPersistentState(input);
+		this.isAreaClearEnough = state.isAreaClearEnough();
+		this.nextLeafY = state.nextLeafY();
+		this.yOffset = state.yOffset();
+		this.cScale = state.cScale();
+		this.rScale = state.rScale();
+		this.maxY = state.maxY();
+		this.blocksSkipped = state.blocksSkipped();
+	}
+
+	static PersistentState readPersistentState(ValueInput input) {
+		return new PersistentState(
+			readBoolean(input, "isAreaClearEnough", "clear", true),
+			readInt(input, "nextLeafY", "next_leaf", 0),
+			input.read("yOffset", Codec.INT)
+				.or(() -> input.read("beardifierGroundDelta", Codec.INT))
+				.or(() -> input.read("y_offset", Codec.INT))
+				.orElse(100),
+			readFloat(input, "cScale", "spiral_scale", 0.1F),
+			readFloat(input, "rScale", "radius", 0.1F),
+			readInt(input, "maxY", "max_y", 175),
+			readInt(input, "blocksSkipped", "blocks_skipped", 0));
+	}
+
+	private static boolean readBoolean(ValueInput input, String legacyKey, String alternateKey, boolean defaultValue) {
+		return input.read(legacyKey, Codec.BOOL)
+			.or(() -> input.read(alternateKey, Codec.BOOL))
+			.orElse(defaultValue);
+	}
+
+	private static int readInt(ValueInput input, String legacyKey, String alternateKey, int defaultValue) {
+		return input.read(legacyKey, Codec.INT)
+			.or(() -> input.read(alternateKey, Codec.INT))
+			.orElse(defaultValue);
+	}
+
+	private static float readFloat(ValueInput input, String legacyKey, String alternateKey, float defaultValue) {
+		return input.read(legacyKey, Codec.FLOAT)
+			.or(() -> input.read(alternateKey, Codec.FLOAT))
+			.orElse(defaultValue);
+	}
+
+	record PersistentState(boolean isAreaClearEnough, int nextLeafY, int yOffset, float cScale, float rScale,
+						   int maxY, int blocksSkipped) {
 	}
 
 	public boolean isBeanstalkRumbling() {

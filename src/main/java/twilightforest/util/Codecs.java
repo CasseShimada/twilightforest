@@ -34,6 +34,12 @@ public final class Codecs {
 	public static final Codec<Direction> ONLY_HORIZONTAL = Direction.CODEC.comapFlatMap(direction -> direction.getAxis() != Direction.Axis.Y ? DataResult.success(direction) : DataResult.error(() -> "Horizontal direction only!", direction), Function.identity());
 	public static final Codec<Float> FLOAT_STRING = Codec.STRING.comapFlatMap(Codecs::parseString2Float, f -> Float.toString(f));
 	public static final Codec<Double> DOUBLE_STRING = Codec.STRING.comapFlatMap(Codecs::parseString2Double, f -> Double.toString(f));
+	public static final Codec<Character> CHARACTER_CODEC = Codec.STRING.comapFlatMap(
+		value -> value.length() == 1
+			? DataResult.success(value.charAt(0))
+			: DataResult.error(() -> "Expected exactly one character, received: " + value),
+		String::valueOf
+	);
 	public static final StreamCodec<ByteBuf, BoundingBox> BOX_STREAM_CODEC = new StreamCodec<>() {
 		@Override
 		public BoundingBox decode(ByteBuf buf) {

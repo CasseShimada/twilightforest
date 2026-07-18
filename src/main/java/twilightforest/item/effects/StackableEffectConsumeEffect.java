@@ -1,0 +1,96 @@
+package twilightforest.item.effects;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.consume_effects.ConsumeEffect;
+import net.minecraft.world.level.Level;
+import twilightforest.init.TFConsumeEffects;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class StackableEffectConsumeEffect implements ConsumeEffect {
+	public static final MapCodec<StackableEffectConsumeEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+		StackableEffectInstance.CODEC.listOf().fieldOf("effects").forGetter(effect -> effect.effects)
+	).apply(instance, StackableEffectConsumeEffect::new));
+
+	public static final StreamCodec<RegistryFriendlyByteBuf, StackableEffectConsumeEffect> STREAM_CODEC = StreamCodec.composite(
+		StackableEffectInstance.STREAM_CODEC.apply(ByteBufCodecs.list()), effect -> effect.effects,
+		StackableEffectConsumeEffect::new
+	);
+
+	private final List<StackableEffectInstance> effects;
+
+	private StackableEffectConsumeEffect(List<StackableEffectInstance> effects) {
+		this.effects = effects;
+	}
+
+	public static Builder builder() {
+		return new Builder();
+	}
+
+	@Override
+	public Type<? extends ConsumeEffect> getType() {
+		return TFConsumeEffects.STACKABLE_EFFECTS;
+	}
+
+	@Override
+	public boolean apply(Level level, ItemStack stack, LivingEntity user) {
+		boolean anyApplied = false;
+		for (StackableEffectInstance effect : this.effects) {
+			if (effect.chanceToApply() >= user.getRandom().nextFloat()) {
+				int currentDuration = 0;
+				MobEffectInstance activeEffect = user.getEffect(effect.effect());
+				if (activeEffect != null) {
+					currentDuration = activeEffect.getDuration();
+				}
+				anyApplied |= user.addEffect(new MobEffectInstance(effect.effect(), currentDuration + effect.extraDurationTicks(), effect.amplifier()));
+			}
+		}
+		return anyApplied;
+	}
+
+	public static class Builder {
+		private final List<StackableEffectInstance> effects = new ArrayList<>();
+
+		public Builder addEffect(Holder<MobEffect> effect, int extraDurationSeconds) {
+			this.effects.add(new StackableEffectInstance(effect, extraDurationSeconds * 20, 0, 1.0F));
+			return this;
+		}
+
+		public Builder addEffect(Holder<MobEffect> effect, int extraDurationSeconds, float chance) {
+			this.effects.add(new StackableEffectInstance(effect, extraDurationSeconds * 20, 0, chance));
+			return this;
+		}
+
+		public StackableEffectConsumeEffect build() {
+			return new StackableEffectConsumeEffect(List.copyOf(this.effects));
+		}
+	}
+
+	private record StackableEffectInstance(Holder<MobEffect> effect, int extraDurationTicks, int amplifier, float chanceToApply) {
+		private static final Codec<StackableEffectInstance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			MobEffect.CODEC.fieldOf("id").forGetter(StackableEffectInstance::effect),
+			Codec.INT.fieldOf("extra_duration").forGetter(StackableEffectInstance::extraDurationTicks),
+			Codec.INT.fieldOf("amplifier").forGetter(StackableEffectInstance::amplifier),
+			Codec.FLOAT.fieldOf("apply_chance").forGetter(StackableEffectInstance::chanceToApply)
+		).apply(instance, StackableEffectInstance::new));
+
+		private static final StreamCodec<RegistryFriendlyByteBuf, StackableEffectInstance> STREAM_CODEC = StreamCodec.composite(
+			MobEffect.STREAM_CODEC, StackableEffectInstance::effect,
+			ByteBufCodecs.INT, StackableEffectInstance::extraDurationTicks,
+			ByteBufCodecs.INT, StackableEffectInstance::amplifier,
+			ByteBufCodecs.FLOAT, StackableEffectInstance::chanceToApply,
+			StackableEffectInstance::new
+		);
+	}
+}

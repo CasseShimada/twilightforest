@@ -77,6 +77,14 @@ public class TFArmorMaterials {
 		map.put(ArmorType.BODY, 7);
 	}), 8, SoundEvents.ARMOR_EQUIP_GENERIC, 2.0F, 0.0F, TFItemTags.REPAIRS_ARCTIC_ARMOR, TFEquipmentAssets.ARCTIC);
 
+	public static final ArmorMaterial TRAVELLERS_GEAR = new ArmorMaterial(12, Util.make(new EnumMap<>(ArmorType.class), map -> {
+		map.put(ArmorType.BOOTS, 2);
+		map.put(ArmorType.LEGGINGS, 3);
+		map.put(ArmorType.CHESTPLATE, 4);
+		map.put(ArmorType.HELMET, 2);
+		map.put(ArmorType.BODY, 4);
+	}), 0, SoundEvents.ARMOR_EQUIP_GENERIC, 0.0F, 0.0F, TFItemTags.REPAIRS_TRAVELLERS_GEAR, TFEquipmentAssets.TRAVELLERS);
+
 	private static Holder<SoundEvent> sound(SoundEvent sound) {
 		return BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound);
 	}

@@ -33,6 +33,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.dimension.DimensionType;
+import twilightforest.TwilightForestMod;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
@@ -287,7 +288,21 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 
 	@Override
 	public int getPortalTransitionTime(ServerLevel level, Entity entity) {
-		return 60;
+		if (!(entity instanceof Player player)) {
+			return resolvePortalTransitionTime(false, false, 0, 0);
+		}
+		return resolvePortalTransitionTime(
+			true,
+			player.getAbilities().invulnerable,
+			level.getGameRules().get(TwilightForestMod.TF_PORTAL_DEFAULT_DELAY.get()),
+			level.getGameRules().get(TwilightForestMod.TF_PORTAL_CREATIVE_DELAY.get()));
+	}
+
+	static int resolvePortalTransitionTime(boolean player, boolean invulnerable, int defaultDelay, int creativeDelay) {
+		if (!player) {
+			return 0;
+		}
+		return invulnerable ? creativeDelay : defaultDelay;
 	}
 
 	@Override

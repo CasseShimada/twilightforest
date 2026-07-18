@@ -9,6 +9,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.SectionPos;
@@ -302,22 +303,30 @@ public class TFWeatherRenderer {
 				.addVertex((float) (dx - camera.x() - rainX + 0.5F), (float) (minY - camera.y()), (float) (dz - camera.z() - rainZ + 0.5F))
 				.setUv(0.0F + uFactor, minY * 0.25F + countFactor + vFactor)
 				.setColor(color[0], color[1], color[2], color[3])
-				.setLight(light);
+				.setLight(light)
+				.setOverlay(OverlayTexture.NO_OVERLAY)
+				.setNormal(0.0F, 1.0F, 0.0F);
 			consumer
 				.addVertex((float) (dx - camera.x() + rainX + 0.5F), (float) (minY - camera.y()), (float) (dz - camera.z() + rainZ + 0.5F))
 				.setUv(1.0F + uFactor, minY * 0.25F + countFactor + vFactor)
 				.setColor(color[0], color[1], color[2], color[3])
-				.setLight(light);
+				.setLight(light)
+				.setOverlay(OverlayTexture.NO_OVERLAY)
+				.setNormal(0.0F, 1.0F, 0.0F);
 			consumer
 				.addVertex((float) (dx - camera.x() + rainX + 0.5F), (float) (maxY - camera.y()), (float) (dz - camera.z() + rainZ + 0.5F))
 				.setUv(1.0F + uFactor, maxY * 0.25F + countFactor + vFactor)
 				.setColor(color[0], color[1], color[2], color[3])
-				.setLight(light);
+				.setLight(light)
+				.setOverlay(OverlayTexture.NO_OVERLAY)
+				.setNormal(0.0F, 1.0F, 0.0F);
 			consumer
 				.addVertex((float) (dx - camera.x() - rainX + 0.5F), (float) (maxY - camera.y()), (float) (dz - camera.z() - rainZ + 0.5F))
 				.setUv(0.0F + uFactor, maxY * 0.25F + countFactor + vFactor)
 				.setColor(color[0], color[1], color[2], color[3])
-				.setLight(light);
+				.setLight(light)
+				.setOverlay(OverlayTexture.NO_OVERLAY)
+				.setNormal(0.0F, 1.0F, 0.0F);
 		});
 	}
 

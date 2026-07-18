@@ -1,0 +1,9 @@
+{
+  "neoforge:attachments": {
+    "twilightforest:feather_fan_falling": 1b,
+    "twilightforest:has_double_jump": 1b,
+    "twilightforest:temporary_saved_forward_boost": 0.25d,
+    "twilightforest:is_controlled_falling": 1b,
+    "twilightforest:travellers_goggles_item_display": 0b
+  }
+}

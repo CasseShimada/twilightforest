@@ -10,6 +10,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import twilightforest.entity.boss.UrGhast;
 import twilightforest.events.HostileMountEvents;
+import twilightforest.events.TravellersGearEvents;
+import twilightforest.init.custom.TravellersModifiersManager;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin {
@@ -43,13 +45,23 @@ public abstract class EntityMixin {
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	private void twilightforest$hostileMountShiftKey(CallbackInfo ci) {
-		HostileMountEvents.enforcePassengerShiftKey((Entity) (Object) this);
+		Entity entity = (Entity) (Object) this;
+		HostileMountEvents.enforcePassengerShiftKey(entity);
+		TravellersGearEvents.onEntityTick(entity);
 	}
 
 	@Inject(method = "isInWaterOrRain", at = @At("RETURN"), cancellable = true)
 	private void twilightforest$allowUrGhastTearsToCountAsRain(CallbackInfoReturnable<Boolean> cir) {
 		if (!cir.getReturnValueZ() && UrGhast.isEntityInTantrumTears((Entity) (Object) this)) {
 			cir.setReturnValue(true);
+		}
+	}
+
+	@Inject(method = {"getBlockJumpFactor", "getBlockSpeedFactor"}, at = @At("RETURN"), cancellable = true)
+	private void twilightforest$unrestrainedBlockFactors(CallbackInfoReturnable<Float> cir) {
+		Entity entity = (Entity) (Object) this;
+		if (TravellersModifiersManager.isModifierActive(entity, TravellersModifiersManager.UNRESTRAINED_MODIFIER)) {
+			cir.setReturnValue(1.0F);
 		}
 	}
 }

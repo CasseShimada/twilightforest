@@ -1,0 +1,16 @@
+{
+  DataVersion: 4790,
+  data: {
+    dest: [
+      {
+        name: "twilightforest:twilight_forest",
+        links: [
+          {
+            column: {x: -56, z: 78},
+            portal: {time: 1122334455L, pos: 2233445566L}
+          }
+        ]
+      }
+    ]
+  }
+}

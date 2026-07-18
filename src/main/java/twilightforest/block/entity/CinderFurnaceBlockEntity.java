@@ -1,267 +1,233 @@
 package twilightforest.block.entity;
 
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LevelEvent;
-import net.minecraft.world.level.block.RotatedPillarBlock;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
+import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
-import twilightforest.block.CinderFurnaceBlock;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.FurnaceMenu;
 import twilightforest.init.TFBlockEntities;
 import twilightforest.init.TFBlocks;
 
-public class CinderFurnaceBlockEntity extends FurnaceBlockEntity {
+public class CinderFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 	private static final int SMELT_LOG_FACTOR = 10;
+	private static final Component DEFAULT_NAME = Component.translatable("block.twilightforest.cinder_furnace");
 
 	public CinderFurnaceBlockEntity(BlockPos pos, BlockState state) {
-		super(pos, state);
+		super(TFBlockEntities.CINDER_FURNACE, pos, state, RecipeType.SMELTING);
 	}
 
 	@Override
-	public BlockEntityType<?> getType() {
-		return TFBlockEntities.CINDER_FURNACE;
+	protected Component getDefaultName() {
+		return DEFAULT_NAME;
 	}
 
-//	// [VanillaCopy] of superclass, edits noted
-//	public static void tick(Level level, BlockPos pos, BlockState state, CinderFurnaceBlockEntity te) {
-//		boolean flag = te.isBurning();
-//		boolean flag1 = false;
-//
-//		if (te.isBurning()) {
-//			--te.litTime;
-//		}
-//
-//		if (!level.isClientSide()) {
-//			ItemStack itemstack = te.items.get(1);
-//
-//			if (te.isBurning() || !itemstack.isEmpty() && !te.items.get(0).isEmpty()) {
-//				RecipeHolder<?> recipe = level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(te.items.getFirst()), level).orElse(null);
-//				if (recipe != null && !te.isBurning() && te.canBurn(level, recipe.value())) {
-//					te.litTime = te.getBurnDuration(itemstack);
-//					te.litDuration = te.litTime;
-//
-//					if (te.isBurning()) {
-//						flag1 = true;
-//
-//						if (!itemstack.isEmpty()) {
-//							Item item = itemstack.getItem();
-//							itemstack.shrink(1);
-//
-//							if (itemstack.isEmpty()) {
-//								ItemStack item1 = item.getCraftingRemainingItem(itemstack);
-//								te.items.set(1, item1);
-//							}
-//						}
-//					}
-//				}
-//
-//				if (recipe != null && te.isBurning() && te.canBurn(level, recipe.value())) {
-//					// TF - cook faster
-//					te.cookingProgress += te.getCurrentSpeedMultiplier(level);
-//
-//					if (te.cookingProgress >= te.cookingTotalTime) { // TF - change to geq since we can increment by >1
-//						te.cookingProgress = 0;
-//						te.cookingTotalTime = te.getRecipeBurnTime(level);
-//						te.smeltItem(level, recipe.value());
-//						flag1 = true;
-//					}
-//				} else {
-//					te.cookingProgress = 0;
-//				}
-//			} else if (!te.isBurning() && te.cookingProgress > 0) {
-//				te.cookingProgress = Mth.clamp(te.cookingProgress - 2, 0, te.cookingTotalTime);
-//			}
-//
-//			if (flag != te.isBurning()) {
-//				flag1 = true;
-//				level.setBlock(pos, level.getBlockState(pos).setValue(CinderFurnaceBlock.LIT, te.isBurning()), 3); // TF - use our furnace
-//			}
-//
-//			// TF - occasionally cinderize nearby logs
-//			if (te.isBurning() && te.litTime % 5 == 0) {
-//				te.cinderizeNearbyLog(level, pos);
-//			}
-//		}
-//
-//		if (flag1) {
-//			te.setChanged();
-//		}
-//	}
-//
-//	// [VanillaCopy] of super
-//	private boolean isBurning() {
-//		return this.litTime > 0;
-//	}
-//
-//	// [VanillaCopy] of super, only using SMELTING IRecipeType
-//	protected int getRecipeBurnTime(Level level) {
-//		return level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(this.items.getFirst()), level).map(recipeHolder -> recipeHolder.value().getCookingTime()).orElse(200);
-//	}
-//
-//	@SuppressWarnings("deprecation")
-//	private void cinderizeNearbyLog(Level level, BlockPos origin) {
-//		RandomSource rand = level.getRandom();
-//
-//		int dx = rand.nextInt(2) - rand.nextInt(2);
-//		int dy = rand.nextInt(2) - rand.nextInt(2);
-//		int dz = rand.nextInt(2) - rand.nextInt(2);
-//		BlockPos pos = origin.offset(dx, dy, dz);
-//
-//		if (level.hasChunkAt(pos)) {
-//			BlockState nearbyBlock = level.getBlockState(pos);
-//
-//			if (!nearbyBlock.is(TFBlocks.CINDER_LOG) && nearbyBlock.is(BlockTags.LOGS)) {
-//				level.setBlock(pos, this.getCinderLog(dx, dy, dz), 2);
-//				level.levelEvent(LevelEvent.PARTICLES_MOBBLOCK_SPAWN, pos, 0);
-//				level.levelEvent(LevelEvent.PARTICLES_MOBBLOCK_SPAWN, pos, 0);
-//				level.playSound(null, pos, SoundEvents.FIRE_AMBIENT, SoundSource.BLOCKS, 1.0F, 1.0F);
-//			}
-//		}
-//	}
-//
-//	/**
-//	 * What meta should we set the log block with the specified offset to?
-//	 */
-//	private BlockState getCinderLog(int dx, int dy, int dz) {
-//		@Nullable Direction.Axis direction;
-//		if (dz == 0 && dx != 0) {
-//			direction = dy == 0 ? Direction.Axis.X : Direction.Axis.Z;
-//		} else if (dx == 0 && dz != 0) {
-//			direction = dy == 0 ? Direction.Axis.Z : Direction.Axis.X;
-//		} else if (dx == 0) {
-//			direction = Direction.Axis.Y;
-//		} else {
-//			direction = dy == 0 ? Direction.Axis.Y : null; //We return null so we can get Cinder Wood.
-//		}
-//
-//		return direction != null ? TFBlocks.CINDER_LOG.defaultBlockState().setValue(RotatedPillarBlock.AXIS, direction)
-//			: TFBlocks.CINDER_WOOD.defaultBlockState();
-//	}
-//
-//	/**
-//	 * What is the current speed multiplier, as an int.
-//	 */
-//	private int getCurrentSpeedMultiplier(Level level) {
-//		return this.getCurrentMultiplier(level, 2);
-//	}
-//
-//	/**
-//	 * Returns a number that is based on the number of nearby logs divided by the factor given.
-//	 */
-//	private int getCurrentMultiplier(Level level, int factor) {
-//		int logs = this.countNearbyLogs(level);
-//
-//		if (logs < factor) {
-//			return 1;
-//		} else {
-//			return (logs / factor) + (level.getRandom().nextInt(factor) >= (logs % factor) ? 0 : 1);
-//		}
-//	}
-//
-//	@SuppressWarnings("deprecation")
-//	private int countNearbyLogs(Level level) {
-//		int count = 0;
-//
-//		for (int dx = -1; dx <= 1; dx++) {
-//			for (int dy = -1; dy <= 1; dy++) {
-//				for (int dz = -1; dz <= 1; dz++) {
-//					BlockPos pos = getBlockPos().offset(dx, dy, dz);
-//					if (level.hasChunkAt(pos) && level.getBlockState(pos).is(TFBlocks.CINDER_LOG)) {
-//						count++;
-//					}
-//				}
-//			}
-//		}
-//
-//		return count;
-//	}
-//
-//	// [VanillaCopy] of superclass ver, changes noted
-//	//@Override
-//	protected boolean canBurn(Level level, Recipe<?> recipe) {
-//		if (this.items.get(0).isEmpty()) {
-//			return false;
-//		} else {
-//			ItemStack itemstack = recipe.getResultItem(level.registryAccess());
-//
-//			if (itemstack.isEmpty()) {
-//				return false;
-//			} else {
-//				ItemStack itemstack1 = this.items.get(2);
-//				if (itemstack1.isEmpty()) return true;
-//				if (!itemstack1.is(itemstack.getItem())) return false;
-//				int result = itemstack1.getCount() + getMaxOutputStacks(level, this.items.getFirst(), itemstack); // TF - account for multiplying
-//				return result <= this.getMaxStackSize() && result <= itemstack1.getMaxStackSize(); // Respect stack sizes in furnace recipes
-//			}
-//		}
-//	}
-//
-//	/**
-//	 * Return the max number of items in the output stack, given our current multiplier
-//	 */
-//	public int getMaxOutputStacks(Level level, ItemStack input, ItemStack output) {
-//		if (this.canMultiply(input)) {
-//			return output.getCount() * this.getCurrentMaxSmeltMultiplier(level);
-//		} else {
-//			return output.getCount();
-//		}
-//	}
-//
-//	// [VanillaCopy] superclass, using our own canSmelt and multiplying output
-//	public void smeltItem(Level level, Recipe<?> recipe) {
-//		if (this.canBurn(level, recipe)) {
-//			ItemStack itemstack = this.items.getFirst();
-//			ItemStack itemstack1 = recipe.getResultItem(level.registryAccess());
-//			itemstack1.setCount(itemstack1.getCount() * this.getCurrentSmeltMultiplier(level));
-//			ItemStack itemstack2 = this.items.get(2);
-//
-//			if (itemstack2.isEmpty()) {
-//				this.items.set(2, itemstack1.copy());
-//			} else if (itemstack2.getItem() == itemstack1.getItem()) {
-//				itemstack2.grow(itemstack1.getCount());
-//			}
-//
-//			if (itemstack.getItem() == Blocks.WET_SPONGE.asItem() && !this.items.get(1).isEmpty() && this.items.get(1).getItem() == Items.BUCKET) {
-//				this.items.set(1, new ItemStack(Items.WATER_BUCKET));
-//			}
-//
-//			itemstack.shrink(1);
-//		}
-//	}
-//
-//	private boolean canMultiply(ItemStack input) {
-//		return input.is(ItemTags.LOGS) || input.is(Tags.Items.ORES);
-//	}
-//
-//	/**
-//	 * What is the current speed multiplier, as an int.
-//	 */
-//	private int getCurrentSmeltMultiplier(Level level) {
-//		return this.getCurrentMultiplier(level, SMELT_LOG_FACTOR);
-//	}
-//
-//	/**
-//	 * What is the current speed multiplier, as an int.
-//	 */
-//	private int getCurrentMaxSmeltMultiplier(Level level) {
-//		return (int) Math.ceil((float) this.countNearbyLogs(level) / (float) SMELT_LOG_FACTOR);
-//	}
+	@Override
+	protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
+		return new FurnaceMenu(containerId, inventory, this, this.dataAccess);
+	}
+
+	// Vanilla AbstractFurnaceBlockEntity.serverTick with the historical Cinder Furnace speed,
+	// output multiplication, and nearby-log conversion behavior restored.
+	public static void serverTick(Level level, BlockPos pos, BlockState state, CinderFurnaceBlockEntity entity) {
+		if (!(level instanceof ServerLevel serverLevel)) return;
+
+		boolean changed = false;
+		int litTimeRemaining = entity.dataAccess.get(DATA_LIT_TIME);
+		boolean wasLit = litTimeRemaining > 0;
+		if (wasLit) {
+			litTimeRemaining--;
+			entity.dataAccess.set(DATA_LIT_TIME, litTimeRemaining);
+		}
+		boolean isLit = litTimeRemaining > 0;
+
+		ItemStack fuel = entity.items.get(SLOT_FUEL);
+		ItemStack ingredient = entity.items.get(SLOT_INPUT);
+		boolean hasIngredient = !ingredient.isEmpty();
+		boolean hasFuel = !fuel.isEmpty();
+		if (isLit || hasFuel && hasIngredient) {
+			if (hasIngredient) {
+				SingleRecipeInput input = new SingleRecipeInput(ingredient);
+				RecipeHolder<? extends AbstractCookingRecipe> recipe = serverLevel.recipeAccess()
+					.getRecipeFor(RecipeType.SMELTING, input, serverLevel)
+					.orElse(null);
+				if (recipe != null) {
+					ItemStack burnResult = recipe.value().assemble(input);
+					if (!burnResult.isEmpty() && entity.canBurn(serverLevel, entity.getMaxStackSize(), burnResult)) {
+						if (!isLit) {
+							int newLitTime = entity.getBurnDuration(serverLevel.fuelValues(), fuel);
+							entity.dataAccess.set(DATA_LIT_TIME, newLitTime);
+							entity.dataAccess.set(DATA_LIT_DURATION, newLitTime);
+							litTimeRemaining = newLitTime;
+							if (newLitTime > 0) {
+								consumeFuel(entity.items, fuel);
+								isLit = true;
+								changed = true;
+							}
+						}
+
+						if (isLit) {
+							int cookingTimer = entity.dataAccess.get(DATA_COOKING_PROGRESS)
+								+ entity.getCurrentSpeedMultiplier(serverLevel);
+							int cookingTotalTime = entity.dataAccess.get(DATA_COOKING_TOTAL_TIME);
+							entity.dataAccess.set(DATA_COOKING_PROGRESS, cookingTimer);
+							if (cookingTimer >= cookingTotalTime) {
+								entity.dataAccess.set(DATA_COOKING_PROGRESS, 0);
+								entity.dataAccess.set(DATA_COOKING_TOTAL_TIME, recipe.value().cookingTime());
+								entity.burn(serverLevel, ingredient, burnResult);
+								entity.setRecipeUsed(recipe);
+								changed = true;
+							}
+						} else {
+							entity.dataAccess.set(DATA_COOKING_PROGRESS, 0);
+						}
+					} else {
+						entity.dataAccess.set(DATA_COOKING_PROGRESS, 0);
+					}
+				}
+			} else {
+				entity.dataAccess.set(DATA_COOKING_PROGRESS, 0);
+			}
+		} else {
+			int cookingTimer = entity.dataAccess.get(DATA_COOKING_PROGRESS);
+			if (cookingTimer > 0) {
+				entity.dataAccess.set(DATA_COOKING_PROGRESS, Mth.clamp(
+					cookingTimer - BURN_COOL_SPEED, 0, entity.dataAccess.get(DATA_COOKING_TOTAL_TIME)));
+			}
+		}
+
+		if (wasLit != isLit) {
+			changed = true;
+			state = state.setValue(AbstractFurnaceBlock.LIT, isLit);
+			serverLevel.setBlock(pos, state, Block.UPDATE_ALL);
+		}
+
+		if (isLit && litTimeRemaining % 5 == 0) {
+			entity.cinderizeNearbyLog(serverLevel, pos);
+		}
+
+		if (changed) {
+			setChanged(serverLevel, pos, state);
+		}
+	}
+
+	private void cinderizeNearbyLog(ServerLevel level, BlockPos origin) {
+		RandomSource random = level.getRandom();
+		int dx = random.nextInt(2) - random.nextInt(2);
+		int dy = random.nextInt(2) - random.nextInt(2);
+		int dz = random.nextInt(2) - random.nextInt(2);
+		BlockPos pos = origin.offset(dx, dy, dz);
+
+		if (level.hasChunkAt(pos)) {
+			BlockState nearbyBlock = level.getBlockState(pos);
+			if (!nearbyBlock.is(TFBlocks.CINDER_LOG) && nearbyBlock.is(BlockTags.LOGS)) {
+				level.setBlock(pos, TFBlocks.CINDER_LOG.withPropertiesOf(nearbyBlock), Block.UPDATE_CLIENTS);
+				level.levelEvent(LevelEvent.PARTICLES_MOBBLOCK_SPAWN, pos, 0);
+				level.levelEvent(LevelEvent.PARTICLES_MOBBLOCK_SPAWN, pos, 0);
+				level.playSound(null, pos, SoundEvents.FIRE_AMBIENT, SoundSource.BLOCKS, 1.0F, 1.0F);
+			}
+		}
+	}
+
+	private int getCurrentSpeedMultiplier(Level level) {
+		return calculateMultiplier(this.countNearbyCinderLogs(level), 2, level.getRandom().nextInt(2));
+	}
+
+	private int countNearbyCinderLogs(Level level) {
+		int count = 0;
+		for (int dx = -1; dx <= 1; dx++) {
+			for (int dy = -1; dy <= 1; dy++) {
+				for (int dz = -1; dz <= 1; dz++) {
+					BlockPos pos = this.getBlockPos().offset(dx, dy, dz);
+					if (level.hasChunkAt(pos) && level.getBlockState(pos).is(TFBlocks.CINDER_LOG)) {
+						count++;
+					}
+				}
+			}
+		}
+		return count;
+	}
+
+	private boolean canBurn(Level level, int maxStackSize, ItemStack burnResult) {
+		ItemStack resultStack = this.items.get(SLOT_RESULT);
+		if (resultStack.isEmpty()) return true;
+		if (!ItemStack.isSameItemSameComponents(resultStack, burnResult)) return false;
+
+		int resultCount = resultStack.getCount()
+			+ this.getMaxOutputStacks(level, this.items.get(SLOT_INPUT), burnResult);
+		return resultCount <= Math.min(maxStackSize, burnResult.getMaxStackSize());
+	}
+
+	public int getMaxOutputStacks(Level level, ItemStack input, ItemStack output) {
+		return output.getCount() * (this.canMultiply(input)
+			? maxOutputMultiplier(this.countNearbyCinderLogs(level))
+			: 1);
+	}
+
+	private static void consumeFuel(NonNullList<ItemStack> items, ItemStack fuel) {
+		Item fuelItem = fuel.getItem();
+		fuel.shrink(1);
+		if (fuel.isEmpty()) {
+			ItemStackTemplate remainder = fuelItem.getCraftingRemainder();
+			items.set(SLOT_FUEL, remainder != null ? remainder.create() : ItemStack.EMPTY);
+		}
+	}
+
+	private void burn(Level level, ItemStack input, ItemStack recipeResult) {
+		ItemStack multipliedResult = recipeResult.copy();
+		if (this.canMultiply(input)) {
+			multipliedResult.setCount(recipeResult.getCount() * calculateMultiplier(
+				this.countNearbyCinderLogs(level), SMELT_LOG_FACTOR, level.getRandom().nextInt(SMELT_LOG_FACTOR)));
+		}
+
+		ItemStack resultStack = this.items.get(SLOT_RESULT);
+		if (resultStack.isEmpty()) {
+			this.items.set(SLOT_RESULT, multipliedResult);
+		} else {
+			resultStack.grow(multipliedResult.getCount());
+		}
+
+		if (input.is(Items.WET_SPONGE) && this.items.get(SLOT_FUEL).is(Items.BUCKET)) {
+			this.items.set(SLOT_FUEL, new ItemStack(Items.WATER_BUCKET));
+		}
+		input.shrink(1);
+	}
+
+	private boolean canMultiply(ItemStack input) {
+		return input.is(ItemTags.LOGS) || input.is(ConventionalItemTags.ORES);
+	}
+
+	static int calculateMultiplier(int cinderLogs, int factor, int randomRoll) {
+		if (factor <= 0 || randomRoll < 0 || randomRoll >= factor) {
+			throw new IllegalArgumentException("factor must be positive and randomRoll must be within its range");
+		}
+		if (cinderLogs < factor) return 1;
+		return cinderLogs / factor + (randomRoll < cinderLogs % factor ? 1 : 0);
+	}
+
+	static int maxOutputMultiplier(int cinderLogs) {
+		return Math.max(1, (cinderLogs + SMELT_LOG_FACTOR - 1) / SMELT_LOG_FACTOR);
+	}
 }

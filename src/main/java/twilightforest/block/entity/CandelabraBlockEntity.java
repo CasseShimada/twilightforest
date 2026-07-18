@@ -46,6 +46,28 @@ public class CandelabraBlockEntity extends BlockEntity {
 		this.data = data;
 	}
 
+	/**
+	 * Restores the implicit three plain candles used before the candelabra gained a block entity.
+	 * This must only be called for a candelabra position that had no serialized block entity at all.
+	 */
+	public void initializeLegacyPlainCandles() {
+		if (this.level == null) {
+			throw new IllegalStateException("Cannot migrate a candelabra before it is attached to a level");
+		}
+
+		this.data = new CandelabraData(List.of(Blocks.CANDLE, Blocks.CANDLE, Blocks.CANDLE));
+		BlockState migratedState = legacyPlainCandleState(this.getBlockState());
+		this.level.setBlock(this.getBlockPos(), migratedState, Block.UPDATE_ALL);
+		this.setChanged();
+	}
+
+	static BlockState legacyPlainCandleState(BlockState state) {
+		for (BooleanProperty candle : CandelabraBlock.CANDLES) {
+			state = state.setValue(candle, true);
+		}
+		return state;
+	}
+
 	public Block removeCandle(int index) {
 		Block block = CandelabraData.getItem(this.data.ordered(), index).orElse(Blocks.AIR);
 		this.setCandle(index, Blocks.AIR);

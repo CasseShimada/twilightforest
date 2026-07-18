@@ -81,6 +81,7 @@ public final class AttachmentEvents {
 			return;
 		}
 		syncAttachments(player, player);
+		TFConfig.syncUncraftingConfig(player);
 		if (!TFDataAttachments.has(player, TFDataAttachments.BANISHED_TO_TWILIGHT_FOREST)) {
 			newSpawnInTwilightForest(player);
 		}

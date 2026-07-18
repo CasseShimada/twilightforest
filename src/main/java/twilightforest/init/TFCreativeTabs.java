@@ -244,6 +244,18 @@ public class TFCreativeTabs {
 			output.accept(TFItems.FALLEN_LEAVES);
 			output.accept(TFBlocks.ROOT_STRAND);
 			output.accept(TFBlocks.HEDGE);
+			output.accept(TFBlocks.IRON_OREBERRY_BUSH);
+			output.accept(TFBlocks.GOLD_OREBERRY_BUSH);
+			output.accept(TFBlocks.COPPER_OREBERRY_BUSH);
+			output.accept(TFBlocks.ESSENCE_OREBERRY_BUSH);
+			output.accept(TFBlocks.RASPBERRY_BUSH);
+			output.accept(TFBlocks.BLUEBERRY_BUSH);
+			output.accept(TFBlocks.BLACKBERRY_BUSH);
+			output.accept(TFBlocks.MALOBERRY_BUSH);
+			output.accept(TFBlocks.BLIGHTBERRY_BUSH);
+			output.accept(TFBlocks.DUSKBERRY_BUSH);
+			output.accept(TFBlocks.SKYBERRY_BUSH);
+			output.accept(TFBlocks.STINGBERRY_BUSH);
 			output.accept(TFItems.MASON_JAR.getDefaultInstance());
 			output.accept(TFItems.FIREFLY_JAR.getDefaultInstance());
 			output.accept(TFItems.CICADA_JAR.getDefaultInstance());
@@ -409,7 +421,6 @@ public class TFCreativeTabs {
 			output.accept(TFItems.MAGIC_MAP);
 			output.accept(TFItems.MAZE_MAP);
 			output.accept(TFItems.ORE_MAP);
-			output.accept(TFItems.TORCHBERRIES);
 			output.accept(TFItems.RAVEN_FEATHER);
 			output.accept(TFItems.MAGIC_MAP_FOCUS);
 			output.accept(TFItems.MAZE_MAP_FOCUS);
@@ -419,24 +430,20 @@ public class TFCreativeTabs {
 			output.accept(TFItems.CHARM_OF_KEEPING_2);
 			output.accept(TFItems.CHARM_OF_KEEPING_3);
 			output.accept(TFItems.TRANSFORMATION_POWDER);
-			output.accept(TFItems.RAW_VENISON);
-			output.accept(TFItems.COOKED_VENISON);
-			output.accept(TFItems.RAW_MEEF);
-			output.accept(TFItems.COOKED_MEEF);
-			output.accept(TFItems.MAZE_WAFER);
-			output.accept(TFItems.MEEF_STROGANOFF);
-			output.accept(TFItems.HYDRA_CHOP);
-			output.accept(TFItems.EXPERIMENT_115);
 			output.accept(TFItems.LIVEROOT);
 			output.accept(TFItems.RAW_IRONWOOD);
 			output.accept(TFItems.IRONWOOD_INGOT);
 			output.accept(TFItems.STEELEAF_INGOT);
+			output.accept(TFItems.MAZE_SLIME_BALL);
 			output.accept(TFItems.NAGA_SCALE);
 			output.accept(TFItems.WROUGHT_IRON_BAR);
 			output.accept(TFItems.ARMOR_SHARD);
 			output.accept(TFItems.ARMOR_SHARD_CLUSTER);
 			output.accept(TFItems.KNIGHTMETAL_INGOT);
 			output.accept(TFItems.KNIGHTMETAL_RING);
+			output.accept(TFItems.TANNIN);
+			output.accept(TFItems.TREATED_LEATHER);
+			output.accept(TFItems.TANNED_LEATHER);
 			output.accept(TFItems.FIERY_BLOOD);
 			output.accept(TFItems.FIERY_TEARS);
 			output.accept(TFItems.FIERY_INGOT);
@@ -451,6 +458,10 @@ public class TFCreativeTabs {
 			output.accept(TFItems.CARMINITE);
 			output.accept(TFItems.TOWER_KEY);
 			output.accept(TFItems.MAGIC_BEANS);
+			output.accept(TFItems.IRON_BERRY);
+			output.accept(TFItems.GOLD_BERRY);
+			output.accept(TFItems.COPPER_BERRY);
+			output.accept(TFItems.ESSENCE_BERRY);
 			output.accept(TFItems.MUSIC_DISC_THREAD);
 			output.accept(TFItems.MUSIC_DISC_FINDINGS);
 			output.accept(TFItems.MUSIC_DISC_RADIANCE);
@@ -555,6 +566,10 @@ public class TFCreativeTabs {
 			output.accept(TFItems.LIFEDRAIN_SCEPTER);
 			output.accept(TFItems.ZOMBIE_SCEPTER);
 			output.accept(TFItems.FORTIFICATION_SCEPTER);
+			output.accept(TFItems.TRAVELLERS_GOGGLES);
+			output.accept(TFItems.TRAVELLERS_VEST);
+			output.accept(TFItems.TRAVELLERS_WINGS);
+			output.accept(TFItems.TRAVELLERS_BOOTS);
 			output.accept(TFItems.LAMP_OF_CINDERS);
 			output.accept(TFItems.EMPERORS_CLOTH);
 			output.accept(TFItems.ORE_MAGNET);
@@ -564,6 +579,46 @@ public class TFCreativeTabs {
 			output.accept(TFItems.CRUMBLE_HORN);
 			output.accept(TFItems.PEACOCK_FEATHER_FAN);
 			output.accept(TFItems.MOONWORM_QUEEN);
+		}).build());
+
+	public static final CreativeModeTab FOOD = register("food", FabricCreativeModeTab.builder()
+		.title(Component.translatable("itemGroup.twilightforest.food"))
+		.icon(() -> new ItemStack(TFItems.COOKED_MEEF))
+		.displayItems((parameters, output) -> {
+			output.accept(TFItems.TORCHBERRIES);
+			output.accept(TFItems.RASPBERRY);
+			output.accept(TFItems.BLUEBERRY);
+			output.accept(TFItems.BLACKBERRY);
+			output.accept(TFItems.MALOBERRY);
+			output.accept(TFItems.BLIGHTBERRY);
+			output.accept(TFItems.DUSKBERRY);
+			output.accept(TFItems.SKYBERRY);
+			output.accept(TFItems.STINGBERRY);
+			output.accept(TFItems.BERRY_MEDLEY);
+			output.accept(TFItems.MOSS_SOUP);
+			output.accept(TFItems.RAW_VENISON);
+			output.accept(TFItems.COOKED_VENISON);
+			output.accept(TFItems.RAW_MEEF);
+			output.accept(TFItems.COOKED_MEEF);
+			output.accept(TFItems.BEEF_JERKY);
+			output.accept(TFItems.CHICKEN_JERKY);
+			output.accept(TFItems.PORK_JERKY);
+			output.accept(TFItems.MUTTON_JERKY);
+			output.accept(TFItems.RABBIT_JERKY);
+			output.accept(TFItems.MEEF_JERKY);
+			output.accept(TFItems.VENISON_JERKY);
+			output.accept(TFItems.MONSTER_JERKY);
+			output.accept(TFItems.COD_JERKY);
+			output.accept(TFItems.SALMON_JERKY);
+			output.accept(TFItems.TROPICAL_FISH_JERKY);
+			output.accept(TFItems.FUGU_JERKY);
+			output.accept(TFItems.GELATINOUS_SLIME_DROP);
+			output.accept(TFItems.GELATINOUS_MAZE_SLIME_DROP);
+			output.accept(TFItems.MAZE_WAFER);
+			output.accept(TFItems.SHIKA_SENBEI);
+			output.accept(TFItems.MEEF_STROGANOFF);
+			output.accept(TFItems.HYDRA_CHOP);
+			output.accept(TFItems.EXPERIMENT_115);
 		}).build());
 
 	public static void init() {
@@ -653,6 +708,7 @@ public class TFCreativeTabs {
 			entries.insertAfter(new ItemStack(Items.CHERRY_FENCE_GATE), new ItemStack(TFBlocks.CHERRY_BANISTER));
 			entries.insertAfter(new ItemStack(TFBlocks.CHERRY_BANISTER), new ItemStack(TFBlocks.CHERRY_DRYING_RACK));
 			entries.insertAfter(new ItemStack(Items.PALE_OAK_FENCE_GATE), new ItemStack(TFBlocks.PALE_OAK_BANISTER));
+			entries.insertAfter(new ItemStack(TFBlocks.PALE_OAK_BANISTER), new ItemStack(TFBlocks.PALE_OAK_DRYING_RACK));
 		});
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.OP_BLOCKS).register(entries -> {

@@ -48,10 +48,15 @@
     ],
     [
       "twilightforest:plant_roots",
-      "twilightforest:torch_berries"
+      "twilightforest:torch_berries",
+      "twilightforest:iron_oreberries",
+      "twilightforest:gold_oreberries",
+      "twilightforest:copper_oreberries"
     ],
     [],
     [
+      "twilightforest:snowy_blueberry_bushes",
+      "twilightforest:maloberry_bushes",
       "twilightforest:tree/selector/snowy_forest_trees",
       "twilightforest:spruce_fallen_log"
     ],

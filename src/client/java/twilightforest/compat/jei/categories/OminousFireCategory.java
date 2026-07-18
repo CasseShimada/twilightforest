@@ -4,7 +4,6 @@ import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
-import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
@@ -67,12 +66,8 @@ public class OminousFireCategory implements IRecipeCategory<OminousFireRecipe> {
 	}
 
 	@Override
-	public void createRecipeExtras(IRecipeExtrasBuilder builder, OminousFireRecipe recipe, IFocusGroup focuses) {
-		builder.addDrawable(this.background, 0, 0);
-	}
-
-	@Override
 	public void draw(OminousFireRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
+		this.background.draw(graphics, 0, 0);
 		this.arrow.draw(graphics, 46, 19);
 	}
 

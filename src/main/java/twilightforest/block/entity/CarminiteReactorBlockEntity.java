@@ -12,6 +12,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import twilightforest.block.CarminiteReactorBlock;
 import twilightforest.tags.TFBlockTags;
 import twilightforest.entity.monster.CarminiteGhastling;
@@ -20,10 +22,17 @@ import twilightforest.init.*;
 import java.util.Optional;
 
 public class CarminiteReactorBlockEntity extends BlockEntity {
+	private static final String TAG_COUNTER = "counter";
+	private static final String TAG_SECONDARY_X = "secondary_x";
+	private static final String TAG_SECONDARY_Y = "secondary_y";
+	private static final String TAG_SECONDARY_Z = "secondary_z";
+	private static final String TAG_TERTIARY_X = "tertiary_x";
+	private static final String TAG_TERTIARY_Y = "tertiary_y";
+	private static final String TAG_TERTIARY_Z = "tertiary_z";
 
-	private final int secX;
-	private final int secY;
-	private final int secZ;
+	private int secX;
+	private int secY;
+	private int secZ;
 	private int counter = 0;
 	private int terX, terY, terZ;
 
@@ -49,106 +58,163 @@ public class CarminiteReactorBlockEntity extends BlockEntity {
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, CarminiteReactorBlockEntity te) {
-
-		if (!level.isDebug() && state.getValue(CarminiteReactorBlock.ACTIVE)) {
+		if (!level.isClientSide() && !level.isDebug() && state.getValue(CarminiteReactorBlock.ACTIVE)) {
 			te.counter++;
+			te.setChanged();
 
-			if (!level.isClientSide()) {
+			if (te.counter % 5 == 0 && te.counter <= 250) {
+				level.playSound(null, pos, TFSounds.REACTOR_AMBIENT, SoundSource.BLOCKS, te.counter / 100F, te.counter / 100F);
+			}
 
-				// every 2 seconds for 10 seconds, destroy a new radius
-				int offset = 10;
+			// every 2 seconds for 10 seconds, destroy a new radius
+			int offset = 10;
 
-				if (te.counter % 5 == 0) {
-					if (te.counter == 5) {
-						BlockState fakeGold = TFBlocks.FAKE_GOLD.defaultBlockState();
-						BlockState fakeDiamond = TFBlocks.FAKE_DIAMOND.defaultBlockState();
+			if (te.counter % 5 == 0) {
+				if (te.counter == 5) {
+					BlockState fakeGold = TFBlocks.FAKE_GOLD.defaultBlockState();
+					BlockState fakeDiamond = TFBlocks.FAKE_DIAMOND.defaultBlockState();
 
-						// transformation!
-						te.createFakeBlock(pos.offset(1, 1, 1), fakeDiamond);
-						te.createFakeBlock(pos.offset(1, 1, -1), fakeDiamond);
-						te.createFakeBlock(pos.offset(-1, 1, 1), fakeDiamond);
-						te.createFakeBlock(pos.offset(-1, 1, -1), fakeDiamond);
-						te.createFakeBlock(pos.offset(0, 1, 0), fakeDiamond);
+					// transformation!
+					te.createFakeBlock(pos.offset(1, 1, 1), fakeDiamond);
+					te.createFakeBlock(pos.offset(1, 1, -1), fakeDiamond);
+					te.createFakeBlock(pos.offset(-1, 1, 1), fakeDiamond);
+					te.createFakeBlock(pos.offset(-1, 1, -1), fakeDiamond);
+					te.createFakeBlock(pos.offset(0, 1, 0), fakeDiamond);
 
-						te.createFakeBlock(pos.offset(0, 1, 1), fakeGold);
-						te.createFakeBlock(pos.offset(0, 1, -1), fakeGold);
-						te.createFakeBlock(pos.offset(1, 1, 0), fakeGold);
-						te.createFakeBlock(pos.offset(-1, 1, 0), fakeGold);
+					te.createFakeBlock(pos.offset(0, 1, 1), fakeGold);
+					te.createFakeBlock(pos.offset(0, 1, -1), fakeGold);
+					te.createFakeBlock(pos.offset(1, 1, 0), fakeGold);
+					te.createFakeBlock(pos.offset(-1, 1, 0), fakeGold);
 
-						te.createFakeBlock(pos.offset(1, 0, 1), fakeGold);
-						te.createFakeBlock(pos.offset(1, 0, -1), fakeGold);
-						te.createFakeBlock(pos.offset(-1, 0, 1), fakeGold);
-						te.createFakeBlock(pos.offset(-1, 0, -1), fakeGold);
+					te.createFakeBlock(pos.offset(1, 0, 1), fakeGold);
+					te.createFakeBlock(pos.offset(1, 0, -1), fakeGold);
+					te.createFakeBlock(pos.offset(-1, 0, 1), fakeGold);
+					te.createFakeBlock(pos.offset(-1, 0, -1), fakeGold);
 
-						te.createFakeBlock(pos.offset(0, 0, 1), fakeDiamond);
-						te.createFakeBlock(pos.offset(0, 0, -1), fakeDiamond);
-						te.createFakeBlock(pos.offset(1, 0, 0), fakeDiamond);
-						te.createFakeBlock(pos.offset(-1, 0, 0), fakeDiamond);
-						te.createFakeBlock(pos.offset(0, -1, 0), fakeDiamond);
+					te.createFakeBlock(pos.offset(0, 0, 1), fakeDiamond);
+					te.createFakeBlock(pos.offset(0, 0, -1), fakeDiamond);
+					te.createFakeBlock(pos.offset(1, 0, 0), fakeDiamond);
+					te.createFakeBlock(pos.offset(-1, 0, 0), fakeDiamond);
+					te.createFakeBlock(pos.offset(0, -1, 0), fakeDiamond);
 
-						te.createFakeBlock(pos.offset(1, -1, 1), fakeDiamond);
-						te.createFakeBlock(pos.offset(1, -1, -1), fakeDiamond);
-						te.createFakeBlock(pos.offset(-1, -1, 1), fakeDiamond);
-						te.createFakeBlock(pos.offset(-1, -1, -1), fakeDiamond);
+					te.createFakeBlock(pos.offset(1, -1, 1), fakeDiamond);
+					te.createFakeBlock(pos.offset(1, -1, -1), fakeDiamond);
+					te.createFakeBlock(pos.offset(-1, -1, 1), fakeDiamond);
+					te.createFakeBlock(pos.offset(-1, -1, -1), fakeDiamond);
 
-						te.createFakeBlock(pos.offset(0, -1, 1), fakeGold);
-						te.createFakeBlock(pos.offset(0, -1, -1), fakeGold);
-						te.createFakeBlock(pos.offset(1, -1, 0), fakeGold);
-						te.createFakeBlock(pos.offset(-1, -1, 0), fakeGold);
-
-					}
-
-
-					// primary burst
-					int primary = te.counter - 80;
-
-					if (primary >= offset && primary <= 249) {
-						te.drawBlob(pos, (primary - offset) / 40, Blocks.AIR.defaultBlockState(), primary - offset, false);
-					}
-					if (primary <= 200) {
-						te.drawBlob(pos, primary / 40, TFBlocks.REACTOR_DEBRIS.defaultBlockState(), te.counter, false);
-					}
-
-					// secondary burst
-					int secondary = te.counter - 120;
-
-					if (secondary >= offset && secondary <= 129) {
-						te.drawBlob(pos.offset(te.secX, te.secY, te.secZ), (secondary - offset) / 40, Blocks.AIR.defaultBlockState(), secondary - offset, false);
-					}
-					if (secondary >= 0 && secondary <= 160) {
-						te.drawBlob(pos.offset(te.secX, te.secY, te.secZ), secondary / 40, Blocks.AIR.defaultBlockState(), secondary, true);
-					}
-
-					// tertiary burst
-					int tertiary = te.counter - 160;
-
-					if (tertiary >= offset && tertiary <= 129) {
-						te.drawBlob(pos.offset(te.terX, te.terY, te.terZ), (tertiary - offset) / 40, Blocks.AIR.defaultBlockState(), tertiary - offset, false);
-					}
-					if (tertiary >= 0 && tertiary <= 160) {
-						te.drawBlob(pos.offset(te.terX, te.terY, te.terZ), tertiary / 40, Blocks.AIR.defaultBlockState(), tertiary, true);
-					}
-
+					te.createFakeBlock(pos.offset(0, -1, 1), fakeGold);
+					te.createFakeBlock(pos.offset(0, -1, -1), fakeGold);
+					te.createFakeBlock(pos.offset(1, -1, 0), fakeGold);
+					te.createFakeBlock(pos.offset(-1, -1, 0), fakeGold);
 				}
 
-				if (te.counter >= 350) {
-					// deactivate & explode
-					level.destroyBlock(pos, false);
-					level.explode(null, level.damageSources().source(TFDamageTypes.REACTOR), null, pos.getX(), pos.getY(), pos.getZ(), 4.0F, true, Level.ExplosionInteraction.BLOCK);
+				// primary burst
+				int primary = te.counter - 80;
 
-					// spawn mini ghasts near the secondary & tertiary points
-					for (int i = 0; i < 3; i++) {
-						te.spawnGhastNear(level, pos.getX() + te.secX, pos.getY() + te.secY, pos.getZ() + te.secZ);
-						te.spawnGhastNear(level, pos.getX() + te.terX, pos.getY() + te.terY, pos.getZ() + te.terZ);
-					}
+				if (primary >= offset && primary <= 249) {
+					te.drawBlob(pos, (primary - offset) / 40, Blocks.AIR.defaultBlockState(), primary - offset, false);
+				}
+				if (primary <= 200) {
+					te.drawBlob(pos, primary / 40, TFBlocks.REACTOR_DEBRIS.defaultBlockState(), te.counter, false);
 				}
 
-			} else {
-				if (te.counter % 5 == 0 && te.counter <= 250) {
-					level.playLocalSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, TFSounds.REACTOR_AMBIENT, SoundSource.BLOCKS, te.counter / 100F, te.counter / 100F, false);
+				// secondary burst
+				int secondary = te.counter - 120;
+
+				if (secondary >= offset && secondary <= 129) {
+					te.drawBlob(pos.offset(te.secX, te.secY, te.secZ), (secondary - offset) / 40, Blocks.AIR.defaultBlockState(), secondary - offset, false);
+				}
+				if (secondary >= 0 && secondary <= 160) {
+					te.drawBlob(pos.offset(te.secX, te.secY, te.secZ), secondary / 40, Blocks.AIR.defaultBlockState(), secondary, true);
+				}
+
+				// tertiary burst
+				int tertiary = te.counter - 160;
+
+				if (tertiary >= offset && tertiary <= 129) {
+					te.drawBlob(pos.offset(te.terX, te.terY, te.terZ), (tertiary - offset) / 40, Blocks.AIR.defaultBlockState(), tertiary - offset, false);
+				}
+				if (tertiary >= 0 && tertiary <= 160) {
+					te.drawBlob(pos.offset(te.terX, te.terY, te.terZ), tertiary / 40, Blocks.AIR.defaultBlockState(), tertiary, true);
+				}
+			}
+
+			if (te.counter >= 350) {
+				// deactivate & explode
+				level.destroyBlock(pos, false);
+				level.explode(null, level.damageSources().source(TFDamageTypes.REACTOR), null, pos.getX(), pos.getY(), pos.getZ(), 4.0F, true, Level.ExplosionInteraction.BLOCK);
+
+				// spawn mini ghasts near the secondary & tertiary points
+				for (int i = 0; i < 3; i++) {
+					te.spawnGhastNear(level, pos.getX() + te.secX, pos.getY() + te.secY, pos.getZ() + te.secZ);
+					te.spawnGhastNear(level, pos.getX() + te.terX, pos.getY() + te.terY, pos.getZ() + te.terZ);
 				}
 			}
 		}
+	}
+
+	@Override
+	protected void saveAdditional(ValueOutput output) {
+		super.saveAdditional(output);
+		output.putInt(TAG_COUNTER, this.counter);
+		output.putInt(TAG_SECONDARY_X, this.secX);
+		output.putInt(TAG_SECONDARY_Y, this.secY);
+		output.putInt(TAG_SECONDARY_Z, this.secZ);
+		output.putInt(TAG_TERTIARY_X, this.terX);
+		output.putInt(TAG_TERTIARY_Y, this.terY);
+		output.putInt(TAG_TERTIARY_Z, this.terZ);
+	}
+
+	@Override
+	protected void loadAdditional(ValueInput input) {
+		super.loadAdditional(input);
+		PersistentState state = readPersistentState(input,
+			new PersistentState(this.counter, this.secX, this.secY, this.secZ, this.terX, this.terY, this.terZ));
+		this.counter = state.counter();
+		this.secX = state.secondaryX();
+		this.secY = state.secondaryY();
+		this.secZ = state.secondaryZ();
+		this.terX = state.tertiaryX();
+		this.terY = state.tertiaryY();
+		this.terZ = state.tertiaryZ();
+	}
+
+	static PersistentState readPersistentState(ValueInput input, PersistentState fallback) {
+		Optional<Integer> counter = input.getInt(TAG_COUNTER);
+		Optional<Integer> secondaryX = input.getInt(TAG_SECONDARY_X);
+		Optional<Integer> secondaryY = input.getInt(TAG_SECONDARY_Y);
+		Optional<Integer> secondaryZ = input.getInt(TAG_SECONDARY_Z);
+		Optional<Integer> tertiaryX = input.getInt(TAG_TERTIARY_X);
+		Optional<Integer> tertiaryY = input.getInt(TAG_TERTIARY_Y);
+		Optional<Integer> tertiaryZ = input.getInt(TAG_TERTIARY_Z);
+		int presentFields = (int) java.util.stream.Stream.of(counter, secondaryX, secondaryY, secondaryZ, tertiaryX, tertiaryY, tertiaryZ)
+			.filter(Optional::isPresent)
+			.count();
+		if (presentFields == 0) {
+			return fallback;
+		}
+		if (presentFields != 7) {
+			throw new IllegalStateException("Incomplete persisted Carminite Reactor state");
+		}
+
+		PersistentState state = new PersistentState(
+			counter.orElseThrow(), secondaryX.orElseThrow(), secondaryY.orElseThrow(), secondaryZ.orElseThrow(),
+			tertiaryX.orElseThrow(), tertiaryY.orElseThrow(), tertiaryZ.orElseThrow()
+		);
+		if (state.counter() < 0 || state.counter() > 350
+			|| !isBurstOffset(state.secondaryX()) || !isBurstOffset(state.secondaryY()) || !isBurstOffset(state.secondaryZ())
+			|| !isBurstOffset(state.tertiaryX()) || !isBurstOffset(state.tertiaryY()) || !isBurstOffset(state.tertiaryZ())
+			|| state.secondaryX() == state.tertiaryX() && state.secondaryY() == state.tertiaryY() && state.secondaryZ() == state.tertiaryZ()) {
+			throw new IllegalStateException("Invalid persisted Carminite Reactor state");
+		}
+		return state;
+	}
+
+	private static boolean isBurstOffset(int offset) {
+		return offset == -3 || offset == 3;
+	}
+
+	record PersistentState(int counter, int secondaryX, int secondaryY, int secondaryZ, int tertiaryX, int tertiaryY, int tertiaryZ) {
 	}
 
 	private void spawnGhastNear(Level level, int x, int y, int z) {

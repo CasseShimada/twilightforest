@@ -9,32 +9,32 @@ import mezz.jei.api.runtime.IJeiRuntime;
 import mezz.jei.common.Internal;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeType;
 import twilightforest.TwilightForestMod;
 import twilightforest.client.UncraftingScreen;
 import twilightforest.compat.RecipeViewerConstants;
 import twilightforest.compat.jei.categories.*;
-import twilightforest.compat.jei.extension.NoTemplateSmithingExtension;
-import twilightforest.compat.jei.extension.ScepterRepairExtension;
+import twilightforest.compat.jei.extension.*;
 import twilightforest.compat.jei.renderers.EntityHelper;
 import twilightforest.compat.jei.renderers.EntityRenderer;
 import twilightforest.compat.jei.renderers.FakeItemEntityHelper;
 import twilightforest.compat.jei.renderers.FakeItemEntityRenderer;
 import twilightforest.compat.jei.subtype.CasketSubtypeInterpreter;
 import twilightforest.compat.jei.util.CrumbleRecipe;
+import twilightforest.compat.jei.util.GrindstoneTravellersRecipesGetter;
 import twilightforest.compat.jei.util.OminousFireRecipe;
 import twilightforest.compat.jei.util.TransformationRecipe;
 import twilightforest.config.TFConfig;
 import twilightforest.init.TFBlocks;
+import twilightforest.init.TFDataComponents;
 import twilightforest.init.TFItems;
 import twilightforest.init.TFMenuTypes;
 import twilightforest.inventory.UncraftingMenu;
-import twilightforest.item.recipe.MoonwormQueenRepairRecipe;
-import twilightforest.item.recipe.NoTemplateSmithingRecipe;
-import twilightforest.item.recipe.ScepterRepairRecipe;
+import twilightforest.item.recipe.*;
+import twilightforest.item.recipe.travellers.TravellersGearModifierShapedRecipe;
+import twilightforest.item.recipe.travellers.TravellersGearModifierShapelessRecipe;
+import twilightforest.item.recipe.travellers.TravellersVestGlovesMergeRecipe;
 
 import java.util.Collections;
 import java.util.List;
@@ -54,18 +54,20 @@ public class JEICompat implements IModPlugin {
 		registration.addCraftingStation(MoonwormQueenCategory.MOONWORM_QUEEN, TFItems.MOONWORM_QUEEN);
 		registration.addCraftingStation(DryingRackCategory.DRYING, TFBlocks.OAK_DRYING_RACK, TFBlocks.SPRUCE_DRYING_RACK, TFBlocks.BIRCH_DRYING_RACK, TFBlocks.JUNGLE_DRYING_RACK,
 			TFBlocks.ACACIA_DRYING_RACK, TFBlocks.DARK_OAK_DRYING_RACK, TFBlocks.CRIMSON_DRYING_RACK, TFBlocks.WARPED_DRYING_RACK, TFBlocks.VANGROVE_DRYING_RACK,
-			TFBlocks.BAMBOO_DRYING_RACK, TFBlocks.CHERRY_DRYING_RACK, TFBlocks.TWILIGHT_OAK_DRYING_RACK, TFBlocks.CANOPY_DRYING_RACK, TFBlocks.MANGROVE_DRYING_RACK,
+			TFBlocks.BAMBOO_DRYING_RACK, TFBlocks.CHERRY_DRYING_RACK, TFBlocks.PALE_OAK_DRYING_RACK, TFBlocks.TWILIGHT_OAK_DRYING_RACK, TFBlocks.CANOPY_DRYING_RACK, TFBlocks.MANGROVE_DRYING_RACK,
 			TFBlocks.DARK_DRYING_RACK, TFBlocks.TIME_DRYING_RACK, TFBlocks.TRANSFORMATION_DRYING_RACK, TFBlocks.MINING_DRYING_RACK, TFBlocks.SORTING_DRYING_RACK);
 	}
 
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistration registration) {
 		registration.registerSubtypeInterpreter(TFItems.KEEPSAKE_CASKET, CasketSubtypeInterpreter.INSTANCE);
+		registration.registerFromDataComponentTypes(TFItems.GLASS_SWORD, TFDataComponents.INFINITE_GLASS_SWORD);
 	}
 
 	@Override
 	public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
 		registration.addRecipeTransferHandler(UncraftingMenu.class, TFMenuTypes.UNCRAFTING, RecipeTypes.CRAFTING, 11, 9, 20, 36);
+		registration.addRecipeTransferHandler(UncraftingMenu.class, TFMenuTypes.UNCRAFTING, JEIUncraftingCategory.UNCRAFTING, 0, 1, 20, 36);
 	}
 
 	@Override
@@ -86,15 +88,21 @@ public class JEICompat implements IModPlugin {
 		registration.addRecipeCategories(new OminousFireCategory(registration.getJeiHelpers().getGuiHelper()));
 		registration.addRecipeCategories(new CrumbleHornCategory(registration.getJeiHelpers().getGuiHelper()));
 		registration.addRecipeCategories(new DryingRackCategory(registration.getJeiHelpers().getGuiHelper()));
-		if (!Internal.getClientSyncedRecipes().byType(RecipeType.CRAFTING).stream().filter(holder -> holder.value() instanceof MoonwormQueenRepairRecipe).toList().isEmpty()) {
-			registration.addRecipeCategories(new MoonwormQueenCategory(registration.getJeiHelpers().getGuiHelper()));
-		}
+		registration.addRecipeCategories(new MoonwormQueenCategory(registration.getJeiHelpers().getGuiHelper()));
 	}
 
 	@Override
 	public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
 		registration.getSmithingCategory().addExtension(NoTemplateSmithingRecipe.class, new NoTemplateSmithingExtension());
+		registration.getCraftingCategory().addExtension(CasketRepairRecipe.class, new CasketRepairExtension());
+		registration.getCraftingCategory().addExtension(EssenceRepairRecipe.class, new EssenceRepairExtension());
+		registration.getCraftingCategory().addExtension(EmperorsClothRecipe.class, new EmperorsClothExtension());
+		registration.getCraftingCategory().addExtension(MagicMapCloningRecipe.class, new MapCloningExtension<>(TFItems.FILLED_MAGIC_MAP, TFItems.MAGIC_MAP));
+		registration.getCraftingCategory().addExtension(MazeMapCloningRecipe.class, new MapCloningExtension<>(TFItems.FILLED_MAZE_MAP, TFItems.MAZE_MAP));
 		registration.getCraftingCategory().addExtension(ScepterRepairRecipe.class, new ScepterRepairExtension());
+		registration.getCraftingCategory().addExtension(TravellersGearModifierShapedRecipe.class, new TravellersGearModifierExtension<>());
+		registration.getCraftingCategory().addExtension(TravellersGearModifierShapelessRecipe.class, new TravellersGearModifierExtension<>());
+		registration.getCraftingCategory().addExtension(TravellersVestGlovesMergeRecipe.class, new TravellersVestGlovesMergeExtension());
 	}
 
 	@Override
@@ -108,7 +116,14 @@ public class JEICompat implements IModPlugin {
 		registration.addRecipes(OminousFireCategory.OMINOUS_FIRE, RecipeViewerConstants.getOminousFireRecipes().stream().map(info -> new OminousFireRecipe(new FakeEntityType(info.input()), new FakeEntityType(info.output()))).toList());
 		registration.addRecipes(CrumbleHornCategory.CRUMBLE_HORN, RecipeViewerConstants.getCrumbleHornRecipes().stream().map(info -> new CrumbleRecipe(info.getFirst(), info.getSecond())).toList());
 		registration.addRecipes(MoonwormQueenCategory.MOONWORM_QUEEN, List.of(new MoonwormQueenRepairRecipe()));
-		registration.addRecipes(DryingRackCategory.DRYING, Internal.getClientSyncedRecipes().byType(twilightforest.init.TFRecipes.DRYING_RECIPE).stream().map(RecipeHolder::value).toList());
+		registration.addRecipes(DryingRackCategory.DRYING, Internal.getClientSyncedRecipes().byType(twilightforest.init.TFRecipes.DRYING_RECIPE).stream()
+			.filter(holder -> !holder.value().getResult().is(TFItems.STALE_BREAD))
+			.map(RecipeHolder::value)
+			.toList());
+		registration.addRecipes(RecipeTypes.GRINDSTONE, GrindstoneTravellersRecipesGetter.getRecipes(
+			Internal.getClientSyncedRecipes(),
+			registration.getVanillaRecipeFactory()
+		));
 
 		//registration.addRecipes(RecipeTypes.CRAFTING, manager.getAllRecipesFor(RecipeType.CRAFTING).stream().filter(holder -> holder.value() instanceof ScepterRepairRecipe).toList());
 	}

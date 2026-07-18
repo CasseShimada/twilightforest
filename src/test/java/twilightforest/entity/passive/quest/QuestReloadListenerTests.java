@@ -1,5 +1,7 @@
 package twilightforest.entity.passive.quest;
 
+import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -10,6 +12,7 @@ import twilightforest.entity.passive.quest.ram.QuestingRamCurrentContext;
 
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.mock;
 
@@ -37,6 +40,19 @@ class QuestReloadListenerTests {
 		this.listener.apply(Map.of(unrelatedQuest, testContext()), mock(ResourceManager.class), mock(ProfilerFiller.class));
 
 		assertSame(QuestingRamContext.FALLBACK, QuestingRamCurrentContext.INSTANCE.getContext());
+	}
+
+	@Test
+	void decodesDatagenIngredientOutputWithRegistryContext() {
+		JsonElement generated = QuestingRamContext.CODEC
+			.encodeStart(JsonOps.INSTANCE, QuestingRamContext.FALLBACK)
+			.getOrThrow();
+		QuestingRamContext decoded = QuestingRamContext.CODEC
+			.parse(QuestReloadListener.registryOps(), generated)
+			.getOrThrow();
+
+		assertEquals(16, decoded.questItems().size());
+		assertEquals(QuestingRamContext.FALLBACK.lootTable(), decoded.lootTable());
 	}
 
 	private static QuestingRamContext testContext() {

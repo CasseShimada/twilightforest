@@ -1,7 +1,11 @@
 package twilightforest.block.entity;
 
+import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.base.SingleStackStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentGetter;
@@ -15,7 +19,8 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -25,6 +30,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
+import twilightforest.block.MasonJarBlock;
 import twilightforest.init.TFBlockEntities;
 import twilightforest.network.SetMasonJarItemPacket;
 
@@ -35,6 +41,8 @@ import static net.minecraft.world.level.block.entity.DecoratedPotBlockEntity.Wob
 
 public class MasonJarBlockEntity extends JarBlockEntity {
 	public static final String TAG_ITEM = "item";
+	public static final String LEGACY_TAG_ITEMS = "stacks";
+	private static final Codec<List<ItemStack>> LEGACY_ITEMS_CODEC = ItemStack.OPTIONAL_CODEC.listOf();
 	public static final String TAG_ANGLE = "rotation";
 
 	protected final MasonJarItemStackHandler item;
@@ -52,15 +60,31 @@ public class MasonJarBlockEntity extends JarBlockEntity {
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
-		output.store(TAG_ITEM, ItemStack.OPTIONAL_CODEC, this.item.getItem());
+		ItemStack storedItem = this.item.getItem();
+		output.store(TAG_ITEM, ItemStack.OPTIONAL_CODEC, storedItem);
+		// NeoForge 26.1 ItemStacksResourceHandler used this one-element list.
+		output.store(LEGACY_TAG_ITEMS, LEGACY_ITEMS_CODEC, List.of(storedItem));
 		output.putInt(TAG_ANGLE, this.itemRotation);
 	}
 
 	@Override
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
-		this.item.setItem(input.read(TAG_ITEM, ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY));
+		this.item.setItem(readStoredItem(input));
 		this.itemRotation = input.getIntOr(TAG_ANGLE, 0);
+	}
+
+	static ItemStack readStoredItem(ValueInput input) {
+		Optional<ItemStack> current = input.read(TAG_ITEM, ItemStack.OPTIONAL_CODEC);
+		if (current.isPresent()) return current.get();
+
+		List<ItemStack> legacyItems = input.read(LEGACY_TAG_ITEMS, LEGACY_ITEMS_CODEC).orElse(List.of());
+		for (int slot = 1; slot < legacyItems.size(); slot++) {
+			if (!legacyItems.get(slot).isEmpty()) {
+				throw new IllegalStateException("Mason Jar legacy stacks contained data outside its only valid slot");
+			}
+		}
+		return legacyItems.isEmpty() ? ItemStack.EMPTY : legacyItems.getFirst();
 	}
 
 	public boolean fillFromLootTable(ResourceKey<LootTable> lootTableKey, long seed, ServerLevel level) {
@@ -113,6 +137,7 @@ public class MasonJarBlockEntity extends JarBlockEntity {
 	public void removeComponentsFromTag(ValueOutput output) {
 		super.removeComponentsFromTag(output);
 		output.discard(TAG_ITEM);
+		output.discard(LEGACY_TAG_ITEMS);
 	}
 
 	@Override
@@ -120,13 +145,36 @@ public class MasonJarBlockEntity extends JarBlockEntity {
 	public void setChanged() {
 		super.setChanged();
 		if (this.level != null) {
-			BlockPos pos = this.getBlockPos();
-			this.level.getLightEngine().checkBlock(pos);
+			this.syncContainedLight();
 		}
 		if (this.level instanceof ServerLevel serverLevel) {
 			SetMasonJarItemPacket packet = new SetMasonJarItemPacket(this.getBlockPos(), this.item.getItem(), this.itemRotation);
 			PlayerLookup.tracking(serverLevel, ChunkPos.containing(this.getBlockPos())).forEach(player -> ServerPlayNetworking.send(player, packet));
 		}
+	}
+
+	@Override
+	public void setLevel(Level level) {
+		super.setLevel(level);
+		if (level instanceof ServerLevel serverLevel) {
+			serverLevel.getServer().execute(() -> {
+				if (this.level == serverLevel && !this.isRemoved()) this.syncContainedLight();
+			});
+		}
+	}
+
+	private void syncContainedLight() {
+		BlockPos pos = this.getBlockPos();
+		BlockState state = this.getBlockState();
+		if (state.hasProperty(MasonJarBlock.LIGHT_LEVEL)) {
+			int lightLevel = this.item.getItem().getItem() instanceof BlockItem blockItem
+				? blockItem.getBlock().defaultBlockState().getLightEmission()
+				: 0;
+			if (state.getValue(MasonJarBlock.LIGHT_LEVEL) != lightLevel) {
+				this.level.setBlock(pos, state.setValue(MasonJarBlock.LIGHT_LEVEL, lightLevel), Block.UPDATE_ALL);
+			}
+		}
+		this.level.getLightEngine().checkBlock(pos);
 	}
 
 	public int getItemRotation() {
@@ -137,9 +185,10 @@ public class MasonJarBlockEntity extends JarBlockEntity {
 		this.itemRotation = itemRotation;
 	}
 
-	public static class MasonJarItemStackHandler {
+	public static class MasonJarItemStackHandler extends SingleStackStorage {
 		protected final MasonJarBlockEntity jarEntity;
 		private ItemStack stack = ItemStack.EMPTY;
+		private ItemStack pendingInitialStack;
 
 		public MasonJarItemStackHandler(MasonJarBlockEntity jarEntity) {
 			this.jarEntity = jarEntity;
@@ -157,7 +206,54 @@ public class MasonJarBlockEntity extends JarBlockEntity {
 
 		// Used when syncing to client and when placing a jar that already has stored items
 		public void setItem(ItemStack itemStack) {
+			this.pendingInitialStack = null;
 			this.stack = itemStack;
+		}
+
+		@Override
+		protected ItemStack getStack() {
+			return this.stack;
+		}
+
+		@Override
+		protected void setStack(ItemStack stack) {
+			this.stack = stack;
+		}
+
+		@Override
+		protected boolean canInsert(ItemVariant resource) {
+			return resource.getItem().canFitInsideContainerItems();
+		}
+
+		@Override
+		public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+			ItemStack before = this.stack.copy();
+			long inserted = super.insert(resource, maxAmount, transaction);
+			if (inserted > 0 && this.pendingInitialStack == null) this.pendingInitialStack = before;
+			return inserted;
+		}
+
+		@Override
+		public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+			ItemStack before = this.stack.copy();
+			long extracted = super.extract(resource, maxAmount, transaction);
+			if (extracted > 0 && this.pendingInitialStack == null) this.pendingInitialStack = before;
+			return extracted;
+		}
+
+		@Override
+		protected void onFinalCommit() {
+			ItemStack initial = this.pendingInitialStack;
+			this.pendingInitialStack = null;
+			if (initial == null || ItemStack.isSameItemSameComponents(initial, this.stack) && initial.getCount() == this.stack.getCount()) {
+				return;
+			}
+
+			boolean inserted = initial.isEmpty() || !this.stack.isEmpty()
+				&& ItemStack.isSameItemSameComponents(initial, this.stack)
+				&& this.stack.getCount() > initial.getCount();
+			this.jarEntity.wobble(inserted ? WobbleStyle.POSITIVE : WobbleStyle.NEGATIVE);
+			this.jarEntity.setChanged();
 		}
 
 		public boolean isItemValid(int slot, ItemStack stack) {
@@ -172,6 +268,7 @@ public class MasonJarBlockEntity extends JarBlockEntity {
 			extractedStack.setCount(extracted);
 
 			if (!simulate) {
+				this.pendingInitialStack = null;
 				this.stack.shrink(extracted);
 				if (this.stack.isEmpty()) this.stack = ItemStack.EMPTY;
 				this.jarEntity.wobble(WobbleStyle.NEGATIVE);
@@ -189,6 +286,7 @@ public class MasonJarBlockEntity extends JarBlockEntity {
 			if (existing.isEmpty()) {
 				int toInsert = Math.min(stack.getCount(), stack.getMaxStackSize());
 				if (!simulate) {
+					this.pendingInitialStack = null;
 					this.stack = stack.copy();
 					this.stack.setCount(toInsert);
 					this.jarEntity.wobble(WobbleStyle.POSITIVE);
@@ -208,6 +306,7 @@ public class MasonJarBlockEntity extends JarBlockEntity {
 
 			int toAdd = Math.min(space, stack.getCount());
 			if (!simulate) {
+				this.pendingInitialStack = null;
 				existing.grow(toAdd);
 				this.jarEntity.wobble(WobbleStyle.POSITIVE);
 				this.jarEntity.setChanged();

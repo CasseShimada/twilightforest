@@ -125,6 +125,7 @@ public class TFSimpleArmorRenderer implements ArmorRenderer {
 		@Override
 		public void onResourceManagerReload(ResourceManager resourceManager) {
 			TFSimpleArmorRenderer.resetAllModelCache();
+			TravellersArmorRenderer.INSTANCE.resetModelCache();
 		}
 
 		@Override

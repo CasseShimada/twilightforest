@@ -1,5 +1,6 @@
 package twilightforest.block.entity;
 
+import com.mojang.authlib.GameProfile;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -32,6 +33,7 @@ import twilightforest.util.PlayerMessaging;
 
 public class SkullChestBlockEntity extends RandomizableContainerBlockEntity implements LidBlockEntity {
 	private static final int SIZE = 9 * 5;
+	protected static final String OWNER_TAG = "owner";
 	public NonNullList<ItemStack> contents = NonNullList.withSize(SIZE, ItemStack.EMPTY);
 	private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
 		@Override
@@ -112,7 +114,7 @@ public class SkullChestBlockEntity extends RandomizableContainerBlockEntity impl
 			ContainerHelper.saveAllItems(output, this.contents);
 		}
 		if (this.owner != null) {
-			output.store("owner", ResolvableProfile.CODEC, this.owner);
+			output.store(OWNER_TAG, ResolvableProfile.CODEC, this.owner);
 		}
 	}
 
@@ -123,8 +125,26 @@ public class SkullChestBlockEntity extends RandomizableContainerBlockEntity impl
 		if (!this.tryLoadLootTable(input)) {
 			ContainerHelper.loadAllItems(input, this.contents);
 		}
-		input.read("owner", ResolvableProfile.CODEC)
-			.ifPresent(resolvableProfile -> this.owner = resolvableProfile);
+		this.owner = this.readOwner(input);
+	}
+
+	@Nullable
+	protected ResolvableProfile readOwner(ValueInput input) {
+		return input.read(OWNER_TAG, ResolvableProfile.CODEC).orElse(null);
+	}
+
+	static boolean profileMatches(GameProfile playerProfile, ResolvableProfile ownerProfile) {
+		GameProfile partialOwner = ownerProfile.partialProfile();
+		if (partialOwner.id() != null) {
+			return partialOwner.id().equals(playerProfile.id());
+		}
+		return partialOwner.name() != null && partialOwner.name().equals(playerProfile.name());
+	}
+
+	public boolean canPlayerAccessOwner(Player player) {
+		return this.owner == null
+			|| player instanceof ServerPlayer serverPlayer && serverPlayer.permissions().hasPermission(Permissions.COMMANDS_ADMIN)
+			|| profileMatches(player.getGameProfile(), this.owner);
 	}
 
 	@Override
@@ -167,31 +187,16 @@ public class SkullChestBlockEntity extends RandomizableContainerBlockEntity impl
 	//if we have a dead player UUID set, then only that player can open the casket
 	@Override
 	public boolean stillValid(Player player) {
-		if (this.owner != null) {
-			if ((player instanceof ServerPlayer serverPlayer && serverPlayer.permissions().hasPermission(Permissions.COMMANDS_ADMIN))
-				|| player.getGameProfile().equals(this.owner.partialProfile())) {
-				return super.stillValid(player);
-			} else {
-				return false;
-			}
-		} else {
-			return super.stillValid(player);
-		}
+		return this.canPlayerAccessOwner(player) && super.stillValid(player);
 	}
 
 	@Override
 	public boolean canOpen(Player player) {
-		if (this.owner != null) {
-			if ((player instanceof ServerPlayer serverPlayer && serverPlayer.permissions().hasPermission(Permissions.COMMANDS_ADMIN))
-				|| player.getGameProfile().equals(this.owner.partialProfile())) {
-				return super.canOpen(player);
-			} else {
-				this.displayLockedInfo(player);
-				return false;
-			}
-		} else {
+		if (this.canPlayerAccessOwner(player)) {
 			return super.canOpen(player);
 		}
+		this.displayLockedInfo(player);
+		return false;
 	}
 
 	public void displayLockedInfo(Player player) {

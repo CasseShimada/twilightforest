@@ -6,7 +6,6 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
@@ -76,11 +75,6 @@ public class JEIUncraftingCategory implements IRecipeCategory<CraftingRecipe> {
 	}
 
 	@Override
-	public void createRecipeExtras(IRecipeExtrasBuilder builder, CraftingRecipe recipe, IFocusGroup focuses) {
-		builder.addDrawable(this.background, 0, 0);
-	}
-
-	@Override
 	public void setRecipe(IRecipeLayoutBuilder builder, CraftingRecipe recipe, IFocusGroup focuses) {
 		List<Ingredient> outputs = new ArrayList<>(recipe.placementInfo().ingredients()); //Collect each ingredient
 		outputs.replaceAll(ingredient -> {
@@ -124,6 +118,7 @@ public class JEIUncraftingCategory implements IRecipeCategory<CraftingRecipe> {
 
 	@Override
 	public void draw(CraftingRecipe recipe, IRecipeSlotsView views, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
+		this.background.draw(graphics, 0, 0);
 		int cost = recipe instanceof UncraftingRecipe ur ? ur.getCost() : RecipeViewerConstants.getRecipeCost(views.getSlotViews(RecipeIngredientRole.OUTPUT).stream().map(view -> view.getDisplayedItemStack().orElse(ItemStack.EMPTY)).toList());
 		if (cost > 0) {
 			String costStr = cost + "";

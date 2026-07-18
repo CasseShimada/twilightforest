@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
@@ -32,6 +33,8 @@ public class ReactorDebrisBlockEntity extends BlockEntity {
 	public static final Identifier DEFAULT_TEXTURE = TEXTURES[0];
 	private static final float Z_FIGHTING_MIN = 0.008F;
 	private static final float Z_FIGHTING_MAX = 1 - 0.008F;
+	private static final String TAG_TIME_ALIVE = "time_alive";
+	private static final String LEGACY_TAG_TIME_ALIVE = "timeAlive";
 	private static final Random RANDOM = new Random();
 	private boolean rerolls = false;
 	private boolean willDisappear = true;
@@ -80,15 +83,20 @@ public class ReactorDebrisBlockEntity extends BlockEntity {
 	}
 
 	public static void tick(Level level, BlockPos blockPos, BlockState blockState, ReactorDebrisBlockEntity reactorDebrisBlockEntity) {
+		if (level.isClientSide()) return;
+
 		if (reactorDebrisBlockEntity.willDisappear && reactorDebrisBlockEntity.timeAlive == 5 ||
 			reactorDebrisBlockEntity.rerolls && RANDOM.nextInt(5) == 0) {
 			reactorDebrisBlockEntity.randomizeDimensions();
 			reactorDebrisBlockEntity.randomizeTextures();
+			reactorDebrisBlockEntity.setChanged();
+			level.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS);
 		}
 
 		if (!reactorDebrisBlockEntity.willDisappear)
 			return;
 		reactorDebrisBlockEntity.timeAlive++;
+		reactorDebrisBlockEntity.setChanged();
 		if (reactorDebrisBlockEntity.timeAlive >= 60) {
 			level.destroyBlock(blockPos, false);
 		}
@@ -106,14 +114,13 @@ public class ReactorDebrisBlockEntity extends BlockEntity {
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
 
-		input.child("textures").ifPresent(textures -> {
-			this.textures[0] = nonEmptyNotNull(textures.getStringOr("west", ""));
-			this.textures[1] = nonEmptyNotNull(textures.getStringOr("east", ""));
-			this.textures[2] = nonEmptyNotNull(textures.getStringOr("bottom", ""));
-			this.textures[3] = nonEmptyNotNull(textures.getStringOr("top", ""));
-			this.textures[4] = nonEmptyNotNull(textures.getStringOr("north", ""));
-			this.textures[5] = nonEmptyNotNull(textures.getStringOr("south", ""));
-		});
+		ValueInput textures = input.childOrEmpty("textures");
+		this.textures[0] = nonEmptyNotNull(textures.getStringOr("west", ""));
+		this.textures[1] = nonEmptyNotNull(textures.getStringOr("east", ""));
+		this.textures[2] = nonEmptyNotNull(textures.getStringOr("bottom", ""));
+		this.textures[3] = nonEmptyNotNull(textures.getStringOr("top", ""));
+		this.textures[4] = nonEmptyNotNull(textures.getStringOr("north", ""));
+		this.textures[5] = nonEmptyNotNull(textures.getStringOr("south", ""));
 
 		List<Float> posList = input.listOrEmpty("pos", Codec.FLOAT).stream().toList();
 		if (posList.size() == 3) {
@@ -127,14 +134,19 @@ public class ReactorDebrisBlockEntity extends BlockEntity {
 		if (sizeList.size() == 3) {
 			this.maxPos = new Vector3f(sizeList.get(0), sizeList.get(1), sizeList.get(2)).add(this.minPos);
 		}
-		if (!new AABB(0, 0, 0, 1, 1, 1).contains(this.minPos.x, this.minPos.y, this.minPos.z)) {
+		if (!new AABB(0, 0, 0, 1, 1, 1).contains(this.maxPos.x, this.maxPos.y, this.maxPos.z)
+			|| this.maxPos.x <= this.minPos.x || this.maxPos.y <= this.minPos.y || this.maxPos.z <= this.minPos.z) {
 			this.maxPos = new Vector3f(1);
 		}
 
 		this.shape = Shapes.box(this.minPos.x, this.minPos.y, this.minPos.z, this.maxPos.x, this.maxPos.y, this.maxPos.z);
 		this.rerolls = input.getBooleanOr("rerolls", this.rerolls);
 		this.willDisappear = input.getBooleanOr("will_disappear", this.willDisappear);
-		this.timeAlive = input.getByteOr("time_alive", this.timeAlive);
+		this.timeAlive = readTimeAlive(input, this.timeAlive);
+	}
+
+	static byte readTimeAlive(ValueInput input, byte fallback) {
+		return input.getByteOr(TAG_TIME_ALIVE, input.getByteOr(LEGACY_TAG_TIME_ALIVE, fallback));
 	}
 
 	@Override
@@ -161,7 +173,8 @@ public class ReactorDebrisBlockEntity extends BlockEntity {
 
 		output.putBoolean("rerolls", this.rerolls);
 		output.putBoolean("will_disappear", this.willDisappear);
-		output.putByte("time_alive", this.timeAlive);
+		output.putByte(TAG_TIME_ALIVE, this.timeAlive);
+		output.putByte(LEGACY_TAG_TIME_ALIVE, this.timeAlive);
 	}
 
 	@Override

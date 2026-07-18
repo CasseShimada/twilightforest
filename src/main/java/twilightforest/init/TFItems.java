@@ -15,12 +15,16 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.equipment.ArmorType;
 import twilightforest.TwilightForestMod;
 import twilightforest.components.item.PotionFlaskComponent;
 import twilightforest.item.*;
 import twilightforest.item.food.TFConsumables;
 import twilightforest.item.food.TFFoods;
+import twilightforest.item.travellers_gear.TravellersArmorBeltItem;
+import twilightforest.item.travellers_gear.TravellersArmorItem;
+import twilightforest.item.travellers_gear.TravellersGogglesItem;
 import twilightforest.tags.TFBannerPatternTags;
 import twilightforest.util.TFToolMaterials;
 import twilightforest.util.registry.RegistryAliasUtil;
@@ -78,6 +82,7 @@ public class TFItems {
 	public static final Item RAW_VENISON = register("raw_venison", Item::new, () -> new Item.Properties().food(TFFoods.RAW_VENISON));
 	public static final Item COOKED_VENISON = register("cooked_venison", Item::new, () -> new Item.Properties().food(TFFoods.VENISON_STEAK));
 	public static final Item HYDRA_CHOP = register("hydra_chop", HydraChopItem::new, () -> new Item.Properties().fireResistant().food(TFFoods.HYDRA_CHOP, TFConsumables.HYDRA_CHOP).rarity(Rarity.UNCOMMON));
+	public static final Item TANNIN = register("tannin", Item::new, () -> new Item.Properties().craftRemainder(Items.GLASS_BOTTLE));
 	public static final Item FIERY_BLOOD = register("fiery_blood", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final Item FIERY_TEARS = register("fiery_tears", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final Item FIERY_INGOT = register("fiery_ingot", Item::new, () -> new Item.Properties().fireResistant().rarity(Rarity.UNCOMMON));
@@ -87,6 +92,12 @@ public class TFItems {
 	public static final Item FIERY_BOOTS = register("fiery_boots", properties -> new FieryArmorItem(TFArmorMaterials.FIERY, ArmorType.BOOTS, properties), () -> new Item.Properties().fireResistant().rarity(Rarity.UNCOMMON));
 	public static final Item FIERY_SWORD = register("fiery_sword", properties -> new FierySwordItem(TFToolMaterials.FIERY, properties), () -> new Item.Properties().fireResistant().rarity(Rarity.UNCOMMON));
 	public static final Item FIERY_PICKAXE = register("fiery_pickaxe", properties -> new FieryPickItem(TFToolMaterials.FIERY, properties), () -> new Item.Properties().fireResistant().rarity(Rarity.UNCOMMON));
+	public static final Item TRAVELLERS_GOGGLES = register("travellers_goggles", properties -> new TravellersGogglesItem(3, properties), () -> TravellersArmorItem.gogglesProperties(TravellersArmorItem.baseProperties(new Item.Properties(), ArmorType.HELMET, true)));
+	public static final Item TRAVELLERS_VEST = register("travellers_vest", properties -> new TravellersArmorItem(3, properties), () -> TravellersArmorItem.chestProperties(TravellersArmorItem.baseProperties(new Item.Properties(), ArmorType.CHESTPLATE, true)));
+	public static final Item TRAVELLERS_GLOVES = register("travellers_gloves", properties -> new TravellersArmorItem(0, properties), () -> TravellersArmorItem.glovesProperties(TravellersArmorItem.baseProperties(new Item.Properties(), ArmorType.CHESTPLATE, false).stacksTo(1)));
+	public static final Item TRAVELLERS_WINGS = register("travellers_wings", properties -> new TravellersArmorBeltItem(3, properties), () -> TravellersArmorItem.wingsProperties(TravellersArmorItem.baseProperties(new Item.Properties(), ArmorType.LEGGINGS, true)));
+	public static final Item TRAVELLERS_BELT = register("travellers_belt", properties -> new TravellersArmorBeltItem(0, properties), () -> TravellersArmorBeltItem.beltProperties(TravellersArmorItem.baseProperties(new Item.Properties(), ArmorType.LEGGINGS, false).stacksTo(1)));
+	public static final Item TRAVELLERS_BOOTS = register("travellers_boots", properties -> new TravellersArmorItem(3, properties), () -> TravellersArmorItem.bootsProperties(TravellersArmorItem.baseProperties(new Item.Properties(), ArmorType.BOOTS, true)));
 	public static final Item STEELEAF_INGOT = register("steeleaf_ingot", Item::new, Item.Properties::new);
 	public static final Item STEELEAF_HELMET = register("steeleaf_helmet", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.STEELEAF, ArmorType.HELMET)), Item.Properties::new);
 	public static final Item STEELEAF_CHESTPLATE = register("steeleaf_chestplate", properties -> new Item(properties.humanoidArmor(TFArmorMaterials.STEELEAF, ArmorType.CHESTPLATE)), Item.Properties::new);
@@ -105,6 +116,7 @@ public class TFItems {
 	public static final Item COOKED_MEEF = register("cooked_meef", Item::new, () -> new Item.Properties().food(TFFoods.MEEF_STEAK));
 	public static final Item MEEF_STROGANOFF = register("meef_stroganoff", Item::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).fireResistant().food(TFFoods.MEEF_STROGANOFF).usingConvertsTo(Items.BOWL));
 	public static final Item MAZE_WAFER = register("maze_wafer", Item::new, () -> new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.6F).build()));
+	public static final Item MAZE_SLIME_BALL = register("maze_slime_ball", Item::new, Item.Properties::new);
 	public static final Item ORE_MAGNET = register("ore_magnet", OreMagnetItem::new, () -> new Item.Properties().durability(64));
 	public static final Item CRUMBLE_HORN = register("crumble_horn", CrumbleHornItem::new, () -> new Item.Properties().durability(1024).rarity(Rarity.RARE));
 	public static final Item PEACOCK_FEATHER_FAN = register("peacock_feather_fan", PeacockFanItem::new, () -> new Item.Properties().durability(1024).rarity(Rarity.RARE));
@@ -116,6 +128,10 @@ public class TFItems {
 	public static final Item CHARM_OF_KEEPING_1 = register("charm_of_keeping_1", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final Item CHARM_OF_KEEPING_2 = register("charm_of_keeping_2", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final Item CHARM_OF_KEEPING_3 = register("charm_of_keeping_3", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
+	public static final Item IRON_BERRY = register("iron_berry", Item::new, Item.Properties::new);
+	public static final Item GOLD_BERRY = register("gold_berry", Item::new, Item.Properties::new);
+	public static final Item COPPER_BERRY = register("copper_berry", Item::new, Item.Properties::new);
+	public static final Item ESSENCE_BERRY = register("essence_berry", EssenceBerryItem::new, Item.Properties::new);
 	public static final Item TOWER_KEY = register("tower_key", Item::new, () -> new Item.Properties().fireResistant().rarity(Rarity.UNCOMMON));
 	public static final Item BORER_ESSENCE = register("borer_essence", Item::new, Item.Properties::new);
 	public static final Item CARMINITE = register("carminite", Item::new, Item.Properties::new);
@@ -170,6 +186,38 @@ public class TFItems {
 	public static final Item MYSTIC_CROWN = register("mystic_crown", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1).attributes(ItemAttributeModifiers.builder().add(Attributes.ARMOR, new AttributeModifier(Identifier.withDefaultNamespace("armor." + EquipmentSlot.HEAD.getName()), 2.0F, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.HEAD).build()).equippable(EquipmentSlot.HEAD));
 
 	public static final Item KEEPSAKE_CASKET = register("keepsake_casket", KeepsakeCasketItem::new, () -> new Item.Properties().useBlockDescriptionPrefix().rarity(Rarity.UNCOMMON));
+	public static final Item RASPBERRY = register("raspberry", Item::new, () -> new Item.Properties().food(TFFoods.BERRY));
+	public static final Item BLUEBERRY = register("blueberry", Item::new, () -> new Item.Properties().food(TFFoods.BERRY));
+	public static final Item BLACKBERRY = register("blackberry", Item::new, () -> new Item.Properties().food(TFFoods.BERRY));
+	public static final Item MALOBERRY = register("maloberry", Item::new, () -> new Item.Properties().food(TFFoods.BERRY));
+	public static final Item BLIGHTBERRY = register("blightberry", Item::new, () -> new Item.Properties().food(TFFoods.BERRY, TFConsumables.BLIGHTBERRY));
+	public static final Item DUSKBERRY = register("duskberry", Item::new, () -> new Item.Properties().food(TFFoods.BERRY, TFConsumables.DUSKBERRY));
+	public static final Item SKYBERRY = register("skyberry", Item::new, () -> new Item.Properties().food(TFFoods.BERRY, TFConsumables.SKYBERRY));
+	public static final Item STINGBERRY = register("stingberry", Item::new, () -> new Item.Properties().food(TFFoods.BERRY, TFConsumables.STINGBERRY));
+	public static final Item BERRY_MEDLEY = register("berry_medley", Item::new, () -> new Item.Properties().food(TFFoods.BERRY_MEDLEY).usingConvertsTo(Items.BOWL).stacksTo(1));
+	public static final Item MOSS_SOUP = register("moss_soup", Item::new, () -> new Item.Properties().food(TFFoods.MOSS_SOUP).usingConvertsTo(Items.BOWL).stacksTo(1));
+	public static final Item SHIKA_SENBEI = register("shika_senbei", Item::new, () -> new Item.Properties().food(TFFoods.SHIKA_SENBEI));
+	public static final Item MONSTER_JERKY = register("monster_jerky", Item::new, () -> new Item.Properties().food(TFFoods.MONSTER_JERKY));
+	public static final Item BEEF_JERKY = register("beef_jerky", Item::new, () -> new Item.Properties().food(TFFoods.BEEF_JERKY));
+	public static final Item CHICKEN_JERKY = register("chicken_jerky", Item::new, () -> new Item.Properties().food(TFFoods.CHICKEN_JERKY));
+	public static final Item PORK_JERKY = register("pork_jerky", Item::new, () -> new Item.Properties().food(TFFoods.PORK_JERKY));
+	public static final Item MUTTON_JERKY = register("mutton_jerky", Item::new, () -> new Item.Properties().food(TFFoods.MUTTON_JERKY));
+	public static final Item RABBIT_JERKY = register("rabbit_jerky", Item::new, () -> new Item.Properties().food(TFFoods.RABBIT_JERKY));
+	public static final Item COD_JERKY = register("cod_jerky", Item::new, () -> new Item.Properties().food(TFFoods.COD_JERKY));
+	public static final Item SALMON_JERKY = register("salmon_jerky", Item::new, () -> new Item.Properties().food(TFFoods.SALMON_JERKY));
+	public static final Item TROPICAL_FISH_JERKY = register("tropical_fish_jerky", Item::new, () -> new Item.Properties().food(TFFoods.TROPICAL_FISH_JERKY));
+	public static final Item FUGU_JERKY = register("fugu_jerky", Item::new, () -> new Item.Properties().food(TFFoods.FUGU_JERKY));
+	public static final Item VENISON_JERKY = register("venison_jerky", Item::new, () -> new Item.Properties().food(TFFoods.VENISON_JERKY));
+	public static final Item MEEF_JERKY = register("meef_jerky", Item::new, () -> new Item.Properties().food(TFFoods.MEEF_JERKY));
+	public static final Item GELATINOUS_SLIME_DROP = register("gelatinous_slime_drop", Item::new, () -> new Item.Properties().food(TFFoods.SLIME_DROP, TFConsumables.SLIME_DROP));
+	public static final Item GELATINOUS_MAZE_SLIME_DROP = register("gelatinous_maze_slime_drop", Item::new, () -> new Item.Properties().food(TFFoods.MAZE_SLIME_DROP, TFConsumables.MAZE_SLIME_DROP));
+	public static final Item TREATED_LEATHER = register("treated_leather", Item::new, Item.Properties::new);
+	public static final Item TANNED_LEATHER = register("tanned_leather", Item::new, Item.Properties::new);
+	public static final Item STALE_BREAD = register("stale_bread", Item::new, () -> new Item.Properties()
+		.stacksTo(1)
+		.component(DataComponents.TOOLTIP_DISPLAY, TooltipDisplay.DEFAULT.withHidden(DataComponents.ATTRIBUTE_MODIFIERS, true))
+		.sword(ToolMaterial.WOOD, 3.0F, -2.4F)
+		.delayedHolderComponent(DataComponents.DAMAGE_TYPE, TFDamageTypes.STALE_SANDWICH));
 	public static final Item HUGE_LILY_PAD = register("huge_lily_pad", properties -> new HugeLilyPadItem(TFBlocks.HUGE_LILY_PAD, properties), () -> new Item.Properties().useBlockDescriptionPrefix());
 	public static final Item HUGE_WATER_LILY = register("huge_water_lily", properties -> new PlaceOnWaterBlockItem(TFBlocks.HUGE_WATER_LILY, properties), () -> new Item.Properties().useBlockDescriptionPrefix());
 	public static final Item FALLEN_LEAVES = register("fallen_leaves", properties -> new FallenLeavesItem(TFBlocks.FALLEN_LEAVES, properties), () -> new Item.Properties().useBlockDescriptionPrefix());

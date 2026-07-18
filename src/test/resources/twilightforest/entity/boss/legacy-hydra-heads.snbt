@@ -1,0 +1,16 @@
+{
+  legacy_four_heads: {
+    NumHeads: 4b
+  },
+  legacy_seven_heads: {
+    NumHeads: 7b
+  },
+  current_sparse_mask: {
+    NumHeads: 73b,
+    HeadNames: ["Hydra", "Hydra", "Hydra", "Hydra", "Hydra", "Hydra", "Hydra"]
+  },
+  current_low_mask: {
+    NumHeads: 7b,
+    HeadNames: ["Hydra", "Hydra", "Hydra", "Hydra", "Hydra", "Hydra", "Hydra"]
+  }
+}

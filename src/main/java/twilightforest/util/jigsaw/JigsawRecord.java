@@ -22,7 +22,7 @@ import java.util.List;
  * @param priority Determines order in which pieces are generated, before post-processing (which is block placement)
  * @param pos Offset from template origin. Not the world position
  */
-public record JigsawRecord(int priority, FrontAndTop orientation, BlockPos pos, String name, String target) {
+public record JigsawRecord(int priority, FrontAndTop orientation, BlockPos pos, String pool, String name, String target) {
 	public static List<JigsawRecord> allFromTemplate(StructureTemplateManager structureManager, Identifier templateLocation, StructurePlaceSettings placeSettings) {
 		// StructureTemplate#filterBlocks() does not support mirroring, force NONE
 		placeSettings.setMirror(Mirror.NONE);
@@ -48,6 +48,7 @@ public record JigsawRecord(int priority, FrontAndTop orientation, BlockPos pos, 
 			Optionull.mapOrDefault(info.nbt(), tag -> tag.getIntOr("selection_priority", 0), 0),
 			JigsawUtil.process(info.state().getValue(JigsawBlock.ORIENTATION), settings),
 			StructureTemplate.calculateRelativePosition(settings, info.pos()),
+			Optionull.mapOrDefault(info.nbt(), tag -> tag.getStringOr("pool", "minecraft:empty"), "minecraft:empty"),
 			Optionull.mapOrDefault(info.nbt(), tag -> tag.getStringOr("name", ""), ""),
 			Optionull.mapOrDefault(info.nbt(), tag -> tag.getStringOr("target", ""), "")
 		);
@@ -58,6 +59,7 @@ public record JigsawRecord(int priority, FrontAndTop orientation, BlockPos pos, 
 			Optionull.mapOrDefault(info.nbt(), tag -> tag.getIntOr("selection_priority", 0), 0),
 			info.state().getValue(JigsawBlock.ORIENTATION),
 			info.pos(),
+			Optionull.mapOrDefault(info.nbt(), tag -> tag.getStringOr("pool", "minecraft:empty"), "minecraft:empty"),
 			Optionull.mapOrDefault(info.nbt(), tag -> tag.getStringOr("name", ""), ""),
 			Optionull.mapOrDefault(info.nbt(), tag -> tag.getStringOr("target", ""), "")
 		);
@@ -66,8 +68,9 @@ public record JigsawRecord(int priority, FrontAndTop orientation, BlockPos pos, 
 	public static JigsawRecord fromTag(CompoundTag tag) {
 		return new JigsawRecord(
 			tag.getIntOr("priority", 0),
-			FrontAndTop.values()[tag.getIntOr("facing", 0) % FrontAndTop.values().length],
+			FrontAndTop.values()[Math.floorMod(tag.getIntOr("facing", 0), FrontAndTop.values().length)],
 			new BlockPos(tag.getIntOr("x", 0), tag.getIntOr("y", 0), tag.getIntOr("z", 0)),
+			tag.getStringOr("pool", "minecraft:empty"),
 			tag.getStringOr("name", ""),
 			tag.getStringOr("target", "")
 		);
@@ -81,6 +84,7 @@ public record JigsawRecord(int priority, FrontAndTop orientation, BlockPos pos, 
 		ret.putInt("x", this.pos.getX());
 		ret.putInt("y", this.pos.getY());
 		ret.putInt("z", this.pos.getZ());
+		ret.putString("pool", this.pool);
 		ret.putString("name", this.name);
 		ret.putString("target", this.target);
 

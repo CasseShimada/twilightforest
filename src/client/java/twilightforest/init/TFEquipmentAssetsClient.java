@@ -28,6 +28,8 @@ public final class TFEquipmentAssetsClient {
 			.addLayers(EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS, arcticDyeable(TwilightForestMod.prefix("arctic_overlay"), false))
 			.build());
 		consumer.accept(TFEquipmentAssets.YETI, EquipmentClientInfo.builder().addHumanoidLayers(TwilightForestMod.prefix("yeti"), false).build());
+		consumer.accept(TFEquipmentAssets.TRAVELLERS, EquipmentClientInfo.builder().addHumanoidLayers(TwilightForestMod.prefix("travellers"), false).build());
+		consumer.accept(TFEquipmentAssets.TRAVELLERS_DOWN, EquipmentClientInfo.builder().addMainHumanoidLayer(TwilightForestMod.prefix("travellers_down"), false).build());
 	}
 
 	public static EquipmentClientInfo.Layer arcticDyeable(Identifier textureId, boolean dyeable) {

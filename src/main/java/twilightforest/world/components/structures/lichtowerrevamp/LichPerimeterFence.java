@@ -10,8 +10,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Unit;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
@@ -364,18 +364,19 @@ public class LichPerimeterFence extends TwilightJigsawPiece implements PieceBear
 		if (!chunkBounds.isInside(zombiePos))
 			return;
 
-		var knot = EntityUtil.createEntityIgnoreException(level, EntityTypes.LEASH_KNOT);
 		var boundedEntity = EntityUtil.createEntityIgnoreException(level, EntityTypes.ZOMBIE);
-		if (knot == null || boundedEntity == null)
+		if (boundedEntity == null)
 			return;
 
-		knot.setPos(this.leashPos.getX() + 0.5, this.leashPos.getY(), this.leashPos.getZ() + 0.5);
+		boolean createdKnot = LeashFenceKnotEntity.getKnot(level.getLevel(), this.leashPos).isEmpty();
+		var knot = LeashFenceKnotEntity.getOrCreateKnot(level.getLevel(), this.leashPos);
 
 		boundedEntity.setPersistenceRequired();
 		boundedEntity.setLeashedTo(knot, false);
 		boundedEntity.setPos(zombiePos.getX() + 0.5, zombiePos.getY() - 1, zombiePos.getZ() + 0.5);
 		TFDataAttachments.set(boundedEntity, TFDataAttachments.LEASH_PATHFINDER_OVERRIDE, Unit.INSTANCE);
-		level.addFreshEntity(boundedEntity);
+		if (!level.addFreshEntity(boundedEntity) && createdKnot)
+			knot.discard();
 	}
 
 	private void generateEscapeLadder(WorldGenLevel level, BoundingBox chunkBounds) {

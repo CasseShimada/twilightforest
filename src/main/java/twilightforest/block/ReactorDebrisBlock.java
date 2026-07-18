@@ -7,6 +7,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -47,9 +48,11 @@ public class ReactorDebrisBlock extends BaseEntityBlock {
 
 	@Override
 	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moving) {
-		if(!level.isClientSide() && level.getBlockEntity(pos) instanceof ReactorDebrisBlockEntity blockEntity) {  //  blockEntity should always be
+		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof ReactorDebrisBlockEntity blockEntity) {
 			blockEntity.randomizeDimensions();
 			blockEntity.randomizeTextures();
+			blockEntity.setChanged();
+			level.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS);
 		}
 	}
 

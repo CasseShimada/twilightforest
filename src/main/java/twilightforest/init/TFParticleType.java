@@ -24,6 +24,8 @@ public class TFParticleType {
 	public static final SimpleParticleType SNOW_GUARDIAN = register("snow_guardian", FabricParticleTypes.simple(false));
 	public static final SimpleParticleType ICE_BEAM = register("ice_beam", FabricParticleTypes.simple(false));
 	public static final SimpleParticleType ANNIHILATE = register("annihilate", FabricParticleTypes.simple(false));
+	public static final SimpleParticleType PERFECT_DODGE = register("perfect_dodge", FabricParticleTypes.simple(false));
+	public static final SimpleParticleType DOUBLE_JUMP = register("double_jump", FabricParticleTypes.simple(true));
 	public static final SimpleParticleType HUGE_SMOKE = register("huge_smoke", FabricParticleTypes.simple(false));
 	public static final SimpleParticleType FIREFLY = register("firefly", FabricParticleTypes.simple(false));
 	public static final SimpleParticleType WANDERING_FIREFLY = register("wandering_firefly", FabricParticleTypes.simple(false));

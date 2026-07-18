@@ -13,8 +13,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import twilightforest.api.ArmorApi;
 import twilightforest.init.TFDamageTypes;
-import twilightforest.init.TFItems;
 import twilightforest.platform.Mods;
 
 public class FieryBlock extends Block {
@@ -41,7 +41,7 @@ public class FieryBlock extends Block {
 	public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
 		if (level instanceof ServerLevel serverLevel && !entity.fireImmune()
 			&& entity instanceof LivingEntity living
-			&& !living.getItemBySlot(EquipmentSlot.FEET).is(TFItems.FIERY_BOOTS)) {
+			&& !ArmorApi.hasTrait(living.getItemBySlot(EquipmentSlot.FEET), ArmorApi.FIERY_STEP_IMMUNITY)) {
 			living.hurtServer(serverLevel, serverLevel.damageSources().source(TFDamageTypes.FIERY), 1.0F);
 		}
 

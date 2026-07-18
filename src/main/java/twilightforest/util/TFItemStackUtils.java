@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.RegistryOps;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,6 +17,9 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.ItemLike;
+import twilightforest.api.AccessoryApi;
+import twilightforest.api.AccessoryConsumptionContext;
+import twilightforest.api.AccessoryConsumptionResult;
 import twilightforest.block.KeepsakeCasketBlock;
 import twilightforest.events.CharmEvents;
 import twilightforest.init.TFDataComponents;
@@ -35,25 +39,30 @@ public class TFItemStackUtils {
 			return true;
 		}
 
-		return consumeEquipmentSlot(player, EquipmentSlot.HEAD, item, persistentTag, saveItemToTag)
+		boolean consumedFromEquipment = consumeEquipmentSlot(player, EquipmentSlot.HEAD, item, persistentTag, saveItemToTag)
 			|| consumeEquipmentSlot(player, EquipmentSlot.CHEST, item, persistentTag, saveItemToTag)
 			|| consumeEquipmentSlot(player, EquipmentSlot.LEGS, item, persistentTag, saveItemToTag)
 			|| consumeEquipmentSlot(player, EquipmentSlot.FEET, item, persistentTag, saveItemToTag)
 			|| consumeEquipmentSlot(player, EquipmentSlot.OFFHAND, item, persistentTag, saveItemToTag);
+		if (consumedFromEquipment) {
+			return true;
+		}
+
+		if (player instanceof ServerPlayer serverPlayer) {
+			AccessoryConsumptionResult result = AccessoryApi.tryConsume(new AccessoryConsumptionContext(serverPlayer, item.asItem()));
+			if (result.wasConsumed()) {
+				recordPreConsumptionStack(player.registryAccess(), result.consumedStack(), persistentTag, saveItemToTag);
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public static boolean consumeInventoryItem(final NonNullList<ItemStack> stacks, final ItemLike item, CompoundTag persistentTag, boolean saveItemToTag, RegistryAccess registryAccess) {
 		for (ItemStack stack : stacks) {
 			if (stack.is(item.asItem())) {
-				if (saveItemToTag) persistentTag.put(CharmEvents.CONSUMED_CHARM_TAG, saveItem(registryAccess, stack));
-				BlockItemStateProperties blockItemStateProperties = stack.get(DataComponents.BLOCK_STATE);
-				if (blockItemStateProperties != null && blockItemStateProperties.properties().containsKey(KeepsakeCasketBlock.BREAKAGE.getName())) {
-					String propertyValueString = blockItemStateProperties.properties().get(KeepsakeCasketBlock.BREAKAGE.getName());
-
-					persistentTag.putInt(CharmEvents.CASKET_DAMAGE_TAG, isNumeric(propertyValueString) ? Integer.parseInt(propertyValueString) : 0);
-				} else if (stack.has(TFDataComponents.CASKET_DAMAGE)) {
-					persistentTag.putInt(CharmEvents.CASKET_DAMAGE_TAG, stack.getOrDefault(TFDataComponents.CASKET_DAMAGE, 0));
-				}
+				recordPreConsumptionStack(registryAccess, stack, persistentTag, saveItemToTag);
 				stack.shrink(1);
 				return true;
 			}
@@ -67,9 +76,14 @@ public class TFItemStackUtils {
 		if (!stack.is(item.asItem())) {
 			return false;
 		}
-		if (saveItemToTag) {
-			persistentTag.put(CharmEvents.CONSUMED_CHARM_TAG, saveItem(player.registryAccess(), stack));
-		}
+		recordPreConsumptionStack(player.registryAccess(), stack, persistentTag, saveItemToTag);
+		stack.shrink(1);
+		player.setItemSlot(slot, stack);
+		return true;
+	}
+
+	private static void recordPreConsumptionStack(RegistryAccess registryAccess, ItemStack stack, CompoundTag persistentTag, boolean saveItemToTag) {
+		if (saveItemToTag) persistentTag.put(CharmEvents.CONSUMED_CHARM_TAG, saveItem(registryAccess, stack));
 		BlockItemStateProperties blockItemStateProperties = stack.get(DataComponents.BLOCK_STATE);
 		if (blockItemStateProperties != null && blockItemStateProperties.properties().containsKey(KeepsakeCasketBlock.BREAKAGE.getName())) {
 			String propertyValueString = blockItemStateProperties.properties().get(KeepsakeCasketBlock.BREAKAGE.getName());
@@ -77,9 +91,6 @@ public class TFItemStackUtils {
 		} else if (stack.has(TFDataComponents.CASKET_DAMAGE)) {
 			persistentTag.putInt(CharmEvents.CASKET_DAMAGE_TAG, stack.getOrDefault(TFDataComponents.CASKET_DAMAGE, 0));
 		}
-		stack.shrink(1);
-		player.setItemSlot(slot, stack);
-		return true;
 	}
 
 	public static NonNullList<ItemStack> sortArmorForCasket(Player player) {

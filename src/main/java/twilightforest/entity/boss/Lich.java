@@ -1,5 +1,6 @@
 package twilightforest.entity.boss;
 
+import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
@@ -67,9 +68,13 @@ import twilightforest.util.entities.EntityUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 public class Lich extends BaseTFBoss {
+	static final Codec<Set<UUID>> CURRENT_SUMMONED_CLONES_CODEC = UUIDUtil.CODEC_SET.fieldOf("UUIDs").codec();
+	static final Codec<Set<UUID>> COMPATIBLE_SUMMONED_CLONES_CODEC = Codec.withAlternative(CURRENT_SUMMONED_CLONES_CODEC, UUIDUtil.CODEC_SET);
+
 	public static final int PARTICLE_BURST_COOLDOWN = 23; //How many ticks between bursts of particles during the start of the death animation
 	public static final int DEATH_ANIMATION_POINT_A = PARTICLE_BURST_COOLDOWN * 5; //How many bursts of particles should happen
 	public static final int DEATH_ANIMATION_POINT_B = DEATH_ANIMATION_POINT_A + 16; //How long should the crown be falling down for
@@ -218,10 +223,7 @@ public class Lich extends BaseTFBoss {
 		super.addAdditionalSaveData(output);
 		output.storeNullable("MasterLich", UUIDUtil.CODEC, this.getMasterUUID());
 		if (!this.summonedClones.isEmpty()) {
-			ValueOutput.TypedOutputList<UUID> clonesTag = output.list("SummonedClones", UUIDUtil.CODEC);
-			for (UUID uuid : this.summonedClones) {
-				clonesTag.add(uuid);
-			}
+			output.store("SummonedClones", CURRENT_SUMMONED_CLONES_CODEC, Set.copyOf(this.summonedClones));
 		}
 		output.putInt("ShieldStrength", this.getShieldStrength());
 		output.putInt("MinionsToSummon", this.getMinionsToSummon());
@@ -234,9 +236,7 @@ public class Lich extends BaseTFBoss {
 		super.readAdditionalSaveData(input);
 		this.setMasterUUID(input.read("MasterLich", UUIDUtil.CODEC).orElse(null));
 		this.summonedClones.clear();
-		for (UUID uuid : input.listOrEmpty("SummonedClones", UUIDUtil.CODEC)) {
-			this.summonedClones.add(uuid);
-		}
+		input.read("SummonedClones", COMPATIBLE_SUMMONED_CLONES_CODEC).ifPresent(this.summonedClones::addAll);
 		this.setShieldStrength(input.getIntOr("ShieldStrength", this.getShieldStrength()));
 		this.setMinionsToSummon(input.getIntOr("MinionsToSummon", this.getMinionsToSummon()));
 		this.babyMinionsSummoned = input.getIntOr("BabyMinionsSummoned", this.babyMinionsSummoned);

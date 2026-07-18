@@ -1,0 +1,17 @@
+{
+  ForgeCaps: {
+    "twilightforest:cap_shield": {tempshields: 3, permshields: 2},
+    "twilightforest:cap_feather_fan_fall": {featherFanFalling: 1b},
+    "twilightforest:cap_thrown": {yetiThrown: 1b, throwCooldown: 199, throwX: 0.25d, throwY: 1.5d, throwZ: -0.75d},
+    "twilightforest:giant_pick_mine": {giantPickMining: 123456789L, giantPickBreaking: 1b, giantBlockConversion: 4},
+    "example:unknown_provider": {do_not_drop: "preserved"}
+  },
+  ForgeData: {
+    PlayerPersisted: {
+      twilightforest_banished: 1b,
+      "twilightforest:keep_inventory_charm": 1b
+    },
+    "twilightforest:ender": 1b,
+    unrelated_value: 42
+  }
+}

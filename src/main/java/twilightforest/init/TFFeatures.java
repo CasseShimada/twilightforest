@@ -42,7 +42,9 @@ public class TFFeatures {
 	public static final Feature<TFTreeFeatureConfig> MINERS_TREE = register("miners_tree", new MiningTreeFeature(TFTreeFeatureConfig.codecTFTreeConfig));
 	public static final Feature<NoneFeatureConfiguration> MONOLITH = register("monolith", new MonolithFeature(NoneFeatureConfiguration.CODEC));
 	public static final Feature<DiskConfiguration> MYCELIUM_BLOB = register("mycelium_blob", new CheckAbovePatchFeature(DiskConfiguration.CODEC));
+	public static final Feature<BerryBushConfig> BERRY_BUSH = register("berry_bush", new BerryBushFeature(BerryBushConfig.CODEC));
 	public static final Feature<BlockStateConfiguration> UNDERGROUND_PLANTS = register("underground_plants", new UndergroundPlantFeature(BlockStateConfiguration.CODEC));
+	public static final Feature<BlockStateConfiguration> OREBERRY_BUSHES = register("oreberry_bushes", new UndergroundPlantFeature(BlockStateConfiguration.CODEC, 1));
 	public static final Feature<BlockStateConfiguration> TROLL_VINES = register("troll_vines", new UndergroundPlantFeature(BlockStateConfiguration.CODEC));
 	public static final Feature<HugeMushroomFeatureConfiguration> TROLL_BIG_MUSHGLOOM = register("troll_cave_big_mushgloom", new TrollBigMushgloomFeature(HugeMushroomFeatureConfiguration.CODEC));
 	public static final Feature<HugeMushroomFeatureConfiguration> TROLL_HUGE_RED_MUSHROOM = register("troll_cave_huge_red_mushroom", new TrollHugeRedMushroomFeature(HugeMushroomFeatureConfiguration.CODEC));

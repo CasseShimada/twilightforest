@@ -1,0 +1,10 @@
+{
+	sinister_spawner_26_1: {
+		Delay: 20s,
+		EntityScanRange: 11,
+		MaxNearbyEntities: 6s,
+		RequiredPlayerRange: 16s,
+		SpawnCount: 4s,
+		SpawnRange: 7s
+	}
+}

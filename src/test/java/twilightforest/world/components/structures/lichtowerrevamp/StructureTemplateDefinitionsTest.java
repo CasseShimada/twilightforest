@@ -6,6 +6,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.profiling.ProfilerFiller;
 import org.junit.jupiter.api.Test;
 import twilightforest.TwilightForestMod;
+import twilightforest.world.components.structures.util.TemplatePoolInstance;
 
 import java.util.Map;
 
@@ -24,9 +25,9 @@ public class StructureTemplateDefinitionsTest {
 
 		Identifier architectureTemplate = TwilightForestMod.prefix("template/architecture");
 		StructureTemplateDefinition templateDefinition = new StructureTemplateDefinition(Map.of(
-			alcovePool, 1,
-			balconyPool, 10,
-			chamber, 0
+			alcovePool, TemplatePoolInstance.defaultsWithWeight(1),
+			balconyPool, TemplatePoolInstance.defaultsWithWeight(10),
+			chamber, TemplatePoolInstance.defaultsWithWeight(0)
 		));
 		this.structureTemplateDefinitions.apply(Map.of(architectureTemplate, templateDefinition), mock(ResourceManager.class), mock(ProfilerFiller.class));
 

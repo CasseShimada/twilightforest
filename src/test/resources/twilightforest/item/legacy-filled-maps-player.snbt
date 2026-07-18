@@ -1,0 +1,7 @@
+{
+  Inventory: [
+    {Slot: 0b, id: "twilightforest:magic_map", Count: 1b, tag: {map: 42, LegacyMarker: "magic"}},
+    {Slot: 1b, id: "twilightforest:maze_map", Count: 1b, tag: {map: 43, LegacyMarker: "maze"}},
+    {Slot: 2b, id: "twilightforest:ore_map", Count: 1b, tag: {map: 44, LegacyMarker: "ore"}}
+  ]
+}

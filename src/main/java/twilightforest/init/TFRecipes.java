@@ -11,6 +11,9 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import twilightforest.TwilightForestMod;
 import twilightforest.item.recipe.*;
+import twilightforest.item.recipe.travellers.TravellersGearModifierShapedRecipe;
+import twilightforest.item.recipe.travellers.TravellersGearModifierShapelessRecipe;
+import twilightforest.item.recipe.travellers.TravellersVestGlovesMergeRecipe;
 
 import java.util.function.Supplier;
 
@@ -26,6 +29,9 @@ public class TFRecipes {
 	public static final RecipeSerializer<UncraftingRecipe> UNCRAFTING_SERIALIZER = registerSerializer("uncrafting", UncraftingRecipe.SERIALIZER);
 	public static final RecipeSerializer<NoTemplateSmithingRecipe> NO_TEMPLATE_SMITHING_SERIALIZER = registerSerializer("no_template_smithing", NoTemplateSmithingRecipe.SERIALIZER);
 	public static final RecipeSerializer<DryingRecipe> DRYING_SERIALIZER = registerSerializer("drying", new RecipeSerializer<>(DryingRecipe.CODEC, DryingRecipe.STREAM_CODEC));
+	public static final RecipeSerializer<TravellersGearModifierShapelessRecipe> MODIFIER_SHAPELESS_RECIPE_SERIALIZER = registerSerializer("travellers_gear_modifier_shapeless_recipe", TravellersGearModifierShapelessRecipe.SERIALIZER);
+	public static final RecipeSerializer<TravellersGearModifierShapedRecipe> MODIFIER_SHAPED_RECIPE_SERIALIZER = registerSerializer("travellers_gear_modifier_shaped_recipe", TravellersGearModifierShapedRecipe.SERIALIZER);
+	public static final RecipeSerializer<TravellersVestGlovesMergeRecipe> TRAVELLERS_VEST_GLOVES_MERGE_RECIPE_SERIALIZER = registerSerializer("travellers_vest_gloves_merge_recipe", simpleSerializer(TravellersVestGlovesMergeRecipe::new));
 
 	public static final RecipeType<CraftingRecipe> UNCRAFTING_RECIPE = registerType("uncrafting", new RecipeType<>() {
 		@Override

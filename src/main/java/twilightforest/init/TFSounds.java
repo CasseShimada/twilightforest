@@ -69,15 +69,19 @@ public final class TFSounds {
 	public static final SoundEvent CHARM_KEEP = createEvent("item.twilightforest.charm.keep");
 	public static final SoundEvent CHARM_LIFE = createEvent("item.twilightforest.charm.life");
 	public static final SoundEvent CICADA = createEvent("block.twilightforest.cicada");
+	public static final SoundEvent CYCLE_MAPS = createEvent("item.twilightforest.travellers_gear.cycle_maps");
+	public static final SoundEvent CYCLE_MAPS_EMPTY = createEvent("item.twilightforest.travellers_gear.cycle_maps_empty");
 	public static final SoundEvent DEATH_TOME_AMBIENT = createEvent("entity.twilightforest.death_tome.ambient");
 	public static final SoundEvent DEATH_TOME_DEATH = createEvent("entity.twilightforest.death_tome.death");
 	public static final SoundEvent DEATH_TOME_HURT = createEvent("entity.twilightforest.death_tome.hurt");
 	public static final SoundEvent DEER_AMBIENT = createEvent("entity.twilightforest.deer.ambient");
 	public static final SoundEvent DEER_DEATH = createEvent("entity.twilightforest.deer.death");
+	public static final SoundEvent DEER_EAT = createEvent("entity.twilightforest.deer.eat");
 	public static final SoundEvent DEER_HURT = createEvent("entity.twilightforest.deer.hurt");
 	public static final SoundEvent DOOR_ACTIVATED = createEvent("block.twilightforest.door.activate");
 	public static final SoundEvent DOOR_REAPPEAR = createEvent("block.twilightforest.door.reappear");
 	public static final SoundEvent DOOR_VANISH = createEvent("block.twilightforest.door.vanish");
+	public static final SoundEvent DOUBLE_JUMP = createEvent("item.twilightforest.travellers_gear.double_jump");
 	public static final SoundEvent DRYING_RACK_ADD_ITEM = createEvent("block.twilightforest.drying_rack.add_item");
 	public static final SoundEvent DRYING_RACK_REMOVE_ITEM = createEvent("block.twilightforest.drying_rack.remove_item");
 	public static final SoundEvent DWARF_RABBIT_AMBIENT = createEvent("entity.twilightforest.dwarf_rabbit.ambient");
@@ -96,6 +100,8 @@ public final class TFSounds {
 	public static final SoundEvent GHAST_TRAP_SPINDOWN = createEvent("block.twilightforest.ghast_trap.spindown");
 	public static final SoundEvent GHAST_TRAP_WARMUP = createEvent("block.twilightforest.ghast_trap.warmup");
 	public static final SoundEvent GLASS_SWORD_BREAK = createEvent("item.twilightforest.glass_sword.break");
+	public static final SoundEvent GOGGLES_ZOOM_IN = createEvent("item.twilightforest.travellers_goggles.zoom_in");
+	public static final SoundEvent GOGGLES_ZOOM_OUT = createEvent("item.twilightforest.travellers_goggles.zoom_out");
 	public static final SoundEvent GOBLIN_KNIGHT_AMBIENT = createEvent("entity.twilightforest.goblin_knight.ambient");
 	public static final SoundEvent GOBLIN_KNIGHT_DEATH = createEvent("entity.twilightforest.goblin_knight.death");
 	public static final SoundEvent GOBLIN_KNIGHT_HURT = createEvent("entity.twilightforest.goblin_knight.hurt");
@@ -197,6 +203,7 @@ public final class TFSounds {
 	public static final SoundEvent PENGUIN_AMBIENT = createEvent("entity.twilightforest.penguin.ambient");
 	public static final SoundEvent PENGUIN_DEATH = createEvent("entity.twilightforest.penguin.death");
 	public static final SoundEvent PENGUIN_HURT = createEvent("entity.twilightforest.penguin.hurt");
+	public static final SoundEvent PERFECT_DODGE = createEvent("item.twilightforest.travellers_gear.perfect_dodge");
 	public static final SoundEvent PICKED_TORCHBERRIES = createEvent("block.twilightforest.torchberry.harvest");
 	public static final SoundEvent PINCH_BEETLE_AMBIENT = createEvent("entity.twilightforest.pinch_beetle.ambient");
 	public static final SoundEvent PINCH_BEETLE_ATTACK = createEvent("entity.twilightforest.pinch_beetle.attack");
@@ -221,6 +228,8 @@ public final class TFSounds {
 	public static final SoundEvent SHIELD_BLOCK = createEvent("entity.twilightforest.fortification_shield.block");
 	public static final SoundEvent SHIELD_BREAK = createEvent("entity.twilightforest.fortification_shield.break");
 	public static final SoundEvent SHIELD_EXPIRE = createEvent("entity.twilightforest.fortification_shield.expire");
+	public static final SoundEvent SIDE_STEP = createEvent("item.twilightforest.travellers_gear.side_step");
+	public static final SoundEvent SIDE_STEP_CHARGED = createEvent("item.twilightforest.travellers_gear.side_step_ready");
 	public static final SoundEvent SKELETON_DRUID_AMBIENT = createEvent("entity.twilightforest.skeleton_druid.ambient");
 	public static final SoundEvent SKELETON_DRUID_DEATH = createEvent("entity.twilightforest.skeleton_druid.death");
 	public static final SoundEvent SKELETON_DRUID_HURT = createEvent("entity.twilightforest.skeleton_druid.hurt");
@@ -246,6 +255,7 @@ public final class TFSounds {
 	public static final SoundEvent SNOW_QUEEN_HURT = createEvent("entity.twilightforest.snow_queen.hurt");
 	public static final SoundEvent SQUIRREL_AMBIENT = createEvent("entity.twilightforest.squirrel.ambient");
 	public static final SoundEvent SQUIRREL_DEATH = createEvent("entity.twilightforest.squirrel.death");
+	public static final SoundEvent SWAP_HOTBAR = createEvent("item.twilightforest.travellers_gear.swap_hotbar");
 	public static final SoundEvent SQUIRREL_HURT = createEvent("entity.twilightforest.squirrel.hurt");
 	public static final SoundEvent SWARM_SPIDER_AMBIENT = createEvent("entity.twilightforest.swarm_spider.ambient");
 	public static final SoundEvent SWARM_SPIDER_DEATH = createEvent("entity.twilightforest.swarm_spider.death");

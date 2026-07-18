@@ -1,0 +1,26 @@
+{
+  "neoforge:attachments": {
+    "twilightforest:feather_fan_falling": {feather_fan_falling: 1b},
+    "twilightforest:is_using_goggles_zoom_modifier": {zooming: 1b},
+    "twilightforest:travellers_goggles_red_thread_vision": {red_thread_vision: 0b},
+    "twilightforest:last_tick_water_walking": {last_water_walking_tick: 123456789L},
+    "twilightforest:has_double_jump": {double_jump: 1b},
+    "twilightforest:double_jump_validator": {double_jump_count: 2},
+    "twilightforest:double_jump_validator_last_check": {last_double_jump_count: 1},
+    "twilightforest:temporary_saved_straight_ahead": {straight_ahead: 0.625d},
+    "twilightforest:last_damage_armor_time": {last_armor_damage_timestamp: 987654321L},
+    "twilightforest:last_jump_key_press_time": {last_jump_key_press: 17},
+    "twilightforest:last_horizontal_impulse": {last_horizontal_impulse: 0.75f},
+    "twilightforest:last_non_horizontal_impulse": {last_non_horizontal_impulse: 0.5f},
+    "twilightforest:last_horizontal_walking_time": {last_horizontal_walk_time: 29},
+    "twilightforest:sidestep_validator": {side_step_count: 4},
+    "twilightforest:sidestep_validator_last_check": {last_side_step_count: 3},
+    "twilightforest:is_gradually_gliding": {gliding: 1b},
+    "twilightforest:slimy_soles_bounce_info": {
+      bounce_velocity: 0.875d,
+      double_jump_boost_velocity: 0.375d,
+      force_bounce: 1b,
+      bounce: 1b
+    }
+  }
+}

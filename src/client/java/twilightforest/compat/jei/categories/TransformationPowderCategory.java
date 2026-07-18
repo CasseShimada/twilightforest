@@ -4,7 +4,6 @@ import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
-import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
@@ -69,12 +68,8 @@ public class TransformationPowderCategory implements IRecipeCategory<Transformat
 	}
 
 	@Override
-	public void createRecipeExtras(IRecipeExtrasBuilder builder, TransformationRecipe recipe, IFocusGroup focuses) {
-		builder.addDrawable(this.background, 0, 0);
-	}
-
-	@Override
 	public void draw(TransformationRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
+		this.background.draw(graphics, 0, 0);
 		if (recipe.isReversible()) {
 			this.doubleArrow.draw(graphics, 46, 19);
 		} else {

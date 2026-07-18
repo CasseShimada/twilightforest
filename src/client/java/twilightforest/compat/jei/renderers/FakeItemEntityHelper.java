@@ -34,7 +34,7 @@ public class FakeItemEntityHelper implements IIngredientHelper<FakeItemEntity> {
 
 	@Override
 	public FakeItemEntity copyIngredient(FakeItemEntity ingredient) {
-		return ingredient;
+		return new FakeItemEntity(ingredient.stack().copy());
 	}
 
 	@Override

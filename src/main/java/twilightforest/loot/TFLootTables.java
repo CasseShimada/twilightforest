@@ -63,6 +63,10 @@ public class TFLootTables {
 	public static final ResourceKey<LootTable> DARKTOWER_BOSS = register("darktower_boss");
 	public static final ResourceKey<LootTable> TREE_CACHE = register("tree_cache");
 	public static final ResourceKey<LootTable> FALLEN_TRUNK_LOOT = register("fallen_trunk_loot");
+	public static final ResourceKey<LootTable> CAMP_TENT = register("camp_tent");
+	public static final ResourceKey<LootTable> CAMP_ARMOR_RACK = register("camp_armor_rack");
+	public static final ResourceKey<LootTable> CAMP_DRYING_RACK = register("camp_drying_rack");
+	public static final ResourceKey<LootTable> CAMP_POT = register("camp_pot");
 	public static final ResourceKey<LootTable> STRONGHOLD_CACHE = register("stronghold_cache");
 	public static final ResourceKey<LootTable> STRONGHOLD_ROOM = register("stronghold_room");
 	public static final ResourceKey<LootTable> AURORA_CACHE = register("aurora_cache");
@@ -107,6 +111,20 @@ public class TFLootTables {
 	public static final ResourceKey<LootTable> FIREFLY_SQUISH_DROPS = register("blocks/firefly_squish");
 	public static final ResourceKey<LootTable> MOONWORM_FAILED_TO_PLACE_DROPS = register("blocks/moonworm_failed_to_place");
 	public static final ResourceKey<LootTable> MOONWORM_SQUISH_DROPS = register("blocks/moonworm_squish");
+
+	// Bush harvest drops
+	public static final ResourceKey<LootTable> RASPBERRY_BUSH_DROPS = register("blocks/raspberry_bush_berries");
+	public static final ResourceKey<LootTable> BLUEBERRY_BUSH_DROPS = register("blocks/blueberry_bush_berries");
+	public static final ResourceKey<LootTable> BLACKBERRY_BUSH_DROPS = register("blocks/blackberry_bush_berries");
+	public static final ResourceKey<LootTable> MALOBERRY_BUSH_DROPS = register("blocks/maloberry_bush_berries");
+	public static final ResourceKey<LootTable> BLIGHTBERRY_BUSH_DROPS = register("blocks/blightberry_bush_berries");
+	public static final ResourceKey<LootTable> DUSKBERRY_BUSH_DROPS = register("blocks/duskberry_bush_berries");
+	public static final ResourceKey<LootTable> SKYBERRY_BUSH_DROPS = register("blocks/skyberry_bush_berries");
+	public static final ResourceKey<LootTable> STINGBERRY_BUSH_DROPS = register("blocks/stingberry_bush_berries");
+	public static final ResourceKey<LootTable> COPPER_OREBERRY_BUSH_DROPS = register("blocks/copper_oreberry_bush_berries");
+	public static final ResourceKey<LootTable> IRON_OREBERRY_BUSH_DROPS = register("blocks/iron_oreberry_bush_berries");
+	public static final ResourceKey<LootTable> GOLD_OREBERRY_BUSH_DROPS = register("blocks/gold_oreberry_bush_berries");
+	public static final ResourceKey<LootTable> ESSENCE_BERRY_BUSH_DROPS = register("blocks/essence_berry_bush_berries");
 
 	//public static final Identifier ALL_BOSSES = register("entities/all_bosses");
 

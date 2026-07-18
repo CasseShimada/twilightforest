@@ -32,6 +32,7 @@ public final class ParticleGenerator implements DataProvider {
 		addSprite(descriptions, TFParticleType.ANNIHILATE, TwilightForestMod.prefix("annihilate_particle"));
 		addSpriteSet(descriptions, TFParticleType.CLOUD_PUFF, Identifier.withDefaultNamespace("generic"), 8, true);
 		addSprite(descriptions, TFParticleType.DIM_FLAME, TwilightForestMod.prefix("dim_flame"));
+		addSpriteSet(descriptions, TFParticleType.DOUBLE_JUMP, Identifier.withDefaultNamespace("generic"), 8, true);
 		addSpriteSet(descriptions, TFParticleType.DRYING_RACK, Identifier.withDefaultNamespace("generic"), 8, true);
 		addSpriteSet(descriptions, TFParticleType.EXTENDED_SNOW_WARNING, TwilightForestMod.prefix("snow"), 4, false);
 		addSprite(descriptions, TFParticleType.FALLEN_LEAF, TwilightForestMod.prefix("fallen_leaf"));
@@ -44,6 +45,7 @@ public final class ParticleGenerator implements DataProvider {
 		addSprite(descriptions, TFParticleType.LOG_CORE_PARTICLE, TwilightForestMod.prefix("log_core"));
 		addSprite(descriptions, TFParticleType.OMINOUS_FLAME, TwilightForestMod.prefix("ominous_flame"));
 		addSprite(descriptions, TFParticleType.PARTICLE_SPAWNER_FIREFLY, TwilightForestMod.prefix("firefly"));
+		addSpriteSet(descriptions, TFParticleType.PERFECT_DODGE, Identifier.withDefaultNamespace("generic"), 8, true);
 		addSprite(descriptions, TFParticleType.PROTECTION, Identifier.withDefaultNamespace("glint"));
 		addSpriteSet(descriptions, TFParticleType.SNOW, TwilightForestMod.prefix("snow"), 4, false);
 		addSpriteSet(descriptions, TFParticleType.SNOW_GUARDIAN, TwilightForestMod.prefix("snow"), 4, false);

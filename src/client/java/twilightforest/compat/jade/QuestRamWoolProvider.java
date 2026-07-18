@@ -1,0 +1,48 @@
+package twilightforest.compat.jade;
+
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import snownee.jade.api.EntityAccessor;
+import snownee.jade.api.IEntityComponentProvider;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.config.IPluginConfig;
+import snownee.jade.api.ui.JadeUI;
+import twilightforest.TwilightForestMod;
+import twilightforest.entity.passive.QuestRam;
+import twilightforest.util.ColorUtil;
+
+import java.util.Map;
+
+public enum QuestRamWoolProvider implements IEntityComponentProvider {
+	INSTANCE;
+
+	@Override
+	public void appendTooltip(ITooltip tooltip, EntityAccessor accessor, IPluginConfig config) {
+		if (!(accessor.getEntity() instanceof QuestRam ram)) {
+			return;
+		}
+
+		int renderedWools = 0;
+		for (Map.Entry<DyeColor, Block> entry : ColorUtil.WOOL_TO_DYE_IN_RAM_ORDER.entrySet()) {
+			if (!JadeCompatLogic.isColorMissing(ram.getColorFlags(), entry.getKey())) {
+				continue;
+			}
+
+			if (renderedWools % 8 == 0) {
+				tooltip.add(JadeUI.smallItem(new ItemStack(entry.getValue())).size(4, 4));
+			} else {
+				tooltip.append(JadeUI.smallItem(new ItemStack(entry.getValue())).size(4, 4));
+			}
+			tooltip.append(Component.literal(" "));
+			renderedWools++;
+		}
+	}
+
+	@Override
+	public Identifier getUid() {
+		return TwilightForestMod.prefix("quest_ram_wool");
+	}
+}

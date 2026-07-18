@@ -15,6 +15,7 @@ public class TFBiomeTags {
 	public static final TagKey<Biome> VALID_HEDGE_MAZE_BIOMES = create("valid_hedge_maze_biomes");
 	public static final TagKey<Biome> VALID_HOLLOW_HILL_BIOMES = create("valid_hollow_hill_biomes");
 	public static final TagKey<Biome> VALID_MUSHROOM_TOWER_BIOMES = create("valid_mushroom_tower_biomes");
+	public static final TagKey<Biome> VALID_CAMP_BIOMES = create("valid_camp_biomes");
 
 	public static final TagKey<Biome> VALID_NAGA_COURTYARD_BIOMES = create("valid_naga_courtyard_biomes");
 	public static final TagKey<Biome> VALID_LICH_TOWER_BIOMES = create("valid_lich_tower_biomes");

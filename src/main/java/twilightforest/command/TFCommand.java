@@ -25,6 +25,8 @@ public class TFCommand {
 	private final CountTemplateCommand countTemplateCommand = new CountTemplateCommand();
 	private final StructureDistanceCommand structureDistanceCommand = new StructureDistanceCommand();
 	private final ClearDisplayCommand clearDisplayCommand = new ClearDisplayCommand();
+	private final TravellersGearCommand travellersGearCommand = new TravellersGearCommand();
+	private final TFTeleportCommand tfTeleportCommand = new TFTeleportCommand();
 	private final GetSeedAndTeleportCommand getSeedAndTeleportCommand = new GetSeedAndTeleportCommand();
 
 	public void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext, Commands.CommandSelection selection) {
@@ -37,6 +39,7 @@ public class TFCommand {
 
 		LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal("twilightforest")
 			.executes(this::run)
+			.then(tfTeleportCommand.register())
 			.then(centerCommand.register())
 			.then(mapLocatorCommand.register())
 			.then(conquerCommand.register())
@@ -45,6 +48,7 @@ public class TFCommand {
 			.then(mapBiomesCommand.register())
 			.then(shieldCommand.register())
 			.then(spawnerCommand.register(buildContext))
+			.then(travellersGearCommand.register())
 			.then(getSeedAndTeleportCommand.register(selection != Commands.CommandSelection.INTEGRATED))
 			.then(structureBranch);
 		LiteralCommandNode<CommandSourceStack> node = dispatcher.register(builder);

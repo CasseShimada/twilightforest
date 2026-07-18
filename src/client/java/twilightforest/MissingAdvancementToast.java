@@ -39,6 +39,6 @@ public class MissingAdvancementToast implements Toast {
 		graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND_SPRITE, 0, 0, this.width(), this.height());
 		graphics.fakeItem(this.icon, 6, 8);
 		graphics.text(font, UPPER_TEXT, 25, 7, 0xffffffff, false);
-		graphics.text(font, this.title, 25, 18, 0xffffff, false);
+		graphics.text(font, this.title, 25, 18, 0xFFFFFFFF, false);
 	}
 }

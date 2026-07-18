@@ -1,5 +1,7 @@
 package twilightforest.components.entity;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,12 +15,28 @@ import twilightforest.network.UpdateThrownPacket;
 public class YetiThrowAttachment {
 
 	public static final int THROW_COOLDOWN = 200;
+	public static final Codec<YetiThrowAttachment> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		Codec.BOOL.fieldOf("yetiThrown").forGetter(YetiThrowAttachment::getThrown),
+		Codec.INT.fieldOf("throwCooldown").forGetter(YetiThrowAttachment::getThrowCooldown),
+		Codec.DOUBLE.fieldOf("throwX").forGetter(attachment -> attachment.throwVector.x()),
+		Codec.DOUBLE.fieldOf("throwY").forGetter(attachment -> attachment.throwVector.y()),
+		Codec.DOUBLE.fieldOf("throwZ").forGetter(attachment -> attachment.throwVector.z())
+	).apply(instance, YetiThrowAttachment::new));
 
 	private boolean thrown;
 	@Nullable
 	private LivingEntity thrower;
 	private int throwCooldown;
 	private Vec3 throwVector = Vec3.ZERO;
+
+	public YetiThrowAttachment() {
+	}
+
+	private YetiThrowAttachment(boolean thrown, int throwCooldown, double throwX, double throwY, double throwZ) {
+		this.thrown = thrown;
+		this.throwCooldown = throwCooldown;
+		this.throwVector = new Vec3(throwX, throwY, throwZ);
+	}
 
 	public void tick(Player player) {
 		if (this.getThrown()) {

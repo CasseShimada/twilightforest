@@ -127,7 +127,7 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 			.addOptionalTag(ConventionalItemTags.POTATO_CROPS)
 			.addOptionalTag(ConventionalItemTags.BEETROOT_CROPS);
 		this.builder(TFItemTags.DEER_TEMPT_ITEMS)
-			.add(key(Items.APPLE))
+			.add(key(Items.APPLE), key(TFItems.SHIKA_SENBEI))
 			.addOptionalTag(ConventionalItemTags.WHEAT_CROPS);
 		this.builder(TFItemTags.DWARF_RABBIT_TEMPT_ITEMS)
 			.add(key(Items.GOLDEN_CARROT), key(Items.DANDELION))
@@ -148,7 +148,35 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 
 	private void addConventionTags() {
 		this.builder(ConventionalItemTags.FEATHERS).add(key(TFItems.RAVEN_FEATHER));
-		this.builder(ConventionalItemTags.BERRY_FOODS).add(key(TFItems.TORCHBERRIES));
+		this.builder(ConventionalItemTags.SLIME_BALLS).add(key(TFItems.MAZE_SLIME_BALL));
+		this.builder(ConventionalItemTags.BERRY_FOODS).add(
+			key(TFItems.TORCHBERRIES),
+			key(TFItems.RASPBERRY),
+			key(TFItems.BLACKBERRY),
+			key(TFItems.BLUEBERRY),
+			key(TFItems.MALOBERRY),
+			key(TFItems.DUSKBERRY),
+			key(TFItems.SKYBERRY),
+			key(TFItems.BLIGHTBERRY),
+			key(TFItems.STINGBERRY)
+		);
+		this.builder(TFItemTags.FOODS_JERKY).add(
+			key(TFItems.MONSTER_JERKY),
+			key(TFItems.BEEF_JERKY),
+			key(TFItems.PORK_JERKY),
+			key(TFItems.CHICKEN_JERKY),
+			key(TFItems.RABBIT_JERKY),
+			key(TFItems.MUTTON_JERKY),
+			key(TFItems.VENISON_JERKY),
+			key(TFItems.MEEF_JERKY),
+			key(TFItems.COD_JERKY),
+			key(TFItems.SALMON_JERKY),
+			key(TFItems.TROPICAL_FISH_JERKY),
+			key(TFItems.FUGU_JERKY)
+		);
+		this.builder(ConventionalItemTags.FOODS)
+			.addOptionalTag(TFItemTags.FOODS_JERKY)
+			.add(key(TFItems.GELATINOUS_SLIME_DROP), key(TFItems.GELATINOUS_MAZE_SLIME_DROP), key(TFItems.BERRY_MEDLEY), key(TFItems.MAZE_WAFER));
 		this.builder(ConventionalItemTags.COOKED_MEAT_FOODS).add(
 			key(TFItems.COOKED_VENISON),
 			key(TFItems.COOKED_MEEF),
@@ -156,7 +184,7 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 		);
 		this.builder(ConventionalItemTags.EDIBLE_WHEN_PLACED_FOODS).add(key(TFItems.EXPERIMENT_115));
 		this.builder(ConventionalItemTags.RAW_MEAT_FOODS).add(key(TFItems.RAW_VENISON), key(TFItems.RAW_MEEF));
-		this.builder(ConventionalItemTags.SOUP_FOODS).add(key(TFItems.MEEF_STROGANOFF));
+		this.builder(ConventionalItemTags.SOUP_FOODS).add(key(TFItems.MEEF_STROGANOFF), key(TFItems.MOSS_SOUP));
 		this.builder(ConventionalItemTags.MUSHROOMS).add(key(TFBlocks.MUSHGLOOM.asItem()));
 		this.builder(ConventionalItemTags.MUSIC_DISCS).add(
 			key(TFItems.MUSIC_DISC_RADIANCE),
@@ -328,6 +356,10 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 
 	private void addVanillaUtilityTags() {
 		this.fabricBuilder(ItemTags.TRIMMABLE_ARMOR).remove(key(TFItems.YETI_HELMET));
+		this.builder(ItemTags.PIGLIN_SAFE_ARMOR).add(
+			key(TFItems.TRAVELLERS_GOGGLES),
+			key(TFItems.TRAVELLERS_WINGS)
+		);
 		this.builder(ItemTags.BEACON_PAYMENT_ITEMS)
 			.addTag(TFItemTags.IRONWOOD_INGOTS)
 			.addTag(TFItemTags.STEELEAF_INGOTS)
@@ -368,6 +400,11 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 			key(TFItems.YETI_LEGGINGS),
 			key(TFItems.YETI_BOOTS)
 		);
+		this.builder(TFItemTags.POWDER_SNOW_WALKABLE_BOOTS).add(
+			key(TFItems.ARCTIC_BOOTS),
+			key(TFItems.YETI_BOOTS),
+			key(TFItems.TRAVELLERS_BOOTS)
+		);
 		this.builder(ItemTags.LOGS_THAT_BURN)
 			.addTag(TFItemTags.TWILIGHT_OAK_LOGS)
 			.addTag(TFItemTags.CANOPY_LOGS)
@@ -383,7 +420,19 @@ public final class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider 
 			key(TFItems.COOKED_MEEF),
 			key(TFItems.MEEF_STROGANOFF),
 			key(TFItems.EXPERIMENT_115),
-			key(TFItems.HYDRA_CHOP)
+			key(TFItems.HYDRA_CHOP),
+			key(TFItems.MONSTER_JERKY),
+			key(TFItems.BEEF_JERKY),
+			key(TFItems.PORK_JERKY),
+			key(TFItems.CHICKEN_JERKY),
+			key(TFItems.RABBIT_JERKY),
+			key(TFItems.MUTTON_JERKY),
+			key(TFItems.VENISON_JERKY),
+			key(TFItems.MEEF_JERKY),
+			key(TFItems.COD_JERKY),
+			key(TFItems.SALMON_JERKY),
+			key(TFItems.TROPICAL_FISH_JERKY),
+			key(TFItems.FUGU_JERKY)
 		);
 		this.addSkullCandles(ItemTags.NOTE_BLOCK_TOP_INSTRUMENTS);
 		this.builder(ItemTags.PIGLIN_LOVED).add(

@@ -1,5 +1,6 @@
 package twilightforest.block.entity;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -33,6 +34,7 @@ import java.util.Optional;
 public class DryingRackBlockEntity extends BlockEntity {
 
 	public static final int DEFAULT_DRYING_TIME = 20 * 60 * 5;
+	static final Codec<ItemStack> STORED_ITEM_CODEC = ItemStack.OPTIONAL_CODEC;
 	private ItemStack stack = ItemStack.EMPTY;
 	private final RecipeManager.CachedCheck<SingleRecipeInput, DryingRecipe> quickCheck = RecipeManager.createCheck(TFRecipes.DRYING_RECIPE);
 
@@ -156,7 +158,7 @@ public class DryingRackBlockEntity extends BlockEntity {
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
-		output.storeNullable("item", ItemStack.CODEC, this.stack);
+		output.store("item", STORED_ITEM_CODEC, this.stack);
 		output.putInt("dry_time", this.dryTime);
 		output.putInt("total_dry_time", this.totalDryTime);
 		output.putBoolean("drying", this.drying);
@@ -165,7 +167,7 @@ public class DryingRackBlockEntity extends BlockEntity {
 	@Override
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
-		this.stack = input.read("item", ItemStack.CODEC).orElse(ItemStack.EMPTY);
+		this.stack = input.read("item", STORED_ITEM_CODEC).orElse(ItemStack.EMPTY);
 		this.dryTime = input.getIntOr("dry_time", 0);
 		this.totalDryTime = input.getIntOr("total_dry_time", DEFAULT_DRYING_TIME);
 		this.drying = input.getBooleanOr("drying", false);

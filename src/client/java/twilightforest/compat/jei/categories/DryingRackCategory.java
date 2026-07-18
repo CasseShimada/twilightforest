@@ -20,12 +20,10 @@ import twilightforest.item.recipe.DryingRecipe;
 
 public class DryingRackCategory implements IRecipeCategory<DryingRecipe> {
 	public static final IRecipeType<DryingRecipe> DRYING = IRecipeType.create(TwilightForestMod.prefix("drying"), DryingRecipe.class);
-	private final IDrawable background;
 	private final IDrawable icon;
 	private final Component localizedName;
 
 	public DryingRackCategory(IGuiHelper guiHelper) {
-		this.background = guiHelper.createBlankDrawable(RecipeViewerConstants.GENERIC_RECIPE_WIDTH, RecipeViewerConstants.GENERIC_RECIPE_HEIGHT);
 		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(TFBlocks.OAK_DRYING_RACK));
 		this.localizedName = Component.translatable("gui.twilightforest.drying_jei");
 	}
@@ -57,7 +55,6 @@ public class DryingRackCategory implements IRecipeCategory<DryingRecipe> {
 
 	@Override
 	public void createRecipeExtras(IRecipeExtrasBuilder builder, DryingRecipe recipe, IFocusGroup focuses) {
-		builder.addDrawable(this.background, 0, 0);
 		builder.addAnimatedRecipeArrow(recipe.getDryingTime()).setPosition(47, 18);
 		builder.addText(formatDryingTime(recipe.getDryingTime()), 0, 43)
 			.setPosition(0, 43, this.getWidth(), 10, HorizontalAlignment.CENTER, VerticalAlignment.TOP)

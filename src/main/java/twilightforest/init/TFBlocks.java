@@ -32,6 +32,7 @@ import twilightforest.enums.FireJetVariant;
 import twilightforest.enums.TowerDeviceVariant;
 import twilightforest.item.WroughtIronFenceItem;
 import twilightforest.item.TooltipBlockItem;
+import twilightforest.loot.TFLootTables;
 import twilightforest.util.registry.RegistryAliasUtil;
 import twilightforest.util.woods.TFWoodTypes;
 import twilightforest.world.components.feature.trees.growers.TFTreeGrowers;
@@ -53,7 +54,7 @@ public class TFBlocks {
 
 	//misc.
 	public static final HedgeBlock HEDGE = registerDirectWithItem("hedge", HedgeBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).sound(SoundType.GRASS).strength(2.0F, 6.0F));
-	public static final MasonJarBlock MASON_JAR = registerDirect("mason_jar", MasonJarBlock::new, () -> BlockBehaviour.Properties.of().noOcclusion().noTerrainParticles().randomTicks().sound(TFSoundTypes.JAR).strength(0.3F, 3.0F));
+	public static final MasonJarBlock MASON_JAR = registerDirect("mason_jar", MasonJarBlock::new, () -> BlockBehaviour.Properties.of().noOcclusion().noTerrainParticles().randomTicks().sound(TFSoundTypes.JAR).strength(0.3F, 3.0F).lightLevel(state -> state.getValue(MasonJarBlock.LIGHT_LEVEL)));
 	public static final JarBlock FIREFLY_JAR = registerDirect("firefly_jar", FireflyJarBlock::new, () -> BlockBehaviour.Properties.of().lightLevel((state) -> 15).noOcclusion().noTerrainParticles().sound(TFSoundTypes.JAR).strength(0.3F, 3.0F));
 	public static final FireflySpawnerBlock FIREFLY_SPAWNER = registerDirectWithItem("firefly_particle_spawner", FireflySpawnerBlock::new, () -> BlockBehaviour.Properties.of().lightLevel((state) -> 15).noOcclusion().noTerrainParticles().sound(TFSoundTypes.JAR).strength(0.3F, 3.0F));
 	public static final JarBlock CICADA_JAR = registerDirect("cicada_jar", CicadaJarBlock::new, () -> BlockBehaviour.Properties.of().noOcclusion().noTerrainParticles().randomTicks().sound(TFSoundTypes.JAR).strength(0.3F, 3.0F));
@@ -95,6 +96,20 @@ public class TFBlocks {
 			}
 		});
 	public static final BrazierBlock BRAZIER = registerDirectWithItem("brazier", BrazierBlock::new, () -> BlockBehaviour.Properties.of().sound(SoundType.WOOD).lightLevel(state -> state.getValue(BrazierBlock.HALF) == DoubleBlockHalf.UPPER ? state.getValue(BrazierBlock.LIGHT).getLight() : 0).pushReaction(PushReaction.DESTROY));
+
+	// bushes
+	public static final OreBerryBushBlock IRON_OREBERRY_BUSH = registerDirectWithItem("iron_oreberry_bush", properties -> new OreBerryBushBlock(false, TFLootTables.IRON_OREBERRY_BUSH_DROPS, properties), TFBlocks::oreberryBushProperties);
+	public static final OreBerryBushBlock GOLD_OREBERRY_BUSH = registerDirectWithItem("gold_oreberry_bush", properties -> new OreBerryBushBlock(false, TFLootTables.GOLD_OREBERRY_BUSH_DROPS, properties), TFBlocks::oreberryBushProperties);
+	public static final OreBerryBushBlock COPPER_OREBERRY_BUSH = registerDirectWithItem("copper_oreberry_bush", properties -> new OreBerryBushBlock(false, TFLootTables.COPPER_OREBERRY_BUSH_DROPS, properties), TFBlocks::oreberryBushProperties);
+	public static final OreBerryBushBlock ESSENCE_OREBERRY_BUSH = registerDirectWithItem("essence_oreberry_bush", properties -> new OreBerryBushBlock(true, TFLootTables.ESSENCE_BERRY_BUSH_DROPS, properties), TFBlocks::oreberryBushProperties);
+	public static final BerryBushBlock RASPBERRY_BUSH = registerDirectWithItem("raspberry_bush", properties -> new BerryBushBlock(TFLootTables.RASPBERRY_BUSH_DROPS, properties), TFBlocks::berryBushProperties);
+	public static final BerryBushBlock BLUEBERRY_BUSH = registerDirectWithItem("blueberry_bush", properties -> new BerryBushBlock(TFLootTables.BLUEBERRY_BUSH_DROPS, properties), TFBlocks::berryBushProperties);
+	public static final BerryBushBlock BLACKBERRY_BUSH = registerDirectWithItem("blackberry_bush", properties -> new BerryBushBlock(TFLootTables.BLACKBERRY_BUSH_DROPS, properties), TFBlocks::berryBushProperties);
+	public static final BerryBushBlock MALOBERRY_BUSH = registerDirectWithItem("maloberry_bush", properties -> new BerryBushBlock(TFLootTables.MALOBERRY_BUSH_DROPS, properties), TFBlocks::berryBushProperties);
+	public static final DarkTowerBerryBushBlock BLIGHTBERRY_BUSH = registerDirectWithItem("blightberry_bush", properties -> new DarkTowerBerryBushBlock(TFLootTables.BLIGHTBERRY_BUSH_DROPS, properties), TFBlocks::berryBushProperties);
+	public static final DarkTowerBerryBushBlock DUSKBERRY_BUSH = registerDirectWithItem("duskberry_bush", properties -> new DarkTowerBerryBushBlock(TFLootTables.DUSKBERRY_BUSH_DROPS, properties), TFBlocks::berryBushProperties);
+	public static final DarkTowerBerryBushBlock SKYBERRY_BUSH = registerDirectWithItem("skyberry_bush", properties -> new DarkTowerBerryBushBlock(TFLootTables.SKYBERRY_BUSH_DROPS, properties), TFBlocks::berryBushProperties);
+	public static final DarkTowerBerryBushBlock STINGBERRY_BUSH = registerDirectWithItem("stingberry_bush", properties -> new DarkTowerBerryBushBlock(TFLootTables.STINGBERRY_BUSH_DROPS, properties), TFBlocks::berryBushProperties);
 
 	//naga courtyard
 	public static final TFHorizontalBlock NAGASTONE_HEAD = registerDirectWithItem("nagastone_head", TFHorizontalBlock::new, () -> BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).mapColor(MapColor.STONE).requiresCorrectToolForDrops().sound(SoundType.STONE).strength(1.5F, 6.0F));
@@ -278,10 +293,10 @@ public class TFBlocks {
 //	public static final MiniatureStructureBlock MUSHROOM_TOWER_MINIATURE_STRUCTURE = registerDirectWithItem("mushroom_tower_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
 	public static final MiniatureStructureBlock NAGA_COURTYARD_MINIATURE_STRUCTURE = registerDirectWithItem("naga_courtyard_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
 	public static final MiniatureStructureBlock LICH_TOWER_MINIATURE_STRUCTURE = registerDirectWithItem("lich_tower_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
-//	public static final MiniatureStructureBlock MINOTAUR_LABYRINTH_MINIATURE_STRUCTURE = registerDirectWithItem("minotaur_labyrinth_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
+	public static final MiniatureStructureBlock MINOTAUR_LABYRINTH_MINIATURE_STRUCTURE = registerDirect("minotaur_labyrinth_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
 //	public static final MiniatureStructureBlock HYDRA_LAIR_MINIATURE_STRUCTURE = registerDirectWithItem("hydra_lair_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
 //	public static final MiniatureStructureBlock GOBLIN_STRONGHOLD_MINIATURE_STRUCTURE = registerDirectWithItem("goblin_stronghold_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
-//	public static final MiniatureStructureBlock DARK_TOWER_MINIATURE_STRUCTURE = registerDirectWithItem("dark_tower_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
+	public static final MiniatureStructureBlock DARK_TOWER_MINIATURE_STRUCTURE = registerDirect("dark_tower_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
 //	public static final MiniatureStructureBlock YETI_CAVE_MINIATURE_STRUCTURE = registerDirectWithItem("yeti_cave_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
 //	public static final MiniatureStructureBlock AURORA_PALACE_MINIATURE_STRUCTURE = registerDirectWithItem("aurora_palace_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
 //	public static final MiniatureStructureBlock TROLL_CAVE_COTTAGE_MINIATURE_STRUCTURE = registerDirectWithItem("troll_cave_cottage_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE));
@@ -350,6 +365,7 @@ public class TFBlocks {
 	public static final DryingRackBlock VANGROVE_DRYING_RACK = registerDirectWithItem("vangrove_drying_rack", DryingRackBlock::new, () -> copyAndScaleProperties(Blocks.MANGROVE_SLAB, 0.5F));
 	public static final DryingRackBlock BAMBOO_DRYING_RACK = registerDirectWithItem("bamboo_drying_rack", DryingRackBlock::new, () -> copyAndScaleProperties(Blocks.BAMBOO_SLAB, 0.5F));
 	public static final DryingRackBlock CHERRY_DRYING_RACK = registerDirectWithItem("cherry_drying_rack", DryingRackBlock::new, () -> copyAndScaleProperties(Blocks.CHERRY_SLAB, 0.5F));
+	public static final DryingRackBlock PALE_OAK_DRYING_RACK = registerDirectWithItem("pale_oak_drying_rack", DryingRackBlock::new, () -> copyAndScaleProperties(Blocks.CHERRY_SLAB, 0.5F));
 
 	public static final BlockBehaviour.Properties TWILIGHT_OAK_LOG_PROPS = logProperties(MapColor.WOOD, MapColor.PODZOL).strength(2.0F).sound(SoundType.WOOD);
 	public static final BlockBehaviour.Properties CANOPY_LOG_PROPS = logProperties(MapColor.PODZOL, MapColor.COLOR_BROWN).strength(2.0F).sound(SoundType.WOOD);
@@ -748,6 +764,14 @@ public class TFBlocks {
 
 	private static BlockBehaviour.Properties logProperties(MapColor color) {
 		return BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).mapColor(color);
+	}
+
+	private static BlockBehaviour.Properties oreberryBushProperties() {
+		return BlockBehaviour.Properties.of().sound(SoundType.METAL).destroyTime(0.4F).randomTicks().dynamicShape().noOcclusion();
+	}
+
+	private static BlockBehaviour.Properties berryBushProperties() {
+		return BlockBehaviour.Properties.of().sound(SoundType.GRASS).destroyTime(0.4F).randomTicks().dynamicShape().noOcclusion();
 	}
 
 	private static BlockBehaviour.Properties logProperties(MapColor top, MapColor side) {

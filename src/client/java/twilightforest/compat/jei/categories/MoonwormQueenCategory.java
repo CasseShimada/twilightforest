@@ -4,12 +4,13 @@ import mezz.jei.api.constants.ModIds;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.types.IRecipeType;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
@@ -57,11 +58,6 @@ public class MoonwormQueenCategory implements IRecipeCategory<MoonwormQueenRepai
 		return RecipeViewerConstants.GENERIC_RECIPE_HEIGHT;
 	}
 
-	@Override
-	public void createRecipeExtras(IRecipeExtrasBuilder builder, MoonwormQueenRepairRecipe recipe, IFocusGroup focuses) {
-		builder.addDrawable(this.background, 0, 0);
-	}
-
 	@SuppressWarnings("removal") //liar
 	@Override
 	public void setRecipe(IRecipeLayoutBuilder builder, MoonwormQueenRepairRecipe recipe, IFocusGroup focuses) {
@@ -79,5 +75,10 @@ public class MoonwormQueenCategory implements IRecipeCategory<MoonwormQueenRepai
 		builder.addSlot(RecipeIngredientRole.OUTPUT, 95, 19)
 			.addItemStacks(RecipeViewerConstants.MOONWORM_QUEEN_LIST)
 			.addRichTooltipCallback((view, tooltip) -> tooltip.add(RecipeViewerConstants.MOONWORM_QUEEN_TOOLTIP));
+	}
+
+	@Override
+	public void draw(MoonwormQueenRepairRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
+		this.background.draw(graphics, 0, 0);
 	}
 }

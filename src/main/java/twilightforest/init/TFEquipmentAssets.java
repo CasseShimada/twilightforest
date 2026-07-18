@@ -16,6 +16,8 @@ public class TFEquipmentAssets {
 	public static final ResourceKey<EquipmentAsset> PHANTOM = createId("phantom");
 	public static final ResourceKey<EquipmentAsset> ARCTIC = createId("arctic");
 	public static final ResourceKey<EquipmentAsset> YETI = createId("yeti");
+	public static final ResourceKey<EquipmentAsset> TRAVELLERS = createId("travellers_gear");
+	public static final ResourceKey<EquipmentAsset> TRAVELLERS_DOWN = createId("travellers_gear_down");
 
 	static ResourceKey<EquipmentAsset> createId(String name) {
 		return ResourceKey.create(EquipmentAssets.ROOT_ID, TwilightForestMod.prefix(name));

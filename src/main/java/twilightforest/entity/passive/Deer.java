@@ -4,6 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
@@ -18,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import twilightforest.tags.TFItemTags;
 import twilightforest.init.TFEntities;
+import twilightforest.init.TFItems;
 import twilightforest.init.TFSounds;
 
 public class Deer extends Animal {
@@ -43,6 +46,28 @@ public class Deer extends Animal {
 		return Animal.createAnimalAttributes()
 			.add(Attributes.MAX_HEALTH, 10.0)
 			.add(Attributes.MOVEMENT_SPEED, 0.2);
+	}
+
+	@Override
+	public InteractionResult mobInteract(Player player, InteractionHand hand) {
+		InteractionResult result = super.mobInteract(player, hand);
+		ItemStack stack = player.getItemInHand(hand);
+		if (result == InteractionResult.PASS && stack.is(TFItems.SHIKA_SENBEI) && this.getHealth() < this.getMaxHealth()) {
+			this.usePlayerItem(player, hand, stack);
+			return InteractionResult.SUCCESS;
+		}
+		return result;
+	}
+
+	@Override
+	public void usePlayerItem(Player player, InteractionHand hand, ItemStack stack) {
+		if (stack.is(TFItems.SHIKA_SENBEI)) {
+			if (!this.level().isClientSide()) {
+				this.heal(4.0F);
+			}
+			this.level().playSound(null, this.getX(), this.getY(), this.getZ(), TFSounds.DEER_EAT, this.getSoundSource(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
+		}
+		super.usePlayerItem(player, hand, stack);
 	}
 
 	@Override

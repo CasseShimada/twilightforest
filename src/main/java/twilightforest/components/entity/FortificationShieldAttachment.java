@@ -21,10 +21,15 @@ import twilightforest.network.UpdateShieldPacket;
 
 public class FortificationShieldAttachment {
 
-	public static final Codec<FortificationShieldAttachment> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+	private static final Codec<FortificationShieldAttachment> CURRENT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.INT.fieldOf("temporary_shields").forGetter(o -> o.temporaryShields),
 			Codec.INT.fieldOf("permanent_shields").forGetter(o -> o.permanentShields))
 		.apply(instance, FortificationShieldAttachment::new));
+	private static final Codec<FortificationShieldAttachment> LEGACY_FORGE_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Codec.INT.fieldOf("tempshields").forGetter(o -> o.temporaryShields),
+			Codec.INT.fieldOf("permshields").forGetter(o -> o.permanentShields))
+		.apply(instance, FortificationShieldAttachment::new));
+	public static final Codec<FortificationShieldAttachment> CODEC = Codec.withAlternative(CURRENT_CODEC, LEGACY_FORGE_CODEC);
 
 	private int temporaryShields;
 	private int permanentShields;

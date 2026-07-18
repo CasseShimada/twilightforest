@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundMapItemDataPacket;
@@ -14,11 +15,13 @@ import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedDataType;
+import net.minecraft.world.level.storage.SavedDataStorage;
 import net.minecraft.world.level.saveddata.maps.MapId;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.network.MazeMapPacket;
 
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,7 +69,17 @@ public class TFMazeMapData extends MapItemSavedData {
 	@Nullable
 	public static TFMazeMapData getMazeMapData(Level level, String name) {
 		if (level.isClientSide()) return CLIENT_DATA.get(name);
-		else return ((ServerLevel) level).getServer().overworld().getDataStorage().get(type(name));
+		else return LegacyMapSavedData.get((ServerLevel) level, name, type(name), CODEC);
+	}
+
+	@Nullable
+	static TFMazeMapData getMazeMapData(
+		SavedDataStorage storage,
+		Path currentDataFolder,
+		Path legacyWorldDataFolder,
+		HolderLookup.Provider registries,
+		String name) {
+		return LegacyMapSavedData.get(storage, currentDataFolder, legacyWorldDataFolder, registries, name, type(name), CODEC);
 	}
 
 	// Like the method above, but if we know we're on client
@@ -95,10 +108,14 @@ public class TFMazeMapData extends MapItemSavedData {
 	}
 
 	private static <T> boolean readBoolean(DynamicOps<T> ops, T input, String key, boolean defaultValue) {
-		return ops.get(input, key).flatMap(ops::getBooleanValue).result().orElse(defaultValue);
+		return ops.get(input, key).result()
+			.map(value -> ops.getBooleanValue(value).getOrThrow())
+			.orElse(defaultValue);
 	}
 
 	private static <T> int readInt(DynamicOps<T> ops, T input, String key, int defaultValue) {
-		return ops.get(input, key).flatMap(ops::getNumberValue).map(Number::intValue).result().orElse(defaultValue);
+		return ops.get(input, key).result()
+			.map(value -> ops.getNumberValue(value).getOrThrow().intValue())
+			.orElse(defaultValue);
 	}
 }

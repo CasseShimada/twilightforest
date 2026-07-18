@@ -62,6 +62,7 @@ public final class EntityTypeTagGenerator extends FabricTagsProvider.EntityTypeT
 			.add(key(TFEntities.LICH_MINION))
 			.add(key(TFEntities.LOYAL_ZOMBIE))
 			.add(key(TFEntities.RISING_ZOMBIE));
+		this.builder(EntityTypeTags.CANNOT_BE_AGE_LOCKED).add(key(TFEntities.LOYAL_ZOMBIE));
 		this.builder(EntityTypeTags.FALL_DAMAGE_IMMUNE)
 			.add(key(TFEntities.NAGA))
 			.add(key(TFEntities.SQUIRREL))

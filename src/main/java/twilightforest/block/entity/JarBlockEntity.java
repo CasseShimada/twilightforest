@@ -71,7 +71,18 @@ public class JarBlockEntity extends BlockEntity {
 	@Override
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
-		this.lid = input.read(TAG_LID, ITEM_CODEC).orElse(TFBlocks.TWILIGHT_OAK_LOG.asItem());
+		this.lid = readLid(input, this.lid);
+	}
+
+	static Item readLid(ValueInput input, Item fallback) {
+		return input.read(TAG_LID, Codec.PASSTHROUGH)
+			.map(rawLid -> rawLid.read(ITEM_CODEC).getOrThrow(message ->
+				new IllegalStateException("Malformed jar lid '" + TAG_LID + "': " + message)))
+			.orElse(fallback);
+	}
+
+	static Item readLid(@Nullable JarLid currentLid, Item fallback) {
+		return currentLid != null ? currentLid.lid() : fallback;
 	}
 
 	public ItemStack getJarAsItem() {
@@ -97,7 +108,7 @@ public class JarBlockEntity extends BlockEntity {
 	@Override
 	protected void applyImplicitComponents(DataComponentGetter input) {
 		super.applyImplicitComponents(input);
-		this.lid = input.getOrDefault(TFDataComponents.JAR_LID, new JarLid(TFBlocks.TWILIGHT_OAK_LOG.asItem())).lid();
+		this.lid = readLid(input.get(TFDataComponents.JAR_LID), this.lid);
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import twilightforest.datagen.assets.AtlasGenerator;
 import twilightforest.datagen.assets.EquipmentAssetsGenerator;
 import twilightforest.datagen.assets.ParticleGenerator;
 import twilightforest.datagen.data.DataMapGenerator;
+import twilightforest.datagen.data.RegistrySnapshotGenerator;
 import twilightforest.datagen.data.custom.QuestGenerator;
 import twilightforest.datagen.data.custom.StalactiteGenerator;
 import twilightforest.datagen.data.registries.BannerPatternGenerator;
@@ -35,6 +36,7 @@ import twilightforest.datagen.data.registries.StructureSetGenerator;
 import twilightforest.datagen.data.registries.StructureSpeleothemConfigGenerator;
 import twilightforest.datagen.data.registries.TinyBirdVariantGenerator;
 import twilightforest.datagen.data.registries.TrimMaterialGenerator;
+import twilightforest.datagen.data.registries.TravellersModifierGenerator;
 import twilightforest.datagen.data.registries.WoodPaletteGenerator;
 import twilightforest.datagen.data.tags.BannerPatternTagGenerator;
 import twilightforest.datagen.data.tags.BiomeTagGenerator;
@@ -64,8 +66,10 @@ import twilightforest.init.custom.BiomeLayerStack;
 import twilightforest.init.custom.ChunkBlanketProcessors;
 import twilightforest.init.custom.DwarfRabbitVariants;
 import twilightforest.init.custom.MagicPaintingVariants;
+import twilightforest.init.custom.TravellersModifiersManager;
 import twilightforest.init.custom.Restrictions;
 import twilightforest.init.custom.StructureSpeleothemConfigs;
+import twilightforest.init.custom.TemplateMarkerHandlers;
 import twilightforest.init.custom.TinyBirdVariants;
 import twilightforest.init.custom.WoodPalettes;
 
@@ -77,6 +81,7 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		pack.addProvider(EquipmentAssetsGenerator::new);
 		pack.addProvider(ParticleGenerator::new);
 		pack.addProvider(DataMapGenerator::new);
+		pack.addProvider(RegistrySnapshotGenerator::new);
 		pack.addProvider(QuestGenerator::new);
 		pack.addProvider(StalactiteGenerator::new);
 		pack.addProvider(BannerPatternGenerator::new);
@@ -102,6 +107,7 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		pack.addProvider(StructureSpeleothemConfigGenerator::new);
 		pack.addProvider(TinyBirdVariantGenerator::new);
 		pack.addProvider(TrimMaterialGenerator::new);
+		pack.addProvider(TravellersModifierGenerator::new);
 		pack.addProvider(WoodPaletteGenerator::new);
 		BlockTagGenerator blockTags = pack.addProvider(BlockTagGenerator::new);
 		pack.addProvider((output, registries) -> new ItemTagGenerator(output, registries, blockTags));
@@ -138,8 +144,10 @@ public final class TwilightForestDataGenerator implements DataGeneratorEntrypoin
 		registryBuilder.add(TFRegistries.Keys.CHUNK_BLANKET_PROCESSORS, ChunkBlanketProcessors::bootstrap);
 		registryBuilder.add(TFRegistries.Keys.DWARF_RABBIT_VARIANT, DwarfRabbitVariants::bootstrap);
 		registryBuilder.add(TFRegistries.Keys.MAGIC_PAINTINGS, MagicPaintingVariants::bootstrap);
+		registryBuilder.add(TFRegistries.Keys.TRAVELLERS_MODIFIERS, TravellersModifiersManager::bootstrap);
 		registryBuilder.add(TFRegistries.Keys.RESTRICTIONS, Restrictions::bootstrap);
 		registryBuilder.add(TFRegistries.Keys.STRUCTURE_SPELEOTHEM_SETTINGS, StructureSpeleothemConfigs::bootstrap);
+		registryBuilder.add(TFRegistries.Keys.TEMPLATE_MARKER_HANDLER_LIST, TemplateMarkerHandlers::bootstrap);
 		registryBuilder.add(TFRegistries.Keys.TINY_BIRD_VARIANT, TinyBirdVariants::bootstrap);
 		registryBuilder.add(TFRegistries.Keys.WOOD_PALETTES, WoodPalettes::bootstrap);
 	}

@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "twilightforest:travellers_down"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "twilightforest:travellers_down"
+      }
+    ]
+  }
+}

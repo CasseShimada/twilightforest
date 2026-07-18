@@ -94,8 +94,6 @@ import twilightforest.mixin.client.accessor.BiomeManagerAccessor;
 import twilightforest.tags.TFItemTags;
 import twilightforest.util.HolderMatcher;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -229,13 +227,7 @@ public class ClientEvents {
 		}
 
 		if (item.getItem() instanceof MoonDialItem) {
-			LocalDate today = LocalDate.now();
-			boolean aprilFools = today.getMonth() == Month.APRIL && today.getDayOfMonth() == 1;
-			var level = Minecraft.getInstance().level;
-			String phaseType = level != null && level.dimensionType().hasSkyLight()
-				? String.valueOf(Math.floorMod(level.getOverworldClockTime() / 24000L, 8))
-				: aprilFools ? "unknown_fools" : "unknown";
-			lines.add(descriptionIndex, Component.translatable("item.twilightforest.moon_dial.phase_" + phaseType).withStyle(ChatFormatting.GRAY));
+			lines.add(descriptionIndex, MoonDialItem.getMoonPhase(Minecraft.getInstance().level).withStyle(ChatFormatting.GRAY));
 		}
 
 		if (item.is(TFItemTags.WIP)) {

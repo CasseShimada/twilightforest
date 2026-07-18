@@ -790,6 +790,16 @@ public class HydraHeadContainer {
 		this.ticksProgress = this.ticksNeeded;
 	}
 
+	void restoreActiveState(boolean active) {
+		State restoredState = active ? State.IDLE : State.DEAD;
+		this.prevState = restoredState;
+		this.currentState = restoredState;
+		this.nextState = NEXT_AUTOMATIC;
+		this.ticksNeeded = restoredState.duration;
+		this.ticksProgress = this.ticksNeeded;
+		this.headEntity.setState(restoredState);
+	}
+
 	private float getCurrentNeckLength() {
 		float prevLength = this.stateNeckLength[this.headNum].get(this.prevState);
 		float curLength = this.stateNeckLength[this.headNum].get(this.currentState);

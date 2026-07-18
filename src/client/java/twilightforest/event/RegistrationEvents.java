@@ -31,6 +31,7 @@ import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.item.properties.conditional.ConditionalItemModelProperties;
 import net.minecraft.client.renderer.item.properties.numeric.RangeSelectItemModelProperties;
 import net.minecraft.client.renderer.item.properties.select.SelectItemModelProperties;
+import net.minecraft.client.renderer.item.ItemModels;
 import net.minecraft.client.renderer.special.SpecialModelRenderers;
 import net.minecraft.client.model.object.boat.BoatModel;
 import net.minecraft.resources.Identifier;
@@ -45,6 +46,7 @@ import twilightforest.client.MagicPaintingTextureManager;
 import twilightforest.client.TextureGeneratorReloadListener;
 import twilightforest.client.UncraftingScreen;
 import twilightforest.client.model.TFModelLayers;
+import twilightforest.client.model.item.TravellersGearItemModel;
 import twilightforest.client.model.block.aurorablock.AuroraModelRegistry;
 import twilightforest.client.model.block.aurorablock.NoiseVaryingModelLoader;
 import twilightforest.client.model.block.connected.ConnectedTextureModelLoader;
@@ -64,15 +66,20 @@ import twilightforest.client.properties.PotionFlaskDamage;
 import twilightforest.client.properties.PotionFlaskDosage;
 import twilightforest.client.renderer.TFRenderPipelines;
 import twilightforest.client.renderer.TFSimpleArmorRenderer;
+import twilightforest.client.renderer.TravellersArmorRenderer;
 import twilightforest.client.renderer.block.*;
 import twilightforest.client.renderer.entity.*;
 import twilightforest.client.renderer.entity.layers.IceLayer;
 import twilightforest.client.renderer.entity.layers.ShieldLayer;
 import twilightforest.client.renderer.special.*;
 import twilightforest.client.renderer.PotionFlaskTooltipComponent;
+import twilightforest.client.renderer.ItemDisplayTooltipComponent;
+import twilightforest.client.renderer.TravellersBeltTooltipComponent;
 import twilightforest.enums.BossVariant;
 import twilightforest.init.*;
 import twilightforest.item.BrittleFlaskItem;
+import twilightforest.item.travellers_gear.TravellersArmorBeltItem;
+import twilightforest.item.travellers_gear.TravellersGogglesItem;
 
 public class RegistrationEvents {
 	private static boolean optifinePresent = false;
@@ -123,6 +130,9 @@ public class RegistrationEvents {
 	}
 
 	private static void registerItemModelTypes() {
+		registerLateBound(ItemModels.ID_MAPPER, ItemModels.class,
+			TwilightForestMod.prefix("travellers_gear"), TravellersGearItemModel.Unbaked.MAP_CODEC);
+
 		registerLateBound(SpecialModelRenderers.ID_MAPPER, SpecialModelRenderers.class,
 			TwilightForestMod.prefix("tf_chest"), TFChestSpecialRenderer.Unbaked.MAP_CODEC);
 		registerLateBound(SpecialModelRenderers.ID_MAPPER, SpecialModelRenderers.class,
@@ -168,6 +178,12 @@ public class RegistrationEvents {
 		ClientTooltipComponentCallback.EVENT.register(data -> {
 			if (data instanceof BrittleFlaskItem.Tooltip tooltip) {
 				return new PotionFlaskTooltipComponent(tooltip);
+			}
+			if (data instanceof TravellersGogglesItem.Tooltip tooltip) {
+				return new ItemDisplayTooltipComponent(tooltip);
+			}
+			if (data instanceof TravellersArmorBeltItem.Tooltip tooltip) {
+				return new TravellersBeltTooltipComponent(tooltip);
 			}
 			return null;
 		});
@@ -321,6 +337,11 @@ public class RegistrationEvents {
 		ModelLayerRegistry.registerModelLayer(TFModelLayers.ARCTIC_ARMOR_OUTER, () -> LayerDefinition.create(ArcticArmorModel.addPieces(OUTER_ARMOR_DEFORMATION), 64, 32));
 		ModelLayerRegistry.registerModelLayer(TFModelLayers.FIERY_ARMOR_INNER, () -> LayerDefinition.create(FieryArmorModel.createMesh(INNER_ARMOR_DEFORMATION, 0.0F), 64, 32));
 		ModelLayerRegistry.registerModelLayer(TFModelLayers.FIERY_ARMOR_OUTER, () -> LayerDefinition.create(FieryArmorModel.createMesh(OUTER_ARMOR_DEFORMATION, 0.0F), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.TRAVELLERS_ARMOR_HELMET, () -> LayerDefinition.create(TravellersGearModels.addGogglePieces(OUTER_ARMOR_DEFORMATION), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.TRAVELLERS_ARMOR_CHEST_GLOVES, () -> LayerDefinition.create(TravellersGearModels.addGlovePieces(new CubeDeformation(0.295F), false), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.TRAVELLERS_ARMOR_CHEST_GLOVES_SLIM, () -> LayerDefinition.create(TravellersGearModels.addGlovePieces(new CubeDeformation(0.295F), true), 64, 32));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.TRAVELLERS_ARMOR_LEGGINGS, () -> TravellersWingsModel.createLayer(0.25F));
+		ModelLayerRegistry.registerModelLayer(TFModelLayers.TRAVELLERS_ARMOR_BOOTS, () -> LayerDefinition.create(TravellersGearModels.addBootPieces(new CubeDeformation(0.5F)), 64, 32));
 		ModelLayerRegistry.registerModelLayer(TFModelLayers.KNIGHTMETAL_ARMOR_INNER, () -> LayerDefinition.create(KnightmetalArmorModel.addPieces(INNER_ARMOR_DEFORMATION), 64, 32));
 		ModelLayerRegistry.registerModelLayer(TFModelLayers.KNIGHTMETAL_ARMOR_OUTER, () -> LayerDefinition.create(KnightmetalArmorModel.addPieces(OUTER_ARMOR_DEFORMATION), 64, 32));
 		ModelLayerRegistry.registerModelLayer(TFModelLayers.PHANTOM_ARMOR_INNER, () -> LayerDefinition.create(PhantomArmorModel.addPieces(INNER_ARMOR_DEFORMATION), 64, 32));
@@ -454,6 +475,8 @@ public class RegistrationEvents {
 		registry.register(TFParticleType.EXTENDED_SNOW_WARNING, SnowWarningParticle.ExtendedFactory::new);
 		registry.register(TFParticleType.ICE_BEAM, IceBeamParticle.Factory::new);
 		registry.register(TFParticleType.ANNIHILATE, AnnihilateParticle.Factory::new);
+		registry.register(TFParticleType.PERFECT_DODGE, PerfectDodgeParticle.Provider::new);
+		registry.register(TFParticleType.DOUBLE_JUMP, DoubleJumpParticle.Provider::new);
 		registry.register(TFParticleType.HUGE_SMOKE, SmokeScaleParticle.Factory::new);
 		registry.register(TFParticleType.FIREFLY, FireflyParticle.StationaryProvider::new);
 		registry.register(TFParticleType.WANDERING_FIREFLY, FireflyParticle.WanderingProvider::new);
@@ -477,6 +500,9 @@ public class RegistrationEvents {
 			TFItems.ARCTIC_HELMET, TFItems.ARCTIC_CHESTPLATE, TFItems.ARCTIC_LEGGINGS, TFItems.ARCTIC_BOOTS);
 		ArmorRenderer.register(new TFSimpleArmorRenderer(FieryArmorModel::new, TFModelLayers.FIERY_ARMOR_INNER, TFModelLayers.FIERY_ARMOR_OUTER, true),
 			TFItems.FIERY_HELMET, TFItems.FIERY_CHESTPLATE, TFItems.FIERY_LEGGINGS, TFItems.FIERY_BOOTS);
+		ArmorRenderer.register(TravellersArmorRenderer.INSTANCE,
+			TFItems.TRAVELLERS_GOGGLES, TFItems.TRAVELLERS_VEST, TFItems.TRAVELLERS_GLOVES,
+			TFItems.TRAVELLERS_WINGS, TFItems.TRAVELLERS_BELT, TFItems.TRAVELLERS_BOOTS);
 		ArmorRenderer.register(new TFSimpleArmorRenderer(HumanoidModel::new, TFModelLayers.KNIGHTMETAL_ARMOR_INNER, TFModelLayers.KNIGHTMETAL_ARMOR_OUTER),
 			TFItems.KNIGHTMETAL_HELMET, TFItems.KNIGHTMETAL_CHESTPLATE, TFItems.KNIGHTMETAL_LEGGINGS, TFItems.KNIGHTMETAL_BOOTS);
 		ArmorRenderer.register(new TFSimpleArmorRenderer(HumanoidModel::new, TFModelLayers.PHANTOM_ARMOR_INNER, TFModelLayers.PHANTOM_ARMOR_OUTER),

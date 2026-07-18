@@ -1,0 +1,43 @@
+casketUUIDLocking = true
+disableSkullCandleCreation = true
+showEnchantmentsOnItems = false
+bossesSpawnDropChests = false
+cloudBlockPrecipitationDistance = 73
+multiplayerFightAdjuster = "MORE_LOOT_AND_HEALTH"
+
+["Dimension Settings"]
+newPlayersSpawnInTF = true
+portalForNewPlayer = true
+
+["Portal Settings"]
+originDimension = "minecraft:the_nether"
+allowPortalsInOtherDimensions = true
+portalCreationPermission = "ADMINS"
+disablePortalCreation = true
+checkPortalPlacement = false
+destructivePortalLightning = false
+shouldReturnPortalBeUsable = false
+portalUnlockedByAdvancement = "minecraft:story/root"
+maxPortalSize = 81
+
+["Uncrafting Table"]
+uncraftingXpCostMultiplier = 2.5
+repairingXpCostMultiplier = 3.5
+disableUncraftingRecipes = ["twilightforest:uncrafting_table", "minecraft:crafting_table"]
+flipRecipeList = true
+blacklistedUncraftingModIds = ["minecraft", "example"]
+flipIdList = true
+enableShapelessCrafting = true
+disableIngredientSwitching = true
+disableUncrafting = true
+disableUncraftingTable = true
+
+["Magic Trees"]
+timeCoreRange = 11
+transformationCoreRange = 22
+miningCoreRange = 33
+sortingCoreRange = 44
+
+["Shield Parrying"]
+parryNonTwilightAttacks = true
+shieldParryTicksArrow = 17

@@ -2,12 +2,14 @@ package twilightforest.world.components.structures.lichtowerrevamp;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.resources.Identifier;
+import twilightforest.world.components.structures.util.TemplatePoolInstance;
 
 import java.util.Map;
 
 /**
- * @param poolWeights Weights in assigning this template to their respective pools
+ * @param poolWeights weighted metadata assigning this template to its pools
  */
-public record StructureTemplateDefinition(Map<Identifier, Integer> poolWeights) {
-	public final static Codec<StructureTemplateDefinition> CODEC = Codec.unboundedMap(Identifier.CODEC, Codec.INT).xmap(StructureTemplateDefinition::new, StructureTemplateDefinition::poolWeights);
+public record StructureTemplateDefinition(Map<Identifier, TemplatePoolInstance> poolWeights) {
+	public static final Codec<StructureTemplateDefinition> CODEC = Codec.unboundedMap(Identifier.CODEC, TemplatePoolInstance.CODEC)
+		.xmap(StructureTemplateDefinition::new, StructureTemplateDefinition::poolWeights);
 }

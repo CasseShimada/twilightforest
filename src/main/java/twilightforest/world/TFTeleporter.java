@@ -364,11 +364,9 @@ public class TFTeleporter {
 		// well I don't think we can actually just return and fail here
 		TwilightForestMod.LOGGER.debug("Did not even find a fallback portal spot, just making a random one for {}", name);
 
-		// adjust the portal height based on what world we're traveling to
-		double yFactor = getYFactor(world);
-
-		// + 2 to make it above bedrock
-		cacheNewPortalCoords(cache, src, makePortalAt(world, BlockPos.containing(entity.getX() * getHorizontalScale(world), (entity.getY() * yFactor) + 2, entity.getZ() * getHorizontalScale(world)), locked), entity.blockPosition());
+		BlockPos horizontallyScaled = BlockPos.containing(entity.getX() * getHorizontalScale(world), entity.getY(), entity.getZ() * getHorizontalScale(world));
+		spot = world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, horizontallyScaled);
+		cacheNewPortalCoords(cache, src, makePortalAt(world, spot, locked), entity.blockPosition());
 	}
 
 	protected static void loadSurroundingArea(ServerLevel world, Vec3 pos) {

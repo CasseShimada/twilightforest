@@ -4,7 +4,13 @@ import net.minecraft.resources.Identifier;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.*;
 
+import java.util.Map;
+
 public final class TFRemapper {
+	static final Map<Identifier, Identifier> CROSS_NAMESPACE_ITEM_ALIASES = Map.of(
+		TwilightForestMod.prefix("copper_nugget"), Identifier.withDefaultNamespace("copper_nugget")
+	);
+
 	private final AliasTarget target;
 
 	private TFRemapper(AliasTarget target) {
@@ -176,9 +182,6 @@ public final class TFRemapper {
 		remapBlockAndItem("sort_banister", "sorting_banister");
 
 		remapItem("shield_scepter", "fortification_scepter");
-		remapItem("magic_map", "filled_magic_map");
-		remapItem("maze_map", "filled_maze_map");
-		remapItem("ore_map", "filled_ore_map");
 		remapItem("magic_map_empty", "magic_map");
 		remapItem("maze_map_empty", "maze_map");
 		remapItem("ore_map_empty", "ore_map");
@@ -188,6 +191,7 @@ public final class TFRemapper {
 		remapItem("peacock_fan", "peacock_feather_fan");
 		remapItem("alpha_fur", "alpha_yeti_fur");
 		remapItem("questing_ram_banner_pattern", "quest_ram_banner_pattern");
+		CROSS_NAMESPACE_ITEM_ALIASES.forEach(this::remapItem);
 
 		remapSpawnEgg("bunny_spawn_egg", "dwarf_rabbit_spawn_egg");
 		remapSpawnEgg("goblin_knight_lower_spawn_egg", "lower_goblin_knight_spawn_egg");
@@ -229,8 +233,12 @@ public final class TFRemapper {
 	}
 
 	private void remapItem(String oldId, String newId) {
+		remapItem(TwilightForestMod.prefix(oldId), TwilightForestMod.prefix(newId));
+	}
+
+	private void remapItem(Identifier oldId, Identifier newId) {
 		if (this.target == AliasTarget.ITEM) {
-			TFItems.addAlias(TwilightForestMod.prefix(oldId), TwilightForestMod.prefix(newId));
+			TFItems.addAlias(oldId, newId);
 		}
 	}
 

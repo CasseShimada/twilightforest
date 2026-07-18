@@ -71,6 +71,12 @@ public final class BiomeTagGenerator extends FabricTagsProvider<Biome> {
 			.add(TFBiomes.MUSHROOM_FOREST)
 			.add(TFBiomes.OAK_SAVANNAH)
 			.add(TFBiomes.ENCHANTED_FOREST);
+		this.builder(TFBiomeTags.VALID_CAMP_BIOMES)
+			.add(TFBiomes.OAK_SAVANNAH)
+			.add(TFBiomes.CLEARING)
+			.add(TFBiomes.MUSHROOM_FOREST)
+			.add(TFBiomes.FOREST)
+			.add(TFBiomes.FIREFLY_FOREST);
 		this.builder(TFBiomeTags.VALID_HYDRA_LAIR_BIOMES).add(TFBiomes.FIRE_SWAMP);
 		this.builder(TFBiomeTags.VALID_KNIGHT_STRONGHOLD_BIOMES).add(TFBiomes.DARK_FOREST);
 		this.builder(TFBiomeTags.VALID_LABYRINTH_BIOMES).add(TFBiomes.SWAMP);

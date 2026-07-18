@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
-import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.networking.v1.EntityTrackingEvents;
 import net.minecraft.server.level.ServerLevel;
@@ -18,6 +17,8 @@ import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Mob;
 import twilightforest.item.OreMagnetItem;
+import twilightforest.block.TFBushBlock;
+import twilightforest.block.SnowLoggable;
 
 public final class TFEventHandlers {
 	private TFEventHandlers() {
@@ -38,6 +39,10 @@ public final class TFEventHandlers {
 				if (player instanceof ServerPlayer serverPlayer && LootEvents.tryHandleGiantPickBreak(level, serverPlayer, pos, state)) {
 					return false;
 				}
+				if (state.getBlock() instanceof TFBushBlock bush && !player.isSecondaryUseActive() && state.getValue(SnowLoggable.SNOW_LAYERS) > 0) {
+					bush.handleBreakingLogic(level, pos, state, player, null);
+					return false;
+				}
 			}
 			return true;
 		});
@@ -49,7 +54,10 @@ public final class TFEventHandlers {
 		});
 
 		UseBlockCallback.EVENT.register((player, world, hand, hit) -> {
-			if (!(world instanceof ServerLevel level) || world.isClientSide()) {
+			if (world.isClientSide()) {
+				return EntityEvents.handleWroughtFenceLead(player, world, hand, hit);
+			}
+			if (!(world instanceof ServerLevel level)) {
 				return InteractionResult.PASS;
 			}
 			TriState allow = ProgressionEvents.shouldAllowBlockInteraction(level, player, hit.getBlockPos());
@@ -82,10 +90,6 @@ public final class TFEventHandlers {
 			}
 			return EntityEvents.handleAttackEntity(entity);
 		});
-
-		UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) ->
-			EntityEvents.handleGoldenDandelionUse(player, world, hand, entity)
-		);
 
 		ServerTickEvents.END_LEVEL_TICK.register(world -> {
 			for (ServerPlayer player : world.players()) {
@@ -148,6 +152,7 @@ public final class TFEventHandlers {
 		ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
 			CharmEvents.onPlayerRespawn(newPlayer, alive);
 			AttachmentEvents.onPlayerRespawn(newPlayer);
+			TravellersGearEvents.onPlayerRespawn(oldPlayer, newPlayer, alive);
 		});
 
 		ServerPlayerEvents.JOIN.register(AttachmentEvents::onPlayerJoin);

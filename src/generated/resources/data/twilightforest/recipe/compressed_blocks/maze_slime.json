@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": { "#": "twilightforest:maze_slime_ball" },
+  "pattern": ["###", "###", "###"],
+  "result": { "count": 1, "id": "twilightforest:maze_slime_block" }
+}

@@ -22,6 +22,7 @@ import net.minecraft.world.RandomizableContainer;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -643,6 +644,12 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 		if (parameters.length >= 3 && StringUtils.isNumeric(parameters[2])) {
 			((BaseSpawnerAccessor) spawner.getSpawner()).twilightforest$setSpawnRange(Mth.clamp(Integer.parseInt(parameters[2]), 1, 16));
 		}
+
+		if (parameters.length >= 4 && StringUtils.isNumeric(parameters[3])) {
+			spawner.getSpawner().setEntityScanRange(Mth.clamp(Integer.parseInt(parameters[3]), 1, 32));
+		} else {
+			spawner.getSpawner().setEntityScanRange(((BaseSpawnerAccessor) spawner.getSpawner()).twilightforest$getSpawnRange());
+		}
 	}
 
 	private void configureBaseSpawner(BlockPos pos, RandomSource random, String[] parameters, BaseSpawner spawner) {
@@ -712,18 +719,19 @@ public final class LichTowerWingRoom extends TwilightJigsawPiece implements Piec
 
 		BlockPos zombiePos = pos.relative(randomDirection, 1);
 
-		var knot = EntityUtil.createEntityIgnoreException(level, EntityTypes.LEASH_KNOT);
 		var trapEntity = EntityUtil.createEntityIgnoreException(level, EntityTypes.ZOMBIE);
-		if (knot == null || trapEntity == null)
+		if (trapEntity == null)
 			return;
 
-		knot.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+		boolean createdKnot = LeashFenceKnotEntity.getKnot(level.getLevel(), pos).isEmpty();
+		var knot = LeashFenceKnotEntity.getOrCreateKnot(level.getLevel(), pos);
 
 		trapEntity.setPersistenceRequired();
 		trapEntity.setLeashedTo(knot, false);
 		trapEntity.setPos(zombiePos.getX() + 0.5, zombiePos.getY() - 1, zombiePos.getZ() + 0.5);
 		TFDataAttachments.set(trapEntity, TFDataAttachments.LEASH_PATHFINDER_OVERRIDE, Unit.INSTANCE);
-		level.addFreshEntity(trapEntity);
+		if (!level.addFreshEntity(trapEntity) && createdKnot)
+			knot.discard();
 	}
 
 	private @NotNull Direction getRandomDirectionInsideChunk(WorldGenLevel level, RandomSource random, BlockPos pos) {

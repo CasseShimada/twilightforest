@@ -1,0 +1,104 @@
+# Twilight Forest public API v1 binary/source compatibility baseline.
+# Format: TYPE binary-name
+#         FIELD owner name erased-type
+#         METHOD owner name erased-return-type [erased-parameter-types...]
+#         CONSTRUCTOR owner [erased-parameter-types...]
+#         ENUM owner constant
+
+TYPE twilightforest.api.AccessoryApi
+TYPE twilightforest.api.AccessoryConsumptionContext
+TYPE twilightforest.api.AccessoryConsumptionResult
+TYPE twilightforest.api.AccessoryConsumptionResult$Outcome
+TYPE twilightforest.api.AccessoryItemConsumer
+TYPE twilightforest.api.ArmorApi
+TYPE twilightforest.api.ArmorClassifier
+TYPE twilightforest.api.TravellerGearApi
+TYPE twilightforest.api.TravellerGearClassifier
+TYPE twilightforest.api.TravellerGearPart
+TYPE twilightforest.api.TwilightForestApi
+TYPE twilightforest.api.WeaponApi
+TYPE twilightforest.api.WeaponClassifier
+
+FIELD twilightforest.api.TwilightForestApi API_VERSION java.lang.String
+FIELD twilightforest.api.TwilightForestApi API_MAJOR_VERSION int
+
+FIELD twilightforest.api.ArmorApi TWILIGHT_FOREST_ARMOR net.minecraft.resources.Identifier
+FIELD twilightforest.api.ArmorApi NAGA net.minecraft.resources.Identifier
+FIELD twilightforest.api.ArmorApi IRONWOOD net.minecraft.resources.Identifier
+FIELD twilightforest.api.ArmorApi STEELEAF net.minecraft.resources.Identifier
+FIELD twilightforest.api.ArmorApi FIERY net.minecraft.resources.Identifier
+FIELD twilightforest.api.ArmorApi KNIGHTMETAL net.minecraft.resources.Identifier
+FIELD twilightforest.api.ArmorApi PHANTOM net.minecraft.resources.Identifier
+FIELD twilightforest.api.ArmorApi ARCTIC net.minecraft.resources.Identifier
+FIELD twilightforest.api.ArmorApi YETI net.minecraft.resources.Identifier
+FIELD twilightforest.api.ArmorApi TRAVELLERS_GEAR net.minecraft.resources.Identifier
+FIELD twilightforest.api.ArmorApi FIERY_REACTIVE net.minecraft.resources.Identifier
+FIELD twilightforest.api.ArmorApi CHILL_AURA net.minecraft.resources.Identifier
+FIELD twilightforest.api.ArmorApi FIERY_STEP_IMMUNITY net.minecraft.resources.Identifier
+
+FIELD twilightforest.api.WeaponApi TWILIGHT_FOREST_WEAPON net.minecraft.resources.Identifier
+FIELD twilightforest.api.WeaponApi IGNITES_TARGETS net.minecraft.resources.Identifier
+FIELD twilightforest.api.WeaponApi BONUS_AGAINST_ARMORED net.minecraft.resources.Identifier
+FIELD twilightforest.api.WeaponApi BONUS_AGAINST_UNARMORED net.minecraft.resources.Identifier
+FIELD twilightforest.api.WeaponApi SPRINT_CHARGE_BONUS net.minecraft.resources.Identifier
+FIELD twilightforest.api.WeaponApi SMELTS_BLOCK_DROPS net.minecraft.resources.Identifier
+FIELD twilightforest.api.WeaponApi MAZESTONE_WEAR_EXEMPT net.minecraft.resources.Identifier
+FIELD twilightforest.api.WeaponApi RESETS_ARROW_INVULNERABILITY net.minecraft.resources.Identifier
+
+CONSTRUCTOR twilightforest.api.AccessoryConsumptionContext net.minecraft.server.level.ServerPlayer net.minecraft.world.item.Item
+CONSTRUCTOR twilightforest.api.AccessoryConsumptionResult twilightforest.api.AccessoryConsumptionResult$Outcome net.minecraft.world.item.ItemStack
+
+METHOD twilightforest.api.AccessoryApi registerItemConsumer void net.minecraft.resources.Identifier twilightforest.api.AccessoryItemConsumer
+METHOD twilightforest.api.AccessoryApi itemConsumerIds java.util.List
+METHOD twilightforest.api.AccessoryApi tryConsume twilightforest.api.AccessoryConsumptionResult twilightforest.api.AccessoryConsumptionContext
+METHOD twilightforest.api.AccessoryApi registrationsFrozen boolean
+
+METHOD twilightforest.api.AccessoryConsumptionContext player net.minecraft.server.level.ServerPlayer
+METHOD twilightforest.api.AccessoryConsumptionContext requestedItem net.minecraft.world.item.Item
+
+METHOD twilightforest.api.AccessoryConsumptionResult pass twilightforest.api.AccessoryConsumptionResult
+METHOD twilightforest.api.AccessoryConsumptionResult consumed twilightforest.api.AccessoryConsumptionResult net.minecraft.world.item.ItemStack
+METHOD twilightforest.api.AccessoryConsumptionResult wasConsumed boolean
+METHOD twilightforest.api.AccessoryConsumptionResult outcome twilightforest.api.AccessoryConsumptionResult$Outcome
+METHOD twilightforest.api.AccessoryConsumptionResult consumedStack net.minecraft.world.item.ItemStack
+
+METHOD twilightforest.api.AccessoryItemConsumer tryConsume twilightforest.api.AccessoryConsumptionResult twilightforest.api.AccessoryConsumptionContext
+
+METHOD twilightforest.api.ArmorApi registerClassifier void net.minecraft.resources.Identifier twilightforest.api.ArmorClassifier
+METHOD twilightforest.api.ArmorApi classifierIds java.util.List
+METHOD twilightforest.api.ArmorApi traits java.util.Set net.minecraft.world.item.ItemStack
+METHOD twilightforest.api.ArmorApi hasTrait boolean net.minecraft.world.item.ItemStack net.minecraft.resources.Identifier
+METHOD twilightforest.api.ArmorApi registrationsFrozen boolean
+METHOD twilightforest.api.ArmorClassifier classify java.util.Set net.minecraft.world.item.ItemStack
+
+METHOD twilightforest.api.TravellerGearApi registerClassifier void net.minecraft.resources.Identifier twilightforest.api.TravellerGearClassifier
+METHOD twilightforest.api.TravellerGearApi classifierIds java.util.List
+METHOD twilightforest.api.TravellerGearApi parts java.util.Set net.minecraft.world.item.ItemStack
+METHOD twilightforest.api.TravellerGearApi isTravellerGear boolean net.minecraft.world.item.ItemStack
+METHOD twilightforest.api.TravellerGearApi isBroken boolean net.minecraft.world.item.ItemStack
+METHOD twilightforest.api.TravellerGearApi equippedStack net.minecraft.world.item.ItemStack net.minecraft.world.entity.LivingEntity twilightforest.api.TravellerGearPart
+METHOD twilightforest.api.TravellerGearApi equippedParts java.util.Map net.minecraft.world.entity.LivingEntity
+METHOD twilightforest.api.TravellerGearApi activeEffectIds java.util.Set net.minecraft.world.entity.LivingEntity
+METHOD twilightforest.api.TravellerGearApi registrationsFrozen boolean
+METHOD twilightforest.api.TravellerGearClassifier classify java.util.Set net.minecraft.world.item.ItemStack
+METHOD twilightforest.api.TravellerGearClassifier activeEffects java.util.Set net.minecraft.world.entity.LivingEntity net.minecraft.world.item.ItemStack
+METHOD twilightforest.api.TravellerGearPart equipmentSlot net.minecraft.world.entity.EquipmentSlot
+
+METHOD twilightforest.api.TwilightForestApi freezeRegistrations void
+METHOD twilightforest.api.TwilightForestApi registrationsFrozen boolean
+
+METHOD twilightforest.api.WeaponApi registerClassifier void net.minecraft.resources.Identifier twilightforest.api.WeaponClassifier
+METHOD twilightforest.api.WeaponApi classifierIds java.util.List
+METHOD twilightforest.api.WeaponApi traits java.util.Set net.minecraft.world.item.ItemStack
+METHOD twilightforest.api.WeaponApi hasTrait boolean net.minecraft.world.item.ItemStack net.minecraft.resources.Identifier
+METHOD twilightforest.api.WeaponApi registrationsFrozen boolean
+METHOD twilightforest.api.WeaponClassifier classify java.util.Set net.minecraft.world.item.ItemStack
+
+ENUM twilightforest.api.AccessoryConsumptionResult$Outcome PASS
+ENUM twilightforest.api.AccessoryConsumptionResult$Outcome CONSUMED
+ENUM twilightforest.api.TravellerGearPart GOGGLES
+ENUM twilightforest.api.TravellerGearPart VEST
+ENUM twilightforest.api.TravellerGearPart GLOVES
+ENUM twilightforest.api.TravellerGearPart WINGS
+ENUM twilightforest.api.TravellerGearPart BELT
+ENUM twilightforest.api.TravellerGearPart BOOTS

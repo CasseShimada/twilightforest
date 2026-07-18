@@ -20,10 +20,10 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.jetbrains.annotations.Nullable;
+import twilightforest.api.WeaponApi;
 import twilightforest.block.GiantBlock;
 import twilightforest.components.entity.GiantPickaxeMiningAttachment;
 import twilightforest.init.TFDataAttachments;
-import twilightforest.init.TFItems;
 import twilightforest.item.GiantPickItem;
 
 import java.util.HashMap;
@@ -89,7 +89,7 @@ public final class LootEvents {
 
 	private static void applyFierySmelting(LootContext context, List<ItemStack> drops) {
 		ItemStack tool = context.getOptionalParameter(LootContextParams.TOOL) != null ? (ItemStack) context.getOptionalParameter(LootContextParams.TOOL) : null;
-		if (tool == null || !tool.is(TFItems.FIERY_PICKAXE)) {
+		if (tool == null || !WeaponApi.hasTrait(tool, WeaponApi.SMELTS_BLOCK_DROPS)) {
 			return;
 		}
 

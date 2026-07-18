@@ -77,7 +77,7 @@ public final class LandmarkUtil {
 			return false;
 		}
 		ResourceKey<Structure> key = getStructureKey(level, start.get().getStructure());
-		return key != null && StructureConqueredData.get(serverLevel).isConquered(key, start.get().getChunkPos());
+		return key != null && StructureConqueredData.get(serverLevel).isConquered(serverLevel, key, start.get());
 	}
 
 	public static void markStructureConquered(Level level, EnforcedHomePoint mobHome, ResourceKey<Structure> structureKey, boolean conquered) {
@@ -88,7 +88,7 @@ public final class LandmarkUtil {
 		if (pos != null && level.dimension() == pos.dimension()) {
 			Optional<StructureStart> nearStart = locateNearestLandmarkStart(level, structureKey, pos.pos());
 			if (nearStart.isEmpty() || !(level instanceof ServerLevel serverLevel)) return;
-			StructureConqueredData.get(serverLevel).setConquered(structureKey, nearStart.get().getChunkPos(), conquered);
+			StructureConqueredData.get(serverLevel).setConquered(serverLevel, structureKey, nearStart.get(), conquered);
 
 			for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, new AABB(pos.pos()).inflate(32.0F))) {
 				TFAdvancements.STRUCTURE_CLEARED.trigger(player, structureKey);
@@ -132,7 +132,9 @@ public final class LandmarkUtil {
 	}
 
 	public static boolean isProgressionEnforced(ServerLevel level) {
-		return level.getGameRules().get(TwilightForestMod.ENFORCED_PROGRESSION_RULE.get());
+		return TwilightForestMod.resolveEnforcedProgression(
+			level.getGameRules().get(TwilightForestMod.ENFORCED_PROGRESSION_RULE.get()),
+			level.getGameRules().get(TwilightForestMod.UPSTREAM_ENFORCED_PROGRESSION_RULE.get()));
 	}
 
 	private LandmarkUtil() {

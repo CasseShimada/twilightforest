@@ -131,6 +131,10 @@ public final class WorldUtil {
 	}
 
 	public static int adjustForTerrain(Structure.GenerationContext context, int xMin, int zMin, int xMax, int zMax, int gridLength) {
+		return adjustForTerrain(context, xMin, zMin, xMax, zMax, gridLength, Heightmap.Types.WORLD_SURFACE_WG);
+	}
+
+	public static int adjustForTerrain(Structure.GenerationContext context, int xMin, int zMin, int xMax, int zMax, int gridLength, Heightmap.Types heightmap) {
 		int subDivisions = gridLength - 1;
 		IntList heights = new IntArrayList(gridLength * gridLength);
 
@@ -139,7 +143,7 @@ public final class WorldUtil {
 			for (int xStep = 0; xStep <= subDivisions; xStep++) {
 				int xPos = Mth.lerpDiscrete((float) xStep / subDivisions, xMin, xMax);
 
-				heights.add(context.chunkGenerator().getFirstOccupiedHeight(xPos, zPos, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState()));
+				heights.add(context.chunkGenerator().getFirstOccupiedHeight(xPos, zPos, heightmap, context.heightAccessor(), context.randomState()));
 			}
 		}
 

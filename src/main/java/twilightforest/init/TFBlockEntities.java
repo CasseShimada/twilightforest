@@ -8,6 +8,7 @@ import twilightforest.TwilightForestMod;
 import twilightforest.block.entity.*;
 import twilightforest.block.entity.bookshelf.ChiseledCanopyShelfBlockEntity;
 import twilightforest.block.entity.spawner.*;
+import twilightforest.util.registry.RegistryAliasUtil;
 
 public class TFBlockEntities {
 	public static final BlockEntityType<AntibuilderBlockEntity> ANTIBUILDER = register("antibuilder", FabricBlockEntityTypeBuilder.create(AntibuilderBlockEntity::new, TFBlocks.ANTIBUILDER).build());
@@ -46,7 +47,8 @@ public class TFBlockEntities {
 		TFBlocks.ACACIA_DRYING_RACK, TFBlocks.DARK_OAK_DRYING_RACK,
 		TFBlocks.CRIMSON_DRYING_RACK, TFBlocks.WARPED_DRYING_RACK,
 		TFBlocks.VANGROVE_DRYING_RACK, TFBlocks.BAMBOO_DRYING_RACK,
-		TFBlocks.CHERRY_DRYING_RACK, TFBlocks.TWILIGHT_OAK_DRYING_RACK,
+		TFBlocks.CHERRY_DRYING_RACK, TFBlocks.PALE_OAK_DRYING_RACK,
+		TFBlocks.TWILIGHT_OAK_DRYING_RACK,
 		TFBlocks.CANOPY_DRYING_RACK, TFBlocks.MANGROVE_DRYING_RACK,
 		TFBlocks.DARK_DRYING_RACK, TFBlocks.TIME_DRYING_RACK,
 		TFBlocks.TRANSFORMATION_DRYING_RACK, TFBlocks.MINING_DRYING_RACK,
@@ -59,12 +61,12 @@ public class TFBlockEntities {
 		TFBlocks.MINOSHROOM_WALL_TROPHY, TFBlocks.HYDRA_WALL_TROPHY, TFBlocks.KNIGHT_PHANTOM_WALL_TROPHY, TFBlocks.UR_GHAST_WALL_TROPHY,
 		TFBlocks.ALPHA_YETI_WALL_TROPHY, TFBlocks.SNOW_QUEEN_WALL_TROPHY, TFBlocks.QUEST_RAM_WALL_TROPHY).build());
 
-	public static final BlockEntityType<TFChestBlockEntity> TF_CHEST = register("tf_chest", FabricBlockEntityTypeBuilder.create(TFChestBlockEntity::new,
+	public static final BlockEntityType<TFChestBlockEntity> TF_CHEST = register(TFBlockEntityIds.CHEST, FabricBlockEntityTypeBuilder.create(TFChestBlockEntity::new,
 		TFBlocks.TWILIGHT_OAK_CHEST, TFBlocks.CANOPY_CHEST, TFBlocks.MANGROVE_CHEST,
 		TFBlocks.DARK_CHEST, TFBlocks.TIME_CHEST, TFBlocks.TRANSFORMATION_CHEST,
 		TFBlocks.MINING_CHEST, TFBlocks.SORTING_CHEST).build());
 
-	public static final BlockEntityType<TFTrappedChestBlockEntity> TF_TRAPPED_CHEST = register("tf_trapped_chest", FabricBlockEntityTypeBuilder.create(TFTrappedChestBlockEntity::new,
+	public static final BlockEntityType<TFTrappedChestBlockEntity> TF_TRAPPED_CHEST = register(TFBlockEntityIds.TRAPPED_CHEST, FabricBlockEntityTypeBuilder.create(TFTrappedChestBlockEntity::new,
 		TFBlocks.TWILIGHT_OAK_TRAPPED_CHEST, TFBlocks.CANOPY_TRAPPED_CHEST, TFBlocks.MANGROVE_TRAPPED_CHEST,
 		TFBlocks.DARK_TRAPPED_CHEST, TFBlocks.TIME_TRAPPED_CHEST, TFBlocks.TRANSFORMATION_TRAPPED_CHEST,
 		TFBlocks.MINING_TRAPPED_CHEST, TFBlocks.SORTING_TRAPPED_CHEST).build());
@@ -89,6 +91,7 @@ public class TFBlockEntities {
 		TFBlocks.OMINOUS_BLACK_CANDLE).build());
 
 	public static void init() {
+		RegistryAliasUtil.applyAliases(BuiltInRegistries.BLOCK_ENTITY_TYPE, TFBlockEntityIds.ALIASES);
 	}
 
 	private static <T extends BlockEntityType<?>> T register(String name, T type) {

@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.minecraft.client.GraphicsPreset;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -203,19 +204,27 @@ public class CloudEvents {
 				buffer.addVertex((float) (roofX - camX - rainX + 0.5D), (float) (topY - camY), (float) (roofZ - camZ - rainZ + 0.5D))
 					.setUv(0.0F, (float) botY * 0.25F + uvOffset)
 					.setColor(1.0F, 1.0F, 1.0F, alpha)
-					.setLight(lightColor);
+					.setLight(lightColor)
+					.setOverlay(OverlayTexture.NO_OVERLAY)
+					.setNormal(0.0F, 1.0F, 0.0F);
 				buffer.addVertex((float) (roofX - camX + rainX + 0.5D), (float) (topY - camY), (float) (roofZ - camZ + rainZ + 0.5D))
 					.setUv(1.0F, (float) botY * 0.25F + uvOffset)
 					.setColor(1.0F, 1.0F, 1.0F, alpha)
-					.setLight(lightColor);
+					.setLight(lightColor)
+					.setOverlay(OverlayTexture.NO_OVERLAY)
+					.setNormal(0.0F, 1.0F, 0.0F);
 				buffer.addVertex((float) (roofX - camX + rainX + 0.5D), (float) (botY - camY), (float) (roofZ - camZ + rainZ + 0.5D))
 					.setUv(1.0F, (float) topY * 0.25F + uvOffset)
 					.setColor(1.0F, 1.0F, 1.0F, alpha)
-					.setLight(lightColor);
+					.setLight(lightColor)
+					.setOverlay(OverlayTexture.NO_OVERLAY)
+					.setNormal(0.0F, 1.0F, 0.0F);
 				buffer.addVertex((float) (roofX - camX - rainX + 0.5D), (float) (botY - camY), (float) (roofZ - camZ - rainZ + 0.5D))
 					.setUv(0.0F, (float) topY * 0.25F + uvOffset)
 					.setColor(1.0F, 1.0F, 1.0F, alpha)
-					.setLight(lightColor);
+					.setLight(lightColor)
+					.setOverlay(OverlayTexture.NO_OVERLAY)
+					.setNormal(0.0F, 1.0F, 0.0F);
 			});
 		}
 	}

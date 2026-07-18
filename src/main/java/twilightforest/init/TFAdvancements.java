@@ -19,6 +19,7 @@ public class TFAdvancements {
 	public static final SimpleAdvancementTrigger KILL_ALL_PHANTOMS = register("kill_all_phantoms", new SimpleAdvancementTrigger());
 	public static final UncraftItemTrigger UNCRAFT_ITEM = register("uncraft_item", new UncraftItemTrigger());
 	public static final SimpleAdvancementTrigger BROKE_GLASS_SWORD = register("broke_glass_sword", new SimpleAdvancementTrigger());
+	public static final AddModifierTrigger ADD_MODIFIER = register("add_modifier", new AddModifierTrigger());
 
 	private static <T extends CriterionTrigger<?>> T register(String name, T trigger) {
 		return Registry.register(BuiltInRegistries.TRIGGER_TYPES, TwilightForestMod.prefix(name), trigger);

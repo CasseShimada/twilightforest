@@ -63,6 +63,9 @@ public final class TFClientNetworking {
 		ClientPlayNetworking.registerGlobalReceiver(UpdateTFMultipartPacket.TYPE, TFClientNetworking::handleUpdateTFMultipart);
 		ClientPlayNetworking.registerGlobalReceiver(UpdateThrownPacket.TYPE, TFClientNetworking::handleUpdateThrown);
 		ClientPlayNetworking.registerGlobalReceiver(UpdateUncraftingCostPacket.TYPE, TFClientNetworking::handleUpdateUncraftingCost);
+		ClientPlayNetworking.registerGlobalReceiver(GogglesZoomPacket.TYPE, TFClientNetworking::handleGogglesZoom);
+		ClientPlayNetworking.registerGlobalReceiver(GradualGlidePacket.TYPE, TFClientNetworking::handleGradualGlide);
+		ClientPlayNetworking.registerGlobalReceiver(TravellersWingsStatePacket.TYPE, TFClientNetworking::handleTravellersWingsState);
 
 		ClientPlayNetworking.registerGlobalReceiver(AreaProtectionPacket.TYPE, TFClientNetworking::handleAreaProtection);
 		ClientPlayNetworking.registerGlobalReceiver(CreateMovingCicadaSoundPacket.TYPE, TFClientNetworking::handleMovingCicadaSound);
@@ -75,6 +78,37 @@ public final class TFClientNetworking {
 		ClientPlayNetworking.registerGlobalReceiver(StructureProtectionPacket.TYPE, TFClientNetworking::handleStructureProtection);
 		ClientPlayNetworking.registerGlobalReceiver(TFBossBarPacket.AddTFBossBarPacket.TYPE, TFClientNetworking::handleBossBarAdd);
 		ClientPlayNetworking.registerGlobalReceiver(TFBossBarPacket.UpdateTFBossBarStylePacket.TYPE, TFClientNetworking::handleBossBarStyle);
+	}
+
+	private static void handleGogglesZoom(GogglesZoomPacket packet, ClientPlayNetworking.Context context) {
+		context.client().execute(() -> {
+			Player player = context.player().level().getPlayerByUUID(packet.playerUUID());
+			if (player != null) {
+				TFDataAttachments.set(player, TFDataAttachments.IS_USING_GOGGLES_ZOOM_MODIFIER, packet.isUsingZoom());
+			}
+		});
+	}
+
+	private static void handleGradualGlide(GradualGlidePacket packet, ClientPlayNetworking.Context context) {
+		context.client().execute(() -> {
+			Player player = context.player().level().getPlayerByUUID(packet.playerUUID());
+			if (player != null) {
+				TFDataAttachments.set(player, TFDataAttachments.IS_GRADUALLY_GLIDING, packet.isGraduallyGliding());
+			}
+		});
+	}
+
+	private static void handleTravellersWingsState(TravellersWingsStatePacket packet, ClientPlayNetworking.Context context) {
+		context.client().execute(() -> {
+			Entity entity = context.player().level().getEntity(packet.entityId());
+			if (entity instanceof LivingEntity living) {
+				var attachment = TFDataAttachments.get(living, TFDataAttachments.TRAVELLERS_WINGS);
+				attachment.state = packet.state();
+				attachment.sidestepLeft = packet.sidestepLeft();
+				attachment.doubleJumpTimer = packet.doubleJumpTimer();
+				attachment.sidestepTimer = packet.sidestepTimer();
+			}
+		});
 	}
 
 	private static void handleEnforceProgressionStatus(EnforceProgressionStatusPacket packet, ClientPlayNetworking.Context context) {

@@ -11,7 +11,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.permissions.Permissions;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
@@ -25,7 +24,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.entity.player.Player;
@@ -53,9 +52,12 @@ import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.fabricmc.loader.api.FabricLoader;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
+import twilightforest.api.ArmorApi;
+import twilightforest.api.WeaponApi;
 import twilightforest.advancements.DrinkFromFlaskTrigger;
 import twilightforest.block.*;
 import twilightforest.block.entity.SkullChestBlockEntity;
@@ -68,9 +70,7 @@ import twilightforest.entity.projectile.ITFProjectile;
 import twilightforest.entity.projectile.LichBomb;
 import twilightforest.init.*;
 import twilightforest.inventory.InventoryUtil;
-import twilightforest.item.FieryArmorItem;
-import twilightforest.item.YetiArmorItem;
-import twilightforest.mixin.accessor.AgeableMobAccessor;
+import twilightforest.init.custom.TravellersModifiersManager;
 import twilightforest.network.SyncQuestsPacket;
 import twilightforest.mixin.accessor.SkullBlockEntityAccessor;
 import twilightforest.util.datamaps.EntityTransformation;
@@ -145,41 +145,21 @@ public class EntityEvents {
 
 	public static InteractionResult handleWroughtFenceLead(Player player, Level level, InteractionHand hand, BlockHitResult hit) {
 		ItemStack stack = player.getItemInHand(hand);
-		if (stack.is(Items.LEAD)) {
-			BlockPos pos = hit.getBlockPos();
-			BlockState state = level.getBlockState(pos);
-			if (state.is(TFBlocks.WROUGHT_IRON_FENCE) && state.getValue(WroughtIronFenceBlock.POST) != WroughtIronFenceBlock.PostState.NONE) {
-				if (!level.isClientSide()) {
-					LeadItem.bindPlayerMobs(player, level, pos);
-				}
-				return InteractionResult.SUCCESS;
-			}
-		}
-		return InteractionResult.PASS;
-	}
-
-	public static InteractionResult handleGoldenDandelionUse(Player player, Level level, InteractionHand hand, Entity entity) {
-		if (!(entity instanceof Animal animal) || !(animal instanceof AgeableMob ageable)) {
-			return InteractionResult.PASS;
-		}
-
-		Identifier entityId = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
-		if (entityId == null || !TwilightForestMod.ID.equals(entityId.getNamespace())) {
-			return InteractionResult.PASS;
-		}
-
-		ItemStack stack = player.getItemInHand(hand);
-		int particleTimer = ((AgeableMobAccessor) ageable).twilightforest$getAgeLockParticleTimer();
-		if (!AgeableMob.canUseGoldenDandelion(stack, ageable.isBaby(), particleTimer, animal)) {
+		BlockPos pos = hit.getBlockPos();
+		if (!stack.is(Items.LEAD) || !WroughtIronFenceBlock.supportsLeashKnot(level.getBlockState(pos))) {
 			return InteractionResult.PASS;
 		}
 
 		if (!level.isClientSide()) {
-			AgeableMob.setAgeLocked(animal, ageable::isAgeLocked, player, stack,
-				mob -> ((AgeableMobAccessor) mob).twilightforest$invokeSetAgeLocked(!((AgeableMob) mob).isAgeLocked()));
+			return LeadItem.bindPlayerMobs(player, level, pos);
 		}
 
-		return InteractionResult.SUCCESS;
+		LeashFenceKnotEntity knot = LeashFenceKnotEntity.getKnot(level, pos)
+			.orElseGet(() -> new LeashFenceKnotEntity(level, pos));
+		boolean canBind = Leashable.leashableInArea(level, Vec3.atCenterOf(pos), leashable -> leashable.getLeashHolder() == player)
+			.stream()
+			.anyMatch(leashable -> leashable.canHaveALeashAttachedTo(knot));
+		return canBind ? InteractionResult.SUCCESS : InteractionResult.PASS;
 	}
 
 	public static void handleAfterDamage(LivingEntity living, DamageSource source, float finalDamage) {
@@ -201,7 +181,7 @@ public class EntityEvents {
 
 		// triple bow strips invulnerableTime
 		if ("arrow".equals(source.getMsgId()) && trueSource instanceof Player player) {
-			if (player.getItemInHand(player.getUsedItemHand()).is(TFItems.TRIPLE_BOW)) {
+			if (WeaponApi.hasTrait(player.getItemInHand(player.getUsedItemHand()), WeaponApi.RESETS_ARROW_INVULNERABILITY)) {
 				living.invulnerableTime = 0;
 			}
 		}
@@ -215,10 +195,8 @@ public class EntityEvents {
 		if (!(blockEntity instanceof SkullChestBlockEntity casket)) {
 			return false;
 		}
-		ResolvableProfile checker = casket.owner;
-		if (checker != null && !casket.isEmpty()) {
-			boolean canBypass = player instanceof ServerPlayer serverPlayer && serverPlayer.permissions().hasPermission(Permissions.COMMANDS_ADMIN);
-			return !canBypass && !player.getGameProfile().equals(checker.partialProfile());
+		if (casket.owner != null && !casket.isEmpty()) {
+			return !casket.canPlayerAccessOwner(player);
 		}
 		return false;
 	}
@@ -230,6 +208,27 @@ public class EntityEvents {
 			InventoryUtil.giveItemToPlayer(player, new ItemStack(Items.OAK_PLANKS, 64));
 			InventoryUtil.giveItemToPlayer(player, new ItemStack(Items.OAK_PLANKS, 64));
 		}
+
+		if (!(player instanceof ServerPlayer serverPlayer) || !crafted.has(TFDataComponents.IS_TRAVELLERS_GEAR)) {
+			return;
+		}
+
+		ItemStack original = ItemStack.EMPTY;
+		for (int i = 0; i < craftingInventory.getContainerSize(); i++) {
+			ItemStack input = craftingInventory.getItem(i);
+			if (input.is(crafted.getItem()) && input.has(TFDataComponents.IS_TRAVELLERS_GEAR)) {
+				original = input;
+			}
+		}
+		if (original.isEmpty()) {
+			return;
+		}
+
+		List<net.minecraft.core.Holder.Reference<twilightforest.item.travellers_gear.modifiers.TravellersModifier>> oldModifiers =
+			TravellersModifiersManager.findAllInsertableModifiers(serverPlayer.registryAccess(), original);
+		TravellersModifiersManager.findAllInsertableModifiers(serverPlayer.registryAccess(), crafted).stream()
+			.filter(modifier -> !oldModifiers.contains(modifier))
+			.forEach(modifier -> TFAdvancements.ADD_MODIFIER.trigger(serverPlayer, modifier.key().identifier()));
 	}
 
 	@SuppressWarnings("UnstableApiUsage")
@@ -377,7 +376,7 @@ public class EntityEvents {
 
 		for (EquipmentSlot slot : EquipmentSlotGroup.ARMOR) {
 			ItemStack armor = entity.getItemBySlot(slot);
-			if (!armor.isEmpty() && (yeti ? armor.getItem() instanceof YetiArmorItem : armor.getItem() instanceof FieryArmorItem)) {
+			if (!armor.isEmpty() && ArmorApi.hasTrait(armor, yeti ? ArmorApi.CHILL_AURA : ArmorApi.FIERY_REACTIVE)) {
 				amount++;
 			}
 		}
@@ -418,7 +417,7 @@ public class EntityEvents {
 					return landmark.getSpawnableList(classification);
 
 				var key = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getResourceKey(start.getStructure()).orElse(null);
-				if (key != null && StructureConqueredData.get(level).isConquered(key, start.getChunkPos()))
+				if (key != null && StructureConqueredData.get(level).isConquered(level, key, start))
 					return null;
 
 				// FIXME Make interface for this method?

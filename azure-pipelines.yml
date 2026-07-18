@@ -4,15 +4,13 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
 pool:
-  vmImage: 'Ubuntu-latest'
+  vmImage: 'ubuntu-24.04'
 
 variables:
   artifactName: 'Release'
   GRADLE_USER_HOME: $(Pipeline.Workspace)/.gradle
   SKIP_BUILD: $[contains(variables['Build.SourceBranch'], 'refs/heads/no-build/')]
   SKIP_DISCORD: 'false'
-  ${{ if not(contains(variables['Build.SourceBranch'], 'refs/heads/no-build/')) }}:
-    revision: $[counter('release-number', 0)]
 
 steps:
   - powershell: |
@@ -39,21 +37,21 @@ steps:
 
   - task: Cache@2
     inputs:
-      key: 'gradle | "$(Agent.OS)" | build.gradle | settings.gradle | gradle.properties | src/main/resources/META-INF/accesstransformer.cfg'
+      key: 'gradle | "$(Agent.OS)" | build.gradle | settings.gradle | gradle.properties | src/main/resources/twilightforest.accesswidener'
       path: $(GRADLE_USER_HOME)
     displayName: Restore Gradle Cache
     condition: eq(variables.SKIP_BUILD, 'false')
 
   - task: Cache@2
     inputs:
-      key: 'gradleLocal | "$(Agent.OS)" | build.gradle | settings.gradle | gradle.properties | src/main/resources/META-INF/accesstransformer.cfg'
+      key: 'gradleLocal | "$(Agent.OS)" | build.gradle | settings.gradle | gradle.properties | src/main/resources/twilightforest.accesswidener'
       path: .gradle
     displayName: Restore Project Level Gradle Cache
     condition: eq(variables.SKIP_BUILD, 'false')
 
   - task: Cache@2
     inputs:
-      key: 'gradleBuildTmpLocal | "$(Agent.OS)" | build.gradle | settings.gradle | gradle.properties | src/main/resources/META-INF/accesstransformer.cfg'
+      key: 'gradleBuildTmpLocal | "$(Agent.OS)" | build.gradle | settings.gradle | gradle.properties | src/main/resources/twilightforest.accesswidener'
       path: build/tmp
     displayName: Restore Project Level build/tmp Cache
     condition: eq(variables.SKIP_BUILD, 'false')
@@ -74,12 +72,11 @@ steps:
     displayName: Create Release Build
     inputs:
       workingDirectory: ''
-      options: '--build-cache --max-workers=1 -PCIRevision=$(javaprops_mod_version).$(revision) -PCIType=RELEASE'
+      options: '--build-cache --max-workers=1'
       gradleWrapperFile: 'gradlew'
       gradleOptions: '-Xmx3072m'
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '21'
-      jdkArchitectureOption: 'x64'
+      javaHomeOption: 'Path'
+      jdkDirectory: '$(JAVA_HOME_25_X64)'
       publishJUnitResults: false
       testResultsFiles: '**/TEST-*.xml'
       tasks: 'build'
@@ -89,7 +86,9 @@ steps:
     displayName: Copy Release build to artifact staging
     inputs:
       sourceFolder: './build/libs/'
-      contents: 'twilightforest-*-universal.jar'
+      contents: |
+        twilightforest-*-fabric-*.jar
+        !twilightforest-*-fabric-*-sources.jar
       targetFolder: $(build.artifactStagingDirectory)
     condition: and(and(succeeded(), eq(variables['CreateArtifacts'], 'True')), eq(variables.SKIP_BUILD, 'false'))
 
@@ -104,7 +103,7 @@ steps:
   - powershell: |
       $rawpath = "pipelineartifact://teamtwilight/projectId/1ef09d39-06cf-41fa-ad98-7258b70c2a72/buildId/$($Env:BUILD_BUILDID)/artifactName/Release"
       $path = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($rawpath))
-      $jar = "twilightforest-$($env:JAVAPROPS_MINECRAFT_VERSION)-$($env:JAVAPROPS_MOD_VERSION).$($env:REVISION)-universal.jar"
+      $jar = "twilightforest-$($env:JAVAPROPS_MINECRAFT_VERSION)-fabric-$($env:JAVAPROPS_MOD_VERSION).jar"
       $downloadUrl = "https://artprodcus3.artifacts.visualstudio.com/Abaabfa6c-deea-4587-ba05-c308c2597b7a/1ef09d39-06cf-41fa-ad98-7258b70c2a72/_apis/artifact/$($path)0/content?format=file&subPath=%2F$($jar)"
       $jobResult = (Get-Culture).TextInfo.ToTitleCase(${env:agent.jobstatus})
       $Colour = 65280
@@ -128,7 +127,7 @@ steps:
               },
               [Ordered]@{
                   name = "Mod Version"
-                  value = "$($env:JAVAPROPS_MOD_VERSION).$($env:REVISION)"
+                  value = "$($env:JAVAPROPS_MOD_VERSION)"
               },
               [Ordered]@{
                   name = "Commit"
@@ -167,12 +166,11 @@ steps:
     displayName: Publish to Maven
     inputs:
       workingDirectory: ''
-      options: '-PCIRevision=$(javaprops_mod_version).$(revision) -PCIType=RELEASE'
+      options: '--max-workers=1'
       gradleWrapperFile: 'gradlew'
       gradleOptions: '-Xmx3072m'
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '21'
-      jdkArchitectureOption: 'x64'
+      javaHomeOption: 'Path'
+      jdkDirectory: '$(JAVA_HOME_25_X64)'
       publishJUnitResults: false
       testResultsFiles: '**/TEST-*.xml'
       tasks: 'publish'

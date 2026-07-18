@@ -15,12 +15,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.EntityHitResult;
 import org.jetbrains.annotations.Nullable;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalEntityTypeTags;
+import twilightforest.api.WeaponApi;
 import twilightforest.tags.TFBlockTags;
 import twilightforest.init.TFDataAttachments;
 import twilightforest.init.TFItems;
 import twilightforest.item.EnderBowItem;
-import twilightforest.item.MazebreakerPickItem;
-import twilightforest.item.MinotaurAxeItem;
 
 public class ToolEvents {
 
@@ -73,7 +72,7 @@ public class ToolEvents {
 		if (!(sourceEntity instanceof LivingEntity living)) {
 			return;
 		}
-		if ((living.getMainHandItem().is(TFItems.FIERY_SWORD) || living.getMainHandItem().is(TFItems.FIERY_PICKAXE)) && !target.fireImmune()) {
+		if (WeaponApi.hasTrait(living.getMainHandItem(), WeaponApi.IGNITES_TARGETS) && !target.fireImmune()) {
 			target.igniteForSeconds(1);
 		}
 	}
@@ -90,13 +89,13 @@ public class ToolEvents {
 			return amount;
 		}
 
-		if (target.getArmorValue() > 0 && (weapon.is(TFItems.KNIGHTMETAL_PICKAXE) || weapon.is(TFItems.KNIGHTMETAL_SWORD))) {
+		if (target.getArmorValue() > 0 && WeaponApi.hasTrait(weapon, WeaponApi.BONUS_AGAINST_ARMORED)) {
 			int moreBonus = target.getArmorCoverPercentage() > 0 ? (int) (KNIGHTMETAL_BONUS_DAMAGE * target.getArmorCoverPercentage()) : KNIGHTMETAL_BONUS_DAMAGE;
 			((ServerLevel) target.level()).getChunkSource().sendToTrackingPlayersAndSelf(target, new ClientboundAnimatePacket(target, 5));
 			return amount + moreBonus;
 		}
 
-		if (target.getArmorValue() == 0 && weapon.is(TFItems.KNIGHTMETAL_AXE)) {
+		if (target.getArmorValue() == 0 && WeaponApi.hasTrait(weapon, WeaponApi.BONUS_AGAINST_UNARMORED)) {
 			((ServerLevel) target.level()).getChunkSource().sendToTrackingPlayersAndSelf(target, new ClientboundAnimatePacket(target, 5));
 			return amount + KNIGHTMETAL_BONUS_DAMAGE;
 		}
@@ -119,7 +118,7 @@ public class ToolEvents {
 		}
 
 		ItemStack weapon = living.getMainHandItem();
-		if (!weapon.isEmpty() && weapon.getItem() instanceof MinotaurAxeItem) {
+		if (!weapon.isEmpty() && WeaponApi.hasTrait(weapon, WeaponApi.SPRINT_CHARGE_BONUS)) {
 			((ServerLevel) target.level()).getChunkSource().sendToTrackingPlayersAndSelf(target, new ClientboundAnimatePacket(target, 5));
 			return amount + MINOTAUR_AXE_BONUS_DAMAGE;
 		}
@@ -128,7 +127,7 @@ public class ToolEvents {
 
 	public static void damageToolsExtra(Player player, ItemStack stack, BlockState state) {
 		if (state.is(TFBlockTags.MAZESTONE) || state.is(TFBlockTags.CASTLE_BLOCKS)) {
-			if (stack.isDamageableItem() && !(stack.getItem() instanceof MazebreakerPickItem)) {
+			if (stack.isDamageableItem() && !WeaponApi.hasTrait(stack, WeaponApi.MAZESTONE_WEAR_EXEMPT)) {
 				stack.hurtAndBreak(16, player, EquipmentSlot.MAINHAND);
 			}
 		}

@@ -37,9 +37,9 @@ public class ConquerCommand {
 			if (key == null) {
 				throw NOT_IN_STRUCTURE.create();
 			}
-			boolean current = StructureConqueredData.get(source.getLevel()).isConquered(key, start.getChunkPos());
+			boolean current = StructureConqueredData.get(source.getLevel()).isConquered(source.getLevel(), key, start);
 			source.sendSuccess(() -> Component.translatable("commands.tffeature.structure.conquer.update", current, flag), true);
-			StructureConqueredData.get(source.getLevel()).setConquered(key, start.getChunkPos(), flag);
+			StructureConqueredData.get(source.getLevel()).setConquered(source.getLevel(), key, start, flag);
 		} else {
 			throw NOT_IN_STRUCTURE.create();
 		}

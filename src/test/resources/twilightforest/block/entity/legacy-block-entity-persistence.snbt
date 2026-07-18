@@ -1,0 +1,98 @@
+{
+  beanstalk_forge_1_20_1: {
+    isAreaClearEnough: 0b,
+    nextLeafY: 147,
+    beardifierGroundDelta: 61,
+    cScale: 0.3125f,
+    rScale: 0.1875f,
+    maxY: 192,
+    blocksSkipped: 9
+  },
+  beanstalk_current_keys_take_precedence: {
+    isAreaClearEnough: 1b,
+    clear: 0b,
+    nextLeafY: 151,
+    next_leaf: 88,
+    yOffset: 42,
+    beardifierGroundDelta: 43,
+    y_offset: 44,
+    cScale: 0.25f,
+    spiral_scale: 0.5f,
+    rScale: 0.375f,
+    radius: 0.75f,
+    maxY: 205,
+    max_y: 99,
+    blocksSkipped: 3,
+    blocks_skipped: 12
+  },
+  beanstalk_26_1_aliases: {
+    clear: 0b,
+    next_leaf: 164,
+    y_offset: 73,
+    spiral_scale: 0.15625f,
+    radius: 0.21875f,
+    max_y: 226,
+    blocks_skipped: 11
+  },
+  skull_candle_forge_1_20_1: {
+    CandleColor: 14,
+    CandleAmount: 4
+  },
+  skull_candle_current: {
+    info: {color: 5, count: 3},
+    CandleColor: 1,
+    CandleAmount: 2
+  },
+  skull_candle_color_only: {
+    CandleColor: 7
+  },
+  mason_jar_neoforge_26_1: {
+    stacks: [{id: "minecraft:glowstone", count: 23}],
+    rotation: 11
+  },
+  mason_jar_current_keys_take_precedence: {
+    item: {id: "minecraft:emerald", count: 5},
+    stacks: [{id: "minecraft:diamond", count: 37}]
+  },
+  mason_jar_invalid_extra_slot: {
+    stacks: [
+      {id: "minecraft:diamond", count: 1},
+      {id: "minecraft:emerald", count: 1}
+    ]
+  },
+  carminite_reactor_current: {
+    counter: 217,
+    secondary_x: 3,
+    secondary_y: -3,
+    secondary_z: 3,
+    tertiary_x: -3,
+    tertiary_y: 3,
+    tertiary_z: -3
+  },
+  carminite_reactor_invalid_duplicate_burst: {
+    counter: 12,
+    secondary_x: 3,
+    secondary_y: 3,
+    secondary_z: -3,
+    tertiary_x: 3,
+    tertiary_y: 3,
+    tertiary_z: -3
+  },
+  reactor_debris_2024: {
+    timeAlive: 42b
+  },
+  reactor_debris_current_keys_take_precedence: {
+    time_alive: 17b,
+    timeAlive: 42b
+  },
+  keepsake_casket_forge_1_20_1: {
+    deadPlayer: [I; 305419896, 305419896, -1698898192, 305419896],
+    playerName: "LegacyOwner"
+  },
+  keepsake_casket_unlocked_name_only: {
+    playerName: "UnlockedOwner"
+  },
+  keepsake_casket_uuid_only: {
+    deadPlayer: [I; 305419896, 305419896, -1698898192, 305419896]
+  }
+}

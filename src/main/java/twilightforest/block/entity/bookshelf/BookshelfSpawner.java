@@ -11,7 +11,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.block.ChiseledBookShelfBlock;
@@ -35,6 +34,10 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class BookshelfSpawner {
+	private static final String LEGACY_ENTITY_TYPE_TAG = "EntityType";
+	private static final String LEGACY_REMAINING_TAG = "MobSpawnsLeft";
+	private static final String LEGACY_SPAWN_DELAY_TAG = "SpawnDelay";
+	private static final String LEGACY_PLAYER_RANGE_TAG = "MaxPlayerDistance";
 	public static final List<Pair<Integer, BooleanProperty>> SLOT_PROPERTIES_AND_INDEXES = List.of(
 		Pair.of(0, ChiseledBookShelfBlock.SLOT_0_OCCUPIED),
 		Pair.of(1, ChiseledBookShelfBlock.SLOT_1_OCCUPIED),
@@ -72,6 +75,7 @@ public abstract class BookshelfSpawner {
 
 			if (this.spawnDelay > 0) {
 				this.spawnDelay--;
+				this.markOwnerChanged(level, pos);
 			} else {
 				List<Pair<Integer, BooleanProperty>> filledSlots = new ArrayList<>(SLOT_PROPERTIES_AND_INDEXES);
 				filledSlots.removeIf(pair -> !state.getValue(pair.getSecond()));
@@ -80,7 +84,8 @@ public abstract class BookshelfSpawner {
 				for (Pair<Integer, BooleanProperty> filledSlot : filledSlots) {
 					BooleanProperty property = filledSlot.getSecond();
 					if (state.hasProperty(property) && state.getValue(property)) {
-						if (this.attemptSpawnTome(filledSlot.getFirst(), level, pos, false, null, 0)) {
+						if (this.attemptSpawnTome(filledSlot.getFirst(), level, pos,
+							state.getValue(HorizontalDirectionalBlock.FACING), false, null, 0)) {
 							this.delay(level, pos);
 							break;
 						}
@@ -111,6 +116,69 @@ public abstract class BookshelfSpawner {
 
 		this.spawnPotentials.getRandom(randomsource).ifPresent(p_337965_ -> this.setNextSpawnData(level, pos, p_337965_));
 		this.broadcastEvent(level, pos, 1);
+		if (level instanceof ServerLevel serverLevel) {
+			this.markOwnerChanged(serverLevel, pos);
+		}
+	}
+
+	private void markOwnerChanged(ServerLevel level, BlockPos pos) {
+		if (level.getBlockEntity(pos) instanceof ChiseledCanopyShelfBlockEntity shelf) {
+			shelf.setChanged();
+		}
+	}
+
+	public static Optional<LegacyTomeSpawnerState> readLegacyState(ValueInput input) {
+		boolean hasCurrentData = input.getInt("Delay").isPresent()
+			|| input.child("SpawnData").isPresent()
+			|| input.childrenList("SpawnPotentials").isPresent();
+		if (hasCurrentData) {
+			return Optional.empty();
+		}
+
+		Optional<String> entityType = input.getString(LEGACY_ENTITY_TYPE_TAG);
+		Optional<Integer> remaining = input.getInt(LEGACY_REMAINING_TAG);
+		Optional<Integer> spawnDelay = input.getInt(LEGACY_SPAWN_DELAY_TAG);
+		Optional<Integer> playerRange = input.getInt(LEGACY_PLAYER_RANGE_TAG);
+		if (entityType.isEmpty() && remaining.isEmpty() && spawnDelay.isEmpty() && playerRange.isEmpty()) {
+			return Optional.empty();
+		}
+		if (entityType.isEmpty() || spawnDelay.isEmpty() || playerRange.isEmpty()) {
+			throw new IllegalStateException("Incomplete legacy Tome Spawner data");
+		}
+		if (entityType.get().isBlank()) {
+			throw new IllegalStateException("Legacy Tome Spawner EntityType must not be blank");
+		}
+		int delay = requireShort(LEGACY_SPAWN_DELAY_TAG, spawnDelay.get());
+		int range = requireShort(LEGACY_PLAYER_RANGE_TAG, playerRange.get());
+		int remainingSpawns = Math.clamp(remaining.orElse(10), 0, 10);
+		return Optional.of(new LegacyTomeSpawnerState(entityType.get(), remainingSpawns, delay, range, remaining.isEmpty()));
+	}
+
+	private static int requireShort(String key, int value) {
+		if (value < Short.MIN_VALUE || value > Short.MAX_VALUE) {
+			throw new IllegalStateException("Legacy Tome Spawner " + key + " is outside the supported short range: " + value);
+		}
+		return value;
+	}
+
+	public void loadLegacyState(@Nullable Level level, BlockPos pos, LegacyTomeSpawnerState legacy) {
+		this.spawnDelay = legacy.spawnDelay();
+		this.minSpawnDelay = legacy.spawnDelay();
+		this.maxSpawnDelay = legacy.spawnDelay();
+		this.maxNearbyEntities = Short.MAX_VALUE;
+		this.requiredPlayerRange = legacy.playerRange();
+		SpawnData spawnData = new SpawnData();
+		spawnData.getEntityToSpawn().putString("id", legacy.entityType());
+		this.setNextSpawnData(level, pos, spawnData);
+		this.spawnPotentials = WeightedList.of(spawnData);
+	}
+
+	PersistentState persistentState() {
+		String entityType = this.nextSpawnData == null
+			? ""
+			: this.nextSpawnData.getEntityToSpawn().getString("id").orElse("");
+		return new PersistentState(this.spawnDelay, this.minSpawnDelay, this.maxSpawnDelay,
+			this.maxNearbyEntities, this.requiredPlayerRange, entityType);
 	}
 
 	public void load(@Nullable Level level, BlockPos pos, ValueInput input) {
@@ -174,12 +242,11 @@ public abstract class BookshelfSpawner {
 
 	public abstract void broadcastEvent(Level level, BlockPos pos, int id);
 
-	public boolean attemptSpawnTome(int slot, ServerLevel level, BlockPos pos, boolean fire, @Nullable LivingEntity assailant, int maxTries) {
+	public boolean attemptSpawnTome(int slot, ServerLevel level, BlockPos pos, Direction facing, boolean fire,
+		@Nullable LivingEntity assailant, int maxTries) {
 		RandomSource random = level.getRandom();
 		SpawnData data = this.getOrCreateNextSpawnData(level, random, pos);
 		CompoundTag tag = data.entityToSpawn();
-		BlockState shelf = level.getBlockState(pos);
-		Direction facing = shelf.getValue(HorizontalDirectionalBlock.FACING);
 		ValueInput entityInput = TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), tag);
 		Optional<EntityType<?>> optional = EntityType.by(entityInput);
 		//if the assigned entity doesn't exist or the bookshelf is blocked off, fail early
@@ -265,14 +332,22 @@ public abstract class BookshelfSpawner {
 
 			//after mob is spawned, clear that book's spot from the shelf
 			if (level.getBlockEntity(pos) instanceof ChiseledCanopyShelfBlockEntity be) {
-				be.setItem(slot, ItemStack.EMPTY);
+				be.consumeSpawnerBook(slot);
 			}
 			return true;
 		} else {
 			if (maxTries != 0) {
-				this.attemptSpawnTome(slot, level, pos, fire, assailant, maxTries - 1);
+				return this.attemptSpawnTome(slot, level, pos, facing, fire, assailant, maxTries - 1);
 			}
 		}
 		return false;
+	}
+
+	public record LegacyTomeSpawnerState(String entityType, int remainingSpawns, int spawnDelay, int playerRange,
+		boolean remainingWasInferred) {
+	}
+
+	record PersistentState(int spawnDelay, int minSpawnDelay, int maxSpawnDelay, int maxNearbyEntities,
+		int requiredPlayerRange, String entityType) {
 	}
 }

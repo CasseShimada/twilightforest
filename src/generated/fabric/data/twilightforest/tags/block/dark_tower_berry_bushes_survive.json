@@ -1,0 +1,15 @@
+{
+  "values": [
+    {
+      "id": "#c:netherracks",
+      "required": false
+    },
+    {
+      "id": "#c:ores_in_ground/netherrack",
+      "required": false
+    },
+    "minecraft:blackstone",
+    "minecraft:soul_sand",
+    "minecraft:soul_soil"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "type": "twilightforest:drying",
+  "filter_time": 6000,
+  "input": "minecraft:porkchop",
+  "result": { "count": 1, "id": "twilightforest:pork_jerky" }
+}

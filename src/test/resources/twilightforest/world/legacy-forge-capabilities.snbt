@@ -1,0 +1,21 @@
+{
+  DataVersion: 3465,
+  data: {
+    "twilightforest:teleporter_cache": {
+      dest: [
+        {
+          name: "twilightforest:twilight_forest",
+          links: [
+            {
+              column: {x: 12, z: -34},
+              portal: {time: 987654321L, pos: 123456789L}
+            }
+          ]
+        }
+      ]
+    },
+    "example:unrelated_level_capability": {
+      keep: "source-file-must-remain-byte-identical"
+    }
+  }
+}

@@ -99,7 +99,7 @@ public abstract class AbstractSkullCandleBlock extends BaseEntityBlock implement
 		BlockEntity blockentity = level.getBlockEntity(pos);
 		if (blockentity instanceof SkullCandleBlockEntity sc) {
 			SkullCandles skullCandles = stack.getOrDefault(TFDataComponents.SKULL_CANDLES, SkullCandles.DEFAULT);
-			sc.setCandleColor(skullCandles.color());
+			sc.setCandleInfo(skullCandles);
 
 			if (this.type == SkullBlock.Types.PLAYER && stack.has(DataComponents.PROFILE)) {
 				ItemStack profileStack = new ItemStack(this);

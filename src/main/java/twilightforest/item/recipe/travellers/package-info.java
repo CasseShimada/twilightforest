@@ -1,0 +1,8 @@
+@FieldsAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
+package twilightforest.item.recipe.travellers;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+import twilightforest.util.annotation.FieldsAreNonnullByDefault;
+import twilightforest.util.annotation.MethodsReturnNonnullByDefault;

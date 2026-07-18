@@ -1,0 +1,22 @@
+silentCicadas = true
+silentCicadasOnHead = true
+screenShakingEffect = false
+rotateTrophyHeadsGui = false
+disableOptifineNagScreen = true
+disableLockedBiomeToasts = true
+questRamWoolIndicator = false
+fortificationShieldIndicator = false
+fortificationShieldIndicatorInCreative = true
+cloudBlockPrecipitationDistance = 91
+giantSkinUUIDs = ["legacy-invalid-uuid"]
+auroraBiomes = ["minecraft:the_end", "twilightforest:glacier"]
+prettifyOreMeterGui = false
+totemCharmAnimation = true
+travellersWingsGradualGlide = false
+firstPersonGloveOverlay = false
+
+["Item Display Modifier Settings"]
+screenOffsetX = -19
+screenOffsetY = 27
+screenScale = 1.75
+twentyFourHourFormat = false

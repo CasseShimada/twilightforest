@@ -21,6 +21,7 @@ import net.minecraft.core.cauldron.CauldronInteractions;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.ItemTags;
@@ -39,7 +40,9 @@ import net.minecraft.world.level.gamerules.GameRuleCategory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import twilightforest.block.entity.JarBlockEntity;
+import twilightforest.api.TwilightForestApi;
 import twilightforest.command.TFCommand;
+import twilightforest.config.TFConfig;
 import twilightforest.dispenser.TFDispenserBehaviors;
 import twilightforest.entity.MagicPaintingVariant;
 import twilightforest.entity.passive.DwarfRabbitVariant;
@@ -51,6 +54,9 @@ import twilightforest.init.custom.BiomeLayerStack;
 import twilightforest.init.custom.BiomeLayerTypes;
 import twilightforest.init.custom.ChunkBlanketProcessors;
 import twilightforest.init.custom.Enforcements;
+import twilightforest.init.custom.ItemDisplays;
+import twilightforest.init.custom.TemplateMarkerHandlers;
+import twilightforest.init.custom.TravellersModifierTypes;
 import twilightforest.events.TFEventHandlers;
 import twilightforest.events.LootEvents;
 import twilightforest.network.EnforceProgressionStatusPacket;
@@ -66,6 +72,7 @@ import twilightforest.world.components.layer.BiomeDensitySource;
 import twilightforest.world.components.spelothem.StalactiteReloadListener;
 import twilightforest.world.components.spelothem.StructureSpeleothemConfig;
 import twilightforest.world.components.structures.lichtowerrevamp.StructureTemplateDefinitions;
+import twilightforest.world.components.structures.util.TemplateMarkerHandlerList;
 
 import java.util.Locale;
 import java.util.function.Supplier;
@@ -80,16 +87,39 @@ public final class TwilightForestMod implements ModInitializer {
 
 	public static final Logger LOGGER = LogManager.getLogger(ID);
 
+	// Keep the already-published Fabric ID as a first-class compatibility key.
 	public static final Supplier<GameRule<Boolean>> ENFORCED_PROGRESSION_RULE = Suppliers.memoize(() ->
 		GameRuleBuilder.forBoolean(true)
 			.category(GameRuleCategory.UPDATES)
 			.buildAndRegister(prefix("tf_enforced_progression"))
 	);
+	// Also retain the 26.1.x upstream ID; both values are reconciled on server start and mirrored thereafter.
+	public static final Supplier<GameRule<Boolean>> UPSTREAM_ENFORCED_PROGRESSION_RULE = Suppliers.memoize(() ->
+		GameRuleBuilder.forBoolean(true)
+			.category(GameRuleCategory.UPDATES)
+			.buildAndRegister(prefix("twilightforest_enforced_progression"))
+	);
+	public static final Supplier<GameRule<Integer>> TF_PORTAL_DEFAULT_DELAY = Suppliers.memoize(() ->
+		GameRuleBuilder.forInteger(60)
+			.minValue(0)
+			.category(GameRuleCategory.PLAYER)
+			.buildAndRegister(prefix("players_twilight_portal_default_delay"))
+	);
+	public static final Supplier<GameRule<Integer>> TF_PORTAL_CREATIVE_DELAY = Suppliers.memoize(() ->
+		GameRuleBuilder.forInteger(0)
+			.minValue(0)
+			.category(GameRuleCategory.PLAYER)
+			.buildAndRegister(prefix("players_twilight_portal_creative_delay"))
+	);
+
+	private static boolean synchronizingEnforcedProgressionRules;
 
 	@Override
 	public void onInitialize() {
+		TFConfig.loadCommon();
 		TFNetworking.init();
 		TFDataAttachments.init();
+		ServerLifecycleEvents.SERVER_STARTING.register(server -> TwilightForestApi.freezeRegistrations());
 		ServerLifecycleEvents.SERVER_STOPPING.register(SaveDebug::onServerStopping);
 		ServerLifecycleEvents.SERVER_STOPPED.register(SaveDebug::onServerStopped);
 		ResourceConditions.register(UncraftingTableCondition.TYPE);
@@ -107,6 +137,7 @@ public final class TwilightForestMod implements ModInitializer {
 
 	private static void registerStaticRegistries() {
 		TFSounds.init();
+		TFConsumeEffects.init();
 		TFDataComponents.init();
 		TFRemapper.addBlockAliases();
 		TFBlocks.init();
@@ -114,6 +145,9 @@ public final class TwilightForestMod implements ModInitializer {
 		TFEntities.init();
 		TFRemapper.addItemAliases();
 		TFItems.init();
+		TwilightForestApiImplementation.registerBuiltins();
+		ItemDisplays.init();
+		TravellersModifierTypes.init();
 		TFLoot.init();
 		TFPOITypes.init();
 		TFFeatures.init();
@@ -144,6 +178,7 @@ public final class TwilightForestMod implements ModInitializer {
 		TFStructurePieceTypes.init();
 		ChunkBlanketProcessors.init();
 		TFStructurePlacementTypes.init();
+		TemplateMarkerHandlers.init();
 	}
 
 	private static void registerDynamicRegistries() {
@@ -152,16 +187,22 @@ public final class TwilightForestMod implements ModInitializer {
 		DynamicRegistries.register(TFRegistries.Keys.BIOME_TERRAIN_DATA, BiomeDensitySource.CODEC);
 		DynamicRegistries.registerSynced(TFRegistries.Keys.RESTRICTIONS, Restriction.CODEC, Restriction.CODEC);
 		DynamicRegistries.registerSynced(TFRegistries.Keys.MAGIC_PAINTINGS, MagicPaintingVariant.CODEC, MagicPaintingVariant.CODEC);
+		DynamicRegistries.registerSynced(TFRegistries.Keys.TRAVELLERS_MODIFIERS, twilightforest.item.travellers_gear.modifiers.TravellersModifier.CODEC, twilightforest.item.travellers_gear.modifiers.TravellersModifier.CODEC);
 		DynamicRegistries.register(TFRegistries.Keys.STRUCTURE_SPELEOTHEM_SETTINGS, StructureSpeleothemConfig.CODEC);
 		DynamicRegistries.register(TFRegistries.Keys.CHUNK_BLANKET_PROCESSORS, ChunkBlanketProcessors.DISPATCH_CODEC);
 		DynamicRegistries.registerSynced(TFRegistries.Keys.DWARF_RABBIT_VARIANT, DwarfRabbitVariant.DIRECT_CODEC, DwarfRabbitVariant.DIRECT_CODEC);
 		DynamicRegistries.registerSynced(TFRegistries.Keys.TINY_BIRD_VARIANT, TinyBirdVariant.DIRECT_CODEC, TinyBirdVariant.DIRECT_CODEC);
+		DynamicRegistries.register(TFRegistries.Keys.TEMPLATE_MARKER_HANDLER, TemplateMarkerHandlers.DISPATCH_CODEC);
+		DynamicRegistries.register(TFRegistries.Keys.TEMPLATE_MARKER_HANDLER_LIST, TemplateMarkerHandlerList.CODEC);
 	}
 
 	private static void registerReloadListeners() {
 		TFDataMaps.registerReloadListener();
 		ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(StalactiteReloadListener.INSTANCE);
-		ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(StructureTemplateDefinitions.INSTANCE);
+		ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(
+			prefix("structure_templates"),
+			StructureTemplateDefinitions::new
+		);
 		ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new QuestReloadListener());
 	}
 
@@ -171,11 +212,49 @@ public final class TwilightForestMod implements ModInitializer {
 	}
 
 	private static void registerGameRules() {
-		GameRule<Boolean> rule = ENFORCED_PROGRESSION_RULE.get();
-		GameRuleEvents.changeCallback(rule).register((enforced, server) -> {
+		GameRule<Boolean> publishedFabricRule = ENFORCED_PROGRESSION_RULE.get();
+		GameRule<Boolean> upstreamRule = UPSTREAM_ENFORCED_PROGRESSION_RULE.get();
+		TF_PORTAL_DEFAULT_DELAY.get();
+		TF_PORTAL_CREATIVE_DELAY.get();
+
+		GameRuleEvents.changeCallback(publishedFabricRule).register((enforced, server) ->
+			synchronizeEnforcedProgressionRules(server, enforced));
+		GameRuleEvents.changeCallback(upstreamRule).register((enforced, server) ->
+			synchronizeEnforcedProgressionRules(server, enforced));
+		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+			// A missing ID loads its default true value, so AND preserves a saved false value from either lineage.
+			boolean enforced = resolveEnforcedProgression(
+				server.getGameRules().get(publishedFabricRule),
+				server.getGameRules().get(upstreamRule));
+			synchronizeEnforcedProgressionRules(server, enforced);
+		});
+	}
+
+	public static boolean resolveEnforcedProgression(boolean publishedFabricValue, boolean upstreamValue) {
+		return publishedFabricValue && upstreamValue;
+	}
+
+	private static void synchronizeEnforcedProgressionRules(MinecraftServer server, boolean enforced) {
+		if (synchronizingEnforcedProgressionRules) {
+			return;
+		}
+
+		synchronizingEnforcedProgressionRules = true;
+		try {
+			GameRule<Boolean> publishedFabricRule = ENFORCED_PROGRESSION_RULE.get();
+			GameRule<Boolean> upstreamRule = UPSTREAM_ENFORCED_PROGRESSION_RULE.get();
+			if (server.getGameRules().get(publishedFabricRule) != enforced) {
+				server.getGameRules().set(publishedFabricRule, enforced, server);
+			}
+			if (server.getGameRules().get(upstreamRule) != enforced) {
+				server.getGameRules().set(upstreamRule, enforced, server);
+			}
+
 			EnforceProgressionStatusPacket packet = new EnforceProgressionStatusPacket(enforced);
 			PlayerLookup.all(server).forEach(player -> ServerPlayNetworking.send(player, packet));
-		});
+		} finally {
+			synchronizingEnforcedProgressionRules = false;
+		}
 	}
 
 	private static void initCommon() {
@@ -232,6 +311,10 @@ public final class TwilightForestMod implements ModInitializer {
 		});
 
 		FlammableBlockRegistry flammables = FlammableBlockRegistry.getDefaultInstance();
+		flammables.add(TFBlocks.RASPBERRY_BUSH, 4, 25);
+		flammables.add(TFBlocks.BLUEBERRY_BUSH, 4, 25);
+		flammables.add(TFBlocks.BLACKBERRY_BUSH, 4, 25);
+		flammables.add(TFBlocks.MALOBERRY_BUSH, 4, 25);
 		flammables.add(TFBlocks.TWILIGHT_OAK_LOG, 5, 5);
 		flammables.add(TFBlocks.TWILIGHT_OAK_WOOD, 5, 5);
 		flammables.add(TFBlocks.STRIPPED_TWILIGHT_OAK_LOG, 5, 5);

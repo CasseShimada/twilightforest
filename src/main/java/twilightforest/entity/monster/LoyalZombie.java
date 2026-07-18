@@ -32,7 +32,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFDamageTypes;
@@ -135,15 +134,21 @@ public class LoyalZombie extends TamableAnimal {
 	}
 
 	@Override
-	public void addAdditionalSaveData(ValueOutput output) {
-		super.addAdditionalSaveData(output);
-		output.putBoolean("IsBaby", this.isBaby());
-	}
-
-	@Override
 	public void readAdditionalSaveData(ValueInput input) {
 		super.readAdditionalSaveData(input);
-		this.setAge(input.getBooleanOr("IsBaby", false) ? this.getBabyStartAge() : 0);
+		// AgeableMob's exact Age is authoritative in current saves. IsBaby is only a fallback for legacy data.
+		if (LegacyBabyState.shouldRestore(input)) {
+			this.setAge(this.getBabyStartAge());
+		}
+	}
+
+	static final class LegacyBabyState {
+		private LegacyBabyState() {
+		}
+
+		static boolean shouldRestore(ValueInput input) {
+			return input.getInt("Age").isEmpty() && input.getBooleanOr("IsBaby", false);
+		}
 	}
 
 	@Override

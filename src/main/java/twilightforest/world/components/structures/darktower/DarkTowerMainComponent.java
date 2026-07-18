@@ -8,6 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.Util;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.EntityType;
@@ -1000,7 +1001,7 @@ public class DarkTowerMainComponent extends DarkTowerWingComponent {
 		// wart container
 		makePillarFrame(world, sbb, netherDeco, rotation, 12, y, 9, 4, 4, 7, true);
 		this.fillBlocksRotated(world, sbb, 13, y + 1, 10, 14, y + 1, 14, Blocks.SOUL_SAND.defaultBlockState(), rotation);
-		this.fillBlocksRotated(world, sbb, 13, y + 2, 10, 14, y + 2, 14, Blocks.NETHER_WART.defaultBlockState(), rotation);
+		this.fillBlocksRotated(world, sbb, 13, y + 2, 10, 14, y + 2, 14, getNetherPlant(decoRNG), rotation);
 		this.fillBlocksRotated(world, sbb, 13, y + 4, 10, 14, y + 4, 14, Blocks.SOUL_SAND.defaultBlockState(), rotation);
 
 		// blaze container
@@ -1437,5 +1438,15 @@ public class DarkTowerMainComponent extends DarkTowerWingComponent {
 				}
 			}
 		}
+	}
+
+	private BlockState getNetherPlant(RandomSource random) {
+		return Util.getRandom(List.of(
+			Blocks.NETHER_WART.defaultBlockState(),
+			TFBlocks.BLIGHTBERRY_BUSH.defaultBlockState(),
+			TFBlocks.DUSKBERRY_BUSH.defaultBlockState(),
+			TFBlocks.SKYBERRY_BUSH.defaultBlockState(),
+			TFBlocks.STINGBERRY_BUSH.defaultBlockState()
+		), random);
 	}
 }

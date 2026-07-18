@@ -74,7 +74,7 @@ public class InfoCommand {
 			boolean conquered = false;
 			var structureKey = structureRegistry.getResourceKey(structureStart.getStructure()).orElse(null);
 			if (structureKey != null) {
-				conquered = StructureConqueredData.get(level).isConquered(structureKey, structureStart.getChunkPos());
+				conquered = StructureConqueredData.get(level).isConquered(level, structureKey, structureStart);
 			}
 			boolean finalConquered = conquered;
 			source.sendSuccess(() -> Component.translatable("commands.tffeature.structure.conquer.status", finalConquered).withStyle(ChatFormatting.BOLD, finalConquered ? ChatFormatting.GREEN : ChatFormatting.RED), false);

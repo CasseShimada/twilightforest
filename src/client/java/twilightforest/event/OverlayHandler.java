@@ -25,6 +25,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.HitResult;
 import twilightforest.TwilightForestMod;
+import twilightforest.client.overlay.ItemDisplayOverlay;
 import twilightforest.components.entity.TFPortalAttachment;
 import twilightforest.components.item.OreScannerData;
 import twilightforest.config.TFConfig;
@@ -106,6 +107,13 @@ public class OverlayHandler {
 				}
 			}
 		});
+
+		HudElementRegistry.attachElementAfter(VanillaHudElements.SUBTITLES, TwilightForestMod.prefix("item_display_overlay"), (graphics, tickCounter) -> {
+			Minecraft minecraft = Minecraft.getInstance();
+			if (minecraft.getCameraEntity() instanceof Player player) {
+				ItemDisplayOverlay.render(graphics, minecraft, minecraft.gui, player);
+			}
+		});
 	}
 
 	private static void renderIndicator(Minecraft minecraft, GuiGraphicsExtractor graphics, Gui gui, Player player, int screenWidth, int screenHeight) {
@@ -166,7 +174,7 @@ public class OverlayHandler {
 					component = component.copy().append(".");
 				}
 				graphics.fill(0, 0, 56, 16, 0x9b000000);
-				graphics.text(Minecraft.getInstance().font, component, 4, 4, 16777215, false);
+				graphics.text(Minecraft.getInstance().font, component, 4, 4, 0xFFFFFFFF, false);
 			} else {
 				OreScannerData oreScannerData = selectedMeter.get(TFDataComponents.ORE_DATA);
 
@@ -304,7 +312,7 @@ public class OverlayHandler {
 			for (Component rowText : column.textRows) {
 				int textPixelWidth = Minecraft.getInstance().font.width(rowText);
 				int textXPos = xOff + this.textAlignment.getTextOffset(textPixelWidth, this.maxPixelWidth);
-				graphics.text(Minecraft.getInstance().font, rowText, textXPos, yOff, 0x00_ff_ff_ff, false);
+				graphics.text(Minecraft.getInstance().font, rowText, textXPos, yOff, 0xFF_FF_FF_FF, false);
 				yOff += verticalTextPixelsAdvance;
 			}
 
@@ -333,7 +341,7 @@ public class OverlayHandler {
 			int yOff = 4;
 
 			for (Component headerRowText : this.headerRows) {
-				graphics.text(Minecraft.getInstance().font, headerRowText, xOff, yOff, 0x00_ff_ff_ff, false);
+				graphics.text(Minecraft.getInstance().font, headerRowText, xOff, yOff, 0xFF_FF_FF_FF, false);
 				yOff += verticalTextPixelsAdvance;
 			}
 

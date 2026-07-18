@@ -58,6 +58,11 @@ public class TFBlockTags {
 	public static final TagKey<Block> SUPPORTS_STALAGMITES = create("supports_stalagmites");
 	public static final TagKey<Block> CARVER_REPLACEABLES = create("carver_replaceables");
 	public static final TagKey<Block> PLANTS_HANG_ON = create("plants_hang_on");
+	public static final TagKey<Block> OREBERRY_BUSHES_SURVIVE = create("oreberry_bushes_survive");
+	public static final TagKey<Block> TF_BERRY_BUSHES_SURVIVE = create("tf_berry_bushes_survive");
+	public static final TagKey<Block> TF_BERRY_BUSHES_REPLACE = create("tf_berry_bushes_replace");
+	public static final TagKey<Block> DARK_TOWER_BERRY_BUSHES_SURVIVE = create("dark_tower_berry_bushes_survive");
+	public static final TagKey<Block> DARK_TOWER_BERRY_BUSHES_DIE = create("dark_tower_berry_bushes_die");
 
 	public static final TagKey<Block> ORE_MAGNET_SAFE_REPLACE_BLOCK = create("ore_magnet/ore_safe_replace_block");
 	public static final TagKey<Block> ORE_MAGNET_IGNORE = create("ore_magnet/ignored_ores");

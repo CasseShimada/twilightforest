@@ -1,0 +1,35 @@
+{
+  magic: {
+    DataVersion: 3465,
+    data: {
+      dimension: "twilightforest:twilight_forest",
+      xCenter: 1024,
+      zCenter: -1024,
+      scale: 3b,
+      colors: [B;],
+      trackingPosition: 1b,
+      unlimitedTracking: 0b,
+      locked: 0b,
+      banners: [],
+      frames: [],
+      features: [B; -123b, 16b, -8b, 13b, -32b, 24b, 99b, 1b, 2b]
+    }
+  },
+  maze: {
+    DataVersion: 3465,
+    data: {
+      dimension: "twilightforest:twilight_forest",
+      xCenter: 160,
+      zCenter: -96,
+      scale: 0b,
+      colors: [B;],
+      trackingPosition: 1b,
+      unlimitedTracking: 0b,
+      locked: 0b,
+      banners: [],
+      frames: [],
+      yCenter: 31,
+      mapOres: 1b
+    }
+  }
+}
