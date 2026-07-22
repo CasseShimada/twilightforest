@@ -1,62 +1,221 @@
-Twilight Forest [![Discord](https://img.shields.io/discord/313006291012288521.svg?colorB=7289DA&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHYAAABWAgMAAABnZYq0AAAACVBMVEUAAB38%2FPz%2F%2F%2F%2Bm8P%2F9AAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfhBxwQJhxy2iqrAAABoElEQVRIx7WWzdGEIAyGgcMeKMESrMJ6rILZCiiBg4eYKr%2Fd1ZAfgXFm98sJfAyGNwno3G9sLucgYGpQ4OGVRxQTREMDZjF7ILSWjoiHo1n%2BE03Aw8p7CNY5IhkYd%2F%2F6MtO3f8BNhR1QWnarCH4tr6myl0cWgUVNcfMcXACP1hKrGMt8wcAyxide7Ymcgqale7hN6846uJCkQxw6GG7h2MH4Czz3cLqD1zHu0VOXMfZjHLoYvsdd0Q7ZvsOkafJ1P4QXxrWFd14wMc60h8JKCbyQvImzlFjyGoZTKzohwWR2UzSONHhYXBQOaKKsySsahwGGDnb%2FiYPJw22sCqzirSULYy1qtHhXGbtgrM0oagBV4XiTJok3GoLoDNH8ooTmBm7ZMsbpFzi2bgPGoXWXME6XT%2BRJ4GLddxJ4PpQy7tmfoU2HPN6cKg%2BledKHBKlF8oNSt5w5g5o8eXhu1IOlpl5kGerDxIVT%2BztzKepulD8utXqpChamkzzuo7xYGk%2FkpSYuviLXun5bzdRf0Krejzqyz7Z3p0I1v2d6HmA07dofmS48njAiuMgAAAAASUVORK5CYII%3D)](https://discord.gg/6v3z26B) [![Crowdin](https://badges.crowdin.net/twilight-forest/localized.svg)](https://crowdin.com/project/twilight-forest) [![Curseforge](http://cf.way2muchnoise.eu/full_227639_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/the-twilight-forest) [![Curseforge](http://cf.way2muchnoise.eu/versions/For%20MC_227639_all.svg)](https://www.curseforge.com/minecraft/mc-mods/the-twilight-forest)
-==============
+# 暮色森林（The Twilight Forest）— Minecraft 26.2 Fabric
 
-This is the home of the Twilight Forest mod for Minecraft 1.12 and beyond.
+暮色森林是一个以维度探索、地牢、首领战和阶段式解锁为核心的大型冒险模组。这里有独立的生态、巨型树木、迷宫与高塔，也有一条会改变区域危险和结构权限的首领进度线。
 
-## Licensing
-Code unless otherwise stated default to our [LICENSE file here](LICENSE)
+当前版本为 **`1.0.0-beta.2` 预发布版**。它面向 Minecraft 26.2 与 Fabric；进入重要存档前请先备份世界。
 
-Non-Code, [Non-Sound](src/main/resources/assets/twilightforest/sounds) and [Non-Structure](src/main/resources/data/twilightforest/structure) assets [(Located here)](src/main/resources/assets) go by our [ASSET_LICENSE file here](ASSET_LICENSE)
+## 下载与运行环境
 
-Sound based assets [(Located Here)](src/main/resources/assets/twilightforest/sounds) and Structure based assets [(Located Here)](src/main/resources/data/twilightforest/structure) are **All Rights Reserved**
+| 项目 | 要求 |
+| --- | --- |
+| Minecraft | 26.2 |
+| Fabric Loader | 0.19.3 或更高版本 |
+| Fabric API | 必装，使用与 Minecraft 26.2 匹配的版本 |
+| Java | 25 或更高版本 |
+| 安装位置 | 客户端和服务端都要安装暮色森林与 Fabric API |
 
-## Downloads
-Releases will be available on [CurseForge](https://minecraft.curseforge.com/projects/the-twilight-forest) when ready.
+- 本 Fabric 移植版：[GitHub Releases](https://github.com/CasseShimada/twilightforest/releases)
+- 暮色森林官方发布页：[CurseForge](https://www.curseforge.com/minecraft/mc-mods/the-twilight-forest)
+- Fabric 安装器：[Fabric 官网](https://fabricmc.net/use/installer/)
+- Fabric API：[Modrinth](https://modrinth.com/mod/fabric-api)
 
-Alternatively, grab your experimental builds from our [Discord](https://discord.gg/6v3z26B). See the #faq channel for more details.
+下载时请确认文件名、Minecraft 版本与加载器均匹配，不要把 Forge/NeoForge 构建放入 Fabric 实例。
 
-## Community
-Keep in touch with development on our [Discord server](https://discord.gg/6v3z26B). We also have a [Twitter account](https://twitter.com/teamtwilightdev) we post development and Twilight Forest-related content on.
+### 客户端安装
 
-## Translation
-Submitting translations for Twilight Forest can be done via our [Crowdin page](https://crowdin.com/project/twilight-forest). Consider helping us out if you're fluent in any language at all! Alternatively, translations can still be submitted via pull requests.
+1. 为 Minecraft 26.2 安装 Fabric Loader 0.19.3 或更高版本。
+2. 将 Fabric API 和暮色森林的 Fabric JAR 放入实例的 `mods` 文件夹。
+3. 使用 Java 25 或更高版本启动；首次进入前备份原有世界。
 
-## Maven
-### 1.20.6+
-https://maven.tamaized.com/#/releases/team-twilight/twilightforest/
+### 多人服务器
 
+服务端同样需要匹配的 Fabric Loader、Fabric API、暮色森林和 Java 版本。所有玩家应使用与服务器一致的暮色森林版本；可选兼容模组若会改变服务端行为，也应按其发布说明在对应一侧安装。升级或更换模组组合前，先完整备份世界与配置文件。
+
+## 如何进入暮色森林
+
+### 建造传送门
+
+最常见的做法是挖一个 **2×2 的静止水池**，但当前实现并不限于正方形：水池可以是不规则的连续形状，至少包含 **4 格水**，默认最多检查 **64 格水**。每一格水下方都必须有坚固支撑。
+
+水池的四周必须完全围合，可使用草方块、泥土类方块、耕地或土径。每一个边框方块上方还要有自然装饰，例如花、蘑菇、树苗、树叶、草、蕨、作物等。最稳妥的入门方案是“2×2 水池 + 一圈草方块 + 每格边框上放花”。
+
+站在水池旁，把一颗普通钻石丢进水中。钻石会被消耗，并以闪电效果把整片水转换为暮色传送门。兼容数据包也可以把其他物品加入同一激活物品标签，但普通钻石始终是推荐选择。
+
+### 返回传送门
+
+首次抵达时，模组会在目标维度寻找安全位置并建立配对的返回传送门。此后往返会优先使用已经记录的精确配对；如果目标传送门被破坏，系统会尝试寻找附近已加载的可用传送门，必要时重新生成安全出口。
+
+`1.0.0-beta.2` 修复了返回门偶尔连接到错误地点或错误维度的问题。旧世界可以继续使用；若某一对旧传送门仍表现异常，先备份世界，再完整拆除并重建这对门，避免只破坏池中的一部分。
+
+### 无法激活或无法进入时
+
+按下面的顺序排查：
+
+1. 水池是否至少 4 格、所有水格状态一致，且每格下方都有坚固方块。
+2. 四周是否完全由允许的泥土/草类边框围住，每格边框上方是否都有合格植物。
+3. 钻石是否由附近玩家亲自丢出，而不是发射器或其他装置生成的物品实体。
+4. 服务端是否禁用了传送门创建、提高了创建权限，或配置了额外的进度解锁条件。
+5. 目标区域是否安全。启用安全位置检查时，出口可能被挪到附近；关闭该检查后，找不到安全位置会直接导致创建失败。
+6. 返回门是否被拆残、周围区块是否尚未加载。先让目标区域正常加载，再尝试往返或重建配对门。
+
+默认强制首领进度并不会单独禁止建门，但服务器管理员可以另外设置传送门权限或指定前置进度。
+
+## 首领流程总览
+
+默认进度规则开启。推荐路线如下：
+
+```text
+娜迦 → 暮色巫妖
+          ├─ 沼泽迷宫 → 米诺菇 → 食用米诺陶诺斯肉煲 → 九头蛇
+          ├─ 骑士要塞 → 幻影骑士 → 黑暗高塔 → 暮色恶魂
+          └─ 雪怪巢穴 → 雪怪首领 → 极光宫殿 → 冰雪女王
+
+九头蛇 + 暮色恶魂 + 冰雪女王
+          ↓
+高地巨魔洞窟 → 魔豆与巨人云岛 → 巨型黑曜石宝库 → 灰烬烧灯
+          ↓
+荆棘之地 → 最终高原与最终城堡（尚未完成）
 ```
-repositories {
-    maven {
-        url = "https://maven.tamaized.com/releases"
-    }
-}
 
-dependencies {
-    implementation "team-twilight:twilightforest:{version}:universal"
-}
-```
-### 1.20.5 and below
-https://modmaven.dev/teamtwilight/twilightforest/
+巫妖之后的三条分支可以按任意顺序推进；进入高地前必须完成九头蛇、暮色恶魂和冰雪女王三条终点。
 
-```
-repositories {
-    maven {
-        url = "https://modmaven.dev/"
-    }
-}
+### 1. 娜迦（Naga）
 
-dependencies {
-    implementation fg.deobf("teamtwilight:twilightforest:{version}:universal")
-}
-```
+- **地点：** 常规暮色森林区域中的娜迦庭院（Naga Courtyard），一座露天石墙竞技场。
+- **准备：** 铁甲或更好装备、盾牌、弓、充足食物；清空场地角落，保留走位空间。
+- **机制与打法：** 娜迦会盘旋、冲撞和破坏障碍。生命降低时身体变短、速度变快；用盾正面挡住冲撞有机会使其短暂眩晕。持续输出可阻止它脱战恢复，后半段不要贪刀。
+- **奖励与解锁：** 娜迦鳞片与娜迦战利品，可制作娜迦护甲；解锁巫妖塔。
 
-## YourKit
-![](https://www.yourkit.com/images/yklogo.png)
+### 2. 暮色巫妖（Twilight Lich）
 
-We appreciate YourKit, LLC for providing the project developers licenses of its profiler to help us improve performance!
+- **地点：** 巫妖塔（Lich Tower）顶层。
+- **准备：** 远程武器、盾牌、方块和治疗物品；沿塔上行时先清理刷怪房与落脚点。
+- **机制与打法：** 第一阶段会制造分身并由多层护盾保护真身，把巫妖发出的可反弹魔法弹打回去以击破护盾；分身本身不会正常受伤。第二阶段优先清理召唤的亡灵。第三阶段巫妖改用近战并频繁传送，抓住传送后的空档输出。
+- **奖励与解锁：** 四种巫妖权杖之一、附魔金装、末影珍珠等战利品与巫妖战利品；同时开启沼泽、黑暗森林和雪地三条路线。
 
-YourKit supports open source projects with its full-featured Java Profiler.
-YourKit, LLC is the creator of [YourKit Java Profiler](https://www.yourkit.com/java/profiler/)
-and [YourKit .NET Profiler](https://www.yourkit.com/.net/profiler/),
-innovative and intelligent tools for profiling Java and .NET applications.
+### 3. 米诺菇（Minoshroom）
+
+- **地点：** 暮色沼泽地下迷宫（Labyrinth）的下层首领房。
+- **准备：** 迷宫地图、耐久足够的工具、盾、食物和标记路线的方块。迷宫狭窄、分层且有大量陷阱与米诺陶。
+- **机制与打法：** 米诺菇在狭小房间内冲锋并以重击制造范围威胁。利用栅栏与入口观察攻击节奏，躲开冲锋后近战反击，或在安全角度使用远程武器。
+- **奖励与解锁：** 钻石米诺陶战斧、米诺菇战利品和米诺陶诺斯肉煲。**必须食用肉煲**，才会解除火焰沼泽的进度限制并允许挑战九头蛇。
+
+### 4. 九头蛇（Hydra）
+
+- **地点：** 火焰沼泽中的九头蛇巢穴（Hydra Lair）。
+- **准备：** 抗火效果、强力远程武器、治疗与高耐久盾牌；不要站在多个头之间。
+- **机制与打法：** 各个头会咬击、喷火和发射爆炸火弹。嘴张开攻击时受到的伤害最高；闭嘴时防御很强。可以击回部分火弹。砍掉一个头后会再生，并可能让更多头进入战斗，因此集中攻击当前露出弱点的头更安全。
+- **奖励与解锁：** 九头蛇肉排、炽热之血与九头蛇战利品；它是进入高地所需的三名分支首领之一。
+
+### 5. 幻影骑士（Knight Phantom）
+
+- **地点：** 黑暗森林地下的骑士要塞（Knight Stronghold）。在入口基座放置任意首领战利品，才能打开要塞。
+- **准备：** 夜视、盾牌、弓、强力近战武器和大量火把；先在复杂房间中寻找首领墓室。
+- **机制与打法：** 这是一组必须全部击败的骑士。它们按不同阵型轮流突击，有的会投出一圈武器。非进攻状态防御很高，正在冲锋的骑士更危险但也更容易受伤；优先锁定当前进攻者，避免被包围。
+- **奖励与解锁：** 附魔骑士金属工具、幻影护甲和骑士战利品；解除黑暗森林中心区域的限制，并开放黑暗高塔。
+
+### 6. 暮色恶魂（Ur-Ghast）
+
+- **地点：** 黑暗森林中心的黑暗高塔（Dark Tower）屋顶。
+- **准备：** 弓、抗火与治疗物品；攀塔途中熟悉钥匙门、机关和恶魂陷阱的位置。
+- **机制与打法：** 暮色恶魂在高空发射火球，并在暴怒阶段召唤小型恶魂。先在恶魂陷阱附近击杀小恶魂为陷阱充能，再启动已充能的陷阱，把首领拉低并短暂压制；趁这个窗口集中输出。
+- **奖励与解锁：** 卡米奈特、炽热之泪与暮色恶魂战利品；它是进入高地所需的三名分支首领之一。
+
+### 7. 雪怪首领（Alpha Yeti）
+
+- **地点：** 雪域森林中的雪怪巢穴（Yeti Lair）。
+- **准备：** 可靠的近战护甲、盾牌、速度或抗摔手段；注意洞顶落冰。
+- **机制与打法：** 它会投掷冰弹、抓起并抛出玩家，也会进入连续跳砸的暴怒状态。暴怒结束后会疲惫，这是最安全的爆发窗口；远程攻击并非在所有阶段都有效。
+- **奖励与解锁：** 雪怪首领毛皮、冰冻炸弹和首领战利品；毛皮相关进度解除冰川区域限制，开放极光宫殿。
+
+### 8. 冰雪女王（Snow Queen）
+
+- **地点：** 冰川上的极光宫殿（Aurora Palace）最高处。
+- **准备：** 强力远程武器、抗摔与治疗物品；宫殿有分岔、垂直落差和大量冰系敌人。
+- **机制与打法：** 战斗在召唤冰晶、俯冲砸击和冰霜射线阶段间切换。召唤阶段先清掉冰晶；俯冲阶段躲开落点并等待她完成数次攻击；射线阶段利用掩体并远程反击。环绕她的冰盾也会碰撞、击退玩家。
+- **奖励与解锁：** 三发弓或追踪弓、冰雪战利品与女王战利品；她是进入高地所需的三名分支首领之一。
+
+### 9. 巨魔洞窟、巨人与最终阶段
+
+同时击败九头蛇、暮色恶魂和冰雪女王后，高地会解除酸雨限制。这里不是传统的单一首领战，而是一段物品链：
+
+1. 在巨魔洞窟（Troll Cave）探索并找到魔豆。
+2. 把魔豆种在肥沃土壤（Uberous Soil）上，沿长出的豆茎抵达巨人云岛（Giant Cloud）。
+3. 击败巨人，取得巨人镐。
+4. 回到洞窟，用巨人镐打开巨型黑曜石宝库，取得灰烬烧灯（Lamp of Cinders）。
+5. 用灰烬烧灯烧除荆棘，前往最终高原。
+
+最终城堡（Final Castle）目前仍是未完成内容，没有可被视为完整终局的正式 Boss 战。抵达这里代表当前进度线的终点，而不是已经完成最终章节。
+
+## 主要结构与探索方法
+
+| 地点 | 玩家会遇到什么 | 探索重点 |
+| --- | --- | --- |
+| 娜迦庭院 | 开放式竞技场、石墙与娜迦 | 最早的首领地标，保留宽阔走位空间 |
+| 巫妖塔 | 多层房间、楼梯、断桥、刷怪点与宝箱 | 逐层建立安全路线，顶层挑战巫妖 |
+| 地下迷宫 | 两层狭窄迷宫、陷阱、甲虫和米诺陶 | 用迷宫地图与标记防止迷路，下层寻找米诺菇；稀有宝箱可能提供破迷宫工具 |
+| 九头蛇巢穴 | 火焰沼泽中的开放洞穴与大范围首领场地 | 抗火和远程输出比挖掘捷径更重要 |
+| 骑士要塞 | 地下入口、战利品基座、复杂房间与墓室 | 先解锁入口，再寻找整组幻影骑士所在的首领房 |
+| 黑暗高塔 | 高耸的机关塔、钥匙门、红石式装置和恶魂陷阱 | 保存钥匙、观察机关，并为屋顶战提前给陷阱充能 |
+| 雪怪巢穴 | 雪洞、普通雪怪与坠落冰块 | 留意头顶与击退，深处挑战雪怪首领 |
+| 极光宫殿 | 分岔冰塔、垂直房间、冰系生物与跑酷 | 带抗摔手段，逐层搜索通往顶部的路线 |
+| 巨魔洞窟与巨人云岛 | 地下洞穴、魔豆、巨型方块和云上巨人 | 按“魔豆—巨人镐—黑曜石宝库—灰烬烧灯”的顺序推进 |
+| 最终城堡 | 高原上的大型城堡遗迹 | 当前为未完成区域，不要期待完整终局首领 |
+
+其他值得探索的地标：
+
+- **空心山（Hollow Hills）：** 有小、中、大三种规模，内部富含矿物、宝箱和洞穴生物；山越大，奖励与风险通常越高。
+- **树篱迷宫（Hedge Maze）：** 地表迷宫，包含刷怪点、宝箱和多条绕行路线，适合作为早期资源点。
+- **谜题羊树林（Quest Grove）：** 找到谜题羊并完成十六色羊毛任务，可获得独特奖励。
+- **黑暗森林（Dark Forest）：** 林冠极密、能见度低；巫妖与幻影骑士进度会分别影响森林及其中心区域。夜视和魔法地图非常有用。
+
+强制进度开启时，未解锁生物群系会施加饥饿、黑暗、冻伤或酸雨等惩罚，受保护结构中的破坏、放置和交互也可能被阻止。发展进度页和魔法地图上的地标图标，是判断下一站最可靠的游戏内线索。
+
+## 地图、装备与其他玩法
+
+### 探索地图
+
+- **魔法地图（Magic Map）：** 用乌鸦羽毛、火炬浆果和萤石粉制作魔法地图核心，再用 8 张纸围绕核心制作空白地图。它会显示大范围生态与主要地标，也能帮助辨认已征服结构。
+- **迷宫地图（Maze Map）：** 迷宫地图核心主要从地下迷宫中取得，再用 8 张纸制作。它专注显示玩家当前高度附近的细密结构，适合地下迷宫与要塞。
+- **矿石地图（Ore Map）：** 由空白迷宫地图配合铁、金、钻石块升级，除地形外还会标出附近矿物分布。
+
+### 装备、材料与收藏
+
+- 娜迦鳞片、铁木、钢叶、骑士金属、炽热之血/炽热之泪等材料各自对应不同阶段的护甲、工具与武器。
+- 巫妖权杖提供攻击、吸血、召唤或防护能力；首领战利品既可收藏，也会参与骑士要塞等进度机关。
+- Traveller's Gear 包含护目镜、翅膀、背心、腰带、手套和靴子，可通过不同材料赋予探索或战斗加成。
+- 护符、魔法树、特殊弓、号角、罐、萤火虫与大量装饰方块，让非主线探索同样有实际收益。
+
+### 拆解台（Uncrafting Table）
+
+拆解台可消耗经验，把许多有序合成物品还原成原料，也能用于修复、重组装备或替换部分材料。无序配方默认不能拆解，服务器还可以限制或关闭相关功能；实际结果以界面显示和服务器配置为准。
+
+### 谜题羊（Quest Ram）
+
+在谜题羊树林中，依次给谜题羊喂食 **16 种颜色的羊毛**。完成后会得到瓦解之角（Crumble Horn）、经验和一组珍贵方块奖励。WTHIT 或 Jade 可以直接显示尚缺的颜色，适合多人共同收集时查漏补缺。
+
+### 服务器进度设置
+
+暮色森林的强制进度游戏规则默认开启。关闭后，生态惩罚和结构保护会放宽，适合自由探索或地图制作，但会削弱原本的首领路线设计。多人服务器应在开服前决定规则；中途修改不会自动补发进度，玩家仍应通过发展进度确认已经完成的首领。
+
+## 可选模组兼容
+
+以下均为可选依赖；不安装它们，暮色森林本体仍可正常运行。
+
+| 模组 | 状态 | 玩家可见行为 |
+| --- | --- | --- |
+| [WTHIT](https://github.com/CasseShimada/wthit/releases) | 已支持 | 信息面板可显示晾晒架进度/剩余时间、谜题羊缺少的羊毛颜色，以及创造模式下特殊书架中的刷怪信息。 |
+| [Carry On](https://github.com/CasseShimada/CarryOn/releases) | 已支持 | 允许搬运部分安全容器、战利品装饰与温顺暮色动物；禁止搬运首领、谜题羊、带乘客实体、传送门和危险机关，并遵守结构进度与私人棺材权限。 |
+| [Diggus Maximus](https://github.com/CasseShimada/DiggusMaximus/releases) | 已支持 | 识别多组暮色木材；连锁挖掘会避开巨人镐、方块实体、传送门、首领/进度保护区与其他特殊方块，也不会为远处方块强制加载区块。 |
+| [Jade](https://modrinth.com/mod/jade) | 已支持 | 提供晾晒架剩余时间、谜题羊缺色提示，以及创造模式下特殊书架刷怪信息。 |
+| [JEI](https://modrinth.com/mod/jei) | 已支持 | 展示拆解、转化粉、晾晒架、瓦解之角、月光蠕虫女王等暮色专用配方与用途。 |
+
+当前源码没有把其他模组列为“部分支持”。只依赖通用 Fabric 事件或物品标签的组合，不等于经过专门适配；上表以外的模组组合均视为 **未验证**。预发布版的整合包环境差异较大，遇到问题时先用最小模组组合复现，并同时记录客户端与服务端版本。
+
+## 社区、翻译与许可
+
+- 社区交流：[Twilight Forest Discord](https://discord.gg/6v3z26B)
+- 翻译协作：[Crowdin](https://crowdin.com/project/twilight-forest)
+- 原项目与问题跟踪：[TeamTwilight/twilightforest](https://github.com/TeamTwilight/twilightforest)
+
+代码默认遵循 [LICENSE](LICENSE) 中的许可。非代码、非声音、非结构资源适用 [ASSET_LICENSE](ASSET_LICENSE)；声音与结构资源保留其各自声明的权利。分发或再利用前请阅读仓库中的完整许可文本。

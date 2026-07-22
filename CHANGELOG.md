@@ -1,40 +1,29 @@
-# Changelog
+# 更新日志
 
 ## [1.0.0-beta.2] - 2026-07-22
 
-This Fabric 26.2 prerelease repairs the special-item resource pipeline, makes custom block-model
-rendering lifecycle-safe, and replaces ambiguous Twilight Forest return-portal lookups with exact,
-persistent portal-shape links.
+这是面向 Minecraft 26.2 Fabric 的预发布版本。建议进入重要存档前先备份世界，并确保客户端与服务端使用相同版本。
 
-### Fixed
+### 显示与模型修复
 
-- Migrated special item models to Minecraft 26.2 item definitions and special renderers, including
-  the missing brazier definition, shield sprite lookup, skull-candle transforms, and stale pillar
-  inventory texture reference.
-- Made connected-texture, force-field, giant-block, and patch model parts immutable for each
-  collection pass, and guaranteed renderer context cleanup after failures.
-- Replaced X/Z-only return-portal cache aliases with dimension-aware canonical anchors, shape
-  fingerprints, exact bidirectional links, atomic invalidation, and safe legacy-cache migration.
-- Bounded portal discovery to loaded chunks and removed the synchronous full-height 200-block
-  volume sweep that could stall the server thread.
+- 修复火盆、骑士金属盾、头颅蜡烛、首领战利品、萤火虫、蝉、月光蠕虫、罐与箱等特殊物品在背包或手持状态下缺失、透明或显示错误的问题。
+- 修复连接纹理、力场、巨型方块和部分地表装饰在资源重载或长时间游玩后可能出现的模型异常。
+- 修复石柱物品引用错误贴图的问题。
 
-### Compatibility
+### 传送门与游玩体验
 
-- Added server-authoritative Diggus Maximus API 1 policy hooks and data tags, with per-candidate
-  progression, ownership, block-entity, portal, and Giant Pick safety checks.
-- Added server-authoritative Carry On API 1 pickup/place/stack policy, explicit safe and unsafe
-  matrices, ownership checks, and hard relocation tags.
-- Added native WTHIT 20 common/client plugins for Drying Rack progress, Quest Ram missing wool,
-  and creative-only Chiseled Canopy Bookshelf spawner data while preserving Jade support.
-- Kept all three integrations optional and verified that no optional API or runtime implementation
-  classes are bundled in either release archive.
+- 修复返回传送门偶尔连接到错误地点或错误维度的问题；新建立的往返传送门会保持正确配对。
+- 旧世界可以继续使用现有传送门数据。若个别旧传送门仍异常，建议先备份世界，再完整重建对应的一对传送门。
+- 优化传送门寻找出口的范围，避免为搜索远处目标而扫描大量未加载区域，降低探索或传送时的卡顿风险。
 
-### Verification
+### 可选模组兼容
 
-- Supersedes `1.0.0-beta.1` with sanitized, machine-independent reference-instance wording in the
-  published audit report; production behavior is unchanged.
-- Added final-resource-union graph tests, custom-model performance contracts, portal persistence and
-  migration tests, optional-compat policy tests, and an isolated real-client/dedicated-server
-  compatibility matrix harness.
-- Added automated handling of Minecraft's experimental-world confirmation through the real GUI
-  mouse-input path so unattended client tests cannot stop at the warning screen.
+- 新增 WTHIT 支持，可查看晾晒架进度、谜题羊缺少的羊毛颜色等信息。
+- 新增 Carry On 安全规则：允许搬运部分安全方块和温顺生物，同时保护首领、传送门、危险机关、进度区域及带权限的容器。
+- 新增 Diggus Maximus 支持：识别暮色木材，并在连锁挖掘时避开传送门、特殊方块、方块实体和受进度保护的区域。
+- 以上模组均为可选依赖；不安装时，暮色森林仍可正常运行。
+
+### 使用提醒
+
+- 本版本仍为 Beta。升级前请备份世界，并让服务器与所有玩家使用一致的 Minecraft、Fabric Loader、Fabric API 和暮色森林版本。
+- 多人服务器若启用了强制进度、传送门权限或容器所有权限制，可选模组也会遵守这些规则。

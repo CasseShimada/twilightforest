@@ -29,3 +29,6 @@ logs
 run-data
 gource.sh
 .noai
+
+# local maintenance documentation
+/docs/
