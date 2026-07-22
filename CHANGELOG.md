@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.0-beta.1] - 2026-07-22
+## [1.0.0-beta.2] - 2026-07-22
 
 This Fabric 26.2 prerelease repairs the special-item resource pipeline, makes custom block-model
 rendering lifecycle-safe, and replaces ambiguous Twilight Forest return-portal lookups with exact,
@@ -31,6 +31,8 @@ persistent portal-shape links.
 
 ### Verification
 
+- Supersedes `1.0.0-beta.1` with sanitized, machine-independent reference-instance wording in the
+  published audit report; production behavior is unchanged.
 - Added final-resource-union graph tests, custom-model performance contracts, portal persistence and
   migration tests, optional-compat policy tests, and an isolated real-client/dedicated-server
   compatibility matrix harness.
