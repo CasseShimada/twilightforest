@@ -42,7 +42,10 @@ public final class GiantBlockStateModel implements BlockStateModel {
 
 	@Override
 	public void collectParts(RandomSource random, List<BlockStateModelPart> output) {
-		output.add(new GiantBlockPart());
+		BlockModelContext.Context ctx = BlockModelContext.get();
+		output.add(new GiantBlockPart(ctx == null
+			? this.buildQuads(null, BlockPos.ZERO)
+			: this.buildQuads(ctx.level(), ctx.pos())));
 	}
 
 	@Override
@@ -92,13 +95,15 @@ public final class GiantBlockStateModel implements BlockStateModel {
 	}
 
 	private final class GiantBlockPart implements BlockStateModelPart {
+		private final QuadCollection quads;
+
+		private GiantBlockPart(QuadCollection quads) {
+			this.quads = quads;
+		}
+
 		@Override
 		public List<net.minecraft.client.resources.model.geometry.BakedQuad> getQuads(Direction direction) {
-			BlockModelContext.Context ctx = BlockModelContext.get();
-			if (ctx == null) {
-				return buildQuads(null, BlockPos.ZERO).getQuads(direction);
-			}
-			return buildQuads(ctx.level(), ctx.pos()).getQuads(direction);
+			return this.quads.getQuads(direction);
 		}
 
 		@Override

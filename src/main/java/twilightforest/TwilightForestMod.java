@@ -42,6 +42,7 @@ import org.apache.logging.log4j.Logger;
 import twilightforest.block.entity.JarBlockEntity;
 import twilightforest.api.TwilightForestApi;
 import twilightforest.command.TFCommand;
+import twilightforest.compat.OptionalCompat;
 import twilightforest.config.TFConfig;
 import twilightforest.dispenser.TFDispenserBehaviors;
 import twilightforest.entity.MagicPaintingVariant;
@@ -261,6 +262,7 @@ public final class TwilightForestMod implements ModInitializer {
 		TFDispenserBehaviors.init();
 		TFStats.init();
 		TFEventHandlers.register();
+		OptionalCompat.init();
 		TFCreativeTabs.registerVanillaTabs();
 
 		CauldronInteractionDispatcherAccessor twilightforest$waterCauldron = (CauldronInteractionDispatcherAccessor) (Object) CauldronInteractions.WATER;

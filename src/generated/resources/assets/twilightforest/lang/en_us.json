@@ -1939,5 +1939,13 @@
   "travellers_gear.modifier.twilightforest.water_walk": "Water Walk",
   "travellers_gear.modifier.twilightforest.water_walk.description": "Allows you to walk on Water",
   "travellers_gear.modifier.twilightforest.zoom": "Zoom (keybind: ${tfkeybinds/key.twilightforest.zoom})",
-  "travellers_gear.shift_info": "Hold %s for info"
+  "travellers_gear.shift_info": "Hold %s for info",
+  "config.waila.plugin_twilightforest.canopy_shelf_spawner": "Chiseled Canopy Bookshelf Spawns",
+  "config.waila.plugin_twilightforest.drying_rack": "Drying Rack Time",
+  "config.waila.plugin_twilightforest.quest_ram_missing_wool": "Quest Ram Missing Wool",
+  "wthit.twilightforest.canopy_shelf.spawns": "Spawns: %s",
+  "wthit.twilightforest.drying_rack.complete": "Drying complete",
+  "wthit.twilightforest.drying_rack.remaining": "%s remaining",
+  "wthit.twilightforest.quest_ram.complete": "All wool colors collected",
+  "wthit.twilightforest.quest_ram.missing": "Missing wool colors:"
 }

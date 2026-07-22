@@ -155,6 +155,14 @@ public class DryingRackBlockEntity extends BlockEntity {
 		return this.drying;
 	}
 
+	public int getDryTime() {
+		return this.dryTime;
+	}
+
+	public int getTotalDryTime() {
+		return this.totalDryTime;
+	}
+
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);

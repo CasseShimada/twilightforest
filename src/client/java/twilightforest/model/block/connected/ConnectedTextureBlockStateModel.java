@@ -60,7 +60,10 @@ public final class ConnectedTextureBlockStateModel implements BlockStateModel {
 
 	@Override
 	public void collectParts(RandomSource random, List<BlockStateModelPart> parts) {
-		parts.add(new ConnectedTexturePart());
+		BlockModelContext.Context ctx = BlockModelContext.get();
+		parts.add(new ConnectedTexturePart(ctx == null
+			? this.buildQuads(null, BlockPos.ZERO)
+			: this.buildQuads(ctx.level(), ctx.pos())));
 	}
 
 	@Override
@@ -152,13 +155,15 @@ public final class ConnectedTextureBlockStateModel implements BlockStateModel {
 	}
 
 	private final class ConnectedTexturePart implements BlockStateModelPart {
+		private final QuadCollection quads;
+
+		private ConnectedTexturePart(QuadCollection quads) {
+			this.quads = quads;
+		}
+
 		@Override
 		public List<BakedQuad> getQuads(@Nullable Direction direction) {
-			BlockModelContext.Context ctx = BlockModelContext.get();
-			if (ctx == null) {
-				return buildQuads(null, BlockPos.ZERO).getQuads(direction);
-			}
-			return buildQuads(ctx.level(), ctx.pos()).getQuads(direction);
+			return this.quads.getQuads(direction);
 		}
 
 		@Override

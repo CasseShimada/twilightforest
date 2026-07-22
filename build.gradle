@@ -28,14 +28,25 @@ tasks.withType(JavaCompile).configureEach {
 	options.release.set(25)
 }
 
+sourceSets.create("runtimeTestMod")
+
 loom {
 	accessWidenerPath = file("src/main/resources/${project.mod_id}.accesswidener")
 	splitEnvironmentSourceSets()
+	def isolatedRunDir = providers.gradleProperty("tfRunDir").getOrElse("run")
+	def runtimeProbe = providers.gradleProperty("tfRuntimeProbe").getOrElse("false")
+	def runtimeServerProbe = providers.gradleProperty("tfRuntimeServerProbe").getOrElse(runtimeProbe)
+	def runtimeScenario = providers.gradleProperty("tfRuntimeScenario").getOrElse("manual")
+	def runtimePass = providers.gradleProperty("tfRuntimePass").getOrElse("1")
+	def runtimeExpectedMods = providers.gradleProperty("tfRuntimeExpectedMods").getOrElse("")
 
 	mods {
 		"${project.mod_id}" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
+		}
+		"${project.mod_id}-runtime-test" {
+			sourceSet sourceSets.runtimeTestMod
 		}
 	}
 
@@ -44,14 +55,24 @@ loom {
 			client()
 			setConfigName("Client")
 			ideConfigGenerated(true)
-			runDir("run")
+			runDir(isolatedRunDir)
+			property("twilightforest.runtimeProbe", runtimeProbe)
+			property("twilightforest.runtimeServerProbe", runtimeServerProbe)
+			property("twilightforest.runtimeScenario", runtimeScenario)
+			property("twilightforest.runtimePass", runtimePass)
+			property("twilightforest.runtimeExpectedMods", runtimeExpectedMods)
 		}
 
 		server {
 			server()
 			setConfigName("Server")
 			ideConfigGenerated(true)
-			runDir("run")
+			runDir(isolatedRunDir)
+			property("twilightforest.runtimeProbe", runtimeProbe)
+			property("twilightforest.runtimeServerProbe", runtimeServerProbe)
+			property("twilightforest.runtimeScenario", runtimeScenario)
+			property("twilightforest.runtimePass", runtimePass)
+			property("twilightforest.runtimeExpectedMods", runtimeExpectedMods)
 		}
 	}
 }
@@ -66,6 +87,10 @@ fabricApi {
 }
 
 sourceSets {
+	compatApi {
+		java.srcDir 'src/compatApi/java'
+	}
+
 	main {
 		resources {
 			srcDir 'src/generated/resources'
@@ -82,6 +107,34 @@ sourceSets {
 		java.srcDir 'src/apiTestMod/java'
 		resources.srcDir 'src/apiTestMod/resources'
 	}
+
+	runtimeTestMod {
+		java.srcDir 'src/runtimeTestMod/java'
+	}
+}
+
+// Declaration-only snapshots of unpublished optional APIs. They compile compatibility code but
+// are deliberately outside every production/sources JAR and every Loom mod source set.
+sourceSets.compatApi.compileClasspath += configurations.compileClasspath
+sourceSets.main.compileClasspath += sourceSets.compatApi.output
+sourceSets.client.compileClasspath += sourceSets.compatApi.output
+sourceSets.test.compileClasspath += sourceSets.compatApi.output
+sourceSets.test.runtimeClasspath += sourceSets.compatApi.output
+sourceSets.runtimeTestMod.compileClasspath += sourceSets.main.output + sourceSets.client.output + sourceSets.client.compileClasspath + sourceSets.compatApi.output
+sourceSets.runtimeTestMod.runtimeClasspath += sourceSets.runtimeTestMod.output + sourceSets.main.output + sourceSets.client.output
+// The test mod participates only in Loom development launches. Adding its output to the
+// development runtime classpaths makes Fabric Loader discover its own fabric.mod.json;
+// Archive tasks continue to package only main/client sources.
+sourceSets.main.runtimeClasspath += sourceSets.runtimeTestMod.output
+sourceSets.client.runtimeClasspath += sourceSets.runtimeTestMod.output
+
+tasks.named("runServer") {
+	dependsOn tasks.named("runtimeTestModClasses")
+	classpath += sourceSets.runtimeTestMod.output
+}
+tasks.named("runClient") {
+	dependsOn tasks.named("runtimeTestModClasses")
+	classpath += sourceSets.runtimeTestMod.output
 }
 
 repositories {
@@ -145,19 +198,23 @@ tasks.named(sourceSets.apiTestMod.compileJavaTaskName, JavaCompile) {
 	classpath = apiConsumerClasspath
 }
 
+def expandedModVersion = version.toString()
+def expandedApiVersion = project.api_version.toString()
+def archiveBaseName = base.archivesName.get()
+
 processResources {
-	inputs.property "version", project.version
-	inputs.property "api_version", project.api_version
+	inputs.property "version", expandedModVersion
+	inputs.property "api_version", expandedApiVersion
 	exclude("**/.*")
 	filesMatching("fabric.mod.json") {
-		expand "version": project.version, "api_version": project.api_version
+		expand "version": expandedModVersion, "api_version": expandedApiVersion
 	}
 }
 
 jar {
 	exclude("**/.*")
 	from("LICENSE") {
-		rename { "${it}_${project.base.archivesName.get()}" }
+		rename { "${it}_${archiveBaseName}" }
 	}
 }
 
@@ -226,6 +283,38 @@ tasks.register("verifyResourceUnion") {
 
 		logger.lifecycle("Verified ${resources.size()} unique resources from ${packagedResourceRoots.count(File::exists)} roots in ${archive.name}")
 	}
+}
+
+tasks.register("verifyOptionalApiIsolation") {
+	group = "verification"
+	description = "Verifies declaration-only optional APIs and optional-mod classes are not bundled."
+	dependsOn tasks.named("jar"), tasks.named("sourcesJar")
+	inputs.files(tasks.named("jar").flatMap { it.archiveFile }, tasks.named("sourcesJar").flatMap { it.archiveFile })
+
+	doLast {
+		List<String> forbiddenPrefixes = [
+			"net/kyrptonaught/diggusmaximus/",
+			"tschipp/carryon/api/",
+			"mcp/mobius/waila/api/",
+			"lol/bai/badpackets/"
+		]
+		[tasks.named("jar").get().archiveFile.get().asFile, tasks.named("sourcesJar").get().archiveFile.get().asFile].each { archive ->
+			List<String> leaked = []
+			new java.util.zip.ZipFile(archive).withCloseable { zip ->
+				zip.entries().each { entry ->
+					if (forbiddenPrefixes.any { prefix -> entry.name.startsWith(prefix) }) leaked.add(entry.name)
+				}
+			}
+			if (!leaked.isEmpty()) {
+				throw new GradleException("${archive.name} bundles optional API/runtime classes:${System.lineSeparator()}${leaked.take(100).join(System.lineSeparator())}")
+			}
+		}
+	}
+}
+
+tasks.named("check") {
+	dependsOn tasks.named("verifyOptionalApiIsolation")
+	dependsOn tasks.named("runtimeTestModClasses")
 }
 
 def publicApiBaselineFile = file("src/test/resources/twilightforest/api/public-api-v1.txt")

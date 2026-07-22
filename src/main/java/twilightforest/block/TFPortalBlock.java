@@ -56,6 +56,7 @@ import twilightforest.util.landmarks.LandmarkUtil;
 import twilightforest.util.PlayerHelper;
 import twilightforest.util.PlayerMessaging;
 import twilightforest.world.TFTeleporter;
+import twilightforest.world.TeleporterCache;
 
 import java.util.*;
 
@@ -67,9 +68,6 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 	private static final VoxelShape AABB = Shapes.create(new AABB(0.0F, 0.0F, 0.0F, 1.0F, 0.8125F, 1.0F));
 	private static final int MIN_PORTAL_SIZE = 4;
 	private static final HashSet<ServerPlayer> playersNotified = new HashSet<>();
-	@Nullable
-	private static ResourceKey<Level> cachedOriginDimension;
-
 	public TFPortalBlock(BlockBehaviour.Properties properties) {
 		super(properties);
 		this.registerDefaultState(this.getStateDefinition().any().setValue(DISALLOW_RETURN, false));
@@ -228,6 +226,12 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 	}
 
 	@Override
+	protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean isMoving) {
+		TeleporterCache.get(level).invalidateContaining(level.dimension().identifier(), pos);
+		super.affectNeighborsAfterRemoval(state, level, pos, isMoving);
+	}
+
+	@Override
 	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean movedByPiston) {
 		if (state == this.defaultBlockState()) {
 			if (entity instanceof ServerPlayer player && !player.isCreative() && !player.isSpectator() && TFConfig.getPortalLockingAdvancement(player) != null) {
@@ -307,10 +311,20 @@ public class TFPortalBlock extends HalfTransparentBlock implements LiquidBlockCo
 
 	@Override
 	public TeleportTransition getPortalDestination(ServerLevel level, Entity entity, BlockPos pos) {
-		if (cachedOriginDimension == null) cachedOriginDimension = ResourceKey.create(Registries.DIMENSION, Identifier.parse(TFConfig.originDimension));
-		ResourceKey<Level> newDimension = !level.dimension().identifier().equals(TFDimension.DIMENSION) ? TFDimension.DIMENSION_KEY : cachedOriginDimension;
+		ResourceKey<Level> newDimension;
+		if (!level.dimension().identifier().equals(TFDimension.DIMENSION)) {
+			newDimension = TFDimension.DIMENSION_KEY;
+		} else {
+			try {
+				newDimension = ResourceKey.create(Registries.DIMENSION, Identifier.parse(TFConfig.originDimension));
+			} catch (RuntimeException exception) {
+				TwilightForestMod.LOGGER.error("Invalid Twilight Forest originDimension '{}'; expected a namespaced dimension id such as minecraft:overworld", TFConfig.originDimension, exception);
+				return null;
+			}
+		}
 		ServerLevel serverlevel = level.getServer().getLevel(newDimension);
 		if (serverlevel == null) {
+			TwilightForestMod.LOGGER.error("Twilight Forest portal destination '{}' is not loaded; check originDimension and installed dimension data", newDimension.identifier());
 			return null;
 		} else {
 			WorldBorder worldborder = serverlevel.getWorldBorder();

@@ -142,6 +142,8 @@ public class RegistrationEvents {
 		registerLateBound(SpecialModelRenderers.ID_MAPPER, SpecialModelRenderers.class,
 			TwilightForestMod.prefix("candelabra"), CandelabraSpecialRenderer.Unbaked.MAP_CODEC);
 		registerLateBound(SpecialModelRenderers.ID_MAPPER, SpecialModelRenderers.class,
+			TwilightForestMod.prefix("brazier"), BrazierSpecialRenderer.Unbaked.MAP_CODEC);
+		registerLateBound(SpecialModelRenderers.ID_MAPPER, SpecialModelRenderers.class,
 			TwilightForestMod.prefix("cicada"), CicadaSpecialRenderer.Unbaked.MAP_CODEC);
 		registerLateBound(SpecialModelRenderers.ID_MAPPER, SpecialModelRenderers.class,
 			TwilightForestMod.prefix("firefly"), FireflySpecialRenderer.Unbaked.MAP_CODEC);

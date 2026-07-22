@@ -1,7 +1,6 @@
 package twilightforest.compat.jade;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -20,8 +19,7 @@ public enum DryingRackDataProvider implements StreamServerDataProvider<BlockAcce
 			return null;
 		}
 
-		CompoundTag tag = rack.getUpdateTag(accessor.getLevel().registryAccess());
-		return new Data(tag.getIntOr("dry_time", 0), tag.getIntOr("total_dry_time", DryingRackBlockEntity.DEFAULT_DRYING_TIME));
+		return new Data(rack.getDryTime(), rack.getTotalDryTime());
 	}
 
 	@Override

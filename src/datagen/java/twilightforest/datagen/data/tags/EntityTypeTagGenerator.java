@@ -111,6 +111,10 @@ public final class EntityTypeTagGenerator extends FabricTagsProvider.EntityTypeT
 			.add(key(TFEntities.MOSQUITO_SWARM))
 			.add(key(TFEntities.TOWERWOOD_BORER));
 		this.builder(TFEntityTypeTags.BOSSES)
+			// Preserve the legacy tag's vanilla boss membership while migrating the
+			// resource path from entity_types to the 26.2 entity_type directory.
+			.add(key(EntityTypes.ENDER_DRAGON))
+			.add(key(EntityTypes.WITHER))
 			.add(key(TFEntities.NAGA))
 			.add(key(TFEntities.LICH))
 			.add(key(TFEntities.MINOSHROOM))

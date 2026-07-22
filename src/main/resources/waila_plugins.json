@@ -1,0 +1,12 @@
+{
+  "twilightforest:wthit": {
+    "entrypoints": {
+      "common": "twilightforest.compat.wthit.WthitCommonCompat",
+      "client": "twilightforest.compat.wthit.WthitClientCompat"
+    },
+    "side": "*",
+    "required": {
+      "wthit": ">=20.0.0"
+    }
+  }
+}

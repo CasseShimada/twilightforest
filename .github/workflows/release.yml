@@ -1,0 +1,151 @@
+name: Release Fabric build
+
+on:
+  push:
+    tags:
+      - "fabric-*"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build, verify, and publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "25"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Validate release identity
+        id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+          minecraft_version="$(sed -n 's/^minecraft_version=//p' gradle.properties)"
+          mod_version="$(sed -n 's/^mod_version=//p' gradle.properties)"
+          expected_tag="fabric-${minecraft_version}-${mod_version}"
+          if [[ "${GITHUB_REF_NAME}" != "${expected_tag}" ]]; then
+            echo "Expected tag ${expected_tag}, received ${GITHUB_REF_NAME}" >&2
+            exit 1
+          fi
+          if [[ "${mod_version}" == *-* ]]; then
+            prerelease=true
+          else
+            prerelease=false
+          fi
+          archive_base="twilightforest-${minecraft_version}-fabric-${mod_version}"
+          {
+            echo "minecraft_version=${minecraft_version}"
+            echo "mod_version=${mod_version}"
+            echo "tag=${expected_tag}"
+            echo "archive_base=${archive_base}"
+            echo "prerelease=${prerelease}"
+          } >> "${GITHUB_OUTPUT}"
+
+      - name: Verify generated resources are current
+        shell: bash
+        run: |
+          chmod +x gradlew
+          ./gradlew runDatagen --warning-mode all --console=plain
+          git diff --exit-code -- src/generated
+
+      - name: Clean build and test
+        shell: bash
+        run: ./gradlew clean build --warning-mode all --console=plain
+
+      - name: Inspect release archives
+        id: archives
+        env:
+          ARCHIVE_BASE: ${{ steps.release.outputs.archive_base }}
+          MOD_VERSION: ${{ steps.release.outputs.mod_version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          binary="build/libs/${ARCHIVE_BASE}.jar"
+          sources="build/libs/${ARCHIVE_BASE}-sources.jar"
+          test -f "${binary}"
+          test -f "${sources}"
+
+          packaged_version="$(unzip -p "${binary}" fabric.mod.json | python3 -c 'import json,sys; print(json.load(sys.stdin)["version"])')"
+          if [[ "${packaged_version}" != "${MOD_VERSION}" ]]; then
+            echo "fabric.mod.json has ${packaged_version}, expected ${MOD_VERSION}" >&2
+            exit 1
+          fi
+
+          unzip -Z1 "${binary}" > build/release-binary-entries.txt
+          unzip -Z1 "${sources}" > build/release-sources-entries.txt
+          forbidden='^(net/kyrptonaught/diggusmaximus/|tschipp/carryon/api/|mcp/mobius/waila/api/|lol/bai/badpackets/|twilightforest/(client|world)/RuntimeCompat|twilightforest/world/Runtime(Diggus|CarryOn))'
+          if grep -E "${forbidden}" build/release-binary-entries.txt build/release-sources-entries.txt; then
+            echo "Release archives contain optional API declarations or runtime-test classes" >&2
+            exit 1
+          fi
+
+          for required in fabric.mod.json twilightforest.accesswidener twilightforest.mixins.json waila_plugins.json; do
+            grep -Fxq "${required}" build/release-binary-entries.txt
+          done
+
+          mkdir -p build/release
+          cp "${binary}" "${sources}" build/release/
+          (
+            cd build/release
+            sha256sum "$(basename "${binary}")" "$(basename "${sources}")" > SHA256SUMS.txt
+          )
+          awk '
+            /^## \[/ { if (seen++) exit }
+            seen { print }
+          ' CHANGELOG.md > build/release/RELEASE_NOTES.md
+          test -s build/release/RELEASE_NOTES.md
+          echo "binary=$(basename "${binary}")" >> "${GITHUB_OUTPUT}"
+          echo "sources=$(basename "${sources}")" >> "${GITHUB_OUTPUT}"
+
+      - name: Upload verified workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.release.outputs.tag }}
+          if-no-files-found: error
+          path: |
+            build/release/${{ steps.archives.outputs.binary }}
+            build/release/${{ steps.archives.outputs.sources }}
+            build/release/SHA256SUMS.txt
+            build/release/RELEASE_NOTES.md
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.release.outputs.tag }}
+          PRERELEASE: ${{ steps.release.outputs.prerelease }}
+          BINARY: ${{ steps.archives.outputs.binary }}
+          SOURCES: ${{ steps.archives.outputs.sources }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          args=(
+            "${TAG}"
+            --verify-tag
+            --title "Twilight Forest ${TAG}"
+            --notes-file build/release/RELEASE_NOTES.md
+          )
+          if [[ "${PRERELEASE}" == "true" ]]; then
+            args+=(--prerelease)
+          fi
+          gh release create "${args[@]}" \
+            "build/release/${BINARY}" \
+            "build/release/${SOURCES}" \
+            build/release/SHA256SUMS.txt

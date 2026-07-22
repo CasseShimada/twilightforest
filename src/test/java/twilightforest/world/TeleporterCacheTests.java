@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -180,8 +181,121 @@ class TeleporterCacheTests {
 		assertTrue(source.contains("twilightforest$getDataFolder"));
 	}
 
+	@Test
+	void exactBidirectionalLinksKeepNearbyAndStackedPortalsSeparate() {
+		TeleporterCache cache = new TeleporterCache();
+		Identifier overworld = Identifier.parse("minecraft:overworld");
+		TeleporterCache.PortalEndpoint lowerA = endpoint(overworld, 10, 64, 10, 11L);
+		TeleporterCache.PortalEndpoint lowerB = endpoint(TWILIGHT_FOREST, 12, 32, 10, 12L);
+		TeleporterCache.PortalEndpoint nearbyA = endpoint(overworld, 14, 64, 10, 13L);
+		TeleporterCache.PortalEndpoint nearbyB = endpoint(TWILIGHT_FOREST, 16, 32, 10, 14L);
+		TeleporterCache.PortalEndpoint stackedA = endpoint(overworld, 10, 112, 10, 15L);
+		TeleporterCache.PortalEndpoint stackedB = endpoint(TWILIGHT_FOREST, 12, 80, 10, 16L);
+
+		assertTrue(cache.link(lowerA, lowerB));
+		assertTrue(cache.link(nearbyA, nearbyB));
+		assertTrue(cache.link(stackedA, stackedB));
+		assertEquals(lowerB, cache.getLinkedPortal(lowerA, TWILIGHT_FOREST));
+		assertEquals(lowerA, cache.getLinkedPortal(lowerB, overworld));
+		assertEquals(nearbyB, cache.getLinkedPortal(nearbyA, TWILIGHT_FOREST));
+		assertEquals(stackedB, cache.getLinkedPortal(stackedA, TWILIGHT_FOREST));
+		assertFalse(cache.link(nearbyA, lowerB), "an already paired target must never be stolen by a nearby portal");
+	}
+
+	@Test
+	void invalidationRemovesBothDirectionsAndAllowsCleanRelink() {
+		TeleporterCache cache = new TeleporterCache();
+		Identifier overworld = Identifier.parse("minecraft:overworld");
+		TeleporterCache.PortalEndpoint first = endpoint(overworld, 15, 64, 15, 21L);
+		TeleporterCache.PortalEndpoint second = endpoint(TWILIGHT_FOREST, 31, 32, 31, 22L);
+		TeleporterCache.PortalEndpoint replacement = endpoint(TWILIGHT_FOREST, 47, 32, 47, 23L);
+
+		assertTrue(cache.link(first, second));
+		cache.invalidateContaining(TWILIGHT_FOREST, second.anchor().east());
+		assertNull(cache.getLinkedPortal(first));
+		assertNull(cache.getLinkedPortal(second));
+		assertTrue(cache.link(first, replacement));
+		assertEquals(replacement, cache.getLinkedPortal(first));
+	}
+
+	@Test
+	void versionTwoRoundTripIsIdempotentAndPreservesCrossChunkLinks() {
+		Identifier overworld = Identifier.parse("minecraft:overworld");
+		TeleporterCache cache = new TeleporterCache();
+		TeleporterCache.PortalEndpoint source = endpoint(overworld, 15, 70, 15, 31L);
+		TeleporterCache.PortalEndpoint destination = endpoint(TWILIGHT_FOREST, -17, 40, -17, 32L);
+		assertTrue(cache.link(source, destination));
+
+		CompoundTag once = cache.save(new CompoundTag());
+		TeleporterCache restarted = TeleporterCache.load(once);
+		CompoundTag twice = restarted.save(new CompoundTag());
+		TeleporterCache restartedAgain = TeleporterCache.load(twice);
+
+		assertEquals(destination, restartedAgain.getLinkedPortal(source, TWILIGHT_FOREST));
+		assertEquals(source, restartedAgain.getLinkedPortal(destination, overworld));
+		assertEquals(once, twice, "loading and saving the current format must be idempotent");
+	}
+
+	@Test
+	void legacyColumnHintsAreOneShotAndCannotBecomeAliases() {
+		TeleporterCache cache = new TeleporterCache();
+		ColumnPos first = new ColumnPos(5, 6);
+		ColumnPos second = new ColumnPos(6, 6);
+		TFTeleporter.PortalPosition target = new TFTeleporter.PortalPosition(new net.minecraft.core.BlockPos(20, 30, 40), 50L);
+		cache.addBlockToCache(TWILIGHT_FOREST, first, target);
+		cache.addBlockToCache(TWILIGHT_FOREST, second, target);
+
+		assertEquals(target, cache.consumeLegacyHint(TWILIGHT_FOREST, Set.of(first, second)));
+		assertNull(cache.consumeLegacyHint(TWILIGHT_FOREST, Set.of(first, second)));
+	}
+
+	@Test
+	void nearestIndexUsesHorizontalRadiusButKeepsFullEndpointIdentity() {
+		TeleporterCache cache = new TeleporterCache();
+		TeleporterCache.PortalEndpoint low = endpoint(TWILIGHT_FOREST, 0, 20, 0, 41L);
+		TeleporterCache.PortalEndpoint high = endpoint(TWILIGHT_FOREST, 0, 120, 0, 42L);
+		TeleporterCache.PortalEndpoint outside = endpoint(TWILIGHT_FOREST, 201, 20, 0, 43L);
+		cache.registerPortal(low);
+		cache.registerPortal(high);
+		cache.registerPortal(outside);
+
+		assertEquals(Set.of(low, high), Set.copyOf(cache.nearestIndexedPortals(TWILIGHT_FOREST, new net.minecraft.core.BlockPos(0, 64, 0), 200)));
+	}
+
+	@Test
+	void endpointSnapshotsMutablePositionsAndRejectsPathologicalChunkBounds() {
+		net.minecraft.core.BlockPos.MutableBlockPos mutable = new net.minecraft.core.BlockPos.MutableBlockPos(1, 64, 1);
+		TeleporterCache.PortalEndpoint endpoint = new TeleporterCache.PortalEndpoint(
+			TWILIGHT_FOREST, mutable, 1, 51L, mutable, mutable);
+		mutable.set(200, 90, 200);
+		assertEquals(new net.minecraft.core.BlockPos(1, 64, 1), endpoint.anchor());
+
+		assertThrows(IllegalArgumentException.class, () -> new TeleporterCache.PortalEndpoint(
+			TWILIGHT_FOREST,
+			new net.minecraft.core.BlockPos(0, 64, 0),
+			4096,
+			52L,
+			new net.minecraft.core.BlockPos(0, 64, 0),
+			new net.minecraft.core.BlockPos(2047, 64, 2048)));
+	}
+
+	@Test
+	void fallbackPortalSearchOnlyInspectsLoadedChunksWithSectionPaletteFiltering() throws IOException {
+		String source = Files.readString(Path.of("src/main/java/twilightforest/world/TFTeleporter.java"));
+		String search = source.substring(source.indexOf("private static List<PortalShape> findLoadedPortals"),
+			source.indexOf("static PortalShape resolvePortalShape"));
+		assertTrue(search.contains("getChunkNow"));
+		assertTrue(search.contains("section.maybeHas"));
+		assertFalse(search.contains("level.getChunk("), "fallback discovery must not create chunk tickets");
+	}
+
 	private static SavedDataStorage storage(Path dataFolder) {
 		return new SavedDataStorage(dataFolder, DataFixers.getDataFixer(), RegistryAccess.EMPTY);
+	}
+
+	private static TeleporterCache.PortalEndpoint endpoint(Identifier dimension, int x, int y, int z, long fingerprint) {
+		net.minecraft.core.BlockPos anchor = new net.minecraft.core.BlockPos(x, y, z);
+		return new TeleporterCache.PortalEndpoint(dimension, anchor, 4, fingerprint, anchor, anchor.offset(1, 0, 1));
 	}
 
 	private static void assertPortal(TeleporterCache cache, int x, int z, long position, long time) {

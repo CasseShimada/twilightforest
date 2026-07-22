@@ -45,7 +45,19 @@ public class PatchModel implements BlockStateModel {
 
 	@Override
 	public void collectParts(RandomSource random, List<BlockStateModelPart> output) {
-		output.add(new PatchPart(random.nextLong()));
+		BlockModelContext.Context ctx = BlockModelContext.get();
+		boolean north = false;
+		boolean east = false;
+		boolean south = false;
+		boolean west = false;
+		if (ctx != null) {
+			var state = ctx.state();
+			north = state.getValue(PatchBlock.NORTH);
+			east = state.getValue(PatchBlock.EAST);
+			south = state.getValue(PatchBlock.SOUTH);
+			west = state.getValue(PatchBlock.WEST);
+		}
+		output.add(new PatchPart(this.buildQuads(north, east, south, west, RandomSource.create(random.nextLong()))));
 	}
 
 	@Override
@@ -197,28 +209,15 @@ public class PatchModel implements BlockStateModel {
 	}
 
 	private final class PatchPart implements BlockStateModelPart {
-		private final long seed;
+		private final QuadCollection quads;
 
-		private PatchPart(long seed) {
-			this.seed = seed;
+		private PatchPart(QuadCollection quads) {
+			this.quads = quads;
 		}
 
 		@Override
 		public List<BakedQuad> getQuads(Direction direction) {
-			BlockModelContext.Context ctx = BlockModelContext.get();
-			boolean north = false;
-			boolean east = false;
-			boolean south = false;
-			boolean west = false;
-			if (ctx != null) {
-				var state = ctx.state();
-				north = state.getValue(PatchBlock.NORTH);
-				east = state.getValue(PatchBlock.EAST);
-				south = state.getValue(PatchBlock.SOUTH);
-				west = state.getValue(PatchBlock.WEST);
-			}
-			RandomSource seeded = RandomSource.create(seed);
-			return buildQuads(north, east, south, west, seeded).getQuads(direction);
+			return this.quads.getQuads(direction);
 		}
 
 		@Override

@@ -63,7 +63,9 @@ public record SkullCandleSpecialRenderer(
 			ItemStack candleStack = new ItemStack(AbstractSkullCandleBlock.candleColorToCandle(AbstractSkullCandleBlock.CandleColors.colorFromInt(candles.color())));
 			resolver.updateForTopItem(candleRenderState, candleStack, net.minecraft.world.item.ItemDisplayContext.FIXED, null, null, 0);
 			poseStack.pushPose();
-			poseStack.translate(0.0F, 0.5F, 0.0F);
+			// The vanilla skull item transformation rotates model space 180 degrees around X.
+			// A negative local Y offset therefore places the candle above the rendered skull.
+			poseStack.translate(0.0F, -0.5F, 0.0F);
 			candleRenderState.submit(poseStack, nodeCollector, packedLight, packedOverlay, outlineColor);
 			poseStack.popPose();
 		}
@@ -72,13 +74,14 @@ public record SkullCandleSpecialRenderer(
 	@Override
 	public void getExtents(Consumer<Vector3fc> output) {
 		PoseStack poseStack = new PoseStack();
-		poseStack.translate(0.5F, 0.0F, 0.5F);
-		poseStack.scale(-1.0F, -1.0F, 1.0F);
+		net.minecraft.client.model.object.skull.SkullModelBase.State modelState = new net.minecraft.client.model.object.skull.SkullModelBase.State();
+		modelState.animationPos = this.animation;
+		this.model.setupAnim(modelState);
 		this.model.root().getExtentsForGui(poseStack, output);
 
-		// Include candle bounds roughly (block AABB shifted up).
-		output.accept(new org.joml.Vector3f(0.0F, 0.5F, 0.0F));
-		output.accept(new org.joml.Vector3f(1.0F, 1.5F, 1.0F));
+		// Include the candle in the same pre-rotation coordinate space used by submit().
+		output.accept(new org.joml.Vector3f(-0.5F, -1.0F, -0.5F));
+		output.accept(new org.joml.Vector3f(0.5F, 0.0F, 0.5F));
 	}
 
 	public record Unbaked(SkullBlock.Type kind, Optional<Identifier> textureOverride, float animation) implements SpecialModelRenderer.Unbaked<Pair<ResolvableProfile, SkullCandles>> {

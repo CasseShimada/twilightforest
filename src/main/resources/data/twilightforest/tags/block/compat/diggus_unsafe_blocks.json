@@ -1,0 +1,9 @@
+{
+  "values": [
+    "#twilightforest:compat/carryon_unsafe_blocks",
+    "#twilightforest:compat/carryon_safe_blocks",
+    "twilightforest:cicada",
+    "twilightforest:firefly",
+    "twilightforest:moonworm"
+  ]
+}

@@ -6,7 +6,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ColumnPos;
-import net.minecraft.server.level.FullChunkStatus;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.TicketType;
 import net.minecraft.tags.BlockTags;
@@ -19,12 +18,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.apache.commons.lang3.mutable.MutableInt;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.TFPortalBlock;
@@ -43,6 +42,12 @@ import java.util.*;
 import java.util.function.Predicate;
 
 public class TFTeleporter {
+	private static final int PORTAL_SEARCH_RADIUS = 200;
+	private static final int MIN_PORTAL_BLOCKS = 4;
+	private static final Comparator<BlockPos> PORTAL_BLOCK_ORDER = Comparator
+		.comparingInt((BlockPos block) -> block.getY())
+		.thenComparingInt(block -> block.getX())
+		.thenComparingInt(block -> block.getZ());
 
 	public static TeleportTransition createTransition(Entity entity, ServerLevel dest, BlockPos pos, boolean forcedEntry) {
 		TeleportTransition transition;
@@ -67,126 +72,266 @@ public class TFTeleporter {
 
 	@Nullable
 	protected static TeleportTransition placeInExistingPortal(TeleporterCache cache, ServerLevel destDim, Entity entity, BlockPos pos) {
-		boolean flag = true;
-		BlockPos blockpos;
-		ColumnPos columnPos = new ColumnPos(entity.blockPosition().getX(), entity.blockPosition().getZ()); // Must be the position from the src dim
-
-		PortalPosition portalPosition = cache.getPortalPosition(destDim.dimension().identifier(), columnPos);
-		if (portalPosition != null) {
-			blockpos = portalPosition.pos;
-			portalPosition.lastUpdateTime = destDim.getGameTime();
-			flag = false;
-			// Validate that the Portal still exists
-			TwilightForestMod.LOGGER.debug("Using cache, validating. {}", blockpos);
-			if (blockpos == null || !destDim.getBlockState(blockpos).is(TFBlocks.TWILIGHT_PORTAL)) {
-				// Portal was broken, we need to recreate it.
-				TwilightForestMod.LOGGER.debug("Portal Invalid, recreating.");
-				blockpos = null;
-				cache.removeInvalidPos(destDim.dimension().identifier(), columnPos);
-			}
-		} else {
-			//BlockPos blockpos3 = new BlockPos(entity);
-			blockpos = getPortalPosition(destDim, pos);
-		}
-
-		if (blockpos == null) {
+		if (!(entity.level() instanceof ServerLevel sourceLevel)) {
 			return null;
-		} else {
-			if (flag) {
-				TwilightForestMod.LOGGER.debug("Caching Src Portal Blocks to {}", blockpos);
-				Map<BlockPos, Boolean> portalBlocks = new HashMap<>();
-				portalBlocks.put(entity.blockPosition(), true);
-				TFPortalBlock.recursivelyValidatePortal(entity.level(), entity.blockPosition(), portalBlocks, new MutableInt(0), entity.level().getBlockState(entity.blockPosition()));
-				BlockPos finalBlockpos = blockpos;
-				portalBlocks.forEach((blockPos, b) -> {
-					if (b) {
-						TwilightForestMod.LOGGER.debug("Caching {}", blockPos);
-						cache.addBlockToCache(destDim.dimension().identifier(), new ColumnPos(blockPos.getX(), blockPos.getZ()), new PortalPosition(finalBlockpos, destDim.getGameTime()));
-					}
-				});
-				// the last param is just an object for tracking, don't worry about it using columnPos instead of blockpos
-				destDim.getChunkSource().addTicketWithRadius(TicketType.PORTAL, ChunkPos.containing(blockpos), 3);
-			}
-
-			// replace with our own placement logic
-			BlockPos[] portalBorder = getBoundaryPositions(destDim, blockpos).toArray(new BlockPos[0]);
-			BlockPos borderPos;
-			if (portalBorder.length > 0) {
-				borderPos = portalBorder[destDim.getRandom().nextInt(portalBorder.length)];
-			} else {
-				borderPos = blockpos;
-			}
-
-			double portalX = borderPos.getX() + 0.5;
-			double portalY = borderPos.getY() + 1.0;
-			double portalZ = borderPos.getZ() + 0.5;
-
-			return makePortalInfo(destDim, entity, portalX, portalY, portalZ);
 		}
+
+		PortalShape source = resolvePortalShape(sourceLevel, entity.blockPosition());
+		if (source == null) {
+			TwilightForestMod.LOGGER.warn("Could not resolve a Twilight Forest portal shape around {} in {}; refusing to create an ambiguous return link",
+				entity.blockPosition().toShortString(), sourceLevel.dimension().identifier());
+			return null;
+		}
+		cache.registerPortal(source.endpoint());
+
+		PortalShape target = findLinkedTarget(cache, source, destDim);
+		if (target == null) {
+			PortalPosition legacy = cache.consumeLegacyHint(destDim.dimension().identifier(), source.columns());
+			if (legacy != null) {
+				target = resolvePortalShape(destDim, legacy.pos);
+				if (target == null || !cache.isAvailableFor(target.endpoint(), source.endpoint()) || !cache.link(source.endpoint(), target.endpoint())) {
+					target = null;
+				}
+			}
+		}
+		if (target == null) {
+			target = findIndexedTarget(cache, source, destDim, pos);
+		}
+		if (target == null) {
+			for (PortalShape candidate : findLoadedPortals(destDim, pos, PORTAL_SEARCH_RADIUS)) {
+				if (cache.isAvailableFor(candidate.endpoint(), source.endpoint()) && cache.link(source.endpoint(), candidate.endpoint())) {
+					target = candidate;
+					break;
+				}
+			}
+		}
+
+		if (target == null) {
+			return null;
+		}
+
+		BlockPos anchor = target.endpoint().anchor();
+		destDim.getChunkSource().addTicketWithRadius(TicketType.PORTAL, ChunkPos.containing(anchor), 3);
+		BlockPos[] portalBorder = getBoundaryPositions(destDim, target.blocks()).toArray(new BlockPos[0]);
+		BlockPos borderPos = portalBorder.length > 0
+			? portalBorder[destDim.getRandom().nextInt(portalBorder.length)]
+			: anchor;
+		return makePortalInfo(destDim, entity, borderPos.getX() + 0.5, borderPos.getY() + 1.0, borderPos.getZ() + 0.5);
 	}
 
 	@Nullable
-	private static BlockPos getPortalPosition(ServerLevel destDim, BlockPos pos) {
-		int i = 200; // scan radius up to 200, and also un-inline this variable back into below
-		double d0 = Double.MAX_VALUE;
-		BlockPos result = null;
+	private static PortalShape findLinkedTarget(TeleporterCache cache, PortalShape source, ServerLevel destination) {
+		TeleporterCache.PortalEndpoint linked = cache.getLinkedPortal(source.endpoint(), destination.dimension().identifier());
+		if (linked == null) {
+			TeleporterCache.PortalEndpoint wrongDimension = cache.getLinkedPortal(source.endpoint());
+			if (wrongDimension != null) {
+				cache.invalidate(source.endpoint());
+				cache.registerPortal(source.endpoint());
+			}
+			return null;
+		}
+		loadEndpointChunks(destination, linked);
+		PortalShape target = readPortalShape(destination, linked.anchor());
+		if (target == null || !target.endpoint().equals(linked)) {
+			TwilightForestMod.LOGGER.debug("Invalidating stale portal link from {} to {}", source.endpoint().anchor(), linked.anchor());
+			cache.invalidate(source.endpoint());
+			cache.registerPortal(source.endpoint());
+			return null;
+		}
+		return target;
+	}
 
-		for (int i1 = -i; i1 <= i; ++i1) {
-			BlockPos blockpos2;
+	@Nullable
+	private static PortalShape findIndexedTarget(TeleporterCache cache, PortalShape source, ServerLevel destination, BlockPos near) {
+		for (TeleporterCache.PortalEndpoint endpoint : cache.nearestIndexedPortals(destination.dimension().identifier(), near, PORTAL_SEARCH_RADIUS)) {
+			if (!cache.isAvailableFor(endpoint, source.endpoint()) || !areEndpointChunksLoaded(destination, endpoint)) {
+				continue;
+			}
+			PortalShape candidate = readPortalShape(destination, endpoint.anchor());
+			if (candidate == null || !candidate.endpoint().equals(endpoint)) {
+				cache.invalidate(endpoint);
+				continue;
+			}
+			if (cache.link(source.endpoint(), candidate.endpoint())) {
+				return candidate;
+			}
+		}
+		return null;
+	}
 
-			for (int j1 = -i; j1 <= i; ++j1) {
+	private static List<PortalShape> findLoadedPortals(ServerLevel level, BlockPos center, int radius) {
+		int minChunkX = (center.getX() - radius) >> 4;
+		int maxChunkX = (center.getX() + radius) >> 4;
+		int minChunkZ = (center.getZ() - radius) >> 4;
+		int maxChunkZ = (center.getZ() + radius) >> 4;
+		long radiusSquared = (long) radius * radius;
+		Map<BlockPos, PortalShape> shapes = new HashMap<>();
 
-				// skip positions outside current world border (MC-114796)
-				if (!destDim.getWorldBorder().isWithinBounds(pos.offset(i1, 0, j1))) {
+		for (int chunkX = minChunkX; chunkX <= maxChunkX; chunkX++) {
+			for (int chunkZ = minChunkZ; chunkZ <= maxChunkZ; chunkZ++) {
+				LevelChunk chunk = level.getChunkSource().getChunkNow(chunkX, chunkZ);
+				if (chunk == null) {
 					continue;
 				}
-
-				ChunkPos chunkPos = ChunkPos.containing(pos.offset(i1, 0, j1));
-				LevelChunk chunk = destDim.getChunkSource().getChunkNow(chunkPos.x(), chunkPos.z());
-
-				// skip chunks that aren't generated
-				if (chunk == null || chunk.getFullStatus() == FullChunkStatus.INACCESSIBLE) {
-					continue;
-				}
-
-				for (BlockPos blockpos1 = pos.offset(i1, getScanHeight(destDim, pos) - pos.getY(), j1); blockpos1.getY() >= destDim.getMinY(); blockpos1 = blockpos2) {
-					blockpos2 = blockpos1.below();
-
-					// don't lookup state if inner condition would fail
-					if (d0 >= 0.0D && blockpos1.distSqr(pos) >= d0) {
+				LevelChunkSection[] sections = chunk.getSections();
+				for (int sectionIndex = 0; sectionIndex < sections.length; sectionIndex++) {
+					LevelChunkSection section = sections[sectionIndex];
+					if (!section.maybeHas(TFTeleporter::isPortal)) {
 						continue;
 					}
-
-					// use our portal block
-					if (isPortal(chunk.getBlockState(blockpos1))) {
-						for (blockpos2 = blockpos1.below(); isPortal(chunk.getBlockState(blockpos2)); blockpos2 = blockpos2.below()) {
-							blockpos1 = blockpos2;
-						}
-
-						float d1 = (float) blockpos1.distSqr(pos);
-						if (d0 < 0.0D || d1 < d0) {
-							d0 = d1;
-							result = blockpos1;
-							// restrict search radius to new distance
-							i = Mth.ceil(Mth.sqrt(d1));
+					int baseY = chunk.getSectionYFromSectionIndex(sectionIndex) << 4;
+					for (int localY = 0; localY < 16; localY++) {
+						for (int localX = 0; localX < 16; localX++) {
+							for (int localZ = 0; localZ < 16; localZ++) {
+								if (!isPortal(section.getBlockState(localX, localY, localZ))) {
+									continue;
+								}
+								BlockPos seed = new BlockPos((chunkX << 4) + localX, baseY + localY, (chunkZ << 4) + localZ);
+								long dx = (long) seed.getX() - center.getX();
+								long dz = (long) seed.getZ() - center.getZ();
+								if (dx * dx + dz * dz > radiusSquared || !level.getWorldBorder().isWithinBounds(seed)) {
+									continue;
+								}
+								PortalShape shape = readPortalShape(level, seed);
+								if (shape != null) {
+									shapes.putIfAbsent(shape.endpoint().anchor(), shape);
+								}
+							}
 						}
 					}
 				}
 			}
 		}
-		return result;
+
+		return shapes.values().stream()
+			.sorted(Comparator.comparingDouble((PortalShape shape) -> shape.endpoint().anchor().distSqr(center))
+				.thenComparing(shape -> shape.endpoint().anchor(), PORTAL_BLOCK_ORDER))
+			.toList();
 	}
 
-	private static int getScanHeight(ServerLevel world, BlockPos pos) {
-		return getScanHeight(world, pos.getX(), pos.getZ());
+	@Nullable
+	static PortalShape resolvePortalShape(ServerLevel level, BlockPos hint) {
+		for (int verticalOffset = -2; verticalOffset <= 1; verticalOffset++) {
+			for (int radius = 0; radius <= 2; radius++) {
+				for (int offsetX = -radius; offsetX <= radius; offsetX++) {
+					for (int offsetZ = -radius; offsetZ <= radius; offsetZ++) {
+						if (Math.max(Math.abs(offsetX), Math.abs(offsetZ)) != radius) {
+							continue;
+						}
+						BlockPos seed = hint.offset(offsetX, verticalOffset, offsetZ);
+						BlockState state = getLoadedBlockState(level, seed);
+						if (state != null && isPortal(state)) {
+							return readPortalShape(level, seed);
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	@Nullable
+	private static PortalShape readPortalShape(ServerLevel level, BlockPos seed) {
+		BlockState seedState = getLoadedBlockState(level, seed);
+		if (seedState == null || !isPortal(seedState)) {
+			return null;
+		}
+
+		int limit = Math.min(4096, Math.max(4, TFConfig.maxPortalSize));
+		Set<BlockPos> blocks = new HashSet<>();
+		ArrayDeque<BlockPos> queue = new ArrayDeque<>();
+		blocks.add(seed.immutable());
+		queue.add(seed.immutable());
+		while (!queue.isEmpty()) {
+			BlockPos current = queue.removeFirst();
+			for (Direction direction : Direction.Plane.HORIZONTAL) {
+				BlockPos adjacent = current.relative(direction);
+				BlockState adjacentState = getLoadedBlockState(level, adjacent);
+				if (adjacentState == null) {
+					// Full-shape validation cannot be proven across an unloaded chunk edge.
+					return null;
+				}
+				if (isPortal(adjacentState) && blocks.add(adjacent.immutable())) {
+					if (blocks.size() > limit) {
+						TwilightForestMod.LOGGER.warn("Ignoring oversized Twilight Forest portal near {} (configured maximum {})", seed.toShortString(), limit);
+						return null;
+					}
+					queue.addLast(adjacent.immutable());
+				}
+			}
+		}
+		if (blocks.size() < MIN_PORTAL_BLOCKS) {
+			return null;
+		}
+
+		List<BlockPos> ordered = blocks.stream().sorted(PORTAL_BLOCK_ORDER).toList();
+		BlockPos anchor = ordered.getFirst();
+		int minX = ordered.stream().mapToInt(BlockPos::getX).min().orElseThrow();
+		int minY = ordered.stream().mapToInt(BlockPos::getY).min().orElseThrow();
+		int minZ = ordered.stream().mapToInt(BlockPos::getZ).min().orElseThrow();
+		int maxX = ordered.stream().mapToInt(BlockPos::getX).max().orElseThrow();
+		int maxY = ordered.stream().mapToInt(BlockPos::getY).max().orElseThrow();
+		int maxZ = ordered.stream().mapToInt(BlockPos::getZ).max().orElseThrow();
+		long fingerprint = 0xcbf29ce484222325L;
+		for (BlockPos block : ordered) {
+			fingerprint = mixFingerprint(fingerprint, block.getX() - anchor.getX());
+			fingerprint = mixFingerprint(fingerprint, block.getY() - anchor.getY());
+			fingerprint = mixFingerprint(fingerprint, block.getZ() - anchor.getZ());
+			BlockState state = getLoadedBlockState(level, block);
+			fingerprint = mixFingerprint(fingerprint,
+				state != null && state.getValue(TFPortalBlock.DISALLOW_RETURN) ? 1 : 0);
+		}
+
+		TeleporterCache.PortalEndpoint endpoint = new TeleporterCache.PortalEndpoint(
+			level.dimension().identifier(), anchor, ordered.size(), fingerprint,
+			new BlockPos(minX, minY, minZ), new BlockPos(maxX, maxY, maxZ));
+		return new PortalShape(endpoint, blocks);
+	}
+
+	private static long mixFingerprint(long hash, long value) {
+		for (int shift = 0; shift < Long.SIZE; shift += Byte.SIZE) {
+			hash ^= value >>> shift & 0xffL;
+			hash *= 0x100000001b3L;
+		}
+		return hash;
+	}
+
+	@Nullable
+	private static BlockState getLoadedBlockState(ServerLevel level, BlockPos pos) {
+		LevelChunk chunk = level.getChunkSource().getChunkNow(pos.getX() >> 4, pos.getZ() >> 4);
+		return chunk == null ? null : chunk.getBlockState(pos);
+	}
+
+	private static boolean areEndpointChunksLoaded(ServerLevel level, TeleporterCache.PortalEndpoint endpoint) {
+		// Shape validation inspects the horizontal neighbours of every portal block. Include that
+		// one-block halo so a portal on a chunk edge is never rejected merely because getChunkNow
+		// cannot see the adjacent chunk.
+		for (int chunkX = (endpoint.min().getX() - 1) >> 4; chunkX <= (endpoint.max().getX() + 1) >> 4; chunkX++) {
+			for (int chunkZ = (endpoint.min().getZ() - 1) >> 4; chunkZ <= (endpoint.max().getZ() + 1) >> 4; chunkZ++) {
+				if (level.getChunkSource().getChunkNow(chunkX, chunkZ) == null) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	private static void loadEndpointChunks(ServerLevel level, TeleporterCache.PortalEndpoint endpoint) {
+		for (int chunkX = (endpoint.min().getX() - 1) >> 4; chunkX <= (endpoint.max().getX() + 1) >> 4; chunkX++) {
+			for (int chunkZ = (endpoint.min().getZ() - 1) >> 4; chunkZ <= (endpoint.max().getZ() + 1) >> 4; chunkZ++) {
+				level.getChunk(chunkX, chunkZ);
+			}
+		}
 	}
 
 	private static int getScanHeight(ServerLevel world, int x, int z) {
-		int worldHeight = world.getMaxY() - 1;
-		//FIXME find an alternative to getHighestSectionPosition, its marked for removal
+		LevelChunk chunk = world.getChunkSource().getChunkNow(x >> 4, z >> 4);
+		if (chunk == null) {
+			return world.getMinY();
+		}
 		@SuppressWarnings("removal")
-		int chunkHeight = world.getChunk(x >> 4, z >> 4).getHighestSectionPosition() + 15;
-		return Math.min(worldHeight, chunkHeight);
+		int chunkHeight = chunk.getHighestSectionPosition() + 15;
+		return Math.min(world.getMaxY() - 1, chunkHeight);
 	}
 
 	private static boolean isPortal(BlockState state) {
@@ -194,27 +339,22 @@ public class TFTeleporter {
 	}
 
 	// from the start point, builds a set of all directly adjacent non-portal blocks
-	private static Set<BlockPos> getBoundaryPositions(ServerLevel world, BlockPos start) {
-		Set<BlockPos> result = new HashSet<>(), checked = new HashSet<>();
-		checked.add(start);
-		checkAdjacent(world, start, checked, result);
-		return result;
-	}
-
-	private static void checkAdjacent(ServerLevel world, BlockPos pos, Set<BlockPos> checked, Set<BlockPos> result) {
-		for (Direction facing : Direction.Plane.HORIZONTAL) {
-			BlockPos offset = pos.relative(facing);
-			if (!checked.add(offset))
-				continue;
-			BlockState checkState = world.getBlockState(offset);
-			if (isPortal(checkState)) {
-				checkAdjacent(world, offset, checked, result);
-			} else {
-				if (Block.isFaceFull(checkState.getCollisionShape(world, offset), Direction.UP) && world.getBlockState(offset.above()).getCollisionShape(world, offset.above()).isEmpty()) {
+	private static Set<BlockPos> getBoundaryPositions(ServerLevel world, Set<BlockPos> portalBlocks) {
+		Set<BlockPos> result = new HashSet<>();
+		for (BlockPos portal : portalBlocks) {
+			for (Direction facing : Direction.Plane.HORIZONTAL) {
+				BlockPos offset = portal.relative(facing);
+				if (portalBlocks.contains(offset)) {
+					continue;
+				}
+				BlockState checkState = world.getBlockState(offset);
+				if (Block.isFaceFull(checkState.getCollisionShape(world, offset), Direction.UP)
+					&& world.getBlockState(offset.above()).getCollisionShape(world, offset.above()).isEmpty()) {
 					result.add(offset);
 				}
 			}
 		}
+		return result;
 	}
 
 	protected static boolean isPortalAt(ServerLevel world, BlockPos pos) {
@@ -326,20 +466,13 @@ public class TFTeleporter {
 		// ensure area is populated first
 		loadSurroundingArea(world, pos);
 
-		BlockPos spot = findPortalCoords(world, pos, blockPos -> isPortalAt(world, blockPos));
+		BlockPos spot;
 		String name = entity.getName().getString();
-
-		if (spot != null) {
-			TwilightForestMod.LOGGER.debug("Found existing portal for {} at {}", name, spot);
-			cacheNewPortalCoords(cache, src, spot, entity.blockPosition());
-			return;
-		}
-
 		spot = findPortalCoords(world, pos, blockpos -> isIdealForPortal(world, blockpos));
 
 		if (spot != null) {
 			TwilightForestMod.LOGGER.debug("Found ideal portal spot for {} at {}", name, spot);
-			cacheNewPortalCoords(cache, src, makePortalAt(world, spot, locked), entity.blockPosition());
+			linkNewPortal(cache, src, entity.blockPosition(), world, makePortalAt(world, spot, locked));
 			return;
 		}
 
@@ -348,7 +481,7 @@ public class TFTeleporter {
 
 		if (spot != null) {
 			TwilightForestMod.LOGGER.debug("Found okay portal spot for {} at {}", name, spot);
-			cacheNewPortalCoords(cache, src, makePortalAt(world, spot, locked), entity.blockPosition());
+			linkNewPortal(cache, src, entity.blockPosition(), world, makePortalAt(world, spot, locked));
 			return;
 		}
 
@@ -357,7 +490,7 @@ public class TFTeleporter {
 		spot = findPortalCoords(world, pos, blockpos -> isOkayForFallbackPortal(world, blockpos), true);
 		if (spot != null) {
 			TwilightForestMod.LOGGER.debug("Found fallback portal spot for {} at {}", name, spot);
-			cacheNewPortalCoords(cache, src, makePortalAt(world, spot, locked), entity.blockPosition());
+			linkNewPortal(cache, src, entity.blockPosition(), world, makePortalAt(world, spot, locked));
 			return;
 		}
 
@@ -366,7 +499,7 @@ public class TFTeleporter {
 
 		BlockPos horizontallyScaled = BlockPos.containing(entity.getX() * getHorizontalScale(world), entity.getY(), entity.getZ() * getHorizontalScale(world));
 		spot = world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, horizontallyScaled);
-		cacheNewPortalCoords(cache, src, makePortalAt(world, spot, locked), entity.blockPosition());
+		linkNewPortal(cache, src, entity.blockPosition(), world, makePortalAt(world, spot, locked));
 	}
 
 	protected static void loadSurroundingArea(ServerLevel world, Vec3 pos) {
@@ -374,8 +507,8 @@ public class TFTeleporter {
 		int x = Mth.floor(pos.x()) >> 4;
 		int z = Mth.floor(pos.z()) >> 4;
 
-		for (int dx = -2; dx <= 2; dx++) {
-			for (int dz = -2; dz <= 2; dz++) {
+		for (int dx = -1; dx <= 1; dx++) {
+			for (int dz = -1; dz <= 1; dz++) {
 				world.getChunk(x + dx, z + dz);
 			}
 		}
@@ -462,18 +595,20 @@ public class TFTeleporter {
 		return world.dimension().identifier().equals(Level.OVERWORLD.identifier()) ? 2.0 : 0.5;
 	}
 
-	private static void cacheNewPortalCoords(TeleporterCache cache, @Nullable ServerLevel srcDim, BlockPos pos, BlockPos srcPos) {
-		// src/dest is backwards logic because we're caching the opposite direction
-		if (srcDim == null)
+	private static void linkNewPortal(TeleporterCache cache, @Nullable ServerLevel sourceLevel, BlockPos sourceHint, ServerLevel destinationLevel, BlockPos destinationHint) {
+		if (sourceLevel == null) {
 			return;
-		BlockPos exitPos = getPortalPosition(srcDim, srcPos);
-		if (exitPos == null)
+		}
+		PortalShape source = resolvePortalShape(sourceLevel, sourceHint);
+		PortalShape destination = resolvePortalShape(destinationLevel, destinationHint);
+		if (source == null || destination == null) {
+			TwilightForestMod.LOGGER.warn("Created a portal near {} but could not resolve both portal shapes; no ambiguous link was persisted", destinationHint.toShortString());
 			return;
-		TwilightForestMod.LOGGER.debug("Caching Dest Portal Blocks to {}", exitPos);
-		cache.addBlockToCache(srcDim.dimension().identifier(), new ColumnPos(pos.getX(), pos.getZ()), new TFTeleporter.PortalPosition(exitPos, srcDim.getGameTime()));
-		cache.addBlockToCache(srcDim.dimension().identifier(), new ColumnPos(pos.south().getX(), pos.south().getZ()), new TFTeleporter.PortalPosition(exitPos, srcDim.getGameTime()));
-		cache.addBlockToCache(srcDim.dimension().identifier(), new ColumnPos(pos.east().getX(), pos.east().getZ()), new TFTeleporter.PortalPosition(exitPos, srcDim.getGameTime()));
-		cache.addBlockToCache(srcDim.dimension().identifier(), new ColumnPos(pos.south().east().getX(), pos.south().east().getZ()), new TFTeleporter.PortalPosition(exitPos, srcDim.getGameTime()));
+		}
+		if (!cache.link(source.endpoint(), destination.endpoint())) {
+			TwilightForestMod.LOGGER.warn("Created portal {} could not be linked to {} because one endpoint already has a different exact partner",
+				destination.endpoint().anchor().toShortString(), source.endpoint().anchor().toShortString());
+		}
 	}
 
 	protected static boolean isIdealForPortal(ServerLevel world, BlockPos pos) {
@@ -633,6 +768,20 @@ public class TFTeleporter {
 		PortalPosition(BlockPos pos, long time) {
 			this.pos = pos;
 			this.lastUpdateTime = time;
+		}
+	}
+
+	static record PortalShape(TeleporterCache.PortalEndpoint endpoint, Set<BlockPos> blocks) {
+		PortalShape {
+			blocks = Set.copyOf(blocks);
+		}
+
+		Set<ColumnPos> columns() {
+			Set<ColumnPos> columns = new HashSet<>();
+			for (BlockPos block : this.blocks) {
+				columns.add(new ColumnPos(block.getX(), block.getZ()));
+			}
+			return columns;
 		}
 	}
 }

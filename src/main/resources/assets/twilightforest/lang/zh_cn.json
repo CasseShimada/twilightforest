@@ -2043,5 +2043,13 @@
   "twilightforest.tips.worldgen_features": "森林中充满了废墟，有些甚至可能包含独特的物品。",
   "twilightforest.tips.wrought_iron": "锻铁锭只能通过拆解由其制成的方块获得。",
   "twilightforest.tips.yeti": "雪怪们喜欢扔东西。",
-  "twilightforest.tips.zombie_healing": "可以用腐肉治疗僵尸权杖召唤的僵尸。"
+  "twilightforest.tips.zombie_healing": "可以用腐肉治疗僵尸权杖召唤的僵尸。",
+  "config.waila.plugin_twilightforest.canopy_shelf_spawner": "雕纹苍穹木书架生成",
+  "config.waila.plugin_twilightforest.drying_rack": "晾干架干燥时间",
+  "config.waila.plugin_twilightforest.quest_ram_missing_wool": "谜题羊缺少的羊毛",
+  "wthit.twilightforest.canopy_shelf.spawns": "生成：%s",
+  "wthit.twilightforest.drying_rack.complete": "晾干完成",
+  "wthit.twilightforest.drying_rack.remaining": "剩余%s",
+  "wthit.twilightforest.quest_ram.complete": "已收集全部羊毛颜色",
+  "wthit.twilightforest.quest_ram.missing": "仍缺少的羊毛颜色："
 }

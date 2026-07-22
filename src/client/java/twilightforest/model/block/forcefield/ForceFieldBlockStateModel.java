@@ -38,7 +38,7 @@ public final class ForceFieldBlockStateModel implements BlockStateModel {
 
 	@Override
 	public void collectParts(RandomSource random, List<BlockStateModelPart> output) {
-		output.add(new ForceFieldPart());
+		output.add(new ForceFieldPart(this.buildQuads(this.collectDirections(BlockModelContext.get()))));
 	}
 
 	@Override
@@ -101,10 +101,15 @@ public final class ForceFieldBlockStateModel implements BlockStateModel {
 	}
 
 	private final class ForceFieldPart implements BlockStateModelPart {
+		private final QuadCollection quads;
+
+		private ForceFieldPart(QuadCollection quads) {
+			this.quads = quads;
+		}
+
 		@Override
 		public List<BakedQuad> getQuads(@Nullable Direction direction) {
-			Map<ForceFieldModel.ExtraDirection, List<Direction>> directions = collectDirections(BlockModelContext.get());
-			return buildQuads(directions).getQuads(direction);
+			return this.quads.getQuads(direction);
 		}
 
 		@Override

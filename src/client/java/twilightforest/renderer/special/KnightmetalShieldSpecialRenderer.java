@@ -20,7 +20,10 @@ import java.util.function.Consumer;
 
 public record KnightmetalShieldSpecialRenderer(SpriteGetter sprites, KnightmetalShieldModel model) implements NoDataSpecialModelRenderer {
 
-	private static final SpriteId SHIELD_BASE = Sheets.SHIELD_MAPPER.apply(TwilightForestMod.prefix("entity/knightmetal_shield"));
+	// Datagen stitches this legacy entity texture into the shield-pattern atlas under its
+	// original sprite id. SHIELD_MAPPER would prepend entity/shield/ and silently resolve
+	// to the missing-texture sprite instead.
+	private static final SpriteId SHIELD_BASE = new SpriteId(Sheets.SHIELD_SHEET, TwilightForestMod.prefix("entity/knightmetal_shield"));
 
 	@Override
 	public void submit(PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, boolean hasFoil, int outlineColor) {
