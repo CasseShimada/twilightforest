@@ -9,7 +9,8 @@
       "twilightforest.world.RuntimeCompatServerProbe"
     ],
     "client": [
-      "twilightforest.client.RuntimeCompatClientProbe"
+      "twilightforest.client.RuntimeCompatClientProbe",
+      "twilightforest.client.BossChestRuntimeProbe"
     ]
   },
   "depends": {

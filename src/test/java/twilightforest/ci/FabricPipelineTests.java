@@ -36,4 +36,23 @@ class FabricPipelineTests {
 		assertFalse(pipeline.contains("ARTIFACTORY_USER:"));
 		assertFalse(pipeline.contains("ARTIFACTORY_PASS:"));
 	}
+
+	@Test
+	void issueTemplateAcceptsCurrentFabricReports() throws IOException {
+		String template = Files.readString(Path.of(".github/ISSUE_TEMPLATE/bug-report.yml"));
+		String normalized = template.toLowerCase(Locale.ROOT);
+
+		assertTrue(template.contains("label: Fabric Loader Version"));
+		assertFalse(normalized.contains("fabric issues are not accepted"));
+		assertFalse(template.contains("label: NeoForge Version"));
+	}
+
+	@Test
+	void currentMaintenanceDocsDoNotAdvertiseOutOfScopeCarryOnSupport() throws IOException {
+		String readme = Files.readString(Path.of("README.md"));
+		String metadata = Files.readString(Path.of("src/main/resources/fabric.mod.json"));
+
+		assertFalse(readme.contains("[Carry On]"));
+		assertFalse(metadata.contains("\"carryon\":"));
+	}
 }

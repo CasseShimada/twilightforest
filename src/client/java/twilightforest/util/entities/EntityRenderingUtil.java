@@ -25,6 +25,7 @@ import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import twilightforest.TwilightForestMod;
 
@@ -138,6 +139,7 @@ public class EntityRenderingUtil {
 		if (level == null) return;
 
 		ItemEntity itemEntity = new ItemEntity(level, 0.0D, 0.0D, 0.0D, stack);
+		itemEntity.setId(BuiltInRegistries.ITEM.getId(stack.getItem()) + 1);
 		float partialTicks = minecraft.getDeltaTracker().getGameTimeDeltaTicks();
 		EntityRenderState state = extractRenderState(itemEntity, partialTicks);
 		if (state instanceof ItemEntityRenderState itemState) {
@@ -152,7 +154,13 @@ public class EntityRenderingUtil {
 		rotation.mul(Axis.XN.rotationDegrees(35.0F));
 		rotation.mul(Axis.YN.rotationDegrees(145.0F));
 
-		graphics.entity(state, 50.0F, translation, rotation, camera, 0, 0, 32, 32);
+		Vector2f firstCorner = graphics.pose().transformPosition(0.0F, 0.0F, new Vector2f());
+		Vector2f secondCorner = graphics.pose().transformPosition(32.0F, 32.0F, new Vector2f());
+		int left = Mth.floor(Math.min(firstCorner.x, secondCorner.x));
+		int top = Mth.floor(Math.min(firstCorner.y, secondCorner.y));
+		int right = Mth.ceil(Math.max(firstCorner.x, secondCorner.x));
+		int bottom = Mth.ceil(Math.max(firstCorner.y, secondCorner.y));
+		graphics.entity(state, 50.0F, translation, rotation, camera, left, top, right, bottom);
 	}
 
 	public static List<Component> getMobTooltip(EntityType<?> type, ResourceKey<EntityType<?>> key) {

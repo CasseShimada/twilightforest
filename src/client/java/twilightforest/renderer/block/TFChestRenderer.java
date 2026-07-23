@@ -2,7 +2,6 @@ package twilightforest.client.renderer.block;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.object.chest.ChestModel;
 import net.minecraft.client.resources.model.sprite.SpriteGetter;
 import net.minecraft.client.resources.model.sprite.SpriteId;
@@ -28,8 +27,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.core.Direction;
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
-import twilightforest.TwilightForestMod;
+import twilightforest.client.renderer.TFChestSpriteIds;
 import twilightforest.init.TFBlocks;
+import twilightforest.util.TFChestTextures;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -40,23 +40,23 @@ public class TFChestRenderer<T extends ChestBlockEntity> implements BlockEntityR
 	static {
 		ImmutableMap.Builder<Block, EnumMap<ChestType, SpriteId>> builder = ImmutableMap.builder();
 
-		builder.put(TFBlocks.TWILIGHT_OAK_CHEST, chestMaterial("twilight_oak", false));
-		builder.put(TFBlocks.CANOPY_CHEST, chestMaterial("canopy", false));
-		builder.put(TFBlocks.MANGROVE_CHEST, chestMaterial("mangrove", false));
-		builder.put(TFBlocks.DARK_CHEST, chestMaterial("darkwood", false));
-		builder.put(TFBlocks.TIME_CHEST, chestMaterial("time", false));
-		builder.put(TFBlocks.TRANSFORMATION_CHEST, chestMaterial("transformation", false));
-		builder.put(TFBlocks.MINING_CHEST, chestMaterial("mining", false));
-		builder.put(TFBlocks.SORTING_CHEST, chestMaterial("sorting", false));
+		builder.put(TFBlocks.TWILIGHT_OAK_CHEST, TFChestSpriteIds.forWood(TFChestTextures.Wood.TWILIGHT_OAK, false));
+		builder.put(TFBlocks.CANOPY_CHEST, TFChestSpriteIds.forWood(TFChestTextures.Wood.CANOPY, false));
+		builder.put(TFBlocks.MANGROVE_CHEST, TFChestSpriteIds.forWood(TFChestTextures.Wood.MANGROVE, false));
+		builder.put(TFBlocks.DARK_CHEST, TFChestSpriteIds.forWood(TFChestTextures.Wood.DARK, false));
+		builder.put(TFBlocks.TIME_CHEST, TFChestSpriteIds.forWood(TFChestTextures.Wood.TIME, false));
+		builder.put(TFBlocks.TRANSFORMATION_CHEST, TFChestSpriteIds.forWood(TFChestTextures.Wood.TRANSFORMATION, false));
+		builder.put(TFBlocks.MINING_CHEST, TFChestSpriteIds.forWood(TFChestTextures.Wood.MINING, false));
+		builder.put(TFBlocks.SORTING_CHEST, TFChestSpriteIds.forWood(TFChestTextures.Wood.SORTING, false));
 
-		builder.put(TFBlocks.TWILIGHT_OAK_TRAPPED_CHEST, chestMaterial("twilight_oak", true));
-		builder.put(TFBlocks.CANOPY_TRAPPED_CHEST, chestMaterial("canopy", true));
-		builder.put(TFBlocks.MANGROVE_TRAPPED_CHEST, chestMaterial("mangrove", true));
-		builder.put(TFBlocks.DARK_TRAPPED_CHEST, chestMaterial("darkwood", true));
-		builder.put(TFBlocks.TIME_TRAPPED_CHEST, chestMaterial("time", true));
-		builder.put(TFBlocks.TRANSFORMATION_TRAPPED_CHEST, chestMaterial("transformation", true));
-		builder.put(TFBlocks.MINING_TRAPPED_CHEST, chestMaterial("mining", true));
-		builder.put(TFBlocks.SORTING_TRAPPED_CHEST, chestMaterial("sorting", true));
+		builder.put(TFBlocks.TWILIGHT_OAK_TRAPPED_CHEST, TFChestSpriteIds.forWood(TFChestTextures.Wood.TWILIGHT_OAK, true));
+		builder.put(TFBlocks.CANOPY_TRAPPED_CHEST, TFChestSpriteIds.forWood(TFChestTextures.Wood.CANOPY, true));
+		builder.put(TFBlocks.MANGROVE_TRAPPED_CHEST, TFChestSpriteIds.forWood(TFChestTextures.Wood.MANGROVE, true));
+		builder.put(TFBlocks.DARK_TRAPPED_CHEST, TFChestSpriteIds.forWood(TFChestTextures.Wood.DARK, true));
+		builder.put(TFBlocks.TIME_TRAPPED_CHEST, TFChestSpriteIds.forWood(TFChestTextures.Wood.TIME, true));
+		builder.put(TFBlocks.TRANSFORMATION_TRAPPED_CHEST, TFChestSpriteIds.forWood(TFChestTextures.Wood.TRANSFORMATION, true));
+		builder.put(TFBlocks.MINING_TRAPPED_CHEST, TFChestSpriteIds.forWood(TFChestTextures.Wood.MINING, true));
+		builder.put(TFBlocks.SORTING_TRAPPED_CHEST, TFChestSpriteIds.forWood(TFChestTextures.Wood.SORTING, true));
 
 		SPRITES = builder.build();
 	}
@@ -110,7 +110,7 @@ public class TFChestRenderer<T extends ChestBlockEntity> implements BlockEntityR
 		openness = 1.0F - openness;
 		openness = 1.0F - openness * openness * openness;
 
-		SpriteId sprite = renderState.customSprite != null ? renderState.customSprite : Sheets.chooseSprite(renderState.material, renderState.type);
+		SpriteId sprite = TFChestSpriteIds.select(renderState.customSprite, renderState.material, renderState.type);
 		ChestModel model = this.models.select(renderState.type);
 		nodeCollector.submitModel(model, openness, poseStack, renderState.lightCoords, OverlayTexture.NO_OVERLAY, -1, sprite, this.sprites, 0, renderState.breakProgress);
 		poseStack.popPose();
@@ -143,17 +143,6 @@ public class TFChestRenderer<T extends ChestBlockEntity> implements BlockEntityR
 		}
 
 		return ChestRenderState.ChestMaterialType.REGULAR;
-	}
-
-	private static EnumMap<ChestType, SpriteId> chestMaterial(String wood, boolean trapped) {
-		EnumMap<ChestType, SpriteId> map = new EnumMap<>(ChestType.class);
-		String type = (trapped ? "trapped" : "normal");
-
-		map.put(ChestType.SINGLE, Sheets.CHEST_MAPPER.apply(TwilightForestMod.prefix("entity/chest/" + wood + "/" + type)));
-		map.put(ChestType.LEFT, Sheets.CHEST_MAPPER.apply(TwilightForestMod.prefix("entity/chest/" + wood + "/" + type + "_left")));
-		map.put(ChestType.RIGHT, Sheets.CHEST_MAPPER.apply(TwilightForestMod.prefix("entity/chest/" + wood + "/" + type + "_right")));
-
-		return map;
 	}
 
 	public static class RenderState extends ChestRenderState {

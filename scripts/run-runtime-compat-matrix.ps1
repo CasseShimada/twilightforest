@@ -25,6 +25,7 @@ $gradleWrapper = Join-Path $repoRoot 'gradlew.bat'
 
 $scenarioDefinitions = [ordered]@{
     'base' = @{ jars = @(); mods = @() }
+    'api-consumer' = @{ jars = @(); mods = @() }
     'diggus' = @{ jars = @($DiggusJar); mods = @('diggusmaximus') }
     'carry' = @{ jars = @($CarryOnJar); mods = @('carryon') }
     'wthit' = @{ jars = @($WthitJar, $BadPacketsJar); mods = @('wthit', 'badpackets') }

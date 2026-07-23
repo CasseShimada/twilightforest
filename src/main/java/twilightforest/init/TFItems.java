@@ -8,12 +8,15 @@ import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.equipment.ArmorType;
@@ -34,6 +37,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -151,7 +155,17 @@ public class TFItems {
 	public static final Item KNIGHTMETAL_PICKAXE = register("knightmetal_pickaxe", properties -> new KnightmetalPickItem(TFToolMaterials.KNIGHTMETAL, properties), Item.Properties::new);
 	public static final Item KNIGHTMETAL_AXE = register("knightmetal_axe", properties -> new KnightmetalAxeItem(TFToolMaterials.KNIGHTMETAL, properties), Item.Properties::new);
 	public static final Item KNIGHTMETAL_RING = register("knightmetal_ring", Item::new, Item.Properties::new);
-	public static final Item KNIGHTMETAL_SHIELD = register("knightmetal_shield", KnightmetalShieldItem::new, () -> new Item.Properties().durability(1024));
+	public static final Item KNIGHTMETAL_SHIELD = register("knightmetal_shield", KnightmetalShieldItem::new,
+		() -> new Item.Properties().durability(1024).equippableUnswappable(EquipmentSlot.OFFHAND)
+			.delayedComponent(DataComponents.BLOCKS_ATTACKS, provider -> new BlocksAttacks(
+				0.25F,
+				1.0F,
+				List.of(new BlocksAttacks.DamageReduction(90.0F, Optional.empty(), 0.0F, 1.0F)),
+				new BlocksAttacks.ItemDamageFunction(3.0F, 1.0F, 1.0F),
+				Optional.of(provider.getOrThrow(DamageTypeTags.BYPASSES_SHIELD)),
+				Optional.of(SoundEvents.SHIELD_BLOCK),
+				Optional.of(SoundEvents.SHIELD_BREAK)))
+			.component(DataComponents.BREAK_SOUND, SoundEvents.SHIELD_BREAK));
 	public static final Item BLOCK_AND_CHAIN = register("block_and_chain", ChainBlockItem::new, () -> new Item.Properties().durability(99));
 	public static final Item PHANTOM_HELMET = register("phantom_helmet", properties -> new PhantomArmorItem(TFArmorMaterials.PHANTOM, ArmorType.HELMET, properties), () -> new Item.Properties().durability(ArmorType.HELMET.getDurability(30)).rarity(Rarity.UNCOMMON));
 	public static final Item PHANTOM_CHESTPLATE = register("phantom_chestplate", properties -> new PhantomArmorItem(TFArmorMaterials.PHANTOM, ArmorType.CHESTPLATE, properties), () -> new Item.Properties().durability(ArmorType.CHESTPLATE.getDurability(30)).rarity(Rarity.UNCOMMON));

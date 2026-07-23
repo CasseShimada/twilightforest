@@ -6,7 +6,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.model.object.chest.ChestModel;
 import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.special.NoDataSpecialModelRenderer;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
@@ -14,6 +13,7 @@ import net.minecraft.client.resources.model.sprite.SpriteGetter;
 import net.minecraft.client.resources.model.sprite.SpriteId;
 import net.minecraft.resources.Identifier;
 import org.joml.Vector3fc;
+import twilightforest.client.renderer.TFChestSpriteIds;
 
 import java.util.function.Consumer;
 
@@ -52,7 +52,7 @@ public record TFChestSpecialRenderer(SpriteGetter sprites, ChestModel model, Spr
 		@Override
 		public SpecialModelRenderer<Void> bake(SpecialModelRenderer.BakingContext context) {
 			ChestModel chestmodel = new ChestModel(context.entityModelSet().bakeLayer(ModelLayers.CHEST));
-			SpriteId sprite = Sheets.CHEST_MAPPER.apply(this.texture);
+			SpriteId sprite = TFChestSpriteIds.fromTexture(this.texture);
 			return new TFChestSpecialRenderer(context.sprites(), chestmodel, sprite, this.openness());
 		}
 	}

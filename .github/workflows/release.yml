@@ -91,7 +91,7 @@ jobs:
 
           unzip -Z1 "${binary}" > build/release-binary-entries.txt
           unzip -Z1 "${sources}" > build/release-sources-entries.txt
-          forbidden='^(net/kyrptonaught/diggusmaximus/|tschipp/carryon/api/|mcp/mobius/waila/api/|lol/bai/badpackets/|twilightforest/(client|world)/RuntimeCompat|twilightforest/world/Runtime(Diggus|CarryOn))'
+          forbidden='^(net/kyrptonaught/diggusmaximus/|tschipp/carryon/api/|mcp/mobius/waila/api/|lol/bai/badpackets/|com/example/twilightforestapi/|twilightforest/client/(RuntimeCompat|BossChestRuntimeProbe)|twilightforest/world/Runtime(Compat|Diggus|CarryOn))'
           if grep -E "${forbidden}" build/release-binary-entries.txt build/release-sources-entries.txt; then
             echo "Release archives contain optional API declarations or runtime-test classes" >&2
             exit 1

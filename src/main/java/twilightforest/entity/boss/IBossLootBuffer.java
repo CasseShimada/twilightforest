@@ -17,7 +17,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -30,6 +29,7 @@ import twilightforest.network.ParticlePacket;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public interface IBossLootBuffer {
 	int CONTAINER_SIZE = 27;
@@ -57,50 +57,85 @@ public interface IBossLootBuffer {
 		var loot = boss.getLootTable();
 		if (TFConfig.bossDropChests && loot.isPresent()) {
 			LootTable table = serverLevel.getServer().reloadableRegistries().getLootTable(loot.get());
-			ObjectArrayList<ItemStack> stacks = table.getRandomItems(params);
-			boss.fill(boss, params, table);
-
-			//If our loot stack size is bigger than the inventory, drop everything else outside it. Don't want to lose any loot now do we?
-			if (stacks.size() > CONTAINER_SIZE) {
-				for (ItemStack stack : stacks.subList(CONTAINER_SIZE, stacks.size())) {
-					ItemEntity item = new ItemEntity(serverLevel, boss.getX(), boss.getY(), boss.getZ(), stack);
-					item.setExtendedLifetime();
-					item.setNoPickUpDelay();
-					serverLevel.addFreshEntity(item);
-				}
-			}
+			ObjectArrayList<ItemStack> generatedLoot = table.getRandomItems(params);
+			bufferGeneratedLoot(boss, generatedLoot, boss.getRandom(), stack -> {
+				ItemEntity item = new ItemEntity(serverLevel, boss.getX(), boss.getY(), boss.getZ(), stack);
+				item.setExtendedLifetime();
+				item.setNoPickUpDelay();
+				serverLevel.addFreshEntity(item);
+			});
 		}
 	}
 
 	static <T extends LivingEntity & IBossLootBuffer> void depositDropsIntoChest(T boss, BlockState chest, BlockPos pos, ServerLevel serverLevel) {
-		if (TFConfig.bossDropChests && !boss.getItemStacks().isEmpty()) {
+		if (TFConfig.bossDropChests && boss.hasBufferedLoot()) {
 			if (!tryDeposit(boss, chest, pos, serverLevel)) {
 				BlockPos.MutableBlockPos chestPos = pos.mutable();
-				for (int y = pos.getY(); y < serverLevel.getMaxY(); y++) {
+				for (int y = pos.getY() + 1; y < serverLevel.getMaxY(); y++) {
 					chestPos.setY(y);
 					if (tryDeposit(boss, chest, chestPos, serverLevel)) return;
 				}
 			} else return;
 
 			for (int i = 0; i < CONTAINER_SIZE; i++) {
-				Block.popResource(serverLevel, pos, boss.getItem(i));
+				ItemStack stack = boss.getItem(i);
+				if (!stack.isEmpty()) {
+					Block.popResource(serverLevel, pos, stack);
+					boss.setItem(i, ItemStack.EMPTY);
+				}
 			}
 			celebrateAt(boss, Vec3.atCenterOf(pos), serverLevel);
 		}
 	}
 
 	static <T extends LivingEntity & IBossLootBuffer> boolean tryDeposit(T boss, BlockState chest, BlockPos pos, ServerLevel serverLevel) {
-		if ((serverLevel.getBlockState(pos).is(chest.getBlock()) ||
-			((serverLevel.getBlockState(pos).canBeReplaced() || serverLevel.getBlockState(pos).getPistonPushReaction() != PushReaction.BLOCK) && serverLevel.getBlockEntity(pos) == null && serverLevel.setBlock(pos, chest, TFLootTables.DEFAULT_PLACE_FLAG))) &&
-			serverLevel.getBlockEntity(pos) instanceof Container container) {
-
-			for (int i = 0; i < CONTAINER_SIZE && i < container.getContainerSize(); i++) {
-				container.setItem(i, boss.getItem(i));
+		BlockState existing = serverLevel.getBlockState(pos);
+		if (serverLevel.getBlockEntity(pos) == null &&
+			existing.canBeReplaced() &&
+			serverLevel.setBlock(pos, chest, TFLootTables.DEFAULT_PLACE_FLAG)) {
+			if (serverLevel.getBlockEntity(pos) instanceof Container container && transferBufferedLoot(boss, container)) {
+				celebrateAt(boss, Vec3.atCenterOf(pos), serverLevel);
+				return true;
 			}
-			celebrateAt(boss, Vec3.atCenterOf(pos), serverLevel);
-			return true;
+			serverLevel.setBlock(pos, existing, TFLootTables.DEFAULT_PLACE_FLAG);
 		}
 		return false;
+	}
+
+	default boolean hasBufferedLoot() {
+		return this.getItemStacks().stream().anyMatch(stack -> !stack.isEmpty());
+	}
+
+	static void bufferGeneratedLoot(IBossLootBuffer buffer, ObjectArrayList<ItemStack> generatedLoot, RandomSource random, Consumer<ItemStack> overflow) {
+		List<Integer> availableSlots = buffer.getAvailableSlots(random);
+		shuffleAndSplitItems(generatedLoot, availableSlots.size(), random);
+
+		for (ItemStack stack : generatedLoot) {
+			if (stack.isEmpty()) {
+				continue;
+			}
+			if (availableSlots.isEmpty()) {
+				overflow.accept(stack);
+			} else {
+				buffer.setItem(availableSlots.removeLast(), stack);
+			}
+		}
+	}
+
+	static boolean transferBufferedLoot(IBossLootBuffer buffer, Container container) {
+		if (container.getContainerSize() < CONTAINER_SIZE) {
+			return false;
+		}
+		for (int i = 0; i < CONTAINER_SIZE; i++) {
+			if (!container.getItem(i).isEmpty()) {
+				return false;
+			}
+		}
+		for (int i = 0; i < CONTAINER_SIZE; i++) {
+			container.setItem(i, buffer.getItem(i));
+			buffer.setItem(i, ItemStack.EMPTY);
+		}
+		return true;
 	}
 
 	static <T extends LivingEntity & IBossLootBuffer> void celebrateAt(T boss, Vec3 vec3, ServerLevel serverLevel) {
@@ -116,22 +151,13 @@ public interface IBossLootBuffer {
 		PlayerLookup.tracking(boss).forEach(player -> ServerPlayNetworking.send(player, particlePacket));
 	}
 
-	default <T extends LivingEntity & IBossLootBuffer> void fill(T boss, LootParams context, LootTable table) {
-		ObjectArrayList<ItemStack> items = table.getRandomItems(context);
-		RandomSource randomsource = boss.getRandom();
-		List<Integer> list = this.getAvailableSlots(randomsource);
-		shuffleAndSplitItems(items, list.size(), randomsource);
-
-		for (ItemStack itemstack : items) {
-			if (!list.isEmpty()) {
-				this.setItem(list.removeLast(), itemstack.isEmpty() ? ItemStack.EMPTY : itemstack);
-			}
-		}
-	}
-
 	default List<Integer> getAvailableSlots(RandomSource random) {
 		ObjectArrayList<Integer> arrayList = new ObjectArrayList<>();
-		for (int i = 0; i < CONTAINER_SIZE; ++i) arrayList.add(i);
+		for (int i = 0; i < CONTAINER_SIZE; ++i) {
+			if (this.getItem(i).isEmpty()) {
+				arrayList.add(i);
+			}
+		}
 		Util.shuffle(arrayList, random);
 		return arrayList;
 	}

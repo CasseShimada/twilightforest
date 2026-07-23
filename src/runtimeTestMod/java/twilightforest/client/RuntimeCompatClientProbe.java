@@ -18,6 +18,7 @@ import net.minecraft.client.gui.screens.worldselection.ConfirmExperimentalFeatur
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -26,13 +27,18 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.BlocksAttacks;
+import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -41,6 +47,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import org.slf4j.Logger;
+import twilightforest.api.ArmorApi;
+import twilightforest.api.TravellerGearApi;
+import twilightforest.api.TravellerGearPart;
+import twilightforest.api.TwilightForestApi;
+import twilightforest.api.WeaponApi;
 import twilightforest.block.ChiseledCanopyShelfBlock;
 import twilightforest.block.AbstractSkullCandleBlock;
 import twilightforest.block.entity.DryingRackBlockEntity;
@@ -48,6 +59,7 @@ import twilightforest.block.entity.bookshelf.ChiseledCanopyShelfBlockEntity;
 import twilightforest.components.item.SkullCandles;
 import twilightforest.init.TFDataComponents;
 import twilightforest.init.TFDimension;
+import twilightforest.util.entities.EntityRenderingUtil;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -69,6 +81,7 @@ public final class RuntimeCompatClientProbe implements ClientModInitializer {
 	// Reusing it keeps dimension round trips from measuring synchronous world generation.
 	private static final int TRIP_X = 32;
 	private static final int TRIP_Z = 32;
+	private static final BlockPos COMPLETED_DRYING_RACK = new BlockPos(MATRIX_X - 7, MATRIX_Y + 1, MATRIX_Z + 2);
 	private static final BlockPos WTHIT_DRYING_RACK = new BlockPos(MATRIX_X - 5, MATRIX_Y + 1, MATRIX_Z + 2);
 	private static final BlockPos WTHIT_CANOPY_SHELF = new BlockPos(MATRIX_X + 5, MATRIX_Y + 1, MATRIX_Z + 2);
 	private static final List<String> SPECIAL_ITEMS = List.of(
@@ -116,6 +129,9 @@ public final class RuntimeCompatClientProbe implements ClientModInitializer {
 			return;
 		}
 		this.scenario = System.getProperty("twilightforest.runtimeScenario", "manual");
+		if (this.scenario.startsWith("boss-chest")) {
+			return;
+		}
 		this.wthitLoaded = FabricLoader.getInstance().isModLoaded("wthit");
 		verifyExpectedMods();
 		this.startedNanos = System.nanoTime();
@@ -230,6 +246,8 @@ public final class RuntimeCompatClientProbe implements ClientModInitializer {
 						minecraft.gui.setScreen(new SpecialItemGridScreen(SPECIAL_ITEMS.stream()
 							.map(RuntimeCompatClientProbe::runtimeItemStack)
 							.toList()));
+						LOGGER.info("{} ENTITY_PREVIEW scenario={} items={} stable_entity_ids=true transformed_bounds=true",
+							MARKER, this.scenario, SPECIAL_ITEMS.size());
 						advance(14);
 					}
 				}
@@ -287,6 +305,7 @@ public final class RuntimeCompatClientProbe implements ClientModInitializer {
 	}
 
 	private void prepareMatrix(Minecraft minecraft) {
+		validateKnightmetalShield(minecraft);
 		IntegratedServer server = minecraft.getSingleplayerServer();
 		UUID playerId = minecraft.player.getUUID();
 		server.execute(() -> {
@@ -321,6 +340,26 @@ public final class RuntimeCompatClientProbe implements ClientModInitializer {
 					rack.setTheItem(new ItemStack(Items.BEEF));
 				}
 
+				level.setBlockAndUpdate(COMPLETED_DRYING_RACK, registryBlock("twilightforest:oak_drying_rack").defaultBlockState());
+				BlockEntity completedRackEntity = level.getBlockEntity(COMPLETED_DRYING_RACK);
+				if (!(completedRackEntity instanceof DryingRackBlockEntity completedRack)) {
+					throw new IllegalStateException("Missing completion-probe drying rack");
+				}
+				completedRack.setTheItem(new ItemStack(Items.BEEF));
+				int dryingTicks = completedRack.getTotalDryTime();
+				if (dryingTicks != 6_000) {
+					throw new IllegalStateException("Beef drying recipe time changed: " + dryingTicks);
+				}
+				for (int tick = 0; tick < dryingTicks; tick++) {
+					DryingRackBlockEntity.tick(level, COMPLETED_DRYING_RACK,
+						level.getBlockState(COMPLETED_DRYING_RACK), completedRack);
+				}
+				if (!completedRack.getTheItem().is(registryItem("twilightforest:beef_jerky"))) {
+					throw new IllegalStateException("Drying rack did not convert beef to beef jerky");
+				}
+				LOGGER.info("{} DRYING_COMPLETE input=minecraft:beef output=twilightforest:beef_jerky ticks={} production_tick_path=true",
+					MARKER, dryingTicks);
+
 				Block shelf = registryBlock("twilightforest:chiseled_canopy_bookshelf");
 				level.setBlockAndUpdate(WTHIT_CANOPY_SHELF, shelf.defaultBlockState().setValue(ChiseledCanopyShelfBlock.SPAWNER, true));
 				if (level.getBlockEntity(WTHIT_CANOPY_SHELF) instanceof ChiseledCanopyShelfBlockEntity shelfEntity) {
@@ -351,6 +390,26 @@ public final class RuntimeCompatClientProbe implements ClientModInitializer {
 				minecraft.execute(() -> fail(minecraft, failure));
 			}
 		});
+	}
+
+	private static void validateKnightmetalShield(Minecraft minecraft) {
+		ItemStack shield = runtimeItemStack("twilightforest:knightmetal_shield");
+		BlocksAttacks blocksAttacks = require(shield.get(DataComponents.BLOCKS_ATTACKS), "Knightmetal Shield blocks-attacks component");
+		Equippable equippable = require(shield.get(DataComponents.EQUIPPABLE), "Knightmetal Shield equippable component");
+		if (shield.getUseAnimation() != ItemUseAnimation.BLOCK || shield.getUseDuration(minecraft.player) != 72_000) {
+			throw new IllegalStateException("Knightmetal Shield lost its BLOCK/72000 use behavior");
+		}
+		if (equippable.slot() != EquipmentSlot.OFFHAND || equippable.swappable()) {
+			throw new IllegalStateException("Knightmetal Shield is not an unswappable offhand item");
+		}
+		if (blocksAttacks.blockDelaySeconds() != 0.25F
+			|| !SoundEvents.SHIELD_BLOCK.equals(blocksAttacks.blockSound().orElse(null))
+			|| !SoundEvents.SHIELD_BREAK.equals(blocksAttacks.disableSound().orElse(null))
+			|| !SoundEvents.SHIELD_BREAK.equals(shield.get(DataComponents.BREAK_SOUND))) {
+			throw new IllegalStateException("Knightmetal Shield block/break component semantics changed");
+		}
+		LOGGER.info("{} SHIELD_COMPONENTS item=twilightforest:knightmetal_shield animation=BLOCK duration=72000 offhand=true unswappable=true block_delay={} block_sound=shield_block break_sound=shield_break",
+			MARKER, blocksAttacks.blockDelaySeconds());
 	}
 
 	private static void preparePortalTile(ServerLevel level, BlockPos anchor) {
@@ -419,6 +478,12 @@ public final class RuntimeCompatClientProbe implements ClientModInitializer {
 	}
 
 	private void finish(Minecraft minecraft) {
+		if (!(minecraft.level.getBlockEntity(COMPLETED_DRYING_RACK) instanceof DryingRackBlockEntity completedRack)
+			|| !completedRack.getTheItem().is(registryItem("twilightforest:beef_jerky"))) {
+			throw new IllegalStateException("Completed drying result was not synchronized after resource reload");
+		}
+		LOGGER.info("{} DRYING_COMPLETE client_after_reload=true item=twilightforest:beef_jerky", MARKER);
+		verifyPublicApiAfterReload();
 		long elapsedMillis = (System.nanoTime() - this.startedNanos) / 1_000_000L;
 		LOGGER.info("{} PASS client scenario={} dimension_round_trips={} elapsed_ms={}", MARKER, this.scenario, this.dimensionTrips, elapsedMillis);
 		this.phase = 25;
@@ -515,6 +580,35 @@ public final class RuntimeCompatClientProbe implements ClientModInitializer {
 			});
 	}
 
+	private void verifyPublicApiAfterReload() {
+		String consumerNamespace = "twilightforest_api_testmod";
+		boolean consumerScenario = this.scenario.equals("api-consumer");
+		boolean consumerRegistered = List.of(
+			ArmorApi.classifierIds(),
+			TravellerGearApi.classifierIds(),
+			WeaponApi.classifierIds()
+		).stream().flatMap(List::stream).anyMatch(id -> id.getNamespace().equals(consumerNamespace));
+		if (consumerRegistered != consumerScenario) {
+			throw new IllegalStateException("API consumer state changed across client resource reload");
+		}
+		if (!TwilightForestApi.registrationsFrozen()) {
+			throw new IllegalStateException("public API registrations are not frozen after client resource reload");
+		}
+		if (consumerScenario) {
+			Identifier armorTrait = Identifier.fromNamespaceAndPath(consumerNamespace, "runtime/armor");
+			Identifier recursiveTrait = Identifier.fromNamespaceAndPath(consumerNamespace, "runtime/recursive");
+			Set<Identifier> traits = ArmorApi.traits(new ItemStack(Items.STICK));
+			if (!traits.containsAll(Set.of(armorTrait, recursiveTrait))
+				|| !TravellerGearApi.parts(new ItemStack(Items.STICK)).contains(TravellerGearPart.BOOTS)
+				|| !WeaponApi.traits(new ItemStack(Items.DIAMOND_SWORD))
+					.contains(Identifier.fromNamespaceAndPath(consumerNamespace, "runtime/weapon"))) {
+				throw new IllegalStateException("runtime API consumer stopped dispatching after resource reload");
+			}
+		}
+		LOGGER.info("{} API_RUNTIME client scenario={} consumer={} frozen=true resource_reload_persistent=true",
+			MARKER, this.scenario, consumerScenario);
+	}
+
 	private static <T> T require(T value, String description) {
 		if (value == null) {
 			throw new IllegalStateException("Missing " + description);
@@ -545,7 +639,11 @@ public final class RuntimeCompatClientProbe implements ClientModInitializer {
 				int y = startY + index / columns * cellHeight;
 				graphics.fill(x, y, x + cellWidth - 4, y + cellHeight - 4, 0xCC202630);
 				graphics.item(this.stacks.get(index), x + 10, y + 10, index);
-				graphics.text(this.font, this.stacks.get(index).getHoverName(), x + 34, y + 14, 0xFFFFFFFF, false);
+				graphics.pose().pushMatrix();
+				graphics.pose().translate(x + 34.0F, y + 3.0F);
+				EntityRenderingUtil.renderItemEntity(graphics, this.stacks.get(index), index * 0.375F);
+				graphics.pose().popMatrix();
+				graphics.text(this.font, this.stacks.get(index).getHoverName(), x + 72, y + 14, 0xFFFFFFFF, false);
 			}
 		}
 

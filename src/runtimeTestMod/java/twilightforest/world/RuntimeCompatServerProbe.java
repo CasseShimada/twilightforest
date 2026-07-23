@@ -6,16 +6,25 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.animal.pig.Pig;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.portal.TeleportTransition;
 import org.slf4j.Logger;
+import twilightforest.api.AccessoryApi;
+import twilightforest.api.ArmorApi;
+import twilightforest.api.TravellerGearApi;
+import twilightforest.api.TravellerGearPart;
+import twilightforest.api.TwilightForestApi;
+import twilightforest.api.WeaponApi;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFDimension;
 
@@ -48,6 +57,7 @@ public final class RuntimeCompatServerProbe implements ModInitializer {
 		int pass = Integer.getInteger("twilightforest.runtimePass", 1);
 		try {
 			verifyExpectedMods();
+			verifyPublicApiRuntime(scenario);
 			ServerLevel overworld = require(server.overworld(), "overworld");
 			ServerLevel twilight = require(server.getLevel(TFDimension.DIMENSION_KEY), "Twilight Forest dimension");
 			activeProbe = new ProbeState(scenario, pass, overworld, twilight);
@@ -391,6 +401,61 @@ public final class RuntimeCompatServerProbe implements ModInitializer {
 			.map(String::trim)
 			.filter(id -> !id.isEmpty())
 			.forEach(id -> check(FabricLoader.getInstance().isModLoaded(id), "expected mod is not loaded: " + id));
+	}
+
+	private static void verifyPublicApiRuntime(String scenario) {
+		String consumerNamespace = "twilightforest_api_testmod";
+		check(FabricLoader.getInstance().isModLoaded(consumerNamespace), "independent API test mod is not loaded by Fabric");
+		boolean consumerScenario = scenario.equals("api-consumer");
+		List<Identifier> accessoryIds = AccessoryApi.itemConsumerIds();
+		List<Identifier> travellerIds = TravellerGearApi.classifierIds();
+		List<Identifier> armorIds = ArmorApi.classifierIds();
+		List<Identifier> weaponIds = WeaponApi.classifierIds();
+		boolean consumerRegistered = List.of(accessoryIds, travellerIds, armorIds, weaponIds).stream()
+			.flatMap(List::stream)
+			.anyMatch(id -> id.getNamespace().equals(consumerNamespace));
+		check(consumerRegistered == consumerScenario,
+			"API consumer registration state does not match scenario " + scenario);
+		check(TwilightForestApi.registrationsFrozen(), "public API provider registries were not frozen at SERVER_STARTED");
+
+		if (!consumerScenario) {
+			LOGGER.info("{} API_RUNTIME scenario={} consumer=false frozen=true external_provider_ids=0", MARKER, scenario);
+			return;
+		}
+
+		check(accessoryIds.contains(apiConsumerId("accessory_storage")), "runtime accessory consumer was not registered");
+		check(travellerIds.contains(apiConsumerId("traveller_gear")), "runtime Traveller Gear consumer was not registered");
+		check(armorIds.containsAll(List.of(
+			apiConsumerId("armor"),
+			apiConsumerId("armor_failure"),
+			apiConsumerId("armor_recovery"),
+			apiConsumerId("armor_recursive")
+		)), "runtime armor consumers were not registered");
+		check(weaponIds.contains(apiConsumerId("weapon")), "runtime weapon consumer was not registered");
+
+		Set<Identifier> recursiveTraits = ArmorApi.traits(new ItemStack(Items.STICK));
+		check(recursiveTraits.contains(apiConsumerId("runtime/armor")), "legal runtime armor consumer did not run");
+		check(recursiveTraits.contains(apiConsumerId("runtime/recursive")), "recursive runtime armor consumer did not recover");
+		Set<Identifier> recoveredTraits = ArmorApi.traits(new ItemStack(Items.POISONOUS_POTATO));
+		check(recoveredTraits.contains(apiConsumerId("runtime/recovery")), "provider failure prevented the next runtime consumer");
+		check(TravellerGearApi.parts(new ItemStack(Items.STICK)).contains(TravellerGearPart.BOOTS),
+			"runtime Traveller Gear classifier did not run");
+		check(WeaponApi.traits(new ItemStack(Items.DIAMOND_SWORD)).contains(apiConsumerId("runtime/weapon")),
+			"runtime weapon classifier did not run");
+
+		boolean lateRegistrationRejected = false;
+		try {
+			ArmorApi.registerClassifier(apiConsumerId("late"), stack -> Set.of());
+		} catch (IllegalStateException expected) {
+			lateRegistrationRejected = true;
+		}
+		check(lateRegistrationRejected, "public API accepted a provider after its server-start freeze");
+		LOGGER.info("{} API_RUNTIME scenario={} consumer=true frozen=true legal=true recursive=true failure_isolated=true late_rejected=true accessory_ids={} traveller_ids={} armor_ids={} weapon_ids={}",
+			MARKER, scenario, accessoryIds.size(), travellerIds.size(), armorIds.size(), weaponIds.size());
+	}
+
+	private static Identifier apiConsumerId(String path) {
+		return Identifier.fromNamespaceAndPath("twilightforest_api_testmod", path);
 	}
 
 	private static void check(boolean condition, String message) {

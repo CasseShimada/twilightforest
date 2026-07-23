@@ -29,6 +29,7 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 sourceSets.create("runtimeTestMod")
+sourceSets.create("apiTestMod")
 
 loom {
 	accessWidenerPath = file("src/main/resources/${project.mod_id}.accesswidener")
@@ -47,6 +48,9 @@ loom {
 		}
 		"${project.mod_id}-runtime-test" {
 			sourceSet sourceSets.runtimeTestMod
+		}
+		"${project.mod_id}-api-test" {
+			sourceSet sourceSets.apiTestMod
 		}
 	}
 
@@ -105,7 +109,6 @@ sourceSets {
 
 	apiTestMod {
 		java.srcDir 'src/apiTestMod/java'
-		resources.srcDir 'src/apiTestMod/resources'
 	}
 
 	runtimeTestMod {
@@ -127,14 +130,18 @@ sourceSets.runtimeTestMod.runtimeClasspath += sourceSets.runtimeTestMod.output +
 // Archive tasks continue to package only main/client sources.
 sourceSets.main.runtimeClasspath += sourceSets.runtimeTestMod.output
 sourceSets.client.runtimeClasspath += sourceSets.runtimeTestMod.output
+sourceSets.main.runtimeClasspath += sourceSets.apiTestMod.output
+sourceSets.client.runtimeClasspath += sourceSets.apiTestMod.output
 
 tasks.named("runServer") {
-	dependsOn tasks.named("runtimeTestModClasses")
+	dependsOn tasks.named("runtimeTestModClasses"), tasks.named("apiTestModClasses")
 	classpath += sourceSets.runtimeTestMod.output
+	classpath += sourceSets.apiTestMod.output
 }
 tasks.named("runClient") {
-	dependsOn tasks.named("runtimeTestModClasses")
+	dependsOn tasks.named("runtimeTestModClasses"), tasks.named("apiTestModClasses")
 	classpath += sourceSets.runtimeTestMod.output
+	classpath += sourceSets.apiTestMod.output
 }
 
 repositories {
@@ -281,13 +288,41 @@ tasks.register("verifyResourceUnion") {
 			throw new GradleException("Production JAR is missing ${missing.size()} source resources:${System.lineSeparator()}${missing.take(100).join(System.lineSeparator())}")
 		}
 
-		logger.lifecycle("Verified ${resources.size()} unique resources from ${packagedResourceRoots.count(File::exists)} roots in ${archive.name}")
+		Map<String, String> chestSeries = [
+			"twilight_oak": "twilight_oak",
+			"canopy": "canopy",
+			"mangrove": "mangrove",
+			"dark": "darkwood",
+			"time": "time",
+			"transformation": "transformation",
+			"mining": "mining",
+			"sorting": "sorting"
+		]
+		List<String> requiredChestResources = new ArrayList<>()
+		chestSeries.each { blockName, textureName ->
+			[false, true].each { trapped ->
+				String variant = trapped ? "trapped" : "normal"
+				String itemName = blockName + (trapped ? "_trapped_chest" : "_chest")
+				requiredChestResources.add("assets/twilightforest/items/${itemName}.json".toString())
+				["", "_left", "_right"].each { suffix ->
+					requiredChestResources.add("assets/twilightforest/textures/entity/chest/${textureName}/${variant}${suffix}.png".toString())
+				}
+			}
+		}
+		List<String> missingChestResources = requiredChestResources.findAll { path ->
+			!resources.containsKey(path) || !archiveEntries.contains(path)
+		}
+		if (!missingChestResources.isEmpty()) {
+			throw new GradleException("Chest renderer resources are missing from the source union or production JAR:${System.lineSeparator()}${missingChestResources.join(System.lineSeparator())}")
+		}
+
+		logger.lifecycle("Verified ${resources.size()} unique resources, including ${requiredChestResources.size()} chest renderer resources, from ${packagedResourceRoots.count(File::exists)} roots in ${archive.name}")
 	}
 }
 
 tasks.register("verifyOptionalApiIsolation") {
 	group = "verification"
-	description = "Verifies declaration-only optional APIs and optional-mod classes are not bundled."
+	description = "Verifies declaration-only optional APIs and development runtime-test classes are not bundled."
 	dependsOn tasks.named("jar"), tasks.named("sourcesJar")
 	inputs.files(tasks.named("jar").flatMap { it.archiveFile }, tasks.named("sourcesJar").flatMap { it.archiveFile })
 
@@ -296,7 +331,14 @@ tasks.register("verifyOptionalApiIsolation") {
 			"net/kyrptonaught/diggusmaximus/",
 			"tschipp/carryon/api/",
 			"mcp/mobius/waila/api/",
-			"lol/bai/badpackets/"
+			"lol/bai/badpackets/",
+			"com/example/twilightforestapi/",
+			"twilightforest/client/RuntimeCompatClientProbe",
+			"twilightforest/client/BossChestRuntimeProbe",
+			"twilightforest/world/RuntimeCompatServerProbe",
+			"twilightforest/world/RuntimeCompatTestPlayer",
+			"twilightforest/world/RuntimeDiggusCompatProbe",
+			"twilightforest/world/RuntimeCarryOnCompatProbe"
 		]
 		[tasks.named("jar").get().archiveFile.get().asFile, tasks.named("sourcesJar").get().archiveFile.get().asFile].each { archive ->
 			List<String> leaked = []
